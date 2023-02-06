@@ -1,0 +1,473 @@
+# configuring multiple datasources, so we must be extra cautious
+# we must disable DataSourceAutoConfiguration so it doesn't conflict with our multiple datasources
+base-db-url: jdbc:postgresql://sas-bee9g4o1w1hct2no.db.yandex.net:6432,vla-eogh8vgwij5kg9tt.db.yandex.net:6432/orders_service?ssl=true
+spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  flyway:
+    out-of-order: true
+  quartz:
+    job-store-type: jdbc
+    properties:
+      org.quartz.jobStore.class: org.quartz.impl.jdbcjobstore.JobStoreTX
+      org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+      org.quartz.jobStore.isClustered: true
+      org.quartz.scheduler.instanceName: OrdersAppScheduler
+      org.quartz.scheduler.instanceId: AUTO
+
+
+multiple-datasource:
+  enabled: true
+  primary-datasource:
+    url: ${base-db-url}&targetServerType=master
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    username: orders_service
+    hikari:
+      pool-name: primary
+      maximum-pool-size: 60
+  read-only-datasource:
+    url: ${base-db-url}&targetServerType=slave&readOnly=true
+    username: ${multiple-datasource.primary-datasource.username}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    hikari:
+      pool-name: read_only
+      maximum-pool-size: 20
+  grpc-datasource:
+    url: ${multiple-datasource.primary-datasource.url}
+    username: ${multiple-datasource.primary-datasource.username}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    hikari:
+      pool-name: grpc
+      maximum-pool-size: 20
+
+
+admin-mapping:
+  order-base-url: https://travel-test.yandex.ru/my/order/
+  scrooge-base-url: https://scrooge-test.paysys.yandex-team.ru/payments/?purchase_token=
+aeroflot:
+  # ipv4-proxy url proxying to https://gw.aeroflot.io/api/sb/ndc/v1.0/ep
+  booking-url: http://partners-proxy.testing.avia.yandex.net/boy_aeroflot_testing/api/sb/ndc/v3.0/ep
+  enable-testing-scenarios: true
+  promo-2020:
+    enabled: true
+    starts-at: 2020-12-07T00:00:00Z
+aeroflot-mq:
+  enabled: true
+  sqs-queue-name: testing_aeroflot_order_boy.fifo
+aeroflot-plus-promo:
+  email-campaign: 0Y2LBQ24-ZMV
+  endsAt: 4021-06-20T21:00:00Z
+  startsAt: 2021-06-20T21:00:00Z
+aeroflot-workflow:
+  promo:
+    enabled: true
+    common-promo-code-for-hotels: SUCCESS
+    generate-personal-promo-codes: true
+    promo-action-for-hotels: avia_success_for_hotels_TRAVELITM-84
+aeroflot-state-sync:
+  enabled: true
+auth-admin:
+  enabled: true
+avia-api:
+  base-url: https://api.travel-balancer-test.yandex.net/api/avia_booking_flow
+avia-td-api:
+  base-url: http://ticket-daemon-api.testing.avia.yandex.net/
+balance-contracts:
+  yt-cache:
+    balance-contracts-yt-table: //home/travel/testing/hotels_administrator/contracts_info
+    base-local-path: /cache
+billing-api:
+  base-url: http://greed-tm.paysys.yandex.ru:8002/xmlrpctvm
+  enabled: true
+billing-bank-order-sync:
+  enabled: true
+  bank-payment-processor:
+    enabled: true
+  billing-fetching-bank-orders-processor:
+    enabled: true
+billing-csv-api:
+  base-url: https://balance-xmlrpc-tvm-ts.paysys.yandex.net:8004
+  enabled: true
+billing-partners:
+  agreement-sync-task:
+    enabled: true
+billing-transactions:
+  act-commit-task:
+    enabled: false
+  export-task:
+    enabled: true
+  generator-task:
+    enabled: true
+  yt-exporter:
+    income-tables-directory: //home/travel/testing/billing/income/transactions
+    tables-directory: //home/travel/testing/billing/transactions
+  yt-id-generator-task:
+    enabled: true
+bnovo:
+  billing:
+    generate-meal-items: true
+buses-service:
+  mock-client-enabled: true
+  mode: YP
+  yp:
+    endpoint-set-id: buses-backend-testing.api.grpc
+buses-service-exp:
+  mock-client-enabled: true
+  mode: YP
+  yp:
+    endpoint-set-id: buses-backend-unstable.api.grpc
+    locations: 'IVA'
+cloud:
+  s3:
+    bucket: order-service-testing
+    endpoint: https://s3.mds.yandex.net
+    tvm-alias: s3
+    use-tvm: true
+cpa:
+  extended-partner-order-id-from: 2021-05-27T00:00:00Z
+credentials:
+  auth-enabled: true
+dolphin:
+  client:
+    base-url: https://www.delfin-tour.ru/jsonyandex/Subagents
+  enable-test-names: true
+  financial-data:
+    billing-client-id: 110146753
+    billing-contract-id: 10341427
+  test-hotels-ids:
+    - 13831
+exchange:
+  enabled: false
+  url: http://stocks-dev.yandex.net/morda-v2.json
+expedia:
+  connection:
+    base-url: https://test.ean.com
+    default-api-version: v3
+  enable-test-names: true
+financial-events:
+  enabled: true
+  enable-promo-fee: true
+fiscal-receipts:
+  max-refresh-attempts: 5
+grpc:
+  enable-thread-pool-executor: true
+  thread-pool-size: 150
+  thread-pool-name: 'GrpcService-%d'
+  daemon-threads: true
+  tracing:
+    enabled: true
+grpc-tvm:
+  allowed-consumers: api,avia_notifier,hotels_extranet,orders_cli,searcher,teller,promogranter
+  enabled: true
+high-availability:
+  enabled: true
+  master-lock-initial-ping-delay-duration: 100ms
+  master-lock-ping-duration: 5s
+  master-ping-query-timeout-seconds: 1
+  promote-duration: 10s
+  retry-acquire-master-lock-duration: 5s
+  stop-duration: 5s
+hotel-agreements:
+  yt-cache:
+    hotel-agreements-yt-table: //home/travel/testing/hotels_administrator/hotel_agreements
+    base-local-path: /cache
+hotels-support:
+  successful-orders:
+    notifications-enabled: true
+    email: fake@email
+hotel-workflow:
+  check-expiration-task:
+    enabled: true
+  mail:
+    order-url-base: https://travel-test.yandex.ru/my/order/%s
+    order-confirmed-campaign: OCLJIX53-2A42/send
+    order-refunded-campaign: OCD6JR63-BE61/send
+    order-requires-payment-campaign: OEMGYGV3-E0F/send
+    payment-url-base: https://travel-test.yandex.ru/hotels/book/startDeferredPayment?orderId=%s
+hotels-report:
+  mail:
+    bcc-targets: travel-hotels-payment-register-testing@yandex-team.ru
+  planner:
+    enabled: true
+# train order
+im:
+  base-url: https://testing.ipv4-proxy.internal.rasp.yandex.net/im-test/
+  test-cases:
+    enabled: true
+#Mailer
+mail:
+  debug:
+    enabled: true
+  mailer-url-base: https://test.sender.yandex-team.ru/api/0/travel/transactional/
+  templated-mailer-url-base: https://travel-tools-test.yandex.net/notify/api/send
+#metrics
+metrics:
+  st:
+    queue-names: HBSUPTEST
+mock-aeroflot:
+    enabled: true
+mock-im-client:
+    enabled: true
+notifier:
+  tvm:
+    enabled: true
+  mode: YP
+  yp:
+    endpoint-set-id: travel-notifier-testing.api
+    locations: 'SAS,MAN,VLA'
+# by default the following settings should be changed simultaneously:
+# order-aggregate-state-refresh.task-processor, orders-indexing, notifier-state-refresh.task-processor,
+# orders-updates-queue-state-refresh.task-processor
+notifier-state-refresh:
+  task-processor:
+    enabled: true
+    pool-size: 3
+    schedule-rate: 300ms
+orders-updates-queue-producer:
+  topic: '/travel/test/orders-updates-queue'
+orders-updates-queue-state-refresh:
+  task-processor:
+    enabled: true
+    pool-size: 3
+    schedule-rate: 300ms
+opentracing:
+  jaeger:
+    enabled: true
+# by default the following settings should be changed simultaneously:
+# order-aggregate-state-refresh.task-processor, orders-indexing, notifier-state-refresh.task-processor,
+# orders-updates-queue-state-refresh.task-processor
+order-aggregate-state-refresh:
+  task-processor:
+    pool-size: 3
+    schedule-rate: 300ms
+# by default the following settings should be changed simultaneously:
+# order-aggregate-state-refresh.task-processor, orders-indexing, notifier-state-refresh.task-processor,
+# orders-updates-queue-state-refresh.task-processor
+orders-indexing:
+  number-of-orders-to-index: 3
+  rate: 300ms
+payment-schedule:
+  hotels:
+    hotel-lists:
+      enabled: true
+      index-path: /cache/payment_schedule_hotel_list
+      table-path: //home/travel/testing/config/payment_schedule_hotel_list
+#pdf
+pdfgenerator:
+  base-url: https://travel-tools-test.yandex.net/pdf
+promo:
+  mir2020:
+    card-types:
+      - "NSPK MIR"
+      - "MasterCard"
+    stages:
+      5:
+        stage-starts: 2021-12-22T21:01:00Z
+        stage-ends: 2022-02-27T20:59:00Z
+      6:
+        stage-ends: 2022-04-05T20:59:59Z
+    whitelist:
+      table-path: //home/travel/testing/general/mir/latest/hotels
+      index-path: /cache/mir_promo_hotels
+  taxi2020:
+    email-campaign: SVUBX8Q3-9Z61
+  taxi2020-scheduler-task:
+    enabled: true
+promo-service:
+  mode: YP
+  yp:
+    endpoint-set-id: travel-hotels-promoservice-testing-12599
+    local-cache-path: /cache/promo-service-yp-discovery.json
+# database connection. Password to be taken from env var
+protobuf-enum-dictionary:
+  enabled: true
+suburban:
+  providers:
+    movista:
+      common:
+        billing-client-id: -10000006
+        mail:
+          order-confirmed-campaign: CDJV5TX3-EMK1  # https://test.sender.yandex-team.ru/travel/campaign/21917/overview
+      client:
+        host: https://api-6k.test.cppktrain.ru
+    im:
+      common:
+        billing-client-id: -10000006
+        mail:
+          order-confirmed-campaign: GGXXM474-AUA1  # https://test.sender.yandex-team.ru/travel/campaign/24828/overview
+      client:
+        base-url: https://testing.ipv4-proxy.internal.rasp.yandex.net/im-test/
+    aeroexpress:
+      common:
+        billing-client-id: -10000006
+        mail:
+          order-confirmed-campaign: CDRUC4D4-XQ12  # https://test.sender.yandex-team.ru/travel/campaign/25853/overview
+      client:
+        base-url: https://api.aeroexpress.ru:48000/aeapi/services/TicketServiceService?wsdl
+train-api:
+  base-url: https://testing.train-api.rasp.internal.yandex.net/
+takeout:
+  enable-generic-orders-mode: true
+train-bandit:
+  enabled: true
+  target: travel-trains-bandit-testing.balancer.internal.yandex.net:9111
+train-dictionaries:
+  enabled: true
+train-workflow:
+  reservation-concurrency-limit:
+    mode: ADAPTIVE
+    adaptive:
+      min-concurrent-calls: 3
+      max-concurrent-calls: 15
+  mail :
+    front-url: travel-test.yandex.ru
+  office-refund:
+    enabled: true
+  rebooking-enabled: true
+  order-expiration-time: 30m
+  promo-hotel-2020:
+    enabled: true
+  common-promo-code-for-hotels: SUCCESS
+  generate-personal-promo-codes: true
+  promo-action-for-hotels-name: trains_success_for_hotels_TRAVELITM-84
+generic-workflow:
+  order-expiration-time: 30m
+  train-rebooking-enabled: true
+sentry:
+  dsn: '${SENTRY_DSN}'
+train-tariff-info:
+  enabled: true
+  proxy: hahn.yt.yandex.net,arnold.yt.yandex.net
+  index-path: /cache/train-tariff-info
+  table-path: //home/travel/testing/rasp_dicts/latest/train_tariff_info
+travelline:
+  billing:
+    generate-meal-items: true
+  enable-test-names: true
+trust:
+  base-url: https://trust-payments-test.paysys.yandex.net:8028/trust-payments/v2
+trust-db-mock:
+  enabled: true
+trust-hotels:
+  allow-three-ds-force: true
+  callback-url: https://api.travel-balancer-test.yandex.net/api/travel_orders_trust_callback/v1/basket_status_changed/
+  trains-new-processing-enabled: true
+trust-payment-policy:
+  trains:
+    process-through-yt: false
+tvm:
+  enabled: true
+  client-id: 2002740
+  client-secret: '${TVM_CLIENT_SECRET}'
+tvm-external:
+  blackbox-env: Test
+  client-id: 2002740
+  client-secret: '${TVM_CLIENT_SECRET}'
+  enabled: true
+tvm-internal:
+  blackbox-env: ProdYateam
+  client-id: 2002740
+  client-secret: '${TVM_CLIENT_SECRET}'
+  enabled: true
+tvm-service:
+  blackbox-env: Test
+  client-id: 2002740
+  client-secret: '${TVM_CLIENT_SECRET}'
+  dst-service-aliases: api,avia_notifier,avia_td_api,balance_api,blackbox,buses_worker,s3,train_api,train_bandit,yasms
+  enabled: true
+  service-alias-id-mapping: >
+    api=2002548,
+    avia_notifier=2025412,
+    avia_td_api=2000589,
+    balance_api=2000601,
+    blackbox=223,
+    buses_worker=2023498,
+    hotels_extranet=2033665,
+    hotels_cli=2002574,
+    orders_cli=2010758,
+    promogranter=2033593,
+    s3=2017579,
+    searcher=2010724,
+    teller=2018906,
+    train_api=2002852,
+    train_bandit=2020186,
+    yasms=2000834
+user-order-counters-by-type-yt-exporter:
+  token: '${secrets.yt-token}'
+  user-order-counters-table-path: //home/travel/testing/promo/user_order_counters_by_type
+user-order-counters-yt-exporter:
+  token: '${secrets.yt-token}'
+  user-order-counters-table-path: //home/travel/testing/promo/user_order_counters
+workflow-processing:
+  use-savepoints: false
+  use-processing-pools: true
+  pending-workflow-polling-interval: 100ms
+  processing-pools:
+    default-pool-id: 1
+    scheduling-mode: BATCH
+    pools:
+      1:
+        entity-types:
+        name: default
+        threads: 4
+      2:
+        entity-types: bus_order,hotel_order,train_order,generic_order
+        name: orders
+        threads: 8
+      3:
+        entity-types: bnovo_order_item,bus_order_item,dolphin_order_item,expedia_order_item,travelline_order_item
+        name: order items
+        threads: 4
+      4:
+        entity-types: trust_invoice,trust_refund
+        name: invoices
+        threads: 8
+      5:
+        entity-types: attachment,notification,startrek_issue,voucher
+        name: misc downloaders & notifications
+        threads: 16
+      6:
+        entity-types: train_order_item,train_ticket_refund
+        name: train order items
+        threads: 8
+      7:
+        entity-types: aeroflot_invoice,aeroflot_order,aeroflot_order_item
+        name: aeroflot orders
+        threads: 4
+      8:
+        entity-types: suburban_order_item
+        name: suburban order items
+        threads: 4
+# do it!
+# use this in case of problems with deferred payments
+#      9:
+#        entity-types: pending_invoice,payment_schedule
+#        name: deferred payments
+#        threads: 4
+url-shortener:
+  base-url: https://api.ya.cc
+yandex-plus-promo:
+  topup-delay: -39h
+  min-topup-at: 2021-07-01T00:00:00Z
+ydb-log:
+  db: /ru-prestable/travelorchetsrator/testing/order_logs_testing
+  enabled: true
+  endpoint: ydb-ru-prestable.yandex.net:2135
+  table: order_logs
+yasms:
+  base-url: https://phone-passport-test.yandex.ru
+  ignore:
+    mode: WHITE_LIST
+    phones:
+      - '+79122458573'
+      - '+79655039244'
+      - '+79120452793'
+      - '+79827322560'
+      - '+79630431922'
+      - '+79014544512'
+      - '+79028751401'
+      - '+79221030322'
+      - '+79043808853'
+      - '+79326007577'
+      - '+79292123015'
+      - '+79025871704'

@@ -1,0 +1,34 @@
+{
+  "logHosts": "*",
+  "logPath": "**/yandex/classifier/classifier-access.log",
+  "clickhouseTable": "classifier_access_testing",
+  "parser": {
+    "dateFormat": "yyyy-MM-dd HH:mm:ss,SSS",
+    "patterns": {
+      "message": "^%{date} INFO  .*\\] \"%{method} /(?:%{handler}(?:\\?.+)?) HTTP/[\\d\\.]+\" %{http_code} -  %{work_time_ms}"
+    },
+    "columns": {
+      "method": {
+        "type": "String",
+        "default": "GET"
+      },
+      "handler": {
+        "type": "String"
+      },
+      "http_code": {
+        "type": "UInt16",
+        "default": "0"
+      },
+      "work_time_ms": {
+        "type": "UInt32",
+        "default": "-1"
+      },
+      "host": {
+        "type": "String"
+      }
+    }
+  },
+  "sources": [
+    "logbroker://market-health-testing--other"
+  ]
+}

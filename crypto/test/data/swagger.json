@@ -1,0 +1,306 @@
+{
+    "info": {
+        "contact": {
+            "url": "https://wiki.yandex-team.ru/crypta/"
+        },
+        "description": "Provides ways to interact with Crypta",
+        "version": "8833718",
+        "title": "Crypta API"
+    },
+    "paths": {
+        "/lab/constructor/rule": {
+            "get": {
+                "description": "",
+                "parameters": [
+                    {
+                        "required": false,
+                        "type": "string",
+                        "name": "lang",
+                        "in": "query"
+                    }
+                ],
+                "tags": [
+                    "lab"
+                ],
+                "produces": [
+                    "application/json; charset=utf-8"
+                ],
+                "summary": "Get all rules",
+                "operationId": "getAllRules",
+                "consumes": [
+                    "application/json; charset=utf-8"
+                ],
+                "responses": {
+                    "200": {
+                        "headers": {
+                            "X-Crypta-Request-ID": {
+                                "type": "string",
+                                "description": "Request ID to be reported"
+                            },
+                            "X-Crypta-Host": {
+                                "type": "string",
+                                "description": "Host to be reported"
+                            },
+                            "X-Crypta-Instance-ID": {
+                                "type": "string",
+                                "description": "Instance ID to be reported"
+                            }
+                        },
+                        "description": "successful operation",
+                        "schema": {
+                            "items": {
+                                "$ref": "#/definitions/ru.yandex.crypta.lab.proto.Rule"
+                            },
+                            "type": "array"
+                        }
+                    }
+                }
+            }
+        },
+        "/lab/segment/groups": {
+            "get": {
+                "description": "",
+                "parameters": [
+                    {
+                        "required": false,
+                        "type": "string",
+                        "name": "lang",
+                        "in": "query"
+                    }
+                ],
+                "tags": [
+                    "lab"
+                ],
+                "produces": [
+                    "application/json; charset=utf-8"
+                ],
+                "summary": "Get segment groups",
+                "operationId": "getAllSegmentGroups",
+                "consumes": [
+                    "application/json; charset=utf-8"
+                ],
+                "responses": {
+                    "200": {
+                        "headers": {
+                            "X-Crypta-Request-ID": {
+                                "type": "string",
+                                "description": "Request ID to be reported"
+                            },
+                            "X-Crypta-Host": {
+                                "type": "string",
+                                "description": "Host to be reported"
+                            },
+                            "X-Crypta-Instance-ID": {
+                                "type": "string",
+                                "description": "Instance ID to be reported"
+                            }
+                        },
+                        "description": "successful operation",
+                        "schema": {
+                            "items": {
+                                "$ref": "#/definitions/ru.yandex.crypta.lab.proto.SegmentGroup"
+                            },
+                            "type": "array"
+                        }
+                    }
+                }
+            }
+        },
+        "/lab/segment": {
+            "get": {
+                "description": "",
+                "parameters": [
+                    {
+                        "required": false,
+                        "type": "string",
+                        "name": "lang",
+                        "in": "query"
+                    }
+                ],
+                "tags": [
+                    "lab"
+                ],
+                "produces": [
+                    "application/json; charset=utf-8"
+                ],
+                "summary": "Get all segments",
+                "operationId": "getAllSegments",
+                "consumes": [
+                    "application/json; charset=utf-8"
+                ],
+                "responses": {
+                    "200": {
+                        "headers": {
+                            "X-Crypta-Request-ID": {
+                                "type": "string",
+                                "description": "Request ID to be reported"
+                            },
+                            "X-Crypta-Host": {
+                                "type": "string",
+                                "description": "Host to be reported"
+                            },
+                            "X-Crypta-Instance-ID": {
+                                "type": "string",
+                                "description": "Instance ID to be reported"
+                            }
+                        },
+                        "description": "successful operation",
+                        "schema": {
+                            "items": {
+                                "$ref": "#/definitions/ru.yandex.crypta.lab.proto.Segment"
+                            },
+                            "type": "array"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "lab"
+        }
+    ],
+    "basePath": "/",
+    "definitions": {
+        "ru.yandex.crypta.lab.proto.Rule": {
+            "type": "object",
+            "properties": {
+                "conditions": {
+                    "items": {
+                        "$ref": "#/definitions/ru.yandex.crypta.lab.proto.RuleCondition"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "ru.yandex.crypta.lab.proto.Segment.Export": {
+            "type": "object",
+            "properties": {
+                "lal": {
+                    "type": "string"
+                },
+                "segmentId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "fullExpressions": {
+                    "items": {
+                        "$ref": "#/definitions/ru.yandex.crypta.lab.proto.FullValue"
+                    },
+                    "type": "array"
+                },
+                "hasExpressionErrors": {
+                    "type": "boolean"
+                },
+                "ruleId": {
+                    "type": "string"
+                },
+                "state": {
+                    "enum": [
+                        "CREATED",
+                        "ACTIVE",
+                        "DEPRECATED",
+                        "DISABLED",
+                        "DELETED",
+                        "UNRECOGNIZED"
+                    ],
+                    "type": "string"
+                },
+                "keywordId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "ru.yandex.crypta.lab.proto.SegmentGroup": {
+            "type": "object",
+            "properties": {
+                "parentId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "ru.yandex.crypta.lab.proto.Segment": {
+            "type": "object",
+            "properties": {
+                "exports": {
+                    "$ref": "#/definitions/ru.yandex.crypta.lab.proto.Segment.Exports"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "parentId": {
+                    "type": "string"
+                }
+            }
+        },
+        "ru.yandex.crypta.lab.proto.FullValue": {
+            "type": "object",
+            "properties": {
+                "normalized": {
+                    "type": "string"
+                }
+            }
+        },
+        "ru.yandex.crypta.lab.proto.RuleCondition": {
+            "type": "object",
+            "properties": {
+                "source": {
+                    "enum": [
+                        "UNKNOWN",
+                        "SITES",
+                        "WORDS",
+                        "METRICA_COUNTERS_AND_GOALS",
+                        "METRICA_TITLES",
+                        "SEARCH_REQUESTS",
+                        "SEARCH_RESULTS_HOSTS",
+                        "APPS",
+                        "CATALOGIA",
+                        "MUSIC_LIKES",
+                        "MUSIC_PLAYS",
+                        "EFIR_CHANNELS",
+                        "EFIR_PROGRAMS",
+                        "CODE",
+                        "YANDEX_REFERRER",
+                        "BROWSER_SITES",
+                        "BROWSER_TITLES",
+                        "PRECALCULATED_TABLES",
+                        "PUBLIC_SITES",
+                        "PUBLIC_WORDS",
+                        "METRICA_SITES",
+                        "UNRECOGNIZED"
+                    ],
+                    "type": "string"
+                }
+            }
+        },
+        "ru.yandex.crypta.lab.proto.Segment.Exports": {
+            "type": "object",
+            "properties": {
+                "exports": {
+                    "items": {
+                        "$ref": "#/definitions/ru.yandex.crypta.lab.proto.Segment.Export"
+                    },
+                    "type": "array"
+                }
+            }
+        }
+    },
+    "swagger": "2.0"
+}

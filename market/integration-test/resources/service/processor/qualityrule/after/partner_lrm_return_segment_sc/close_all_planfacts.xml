@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <plan_fact_group
+        id="1"
+        aggregation_key="date:2020-11-01;lrmPartnerFrom:172;lrmPartnerTo:173;"
+        aggregation_type="PARTNER_LRM_RETURN_SEGMENT_SC"
+        processing_status="PROCESSED"
+        expected_status="TRANSIT_PREPARED"
+        data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                     "aggregationEntity": {
+                        "date": [2020, 11, 1],
+                         "lrmPartnerFrom": {
+                            "id": 172,
+                            "name": "172"
+                         },
+                         "lrmPartnerTo": {
+                            "id" : 173,
+                            "name": "aboba"
+                         }
+                     }
+                },
+                "PartnerLrmReturnSegmentScAdditionalData": {
+                     "_type": ".PartnerLrmReturnSegmentScAdditionalData",
+                     "issueKey": "MONITORINGSNDBX-1",
+                     "issueClosed": true,
+                     "issueCreatedAt": [2020, 11, 2, 12, 30],
+                     "affectedOrderIds": ["ORDER1"]
+                }
+                }'
+    />
+
+    <quality_rule
+        id="1"
+        enabled="true"
+        expected_status="TRANSIT_PREPARED"
+        aggregation_type="PARTNER_LRM_RETURN_SEGMENT_SC"
+        rule_processor="STARTREK"
+        rule='{
+                "queue": "MONITORINGSNDBX",
+                "_type": ".PartnerLrmReturnSegmentScPayload",
+                "allowedToCloseAssigned": false
+            }'
+    />
+</dataset>

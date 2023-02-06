@@ -1,0 +1,23 @@
+module: orders-pipelines
+operators:
+  - id: update-order-one-item-instances-pipeline
+    visibility: public
+    value#processing-pipeline:
+      id: update-order-one-item-instances-pipeline
+      conditions:
+        - reason: update-order-one-item-instances
+      shared-state-init:
+        {}
+      stages:
+        - id: get-order-stage
+          handlers:
+            - value#xget: /external/order-handlers/get-order-handler
+# добавить ручки по валидации заказа и прочего, можно отправить в одном запросе,
+# соответственно в предыдущем обработчике собрать все необходимые поля
+#        - id: validate-order-item-instances-stage
+#          handlers:
+#            - value#xget: /external/order-handlers/get-order-handler
+
+        - id: update-order-one-item-instances-stage
+          handlers:
+            - value#xget: /external/order-handlers/update-order-one-item-instances-handler

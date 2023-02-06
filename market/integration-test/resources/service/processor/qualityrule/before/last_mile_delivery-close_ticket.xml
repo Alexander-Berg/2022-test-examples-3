@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="OUT"
+            waybill_segment_type="COURIER"
+            aggregation_type="DATE_PARTNER"
+            rule_processor="STARTREK"
+            rule='{ "queue": "MONITORINGSNDBX", "_type": ".LastMileDeliveryPayload" }'
+    />
+
+    <plan_fact_group
+            id="1"
+            aggregation_key="date:2020-11-01;partner:987654321;"
+            aggregation_type="DATE_PARTNER"
+            processing_status="ENQUEUED"
+            expected_status="OUT"
+            waybill_segment_type="COURIER"
+            schedule_time="2020-11-01 12:00:00 +0000"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 1],
+                        "partner": {
+                            "id": 987654321,
+                            "name": "Яндекс.Go",
+                            "type": "DELIVERY",
+                            "subtype": "MARKET_COURIER"
+                        }
+                    }
+                },
+                "LastMileDeliveryProcessorAdditionalData": {
+                    "_type": ".LastMileDeliveryProcessorAdditionalData",
+                    "issueKey": "MONITORINGSNDBX-1",
+                    "issueClosed": false,
+                    "issueCreatedAt": [2020, 11, 2, 12, 0]
+                }
+            }'
+    />
+
+</dataset>

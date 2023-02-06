@@ -1,0 +1,43 @@
+# -*- coding: utf-8 -*-
+
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+TVM_CLIENTS = [120, 165, 2002384, 2001602]
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'mail_magicdb_qa',
+        'USER': 'magicdaemon',
+        'HOST': 'c-4ec90315-1652-4af6-9828-fccd115cc7e4.rw.db.yandex.net',
+        'PORT': '6432',
+        'OPTIONS': {
+            'sslmode': 'require',
+        }
+    }
+}
+
+SITE_ID = 4
+
+# Reminders url
+REMINDERS_HOST = 'http://reminders-test-back.cmail.yandex.net'
+
+# FURITA - filters in users mail
+FURITA_URLS = dict(
+    external='http://furita.tst.mail.yandex.net:5559/%(method)s',
+    internal='http://furita-corp-qa.mail.yandex.net:5559/%(method)s'
+)
+
+# Settings server: yserver_setting
+YSERVER_SETTINGS_URLS = dict(
+    external='http://settings-test.mail.yandex.net/%(handle)s',
+    internal='http://settingscorp-qa.mail.yandex.net/%(handle)s'
+)
+# 2002478 is destination_id for production corp y-settings (and for QA env too)
+YSERVER_SETTINGS_TVM_ID = dict(internal=2002478, external=2002242)
+
+# Domenator url
+DOMENATOR_URL = 'https://domenator-test.yandex.net/api/domains/magic'
+DOMENATOR_TVM_ID = 2020711
+DOMENATOR_TIMEOUT = 2.0

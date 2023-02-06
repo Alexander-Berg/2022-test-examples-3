@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+set -e
+
+SCRIPTS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd) #"
+. "${SCRIPTS_DIR}"/config.sh
+[ -z "$PROD" ] && . "${SCRIPTS_DIR}"/templater
+
+set +e
+
+# from from params
+${CURL} "https://frontend.vh.yandex.ru/player/4127663ed234fa8584aeb969ceb02cd8.json?${URL_ADD}${SRCRWR}&autoplay=true&force_unmute=false&from=ottwidget_ya-serp&from_block=entity&has_preroll=false&mute=false&player_api_adapter=0&preview=false&progress=false&recommendations=off&report=false&service=ya-serp&share=false&skippable_fragments=false&stream_block=right.1.YA_PREMIUM&use_friendly_frame=false&ya_station=false&reqid=1639399771834074-11174662145030847539-sas3-0973-1aa-sas-l7-balancer-8080-BAL-889&adConfig=%7B%22partnerId%22%3A0%2C%22category%22%3A1012%2C%22videoContentId%22%3A%224127663ed234fa8584aeb969ceb02cd8%22%2C%22videoContentName%22%3A%221%2B1%22%7D&adsdk-container-width=596&adsdk-container-height=335.25" \
+    | jq --exit-status '.content.streams[0].url | test("abcID=1134,from=ottwidget_ya-serp")'
+
+
+# no from -> unknown
+${CURL} "https://frontend.vh.yandex.ru/player/4127663ed234fa8584aeb969ceb02cd8.json?${URL_ADD}${SRCRWR}&autoplay=true&force_unmute=false&from_block=entity&has_preroll=false&mute=false&player_api_adapter=0&preview=false&progress=false&recommendations=off&report=false&service=ya-serp&share=false&skippable_fragments=false&stream_block=right.1.YA_PREMIUM&use_friendly_frame=false&ya_station=false&reqid=1639399771834074-11174662145030847539-sas3-0973-1aa-sas-l7-balancer-8080-BAL-889&adConfig=%7B%22partnerId%22%3A0%2C%22category%22%3A1012%2C%22videoContentId%22%3A%224127663ed234fa8584aeb969ceb02cd8%22%2C%22videoContentName%22%3A%221%2B1%22%7D&adsdk-container-width=596&adsdk-container-height=335.25" \
+    | jq --exit-status '.content.streams[0].url | test("abcID=1558,from=unknown")'
+
+# no from not missed
+${CURL} "https://frontend.vh.yandex.ru/player/10434417664024861196.json?${URL_ADD}${SRCRWR}&service=ya-video&synchronous_scheme=1&discrete_scheme=1" \
+    | jq --exit-status ".content.ottParams.from"
+
+
+${CURL} "https://frontend.vh.yandex.ru/player/10434417664024861196.json?${URL_ADD}${SRCRWR}&from=some_uunknown" \
+    | jq --exit-status '.content.ottParams.from == "some_uunknown"'
+
+${CURL} -H 'Referer: https://yandex.ru/' "https://frontend.vh.yandex.ru/player/10434417664024861196.json?${URL_ADD}${SRCRWR}&from=some_uunknown2" \
+    | jq --exit-status '.content.ottParams.from == "morda"'
+
+${CURL} -H 'Referer: https://some_unknown_referer' "https://frontend.vh.yandex.ru/player/10434417664024861196.json?${URL_ADD}${SRCRWR}&from=some_uunknown3" \
+    | jq --exit-status '.content.ottParams.from == "some_uunknown3"'

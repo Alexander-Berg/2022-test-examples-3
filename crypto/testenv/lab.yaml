@@ -1,0 +1,43 @@
+BUILD_CRYPTA_LAB:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        commit_path_prefixes:
+        - /trunk/arcadia/crypta/
+        observed_paths:
+        - ^arcadia/crypta/lab/crypta-lab.json
+        targets:
+        - crypta/lab/bin
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_LAB_BUNDLE
+                package_type: tarball
+                packages: crypta/lab/crypta-lab.json
+                publish_package: false
+                strip_binaries: false
+        output_resources:
+            CRYPTA_LAB_BUNDLE: 30

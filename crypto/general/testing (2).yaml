@@ -1,0 +1,22 @@
+{% set home_path = "//home/crypta/testing" %}
+{% set yt_db_dir = home_path + "/cookie_matching/rt/db" %}
+{% set yt_tmp_dir = home_path + "/tmp" -%}
+
+environment_type: "testing"
+
+bundle: "default"
+tablets: 50
+sync: true
+enable_tablet_balancer: true
+
+master:
+  cluster: "markov"
+  path: "{{ yt_db_dir }}/master"
+
+replica:
+  pool: "default"
+  clusters:
+    "zeno": {}
+    "seneca-sas": {}
+  path: "{{ yt_db_dir }}/replica"
+  tmp_dir: "{{ yt_tmp_dir }}"

@@ -1,0 +1,38 @@
+abc: cross_service_plus_backends
+command: ""
+dc:
+  vla:
+    max_unavailable: 1
+    pod_count: 2
+environment: testing
+itype: marketmcadaptertestingservice
+name: mc-adapter
+network_id: _MARKET_TEST_NETS_
+params:
+  infra:
+    exp3_consumer: mc-adapter
+quota:
+  cpu:
+    guarantee: 1000
+    limit: 1000
+  disk:
+  - bandwidth_guarantee: 15728640
+    bandwidth_limit: 15728640
+    capacity: 10737418240
+    class: ssd
+  memory:
+    guarantee: 2147483648
+    limit: 2147483648
+  network:
+    guarantee: 10485760
+    limit: 0
+template:
+  modifiers:
+  - box/infra.jsonnet
+  - box/base_app.jsonnet
+  - remove_duplicates.jsonnet
+  - update_layers.jsonnet
+  - set_infra_params.jsonnet
+  root: base.jsonnet
+  tools:
+  - tools.libjsonnet

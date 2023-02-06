@@ -1,0 +1,33 @@
+{% if table == "features_item_pair_model_model_average_external_order_pmi" %}
+    {# Result data. #}
+    {% table table %}
+        [
+            "O1", "O2",
+            {{ (2.0 + 1.0) / 2.0 }},
+            {{ (10.0 + 20.0) / 2.0 }},
+            {{ (2.0 / (4.0 * 8.0) + 1.0 / (2.0 * 2.0)) / 2.0 }},
+            {{ (10.0 / (40.0 * 20.0) + 20.0 / (10.0 * 10.0)) / 2.0 }},
+            "model", "model",
+            "{{ day }}"
+        ]
+    {% endtable %}
+{% elif table == "features_item_pair_model_model_external_order_statistics" %}
+    {% table table %}
+        {% if shift == 0 %}
+            ["O1", "O2", 2.0, 10.0, "model", "model", "{{ day }}"]
+        {% elif shift == 1 %}
+            ["O1", "O2", 1.0, 20.0, "model", "model", "{{ day }}"]
+        {% endif %}
+    {% endtable %}
+{% elif table == "features_item_model_order_statistics" %}
+    {% table table %}
+        {# Note that here external order count goes before external orderer count. #}
+        {% if shift == 0 %}
+            ["O1", 40.0, 4.0, 10.0, 10.0,  10.0, 10.0, 10.0, 10.0,  0.0, 0.0, 0.0, 0.0,  10.0, 10.0, "model", "{{ day }}"],
+            ["O2", 20.0, 8.0, 10.0, 10.0,  10.0, 10.0, 10.0, 10.0,  0.0, 0.0, 0.0, 0.0,  10.0, 10.0, "model", "{{ day }}"]
+        {% elif shift == 1 %}
+            ["O1", 10.0, 2.0, 10.0, 10.0,  10.0, 10.0, 10.0, 10.0,  0.0, 0.0, 0.0, 0.0,  10.0, 10.0, "model", "{{ day }}"],
+            ["O2", 10.0, 2.0, 10.0, 10.0,  10.0, 10.0, 10.0, 10.0,  0.0, 0.0, 0.0, 0.0,  10.0, 10.0, "model", "{{ day }}"]
+        {% endif %}
+    {% endtable %}
+{% endif %}

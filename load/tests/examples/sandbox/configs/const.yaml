@@ -1,0 +1,49 @@
+phantom:
+  enabled: false
+pandora:
+  package: yandextank.plugins.Pandora
+  enabled: true
+  pandora_cmd: /usr/local/bin/pandora
+  resources:
+    - src: https://storage-int.mds.yandex.net/get-load-ammo/15312/c7c8aa227b834051a8cf9e7651c05288
+      dst: ./ammo.uri
+  config_content:
+          pools:
+           - id: HTTP
+             gun:
+                 type: http
+                 target: 4bs65mu2kdulxmir.myt.yp-c.yandex.net:80
+             ammo:
+                  type: uri
+                  file: ./ammo.uri
+             result:
+                 type: phout
+                 destination: ./phout.log
+             rps:
+               - {duration: 2m, type: const, ops: 10}
+               #- {type: once, times: 30000}
+             startup:
+               - {type: once, times: 10}
+          log:
+             level: debug
+          monitoring:
+             expvar:
+                enabled: true
+                port: 1234
+uploader:
+  enabled: true
+  operator: ligreen
+  package: yandextank.plugins.DataUploader
+  task: LOAD-1329
+console:
+  enabled: true
+telegraf:
+  config: monitoring.xml
+  enabled: false
+  package: yandextank.plugins.Telegraf
+metaconf:
+       enabled: true
+       package: yandextank.plugins.MetaConf
+       firestarter:
+         tank: buratino.tanks.yandex.net
+         tank_port: 8083

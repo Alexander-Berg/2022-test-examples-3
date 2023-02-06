@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug">
+
+    <!-- Don't forget to set system property
+-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
+     to make all loggers asynchronous. -->
+
+    <Appenders>
+        <RollingFile name="MAIN"
+                     fileName="${sys:log.dir}/${sys:app.name}.log"
+                     filePattern="nopattern">
+            <PatternLayout pattern="[%d] %-5p [%t] %m%n"/>
+            <RotationBasedTriggeringPolicy />
+            <NoopRollingStrategy />
+        </RollingFile>
+        <RollingFile name="TRACE"
+                     fileName="${sys:log.dir}/trace/${sys:app.name}-trace.log"
+                     filePattern="nopattern">
+            <PatternLayout pattern="%m%n"/>
+            <RotationBasedTriggeringPolicy />
+            <NoopRollingStrategy />
+        </RollingFile>
+        <RollingFile name="BACK_LOG"
+                     fileName="${sys:log.dir}/${sys:app.name}-backlog-tskv.log"
+                     filePattern="nopattern">
+            <BackLogLayout />
+            <RotationBasedTriggeringPolicy />
+            <NoopRollingStrategy />
+        </RollingFile>
+        <RollingFile name="LOGBROKER"
+                     fileName="${sys:log.dir}/${sys:app.name}-logbroker.log"
+                     filePattern="nopattern">
+            <BackLogLayout />
+            <RotationBasedTriggeringPolicy />
+            <NoopRollingStrategy />
+        </RollingFile>
+        <Sentry name="SENTRY"/>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="MAIN"/>
+            <AppenderRef ref="BACK_LOG" level="ERROR"/>
+            <AppenderRef ref="SENTRY" level="ERROR"/>
+        </Root>
+        <Logger name="requestTrace" level="trace" additivity="false">
+            <AppenderRef ref="TRACE"/>
+        </Logger>
+
+        <Logger name="backLogger" level="INFO" additivity="false">
+            <AppenderRef ref="BACK_LOG"/>
+        </Logger>
+
+        <Logger name="ru.yandex.market.logbroker.consumer" level="WARN" additivity="false">
+            <AppenderRef ref="MAIN"/>
+        </Logger>
+
+        <Logger name="ru.yandex.market.logbroker.consumer" level="INFO" additivity="false">
+            <AppenderRef ref="LOGBROKER"/>
+        </Logger>
+    </Loggers>
+</Configuration>

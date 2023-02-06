@@ -1,0 +1,46 @@
+- include: configure-auth.yml
+
+- name: installing ts-front packages
+  apt: pkg={{ item }} force=yes
+  with_items:
+    - yandex-direct={{ direct_version }}
+    - yandex-direct-conf-sandbox-test={{ direct_version }}
+    - yandex-direct-dpkg-monitor-configs={{ direct_version }}
+    - yandex-direct-fake-services={{ direct_version }}
+    - yandex-direct-frontend={{ direct_version }}
+    - yandex-direct-funcs-gearman-workers={{ direct_version }}
+    - yandex-direct-gearmand={{ direct_version }}
+    - yandex-direct-internal-networks={{ direct_version }}
+    - yandex-direct-nginx-geo-configs={{ direct_version }}
+    - yandex-direct-scripts-sandbox={{ direct_version }}
+    - yandex-direct-soap={{ direct_version }}
+    - yandex-direct-soap-gearman-workers={{ direct_version }}
+    - yandex-direct-soap-report-scripts={{ direct_version }}
+    - yandex-direct-soap-scripts={{ direct_version }}
+    - yandex-direct-soap-scripts-back={{ direct_version }}
+    - yandex-direct-user={{ direct_version }}
+    - yandex-direct-zk-delivery-configs={{ direct_version }}
+    - yandex-direct-zookeeper-ppc={{ direct_version }}
+
+    - yandex-du-resource-yacatalog
+    - yandex-direct-commander-build-testing=2.8.12
+    - yandex-direct-commander-staff-build-testing=2.1.4
+    - clemmer=1.0.22
+    - libsoap-lite-perl=0.55.1-1ya
+    - librbac2client-perl=1.384-1
+    - libtemplate-perl=2.24.2~yad-1
+    - libgearman7
+    - libjavascript-v8-perl
+    - gearman
+##    - libgearman-xs-perl
+  tags: sandbox-pkg
+
+- name: get informerstat
+  shell: sudo -u ppc /var/www/ppc.yandex.ru/protected/update_informerstat.pl files-init
+  tags: sandbox-pkg
+- name: get direct news
+  shell: sudo -u ppc /var/www/ppc.yandex.ru/protected/getNews.pl --target rss --target json
+  tags: sandbox-pkg
+- name: get direct geodata
+  shell: sudo -u ppc /var/www/ppc.yandex.ru/protected/get_geo_js.pl --init
+  tags: sandbox-pkg

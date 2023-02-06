@@ -1,0 +1,46 @@
+<dataset>
+
+    <business_process_state
+            type="DELETE_SEGMENT_IN_SC"
+            request_id="request-id-test"
+            payload='{"requestId": "request-id-test", "courierDto": {"carNumber": "123456789", "courierName": "Super courier", "phoneNumber": null, "deliveryServiceId": 123}, "scSegmentId": 2, "sortingCenterId": 123}'
+            status="FAIL"
+            comment="INVALID_PARTNER: 1 error; UNKNOWN_ERROR: 2 error"
+    />
+
+    <return_segment
+            id="1"
+            return_box_id="1"
+            unique_id="segment-1"
+            logistic_point_type="PICKUP"
+    />
+
+    <return_segment
+            id="2"
+            return_box_id="1"
+            unique_id="segment-2"
+            logistic_point_type="SORTING_CENTER"
+            status="OUT"
+            shipment_destination='{
+              "type": "SORTING_CENTER",
+              "partnerId": 345,
+              "logisticPointId": 200,
+              "name": "склад сц",
+              "returnSegmentId": 3
+            }'
+    />
+
+    <return_segment_change
+            return_segment_id="2"
+            status="FAIL"
+    />
+
+    <return_segment
+            id="3"
+            return_box_id="1"
+            unique_id="segment-3"
+            logistic_point_type="SORTING_CENTER"
+            status="IN"
+    />
+
+</dataset>

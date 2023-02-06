@@ -1,0 +1,34 @@
+params:
+  default:
+    resolve: true
+    templates:
+    - user_mslb_triple_waterfall.tpl
+
+values:
+  default:
+    be_defaults:
+      check: check observe layer7
+      ssl: ssl verify none
+      on_error: fastinter
+    globals:
+      service_name: widgets.delivery.tst.vs.market.yandex.net
+      service_port: 80
+      ping_expect: rstring pong
+      timeout_server: 35s
+      ping_vhost: heartbeat-affiliate.market.yandex.ru
+    meta:
+      monrun_ignore: true
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    be1:
+    - name: N@testing_market_front_affiliate_sas@local
+    - name: YP@testing-market-front-affiliate-vla@local
+      dns_resolvers: yandex-ns
+      resolve: false
+    be3:
+    - name: N@testing_market_front_affiliate_sas
+    - name: YP@testing-market-front-affiliate-vla
+      dns_resolvers: yandex-ns
+      resolve: false

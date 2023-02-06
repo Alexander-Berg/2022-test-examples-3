@@ -1,0 +1,35 @@
+<dataset>
+    <queue_tasks
+            queue_name="PROCESS_UPLOADED_FEED"
+            task='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd","waybillSegmentId":1,"sequenceId":1}'
+            attempt="2"
+            process_time="2021-08-30 14:20:00 +0000"
+    />
+    <queue_tasks
+            queue_name="PROCESS_UPLOADED_FEED"
+            task='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd","waybillSegmentId":3,"sequenceId":2}'
+            attempt="3"
+            process_time="2021-08-30 15:11:00 +0000"
+    />
+    <queue_tasks
+            queue_name="MODIFIER_UPLOAD"
+            task='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd","orderId":2,"waybillSegmentId":1,"sequenceId":3}'
+            attempt="4"
+            process_time="2021-08-30 09:20:00 +0000"
+    />
+
+    <!--not in count log, in retried log: process_time = current time, 3 attempts-->
+    <queue_tasks
+            queue_name="CREATE_TRUST_PRODUCT"
+            task='{"requestId":"1000000000000/abcdabcdabcdabaaaaaa"}'
+            attempt="3"
+            process_time="2021-08-30 15:20:00 +0000"
+    />
+    <!--not in log: process_time > current time, 0 attempts-->
+    <queue_tasks
+            queue_name="CREATE_TRUST_PRODUCT"
+            task='{"requestId":"1000000000000/abcdabcdabcdabaaaaaabbbb"}'
+            attempt="0"
+            process_time="2021-08-30 16:20:00 +0000"
+    />
+</dataset>

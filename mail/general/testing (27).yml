@@ -1,0 +1,174 @@
+base: etc/xeno/base.yml
+config:
+    log:
+        global:
+            async: false
+            sinks:
+            -   type: reopenable_file
+                path: var/log/xeno/xeno.log
+                force_flush: true
+        error:
+            async: false
+            sinks:
+            -   type: reopenable_file
+                path: var/log/xeno/error.log
+                force_flush: true
+        api:
+            async: false
+            sinks:
+            -   type: reopenable_file
+                path: var/log/xeno/api.log
+                force_flush: true
+        imap:
+            async: false
+            sinks:
+            -   type: reopenable_file
+                path: var/log/xeno/imap.log
+                force_flush: true
+        smtp:
+            async: false
+            sinks:
+            -   type: reopenable_file
+                path: var/log/xeno/smtp.log
+                force_flush: true
+        WebAccessTskv:
+            async: false
+            sinks:
+            -   type: reopenable_file
+                path: var/log/xeno/access.log
+                force_flush: true
+        sharder:
+            level: debug
+            async: false
+            sinks:
+            -   type: reopenable_file
+                path: var/log/xeno/sharder.log
+                force_flush: true
+    modules:
+        module:
+        -   _name: messenger
+            configuration:
+                peers:
+                -   xeno-lease-1.xeno-lease.testing.leasemeta.mail.stable.qloud-d.yandex.net:4040
+                -   xeno-lease-2.xeno-lease.testing.leasemeta.mail.stable.qloud-d.yandex.net:4040
+                -   xeno-lease-3.xeno-lease.testing.leasemeta.mail.stable.qloud-d.yandex.net:4040
+        -   _name: lease_node
+            configuration:
+                verbose_logging: 1
+        -   _name: ymod_tvm
+            configuration:
+                my_tvm_id: xeno-testing
+                destinations: [blackbox-testing, hound-testing, sendbernar-testing, gendarme-testing]
+        -   _name: rcache_client
+            configuration:
+                hosts: https://rcache-tst.stable.qloud-b.yandex.net
+        -   _name: blackbox_client
+            configuration:
+                hosts: http://pass-test.yandex.ru
+        -   _name: passport_internal_client
+            configuration:
+                hosts: http://passport-test-internal.yandex.ru
+        -   _name: oauth_internal_client
+            configuration:
+                hosts: http://oauth-test-internal.yandex.ru
+        -   _name: social_broker_client
+            configuration:
+                hosts: http://social-test.yandex.ru
+        -   _name: nw_client
+            configuration:
+                hosts: http://mxback-test.mail.yandex.net:8027
+        -   _name: check_spam_client
+            configuration:
+                hosts: http://so-testing-out.so.yandex-team.ru:5253
+        -   _name: xiva_client
+            configuration:
+                hosts: http://push-tst.yandex.ru
+        -   _name: gendarme_client
+            configuration:
+                hosts: https://test.gendarme.mail.yandex.net
+        -   _name: hound_client
+            configuration:
+                hosts: http://meta-test.mail.yandex.net
+        -   _name: sendbernar_client
+            configuration:
+                hosts: http://sendbernar-test.mail.yandex.net
+        -   _name: mobile_api_client
+            configuration:
+                hosts: https://web-tst-stable.mail.yandex.ru
+        -   _name: web_server
+            configuration:
+                endpoints:
+                    listen:
+                    -   addr: '::'
+                        port: 4080
+                    -   addr: '::'
+                        port: 8080
+                        endpoint_name: 'internal'
+        -   _name: xeno_web
+            configuration:
+                proxy_auth_by_pass_resource: auth_by_pass_master_testing
+                auth:
+                    check_credentials:
+                        imap_retries: 0
+        -   _name: macs
+            configuration:
+                sharpei: &sharpei_configuration
+                    host: sharpei-testing.mail.yandex.net
+                    port: 80
+        -   _name: xeno
+            system:
+                factory: xeno::xeno_impl_testing
+            configuration:
+                forbidden_uids: [4015291584, 4007933790, 4014335056, 4012513132, 4015291638, 4007637622]
+                webattach:
+                    url: http://attach-tst.mail.yandex.net
+                mailbox:
+                    external:
+                        provider_detection:
+                            yandex:
+                                id_name_response: "any response" # for not matching with yandex imap server response
+                iteration_timeout: 14 # seconds
+                delete_messages_chunk: 2
+                background_sync:
+                    auth_retry_interval: 10 # seconds
+                sync_messages:
+                    newest_count: 10
+                    oldest_count: 10
+                    oldest_flags_and_deletions_chunk_size: 10
+                cleanup_controllers_interval: 2 # seconds
+                max_delay_between_iteration_result_logs: 1s
+        -   _name: shards_distributor
+            configuration:
+                use_lease: true
+                lease_module: lease_node
+                sharpei:
+                    <<: *sharpei_configuration
+                max_owned_locks: 15
+                extra_acquire_count: 5
+                buckets:
+                -   name: b1
+                    shards: ['1', '5']
+                open_bucket: b0
+        -   _name: users_distributor
+            configuration:
+                users_polling:
+                    get_changed_users_interval: 2s
+                    get_all_users_interval: 20s
+                sharpei:
+                    <<: *sharpei_configuration
+        -   _name: imap_client
+            configuration:
+                verbosity_settings:
+                    client_request: true
+                    server_response: true
+                    service_info: true
+        -   _name: cachedb
+            configuration:
+                pg:
+                    connection_string: "host=man-g42oweom9kd6uni9.db.yandex.net,sas-3tz3aehmiaq1cbow.db.yandex.net,vla-6z9001hklv2nmpsc.db.yandex.net port=6432 dbname=cachedb"
+        -   _name: encryption
+            configuration:
+                kms_encryption:
+                    enabled: true
+                    node: https://kms.yandex
+                    key_id: abjg8q2q054b5kl4p362

@@ -1,0 +1,31 @@
+# Параметры обработки
+params:
+  default:
+    resolve: yes
+    templates:
+      - user_mslb_http.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          check observe layer7
+      on_error:       fastinter
+    globals:
+      ping_expect:    "status 200"
+      service_name:   mbi-log-processor.tst.vs.market.yandex.net
+      service_port:   80
+      timeout_server: 24m
+    meta:
+      monrun_ignore:  yes
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+    - name: YP@testing-market-mbi-log-processor-vla
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing-market-mbi-log-processor-sas
+      dns_resolvers: yandex-ns
+      resolve: false

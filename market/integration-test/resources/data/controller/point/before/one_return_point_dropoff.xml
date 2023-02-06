@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <partner
+            id="6"
+            name="SC1"
+            status="active"
+            type="SORTING_CENTER"
+    />
+    <logistics_point
+            id="10"
+            external_id="10"
+            address_id="1"
+            partner_id="6"
+            type="PICKUP_POINT"
+            active="TRUE"
+    />
+
+    <!-- DROPSHIP  -->
+    <logistic_segments
+            id="2"
+            partner_id="4"
+            type="warehouse"
+            logistic_point_id="6"
+    />
+
+    <!-- BACKWARD_MOVEMENT-->
+    <logistic_edges
+            id="1"
+            to_segment_id="2"
+            from_segment_id="3"
+    />
+    <logistic_segments
+            id="3"
+            partner_id="4"
+            type="backward_movement"
+    />
+
+    <!-- RETURN POINT -->
+    <logistic_edges
+            id="2"
+            to_segment_id="3"
+            from_segment_id="4"
+    />
+    <logistic_segments
+            id="4"
+            type="warehouse"
+            partner_id="6"
+            logistic_point_id="10"
+    />
+    <logistic_segments_services
+            id="1"
+            status="active"
+            segment_id="4"
+            code="1"
+            duration="10"
+            price="10"
+    />
+
+    <!-- ANOTHER BACKWARD_MOVEMENT -->
+    <logistic_edges
+            id="3"
+            to_segment_id="2"
+            from_segment_id="5"
+    />
+    <logistic_edges
+            id="4"
+            to_segment_id="5"
+            from_segment_id="4"
+    />
+    <logistic_segments
+            id="5"
+            partner_id="4"
+            type="backward_movement"
+    />
+</dataset>

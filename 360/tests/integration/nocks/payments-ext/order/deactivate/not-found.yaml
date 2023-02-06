@@ -1,0 +1,23 @@
+$schema: ../../../_schemas/nock.yaml
+
+scope: 'http://payments'
+method: PUT
+path: /ext/order/1234567890/0
+
+reqheaders:
+  $include: ../../../_samples/reqheaders.yaml
+  content-type: application/json
+
+body:
+  active: false
+
+status: 404
+
+response:
+  status: fail
+  code: 404
+  data:
+    message: ORDER_NOT_FOUND
+    params:
+      uid: 1234567890
+      order_id: 0

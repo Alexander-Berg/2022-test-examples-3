@@ -1,0 +1,26 @@
+---
+##################################################
+# Running tests and reporting to Startrek.
+#
+- name: Run tests
+  aqua:
+    pack: "{{ component.aqua.pack_id }}"
+    props: "{{ component.aqua.props }}"
+    restarts: 5
+  register: tests_launch
+
+- name: Change TeamCity status text
+  debug:
+    msg: "Tests finished ##teamcity[buildStatus {% if tests_launch.info.failedSuites %}status='FAILURE'{% endif %} text='Tests {% if tests_launch.info.failedSuites %}failed: {{ tests_launch.info.failedSuites }}, {% endif %}passed: {{ tests_launch.info.passedSuites }}']"
+
+- name: Send notification to release issue
+  startrek:
+    issue: "{{ release_issue.key }}"
+    update_tests_status:
+      version: "{{ mpfs_version }}"
+      name: regression tests
+      passed: "{{ tests_launch.info.passedSuites }}"
+      failed: "{{ tests_launch.info.failedSuites }}"
+      report_url: "{{ tests_launch.info.reportRequestUrl }}"
+  tags:
+    - notification

@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+[ -z "${KEEP}" ] && set -e
+
+SCRIPTS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd) #"
+. "${SCRIPTS_DIR}"/config.sh
+
+export INTERNAL_DRM_PROXY_PORT=${INTERNAL_DRM_PROXY_PORT=7778}
+
+[ -z "${NO_BUILD}" ] && ${YA_MAKE} ${ARCADIA_ROOT}/extsearch/video/vh/internal_drm_proxy
+
+[ -z "${PROD}" ] && TEST_PARAMS="--webauth=https://webauth.test.tools.yandex-team.ru/auth_request --admin_api_url=https://cms-vhbackend10.n.yandex-team.ru/admin-api/admin/v1.0"
+
+echo ${LOGBROKER_OAUTH_TOKEN} > LOGBROKER_OAUTH_TOKEN
+
+killall internal_drm_proxy ||:
+${STARTER} ${ARCADIA_ROOT}/extsearch/video/vh/internal_drm_proxy/internal_drm_proxy --config=${ARCADIA_ROOT}/extsearch/video/vh/internal_drm_proxy/cfg.pb.txt --log log.log --log-level DEBUG --port ${INTERNAL_DRM_PROXY_PORT} ${TEST_PARAMS} &
+last_killer
+[ false ] && \
+env \
+    BIN_DIR=${ARCADIA_ROOT}/extsearch/video/vh/internal_drm_proxy/ \
+    HTTP_PORT=${INTERNAL_DRM_PROXY_PORT} \
+    SERVICE_ARGS="--config=${ARCADIA_ROOT}/extsearch/video/vh/internal_drm_proxy/cfg.pb.txt --log log.log --log-level DEBUG --port ${INTERNAL_DRM_PROXY_PORT} ${TEST_PARAMS}" \
+    ${ARCADIA_ROOT}/extsearch/video/vh/internal_drm_proxy/start.sh &
+last_killer
+
+sleep 1
+
+[ "0;OK" == `${CURL} "http://${HOST}:${INTERNAL_DRM_PROXY_PORT}/internal/ping"` ]
+
+${CURL} "http://${HOST}:${INTERNAL_DRM_PROXY_PORT}/widevine" -v --request OPTIONS --data-raw '' -H 'Origin: https://frontend.vh.yandex.ru' -H 'X-Request-Id: 1648479173792546-9567418621694914434'
+
+echo should not wait:
+${CURL} "http://${HOST}:${INTERNAL_DRM_PROXY_PORT}/widevine" -X 'GET'
+${CURL} "http://${HOST}:${INTERNAL_DRM_PROXY_PORT}/widevine" -X 'OPTIONS'
+${CURL} "http://${HOST}:${INTERNAL_DRM_PROXY_PORT}/widevine" -X 'OPTIONS'   -H 'Pragma: no-cache'   -H 'Cache-Control: no-cache'   -H 'Accept: */*'   -H 'Access-Control-Request-Method: POST'   -H 'Access-Control-Request-Headers: content-type'   -H 'Origin: https://frontend.vh.yandex.ru'   -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36'   -H 'Sec-Fetch-Mode: cors'   -H 'Sec-Fetch-Site: cross-site'   -H 'Sec-Fetch-Dest: empty'   -H 'Referer: https://frontend.vh.yandex.ru/'   -H 'Accept-Language: en-US,en;q=0.9,ru-RU;q=0.8,ru;q=0.7'   --compressed
+${CURL} "http://${HOST}:${INTERNAL_DRM_PROXY_PORT}/widevine" -X 'OPTIONS'   -H 'Connection: keep-alive'   -H 'Pragma: no-cache'   -H 'Cache-Control: no-cache'   -H 'Accept: */*'   -H 'Access-Control-Request-Method: POST'   -H 'Access-Control-Request-Headers: content-type'   -H 'Origin: https://frontend.vh.yandex.ru'   -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36'   -H 'Sec-Fetch-Mode: cors'   -H 'Sec-Fetch-Site: cross-site'   -H 'Sec-Fetch-Dest: empty'   -H 'Referer: https://frontend.vh.yandex.ru/'   -H 'Accept-Language: en-US,en;q=0.9,ru-RU;q=0.8,ru;q=0.7'   --compressed
+
+if [ -z "$NO_BROKEN" ]; then
+echo bad but headers:
+${CURL} -v "http://${HOST}:${INTERNAL_DRM_PROXY_PORT}/widevine"
+
+${CURL} "http://${HOST}:${INTERNAL_DRM_PROXY_PORT}/playready" --data-raw ''
+${CURL} "http://${HOST}:${INTERNAL_DRM_PROXY_PORT}/fairplay" --data-raw ''
+${CURL} -v "http://${HOST}:${INTERNAL_DRM_PROXY_PORT}/widevine" --data-raw '{"broken json here'
+fi
+
+echo good new:
+
+${CURL} -v "http://${HOST}:${INTERNAL_DRM_PROXY_PORT}/" 2>&1 | grep "HTTP/1.1 404 Not Found"
+
+# TODO: ${CURL} -v "http://${HOST}:${INTERNAL_DRM_PROXY_PORT}/" | grep -F 'Content-Type: text/html'
+
+${CURL} -v "http://${HOST}:${INTERNAL_DRM_PROXY_PORT}/widevine" \
+    --data-raw '{"rawLicenseRequestBase64":"CAESkgwKoAsIARKECgrEAggCEhEx5wfonp8oHCnr13rv8Nl0ChiEm-uIBiKMATCBiQKBgQDIACjtZRkb9A-yfVNpzZ01ITSqRPzHYn59pZvnS1HpOlCQ3K_EHqdNRa1LxvH0B1-hQawoPzv2cPlCm1tWVe3Sgtd_bVUI-EkjxOexWvSxpD5wzNSJujAHajMGnw9pnmco42iJ3ZkUTQUpMpe9eEsd2wuUdVxHUXRBnaZHwVN_BwIDAQABKPyqAUgBWpEBCowBMIGJAoGBAKZ0AcDhCCL4aihY4a6zt4EChJz75OL_rnocbJ5zOw8X4-wbxk4JHDUnDh_OrSro17mkoHdz3xhAmSFXXHqh6_oXee6iTnh1tWk5tCZqDI3NurKtUIfKALDv8kiIjbX_AAIv6-vYrPurTsayQ6affiXcORx4qcXp_ADzxCyHP2-HAgMBAAEQARKAApQ-FKVhCFsbDrMy-K_MIAd8EeUV7dlk8a5Isutsb7XAOgTQAXkMLLxg_R2lFWNJ2HvLBEYc23yLPLtfia_s0Xi5Um0KTt_a6t-qaMowjNwhow6urjZyOpJh6w_tbkABhC2vzNB4YwW84Wgf50g-mjd4YaGyPe8WsA8DYVHrMmdkLV4DsT4KnLT_QT8qiYnx_POyIws6awgsGGIy2dHb2u5T1emdG9zpCBNjwCzvvhxfxOOKPzrl_vJYQuEAUkFyq5DcpkpUUxFOs8sstR5xDclyJmyQfQ6ENiW3lhvGy-tFGwzeXT-86WU08fjoRj-oTMSuWgr9t9qTg4vMFGqrj3IatwUKsQIIARIQUte80ZhQU0a9PNxKk-TirhiN24CCBiKOAjCCAQoCggEBAJtXJGezduDGBiy2JB4iKfHjEnE2LtK51Gl7rH3fUBg6EhQo6TVNfnYXYnvJSCFdXCCnI1zr388VsuR6BroQASYxksCCCrvxXGyb1HpUDps-fCabCAaTuaFvzX2U83FPHpRJaUs4XFtFZpn1pva4K1363xi5FP5pAKm94fIk4LeMfE1d6rLFbcJh3pionrlzHQUnZZdms3VNyKNUZ_dG-hsxoQ_geV284JJLFppr1l7XvBVqJSgvZ8BTVYyMl4KKRjSSMKsofsIh7Bntp7YR78sLj0NJHibtAF4EyVXQSnN1idRhEz-eVzd9e32kW9CXFLPpRCTI9RcyiGIPOugBxtECAwEAASj8qgFIARKAA6FgmClgOJvMNzBivveYEz7grLLMXrsfEXQ5tRsvNYyBsSNit8ZUTXqoENX0m5Ci_Xkl0pTW0InLkhxsikmAm6XOTXXi91j2tX40n8Mqov5FDc9IBJPFvCvjozsIf3mN9pSwjIpdgdkqgetGXpPqn7QZnajOiOOHQmPzsQJhksHRRZpcDjGUIrm8NvuMYkXekOrcelLf5q3T-8g6sFbLUEyuClGn8qk3hAGaT0gNnGSW-YsSQI2KU1Bpk6V6aTWaSKqU4vaqy-KvTfb7HY6mxYJR_uPst-g17jNY6692fkGWovKA7LwZQxSRboUWiQ0svtUJyY0FX_UrWV5xT8NmnQrx6YLAVn61_wUIEE8P7N06M0wyW0U3EdnXldetg6pGJ9vl8sX19UXuPIbft_3N3d8HztYLRLjPOfOTeqaA-yHVNjDUp7-jAid-kzjxU-KFRylNJoJATp0jVOxvyKnvV1KxUBivzWBOWsGNYNMwsZ1MHWWuuRAAvg8ck0msVt7kRBobChFhcmNoaXRlY3R1cmVfbmFtZRIGeDg2LTY0GhYKDGNvbXBhbnlfbmFtZRIGR29vZ2xlGhcKCm1vZGVsX25hbWUSCUNocm9tZUNETRoWCg1wbGF0Zm9ybV9uYW1lEgVMaW51eBojChR3aWRldmluZV9jZG1fdmVyc2lvbhILNC4xMC4yMzkxLjAyCggAEAAYASAAKBASXQpbCkUIARIQF7Sxue_iRVOLB1ygDDAsCxoNd2lkZXZpbmVfdGVzdCIgNDQxODBhYjMwNjUyZWUxMThmNDY5ZjZlYmUwMThiNzAQARoQGYoJStvxFz2hU14tmqRfWxgBILeQ0JAGMBU43I-ihAEagAFxhYjMToLCSJxXJfDX777V3QB2IYlbMESTBxJFme53PAodNTU717YYUZxHuhkVhc7ZBzhu5BDtZg8FM_rwUybuTQxRp7WA255iUF-_OF8hlFKJJJe08QnN9vvfD-nW5qNK12HkYGoIjPSPrnzwL7oO3jPvFw-RQHJb__tJMxMhj0oUAAAAAQAAABQABQAQEIiH3JdIrt4=","verificationRequired":false,"monetizationModel":"AVOD","strictPlaybackTtl":10800,"contentId":"44180ab30652ee118f469f6ebe018b70","productId":1,"serviceName":"ya-main","expirationTimestamp":1645483590,"contentTypeId":45,"puid":20424230,"internal":true,"signature":"c449479a0e52765ead593fd3274207a5bca2ea6a","watchSessionId":"4637fa84940a4f81b6dbe1ebf603c571","version":"V4"}' \
+  -H 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="98"' \
+  -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36' \
+  -H 'content-type: application/json' \
+  -H 'Accept-Language: en-US,en;q=0.9,ru-RU;q=0.8,ru;q=0.7' \
+  -H 'Origin: https://frontend.vh.yandex.ru' \
+  -H 'X-Request-Id: 1648479173792546-9567418621694914436' \
+  -H 'Referer: https://frontend.vh.yandex-team.ru/player/4659b7e84376bc0291a13629189dcf71?use_friendly_frame=true&vsid=7686388690d168f6c2f1741b547a28ec525756e8d448xWEBx8099x1649339973&from=vconf&reqid=1649339972758164-3509574292278968605-uzpron2k6bcxk2k2-BAL&slots=558428%2C0%2C11&flags=%7B%22disable_autoplay_slow_connection%22%3A%22false%22%2C%22disable_autoplay_save_data%22%3A%22false%22%2C%22poll_timeout%22%3A%2221600%22%2C%22poll_show_before_midroll%22%3A%22false%22%2C%22videoplayer-version%22%3A%221.0-8099%22%2C%22version%22%3A%221.0-8099%22%2C%22progress%22%3A%22true%22%2C%22start_position_confirmation%22%3A%22false%22%2C%22force_unmute%22%3A%22true%22%2C%22restore_playback_progress%22%3A%22false%22%2C%22hide_brand_play_button%22%3A%22undefined%22%7D&stream_url=https%3A%2F%2Fstrm.yandex.ru%2Fkal%2Fint_vconf4%2Fysign1%3Dfd5133dc9f0f8e772b7949bc1c71fc44af6aa01b824a7b4b029bc01fe967e52c%2CabcID%3D1558%2Cfrom%3Dvconf%2Cpfx%2Cregion%3D225%2Csfx%2Cts%3D62503fc4%2Fint_vconf40.m3u8%3Ffrom%3Dvconf%26partner_id%3D0%26target_ref%3Dhttps%253A%252F%252Fyastatic.net%252Fyandex-video-player-iframe-api-bundles%252F1.0-8099%252Fjs%252Fplayer-api-loader.js%26uuid%3D4659b7e84376bc0291a13629189dcf71%26video_category_id%3D1017%26clid%3D495%26yandexuid%3D84150890642016406%26slots%3Dnull%26imp_id%3D1%26reqid%3D1649339972758164-3509574292278968605-uzpron2k6bcxk2k2-BAL%26frontend_vh_reqid%3D1649339972758164-3509574292278968605-uzpron2k6bcxk2k2-BAL-2658%26content_id%3D4659tb7e84376bc0291a13629189dcf71%26from_block%3Dother%26channel_id%3D1570435155%26sandboxVersion%3D0x227bae77315%26testIds%3D558428&additional_params=%7B%22from%22%3A%22vconf%22%2C%22reqid%22%3A%221649339972758164-3509574292278968605-uzpron2k6bcxk2k2-BAL%22%2C%22vsid%22%3A%227686388690d168f6c2f1741b547a28ec525756e8d448xWEBx8099x1649339973%22%2C%22slots%22%3A%22558428%2C0%2C11%22%2C%22frontend_vh_reqid%22%3A%221649339972758164-3509574292278968605-uzpron2k6bcxk2k2-BAL-2658%22%2C%22content_id%22%3A%224659b7e84376bc0291a13629189dcf71%22%2C%22from_block%22%3A%22other%22%2C%22channel_id%22%3A%221570435155%22%2C%22sandboxVersion%22%3A%220x227bae77315%22%2C%22testIds%22%3A%22558428%22%7D&partner_id=0&category=1017&distr_id=0&video_content_id=4659b7e84376bc0291a13629189dcf71&video_content_name=int_vconf4&video_genre_name=&preview=%2F%2Favatars.mds.yandex.net%2Fget-vh%2F5612829%2F2a0000017decb413abdaf71d955260c4ad8c%2Forig&host=frontend.vh.yandex-team.ru request_id=1649339981608380-17787578345988990450' \
+  -H 'Cookie: _ym_uid=15887406751034836734; yandex_login=troller;'
+
+${CURL} "http://${HOST}:${INTERNAL_DRM_PROXY_PORT}/internal/stat" | wc
+${CURL} "http://${HOST}:${INTERNAL_DRM_PROXY_PORT}/internal/help" | wc
+
+
+#curl 'https://drm.yandex-team.ru/widevine' \
+
+# from from params
+#${CURL} "https://frontend.vh.yandex.ru/player/4127663ed234fa8584aeb969ceb02cd8.json?${URL_ADD}${SRCRWR}&autoplay=true&force_unmute=false&from=ottwidget_ya-serp&from_block=entity&has_preroll=false&mute=false&player_api_adapter=0&preview=false&progress=false&recommendations=off&report=false&service=ya-serp&share=false&skippable_fragments=false&stream_block=right.1.YA_PREMIUM&use_friendly_frame=false&ya_station=false&reqid=1639399771834074-11174662145030847539-sas3-0973-1aa-sas-l7-balancer-8080-BAL-889&adConfig=%7B%22partnerId%22%3A0%2C%22category%22%3A1012%2C%22videoContentId%22%3A%224127663ed234fa8584aeb969ceb02cd8%22%2C%22videoContentName%22%3A%221%2B1%22%7D&adsdk-container-width=596&adsdk-container-height=335.25" \
+#    | jq --exit-status '.content.streams[0].url | test("abcID=1134,from=ottwidget_ya-serp")'
+
+# ab -r -c100 -n50000 -mPOST "http://${HOST}:${INTERNAL_DRM_PROXY_PORT}/widevine" ||:
+# ab -r -c100 -n500000  "http://${HOST}:${INTERNAL_DRM_PROXY_PORT}/internal/ping" ||:
+
+
+# test logfeller:
+#cat ${ARCADIA_ROOT}/extsearch/video/vh/scripts/tests/log.log | ${ARCADIA_ROOT}/logfeller/bin/stdin_parser/logfeller-stdin-parser --configs ${ARCADIA_ROOT}/logfeller/configs/parsers --parser vh-internal-drm-proxy

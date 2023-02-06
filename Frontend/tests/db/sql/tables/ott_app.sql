@@ -1,0 +1,32 @@
+DROP TABLE IF EXISTS riverbank_testing._ott_logs_app_log_v2_d;
+CREATE TABLE riverbank_testing._ott_logs_app_log_v2_d (
+  _logfeller_timestamp UInt64,
+  _timestamp DateTime('Europe/Moscow'),
+  _partition String,
+  _offset UInt64,
+  _idx UInt32,
+  iso_eventtime String,
+  timestamp UInt64,
+  sequence_order UInt64,
+  application String,
+  environment String,
+  component String,
+  datacenter String,
+  instance String,
+  thread String,
+  level String,
+  logger String,
+  message String,
+  stackTrace String,
+  mdc String,
+  buildNumber String,
+  requestId String,
+  puid UInt64,
+  x_forwarded_for String,
+  profile_id String,
+  sub_profile_id String,
+  subscription String,
+  family_id String,
+  _rest String
+) ENGINE = MergeTree()
+ORDER BY timestamp;

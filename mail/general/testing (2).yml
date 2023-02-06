@@ -1,0 +1,84 @@
+base: etc/botserver/base.yml
+config:
+    log:
+        global:
+            async: false
+            sinks:
+            -   type: file
+                path: var/log/botserver/botserver.log
+                force_flush: true
+        WebAccessTskv:
+            async: false
+            sinks:
+            -   type: file
+                path: var/log/botserver/access.log
+                force_flush: true
+        HttpTskv:
+            async: false
+            sinks:
+            -   type: file
+                path: var/log/botserver/httpout.log
+                force_flush: true
+        smtp:
+            async: false
+            sinks:
+            -   type: file
+                path: var/log/botserver/smtp.log
+                force_flush: true
+        typed_log:
+            async: false
+            sinks:
+            -   type: file
+                path: var/log/botserver/typed.log
+                force_flush: true
+    modules:
+        module:
+        -   _name: tvm
+            configuration:
+                my_tvm_id: botserver-testing
+                destinations: [blackbox-testing]
+                wait_first_update_on_start: true
+                secret_file: etc/botserver/tvm_secret
+        -   _name: auth
+            configuration:
+                http:
+                    hosts: http://blackbox-test.yandex.net
+        -   _name: botdb
+            configuration:
+                conninfo: "host=sas-a8teogkl6ht5hbld.db.yandex.net port=6432 sslmode=verify-full user=bot_user dbname=botdb target_session_attrs=read-write"
+        -   _name: web_server
+            configuration:
+                ssl:
+                    cert_file: etc/botserver/ssl/botserver-test.stable.qloud-b.yandex.net.pem
+                    key_file: etc/botserver/ssl/botserver-test.stable.qloud-b.yandex.net.pem
+                endpoints:
+                    listen:
+                    -   addr: '::'
+                        port: 80
+                        ipv6_only: 1
+                    -   addr: '::'
+                        port: 443
+                        ipv6_only: 1
+                        ssl: on
+                    -   addr: '::'
+                        port: 8080
+                        endpoint_name: 'internal'
+        -   _name: mail_sender
+            configuration:
+                sender: rtec-proto-bot@yandex.ru
+                smtp:
+                    host: yabacks-test.mail.yandex.net
+                    port: 25
+        -   _name: telegram_gate
+            configuration:
+                # SHA256 hash from api token according to https://wiki.yandex-team.ru/security/for/imbots/
+                bind_path: /testing/6ecc6c165fc032066d871c3ce8c387fdc48f2f01afac7001590ab6de9a2543db
+                whitelist:
+                  - GRascm
+                  - kharybin
+                  - nordsturmpyc
+                  - anton_nazin
+                  - k_verkhoturova
+                  - Testusername
+                  - temazo
+                  - marchart

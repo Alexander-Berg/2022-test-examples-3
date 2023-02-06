@@ -1,0 +1,15 @@
+#!/bin/sh
+
+#DEBHELPER#
+
+case "$1" in
+    purge)
+        [ -L /etc/service/direct-test-steps ] && rm -v /etc/service/direct-test-steps
+        rm -rv /etc/sv/direct-test-steps
+        [ -L /etc/init.d/direct-test-steps  ] && rm -v /etc/init.d/direct-test-steps
+    ;;
+    remove)
+        printf "The package is removed, but configs remain. Use --purge\n"
+        exit 0
+    ;;
+esac

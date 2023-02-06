@@ -1,0 +1,16 @@
+service: direct
+title: Yandex Direct
+
+arcanum:
+  review:
+    required: true
+    auto_assign: true
+    # Отключаем код-ревью для Роботов (code=robot) и Виртуальных сотрудников (id=531)
+    skip_review_for: "robot, @id=531"
+    override_policy: override
+    disabling_policy: denied
+    rules:
+    - reviewers:
+      - name: "direct:sharding_exceptions_reviewer"
+        ship: 1
+        assign: 1

@@ -1,0 +1,46 @@
+message GoodEmpty {
+    message Value {
+    }
+}
+
+message GoodSimple {
+    message Value {
+    }
+
+    optional int64 x = 1;
+    repeated string ys = 2;
+}
+
+message GoodWithValue {
+    message Value {
+        optional string a = 1;
+        optional string b = 2;
+    }
+
+    optional Value x = 1;
+    optional Value y = 2;
+    optional string u = 3;
+    repeated string vs = 4;
+    optional int64 w = 5;
+}
+
+message BadFloat {
+    message Value {
+    }
+
+    optional double x = 1;
+}
+
+message BadRepeatedInt {
+    message Value {
+    }
+
+    repeated int32 x = 1;
+}
+
+message BadRepeatedValue {
+    message Value {
+    }
+
+    repeated Value xs = 1;
+}

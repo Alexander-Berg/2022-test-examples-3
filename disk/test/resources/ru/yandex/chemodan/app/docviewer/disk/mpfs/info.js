@@ -1,0 +1,13 @@
+{
+    "ctime":1378371473,
+    "meta":
+        {
+            "short_url":"https://front.tst.clk.yandex.net/i/iqHq0LNfRez6"
+        },
+    "mtime":1378371475,
+    "path":"/disk/file.pdf",
+    "utime":1378371473,
+    "type":"file",
+    "id":"/disk/file.pdf",
+    "name":"file.pdf"
+}

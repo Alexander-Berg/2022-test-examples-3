@@ -1,0 +1,19 @@
+context:
+  default:
+    service_name: touch_market_default_exp
+    servername_regexp: default\\.market(-report)?-exp-touch\\.([\\w\\d]+\\.)?yandex\\.(ru|ua|kz|by|com)
+    vs: market_exp
+    antirobot: true
+    antirobot_service_name: market
+    priority: 3
+    health_check: '"GET /ping HTTP/1.1\r\nHost: default.market-exp.yandex.ru\r\n\r\n"'
+    default_cert: fslb-testing
+    cert: fslb-testing
+
+servers:
+  default:
+    main:
+    - name: GREY%market-front-touch.tst.vs.market.yandex.net
+      plain_http_backend: true
+      port: 9080
+      timeout: 35s

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <fulfillment_service
+        ID="100"
+        NAME="test"
+        STATUS="1"
+        TYPE="1"
+    />
+
+    <SUPPLIER
+        ID="2"
+        NAME="supplier2"
+        TYPE="1"
+    />
+
+    <LOGISTICS_POINT
+        ID="222"
+        EXTERNAL_ID="a-b2"
+        PARTNER_ID="100"
+        ACTIVE="true"
+        ADDRESS='{"settlement":"Котельники","street":"Яничкин проезд","house":"7","comment":"терминал БД-6"}'
+        FOUND="true"
+    />
+
+    <SHOP_REQUEST ID="1"
+                  SERVICE_ID="100"
+                  LOGISTICS_POINT_ID="222"
+                  STATUS="7"
+                  TYPE="13"
+                  CREATED_AT="2018-1-1 9:9:9"
+                  REQUESTED_DATE="2018-1-1 9:0:0"
+                  ITEMS_TOTAL_COUNT="10"
+                  CALENDARING_MODE="0"
+                  DETAILS_LOADED="true"
+                  ITEMS_TOTAL_FACT_COUNT="10"
+                  ITEMS_TOTAL_DEFECT_COUNT="2"
+    />
+
+    <SHOP_REQUEST ID="2"
+                  SUPPLIER_ID="2"
+                  SERVICE_ID="100"
+                  STATUS="1"
+                  TYPE="0"
+                  CREATED_AT="2018-1-1 9:9:9"
+                  REQUESTED_DATE="2018-1-1 9:0:0"
+                  ITEMS_TOTAL_COUNT="1"
+                  CALENDARING_MODE="0"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="1"
+        ARTICLE="ssku123"
+        BARCODES="barcode1;barcode2"
+        COUNT="10"
+        NAME="tovar1"
+        SUPPLY_PRICE="100.5"
+        VAT_RATE="1"
+        BOX_COUNT="[null]"
+        COMMENT="item comment"
+        SUPPLIER_ID="444444"
+        FACT_COUNT="10"
+        DEFECT_COUNT="2"
+    />
+
+    <registry id="1"
+              request_id="1"
+              type="1"
+    />
+
+    <registry id="100"
+              request_id="1"
+              type="0"
+    />
+
+    <registry id="101"
+              request_id="1"
+              type="1"
+    />
+
+    <registry id="102"
+              request_id="2"
+              type="0"
+    />
+
+    <registry_unit id="1" registry_id="1" type="0"
+                   identifiers='{"parts": [{"type": "PALLET_ID", "value": "PL1001"}]}'
+                   parents='[]' meta='{"description": "Some pallet"}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 1, "relatedUnitIds": [{}]}]}'/>
+    <registry_unit id="2" registry_id="1" type="10"
+                   identifiers='{"parts": [{"type": "ORDER_ID", "value": "12345"}, {"type": "BOX_ID", "value": "P001"}]}'
+                   parents='[{"parts": [{"type": "PALLET_ID", "value": "PL1001"}]}]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 1, "relatedUnitIds": [{}]}]}'/>
+    <registry_unit id="3" registry_id="1" type="20"
+                   identifiers='{"parts": [{"type": "SHOP_SKU", "value": "ssku123"}, {"type": "VENDOR_ID", "value": "444444"}]}'
+                   parents='[{"parts": [{"type": "ORDER_ID", "value": "12345"}, {"type": "BOX_ID", "value": "P001"}]}]'
+                   meta='{"name": "name", "korobyte": {"width": 20, "height": 10, "length": 30}, "lifeTime": 10, "hasLifeTime": true,
+                   "supplyPrice": 100.0, "vendorCodes": ["vendorCode1", "vendorCode2"], "packageNumInSpike": 5}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 10, "relatedUnitIds": [{}]}, {"type": "DEFECT", "count": 2, "relatedUnitIds": [{}]}]}'/>
+
+    <registry_unit_relation parent_id="1" child_id="2"/>
+    <registry_unit_relation parent_id="2" child_id="3"/>
+
+    <unit_identifier/>
+
+    <queue_tasks
+        queue_name="PUBLISH_REQUEST_STATUS_CHANGE"
+        attempt="0"
+    />
+
+</dataset>

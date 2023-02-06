@@ -1,0 +1,87 @@
+headers:
+  h-balancer: x-rpslimiter-balancer
+  h-quota: x-yandex-rps-limiter-quota
+  is_turbo: x-yandex-zen-prerender
+  is_turbo_api: x-yandex-turbo-api
+cgi:
+  q-target-quota: rps-limiter-quota
+
+
+router:
+  - map: h-balancer
+    data:
+      - key: yappy-global
+        ref: yappy_global
+      - key: turbo
+        ref: turbo
+
+  - map: is_turbo
+    data:
+      - key: 1
+        ref: turbo
+
+  - map: is_turbo_api
+    data:
+      - key: 1
+        ref: turbo
+
+  - map: h-balancer
+    data:
+      - key: addrs_batch
+        ref: addrs_batch
+      - key: ping
+        ref: ping
+      - key: pdb_prod
+        ref: pdb_prod
+      - key: pdb_test
+        ref: pdb_test
+      - key: hamster
+        ref: hamster
+      - key: addrs.yandex.ru
+        ref: geo
+      - key: weather-test-api
+        ref: weather_test_api
+      - key: pdb_public_test
+        ref: pdb_public_test
+      - key: pdb_public_prod
+        ref: pdb_public_prod
+      - key: ugc_test
+        ref: ugc_test
+      - key: ugc_prod
+        ref: ugc_prod
+      - key: saas
+        ref: saas
+      - key: images_apphost_cbir_test
+        ref: images_apphost_cbir_test
+      - key: images_apphost_cbir
+        ref: images_apphost_cbir
+      - key: chats
+        ref: chats
+      - key: video_quasar
+        ref: video_quasar
+      - key: search_alice
+        ref: search_alice
+      - key: search_alice_hamster
+        ref: search_alice_hamster
+      - key: spravapi
+        ref: spravapi
+      - key: frontend_vh
+        ref: frontend_vh
+      - key: weather_apphost
+        ref: weather_apphost
+      - key: testpalm
+        ref: testpalm
+      - key: trust_lpm_prod
+        ref: trust_lpm_prod
+      - key: trust_payments_prod
+        ref: trust_payments_prod
+      - key: trust_paysys_prod
+        ref: trust_paysys_prod
+      - key: trust_common_prod
+        ref: trust_common_prod
+      - key: trust_gateway_prod
+        ref: trust_gateway_prod
+      - key: trust_gateway_test
+        ref: trust_gateway_test
+      - key: trust_test
+        ref: trust_test

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <property name="TIMESTAMP_WITH_TIME_ZONE" value="datetimeoffset" dbms="mssql"/>
+    <property name="TIMESTAMP_WITH_TIME_ZONE" value="TIMESTAMP WITH TIME ZONE" dbms="h2"/>
+
+    <property name="NOW" value="getutcdate()" dbms="mssql"/>
+    <property name="NOW" value="CURRENT_TIMESTAMP()" dbms="h2"/>
+
+    <property name="USER_NAME" value="user_name()" dbms="mssql"/>
+    <property name="USER_NAME" value="USER()" dbms="h2"/>
+
+    <changeSet id="1" author="katejud">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists
+                    schemaName="wmwhse1"
+                    tableName="RECEIPTDETAILITEM"
+                />
+            </not>
+        </preConditions>
+
+        <createTable tableName="RECEIPTDETAILITEM" schemaName="wmwhse1">
+            <column name="UUID" type="nvarchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RECEIPTKEY" type="nvarchar(10)" remarks="Receipt key">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RECEIPTLINENUMBER" type="nvarchar(5)" remarks="Receipt number across SKU group">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RETURNREASONID" type="nvarchar(64)">
+            </column>
+            <column name="RETURNREASON" type="varchar(max)">
+            </column>
+            <column name="ADDDATE" type="${TIMESTAMP_WITH_TIME_ZONE}" defaultValueComputed="${NOW}"
+                    remarks="Insertion date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDWHO" type="nvarchar(256)" defaultValueComputed="${USER_NAME}" remarks="Who added">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITDATE" type="${TIMESTAMP_WITH_TIME_ZONE}" defaultValueComputed="${NOW}"
+                    remarks="Last update date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITWHO" type="nvarchar(256)" defaultValueComputed="${USER_NAME}" remarks="Who edited">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey
+            columnNames="UUID"
+            constraintName="PK_RECEIPTDETAILITEM"
+            schemaName="wmwhse1"
+            tableName="RECEIPTDETAILITEM"
+        />
+
+        <addForeignKeyConstraint
+            baseColumnNames="RECEIPTKEY, RECEIPTLINENUMBER"
+            baseTableName="RECEIPTDETAILITEM"
+            baseTableSchemaName="wmwhse1"
+            constraintName="FK_RECEIPTDETAILITEM_RECEIPTDETAIL"
+            referencedColumnNames="RECEIPTKEY, RECEIPTLINENUMBER"
+            referencedTableName="RECEIPTDETAIL"
+            referencedTableSchemaName="wmwhse1"
+        />
+
+        <rollback>
+            <dropTable schemaName="wmwhse1" tableName="RECEIPTDETAILITEM"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

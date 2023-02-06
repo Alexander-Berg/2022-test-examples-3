@@ -1,0 +1,48 @@
+{
+  "rules": [
+    {
+      "conditions": [
+        {
+          "predicate": {
+            "type": "or",
+            "predicates": []
+          },
+          "positiveBranch": {
+            "rules": [
+              {
+                "actions": [
+                  {
+                    "url": "http://localhost:8080/local",
+                    "type": "httpRequest",
+                    "method": "GET",
+                    "authorization": {
+                      "type": "noAuth"
+                    },
+                    "processRedirect": true
+                  }
+                ]
+              }
+            ]
+          },
+          "negativeBranch": {
+            "rules": [
+              {
+                "actions": [
+                  {
+                    "type": "httpRequest",
+                    "method": "GET",
+                    "url": "http://127.0.0.1",
+                    "authorization": {
+                      "type": "noAuth"
+                    },
+                    "processRedirect": true
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

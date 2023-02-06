@@ -1,0 +1,51 @@
+warehouse-timezone: Europe/Moscow
+spring.datasource-reporter.url: jdbc:h2:mem:WMS;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS REPORTER
+spring.datasource-scprd.url: jdbc:h2:mem:SCPRD;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1
+AppServer: localhost
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms: debug
+    org.springframework.jdbc.core: debug
+    root: info
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  config:
+    import:
+      - application-fragment-common-test.yml
+
+print:
+  server:
+    host: localhost
+    port: 631
+    mock: true
+
+reporter:
+  tvm:
+    serviceId: 0
+    secret:
+    api-methods: /*
+    log-only-mode: false
+    check-user-ticket: false
+    cache:
+      dir:
+
+wms:
+  shipping:
+    tvm:
+      serviceId: 0
+  picking:
+    tvm:
+      serviceId: 0
+
+check:
+  authentication: 'no'
+
+auth-app:
+  tvm:
+    serviceId: 0
+
+s3.use: false

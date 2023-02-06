@@ -1,0 +1,135 @@
+{
+  "basePath" : "/",
+  "definitions" : {
+    "ru.yandex.crypta.lab.proto.FullValue" : {
+      "type" : "object",
+      "properties" : {
+        "error" : {
+          "type" : "string"
+        },
+        "normalized" : {
+          "type" : "string"
+        },
+        "raw" : {
+          "type" : "string"
+        },
+        "tags" : {
+          "items" : {
+            "type" : "string"
+          },
+          "type" : "array"
+        }
+      }
+    },
+    "ru.yandex.crypta.lab.proto.RuleCondition" : {
+      "type" : "object",
+      "properties" : {
+        "fullValues" : {
+          "items" : {
+            "$ref" : "#/definitions/ru.yandex.crypta.lab.proto.FullValue"
+          },
+          "type" : "array"
+        },
+        "hasErrors" : {
+          "type" : "boolean"
+        },
+        "revision" : {
+          "format" : "int64",
+          "type" : "integer"
+        },
+        "ruleId" : {
+          "type" : "string"
+        },
+        "source" : {
+          "enum" : [ "UNKNOWN", "SITES", "WORDS", "METRICA_COUNTERS_AND_GOALS", "METRICA_TITLES", "SEARCH_REQUESTS", "SEARCH_RESULTS_HOSTS", "APPS", "CATALOGIA", "MUSIC_LIKES", "MUSIC_PLAYS", "EFIR_CHANNELS", "EFIR_PROGRAMS", "CODE", "YANDEX_REFERRER", "BROWSER_SITES", "BROWSER_TITLES", "PRECALCULATED_TABLES", "PUBLIC_SITES", "PUBLIC_WORDS", "METRICA_SITES", "UNRECOGNIZED" ],
+          "type" : "string"
+        },
+        "state" : {
+          "enum" : [ "NEED_APPROVE", "APPROVED", "UNRECOGNIZED" ],
+          "type" : "string"
+        },
+        "timestamps" : {
+          "$ref" : "#/definitions/ru.yandex.crypta.lab.proto.Timestamps"
+        },
+        "values" : {
+          "items" : {
+            "type" : "string"
+          },
+          "type" : "array"
+        }
+      }
+    },
+    "ru.yandex.crypta.lab.proto.Timestamps" : {
+      "type" : "object",
+      "properties" : {
+        "created" : {
+          "format" : "int64",
+          "type" : "integer"
+        },
+        "modified" : {
+          "format" : "int64",
+          "type" : "integer"
+        }
+      }
+    }
+  },
+  "info" : {
+    "contact" : {
+      "url" : "https://wiki.yandex-team.ru/crypta/"
+    },
+    "description" : "Provides ways to interact with Crypta",
+    "title" : "Crypta API",
+    "version" : "8770402"
+  },
+  "paths" : {
+    "/lab/constructor/rule/condition/{revision}" : {
+      "get" : {
+        "consumes" : [ "application/json; charset=utf-8" ],
+        "description" : "",
+        "operationId" : "getRuleConditionByRevision",
+        "parameters" : [ {
+          "name" : "lang",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "revision",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "produces" : [ "application/json; charset=utf-8" ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "headers" : {
+              "X-Crypta-Host" : {
+                "description" : "Host to be reported",
+                "type" : "string"
+              },
+              "X-Crypta-Instance-ID" : {
+                "description" : "Instance ID to be reported",
+                "type" : "string"
+              },
+              "X-Crypta-Request-ID" : {
+                "description" : "Request ID to be reported",
+                "type" : "string"
+              }
+            },
+            "schema" : {
+              "$ref" : "#/definitions/ru.yandex.crypta.lab.proto.RuleCondition"
+            }
+          }
+        },
+        "summary" : "Retrieve rule condition",
+        "tags" : [ "lab" ]
+      }
+    }
+  },
+  "swagger" : "2.0",
+  "tags" : [ {
+    "name" : "lab"
+  } ]
+}
+

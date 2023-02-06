@@ -1,0 +1,21 @@
+context:
+  default:
+    service_name: market_exp_testing
+    servername_regexp: '[a-z0-9-_]+\\.market-exp-testing\\.([\\w\\d]+\\.)?yandex\\.(ru|ua|kz|by|com)'
+    vs: market
+    antirobot: true
+    antirobot_service_name: market
+    cert: market-exp-ext
+    priority: 1
+    health_check: '"GET /ping HTTP/1.1\r\nHost: default.market-exp.yandex.ru\r\n\r\n"'
+    exp_getter: true
+    testid_from_host: true
+
+servers:
+  default:
+    main:
+    - name: GREY%fslb.yandex.ru
+      timeout: 35s
+      weight: 100
+      port: 10019
+      plain_http_backend: true

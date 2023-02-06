@@ -1,0 +1,1187 @@
+{
+  "items": [
+    {
+      "id": "intro",
+      "action_type": "button",
+      "action_button_text": "Хорошо",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Здравствуйте. Я робот Яндекс.Драйва, регистрирую новых пользователей."
+        },
+        {
+          "type": "plaintext",
+          "text": "Приготовьте паспорт, водительское удостоверение и банковскую карту. Нужно быть старше 21 года и иметь стаж в категории «B» от двух лет."
+        }
+      ],
+      "next_step": "support_email"
+    },
+    {
+      "id": "support_email",
+      "action_type": "button",
+      "action_button_text": "Буду знать",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Проверка документов может занять несколько часов. Но я могу ошибиться или сломаться."
+        },
+        {
+          "type": "plaintext",
+          "text": "Если вам покажется, что я задерживаю ответ, напишите моим коллегам:"
+        },
+        {
+          "type": "image_link",
+          "text": "drive@support.yandex.ru",
+          "link": "https://yandex.ru/support/drive/joining/joining-faq.html",
+          "icon": "https://carsharing.s3.yandex.net/drive/static/registration-icons/link.png"
+        }
+      ],
+      "next_step": "agreements"
+    },
+    {
+      "id": "agreements",
+      "action_type": "button",
+      "action_button_text": "Прочитано. Даю согласие",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Начнём. Прочитайте документы ниже. Также нужно ваше согласие на обработку персональных данных, согласие с условиями пользования сервисом и лицензионным соглашением."
+        },
+        {
+          "type": "image_link",
+          "text": "Лицензионное соглашение",
+          "link": "https://yandex.ru/legal/drive_mobile_agreement/",
+          "icon": "https://carsharing.s3.yandex.net/drive/static/registration-icons/link.png"
+        },
+        {
+          "type": "image_link",
+          "text": "Условия использования сервиса",
+          "link": "https://yandex.ru/legal/drive_termsofuse/",
+          "icon": "https://carsharing.s3.yandex.net/drive/static/registration-icons/link.png"
+        }
+      ],
+      "next_step": "driver_license"
+    },
+    {
+      "id": "driver_license",
+      "action_type": "license",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Сейчас сфотографируем водительское удостоверение."
+        },
+        {
+          "type": "plaintext",
+          "text": "Постарайтесь держать его ровно."
+        }
+      ],
+      "next_step": "passport"
+    },
+    {
+      "id": "passport",
+      "action_type": "passport",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Хорошо. Теперь сфотографируйте два разворота паспорта. Главный (с фотографией) и с регистрацией."
+        }
+      ],
+      "next_step": "passport_selfie"
+    },
+    {
+      "id": "passport_selfie",
+      "action_type": "passport_selfie",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Также сделайте селфи с паспортом."
+        },
+        {
+          "type": "plaintext",
+          "text": "Постарайтесь найти освещенное место — например, встаньте лицом к окну и держите раскрытый паспорт рядом с собой."
+        },
+        {
+          "type": "plaintext",
+          "text": "Примерно вот так должно получиться:"
+        },
+        {
+          "type": "image",
+          "text": "https://carsharing.s3.yandex.net/drive/registration-chat/selfie-example.jpg"
+        }
+      ],
+      "next_step": "credit_card"
+    },
+    {
+      "id": "credit_card",
+      "action_type": "credit_card",
+      "action_button_text": "Далее",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Теперь привяжем банковскую карту."
+        }
+      ],
+      "next_step": {
+        "default": "initial_reg_final",
+        "conditions": [
+          {
+            "node": "initial_reg_promocode",
+            "condition": {
+              "type": "had_rides",
+              "value": false
+            }
+          }
+        ]
+      }
+    },
+
+    {
+      "action_button_text": null,
+      "action_type": "context_buttons",
+      "schema": {
+        "options": [
+          {
+            "message_text": "!yes",
+            "node": "initial_reg_final_promo",
+            "type": "message",
+            "text": "Есть"
+          },
+          {
+            "message_text": "!no",
+            "node": "initial_reg_final_no_promo",
+            "type": "message",
+            "text": "Нет"
+          }
+        ],
+        "type": "options"
+      },
+      "is_skippable": true,
+      "id": "initial_reg_promocode",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Вот теперь точно всё! Я отправил документы своим коллегам на проверку. Скоро расскажу о результатах."
+        },
+        {
+          "type": "plaintext",
+          "text": "А пока можете ввести промокод на первую поездку, если вдруг он у вас есть."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "action_button_text": null,
+      "action_type": null,
+      "id": "initial_reg_final_no_promo",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Ну, что ж. Ждём результаты проверки документов и едем без промокода."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "action_button_text": null,
+      "next_step_incorrect": "initial_reg_final_promo_notok",
+      "action_type": "enter_promocode",
+      "action_type_interface": "user_message",
+      "id": "initial_reg_final_promo",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Здорово, тогда напишите его прямо мне сюда."
+        }
+      ],
+      "is_skippable": true,
+      "next_step": "initial_reg_final_promo_ok"
+    },
+    {
+      "action_button_text": null,
+      "next_step_incorrect": "initial_reg_final_promo_notok",
+      "action_type": "enter_promocode",
+      "action_type_interface": "user_message",
+      "id": "initial_reg_final_promo_empty_messages",
+      "pre_action_messages": [],
+      "next_step": "initial_reg_final_promo_ok",
+      "is_skippable": true
+    },
+    {
+      "action_button_text": null,
+      "action_type": null,
+      "id": "initial_reg_final_promo_ok",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Принимается. Ждём результаты проверки документов, и, если всё хорошо, можно будет поехать уже со скидкой."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "action_button_text": null,
+      "action_type": "context_buttons",
+      "schema": {
+        "options": [
+          {
+            "message_text": "!yes",
+            "node": "initial_reg_final_promo_empty_messages",
+            "type": "message",
+            "text": "Да"
+          },
+          {
+            "message_text": "!no",
+            "node": "initial_reg_final_no_promo",
+            "type": "message",
+            "text": "Нет"
+          }
+        ],
+        "type": "options"
+      },
+      "id": "initial_reg_final_promo_notok",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Хм, такого промокода нет. Попробуете еще раз?"
+        }
+      ],
+      "is_skippable": true,
+      "next_step": null
+    },
+
+    {
+      "id": "initial_reg_final",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Вот теперь точно всё!"
+        },
+        {
+          "type": "plaintext",
+          "text": "Я отправил документы своим коллегам на проверку. Скоро расскажу о результатах."
+        }
+      ],
+      "next_step": null
+    },
+
+    {
+      "id": "photos_being_verified",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Я отправил документы своим коллегам на проверку. Скоро расскажу о результатах."
+        }
+      ],
+      "next_step": null
+    },
+
+    {
+      "id": "phone_call_intro",
+      "action_type": "call",
+      "action_type_interface": "button",
+      "action_button_text": "Можно звонить",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Хорошо, спасибо. И последнее…"
+        },
+        {
+          "type": "plaintext",
+          "text": "Мне нужно позвонить вам и попросить кое-что сказать :) Это займет несколько секунд."
+        },
+        {
+          "type": "plaintext",
+          "text": "Нажмите кнопку, когда будете готовы."
+        }
+      ],
+      "next_step": "calling"
+    },
+
+    {
+      "id": "calling",
+      "action_type": "call_response",
+      "action_type_interface": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+
+      ],
+      "next_step": {
+        "!call ok": "initial_reg_final",
+        "!call unanswer": "phone_call_busy",
+        "!call error": "phone_call_error",
+        "!default": "initial_reg_final"
+      }
+    },
+
+    {
+      "id": "phone_call_busy",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Не смог до вас дозвониться."
+        },
+        {
+          "type": "plaintext",
+          "text": "Но это не страшно."
+        },
+        {
+          "type": "plaintext",
+          "text": "Я отправил документы своим коллегам на проверку. Скоро расскажу о результатах."
+        }
+      ],
+      "next_step": null
+    },
+
+    {
+      "id": "phone_call_error",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Что-то пошло не так, нас прервали :("
+        },
+        {
+          "type": "plaintext",
+          "text": "Но это не страшно."
+        },
+        {
+          "type": "plaintext",
+          "text": "Я отправил документы своим коллегам на проверку. Скоро расскажу о результатах."
+        }
+      ],
+      "next_step": null
+    },
+
+    {
+      "id": "finish_ok",
+      "action_type": null,
+      "action_type_interface": "enter_map",
+      "action_button_text": "Поехали",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Поздравляю, регистрация пройдена!"
+        },
+        {
+          "type": "plaintext",
+          "text": "Команда Яндекс.Драйва, и я особенно, очень рады, что всё получилось."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "finish_ok_again",
+      "action_type": null,
+      "action_type_interface": "enter_map",
+      "action_button_text": "Поехали",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Мы обновили данные о ваших документах. Спасибо за терпение."
+        }
+      ],
+      "next_step": null
+    },
+
+    {
+      "id": "start_resubmit_license_back",
+      "action_type": "license_back",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Сначала оборотная сторона водительского удостоверения."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "start_resubmit_license_front",
+      "action_type": "license_front",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Сначала лицевая сторона водительского удостоверения."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "start_resubmit_passport_biographical",
+      "action_type": "passport_biographical",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Сначала разворот паспорта с вашим фото."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "start_resubmit_passport_registration",
+      "action_type": "passport_registration",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Сначала разворот паспорта с регистрацией."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "start_resubmit_passport_selfie",
+      "action_type": "passport_selfie",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Сначала селфи с паспортом."
+        }
+      ],
+      "next_step": null
+    },
+
+
+
+    {
+      "id": "cont_resubmit_license_back",
+      "action_type": "license_back",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Теперь оборотная сторона водительского удостоверения."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "cont_resubmit_license_front",
+      "action_type": "license_front",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Теперь лицевая сторона водительского удостоверения."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "cont_resubmit_passport_biographical",
+      "action_type": "passport_biographical",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Теперь разворот паспорта с вашим фото."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "cont_resubmit_passport_registration",
+      "action_type": "passport_registration",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Теперь разворот паспорта с регистрацией."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "cont_resubmit_passport_selfie",
+      "action_type": "passport_selfie",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Теперь селфи с паспортом."
+        }
+      ],
+      "next_step": null
+    },
+
+
+
+    {
+      "id": "only_resubmit_license_back",
+      "action_type": "license_back",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Нужно еще раз сфотографировать сторону прав с таблицей"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "only_resubmit_license_front",
+      "action_type": "license_front",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Нужно еще раз сфотографировать сторону прав с фотографией"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "only_resubmit_passport_biographical",
+      "action_type": "passport_biographical",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Нужно еще раз сфотографировать основной разворот паспорта"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "only_resubmit_passport_registration",
+      "action_type": "passport_registration",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Нужно еще раз сфотографировать разворот паспорта с пропиской"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "only_resubmit_passport_selfie",
+      "action_type": "passport_selfie",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Нужно еще раз сделать селфи с паспортом"
+        }
+      ],
+      "next_step": null
+    },
+
+
+
+    {
+      "id": "resubmit_one_complete",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Спасибо. Я отправил фотографию на проверку"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "resubmit_many_complete",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Спасибо. Я отправил фотографии на проверку"
+        }
+      ],
+      "next_step": null
+    },
+
+    {
+      "id": "ban_duplicate_passport",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Другой пользователь с таким же номером паспорта РФ как у вас, уже есть в сервисе."
+        },
+        {
+          "type": "plaintext",
+          "text": "Если это вы, пожалуйста, удалите приложение, поставьте заново и авторизуйтесь под вторым аккаунтом."
+        },
+        {
+          "type": "plaintext",
+          "text": "Если нет — скорее свяжитесь со службой поддержки:"
+        },
+        {
+          "type": "image_link",
+          "text": "drive@support.yandex.ru",
+          "link": "mailto:drive@support.yandex.ru",
+          "icon": "https://carsharing.s3.yandex.net/drive/static/registration-icons/mail.png"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "ban_duplicate_license",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Другой пользователь с таким же номером водительского удостоверения как у вас, уже есть в сервисе."
+        },
+        {
+          "type": "plaintext",
+          "text": "Если это вы, пожалуйста, удалите приложение, поставьте заново и авторизуйтесь под вторым аккаунтом."
+        },
+        {
+          "type": "plaintext",
+          "text": "Если нет — скорее свяжитесь со службой поддержки:"
+        },
+        {
+          "type": "image_link",
+          "text": "drive@support.yandex.ru",
+          "link": "mailto:drive@support.yandex.ru",
+          "icon": "https://carsharing.s3.yandex.net/drive/static/registration-icons/mail.png"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "ban_driving",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "От ГИБДД мы узнали, что ваши автомобильные права недействительны."
+        },
+        {
+          "type": "plaintext",
+          "text": "Поэтому пока что мы не можем пустить вас в сервис."
+        },
+        {
+          "type": "plaintext",
+          "text": "Если вы уверены, что это ошибка, пожалуйста, свяжитесь со службой поддержки:"
+        },
+        {
+          "type": "image_link",
+          "text": "drive@support.yandex.ru",
+          "link": "mailto:drive@support.yandex.ru",
+          "icon": "https://carsharing.s3.yandex.net/drive/static/registration-icons/mail.png"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "ban_old_license_intro",
+      "action_type": "license",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Ваши водительские права истекли. Если вы уже получили новые, давайте их обновим."
+        },
+        {
+          "type": "plaintext",
+          "text": "Как и во время регистрации, сфотографируйте по очереди обе стороны карточки."
+        },
+        {
+          "type": "plaintext",
+          "text": "Если нет — скорее свяжитесь со службой поддержки:"
+        },
+        {
+          "type": "image_link",
+          "text": "drive@support.yandex.ru",
+          "link": "mailto:drive@support.yandex.ru",
+          "icon": "https://carsharing.s3.yandex.net/drive/static/registration-icons/mail.png"
+        }
+      ],
+      "next_step": "ban_old_license_submitted"
+    },
+    {
+      "id": "ban_old_license_submitted",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Спасибо. Я отправил фотографии на проверку."
+        }
+      ],
+      "next_step": null
+    },
+
+    {
+      "id": "ban_old_passport_intro",
+      "action_type": "passport",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Срок действия Вашего паспорта истек. Давайте его обновим."
+        },
+        {
+          "type": "plaintext",
+          "text": "Пожалуйста, сфотографируйте два разворота паспорта. Основной (с фотографией) и с регистрацией."
+        }
+      ],
+      "next_step": "ban_old_passport_cont"
+    },
+    {
+      "id": "ban_old_passport_cont",
+      "action_type": "passport_selfie",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Также сделайте селфи с паспортом."
+        }
+      ],
+      "next_step": "ban_old_passport_done"
+    },
+    {
+      "id": "ban_old_passport_done",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Спасибо. Я отправил фотографии на проверку."
+        }
+      ],
+      "next_step": null
+    },
+
+    {
+      "id": "ban_old_passport_registration_intro",
+      "action_type": "passport_registration",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Срок действия Вашей временной регистрации истек. Давайте ее обновим."
+        }
+      ],
+      "next_step": "ban_old_passport_registration_done"
+    },
+    {
+      "id": "ban_old_passport_registration_done",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Спасибо. Я отправил фотографию на проверку."
+        }
+      ],
+      "next_step": null
+    },
+
+    {
+      "id": "ban_speed_asshole",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Какое-то время вы не сможете пользоваться Яндекс.Драйвом, потому что много раз превышали скорость \\U0001F3CE"
+        },
+        {
+          "type": "plaintext",
+          "text": "Мы беспокоимся о вас и жизни других людей, поэтому не можем допускать такого стиля вождения."
+        },
+        {
+          "type": "plaintext",
+          "text": "Когда запрет будет снят, вы получите смс и пуш-уведомление."
+        }
+      ],
+      "next_step": null
+    },
+
+    {
+      "id": "blocked_speed_asshole_3day",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "В течение трёх дней вы не сможете пользоваться Яндекс.Драйвом, поскольку часто превышали скорость \\U0001F3CE"
+        },
+        {
+          "type": "plaintext",
+          "text": "Мы беспокоимся за вас и жизни других людей, поэтому не можем допустить такого стиля вождения."
+        },
+        {
+          "type": "plaintext",
+          "text": "Когда доступ к машинам восстановится, вы получите пуш-уведомление."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "blocked_speed_asshole_1week",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "В течение семи дней вы не сможете пользоваться Яндекс.Драйвом, поскольку часто превышали скорость \\U0001F3CE"
+        },
+        {
+          "type": "plaintext",
+          "text": "Мы беспокоимся за вас и жизни других людей, поэтому не можем допустить такого стиля вождения."
+        },
+        {
+          "type": "plaintext",
+          "text": "Когда доступ к машинам восстановится, вы получите пуш-уведомление."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "blocked_speed_asshole_10days",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "В течение 10 дней вы не сможете пользоваться Яндекс.Драйвом, поскольку часто превышали скорость \\U0001F3CE"
+        },
+        {
+          "type": "plaintext",
+          "text": "Мы беспокоимся за вас и жизни других людей, поэтому не можем допустить такого стиля вождения."
+        },
+        {
+          "type": "plaintext",
+          "text": "Когда доступ к машинам восстановится, вы получите пуш-уведомление."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "blocked_speed_asshole_forever",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "К сожалению, с сегодняшнего дня вы не сможете пользоваться Яндекс.Драйвом."
+        },
+        {
+          "type": "plaintext",
+          "text": "Слишком частые превышения скорости недопустимы в нашем сервисе, ведь мы беспокоимся и за вас, и за жизни других людей. Надеемся на понимание."
+        }
+      ],
+      "next_step": null
+    },
+
+    {
+      "id": "blocked_aggressive_driving_3day",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Мы переживаем за вашу безопасность и безопасность других участников дорожного движения. Поэтому не допускаем агрессивного вождения на наших машинах."
+        },
+        {
+          "type": "plaintext",
+          "text": "Доступ к ним заблокирован на 3 дня. После этого ваш аккаунт будет автоматически восстановлен."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "blocked_aggressive_driving_1week",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Мы переживаем за вашу безопасность и безопасность других участников дорожного движения. Поэтому не допускаем агрессивного вождения на наших машинах."
+        },
+        {
+          "type": "plaintext",
+          "text": "Доступ к ним заблокирован на 7 дней. После этого ваш аккаунт будет автоматически восстановлен."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "blocked_aggressive_driving_10days",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Мы переживаем за вашу безопасность и безопасность других участников дорожного движения. Поэтому не допускаем агрессивного вождения на наших машинах."
+        },
+        {
+          "type": "plaintext",
+          "text": "Доступ к ним заблокирован на 10 дней. После этого ваш аккаунт будет автоматически восстановлен."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "blocked_aggressive_driving_forever",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Мы переживаем за вашу безопасность и безопасность других участников дорожного движения. Поэтому не допускаем агрессивного вождения на наших машинах."
+        },
+        {
+          "type": "plaintext",
+          "text": "Доступ к сервису Яндекс.Драйв для вас заблокирован. Надеемся на ваше понимание."
+        }
+      ],
+      "next_step": null
+    },
+
+    {
+      "id": "ban_generic",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Ваш доступ в сервис отозван по решению службы безопасности \\U0001F46E"
+        },
+        {
+          "type": "plaintext",
+          "text": "Возможно, это досадная ошибка. Пожалуйста, свяжитесь со службой поддержки:"
+        },
+        {
+          "type": "image_link",
+          "text": "drive@support.yandex.ru",
+          "link": "mailto:drive@support.yandex.ru",
+          "icon": "https://carsharing.s3.yandex.net/drive/static/registration-icons/mail.png"
+        }
+      ],
+      "next_step": null
+    },
+
+    {
+      "id": "rejected_general",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Регистрация не пройдена, сожалею :("
+        }
+      ],
+      "next_step": null
+    },
+
+    {
+      "id": "screening_inconsistent_data",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Данные в документах не совпадают."
+        },
+        {
+          "type": "plaintext",
+          "text": "Вам нужно перевыпустить документы и прислать мне новые фотографии."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "screening_too_young",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Чтобы пользоваться каршерингом, нужно быть не младше 21 года."
+        },
+        {
+          "type": "plaintext",
+          "text": "Возвращайтесь хоть в день своего 21-летия. Будем ждать!"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "screening_too_unexperienced",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Чтобы пользоваться каршерингом, нужен водительский стаж категории «B» от двух лет."
+        },
+        {
+          "type": "plaintext",
+          "text": "Возвращайтесь, когда стажа будет хватать. До встречи!"
+        }
+      ],
+      "next_step": null
+    },
+
+    {
+      "id": "soon_license_expires",
+      "action_type": "license",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Ваши водительские права скоро истекают. Если вы уже получили новые, давайте их обновим."
+        },
+        {
+          "type": "plaintext",
+          "text": "Как и во время регистрации, сфотографируйте по очереди обе стороны карточки."
+        }
+      ],
+      "next_step": "ban_old_license_submitted"
+    },
+
+    {
+      "id": "soon_passport_expires",
+      "action_type": "passport",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Срок действия Вашего паспорта скоро истекает. Если вы уже получили новый, давайте его обновим."
+        },
+        {
+          "type": "plaintext",
+          "text": "Пожалуйста, сфотографируйте два разворота паспорта. Основной (с фотографией) и с регистрацией."
+        }
+      ],
+      "next_step": "ban_old_passport_cont"
+    },
+
+    {
+      "id": "fraud_reason_reg_missing",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Не хватает адреса временной регистрации или временного пребывания в России. Пришлите адрес или страницу из паспорта с актуальным штампом регистрации в РФ."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "fraud_reason_docs_no_address",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Не хватает адреса регистрации или временного пребывания в России. Пришлите адрес или страницу из паспорта с актуальным штампом регистрации в РФ."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "fraud_reason_reg_signature_missing",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Не хватает подписи в штапме с адресом прописки. Поставьте её, и сделайте новую фотографию."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "fraud_reason_docs_non_latin",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Нужен перевод документов на английский язык. Присылайте оригинал и перевод, как только сделаете."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "fraud_reason_docs_invalid",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Кажется, документ испорчен, я не могу его принять. Вам нужно перевыпустить его и прислать мне новое фото."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "fraud_reason_data_mismatch",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Данные в документах не совпадают. Вам нужно перевыпустить документы и прислать мне новые фотографии."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "fraud_reason_docs_two_sided",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Двусторонний документ не подходит. Нужен основной разворот международного паспорта с фотографией. А ещё страница с адресом регистрации или временного пребывания в России."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "fraud_reason_license_no_b_cat",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Чтобы пользоваться каршерингом, должна быть категория B."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "fraud_reason_docs_expired",
+      "action_type": null,
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Ваш паспорт уже не действителен. Вам нужно перевыпустить его и прислать мне новое фото."
+        }
+      ],
+      "next_step": null
+    }
+  ],
+
+  "faq_url": "https://yandex.ru/support/drive/joining/joining-faq.html",
+  "support_url": "https://forms.yandex.ru/surveys/6149/"
+}

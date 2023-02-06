@@ -1,0 +1,78 @@
+{
+  "db_config": {
+    "user": "default-user",
+    "host": "default-host",
+    "CHILDS": {
+      "db1": {},
+      "db2": {
+        "user": "db2-user"
+      },
+      "db3": {
+        "host": "db3-host",
+        "weight": 4
+      },
+      "db4": {
+        "CHILDS": {
+          "1": {
+            "user": "ppc1-user",
+            "weight": 3
+          },
+          "2": {}
+        }
+      },
+      "dbwithfilepass": {
+        "pass": {
+          "file": "FILE_REPLACEMENT"
+        }
+      },
+      "dbextrausers": {
+        "user": "default_user",
+        "pass": "default",
+        "extra_users": {
+          "user31337": {
+            "pass": {
+              "file": "FILE_REPLACEMENT"
+            }
+          },
+          "dummyuser": {
+            "pass": "dummy"
+          }
+        }
+      },
+      "ppc": {
+        "host": "ppc-host",
+        "CHILDS": {
+          "1": {
+            "user": "ppc1-user"
+          },
+          "2": {
+            "CHILDS": {
+              "_": {
+                "user": "ppc2-user"
+              },
+              "heavy": {
+                "user": "ppc2-user-heavy"
+              }
+            }
+          },
+          "3": {
+            "CHILDS": {
+              "_": {
+                "user": "ppc2-user"
+              },
+              "heavy": {
+                "user": "ppc3-user-heavy"
+              },
+              "heavy2": {
+                "user": "ppc3-user-heavy2"
+              }
+            }
+          },
+          "not-a-shard": {
+            "user": "ppc-user"
+          }
+        }
+      }
+    }
+  }
+}

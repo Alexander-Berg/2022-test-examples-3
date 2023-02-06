@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <orders
+            id="1"
+            external_id="1001"
+            barcode="1001"
+            platform_client_id="1"
+            sender_id="1"
+            status="PROCESSING"
+            delivery_date_min="2021-03-02"
+            delivery_date_max="2021-03-02"
+    />
+
+    <waybill_segment
+            id="1"
+            order_id="1"
+            partner_id="48"
+            external_id="test-external-id"
+            shipment_type="IMPORT"
+            shipment_date="2019-06-11"
+            partner_type="FULFILLMENT"
+            waybill_segment_index="0"
+            shipment_id="[null]"
+            segment_type="FULFILLMENT"
+    />
+
+    <waybill_segment
+            id="2"
+            order_id="1"
+            partner_id="48"
+            external_id="test-external-id"
+            shipment_type="IMPORT"
+            shipment_date="2019-06-11"
+            partner_type="DELIVERY"
+            waybill_segment_index="1"
+            shipment_id="[null]"
+            segment_type="COURIER"
+    />
+
+    <change_order_request
+            id="1"
+            order_id="1"
+            status="PROCESSING"
+            request_type="LAST_MILE"
+    />
+
+    <change_order_segment_request
+            status="FAIL"
+            change_order_request_id="1"
+            segment_id="2"
+            required="true"
+    />
+
+    <business_process_state
+            id="10"
+            queue_type="PROCESS_WAYBILL_SEGMENT_UPDATE_LAST_MILE"
+            status="ERROR_RESPONSE_PROCESSING_SUCCEEDED"
+            author="[null]"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd","changeOrderSegmentRequestId":10}'
+            sequence_id="10"
+    />
+
+    <business_process_state_entity_id
+            business_process_state_id="10"
+            entity_type="CHANGE_ORDER_SEGMENT_REQUEST"
+            entity_id="1"
+    />
+
+    <business_process_state
+            id="1"
+            queue_type="UPDATE_LAST_MILE_REQUEST_STATUS_UPDATE"
+            status="ENQUEUED"
+            author="[null]"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1","changeOrderSegmentRequestId":1,"sequenceId":1}'
+            comment="[null]"
+            sequence_id="1"
+    />
+
+    <business_process_state_entity_id
+            business_process_state_id="1"
+            entity_type="CHANGE_ORDER_SEGMENT_REQUEST"
+            entity_id="1"
+    />
+
+</dataset>

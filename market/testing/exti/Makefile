@@ -1,0 +1,10 @@
+include $(APPDIR)/Make.defs
+
+PROGNAME  = test_exti
+PRIORITY  = SCHED_PRIORITY_DEFAULT
+STACKSIZE = CONFIG_DEFAULT_TASK_STACKSIZE
+MODULE    = $(CONFIG_TESTING_EXTI)
+
+MAINSRC = exti_main.c
+
+include $(APPDIR)/Application.mk

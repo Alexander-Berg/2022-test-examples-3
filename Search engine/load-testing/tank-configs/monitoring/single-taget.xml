@@ -1,0 +1,10 @@
+<Monitoring>
+    <Host address="[target]">
+        <CPU measure="user,system,iowait,idle"/>
+        <System measure="la5,csw,int,numthreads"/>
+        <Memory measure="free,used"/>
+        <Disk measure="read,write"/>
+        <Net measure="recv,send,estab"/>
+        <Custom measure='call' label='TCP Sockets'>ss -s | grep TCP: | awk '{print substr($4, 1, length($4) - 1)}'</Custom>
+    </Host>
+</Monitoring>

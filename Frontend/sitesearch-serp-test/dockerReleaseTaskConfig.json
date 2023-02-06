@@ -1,0 +1,29 @@
+{
+    "owner": "FRONTEND",
+    "description": "Создание релиза из docker образа",
+    "requirements": {
+      "disk_space": 5
+    },
+    "kill_timeout": 10800,
+    "notification": [],
+    "priority": {
+      "class": "SERVICE",
+      "subclass": "NORMAL"
+    },
+    "custom_fields": [
+      { "name": "packaged_resource_id", "value": "${SANDBOX_RESOURCE_ID}" },
+      { "name": "docker_resource_type", "value": "tarball" },
+      { "name": "docker_package_checkout_arcadia_from_url", "value": "arcadia:/arc/trunk/arcadia" },
+      { "name": "build_type", "value": "release" },
+      { "name": "use_aapi_fuse", "value": false },
+      { "name": "registry_tags", "value": "registry.yandex.net/wmfront/sitesearch-serp-test:${DOCKER_TAG}" },
+      { "name": "registry_login", "value": "robot-frontend" },
+      { "name": "vault_item_name", "value": "env.DOCKER_OUATH_TOKEN" },
+      { "name": "vault_item_owner", "value": "FRONTEND" },
+      { "name": "release_to_ya_deploy", "value": true },
+      { "name": "yp_token_vault", "value": "env.DCTL_YP_TOKEN" },
+      { "name": "release_type", "value": "${RELEASE_TYPE}" }
+    ],
+    "type": "BUILD_DOCKER_IMAGE_V6"
+  }
+  

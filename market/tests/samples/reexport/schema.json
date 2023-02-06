@@ -1,0 +1,44 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+      "reexport::a::A": {
+        "properties": {},
+        "type": "object"
+      },
+      "reexport::A": {
+        "$ref": "#/definitions/reexport::a::A"
+      },
+      "reexport::B": {
+        "$ref": "#/definitions/reexport::a::A"
+      },
+      "reexport::c::C": {
+        "properties": {},
+        "type": "object"
+      },
+      "reexport::a::B": {
+        "$ref": "#/definitions/reexport::c::C"
+      },
+      "reexport::D": {
+        "$ref": "#/definitions/reexport::a::B"
+      },
+      "reexport::a::C": {
+        "$ref": "#/definitions/reexport::c::C"
+      },
+      "reexport::C": {
+        "$ref": "#/definitions/reexport::a::C"
+      },
+      "reexport::E": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/reexport::B"
+          },
+          {
+            "$ref": "#/definitions/reexport::C"
+          },
+          {
+            "$ref": "#/definitions/reexport::D"
+          }
+        ]
+      }
+    }
+}

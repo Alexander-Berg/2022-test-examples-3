@@ -1,0 +1,151 @@
+{
+  "meta": {
+    "fields": [
+      {
+        "name": "logisticPointId",
+        "title": "Логистическая точка",
+        "type": "REFERENCE",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "status",
+        "title": "Статус запроса",
+        "type": "LIST",
+        "editable": false,
+        "options": [
+          {
+            "id": "SCHEDULED",
+            "displayName": "Запланирован к выполнению",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "PROCESSING",
+            "displayName": "Выполняется",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "WARN",
+            "displayName": "Ошибка выполнения подзадачи подготовки",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "CANCELLED",
+            "displayName": "Отменен",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "ERROR",
+            "displayName": "Ошибка",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "SUCCESS",
+            "displayName": "Успешно выполнен",
+            "slug": null,
+            "openNewTab": false
+          }
+        ],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "startClosingDateTime",
+        "title": "Время начала отключения",
+        "type": "DATE_TIME",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "closingDateTime",
+        "title": "Время отключения",
+        "type": "DATE_TIME",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "context",
+        "title": "Контекст данных",
+        "type": "FORMAT_TEXT",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "reason",
+        "title": "Причина отключения",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      }
+    ],
+    "actions": [
+      {
+        "title": "Отменить",
+        "description": "Отмена заявки",
+        "slug": "/cancel",
+        "identifiedBy": [],
+        "type": "ROW_ACTION",
+        "method": "POST_BODY",
+        "icon": null,
+        "authorities": [
+          "ROLE_DROPOFF_DISABLING_EDIT"
+        ]
+      }
+    ],
+    "mode": "VIEW",
+    "deletable": false,
+    "children": [
+      {
+        "title": "Подзадачи",
+        "slug": "dropoff-disabling/subtask",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "requestId",
+        "idFieldName": "id",
+        "pageSize": 6,
+        "isCrossPluginSlug": false
+      }
+    ],
+    "tabs": []
+  },
+  "item": {
+    "id": 1,
+    "values": {
+      "reason": "Нерентабельность",
+      "closingDateTime": "2021-12-08T15:00:00",
+      "context": {
+        "text": "{\"affectedShops\": null, \"nextLogisticPointId\": null, \"nextLogisticPointAddress\": null}"
+      },
+      "logisticPointId": {
+        "id": "1",
+        "displayName": "point1",
+        "slug": "lms/logistics-point",
+        "openNewTab": false
+      },
+      "startClosingDateTime": "2021-11-28T15:00:00",
+      "status": "SCHEDULED"
+    },
+    "title": "Запрос на отключение дропоффа 'point1'"
+  }
+}

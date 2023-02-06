@@ -1,0 +1,240 @@
+#include <yxiva/core/platforms.h>
+#include <catch.hpp>
+
+using namespace yxiva;
+using namespace apns;
+
+static const std::string garbage = "garbage";
+static const std::string outdated_cert = R"(
+-----BEGIN CERTIFICATE-----
+MIIEJDCCAwwCCQDPhAUJT4zsgzANBgkqhkiG9w0BAQsFADCB0zELMAkGA1UEBhMC
+VVMxCzAJBgNVBAgMAjUyMRAwDgYDVQQHDAdOb3doZXJlMQ0wCwYDVQQKDARtYWls
+MRkwFwYDVQQLDBB4aXZhc2VydmVyX3V0ZXN0MTMwMQYKCZImiZPyLGQBAQwjcnUu
+eWFuZGV4LmJsdWUubWFya2V0LmluaG91c2UuZGVidWcxRjBEBgNVBAMMPUFwcGxl
+IFByb2R1Y3Rpb24gSU9TIFB1c2ggU2VydmljZXM6IGNvbS55YW5kZXguaW9zLllh
+bmRleE1haWwwHhcNMDAwNjE3MTQwMDI1WhcNMTAwNjE1MTQwMDI1WjCB0zELMAkG
+A1UEBhMCVVMxCzAJBgNVBAgMAjUyMRAwDgYDVQQHDAdOb3doZXJlMQ0wCwYDVQQK
+DARtYWlsMRkwFwYDVQQLDBB4aXZhc2VydmVyX3V0ZXN0MTMwMQYKCZImiZPyLGQB
+AQwjcnUueWFuZGV4LmJsdWUubWFya2V0LmluaG91c2UuZGVidWcxRjBEBgNVBAMM
+PUFwcGxlIFByb2R1Y3Rpb24gSU9TIFB1c2ggU2VydmljZXM6IGNvbS55YW5kZXgu
+aW9zLllhbmRleE1haWwwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCv
+3adenSIbAFon1/748HStlgSd20oaRcj4rqRuXXgOFR8NDHHMR85p49Rzb+nFEkLb
+ENGMIaP28ulemQIkg6zO4W7DU4yGq3yBDrI1lsg2bb5cerAYckEXsY7XGIFeLw/Z
+LFwC9zIViwAMDfTfq9jE5AeufOmjoBECil+OzpYMF30eNS2SCre/5qUhU2x9Wb7A
+BbSZ5gvYM1dBmVq0rz9gJgQ3Ncc1Qa8FmhwkNjUg/ammrSpBqKvtvUu6ABZx6SNn
+fPjvDqHl0VUrjyj/2ItXhpraJpNTyGx5q1qzfF7+KJE8P73V3Hx47vrdSwsRH5U5
+zqb3aO+4+FwzPVRRThfZAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAHxQSH+L8gWR
+ThG7QG+x1W+RZBmt8nokfFq80C9oFZZZIC3dr9gyNP8sfbpH4Jru6yDFVclHVec2
+ROMnzxPlQhkz8cFXXU/6Oyaa7YDLAgxY23D3/FyWFYGjmhXrb4MEFF8U02YRJxjc
+T0DlarhJT0wsvY3VfPBajX1IuNV7CAiFBw9fph0OuCxJW92vLJjUh29B3b172SBT
+IoCV97MA1VRhxSytViBCMcNvPTU+A2wOHxwY9yYK/y8d8h5001fFTouYbU6orDRD
+tvdo8Sw/eZiOXBi+Lk+1uzYSL3Q2LB6/UNoBnptTtXQUcrDkzDnpXeVemE4sHO96
+oq+Cf04+6cY=
+-----END CERTIFICATE-----
+-----BEGIN PRIVATE KEY-----
+MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCv3adenSIbAFon
+1/748HStlgSd20oaRcj4rqRuXXgOFR8NDHHMR85p49Rzb+nFEkLbENGMIaP28ule
+mQIkg6zO4W7DU4yGq3yBDrI1lsg2bb5cerAYckEXsY7XGIFeLw/ZLFwC9zIViwAM
+DfTfq9jE5AeufOmjoBECil+OzpYMF30eNS2SCre/5qUhU2x9Wb7ABbSZ5gvYM1dB
+mVq0rz9gJgQ3Ncc1Qa8FmhwkNjUg/ammrSpBqKvtvUu6ABZx6SNnfPjvDqHl0VUr
+jyj/2ItXhpraJpNTyGx5q1qzfF7+KJE8P73V3Hx47vrdSwsRH5U5zqb3aO+4+Fwz
+PVRRThfZAgMBAAECggEALZeK8k5OLy3SMY4ffa3osa+4lqvo9BKvXTj5S9tTamMz
+X5CgV9Mtwencg+i5c+ueBWjAylFWToj+0xVbpte0DxYGPwED503BwztqG9ZxJRsi
+RJtR16SXF2timoSx1RbiRuznFaW8CDW212ku2GWWlsR+8U9UyqSOhFgXGdCYuZ1W
+z5U4Xv50wuRxPweFBqzzmNCIkdwGG6AMIUGV5rIHTHvbxHbLw/GH9k9xLC/dOgaQ
+j5zO3KgUWmaNH05OKCxQH6NWqJuf83BXnfSGZHi2R4pfJcxYBjR3SLhP6Ju7Auwv
+FhyeBVmGP+V3wP3QQaD01iRkal1eudSRnUt3BTRhuQKBgQDoC08regSWZ6szbAjW
+GkM24Uvoh+hhk+dEkLVhLfBMTroDjkacVGssjRTQS1dLOwV0zuK7gQjzT/dxM5Ci
+FMwYWbayf/j8yquwHLlaC685Gvh1PYDWdzMNskFM0O5DDlrSoNl6DT/Dz2dw6fWQ
+Ewy3a53jQKnbuu1ZgZBXlZ0B0wKBgQDCBZu5pSpjBPrsGIu1i0n3vG4EFgUjoJG/
+62rvAT9LzxtL18GRuBsCP0W/ogI9vJETB0Ny+r2pFt+Q94MM9kjTTdm1PhSFghXH
+E4i/PPtiNFk/vJk79uJfsf592qpC5FWQhozdvupbKS/pFLr82q0uwzua1sDeqi/Y
+JRurcq7IIwKBgQDjCL2rcjUu27u8EkYLBaMh/QmCOAd8AXRTt6pfrMziPFzvwbMA
+nfBGpLrqmeyNJPBPu2RHxRZ2yZT241bt3p9aa9y/hUqeO8YEB/aqTahhnSvfug9m
+xzXifrg5amrUnSTr1Ik0S+ZJtZIl/iNPlfPpOpg+kzQeUySLYKNTroTyFQKBgHiz
+CHdq+n1zIa4ybudXaYKGZGKCWFwbjdA44eMhgYDlrHN4G2FNiO/S8M8QOBiz8ARI
+Zntm5QoFwrrqX0p3BEL/kUog/p83l9iqnE1r4G7tZgAykZkuMxGZJ1qf53+JkHlC
+Wuuv0xc2/ikfzltypn4K0k+2/XEHqo/qNdZol7bFAoGBAMoxwpGEG7QBs4feb0SC
+QEAbpeT2EfbXIQG4y3nfIYR6op8vHXWvL6zTRN0Og2PzT2oy+p8iGyenFBSsMYZA
+OpTAZGhn3D51HR0SQkmLtBlkLqDLx6SApWwZqhY1tALDMDHmxfakJqw3QZrshtkT
+sYzY5ADMvzg7m5FC7d24pSMk
+-----END PRIVATE KEY-----
+)";
+
+static const std::string up_to_date_cert = R"(
+-----BEGIN CERTIFICATE-----
+MIIEJjCCAw4CCQD5m63RkoooPjANBgkqhkiG9w0BAQsFADCB1DELMAkGA1UEBhMC
+VVMxCzAJBgNVBAgMAjUyMRAwDgYDVQQHDAdOb3doZXJlMQ0wCwYDVQQKDARtYWls
+MRkwFwYDVQQLDBB4aXZhc2VydmVyX3V0ZXN0MTMwMQYKCZImiZPyLGQBAQwjcnUu
+eWFuZGV4LmJsdWUubWFya2V0LmluaG91c2UuZGVidWcxRzBFBgNVBAMMPkFwcGxl
+IERldmVsb3BtZW50IElPUyBQdXNoIFNlcnZpY2VzOiBjb20ueWFuZGV4Lmlvcy5Z
+YW5kZXhNYWlsMB4XDTIwMDYxNzEyMTE0NVoXDTMwMDYxNTEyMTE0NVowgdQxCzAJ
+BgNVBAYTAlVTMQswCQYDVQQIDAI1MjEQMA4GA1UEBwwHTm93aGVyZTENMAsGA1UE
+CgwEbWFpbDEZMBcGA1UECwwQeGl2YXNlcnZlcl91dGVzdDEzMDEGCgmSJomT8ixk
+AQEMI3J1LnlhbmRleC5ibHVlLm1hcmtldC5pbmhvdXNlLmRlYnVnMUcwRQYDVQQD
+DD5BcHBsZSBEZXZlbG9wbWVudCBJT1MgUHVzaCBTZXJ2aWNlczogY29tLnlhbmRl
+eC5pb3MuWWFuZGV4TWFpbDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+ALK8Uiwu6en7ScqG7b08CfZ07rdWTM4jDXPC4hdXxw5CYevD8vx9f/7wIHKYv7dI
+QGskvsomHQYLMSu/MyqcakNBs5migOm9O96+mFSr58hrWwUR6anDNyT1UdVgSEbz
+RzxUz66ETwMeDtg8h8tPYcsucyLudhdniEgduY1Pj6R9GCJDvK7xXv3JmSl8nzOS
+skfJ7wkVJ8JtGiDXKiWFQw4gjIOrbbJMcg0bqCi0onYu/nfIHAV7RFLTv0Uu67do
+GW4us8L1TtIYgpylU880zdsyCkNEGZlpvOQBcXU5NyzJ1rDquvtpDGMC+0pYJ3Lx
+2PZoSWHHsWEXJMs0H78B08sCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAYw9LkQk0
+g4ZOi31COl36OskEMcg4Lye6IoHMABLR2qhu3ge+ux8uIK+IG2su6dM3RDLYHAj6
+Y7TAP2/4UcsQWlfeKZN2q+iHmKbL5Elk0hWgPJEIfwWERXZ0JWATGG5WGRPCQcKQ
+11ZbgBJbL/CoSU1HPYF7U+KIjEF0oBxfODCFFzynMEqMTcdDj44+k4psL/1CPw2D
+1AjYfdCc7r7kQfQaNsm/bVH6h0BoRHgb/WX+I6pNNN9W7/XO1gpW76RxshpL5opR
+Ndlqm4P2fDqltWrly98vtVUtDQ7zDSx/NmVPgj0tiPcaXbfMJWsLxmhJBsujDCbN
+CGXfjaSGBkVCYQ==
+-----END CERTIFICATE-----
+-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCyvFIsLunp+0nK
+hu29PAn2dO63VkzOIw1zwuIXV8cOQmHrw/L8fX/+8CBymL+3SEBrJL7KJh0GCzEr
+vzMqnGpDQbOZooDpvTvevphUq+fIa1sFEempwzck9VHVYEhG80c8VM+uhE8DHg7Y
+PIfLT2HLLnMi7nYXZ4hIHbmNT4+kfRgiQ7yu8V79yZkpfJ8zkrJHye8JFSfCbRog
+1yolhUMOIIyDq22yTHING6gotKJ2Lv53yBwFe0RS079FLuu3aBluLrPC9U7SGIKc
+pVPPNM3bMgpDRBmZabzkAXF1OTcsydaw6rr7aQxjAvtKWCdy8dj2aElhx7FhFyTL
+NB+/AdPLAgMBAAECggEAJ9pv5CQtyhta78q4NequOgMGu2CFzazpMfexXA0ZeGd6
+2AwgIQaGxLycL5E5pk949asC06Y98HwMYbnHWef4lbiPqGEgp32nXNpYswCFtR2i
+9PVyiYTaxeXhcld+pjtWlfA/QqWDzKkmHDca/E1d++UGjTJoqH1QWOwv1H96Au31
+4eT74wjMleiQlf+uR2u6AsPc7uOB6E8ULju7/BiAMD21s4rMyIWn+UbCWmyRKcaR
+hIr5BWy5Xr5SZgQNL11x4KhEGCjJGLInxDhqZhGiBQyD0ClacyaGEiaC1P4Q/I/t
+9RgZdK3rqB4X0FNWusTdn+Vrn5MICT2q0qDe6yZweQKBgQDrOFG6GUyFYpFc3Xq0
+7ntg6FuwRyYd5TWZyvK5cCvIhNQQVRtpLYIAoQ7hf457ixXbalw4gFshh/FVxZZk
+57IwOmuuBpUBskldfkBHBmcdsPGnSDMAa0niKna6KUJ0G/7mGx4cY1eLExJDbY1t
+V3lJypud0iVyxanNsGxn++hofwKBgQDChpB81FBLTraNyKXigeF1PgrVBPPOowUk
+5nUs7oWaaEKoe2z1Bs52skTygbdIosA5gmcCOSbQaWGK3ZNR7suPS3HK9A1ze039
+StGeotuGvTBFm41dbIs46SW4p4SlV8wavA8cVEg6PQrFB3bzq/RN2SVOL9AUhcd9
+dxvZrYcOtQKBgQCtzn3FT3BVl1HmFtnW2+la4BbwGIK30Ghc7bORBquzjULNlrWc
+cD4BjQDb608zRsCt0te2AFJWYocXY9sPUI1AScrLWp28FStU5DdGxBppvBe0Dgtx
+odWEQvBb+qTZ+t3M1fjX7SgA4eS64jaAtwQuXIHEikWVmy0vic9wvpkqrQKBgFHD
+tBn0OCffVxZzn159D2JziKQPZ9eUaEYhZGFVhOzpJBOjhaHckY4M0rRIV9z9I+VI
+bbnegfUaRnjTN+g5gnCh2pvfR4Qh8R8lgsS2WaXiAddQUfRR+pcaUNOz/iptpAoc
+wBE9T/rCy7MTtyknPxI10ttxd3oY3Uhcd2Vg7iL9AoGAPYna71oXKe43W4PvtbI+
+lDT6qLpQIqtT8KBD2Sdb2RGOMNCxGwU0JjWEe8xNerhi3MY+raqrGW4+ERWpYzBF
+XQS7zQePBFck+Lj8bTsokxpCPOJrSa1cg6ABhSa2nM3xF1V8B9usy1nVFycyeYjY
+hpH8RR55Z+Dg7NQsuD+VJns=
+-----END PRIVATE KEY-----
+)";
+
+static const std::string without_private_key = R"(
+-----BEGIN CERTIFICATE-----
+MIIDdDCCAlwCCQDhIbhZfmqlQjANBgkqhkiG9w0BAQsFADB8MQswCQYDVQQGEwJV
+UzELMAkGA1UECAwCNTIxEDAOBgNVBAcMB05vd2hlcmUxDTALBgNVBAoMBG1haWwx
+GTAXBgNVBAsMEHhpdmFzZXJ2ZXJfdXRlc3QxFTATBgoJkiaJk/IsZAEBDAV0b3Bp
+YzENMAsGA1UEAwwEcm9vdDAeFw0yMDA2MTYxNDUwMTFaFw0zMDA2MTQxNDUwMTFa
+MHwxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAI1MjEQMA4GA1UEBwwHTm93aGVyZTEN
+MAsGA1UECgwEbWFpbDEZMBcGA1UECwwQeGl2YXNlcnZlcl91dGVzdDEVMBMGCgmS
+JomT8ixkAQEMBXRvcGljMQ0wCwYDVQQDDARyb290MIIBIjANBgkqhkiG9w0BAQEF
+AAOCAQ8AMIIBCgKCAQEA5B2FBwSTF7XiEvLR7UNt3R1cARdBi5CXqyJNTdqx5kGL
+HKNS2XF0cN8wvEeYQ2O8PXB8g27QYYumDyLKU/sqrZyM2cC2UX27HTKzVkJhHtp6
+lay17A22GWEDS2N1OF5FcpjI0LJzQsp14UUU6mamNNFGfQ2kRLFjVtzapK/h1ikz
+p6PkVOKJs7zVoHS394gbb0qTn1cJREWB1KCzFdAURZ6roDfvFzztpvyvlediGCIF
+vH9+DXE5+rSt9SOC27izUSQf9W9NoSiH/Yh5CxBU4iSbzIfi+LboqE2/CdjR8kwn
+9oGAy0FlLw4ZwsFdqvQWlKDWJl0vX/UwUEYhR3e5qQIDAQABMA0GCSqGSIb3DQEB
+CwUAA4IBAQADu3mF+pK2mi/lKrPPb6sNACbpEq+GJn661yn8WnW4kpjZ1FKcE1wI
+wgiH026i0vlaOI/ogkBHXNVYCNkeFYYEfr6jlqs9lG/MadHYAUW6qC+z0Az4uH5U
+2MDxm6GXhc4+eczyKoY0Pp4yU9oszwd2VyXNTB5dKgUkYwbnGURJijlZdzda1LX7
+zop5I3lTv9XWMPzxM1p3vYx+FSTsrs8V+GxE9JsfXdwLvRCTWI2xrFD7YK1psEaO
+ngMq3+z3F3ayDv2f75cxxHMGoXQab3KvXPf4ySZ4xPhCcLwsJKIJ+PK4ktMydQNC
+y8Gn5VVBDrSFQO7GJXPkVZn3M977l5b6
+-----END CERTIFICATE-----
+)";
+
+static const std::string without_certificate = R"(
+-----BEGIN PRIVATE KEY-----
+MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDkHYUHBJMXteIS
+8tHtQ23dHVwBF0GLkJerIk1N2rHmQYsco1LZcXRw3zC8R5hDY7w9cHyDbtBhi6YP
+IspT+yqtnIzZwLZRfbsdMrNWQmEe2nqVrLXsDbYZYQNLY3U4XkVymMjQsnNCynXh
+RRTqZqY00UZ9DaREsWNW3Nqkr+HWKTOno+RU4omzvNWgdLf3iBtvSpOfVwlERYHU
+oLMV0BRFnqugN+8XPO2m/K+V52IYIgW8f34NcTn6tK31I4LbuLNRJB/1b02hKIf9
+iHkLEFTiJJvMh+L4tuioTb8J2NHyTCf2gYDLQWUvDhnCwV2q9BaUoNYmXS9f9TBQ
+RiFHd7mpAgMBAAECggEBAK5Hd1jTP+X/icdcSNJyj789LQuQTv1n7NhMjq8KhJwc
+O0IX7bY/He0WN8/BCy2BR1HRXO+1e/LqlGY/+ECNRh/52QqMVz6PRqOaFrWyZS0D
+UmCD4UGFgDiHi9LPG8GDFJ/m5pW7oJ/IuqLu+nnTDuyPbsEf6P6qX/D/LvRfg7Tv
+t8qR0v2VurVMtQXYNNRrNurfxY55m7M6q5yKVXM2yMFoqgh/zPLvWFBddwWO2DIb
+O+eI/wFhWAOGsrzjSpVb8TGEfd13LN1R7hDnWd72WTymrE3fvWzzTRjDIz4oKYL6
+VTuKg4b77bhJ8gVMETrgyMFDdLjvmTKPgS5zB2rD2QECgYEA/qbs0C9vPQTApO8Z
+oA/AH/If3vxzgQgsIkzn6nqG26c/4ZAsvPutuOafw1QlePZpvaErcPRIDMxJE9Q8
+7S4wexUaNSFUhYsl5siBU3s5kPyMdEqPUyYNdBI4/KcDEZ9TGtHdmsoWxEINk3kq
+genIEp7dC2Dbeqt27hz3SXgfDZkCgYEA5VKilBU1VJUtsOuIn/myRDQMtiNg+EC6
+vYn2JeM49mVn7HdVj0phnRNIwDBs9Pp6AdeWuub96isAVVJvDJQrcw4wOdJ5MZJU
+f+sUKPnEAqL0O1KAyr1g6gclMSThbkHV3Rp/ZcROV+SRTFemLxwJi+uj6y9XQiVZ
+uTpFRb9Q9pECgYBYatcAteeWtSa6XbZ1B+L6dJQyVU85dv/z7OX9WQuoCps4k1ml
+SHGaKKFCLd5Q8KXoTKSLtJWrs+aPtvpsk8QLiFkwJ2F0eMrxJZ8ZwEhNmhKeciDv
+it/S9FzLBKYhIUO2pTWfgBmFjTWvhbuHngd0x6oSQFAUeKJzrKUD4mxNyQKBgEaW
+ih7E7HaNuNPFnHeJt7rQvrzt5PJlklW3esIs0CLgEf4yuW5y+dsMzY8DGPbLhvS8
+NNRxN+V1uROKXU5k6X7v9h5GUDHXFhWN+dWnFBOvrzf3bFd7tbIz4tnevVlgAIGf
+n2lm5KqfW65BKJFFsxaTwRAqsVRWBOlEK4CNpFFRAoGBANw0vg+G0pqgOuFMzPDn
+cNv3CQlWnsKyFMtPYf9n+qeW9iu59Y9uf1hXvNZKBb6SnNsF9d0odEd5l+SNp47z
+DXvfienQaSQRD9LyvmqieVqrm/J7nbyGeZZvWJWAr/VlMqXMMhRvxAYnJ/bXDXbe
+5gDPb1T2tnOSY8Uik6Ua6I0e
+-----END PRIVATE KEY-----
+)";
+
+static const std::string ru_yandex_mail_debug_cert = up_to_date_cert;
+static const std::string production_cert = outdated_cert;
+static const std::string development_cert = up_to_date_cert;
+
+TEST_CASE("pem_certificate::get_topic/fails_on_garbage", "")
+{
+    REQUIRE_THROWS_WITH(
+        pem_certificate::get_topic(garbage),
+        Catch::Contains("failed to read certificate from PEM: no start line"));
+}
+
+TEST_CASE("pem_certificate::get_topic/returns_subject_uid_as_topic", "")
+{
+    REQUIRE(
+        pem_certificate::get_topic(ru_yandex_mail_debug_cert) ==
+        "ru.yandex.blue.market.inhouse.debug");
+}
+
+TEST_CASE("pem_certificate::get_type/fails_on_garbage", "")
+{
+    REQUIRE_THROWS_WITH(
+        pem_certificate::get_type(garbage),
+        Catch::Contains("failed to read certificate from PEM: no start line"));
+}
+
+TEST_CASE("pem_certificate::get_type/detects_production_cert", "")
+{
+    REQUIRE(pem_certificate::get_type(production_cert) == certificate_type::production);
+}
+
+TEST_CASE("pem_certificate::get_type/detects_development_cert", "")
+{
+    REQUIRE(pem_certificate::get_type(development_cert) == certificate_type::development);
+}
+
+TEST_CASE("pem_certificate::validate/fails_on_garbage", "")
+{
+    REQUIRE_THROWS_WITH(
+        pem_certificate::validate(garbage),
+        Catch::Contains("failed to read certificate from PEM: no start line"));
+}
+
+TEST_CASE("pem_certificate::validate/fails_without_private_key", "")
+{
+    REQUIRE_THROWS_WITH(
+        pem_certificate::validate(without_private_key),
+        Catch::Contains("failed to read private key from PEM: no start line"));
+}
+
+TEST_CASE("pem_certificate::validate/fails_without_certificate", "")
+{
+    REQUIRE_THROWS_WITH(
+        pem_certificate::validate(without_certificate),
+        Catch::Contains("failed to read certificate from PEM: no start line"));
+}
+
+TEST_CASE("pem_certificate::validate/fails_on_outdated_cert", "")
+{
+    REQUIRE_THROWS_WITH(
+        pem_certificate::validate(outdated_cert), Catch::Contains("certificate expired"));
+}
+
+TEST_CASE("pem_certificate::validate/ok_on_up_to_date_cert", "")
+{
+    REQUIRE_NOTHROW(pem_certificate::validate(up_to_date_cert));
+}

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <service_code id="554" code="MOVEMENT" is_optional="false" name="TEST SERVICE 1" type="internal"/>
+    <service_code id="553" code="DELIVERY" is_optional="false" name="TEST SERVICE 1" type="internal"/>
+    <service_code id="552" code="DEFERRED_COURIER_YANDEX_GO" is_optional="false" name="TEST SERVICE 1" type="internal"/>
+
+    <partner id="111" status="active" type="SORTING_CENTER" name="dropoff"/>
+    <partner id="1111" status="active" type="SORTING_CENTER" name="is not dropoff"/>
+    <partner id="112" status="active" type="DELIVERY" name="movement_partner"/>
+    <partner id="113" status="active" type="SORTING_CENTER" name="sc"/>
+    <partner id="114" status="active" type="DROPSHIP" name="dropship" location_id="255"/>
+
+    <address
+            id="11"
+            location_id="54321"
+            latitude="100"
+            settlement="Уфа"
+            post_code="555666"
+            street="Центральная"
+            house="8"
+            housing="3"
+    />
+    <address
+            id="12"
+            location_id="54321"
+            latitude="100"
+            settlement="Уфа"
+            post_code="555666"
+            street="Центральная"
+            house="8"
+            housing="3"
+    />
+
+    <logistics_point
+            id="101"
+            name="dropoff"
+            partner_id="111"
+            external_id="warehouse_101"
+            type="PICKUP_POINT"
+            address_id="11"
+            active="true"
+            is_available_for_c2c="false"
+    />
+    <logistics_point
+            id="1"
+            name="dropoff"
+            partner_id="111"
+            external_id="warehouse_1"
+            type="PICKUP_POINT"
+            address_id="11"
+            active="true"
+    />
+    <logistics_point
+            id="102"
+            name="sc"
+            partner_id="113"
+            external_id="warehouse_102"
+            type="WAREHOUSE"
+            address_id="12"
+            active="true"
+    />
+    <logistics_point
+            id="103"
+            name="dropship"
+            partner_id="114"
+            external_id="warehouse_103"
+            type="WAREHOUSE"
+            address_id="12"
+            active="true"
+    />
+    <logistics_point
+            id="111"
+            name="dropoff"
+            partner_id="1111"
+            external_id="warehouse_101"
+            type="WAREHOUSE"
+            address_id="11"
+            active="true"
+    />
+
+    <partner_relation
+            id="6"
+            from_partner="114"
+            to_partner="111"
+            enabled="false"
+            handling_time="1"
+            return_partner="114"
+            shipment_type="IMPORT"
+            to_partner_logistics_point="101"
+    />
+    <partner_relation_cutoff
+            partner_relation_id="6"
+            location_id="225"
+            cutoff_time="19:00:00"
+            packaging_duration="600000000000"
+    />
+    <partner_relation_product_rating
+            partner_relation_id="6"
+            rating="5"
+    />
+    <platform_client_partners partner_id="111" platform_client_id="3" id="1" status="ACTIVE"/>
+    <platform_client_partners partner_id="114" platform_client_id="3" id="2" status="ACTIVE"/>
+
+    <logistic_segments id="1001" partner_id="111" logistic_point_id="101" location_id="1001" type="warehouse"/>
+    <logistic_segments id="1002" partner_id="112" location_id="1001" type="movement"/>
+    <logistic_segments id="1003" partner_id="113" logistic_point_id="1" location_id="1001" type="warehouse"/>
+    <logistic_segments id="1004" partner_id="112" location_id="1001" type="backward_movement"/>
+
+    <logistic_segments_services id="111" segment_id="1001" status="active" code="554" duration="0" price="0" frozen="true"/>
+    <logistic_segments_services id="112" segment_id="1001" status="inactive" code="553" duration="0" price="0" frozen="false"/>
+    <logistic_segments_services id="113" segment_id="1001" status="inactive" code="552" duration="0" price="0" frozen="false"/>
+
+    <logistic_segments_services id="211" segment_id="1002" status="inactive" code="554" duration="0" price="0" frozen="false"/>
+    <logistic_segments_services id="212" segment_id="1002" status="inactive" code="553" duration="0" price="0" frozen="false"/>
+    <logistic_segments_services id="213" segment_id="1002" status="inactive" code="552" duration="0" price="0" frozen="false"/>
+
+    <logistic_segments_services id="311" segment_id="1003" status="inactive" code="554" duration="0" price="0" frozen="false"/>
+    <logistic_segments_services id="312" segment_id="1003" status="inactive" code="553" duration="0" price="0" frozen="false"/>
+    <logistic_segments_services id="313" segment_id="1003" status="inactive" code="552" duration="0" price="0" frozen="false"/>
+
+    <logistic_segments_services id="411" segment_id="1004" status="inactive" code="554" duration="0" price="0" frozen="false"/>
+    <logistic_segments_services id="412" segment_id="1004" status="inactive" code="553" duration="0" price="0" frozen="false"/>
+    <logistic_segments_services id="413" segment_id="1004" status="inactive" code="552" duration="0" price="0" frozen="false"/>
+</dataset>

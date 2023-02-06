@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mockito="http://www.mockito.org/spring/mockito"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.mockito.org/spring/mockito http://www.mockito.org/spring/mockito.xsd">
+
+    <import resource="classpath*:bean.xml"/>
+
+    <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="location" value="classpath:ru/yandex/market/rg/config/functional-test.properties"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="order" value="-1"/>
+    </bean>
+    <mockito:mock id="mbiReportGeneratorTvm" class="ru.yandex.inside.passport.tvm2.Tvm2"/>
+    <mockito:mock id="lgwTvmTicketProvider" class="ru.yandex.market.rg.tvm.LgwTvmTicketProvider"/>
+    <mockito:mock id="nesuClient" class="ru.yandex.market.logistics.nesu.client.NesuClient"/>
+    <mockito:mock id="lomClient" class="ru.yandex.market.logistics.lom.client.LomClient"/>
+    <mockito:mock id="lmsClient" class="ru.yandex.market.logistics.management.client.LMSClient"/>
+    <mockito:mock id="marketLoyaltyClient" class="ru.yandex.market.loyalty.client.MarketLoyaltyClient"/>
+    <mockito:mock id="orderServiceClient" class="ru.yandex.market.rg.client.orderservice.RgOrderServiceClient"/>
+    <bean id="clock" class="ru.yandex.common.util.date.TestableClock"/>
+
+    <!--выключаем yt-->
+    <bean class="ru.yandex.market.core.config.YtTestConfig"/>
+    <bean id="dbTestConfig" class="ru.yandex.market.core.database.EmbeddedPostgresConfig"/>
+    <bean id="functionalTestConfig" class="ru.yandex.market.core.config.FunctionalTestConfig"/>
+    <bean id="functionalTestEnvironmentConfig" class="ru.yandex.market.rg.config.FunctionalTestEnvironmentConfig"/>
+    <bean id="yqlTestConfig" class="ru.yandex.market.rg.config.YqlTestConfig"/>
+
+    <bean id="dataSource"
+          name="dataSourceRW,
+          dataSourceBilling,
+          mstatYqlDataSource,
+          nonTracingDatasource,
+          statsDataSource,
+          statsDataSourceRO"
+          factory-bean="dbTestConfig"
+          factory-method="dataSource"/>
+
+    <bean id="jdbcTemplate"
+          name="billingJdbcTemplate,
+          jdbcTemplateRW,
+          readOnlyJdbcTemplate,
+          shopJdbcTemplate,
+          statsJdbcTemplate,
+          statsJdbcTemplateRO"
+          class="org.springframework.jdbc.core.JdbcTemplate">
+        <constructor-arg name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <alias name="transactionManager" alias="statsTransactionManager"/>
+    <alias name="transactionTemplate" alias="billingTransactionTemplate"/>
+    <bean id="statsTransactionTemplate"
+          name="tmsTransactionTemplate"
+          class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
+
+    <mockito:mock id="asyncReportsService" class="ru.yandex.market.core.asyncreport.ReportsService"/>
+    <mockito:mock id="mockIndexerApiClientHttpClient" class="org.apache.http.client.HttpClient"/>
+    <mockito:mock id="marketReportService" class="ru.yandex.market.common.report.DefaultAsyncMarketReportService"/>
+    <mockito:mock id="mboDeliveryParamsClient" class="ru.yandex.market.core.offer.warehouse.MboDeliveryParamsClient"/>
+
+    <bean class="ru.yandex.market.rg.asyncreport.assortment.AssortmentBeanPostProcessor" lazy-init="false"/>
+
+    <mockito:spy beanName="dataCampService"/>
+
+    <mockito:mock id="loyaltyRestClientImpl"
+                  class="ru.yandex.market.core.supplier.promo.service.loyalty.LoyaltyRestClientImpl"/>
+    <mockito:spy beanName="promoService"/>
+    <mockito:spy beanName="supplierReportPriceService"/>
+    <mockito:spy beanName="asyncMboMappingService"/>
+    <mockito:spy beanName="stockYtDao"/>
+    <mockito:mock id="ytHttpFactory" class="ru.yandex.market.core.yt.YtHttpFactory"/>
+    <mockito:mock class="ru.yandex.market.checkout.checkouter.client.CheckouterClient" id="checkouterClient"/>
+    <mockito:mock id="namedHistoryMdsS3Client"
+                  class="ru.yandex.market.common.mds.s3.client.service.api.NamedHistoryMdsS3Client"/>
+</beans>

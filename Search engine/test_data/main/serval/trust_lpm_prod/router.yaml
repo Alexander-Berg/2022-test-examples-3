@@ -1,0 +1,48 @@
+quota: default
+urls: urls
+
+headers:
+  service_token: X-Service-Token
+
+export:
+  - service_token
+
+router:
+  - regexp: service_token
+    data:
+      - key: "(tickets_[a-z0-9]{32})|(events_tickets_[a-z0-9]{32})|(events_tickets_new_[a-z0-9]{32})|(events_tickets_full_payout_[a-z0-9]{32})"
+        quota: always_allowed
+  - map: urls
+    data:
+      - key: "/bindings-external/v2.0/bindings/"
+        router:
+          - regexp: service_token
+            data:
+              - key: "taxifee_[a-z0-9]{32}"
+                quota: taxi
+              - key: "ubertaxi_[a-z0-9]{32}"
+                quota: uber
+          - not-empty: service_token
+            quota: common
+          - empty: service_token
+            quota: anonymous
+      - key: ["/trust-payments/v2/payment-methods", "/trust-payments/v2/payment_methods"]
+        router:
+          - regexp: service_token
+            data:
+              - key: "carsharing_[a-z0-9]{32}"
+                quota: carsharing
+              - key: "blue_market_payments_[a-z0-9]{32}"
+                quota: blue_market
+              - key: "blue_market_loyalty_[a-z0-9]{32}"
+                quota: blue_market_loyalty
+          - not-empty: service_token
+            quota: common
+          - empty: service_token
+            quota: anonymous
+      - key: ["/xmlrpc", "/simple/xmlrpc"]
+        quota: xmlrpc
+  - not-empty: service_token
+    quota: common
+  - empty: service_token
+    quota: anonymous

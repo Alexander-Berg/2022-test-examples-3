@@ -1,0 +1,77 @@
+
+$wb_name = '%wildberries%';
+$ozon_name = '%ozon%';
+
+$pick_up_points_categories = AsSet(
+    31652, --Пункт выдачи
+    31643, --Почтовый терминал
+    30306, --Интернет-магазин
+);
+$permalinks = (
+    SELECT
+        permalink,
+        CASE
+            WHEN String::ToLower(name_ru) LIKE $wb_name THEN 'wildberries'
+            ELSE 'ozon'
+        END AS name
+    FROM `//organization_categories`
+    WHERE
+        (
+            String::ToLower(name_ru) LIKE $wb_name
+            OR String::ToLower(name_ru) LIKE $ozon_name
+        )
+        AND DictLength(SetIntersection(ToSet(Yson::ConvertToUint64List(categories)), $pick_up_points_categories)) != 0
+    ORDER BY permalink
+);
+
+$ozon_permalinks = (
+    SELECT permalink
+    FROM $permalinks
+    WHERE name == 'ozon'
+);
+$wildberries_permalinks = (
+    SELECT permalink
+    FROM $permalinks
+    WHERE name == 'wildberries'
+);
+
+$merged = (
+    SELECT
+        devid,
+        `date`,
+        permalink,
+    FROM (
+        SELECT
+            devid,
+            `date`,
+            ListUniq(ListFlatMap(AGGREGATE_LIST(permalinks), ($x)->{RETURN $x;})) AS permalinks,
+        FROM (
+            SELECT
+                devid,
+                permalinks,
+                TableName() AS `date`
+            FROM `//deep_visits`
+        )
+        GROUP BY devid, `date`
+    )
+    FLATTEN BY permalinks AS permalink
+);
+
+$filtered = (
+    SELECT
+        devid,
+        `date`,
+        IF(permalink in $ozon_permalinks, 1, 0) AS ozon,
+        IF(permalink in $wildberries_permalinks, 1, 0) AS wildberries,
+    FROM $merged
+    WHERE permalink in $ozon_permalinks OR permalink in $wildberries_permalinks
+);
+
+INSERT INTO `//output_table` WITH TRUNCATE
+SELECT
+    devid,
+    `date`,
+    MAX(ozon) AS ozon,
+    MAX(wildberries) AS wildberries,
+FROM $filtered
+GROUP BY devid, `date`

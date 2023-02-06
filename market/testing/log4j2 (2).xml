@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug" packages="ru.yandex.market.logistics.logging.appender.log4j, ru.yandex.market.logistics.logging.backlog">
+    <Properties>
+        <Property name="JSON_LOG_PATTERN">{ "timestamp": "%date{yyyy-MM-dd'T'HH:mm:ssZ}", "thread": "%thread", "level": "%level", "logger": "%logger", "request_id": "%replace{%X{requestId}}{^$}{NA}", "message": "%replace{%replace{%replace{%message}{\\}{\\\\}}{\n}{\\n}}{\"}{\\"}", "stacktrace": "%throwable" }%n</Property>
+        <Property name="SIMPLE_LOG_PATTERN">%d %-5p "request_id": "%replace{%X{requestId}}{^$}{NA}" [%c{1} %t] %m%n</Property>
+    </Properties>
+    <Appenders>
+        <RollingFile name="MAIN"
+                     fileName="${sys:log.dir}/${sys:app.name}.log"
+                     filePattern="${sys:log.dir}/archive/${sys:app.name}-%d{yyyy-MM-dd}.log.gz">
+            <PatternLayout pattern="${SIMPLE_LOG_PATTERN}"/>
+            <RotationBasedTriggeringPolicy />
+            <NoopRollingStrategy />
+        </RollingFile>
+        <UnifiedAgent name="TRACE" host="localhost" port="16300" messageMetaEnabled="true">
+            <PatternLayout pattern="%m%n"/>
+            <AgentProperty name="MaxInflightBytes" value="31457280"/> <!-- 30mb -->
+            <SessionMetaItem name="channel_key" value="trace_log"/>
+        </UnifiedAgent>
+        <UnifiedAgent name="JSON_LOGGER" host="localhost" port="16300" messageMetaEnabled="true">
+            <PatternLayout pattern="${JSON_LOG_PATTERN}"/>
+            <AgentProperty name="MaxInflightBytes" value="31457280"/> <!-- 30mb -->
+            <SessionMetaItem name="channel_key" value="json_log"/>
+        </UnifiedAgent>
+        <UnifiedAgent name="BACK_LOG" host="localhost" port="16300" messageMetaEnabled="true">
+            <BackLogLayout />
+            <AgentProperty name="MaxInflightBytes" value="31457280"/> <!-- 30mb -->
+            <SessionMetaItem name="channel_key" value="back_log"/>
+        </UnifiedAgent>
+        <UnifiedAgent name="LOM_PLAN_FACT_TSKV_LOG" host="localhost" port="16300" messageMetaEnabled="true">
+            <TskvLogLayout />
+            <AgentProperty name="MaxInflightBytes" value="31457280"/> <!-- 30mb -->
+            <SessionMetaItem name="channel_key" value="lom_plan_fact_tskv_log"/>
+        </UnifiedAgent>
+        <UnifiedAgent name="MONITORING_EVENT_TSKV_LOG" host="localhost" port="16300" messageMetaEnabled="true">
+            <TskvLogLayout />
+            <AgentProperty name="MaxInflightBytes" value="31457280"/> <!-- 30mb -->
+            <SessionMetaItem name="channel_key" value="monitoring_event_tskv_log"/>
+        </UnifiedAgent>
+        <Sentry name="SENTRY"/>
+        <UnifiedAgent name="YT_LOG" host="localhost" port="16300" messageMetaEnabled="true">
+            <BackLogLayout />
+            <AgentProperty name="MaxInflightBytes" value="31457280"/> <!-- 30mb -->
+            <SessionMetaItem name="channel_key" value="yt_log"/>
+        </UnifiedAgent>
+        <UnifiedAgent name="LB_LOG" host="localhost" port="16300" messageMetaEnabled="true">
+            <BackLogLayout />
+            <AgentProperty name="MaxInflightBytes" value="31457280"/> <!-- 30mb -->
+            <SessionMetaItem name="channel_key" value="lb_log"/>
+        </UnifiedAgent>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="MAIN"/>
+            <AppenderRef ref="JSON_LOGGER"/>
+            <AppenderRef ref="BACK_LOG" />
+            <AppenderRef ref="SENTRY" level="ERROR"/>
+        </Root>
+        <Logger name="lomPlanFactTskvLogger" level="info" additivity="false">
+            <AppenderRef ref="LOM_PLAN_FACT_TSKV_LOG"/>
+        </Logger>
+        <Logger name="monitoringEventTskvLogger" level="info" additivity="false">
+            <AppenderRef ref="MONITORING_EVENT_TSKV_LOG"/>
+        </Logger>
+        <Logger name="requestTrace" level="trace" additivity="false">
+            <AppenderRef ref="TRACE"/>
+        </Logger>
+        <Logger name="ru.yandex.yt" level="debug" additivity="false">
+            <AppenderRef ref="YT_LOG"/>
+        </Logger>
+        <Logger name="ru.yandex.inside.yt" level="debug" additivity="false">
+            <AppenderRef ref="YT_LOG"/>
+        </Logger>
+        <Logger name="ru.yandex.kikimr.persqueue" level="debug" additivity="false">
+            <AppenderRef ref="LB_LOG"/>
+        </Logger>
+    </Loggers>
+</Configuration>

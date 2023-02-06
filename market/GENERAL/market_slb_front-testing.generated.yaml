@@ -1,0 +1,43 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый market_slb_front-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_slb_front-testing
+
+juggler:
+  checks:
+
+  # Check balancer-api
+  # https://juggler.yandex-team.ru/check_details/?host=market_slb_front-testing&service=balancer-api&last=1DAY&mode=edit
+  - service: balancer-api
+
+  # Check yandex-balancer
+  # https://juggler.yandex-team.ru/check_details/?host=market_slb_front-testing&service=yandex-balancer&last=1DAY&mode=edit
+  - service: yandex-balancer
+
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    check_options: {}
+    children:
+    - CGROUP%market_slb-front-testing
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_slb_front-testing
+    namespace: market.sre
+    notifications:
+    - template_kwargs:
+        queue: CSADMIN
+        status: CRIT
+      template_name: startrek
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market
+    - _market_
+    ttl: 900

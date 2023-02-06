@@ -1,0 +1,625 @@
+{
+    "items": [
+      {
+        "action_button_text": null,
+        "action_type": "tree",
+        "fallback_node": "entered_intro",
+        "schema": {
+          "options": [
+            {
+              "message_text": "!node_1",
+              "node": "node_1",
+              "type": "message",
+              "text": "Go to node 1"
+            },
+            {
+              "message_text": "!node_2",
+              "node": "node_2",
+              "type": "message",
+              "text": "Go to node 2"
+            },
+            {
+              "message_text": "!endpoint",
+              "node": "test_endpoint_call",
+              "type": "message",
+              "text": "Test endpoint calls"
+            },
+            {
+              "message_text": "!number",
+              "node": "test_phone_number",
+              "type": "message",
+              "text": "Test phone_number"
+            },
+            {
+              "message_text": "!bonuses",
+              "node": "test_bonuses",
+              "type": "message",
+              "text": "Test bonuses"
+            }
+          ],
+          "type": "options"
+        },
+        "id": "intro",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Hello there"
+          },
+            {
+              "type": "plaintext",
+              "text": "!custom.landing_id"
+            }
+        ],
+        "next_step": null
+      },
+      {
+        "action_type": "tree",
+        "context_map": {
+          "key": "node_1",
+          "value": "i_was_in_1"
+        },
+        "schema": {
+          "options": [
+            {
+              "message_text": "!node_3",
+              "node": "node_3",
+              "type": "message",
+              "text": "To node 3"
+            }
+          ],
+          "type": "options"
+        },
+        "id": "node_1",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Entering node 1"
+          },
+          {
+            "type": "plaintext",
+            "text": "!custom.landing_id"
+          }
+        ],
+        "next_step": "node_3"
+      },
+      {
+        "action_type": "tree",
+        "context_map": [
+          {
+            "key": "node_2",
+            "value": "i_was_in_2"
+          },
+          {
+            "key": "node_2_extra",
+            "value": "i_was_in_2_extra"
+          }
+        ],
+        "schema": {
+          "options": [
+            {
+              "message_text": "!node_3",
+              "node": "node_3",
+              "type": "message",
+              "text": "To node 3"
+            }
+          ],
+          "type": "options"
+        },
+        "id": "node_2",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Entering node 2"
+          }
+        ],
+        "next_step": "node_3"
+      },
+      {
+        "action_button_text": null,
+        "action_type": "skip_action",
+        "next_step": {
+          "default": "entered_intro",
+          "conditions": [
+            {
+              "node": "entered_phone_number",
+              "condition": {
+                "type": "context_map_equals",
+                "key": "custom.phone",
+                "value": "+79998885544"
+              }
+            },
+            {
+              "node": "has_landing",
+              "condition": {
+                "type": "context_map_contains_key",
+                "key": "custom.landing_id"
+              }
+            },
+            {
+              "node": "visited_both",
+              "condition": {
+                "type": "and",
+                "subconditions": [
+                  {
+                    "type": "context_map_equals",
+                    "key": "custom.node_2",
+                    "value": "i_was_in_2"
+                  },
+                  {
+                    "type": "context_map_contains_key",
+                    "key": "custom.node_1"
+                  },
+                  {
+                    "type": "context_map_equals",
+                    "key": "custom.node_2_extra",
+                    "value": "i_was_in_2_extra"
+                  }
+                ]
+              }
+            },
+            {
+              "node": "node_5",
+              "condition": {
+                "key": "custom.node_2",
+                "type": "context_map_contains_key"
+              }
+            },
+            {
+              "node": "intro",
+              "condition": {
+                "key": "custom.node_1",
+                "value": "i_was_there",
+                "type": "context_map_equals"
+              }
+            },
+            {
+              "node": "node_4",
+              "condition": {
+                "key": "custom.node_1",
+                "value": "i_was_in_1",
+                "type": "context_map_equals"
+              }
+            },
+            {
+              "node": "intro",
+              "condition": {
+                "key": "node_173",
+                "type": "context_map_contains_key"
+              }
+            }
+          ]
+        },
+        "id": "node_3",
+        "pre_action_messages": []
+      },
+      {
+        "id": "visited_both",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Visited both"
+          }
+        ],
+        "action_type": "tree",
+        "schema": {
+          "options": [
+            {
+              "message_text": "!ok",
+              "node": "intro",
+              "type": "message",
+              "text": "Ок"
+            }
+          ],
+          "type": "options"
+        },
+        "action_button_text": null,
+        "next_step": "entered_intro"
+      },
+      {
+        "id": "node_4",
+        "action_button_text": null,
+        "action_type": "tree",
+        "schema": {
+          "options": [
+            {
+              "message_text": "!back",
+              "node": "intro",
+              "type": "message",
+              "text": "Назад"
+            }
+          ],
+          "type": "options"
+        },
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Node 4"
+          }
+        ],
+        "next_step": "entered_intro"
+      },
+      {
+        "action_button_text": null,
+        "action_type": "skip_action",
+        "next_step": {
+          "default": "entered_intro",
+          "conditions": [
+            {
+              "node": "node_4",
+              "condition": {
+                "key": "node_1",
+                "value": "i_was_here",
+                "type": "context_map_equals"
+              }
+            },
+            {
+              "node": "intro",
+              "condition": {
+                "key": "node_1",
+                "value": "i_was_there",
+                "type": "context_map_equals"
+              }
+            },
+            {
+              "node": "node_5",
+              "condition": {
+                "key": "node_2",
+                "type": "context_map_contains_key"
+              }
+            },
+            {
+              "node": "intro",
+              "condition": {
+                "key": "node_173",
+                "type": "context_map_contains_key"
+              }
+            }
+          ]
+        },
+        "id": "node_30",
+        "pre_action_messages": []
+      },
+      {
+        "id": "node_5",
+        "action_button_text": null,
+        "action_type": "tree",
+        "schema": {
+          "options": [
+            {
+              "message_text": "!back",
+              "node": "intro",
+              "type": "message",
+              "text": "Назад"
+            }
+          ],
+          "type": "options"
+        },
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Node 5"
+          }
+        ],
+        "next_step": "entered_intro"
+      },
+      {
+        "action_button_text": null,
+        "action_type": "tree",
+        "schema": {
+          "options": [
+            {
+              "message_text": "!next",
+              "node": "intro",
+              "type": "message",
+              "text": "Ок"
+            }
+          ],
+          "type": "options"
+        },
+        "on_entry_actions": [
+          {
+            "env": "test_local",
+            "cgi": "id=context_map_text_landing",
+            "actor_user_id": "8b33b36b-ca2a-4f16-9af4-dc1598f02ec4",
+            "type": "endpoint_call",
+            "route": "/api/staff/landing/get",
+            "json_mapper": [
+              {
+                "key": "landing_id",
+                "field_path": "landings.[0].landing_id"
+              },
+              {
+                "key": "landing_enabled",
+                "field_path": "landings.[0].landing_enabled"
+              }
+            ]
+          }
+        ],
+        "id": "test_endpoint_call",
+        "pre_action_messages": [],
+        "next_step": "test_endpoint_call"
+      },
+      {
+        "action_button_text": null,
+        "action_type": "tree",
+        "json_mapper": [
+          {
+            "key": "phone",
+            "field_path": "phone"
+          },
+          {
+            "key": "name",
+            "field_path": "name"
+          },
+          {
+            "key": "user_id",
+            "field_path": "user_id"
+          }
+        ],
+        "schema": {
+          "options": [
+            {
+              "message_text": "[[[!custom.phone]]], [[[!custom.name]]], [[[!custom.user_id]]]",
+              "link": "yandexdrive://bonus/contacts",
+              "node": "node_1",
+              "type": "phone_number",
+              "text": "Ок, выбрать друга"
+            },
+            {
+              "message_text": "card",
+              "link": "yandexdrive://bonus/cards",
+              "node": "intro",
+              "type": "credit_card_schema",
+              "text": "Выбрать карту"
+            },
+            {
+              "message_text": "!next",
+              "node": "entered_intro",
+              "type": "message",
+              "text": "Дальше"
+            }
+          ],
+          "type": "options"
+        },
+        "id": "test_phone_number",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Test phone number"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "action_button_text": null,
+        "action_type": "user_message",
+        "id": "entered_phone_number",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "You've entered phone"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "action_button_text": null,
+        "action_type": "user_message",
+        "id": "has_landing",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "You have landing"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "action_button_text": null,
+        "action_type": "user_message",
+        "id": "entered_intro",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Fallback"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "action_type": "context_buttons",
+        "schema": {
+          "options": [
+            {
+              "message_text": "Дарим бонусы другу [[[!custom.name]]] с номером [[[!custom.phone]]].",
+              "link": "yandexdrive://bonus/contacts",
+              "node": "select_amount",
+              "type": "phone_number",
+              "text": "А давайте"
+            }
+          ],
+          "type": "options"
+        },
+        "id": "test_bonuses",
+        "pre_action_messages": [],
+        "next_step": null,
+        "json_mapper": [
+          {
+            "key": "phone",
+            "field_path": "phone"
+          },
+          {
+            "key": "name",
+            "field_path": "name"
+          },
+          {
+            "key": "user_id",
+            "field_path": "user_id"
+          }
+        ]
+      },
+      {
+        "action_type": "context_buttons",
+        "schema": {
+          "options": [
+            {
+              "message_text": "!3000",
+              "node": "sum_selected_3000",
+              "type": "message",
+              "text": "3000 ₽"
+            },
+            {
+              "message_text": "!5000",
+              "node": "sum_selected_5000",
+              "type": "message",
+              "text": "5000 ₽"
+            }
+          ],
+          "type": "options"
+        },
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Сколько хотите подарить?"
+          }
+        ],
+        "id": "select_amount",
+        "next_step": null
+      },
+      {
+        "context_map": [
+          {
+            "key": "gift_sum",
+            "value": "300000"
+          },
+          {
+            "key": "selected_card_id",
+            "type": "credit_card_id"
+          }
+        ],
+        "action_type": "context_buttons",
+        "schema": {
+          "options": [
+            {
+              "link": "yandexdrive://bonus/cards",
+              "node": "pre_card_selected",
+              "type": "credit_card_schema",
+              "text": "Давайте выберy"
+            }
+          ],
+          "type": "options"
+        },
+        "fallback_node": "bad_card",
+        "id": "sum_selected_3000",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "А теперь надо выбрать карту"
+          }
+        ],
+        "next_step": "intro"
+      },
+      {
+        "context_map": [
+          {
+            "key": "gift_sum",
+            "value": "500000"
+          },
+          {
+            "key": "selected_card_id",
+            "type": "credit_card_id"
+          }
+        ],
+        "action_type": "context_buttons",
+        "schema": {
+          "options": [
+            {
+              "link": "yandexdrive://bonus/cards",
+              "node": "pre_card_selected",
+              "type": "credit_card_schema",
+              "text": "Давайте выберy"
+            }
+          ],
+          "type": "options"
+        },
+        "fallback_node": "bad_card",
+        "id": "sum_selected_5000",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "А теперь надо выбрать карту"
+          }
+        ],
+        "next_step": "intro"
+      },
+      {
+        "schema": {
+          "options": [
+            {
+              "message_text": "!add_tag",
+              "node": "card_selected_100",
+              "type": "message",
+              "text": "Всё так"
+            }
+          ],
+          "type": "options"
+        },
+        "action_type": "context_buttons",
+        "next_step": "test_bonuses",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Отлично. Списываем деньги с этой карты?"
+          }
+        ],
+        "id": "pre_card_selected"
+      },
+      {
+        "action_type": "skip_action",
+        "on_entry_actions": [
+          {
+            "entity": "user",
+            "modifications": [
+              {
+                "tag_data": "{\"tag\": \"simple_user_tag\", \"comment\": \"[[[!custom.user_id]]] [[[!custom.selected_card_id]]] [[[!custom.gift_sum]]]\"",
+                "tag_name": "simple_user_tag",
+                "action": "add"
+              }
+            ],
+            "type": "modify_tag",
+            "object": "[[[!current_user]]]"
+          }
+        ],
+        "id": "card_selected_100",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Пара минут"
+          }
+        ],
+        "next_step": "bad_card"
+      },
+      {
+        "action_type": "context_buttons",
+        "schema": {
+          "options": [
+            {
+              "message_text": "!ok",
+              "node": "select_amount",
+              "type": "message",
+              "text": "Давайте выберу другую"
+            }
+          ],
+          "type": "options"
+        },
+        "id": "bad_card",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Хм, не получится использовать эту карту. Давайте лучше другую."
+          }
+        ],
+        "next_step": null
+      }
+    ]
+  }

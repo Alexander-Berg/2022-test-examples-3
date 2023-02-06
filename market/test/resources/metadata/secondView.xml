@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<m:config xmlns:c="urn:jmf:common:1.0"
+          xmlns:m="urn:jmf:metaclass:config:1.0"
+          xmlns:a="urn:jmf:attribute:type:default:config:1.0"
+          xmlns:e="urn:jmf:module:default:extension:config:1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <m:metaclass>
+        <m:fqn>simpleEntity</m:fqn>
+        <m:parent>systemEntity</m:parent>
+        <m:title>
+            <c:value>Простой объект для тестирования</c:value>
+        </m:title>
+    </m:metaclass>
+
+    <m:metaclass>
+        <m:fqn>withSecondViewEntity</m:fqn>
+        <m:parent>systemEntity</m:parent>
+        <m:title>
+            <c:value>Бизнес объект со вторым монитором</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>secondViewAttr</m:code>
+                <m:title>
+                    <c:value>Ссылка на объект для отображения на втором экране</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="simpleEntity"/>
+            </m:attribute>
+        </m:attributes>
+
+        <m:extensions>
+            <m:extension xsi:type="e:secondView" attribute="secondViewAttr"/>
+        </m:extensions>
+    </m:metaclass>
+
+    <m:metaclass>
+        <m:fqn>withSecondViewGidEntity</m:fqn>
+        <m:parent>systemEntity</m:parent>
+        <m:title>
+            <c:value>Бизнес объект со вторым монитором (GID)</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>secondViewAttr</m:code>
+                <m:title>
+                    <c:value>Ссылка на объект для отображения на втором экране</c:value>
+                </m:title>
+                <m:type xsi:type="a:gid"/>
+            </m:attribute>
+        </m:attributes>
+
+        <m:extensions>
+            <m:extension xsi:type="e:secondView" attribute="secondViewAttr"/>
+        </m:extensions>
+    </m:metaclass>
+</m:config>

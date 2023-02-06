@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lom_order
+            id="1"
+            barcode="777"
+            platform_client_id="3"
+            sender_id="1"
+            status="ENQUEUED"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="1"
+            partner_id="987654321"
+            partner_type="SORTING_CENTER"
+            segment_type="SORTING_CENTER"
+            waybill_segment_index="0"
+            shipment_date="2020-11-06"
+            partner_name="Тестовый СЦ"
+    />
+
+    <lom_waybill_segment
+            id="2"
+            order_id="1"
+            partner_id="987654322"
+            partner_type="DELIVERY"
+            segment_type="MOVEMENT"
+            waybill_segment_index="1"
+            partner_name="Тестовая служба доставки"
+    />
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="2"
+            waybill_segment_type="MOVEMENT"
+            expected_status="OUT"
+            processing_status="PROCESSED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2020-11-07 11:11:50 +0300"
+            schedule_time="2020-11-07 11:11:50 +0300"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <plan_fact_group
+            id="1"
+            aggregation_key="date:2020-11-07;partner:987654322;partnerFrom:987654321;"
+            aggregation_type="SORTING_CENTER_DELIVERY_SERVICE_SHIPMENT"
+            processing_status="ENQUEUED"
+            expected_status="OUT"
+            schedule_time="2020-11-07 11:11:50 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 7],
+                        "time": [11, 11, 50],
+                        "partner": {
+                            "id": 987654322,
+                            "name": "Тестовая служба доставки",
+                            "type": "DELIVERY"
+                        },
+                        "partnerFrom": {
+                            "id": 987654321,
+                            "name": "Тестовый СЦ",
+                            "type": "SORTING_CENTER"
+                        }
+                    }
+                },
+                "SortingCenterToDeliveryServiceShipmentAdditionalData": {
+                    "_type": ".SortingCenterToDeliveryServiceShipmentAdditionalData",
+                    "issueKey": "MONITORINGSNDBX-1",
+                    "issueClosed": false,
+                    "issueCreatedAt": [2020, 11, 7, 14, 15, 30],
+                    "orderIds": ["777"]
+                }
+            }'
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="OUT"
+            aggregation_type="SORTING_CENTER_DELIVERY_SERVICE_SHIPMENT"
+            rule_processor="STARTREK"
+            rule='{ "queue": "MONITORINGSNDBX", "_type": ".SortingCenterToDeliveryServiceShipmentPayload" }'
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="1"
+    />
+
+</dataset>

@@ -1,0 +1,77 @@
+SELECT 
+  IF(is_null(GS.AutobudgetStrategyID), -1, GS.AutobudgetStrategyID) AS EffectiveStrategyId, 
+  GS.GoalID AS GoalID, 
+  IF(is_null(IF(sum(IF((
+    GS.GoalID IN (
+      7, 8
+    )
+    AND GS.CampaignGoalType = 1
+  ), GS.GoalsNum, NULL)) >= 0, sum(IF((
+    GS.GoalID IN (
+      7, 8
+    )
+    AND GS.CampaignGoalType = 1
+  ), GS.GoalsNum, NULL)), sum(IF((
+    GS.GoalID IN (
+      7, 8
+    )
+    AND GS.CampaignGoalType = 2
+  ), GS.GoalsNum, NULL)))), 0, IF(sum(IF((
+    GS.GoalID IN (
+      7, 8
+    )
+    AND GS.CampaignGoalType = 1
+  ), GS.GoalsNum, NULL)) >= 0, sum(IF((
+    GS.GoalID IN (
+      7, 8
+    )
+    AND GS.CampaignGoalType = 1
+  ), GS.GoalsNum, NULL)), sum(IF((
+    GS.GoalID IN (
+      7, 8
+    )
+    AND GS.CampaignGoalType = 2
+  ), GS.GoalsNum, NULL)))) AS GoalsNum, 
+  IF(is_null(IF(sum(IF((
+    GS.GoalID IN (
+      7, 8
+    )
+    AND GS.CampaignGoalType = 1
+  ), (GS.PriceCur / 1000000), NULL)) >= 0, sum(IF((
+    GS.GoalID IN (
+      7, 8
+    )
+    AND GS.CampaignGoalType = 1
+  ), (GS.PriceCur / 1000000), NULL)), sum(IF((
+    GS.GoalID IN (
+      7, 8
+    )
+    AND GS.CampaignGoalType = 2
+  ), (GS.PriceCur / 1000000), NULL)))), 0, IF(sum(IF((
+    GS.GoalID IN (
+      7, 8
+    )
+    AND GS.CampaignGoalType = 1
+  ), (GS.PriceCur / 1000000), NULL)) >= 0, sum(IF((
+    GS.GoalID IN (
+      7, 8
+    )
+    AND GS.CampaignGoalType = 1
+  ), (GS.PriceCur / 1000000), NULL)), sum(IF((
+    GS.GoalID IN (
+      7, 8
+    )
+    AND GS.CampaignGoalType = 2
+  ), (GS.PriceCur / 1000000), NULL)))) AS PriceCur
+FROM yt.DirectGridGoalsStat_bs AS GS
+WHERE (GS.ExportID, GS.UpdateTime, EffectiveStrategyId, GS.GoalID) IN (
+  (1, 1000, 2, 10), 
+  (1, 1000, 2, 11), 
+  (3, 2000, 4, 12), 
+  (3, 2000, 4, 13), 
+  (1, 3000, 2, 10), 
+  (1, 3000, 2, 11)
+)
+GROUP BY 
+  EffectiveStrategyId, 
+  GoalID

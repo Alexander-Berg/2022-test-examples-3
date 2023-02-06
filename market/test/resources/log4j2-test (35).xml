@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG">
+    <Properties>
+        <Property name="log-path">logs</Property>
+    </Properties>
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d  %-5level %t %X %logger{1.}: %msg%n"/>
+        </Console>
+        <Console name="ConsoleRequestLog" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %X %logger{1.}: %msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.zaxxer.hikari" level="WARN" additivity="false">
+            <AppenderRef ref="ConsoleRequestLog"/>
+        </Logger>
+
+        <!-- Request trace logging -->
+        <Logger name="requestTrace" level="TRACE" additivity="false">
+            <AppenderRef ref="ConsoleRequestLog"/>
+        </Logger>
+
+        <!-- Root -->
+        <Root level="DEBUG">
+            <AppenderRef ref="CONSOLE"/>
+        </Root>
+    </Loggers>
+</Configuration>

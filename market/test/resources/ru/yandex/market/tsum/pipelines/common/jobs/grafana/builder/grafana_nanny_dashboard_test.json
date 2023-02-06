@@ -1,0 +1,2922 @@
+{
+  "id": 567893,
+  "uid": "e9OKiPknz",
+  "style": "dark",
+  "title": "Market market-planner auto dash",
+  "timezone": "browser",
+  "editable": true,
+  "panels": [
+    {
+      "panels": [],
+      "title": "RPS, Timings & Errors ($env)",
+      "collapsed": false,
+      "repeat": "env",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 8
+      },
+      "type": "row",
+      "scopedVars": {
+        "env": {
+          "selected": true,
+          "text": "PRODUCTION",
+          "value": "PRODUCTION"
+        }
+      }
+    },
+    {
+      "lines": true,
+      "bars": false,
+      "stack": false,
+      "interval": "1m",
+      "datasource": "Solomon",
+      "nullPointMode": "null as zero",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "show": true,
+        "total": false,
+        "values": true,
+        "sortDesc": false
+      },
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "aliasColors": {},
+      "targets": [
+        {
+          "select": [
+            [
+              {
+                "type": "field",
+                "params": [
+                  "value"
+                ]
+              },
+              {
+                "type": "avg",
+                "params": []
+              },
+              {
+                "type": "alias",
+                "params": [
+                  "RPS"
+                ]
+              }
+            ]
+          ],
+          "refId": "A",
+          "hide": false,
+          "groupBy": [
+            {
+              "type": "time",
+              "params": [
+                "$__interval"
+              ]
+            }
+          ],
+          "tags": {
+            "cluster": "$env",
+            "environment": "$env",
+            "period": "one_min",
+            "http_handle_by_method": "-",
+            "service": "market-planner-auto-dash",
+            "host": "-",
+            "project": "market-planner",
+            "sensor": "RPS",
+            "liveness_handle": "-",
+            "dc": "-"
+          },
+          "target": "alias(group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_handle_by_method'='-','service'='market-planner-auto-dash','host'='-','project'='market-planner','sensor'='RPS','liveness_handle'='-','dc'='-'}), 'RPS')",
+          "type": "timeserie"
+        },
+        {
+          "select": [
+            [
+              {
+                "type": "field",
+                "params": [
+                  "value"
+                ]
+              },
+              {
+                "type": "avg",
+                "params": []
+              },
+              {
+                "type": "shift",
+                "params": [
+                  "1d"
+                ]
+              },
+              {
+                "type": "alias",
+                "params": [
+                  "RPS 1d"
+                ]
+              }
+            ]
+          ],
+          "refId": "B",
+          "hide": false,
+          "groupBy": [
+            {
+              "type": "time",
+              "params": [
+                "$__interval"
+              ]
+            }
+          ],
+          "tags": {
+            "cluster": "$env",
+            "environment": "$env",
+            "period": "one_min",
+            "http_handle_by_method": "-",
+            "service": "market-planner-auto-dash",
+            "host": "-",
+            "project": "market-planner",
+            "sensor": "RPS",
+            "liveness_handle": "-",
+            "dc": "-"
+          },
+          "target": "alias(shift(group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_handle_by_method'='-','service'='market-planner-auto-dash','host'='-','project'='market-planner','sensor'='RPS','liveness_handle'='-','dc'='-'}), 1d), 'RPS 1d')",
+          "type": "timeserie"
+        },
+        {
+          "select": [
+            [
+              {
+                "type": "field",
+                "params": [
+                  "value"
+                ]
+              },
+              {
+                "type": "avg",
+                "params": []
+              },
+              {
+                "type": "shift",
+                "params": [
+                  "7d"
+                ]
+              },
+              {
+                "type": "alias",
+                "params": [
+                  "RPS 7d"
+                ]
+              }
+            ]
+          ],
+          "refId": "C",
+          "hide": false,
+          "groupBy": [
+            {
+              "type": "time",
+              "params": [
+                "$__interval"
+              ]
+            }
+          ],
+          "tags": {
+            "cluster": "$env",
+            "environment": "$env",
+            "period": "one_min",
+            "http_handle_by_method": "-",
+            "service": "market-planner-auto-dash",
+            "host": "-",
+            "project": "market-planner",
+            "sensor": "RPS",
+            "liveness_handle": "-",
+            "dc": "-"
+          },
+          "target": "alias(shift(group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_handle_by_method'='-','service'='market-planner-auto-dash','host'='-','project'='market-planner','sensor'='RPS','liveness_handle'='-','dc'='-'}), 7d), 'RPS 7d')",
+          "type": "timeserie"
+        }
+      ],
+      "title": "RPS ($env)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 8,
+        "h": 8
+      },
+      "type": "graph",
+      "scopedVars": {
+        "env": {
+          "selected": true,
+          "text": "PRODUCTION",
+          "value": "PRODUCTION"
+        }
+      }
+    },
+    {
+      "lines": true,
+      "bars": false,
+      "stack": false,
+      "interval": "1m",
+      "datasource": "Solomon",
+      "nullPointMode": "null",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "show": true,
+        "total": false,
+        "values": true,
+        "sortDesc": false
+      },
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "ms",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "aliasColors": {},
+      "targets": [
+        {
+          "select": [
+            [
+              {
+                "type": "field",
+                "params": [
+                  "value"
+                ]
+              },
+              {
+                "type": "avg",
+                "params": []
+              },
+              {
+                "type": "alias",
+                "params": [
+                  "response_time"
+                ]
+              }
+            ]
+          ],
+          "refId": "A",
+          "hide": false,
+          "groupBy": [
+            {
+              "type": "time",
+              "params": [
+                "$__interval"
+              ]
+            }
+          ],
+          "tags": {
+            "cluster": "$env",
+            "environment": "$env",
+            "period": "one_min",
+            "http_handle_by_method": "-",
+            "service": "market-planner-auto-dash",
+            "quantile": "$timing_quantile",
+            "host": "-",
+            "project": "market-planner",
+            "sensor": "response_time",
+            "liveness_handle": "-",
+            "dc": "-"
+          },
+          "target": "alias(group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_handle_by_method'='-','service'='market-planner-auto-dash','quantile'='$timing_quantile','host'='-','project'='market-planner','sensor'='response_time','liveness_handle'='-','dc'='-'}), 'response_time')",
+          "type": "timeserie"
+        },
+        {
+          "select": [
+            [
+              {
+                "type": "field",
+                "params": [
+                  "value"
+                ]
+              },
+              {
+                "type": "avg",
+                "params": []
+              },
+              {
+                "type": "shift",
+                "params": [
+                  "1d"
+                ]
+              },
+              {
+                "type": "alias",
+                "params": [
+                  "response_time 1d"
+                ]
+              }
+            ]
+          ],
+          "refId": "B",
+          "hide": false,
+          "groupBy": [
+            {
+              "type": "time",
+              "params": [
+                "$__interval"
+              ]
+            }
+          ],
+          "tags": {
+            "cluster": "$env",
+            "environment": "$env",
+            "period": "one_min",
+            "http_handle_by_method": "-",
+            "service": "market-planner-auto-dash",
+            "quantile": "$timing_quantile",
+            "host": "-",
+            "project": "market-planner",
+            "sensor": "response_time",
+            "liveness_handle": "-",
+            "dc": "-"
+          },
+          "target": "alias(shift(group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_handle_by_method'='-','service'='market-planner-auto-dash','quantile'='$timing_quantile','host'='-','project'='market-planner','sensor'='response_time','liveness_handle'='-','dc'='-'}), 1d), 'response_time 1d')",
+          "type": "timeserie"
+        },
+        {
+          "select": [
+            [
+              {
+                "type": "field",
+                "params": [
+                  "value"
+                ]
+              },
+              {
+                "type": "avg",
+                "params": []
+              },
+              {
+                "type": "shift",
+                "params": [
+                  "7d"
+                ]
+              },
+              {
+                "type": "alias",
+                "params": [
+                  "response_time 7d"
+                ]
+              }
+            ]
+          ],
+          "refId": "C",
+          "hide": false,
+          "groupBy": [
+            {
+              "type": "time",
+              "params": [
+                "$__interval"
+              ]
+            }
+          ],
+          "tags": {
+            "cluster": "$env",
+            "environment": "$env",
+            "period": "one_min",
+            "http_handle_by_method": "-",
+            "service": "market-planner-auto-dash",
+            "quantile": "$timing_quantile",
+            "host": "-",
+            "project": "market-planner",
+            "sensor": "response_time",
+            "liveness_handle": "-",
+            "dc": "-"
+          },
+          "target": "alias(shift(group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_handle_by_method'='-','service'='market-planner-auto-dash','quantile'='$timing_quantile','host'='-','project'='market-planner','sensor'='response_time','liveness_handle'='-','dc'='-'}), 7d), 'response_time 7d')",
+          "type": "timeserie"
+        }
+      ],
+      "title": "Timings $timing_quantile ($env)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 8,
+        "y": 0,
+        "w": 8,
+        "h": 8
+      },
+      "type": "graph",
+      "scopedVars": {
+        "env": {
+          "selected": true,
+          "text": "PRODUCTION",
+          "value": "PRODUCTION"
+        }
+      }
+    },
+    {
+      "lines": false,
+      "bars": true,
+      "stack": true,
+      "interval": "1m",
+      "datasource": "Solomon",
+      "nullPointMode": "null",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "show": true,
+        "total": false,
+        "values": true,
+        "sortDesc": false
+      },
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "aliasColors": {
+        "3xx": "green",
+        "4xx": "yellow",
+        "429": "orange",
+        "5xx": "red"
+      },
+      "targets": [
+        {
+          "select": [
+            [
+              {
+                "type": "field",
+                "params": [
+                  "value"
+                ]
+              },
+              {
+                "type": "avg",
+                "params": []
+              }
+            ]
+          ],
+          "refId": "A",
+          "hide": false,
+          "groupBy": [
+            {
+              "type": "time",
+              "params": [
+                "$__interval"
+              ]
+            }
+          ],
+          "tags": {
+            "cluster": "$env",
+            "environment": "$env",
+            "period": "one_min",
+            "http_handle_by_method": "-",
+            "service": "market-planner-auto-dash",
+            "host": "-",
+            "project": "market-planner",
+            "sensor": "errors",
+            "error_codes": "*",
+            "liveness_handle": "-",
+            "dc": "-"
+          },
+          "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_handle_by_method'='-','service'='market-planner-auto-dash','host'='-','project'='market-planner','sensor'='errors','error_codes'='*','liveness_handle'='-','dc'='-'})",
+          "type": "timeserie"
+        }
+      ],
+      "title": "Errors ($env)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 16,
+        "y": 0,
+        "w": 8,
+        "h": 8
+      },
+      "type": "graph",
+      "scopedVars": {
+        "env": {
+          "selected": true,
+          "text": "PRODUCTION",
+          "value": "PRODUCTION"
+        }
+      }
+    },
+    {
+      "panels": [],
+      "title": "Top 10 handles avg ($env)",
+      "collapsed": false,
+      "repeat": "env",
+      "gridPos": {
+        "x": 0,
+        "y": 1,
+        "w": 24,
+        "h": 8
+      },
+      "type": "row",
+      "scopedVars": {
+        "env": {
+          "selected": true,
+          "text": "PRODUCTION",
+          "value": "PRODUCTION"
+        }
+      }
+    },
+    {
+      "lines": true,
+      "bars": false,
+      "stack": false,
+      "interval": "1m",
+      "datasource": "Solomon",
+      "nullPointMode": "null as zero",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "show": true,
+        "total": false,
+        "values": true,
+        "sort": "avg",
+        "sortDesc": true
+      },
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "aliasColors": {},
+      "targets": [
+        {
+          "select": [
+            [
+              {
+                "type": "field",
+                "params": [
+                  "value"
+                ]
+              },
+              {
+                "type": "avg",
+                "params": []
+              },
+              {
+                "type": "top",
+                "params": [
+                  "10",
+                  "avg"
+                ]
+              }
+            ]
+          ],
+          "refId": "A",
+          "hide": false,
+          "groupBy": [
+            {
+              "type": "time",
+              "params": [
+                "$__interval"
+              ]
+            }
+          ],
+          "tags": {
+            "cluster": "$env",
+            "environment": "$env",
+            "period": "one_min",
+            "http_handle_by_method": "*",
+            "service": "market-planner-auto-dash",
+            "host": "-",
+            "project": "market-planner",
+            "sensor": "RPS"
+          },
+          "target": "top(10, 'avg', group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_handle_by_method'='*','service'='market-planner-auto-dash','host'='-','project'='market-planner','sensor'='RPS'}))",
+          "type": "timeserie"
+        }
+      ],
+      "title": "Top 10 handles by RPS ($env)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 1,
+        "w": 8,
+        "h": 8
+      },
+      "type": "graph"
+    },
+    {
+      "lines": true,
+      "bars": false,
+      "stack": false,
+      "interval": "1m",
+      "datasource": "Solomon",
+      "nullPointMode": "null",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "show": true,
+        "total": false,
+        "values": true,
+        "sort": "avg",
+        "sortDesc": true
+      },
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "ms",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "aliasColors": {},
+      "targets": [
+        {
+          "select": [
+            [
+              {
+                "type": "field",
+                "params": [
+                  "value"
+                ]
+              },
+              {
+                "type": "avg",
+                "params": []
+              },
+              {
+                "type": "top",
+                "params": [
+                  "10",
+                  "avg"
+                ]
+              }
+            ]
+          ],
+          "refId": "A",
+          "hide": false,
+          "groupBy": [
+            {
+              "type": "time",
+              "params": [
+                "$__interval"
+              ]
+            }
+          ],
+          "tags": {
+            "cluster": "$env",
+            "environment": "$env",
+            "period": "one_min",
+            "http_handle_by_method": "*",
+            "service": "market-planner-auto-dash",
+            "quantile": "$timing_quantile",
+            "host": "-",
+            "project": "market-planner",
+            "sensor": "response_time"
+          },
+          "target": "top(10, 'avg', group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_handle_by_method'='*','service'='market-planner-auto-dash','quantile'='$timing_quantile','host'='-','project'='market-planner','sensor'='response_time'}))",
+          "type": "timeserie"
+        }
+      ],
+      "title": "Top 10 handles by Timings $timing_quantile ($env)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 8,
+        "y": 1,
+        "w": 8,
+        "h": 8
+      },
+      "type": "graph"
+    },
+    {
+      "lines": false,
+      "bars": true,
+      "stack": false,
+      "interval": "1m",
+      "datasource": "Solomon",
+      "nullPointMode": "null",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "show": true,
+        "total": false,
+        "values": true,
+        "sort": "avg",
+        "sortDesc": true
+      },
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "percent",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "aliasColors": {},
+      "targets": [
+        {
+          "select": [
+            [
+              {
+                "type": "field",
+                "params": [
+                  "value"
+                ]
+              },
+              {
+                "type": "avg",
+                "params": []
+              },
+              {
+                "type": "top",
+                "params": [
+                  "10",
+                  "avg"
+                ]
+              }
+            ]
+          ],
+          "refId": "A",
+          "hide": false,
+          "groupBy": [
+            {
+              "type": "time",
+              "params": [
+                "$__interval"
+              ]
+            }
+          ],
+          "tags": {
+            "cluster": "$env",
+            "environment": "$env",
+            "period": "one_min",
+            "http_handle_by_method": "*",
+            "service": "market-planner-auto-dash",
+            "host": "-",
+            "project": "market-planner",
+            "sensor": "errors-percent",
+            "error_codes": "5xx"
+          },
+          "target": "top(10, 'avg', group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_handle_by_method'='*','service'='market-planner-auto-dash','host'='-','project'='market-planner','sensor'='errors-percent','error_codes'='5xx'}))",
+          "type": "timeserie"
+        }
+      ],
+      "title": "Top 10 handles by 5xx Errors ($env)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 16,
+        "y": 1,
+        "w": 8,
+        "h": 8
+      },
+      "type": "graph"
+    },
+    {
+      "panels": [
+        {
+          "options": {
+            "content": "## Nanny instances\n* sas: https://nanny.yandex-team.ru/ui/#/services/catalog/testing_market_mstat_planner_sas/\n* vla: https://nanny.yandex-team.ru/ui/#/services/catalog/testing_market_mstat_planner_vla/\n## Hardware resources\n* [https://yasm.yandex-team.ru/template/panel/New-Porto-Container](https://yasm.yandex-team.ru/template/panel/New-Porto-Container/hosts=ASEARCH;ctype=testing;prj=market;node=all;itype=marketmstatplanner;nanny=testing_market_mstat_planner_*)",
+            "mode": "markdown"
+          },
+          "title": "General Information (testing)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 0,
+            "y": 2,
+            "w": 12,
+            "h": 8
+          },
+          "type": "text"
+        },
+        {
+          "options": {
+            "content": "## Nanny instances\n* sas: https://nanny.yandex-team.ru/ui/#/services/catalog/production_market_mstat_planner_sas/\n* vla: https://nanny.yandex-team.ru/ui/#/services/catalog/production_market_mstat_planner_vla/\n## Hardware resources\n* [https://yasm.yandex-team.ru/template/panel/New-Porto-Container](https://yasm.yandex-team.ru/template/panel/New-Porto-Container/hosts=ASEARCH;ctype=production;prj=market;node=all;itype=marketmstatplanner;nanny=production_market_mstat_planner_*)",
+            "mode": "markdown"
+          },
+          "title": "General Information (production)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 12,
+            "y": 2,
+            "w": 12,
+            "h": 8
+          },
+          "type": "text"
+        }
+      ],
+      "title": "General Information",
+      "collapsed": true,
+      "gridPos": {
+        "x": 0,
+        "y": 2,
+        "w": 24,
+        "h": 8
+      },
+      "type": "row"
+    },
+    {
+      "panels": [
+        {
+          "lines": true,
+          "bars": false,
+          "stack": true,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null as zero",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "service": "market-planner-auto-dash",
+                "project": "market-planner",
+                "sensor": "RPS",
+                "liveness_handle": "-",
+                "dc": "*"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','service'='market-planner-auto-dash','project'='market-planner','sensor'='RPS','liveness_handle'='-','dc'='*'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "RPS by DC ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 0,
+            "y": 3,
+            "w": 12,
+            "h": 8
+          },
+          "type": "graph"
+        },
+        {
+          "lines": true,
+          "bars": false,
+          "stack": true,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null as zero",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "service": "market-planner-auto-dash",
+                "host": "*",
+                "project": "market-planner",
+                "sensor": "RPS",
+                "liveness_handle": "-"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','service'='market-planner-auto-dash','host'='*','project'='market-planner','sensor'='RPS','liveness_handle'='-'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "RPS by hosts ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 12,
+            "y": 3,
+            "w": 12,
+            "h": 8
+          },
+          "type": "graph"
+        }
+      ],
+      "title": "RPS ($env)",
+      "collapsed": true,
+      "repeat": "env",
+      "gridPos": {
+        "x": 0,
+        "y": 3,
+        "w": 24,
+        "h": 8
+      },
+      "type": "row",
+      "scopedVars": {
+        "env": {
+          "selected": true,
+          "text": "PRODUCTION",
+          "value": "PRODUCTION"
+        }
+      }
+    },
+    {
+      "panels": [
+        {
+          "lines": false,
+          "bars": true,
+          "stack": true,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "http_code": "-",
+                "service": "market-planner-auto-dash",
+                "http_handle": "-",
+                "project": "market-planner",
+                "sensor": "errors",
+                "liveness_handle": "-",
+                "dc": "*"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_code'='-','service'='market-planner-auto-dash','http_handle'='-','project'='market-planner','sensor'='errors','liveness_handle'='-','dc'='*'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "Errors by dc ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 0,
+            "y": 4,
+            "w": 12,
+            "h": 8
+          },
+          "type": "graph"
+        },
+        {
+          "lines": false,
+          "bars": true,
+          "stack": true,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "http_code": "-",
+                "service": "market-planner-auto-dash",
+                "http_handle": "-",
+                "host": "*",
+                "project": "market-planner",
+                "sensor": "errors",
+                "error_codes": "-",
+                "liveness_handle": "-"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_code'='-','service'='market-planner-auto-dash','http_handle'='-','host'='*','project'='market-planner','sensor'='errors','error_codes'='-','liveness_handle'='-'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "RPS by hosts ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 12,
+            "y": 4,
+            "w": 12,
+            "h": 8
+          },
+          "type": "graph"
+        }
+      ],
+      "title": "Errors ($env)",
+      "collapsed": true,
+      "repeat": "env",
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 24,
+        "h": 8
+      },
+      "type": "row",
+      "scopedVars": {
+        "env": {
+          "selected": true,
+          "text": "PRODUCTION",
+          "value": "PRODUCTION"
+        }
+      }
+    },
+    {
+      "panels": [
+        {
+          "lines": true,
+          "bars": false,
+          "stack": false,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "ms",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "http_handle_by_method": "-",
+                "service": "market-planner-auto-dash",
+                "quantile": "0.5|0.8|0.95|0.99",
+                "host": "-",
+                "project": "market-planner",
+                "sensor": "response_time",
+                "liveness_handle": "-"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_handle_by_method'='-','service'='market-planner-auto-dash','quantile'='0.5|0.8|0.95|0.99','host'='-','project'='market-planner','sensor'='response_time','liveness_handle'='-'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "Timings ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 0,
+            "y": 5,
+            "w": 12,
+            "h": 8
+          },
+          "type": "graph"
+        },
+        {
+          "lines": true,
+          "bars": false,
+          "stack": false,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "ms",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "service": "market-planner-auto-dash",
+                "quantile": "$timing_quantile",
+                "host": "*",
+                "project": "market-planner"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','service'='market-planner-auto-dash','quantile'='$timing_quantile','host'='*','project'='market-planner'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "Timings by hosts $timing_quantile ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 12,
+            "y": 5,
+            "w": 12,
+            "h": 8
+          },
+          "type": "graph"
+        }
+      ],
+      "title": "Timings ($env)",
+      "collapsed": true,
+      "repeat": "env",
+      "gridPos": {
+        "x": 0,
+        "y": 5,
+        "w": 24,
+        "h": 8
+      },
+      "type": "row",
+      "scopedVars": {
+        "env": {
+          "selected": true,
+          "text": "PRODUCTION",
+          "value": "PRODUCTION"
+        }
+      }
+    },
+    {
+      "panels": [
+        {
+          "lines": true,
+          "bars": false,
+          "stack": true,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null as zero",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "service": "market-planner-auto-dash",
+                "project": "market-planner",
+                "sensor": "RPS",
+                "liveness_handle": "/ping",
+                "dc": "*"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','service'='market-planner-auto-dash','project'='market-planner','sensor'='RPS','liveness_handle'='/ping','dc'='*'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "/ping RPS by dc ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 0,
+            "y": 6,
+            "w": 8,
+            "h": 8
+          },
+          "type": "graph"
+        },
+        {
+          "lines": true,
+          "bars": false,
+          "stack": true,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null as zero",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "service": "market-planner-auto-dash",
+                "host": "*",
+                "project": "market-planner",
+                "sensor": "RPS",
+                "liveness_handle": "/ping"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','service'='market-planner-auto-dash','host'='*','project'='market-planner','sensor'='RPS','liveness_handle'='/ping'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "/ping RPS by hosts ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 8,
+            "y": 6,
+            "w": 8,
+            "h": 8
+          },
+          "type": "graph"
+        },
+        {
+          "lines": true,
+          "bars": false,
+          "stack": false,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "ms",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "service": "market-planner-auto-dash",
+                "quantile": "0.5|0.8|0.95|0.99",
+                "project": "market-planner",
+                "sensor": "response_time",
+                "liveness_handle": "/ping"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','service'='market-planner-auto-dash','quantile'='0.5|0.8|0.95|0.99','project'='market-planner','sensor'='response_time','liveness_handle'='/ping'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "/ping timings ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 16,
+            "y": 6,
+            "w": 8,
+            "h": 8
+          },
+          "type": "graph"
+        },
+        {
+          "lines": false,
+          "bars": true,
+          "stack": true,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "service": "market-planner-auto-dash",
+                "project": "market-planner",
+                "sensor": "errors",
+                "liveness_handle": "/ping",
+                "dc": "*"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','service'='market-planner-auto-dash','project'='market-planner','sensor'='errors','liveness_handle'='/ping','dc'='*'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "/ping errors by dc ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 0,
+            "y": 7,
+            "w": 8,
+            "h": 8
+          },
+          "type": "graph"
+        },
+        {
+          "lines": false,
+          "bars": true,
+          "stack": true,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "service": "market-planner-auto-dash",
+                "host": "*",
+                "project": "market-planner",
+                "sensor": "errors",
+                "liveness_handle": "/ping"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','service'='market-planner-auto-dash','host'='*','project'='market-planner','sensor'='errors','liveness_handle'='/ping'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "/ping errors by hosts ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 8,
+            "y": 7,
+            "w": 8,
+            "h": 8
+          },
+          "type": "graph"
+        },
+        {
+          "lines": false,
+          "bars": true,
+          "stack": true,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "http_code": "*",
+                "service": "market-planner-auto-dash",
+                "project": "market-planner",
+                "sensor": "errors",
+                "error_codes": "-",
+                "liveness_handle": "/ping"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_code'='*','service'='market-planner-auto-dash','project'='market-planner','sensor'='errors','error_codes'='-','liveness_handle'='/ping'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "/ping codes ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 16,
+            "y": 7,
+            "w": 8,
+            "h": 8
+          },
+          "type": "graph"
+        },
+        {
+          "lines": true,
+          "bars": false,
+          "stack": true,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null as zero",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "service": "market-planner-auto-dash",
+                "project": "market-planner",
+                "sensor": "RPS",
+                "liveness_handle": "/monitoring",
+                "dc": "*"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','service'='market-planner-auto-dash','project'='market-planner','sensor'='RPS','liveness_handle'='/monitoring','dc'='*'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "/monitoring RPS by dc ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 0,
+            "y": 8,
+            "w": 8,
+            "h": 8
+          },
+          "type": "graph"
+        },
+        {
+          "lines": true,
+          "bars": false,
+          "stack": true,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null as zero",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "service": "market-planner-auto-dash",
+                "host": "*",
+                "project": "market-planner",
+                "sensor": "RPS",
+                "liveness_handle": "/monitoring"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','service'='market-planner-auto-dash','host'='*','project'='market-planner','sensor'='RPS','liveness_handle'='/monitoring'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "/monitoring RPS by hosts ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 8,
+            "y": 8,
+            "w": 8,
+            "h": 8
+          },
+          "type": "graph"
+        },
+        {
+          "lines": true,
+          "bars": false,
+          "stack": false,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "ms",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "service": "market-planner-auto-dash",
+                "quantile": "0.5|0.8|0.95|0.99",
+                "project": "market-planner",
+                "sensor": "response_time",
+                "liveness_handle": "/monitoring"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','service'='market-planner-auto-dash','quantile'='0.5|0.8|0.95|0.99','project'='market-planner','sensor'='response_time','liveness_handle'='/monitoring'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "/monitoring timings ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 16,
+            "y": 8,
+            "w": 8,
+            "h": 8
+          },
+          "type": "graph"
+        },
+        {
+          "lines": false,
+          "bars": true,
+          "stack": true,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "service": "market-planner-auto-dash",
+                "project": "market-planner",
+                "sensor": "errors",
+                "liveness_handle": "/monitoring",
+                "dc": "*"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','service'='market-planner-auto-dash','project'='market-planner','sensor'='errors','liveness_handle'='/monitoring','dc'='*'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "/monitoring errors by dc ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 0,
+            "y": 9,
+            "w": 8,
+            "h": 8
+          },
+          "type": "graph"
+        },
+        {
+          "lines": false,
+          "bars": true,
+          "stack": true,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "service": "market-planner-auto-dash",
+                "host": "*",
+                "project": "market-planner",
+                "sensor": "errors",
+                "liveness_handle": "/monitoring"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','service'='market-planner-auto-dash','host'='*','project'='market-planner','sensor'='errors','liveness_handle'='/monitoring'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "/monitoring errors by hosts ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 8,
+            "y": 9,
+            "w": 8,
+            "h": 8
+          },
+          "type": "graph"
+        },
+        {
+          "lines": false,
+          "bars": true,
+          "stack": true,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "http_code": "*",
+                "service": "market-planner-auto-dash",
+                "project": "market-planner",
+                "sensor": "errors",
+                "error_codes": "-",
+                "liveness_handle": "/monitoring"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_code'='*','service'='market-planner-auto-dash','project'='market-planner','sensor'='errors','error_codes'='-','liveness_handle'='/monitoring'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "/monitoring codes ($env)",
+          "collapsed": false,
+          "gridPos": {
+            "x": 16,
+            "y": 9,
+            "w": 8,
+            "h": 8
+          },
+          "type": "graph"
+        }
+      ],
+      "title": "Liveness ($env)",
+      "collapsed": true,
+      "repeat": "env",
+      "gridPos": {
+        "x": 0,
+        "y": 6,
+        "w": 24,
+        "h": 8
+      },
+      "type": "row",
+      "scopedVars": {
+        "env": {
+          "selected": true,
+          "text": "PRODUCTION",
+          "value": "PRODUCTION"
+        }
+      }
+    },
+    {
+      "panels": [
+        {
+          "repeatDirection": "v",
+          "lines": true,
+          "bars": false,
+          "stack": false,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null as zero",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "http_handle_by_method": "$handle_by_method",
+                "service": "market-planner-auto-dash",
+                "host": "-",
+                "project": "market-planner",
+                "sensor": "RPS"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_handle_by_method'='$handle_by_method','service'='market-planner-auto-dash','host'='-','project'='market-planner','sensor'='RPS'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "RPS by $handle_by_method ($env)",
+          "collapsed": false,
+          "repeat": "env",
+          "gridPos": {
+            "x": 0,
+            "y": 8,
+            "w": 8,
+            "h": 8
+          },
+          "type": "graph",
+          "scopedVars": {
+            "handle_by_method": {
+              "selected": false,
+              "text": "",
+              "value": ""
+            },
+            "env": {
+              "selected": true,
+              "text": "PRODUCTION",
+              "value": "PRODUCTION"
+            }
+          }
+        },
+        {
+          "repeatDirection": "v",
+          "lines": true,
+          "bars": false,
+          "stack": false,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "ms",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {},
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "http_handle_by_method": "$handle_by_method",
+                "service": "market-planner-auto-dash",
+                "quantile": "0.5|0.8|0.95|0.99",
+                "host": "-",
+                "project": "market-planner",
+                "sensor": "response_time"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_handle_by_method'='$handle_by_method','service'='market-planner-auto-dash','quantile'='0.5|0.8|0.95|0.99','host'='-','project'='market-planner','sensor'='response_time'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "Timings ($env)",
+          "collapsed": false,
+          "repeat": "env",
+          "gridPos": {
+            "x": 8,
+            "y": 8,
+            "w": 8,
+            "h": 8
+          },
+          "type": "graph",
+          "scopedVars": {
+            "handle_by_method": {
+              "selected": false,
+              "text": "",
+              "value": ""
+            },
+            "env": {
+              "selected": true,
+              "text": "PRODUCTION",
+              "value": "PRODUCTION"
+            }
+          }
+        },
+        {
+          "repeatDirection": "v",
+          "lines": false,
+          "bars": true,
+          "stack": true,
+          "interval": "1m",
+          "datasource": "Solomon",
+          "nullPointMode": "null",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "show": true,
+            "total": false,
+            "values": true,
+            "sortDesc": false
+          },
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "show": true
+            }
+          ],
+          "aliasColors": {
+            "3xx": "green",
+            "4xx": "yellow",
+            "429": "orange",
+            "5xx": "red"
+          },
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "type": "field",
+                    "params": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "avg",
+                    "params": []
+                  }
+                ]
+              ],
+              "refId": "A",
+              "hide": false,
+              "groupBy": [
+                {
+                  "type": "time",
+                  "params": [
+                    "$__interval"
+                  ]
+                }
+              ],
+              "tags": {
+                "cluster": "$env",
+                "environment": "$env",
+                "period": "one_min",
+                "http_handle_by_method": "$handle_by_method",
+                "service": "market-planner-auto-dash",
+                "host": "-",
+                "project": "market-planner",
+                "sensor": "errors",
+                "error_codes": "*"
+              },
+              "target": "group_by_time($__interval, 'avg', {'cluster'='$env','environment'='$env','period'='one_min','http_handle_by_method'='$handle_by_method','service'='market-planner-auto-dash','host'='-','project'='market-planner','sensor'='errors','error_codes'='*'})",
+              "type": "timeserie"
+            }
+          ],
+          "title": "Errors ($env)",
+          "collapsed": false,
+          "repeat": "env",
+          "gridPos": {
+            "x": 16,
+            "y": 8,
+            "w": 8,
+            "h": 8
+          },
+          "type": "graph",
+          "scopedVars": {
+            "handle_by_method": {
+              "selected": false,
+              "text": "",
+              "value": ""
+            },
+            "env": {
+              "selected": true,
+              "text": "PRODUCTION",
+              "value": "PRODUCTION"
+            }
+          }
+        }
+      ],
+      "title": "Handle $handle_by_method",
+      "collapsed": true,
+      "repeat": "handle_by_method",
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 24,
+        "h": 8
+      },
+      "type": "row"
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": [
+            "PRODUCTION"
+          ],
+          "value": [
+            "PRODUCTION"
+          ]
+        },
+        "label": "environment",
+        "multi": true,
+        "name": "env",
+        "type": "custom",
+        "query": "TESTING,PRODUCTION",
+        "options": [
+          {
+            "selected": false,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "TESTING",
+            "value": "TESTING"
+          },
+          {
+            "selected": true,
+            "text": "PRODUCTION",
+            "value": "PRODUCTION"
+          }
+        ],
+        "refresh": 0,
+        "skipUrlSync": false,
+        "sort": 0,
+        "tags": [],
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [],
+          "value": []
+        },
+        "label": "handle_by_method",
+        "multi": true,
+        "name": "handle_by_method",
+        "type": "query",
+        "datasource": "Solomon",
+        "query": "{'cluster'='${env:pipe}', 'environment'='${env:pipe}', 'dc'='-', 'host'='-', 'liveness_handle'='-', 'period'='one_min', 'project'='market-planner', 'sensor'='RPS', 'service'='market-planner-auto-dash', 'http_handle_by_method'='*'} #http_handle_by_method",
+        "options": [],
+        "refresh": 2,
+        "skipUrlSync": false,
+        "sort": 1,
+        "tags": [],
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "0.99"
+          ],
+          "value": [
+            "0.99"
+          ]
+        },
+        "label": "Timing quantile",
+        "multi": false,
+        "name": "timing_quantile",
+        "type": "query",
+        "datasource": "Solomon",
+        "query": "{'cluster'='${env:pipe}', 'dc'='-', 'environment'='${env:pipe}', 'host'='-', 'http_handle_by_method'='-', 'liveness_handle'='-', 'period'='one_min', 'project'='market-planner', 'quantile'='*', 'sensor'='response_time', 'service'='market-planner-auto-dash'} #quantile",
+        "options": [],
+        "refresh": 2,
+        "skipUrlSync": false,
+        "sort": 1,
+        "tags": [],
+        "useTags": false
+      }
+    ]
+  },
+  "annotations": {
+    "list": [
+      {
+        "datasource": "market",
+        "enable": false,
+        "hide": false,
+        "iconColor": "rgba(255, 96, 96, 1)",
+        "name": "stable-deploy",
+        "showIn": 0,
+        "tags": "nanny-resource:MARKET_STAT_PLANNER_APP nanny-resource:MARKET_STAT_PLANNER_WEBAPP"
+      }
+    ]
+  }
+}

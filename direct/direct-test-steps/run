@@ -1,0 +1,59 @@
+#!/bin/sh
+
+set -e
+exec 2>&1
+
+ENV=development
+if [ -f /etc/yandex/environment.type ]; then
+    ENV=$(cat /etc/yandex/environment.type)
+fi
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+LANG=en_US.UTF-8
+DESC="direct-test-steps"
+USER=ppc
+GROUP=ppc
+CWD=/var/www/direct-test-steps
+NAME=direct-test-steps
+GC_LOG=/var/log/yandex/$NAME.gc.log
+ERROR_LOG=/var/log/yandex/$NAME.error.log
+JAVA=/usr/local/yandex-direct-jdk11/bin/java
+
+case "$ENV" in
+    production) MEM_OPTS="-Xmx15G -Xms15G";;
+    *) MEM_OPTS="-Xmx4G";;
+esac
+JAVA_OPTS="$MEM_OPTS \
+    -Dfile.encoding=UTF-8 \
+    -Djava.net.preferIPv4Stack=false -Djava.net.preferIPv6Addresses=true \
+    -Dsun.net.inetaddr.ttl=60 -Dsun.net.inetaddr.negative.ttl=0 \
+    -Djava.util.Arrays.useLegacyMergeSort=true \
+    -XX:-UsePerfData \
+    -XX:+UseG1GC \
+    -XX:MaxGCPauseMillis=100 \
+    -Xlog:gc*=info,safepoint=info,age*=trace:file=$GC_LOG:time,uptime,level,tags:filecount=8,filesize=100M \
+    -XX:+CrashOnOutOfMemoryError \
+    -XX:+HeapDumpOnOutOfMemoryError \
+    -XX:-OmitStackTraceInFastThrow \
+    -XX:HeapDumpPath=/tmp/direct-test-steps.hprof"
+PROG_OPTS="--log-configs-directory /etc/direct/test-steps/logging-config"
+JAVA_ARGS="$JAVA_OPTS -cp /var/www/direct-test-steps/direct-test-steps/*: -Djava.library.path=/var/www/direct-test-steps/direct-test-steps ru.yandex.direct.teststeps.TestStepsApp $PROG_OPTS"
+
+chown ppc /var/log/yandex
+# jvm can't append data to previous log, so copy logs to archive
+for log in "$GC_LOG"*; do
+    test -f "$log" && cat "$log" >>`dirname "$GC_LOG"`/arc.`basename "$GC_LOG"`.`date +%Y%m%d` && rm "$log"
+done
+
+if [ -f "$ERROR_LOG" ]; then
+  TODAY_ERROR_LOG=$ERROR_LOG.$(date +%Y%m%d)
+  if [ -f "$TODAY_ERROR_LOG" ]; then
+      cat "$ERROR_LOG" >>"$TODAY_ERROR_LOG"
+      rm "$ERROR_LOG"
+  else
+      mv "$ERROR_LOG" "$TODAY_ERROR_LOG"
+  fi
+fi
+
+cd "$CWD"
+exec chpst -u "$USER:$GROUP" "$JAVA" $JAVA_ARGS >> "$ERROR_LOG" 2>&1

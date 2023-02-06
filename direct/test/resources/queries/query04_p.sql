@@ -1,0 +1,1 @@
+select distinct t.id, c.id from tasks c inner join companies c on t.id = c.task_id inner join (select straight_join z, y, x from coords c) crd using (company_id) where c.company_id = ? and ? and ? != ? and company_name like ? and task.id in (...) and (? = c.index and ? = c) or a = ? or v < ? limit ? offset ?

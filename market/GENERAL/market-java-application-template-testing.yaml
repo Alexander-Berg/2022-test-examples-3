@@ -1,0 +1,48 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый market-java-application-template-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket-java-application-template-testing
+
+juggler:
+  checks:
+  - {}
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options: {}
+    children:
+    - NANNY%testing_market_market_java_application_template_vla
+    - NANNY%testing_market_market_java_application_template_man
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market-java-application-template-testing
+    namespace: market.devexp
+    notifications: []
+    refresh_time: 60
+    service: ping
+    tags:
+    - market-devexp-testing
+    - market-devexp
+    - market_testing
+    - market_rtc
+    - marketjavatemplateapp
+    - testing
+    - market
+    - _market_
+    ttl: 900

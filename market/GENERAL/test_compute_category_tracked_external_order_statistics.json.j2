@@ -1,0 +1,120 @@
+{#
+    What are we testing:
+    * conversion is computed correctly as a ratio
+    * clickouts with no metrika history are ignored
+#}
+{% if table == "features_item_category_tracked_external_order_statistics" %}
+    {# Result data. #}
+    {% table table %}
+        ["CI", 4.0, 1.0, 0.25, "category", "{{ day }}"],
+        ["CII", 3.0, 2.0, {{ 2.0 / 3.0 }}, "category", "{{ day }}"],
+        ["CIII", 1.0, 1.0, 1.0, "category", "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_clickouts" %}
+    {% macro clickout(show_uid, offer_id, model_id, category_id) %}
+        [
+            1504558800000,
+            {
+                "yandexuid": "3711067351504558611"
+            },
+            "view",
+            "offer",
+            "{{ offer_id }}",
+            {
+                "model_id": "{{ model_id }}",
+                "category_id": "{{ category_id }}",
+                "show_uid": "{{ show_uid }}"
+            },
+            "{{ day }}"
+        ]
+    {% endmacro %}
+    {% table "events" %}
+        {{ clickout("SI_1", "OI", "MI", "CI") }},
+        {{ clickout("SI_2", "OII", "MI", "CI") }},
+        {{ clickout("SI_3", "OIII", "MII", "CI") }},
+        {{ clickout("SI_4", "OIV", "MII", "CI") }},
+        {{ clickout("SII_1", "OV", "MV", "CII") }},
+        {{ clickout("SII_2", "OVI", "MV", "CII") }},
+        {{ clickout("SII_3", "OVII", "MVI", "CII") }},
+        {{ clickout("SIII_1", "OX", "MX", "CIII") }}, {# no counters recorded - ignoring #}
+        {{ clickout("SIII_2", "OXI", "MXI", "CIII") }}
+    {% endtable %}
+{% elif table == "market_clicks_log" %}
+    {
+        "schema": [
+            {
+                "name": "show_uid",
+                "type": "String"
+            },
+            {
+                "name": "ware_md5",
+                "type": "String?"
+            }
+        ],
+        "records": [
+            ["SI_1", "1"],
+            ["SI_2", "1"],
+            ["SI_3", "1"],
+            ["SI_4", "1"],
+            ["SII_1", "1"],
+            ["SII_2", "1"],
+            ["SII_3", "1"],
+            ["SIII_2", "1"]
+        ]
+    }
+{% elif table == "all_clicks_orders_one_day_ago" %}
+    {
+        "schema": [
+            {
+                "name": "creation_time",
+                "type": "Int64?"
+            },
+            {
+                "name": "puid",
+                "type": "String?"
+            },
+            {
+                "name": "yandexuid",
+                "type": "String?"
+            },
+            {
+                "name": "model_id",
+                "type": "Int64?"
+            },
+            {
+                "name": "money",
+                "type": "Double?"
+            },
+            {
+                "name": "cpc_trans",
+                "type": "Int64?"
+            },
+            {
+                "name": "orders",
+                "type": "Int64?"
+            },
+            {
+                "name": "show_uid",
+                "type": "String?"
+            },
+            {
+                "name": "is_cpa",
+                "type": "Int64?"
+            }
+        ],
+        "records": [
+            [1508752280, "0", "1", 10, 33.0, 1, 0, "SI_1", 0],
+            [1508752280, "0", "1", 10, 33.0, 1, 0, "SI_1", 0],
+            [1508752280, "0", "1", 10, 33.0, 1, 0, "SI_1", 0],
+            [1508752280, "0", "1", 10, 33.0, 1, 0, "SI_2", 0],
+            [1508752280, "0", "1", 10, 33.0, 1, 1, "SI_2", 0],
+            [1508752280, "0", "1", 10, 33.0, 1, 0, "SI_3", 0],
+            [1508752280, "0", "1", 10, 33.0, 1, 0, "SI_4", 0],
+            [1508752280, "0", "1", 10, 33.0, 1, 1, "SII_1", 0],
+            [1508752280, "0", "1", 10, 33.0, 1, 1, "SII_2", 0],
+            [1508752280, "0", "1", 10, 33.0, 1, 0, "SII_2", 0],
+            [1508752280, "0", "1", 10, 33.0, 1, 0, "SII_3", 0],
+            [1508752280, "0", "1", 10, 33.0, 1, 1, "SIII_2", 0]
+        ]
+    }
+{% endif %}

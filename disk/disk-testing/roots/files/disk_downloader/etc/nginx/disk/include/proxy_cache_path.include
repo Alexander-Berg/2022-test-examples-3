@@ -1,0 +1,5 @@
+{% set u0_size_gb = salt['status.diskusage']('/u0')['/u0']['total'] // ( 1024 * 1024 *1024 ) -%} 
+{% set cache_u0_data_size = '256m' if grains['mem_total'] < 4096 else '4096m' -%}
+{% set cache_u0_preview_size = '128m' if grains['mem_total'] < 4096 else '4096m' -%}
+proxy_cache_path /u0/nginx/cache levels=1:2 keys_zone=cache_u0_data:{{ cache_u0_data_size }} inactive=1d max_size={{ (u0_size_gb * 0.7) | int(-1) }}g;
+proxy_cache_path /u0/nginx/cache_preview levels=1:2 keys_zone=cache_u0_preview:{{ cache_u0_preview_size }} inactive=1d max_size={{ (u0_size_gb * 0.1) | int(-1) }}g;

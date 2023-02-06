@@ -1,0 +1,104 @@
+
+ident: market-health-stable
+files:
+- name: /var/logs/yandex/report_perf.log
+  send_delay: 5
+  log_type: other
+  metainfo: 0
+  chunk:
+    send-server: 1
+    send-file: 1
+- name: /var/logs/yandex/backctld_perf.log
+  send_delay: 5
+  log_type: other
+  metainfo: 0
+  chunk:
+    send-server: 1
+    send-file: 1
+- name: /var/logs/yandex/backctld_download_progress.log
+  send_delay: 5
+  log_type: other
+  metainfo: 0
+  chunk:
+    send-server: 1
+    send-file: 1
+- name: /var/logs/yandex/sky_downloader_state.log
+  send_delay: 5
+  log_type: other
+  metainfo: 0
+  chunk:
+    send-server: 1
+    send-file: 1
+- name: /var/logs/yandex/sky_downloader_done.log
+  send_delay: 5
+  log_type: other
+  metainfo: 0
+  chunk:
+    send-server: 1
+    send-file: 1
+- name: /var/logs/yandex/host_metrics.log
+  send_delay: 5
+  log_type: other
+  metainfo: 0
+  chunk:
+    send-server: 1
+    send-file: 1
+- name: /var/logs/yandex/action_state.log
+  send_delay: 5
+  log_type: other
+  metainfo: 0
+  chunk:
+    send-server: 1
+    send-file: 1
+- name: /var/logs/yandex/torrent-client-perf.log
+  send_delay: 5
+  log_type: other
+  metainfo: 0
+  chunk:
+    send-server: 1
+    send-file: 1
+- name: /var/logs/yandex/report/rty_stats.log
+  send_delay: 5
+  log_type: other
+  metainfo: 0
+  chunk:
+    send-server: 1
+    send-file: 1
+- name: /var/logs/yandex/report/external-services.log
+  send_delay: 5
+  log_type: other
+  metainfo: 0
+  chunk:
+    send-server: 1
+    send-file: 1
+- name: /var/logs/yandex/report/subplace-access-tskv.log
+  send_delay: 5
+  log_type: other
+  metainfo: 0
+  chunk:
+    send-server: 1
+    send-file: 1
+- name: /var/logs/yandex/nginx/market-report-access.log
+  send_delay: 5
+  log_type: other
+  metainfo: 0
+  chunk:
+    send-server: 1
+    send-file: 1
+
+
+logger:
+  file: /var/logs/yandex/push-client/market-health_logbroker.log
+  level: 5
+  mode:
+  - file
+
+watcher:
+  state: pstate/push-client/market-health_logbroker
+
+network:
+  master_addr: logbroker.yandex.net
+  proto: pq
+  tvm-client-id: 2015224
+  tvm-server-id: 2001059
+  tvm-secret-file: push-client-tvm-secret-health/client_secret

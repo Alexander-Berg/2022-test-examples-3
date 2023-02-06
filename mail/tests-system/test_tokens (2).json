@@ -1,0 +1,359 @@
+{
+  "services": {
+    "test-abc" : {
+      "owner_id": "abc-service",
+      "owner_prefix": "abc:",
+      "send_tokens": [
+        {"token": "123abc", "name": "st1"}
+      ],
+      "tvm_publishers": {
+        "sandbox": [
+          {
+            "id": 12345,
+            "name": "unknown",
+            "suspended": false
+          }
+        ]
+      }
+    },
+    "tests-system-blacklisted": {
+      "owner_id": "800",
+      "owner_prefix": "test_",
+      "send_tokens": [
+        {"token": "tests-system-blacklisted-stoken", "name": "st1"}
+      ],
+      "listen_tokens": [
+        {"token": "tests-system-blacklisted-ltoken", "name": "tst-l1", "client": "tst-l1", "services": ["tests-system-blacklisted"]}
+      ],
+      "tvm_publishers": {
+        "sandbox": [
+          {
+            "id": 12345,
+            "name": "unknown",
+            "suspended": false
+          }
+        ],
+        "corp": [
+          {
+            "id": 98765,
+            "name": "disk",
+            "suspended": true
+          }
+        ]
+      }
+    },
+    "tests-system-whitelisted": {
+      "owner_id": "800",
+      "owner_prefix": "test_",
+      "send_tokens": [
+        {"token": "tests-system-whitelisted-stoken", "name": "st1"}
+      ],
+      "listen_tokens": [
+        {"token": "tests-system-whitelisted-ltoken", "name": "tst-l1", "client": "tst-l1", "services": ["tests-system-whitelisted"]}
+      ],
+      "tvm_publishers": {
+        "sandbox": [
+          {
+            "id": 12345,
+            "name": "unknown",
+            "suspended": false
+          }
+        ],
+        "corp": [
+          {
+            "id": 98765,
+            "name": "disk",
+            "suspended": true
+          }
+        ]
+      },
+      "tvm_subscribers": {
+        "sandbox": [
+          {
+            "id": 1,
+            "name": "unknown",
+            "suspended": false
+          }
+        ],
+        "production": [
+          {
+            "id": 4,
+            "name": "disk",
+            "suspended": true
+          }
+        ]
+      }
+    },
+    "test-tst1": {
+      "owner_id": "800",
+      "owner_prefix": "test_",
+      "revoked": true
+    },
+    "check-test": {
+      "owner_id": "800",
+      "owner_prefix": "test_",
+      "send_tokens": [
+        {"token": "corp:qwerty", "name": "st1_", "environment": "corp"},
+        {"token": "corp:qazwsx", "name": "st1_"}
+      ],
+      "listen_tokens": [
+        {"token": "production:asdfg", "name": "lt1_", "client": "check-test", "services": [], "environment": "production"},
+        {"token": "production:zxcvb", "name": "lt1_", "client": "check-test", "services": []}
+      ]
+    },
+    "check-p8test" : {
+      "owner_id": "777",
+      "owner_prefix": "test_",
+      "send_tokens": [
+        {"token": "corp:knjknkn", "name": "st2_", "environment": "corp"},
+        {"token": "corp:klmk", "name": "st2_"}
+      ],
+      "listen_tokens": [
+        {"token": "production:dfvsdfv", "name": "lt2_", "client": "check-p8test", "services": [], "environment": "production"},
+        {"token": "production:sdfvsdfv", "name": "lt2_", "client": "check-p8test", "services": []}
+      ]
+    },
+    "noauth": {
+      "owner_id": "800",
+      "owner_prefix": "test_",
+      "auth_disabled": true
+    },
+    "regtst": {
+      "owner_id": "200",
+      "owner_prefix": "test_",
+      "send_tokens": [
+        {"token": "01234567890", "name": "st1"}
+      ]
+    },
+    "tst1": {
+      "owner_id": "200",
+      "owner_prefix": "test_",
+      "is_passport": true,
+      "send_tokens": [
+        {"token": "S001", "name": "st1"},
+        {"token": "S003", "name": "st3"},
+        {"token": "corp:S001", "name": "st1", "environment": "corp"},
+        {"token": "corp:S003", "name": "st3", "environment": "corp"}
+      ],
+      "listen_tokens": [
+        {"token": "L001", "name": "tst-l1", "client": "tst-l1", "services": ["tst2"]},
+        {"token": "L003", "name": "tst-l3", "client": "tst-l3", "services": ["tst2"]},
+        {"token": "corp:L001", "name": "tst-l1", "client": "tst-l1", "services": ["tst2"], "environment": "corp"},
+        {"token": "corp:L003", "name": "tst-l3", "client": "tst-l3", "services": ["tst2"], "environment": "corp"}
+      ]
+    },
+    "tst2": {
+      "owner_id": "200",
+      "owner_prefix": "test_",
+      "send_tokens": [
+        {"token": "S002", "name": "st1"}
+      ]
+    },
+    "tests-system-rproxy-rate-limit-no-recovery": {
+      "owner_id": "200",
+      "owner_prefix": "test_",
+      "listen_tokens": [
+        {"token": "RProxyRateLimit", "name": "tst", "services": ["tests-system-rproxy-rate-limit-fast-recovery"]}
+      ]
+    },
+    "tests-system-rproxy-rate-limit-fast-recovery": {
+      "owner_id": "200",
+      "owner_prefix": "test_"
+    },
+    "tst_stream": {
+      "owner_id": "400",
+      "owner_prefix": "test_",
+      "is_stream": true,
+      "stream_count": 10,
+      "send_tokens": [
+        {"token": "abcdef", "name": "sst1"}
+      ],
+      "tvm_publishers": {
+        "sandbox": [
+          {
+            "id": 1000502,
+            "name": "publisher-tst",
+            "suspended": false
+          }
+        ]
+      }
+    },
+    "mail": {
+      "owner_id": "400",
+      "owner_prefix": "test_",
+      "listen_tokens": [
+        {"token": "12345678901234567890", "name": "tst", "client": "tst", "services": ["disk-json"]}
+      ],
+      "tvm_publishers": {
+        "sandbox": [
+          {
+            "id": 1000502,
+            "name": "publisher-tst",
+            "suspended": false
+          },
+          {
+            "id": 1000503,
+            "name": "publisher-suspended",
+            "suspended": true
+          }
+        ],
+        "production": [
+          {
+            "id": 1000504,
+            "name": "publisher-production",
+            "suspended": false
+          }
+        ]
+      },
+      "tvm_subscribers": {
+        "sandbox": [
+          {
+            "id": 1000505,
+            "name": "subscriber-tst",
+            "suspended": false
+          }
+        ]
+      }
+    },
+    "bass": {
+      "owner_id": "400",
+      "owner_prefix": "test_",
+      "listen_tokens": [
+        {"token": "bass123456", "name": "tst", "client": "tst", "services": ["bass"]}
+      ],
+      "tvm_subscribers": {
+        "sandbox": [
+          {
+            "id": 1000505,
+            "name": "subscriber-tst",
+            "suspended": false
+          }
+        ]
+      }
+    },
+    "fake": {
+      "owner_id": "400",
+      "owner_prefix": "test_",
+      "is_passport": true
+    },
+    "tests-system-session-as-ws-subscription-id": {
+      "owner_id": "400",
+      "owner_prefix": "test_",
+      "is_passport": true
+    },
+    "tests-system-message-unlimited-payload": {
+      "owner_id": "400",
+      "owner_prefix": "test_",
+      "is_passport": true,
+      "send_tokens": [
+        {"token": "unlimitedpayload", "name": "tst1"}
+      ]
+    },
+    "tests-system-high-priority-websockets": {
+      "owner_id": "400",
+      "owner_prefix": "test_",
+      "listen_tokens": [
+        {"token": "highpriowebsockets", "name": "tst1"}
+      ]
+    },
+    "disk-json": {
+      "owner_id": "123",
+      "owner_prefix": "corp_"
+    },
+    "autoru": {
+      "owner_id": "800",
+      "owner_prefix": "test_",
+      "is_passport": true,
+      "listen_tokens": [
+        {"token": "L123456", "name": "tst", "client": "tst", "services": ["autoru"]}
+      ],
+      "send_tokens": [
+        {"token": "S123456", "name": "tst1"}
+      ]
+    },
+    "tst_force_direct": {
+      "owner_id": "900",
+      "owner_prefix": "test_",
+      "queued_delivery_by_default": false,
+      "send_tokens": [
+        {"token": "ab123456tstforcedirectcdef", "name": "sst1"}
+      ]
+    }
+  },
+  "apps": {
+    "fcm": [
+      {
+        "name": "xiva.test.mail",
+        "secret": "key",
+        "service": "check-test"
+      },
+      {
+        "name": "xiva.test.noapp"
+      },
+      {
+        "name": "ru.yandex.mail",
+        "service": "check-test",
+        "secret": "s1"
+      },
+      {
+        "name": "ru.yandex.mail.v2",
+        "service": "check-test",
+        "backup": "old"
+      }
+    ],
+    "apns": [
+      {
+        "name": "xiva.test.mail",
+        "secret": "cert:valid_apns",
+        "service": "check-test",
+        "environment": 2
+      },
+      {
+        "name": "xiva.test.noapp"
+      },
+      {
+        "name": "xiva.test.badapp",
+        "secret": "key"
+      },
+      {
+        "name": "xiva.test.outdated",
+        "secret": "cert:outdated"
+      },
+      {
+        "name": "ru.yandex.mail",
+        "service": "check-test",
+        "secret": "cert:valid_apns",
+        "backup": "cert:outdated",
+        "expires": 123
+      },
+      {
+        "name": "ru.yandex.mail.v2",
+        "service": "check-test",
+        "secret": "cert:outdated",
+        "backup": "cert:valid_apns",
+        "expires": 123
+      },
+      {
+        "name": "ru.yandex.mail.p8test",
+        "service": "check-p8test",
+        "secret": "cert:apns_p8_token0_binary",
+        "backup": "cert:apns_p8_token1_binary",
+        "expires": 0
+      }
+    ],
+    "hms": [
+      {
+        "name": "ru.test.hms",
+        "service": "check-test",
+        "secret": "id\nsecret"
+      }
+    ],
+    "wns": [
+      {
+        "name": "ru.test.wns",
+        "service": "check-test",
+        "secret": "sid\nsecret"
+      }
+    ]
+  }
+}

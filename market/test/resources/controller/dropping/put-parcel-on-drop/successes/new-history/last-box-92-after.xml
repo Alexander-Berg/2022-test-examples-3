@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<dataset>
+    <PUTAWAYZONE PUTAWAYZONE="RACK"/>
+    <LOC loc="UNKNOWN" locationtype="OTHER" PUTAWAYZONE="RACK"/>
+    <PACK PACKKEY="STD" PACKDESCR="STD"/>
+
+    <LOC loc="LOC1" locationtype="PACK" PUTAWAYZONE="RACK"/>
+    <LOC loc="DROP" locationtype="DROP" PUTAWAYZONE="RACK"/>
+
+    <NSQLCONFIG CONFIGKEY="YM_MORNING_CUTOFF_TIME" NSQLVALUE="13:00"/>
+    <NSQLCONFIG CONFIGKEY="DROPPING_PARCEL_REGEX" NSQLVALUE="^(P)\d+$"/>
+
+    <STORER STORERKEY="CARRIER-01" COMPANY="Test carrier 1" TYPE="3"/>
+    <STORER STORERKEY="STORER" COMPANY="Тестовый сторер 1" TYPE="1"/>
+
+    <SKU SKU="SKU" STORERKEY="STORER"/>
+
+    <ORDERS
+        ORDERKEY="ORD0001"
+        CARRIERCODE="CARRIER-01"
+        EXTERNORDERKEY="EXT-ORD1"
+        TYPE="0"
+        STATUS="92"
+        SCHEDULEDSHIPDATE="2020-03-31 21:00:00.000"
+        ROWVERSION="1"
+        AddWho="setup"
+        EditWho="setup"
+        ADDDATE="2020-03-29 12:34:56.789"
+        EDITDATE="2020-03-29 12:34:56.789"
+    />
+    <ORDERDETAIL
+        ORDERKEY="ORD0001"
+        ORDERLINENUMBER="00001"
+        STORERKEY="STORER"
+        SKU="SKU"
+        STATUS="92"
+        ISMASTER="1"
+        OPENQTY="1"
+        SHIPPEDQTY="1"
+    />
+
+    <ORDERSTATUSHISTORY
+        ORDERKEY="ORD0001"
+        ORDERLINENUMBER=""
+        ORDERTYPE="SO"
+        STATUS="65"
+        ADDWHO="SETUP"
+        ADDDATE="2020-01-01 00:00:00"
+        COMMENTS="..."
+    />
+    <ORDERSTATUSHISTORY
+        ORDERKEY="ORD0001"
+        ORDERLINENUMBER=""
+        ORDERTYPE="SO"
+        STATUS="92"
+        ADDWHO="SETUP"
+        ADDDATE="2020-01-01 00:00:00"
+        COMMENTS="..."
+    />
+    <ORDERSTATUSHISTORY
+        ORDERKEY="ORD0001"
+        ORDERLINENUMBER=""
+        ORDERTYPE="SO"
+        STATUS="68"
+        ADDWHO="TEST"
+        ADDDATE="2020-04-01 12:34:56.789"
+        COMMENTS="NewDropping"
+    />
+    <ORDERSTATUSHISTORY
+        ORDERKEY="ORD0001"
+        ORDERLINENUMBER=""
+        ORDERTYPE="SO"
+        STATUS="92"
+        ADDWHO="TEST"
+        ADDDATE="2020-04-01 12:34:56.799"
+        COMMENTS="NewDropping"
+    />
+
+    <PICKDETAIL
+        PICKDETAILKEY="0000000001"
+        ORDERKEY="ORD0001"
+        TRACKINGID="P000000001"
+        ID="DRP0000001"
+        EDITDATE="2020-04-01 12:34:56.789"
+        PICKHEADERKEY=" "
+        LOC="DROP"
+        ORDERLINENUMBER="00001"
+        STORERKEY="STORER"
+        SKU="SKU"
+        LOT=""
+        STATUS="7"
+        QTY="1"
+    />
+    <PICKDETAIL
+        PICKDETAILKEY="0000000002"
+        ORDERKEY="ORD0001"
+        TRACKINGID="P000000002"
+        ID="DRP2"
+        EDITDATE="2020-01-01 00:00:00"
+        PICKHEADERKEY=" "
+        LOC="LOC1"
+        ORDERLINENUMBER="00001"
+        STORERKEY="STORER"
+        SKU="SKU"
+        LOT=""
+        STATUS="9"
+        QTY="1"
+    />
+
+    <SERIALINVENTORY SERIALNUMBER="0010000001" STORERKEY="STORER" SKU="SKU" LOT="LOT01" LOC="DROP" ID="DRP0000001"
+                     QTY="1" ADDWHO="setup" EDITWHO="TEST"/>
+
+    <LOTxLOCxID
+        LOT="LOT01"
+        LOC="DROP"
+        ID="DRP0000001"
+        QTY="1"
+        QTYPICKED="1"
+        STORERKEY="STORER"
+        SKU="SKU"
+    />
+
+    <SKUxLOC
+        STORERKEY="STORER"
+        SKU="SKU"
+        LOC="LOC1"
+        QTY="0"
+        QTYPICKED="0"
+        LOCATIONTYPE="PACK"
+        ADDWHO="setup"
+        EDITWHO="TEST"
+        ADDDATE="2020-01-01 00:00:00"
+        EDITDATE="2020-04-01 12:34:56.789"
+    />
+    <SKUxLOC
+        STORERKEY="STORER"
+        SKU="SKU"
+        LOC="DROP"
+        QTY="1"
+        QTYPICKED="1"
+        LOCATIONTYPE="DROP"
+        ADDWHO="TEST"
+        EDITWHO="TEST"
+        ADDDATE="2020-04-01 12:34:56.789"
+        EDITDATE="2020-04-01 12:34:56.789"
+    />
+
+    <LOTxIDHEADER
+        LOTXIDKEY="LI0001"
+        SOURCEKEY="ORD0001"
+        STORERKEY="STORER"
+        SKU="SKU"
+        LOT="LOT01"
+        ID="DRP0000001"
+        PICKDETAILKEY="0000000001"
+    />
+    <LOTxIDHEADER
+        LOTXIDKEY="LI0002"
+        SOURCEKEY="ORD0001"
+        STORERKEY="STORER"
+        SKU="SKU"
+        LOT="LOT01"
+        ID="DRP2"
+        PICKDETAILKEY="0000000002"
+    />
+
+    <LOTxIDDETAIL LOTXIDKEY="LI0001" LOTXIDLINENUMBER="LILN1" SOURCEKEY="ORD0001" PICKDETAILKEY="0000000001"
+                  OOTHER1="0010000001" LOT="LOT01" ID="DRP0000001" SKU="SKU" EDITWHO="TEST"/>
+    <LOTxIDDETAIL LOTXIDKEY="LI0002" LOTXIDLINENUMBER="LILN2" SOURCEKEY="ORD0001" PICKDETAILKEY="0000000002"
+                  OOTHER1="0010000002" LOT="LOT01" ID="DRP2" SKU="SKU" EDITWHO="setup"/>
+</dataset>

@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package travel.komod.trips.api.testing.v1;
+
+option java_package = "ru.yandex.travel.komod.trips.api.testing.v1";
+option java_multiple_files = true;
+
+option go_package = "a.yandex-team.ru/travel/komod/trips/api/testing/v1";
+
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+  info: {
+    title: "Trips.Testing.Api"
+    version: "1.0.0"
+  }
+  external_docs: {
+    url: "https://a.yandex-team.ru/arc/trunk/arcadia/travel/komod/trips/api";
+    description: "gRPC-gateway for travel-trips testing api";
+  }
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
+
+import "google/api/annotations.proto";
+import "google/protobuf/wrappers.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+import "travel/komod/trips/api/trips/v1/trip.proto";
+import "travel/komod/trips/api/trips/v1/trips_list.proto";
+
+message BuildTripsReqV1 {
+  repeated Order orders = 1;
+  int32 geoId = 2;
+}
+
+message BuildTripsRspV1 {
+  travel.komod.trips.api.trips.v1.PaginatedTripsList Active = 1;
+  travel.komod.trips.api.trips.v1.PaginatedTripsList Past = 2;
+}
+
+message PingReq {
+}
+
+message PingRsp {
+  string status = 1;
+}
+
+message Order {
+  string status = 1;
+  string id = 2;
+  oneof data {
+    Hotel hotel = 3;
+    Avia avia = 4;
+    Train train = 5;
+  }
+}
+
+message Hotel {
+  string checkinDate = 1;
+  string checkoutDate = 2;
+  int32 geoId = 3;
+  uint64 hotelPermalink = 4;
+}
+
+message Avia {
+  string forwardDepartureDate = 1;
+  string forwardArrivalDate = 2;
+  string backwardDepartureDate = 3;
+  string backwardArrivalDate = 4;
+  int32 fromSettlement = 5;
+  int32 toSettlement = 6;
+}
+
+message Train {
+  string forwardDepartureDate = 1;
+  string forwardArrivalDate = 2;
+  string backwardDepartureDate = 3;
+  string backwardArrivalDate = 4;
+  int32 fromSettlement = 5;
+  int32 toSettlement = 6;
+}
+
+service TestingServiceV1 {
+  rpc Ping(PingReq) returns (PingRsp) {
+    option (google.api.http) = {
+      get: "/api/testing/ping"
+    };
+  }
+
+  rpc BuildTrips(BuildTripsReqV1) returns (BuildTripsRspV1) {
+    option (google.api.http) = {
+      post: "/api/testing/build_trips"
+      body: "*"
+    };
+  }
+}

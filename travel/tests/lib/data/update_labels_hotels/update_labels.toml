@@ -1,0 +1,680 @@
+bin_path = "travel/cpa/data_processing/update_labels_hotels/update_labels_hotels"
+
+args = [
+    "--yt-proxy", "%(yt_proxy)s",
+    "--src-dir", "//home/tests/update_labels/redir_logs",
+    "--dst-dir", "//home/tests/update_labels/labels",
+    "--additional-tables", "//home/tests/update_labels/feeders/partner_0/latest/labels", "//home/tests/update_labels/feeders/partner_1/latest/labels",
+]
+
+checkers = [
+    "yt",
+]
+
+[yt.input.redir_logs]
+    path = "//home/tests/update_labels/redir_logs/proto_table"
+    converter = "label_to_proto"
+
+[[yt.input.redir_logs.data]]
+    Label = "proto_label_0"
+    Source = "proto_label_source_0"
+    Medium = "proto_label_medium_0"
+    Campaign = "proto_label_campaign_0"
+    Content = "proto_label_content_0"
+    Term = "proto_label_term_0"
+    YandexUid = "proto_label_yandex_uid_0"
+    OperatorId = 21
+    Query = "proto_label_query_0"
+    Price = 1
+    CacheTimestamp = 2
+    Permalink = 3
+    OfferId = "proto_label_offer_id_0"
+    OfferSource = "proto_label_offer_source_0"
+    OfferCampaign = "proto_label_offer_campaign_0"
+    OriginalHotelId = "proto_label_original_hotel_id_0"
+    PassportUid = "proto_label_passport_uid_0"
+    Uuid = "proto_label_uuid_0"
+    PartnerId = 2
+    CheckInDate = "2019-04-05"
+    Nights = 1
+    Occupancy = "2"
+    IntTestIds = [5,6,7]
+    IntTestBuckets = [51,61,71]
+    RequestRegion = 0
+    UserRegion = 0
+    ICookie = "ICookie-0"
+    GeoOrigin = "GeoOrigin-0"
+    GeoClientId = "GeoClientId-0"
+    RedirDestination = 0
+    Surface = 0
+    UserDevice = "UserDevice-0"
+    Gclid = "Gclid-0"
+    YaTravelReqId = "YaTravelReqId-0"
+    SerpReqId = "SerpReqId-0"
+    SearcherReqId = "SearcherReqId-0"
+    YtpReferer = "Referer-0"
+
+[[yt.input.redir_logs.data]]
+    Label = "proto_label_1"
+    Source = "proto_label_source_1"
+    Medium = "proto_label_medium_1"
+    Campaign = "proto_label_campaign_1"
+    Content = "proto_label_content_1"
+    Term = "proto_label_term_1"
+    YandexUid = "proto_label_yandex_uid_1"
+    OperatorId = 21
+    Query = "proto_label_query_1"
+    Price = 11
+    CacheTimestamp = 12
+    Permalink = 13
+    OfferId = "proto_label_offer_id_1"
+    OfferSource = "proto_label_offer_source_1"
+    OfferCampaign = "proto_label_offer_campaign_1"
+    OriginalHotelId = "proto_label_original_hotel_id_1"
+    PassportUid = "proto_label_passport_uid_1"
+    Uuid = "proto_label_uuid_1"
+    PartnerId = 2
+    CheckInDate = "2019-04-06"
+    Nights = 2
+    Occupancy = "2"
+    IntTestIds = [6,7,8]
+    IntTestBuckets = [61,71,81]
+    RequestRegion = 1
+    UserRegion = 1
+    ICookie = "ICookie-1"
+    GeoOrigin = "GeoOrigin-1"
+    GeoClientId = "GeoClientId-1"
+    RedirDestination = 1
+    Surface = 1
+    UserDevice = "UserDevice-1"
+    Gclid = "Gclid-1"
+    YaTravelReqId = "YaTravelReqId-1"
+    SerpReqId = "SerpReqId-1"
+    SearcherReqId = "SearcherReqId-1"
+    YtpReferer = "Referer-1"
+
+[[yt.input.redir_logs.data]]
+    Label = "proto_label_2"
+    Source = "proto_label_source_2"
+    Medium = "proto_label_medium_2"
+    Campaign = "proto_label_campaign_2"
+    Content = "proto_label_content_2"
+    Term = "proto_label_term_2"
+    YandexUid = "proto_label_yandex_uid_2"
+    OperatorId = 21
+    Query = "proto_label_query_2"
+    Price = 21
+    CacheTimestamp = 22
+    Permalink = 23
+    OfferId = "proto_label_offer_id_2"
+    OfferSource = "proto_label_offer_source_2"
+    OfferCampaign = "proto_label_offer_campaign_2"
+    OriginalHotelId = "proto_label_original_hotel_id_2"
+    PassportUid = "proto_label_passport_uid_2"
+    Uuid = "proto_label_uuid_2"
+    PartnerId = 2
+    CheckInDate = "2019-04-07"
+    Nights = 3
+    Occupancy = "2"
+    IntTestIds = [7,8,9]
+    IntTestBuckets = [71,81,91]
+    RequestRegion = 2
+    UserRegion = 2
+    ICookie = "ICookie-2"
+    GeoOrigin = "GeoOrigin-2"
+    GeoClientId = "GeoClientId-2"
+    RedirDestination = 2
+    Surface = 2
+    UserDevice = "UserDevice-2"
+    Gclid = "Gclid-2"
+    YaTravelReqId = "YaTravelReqId-2"
+    SerpReqId = "SerpReqId-2"
+    SearcherReqId = "SearcherReqId-2"
+    YtpReferer = "Referer-2"
+
+[yt.input.labels]
+    path = "//home/tests/update_labels/labels/labels"
+
+# labels table already contains data
+[[yt.input.labels.data]]
+    label = "label_collected"
+    label_source = "label_source"
+    label_medium = "label_medium"
+    label_campaign = "label_campaign"
+    label_content = "label_content"
+    label_term = "label_term"
+    label_yandex_uid = "label_yandex_uid"
+    label_operator_id = "label_operator_id"
+    label_query = "label_query"
+    label_price = 11
+    label_cache_timestamp = 12
+    label_permalink = 13
+    label_offer_id = "label_offer_id"
+    label_offer_source = "label_offer_source"
+    label_offer_campaign = "label_offer_campaign"
+    label_original_hotel_id = "label_original_hotel_id"
+    label_passport_uid = "label_passport_uid"
+    label_uuid = "label_uuid"
+    label_partner_id = "2"
+    label_check_in_date = "2019-04-05"
+    label_nights = 1
+    label_occupancy = "2"
+    label_int_test_ids = [5,6,7]
+    label_int_test_buckets = [51,61,71]
+    label_request_region = 3
+    label_user_region = 3
+    label_icookie = "ICookie-3"
+    label_geo_origin = "GeoOrigin-3"
+    label_geo_client_id = "GeoClientId-3"
+    label_redir_destination = "3"
+    label_surface = "3"
+    label_user_device = "UserDevice-3"
+    label_gclid = "Gclid-3"
+    label_ya_travel_req_id = "YaTravelReqId-3"
+    label_serp_req_id = "SerpReqId-3"
+    label_searcher_req_id = "SearcherReqId-3"
+    label_ytp_referer = "Referer-3"
+
+# hotel labels (feeders output)
+[yt.input.link_0]
+    path = "//home/tests/update_labels/feeders/partner_0/latest"
+    link_to = "//home/tests/update_labels/feeders/partner_0/some_date"
+
+[yt.input.link_1]
+    path = "//home/tests/update_labels/feeders/partner_1/latest"
+    link_to = "//home/tests/update_labels/feeders/partner_1/some_date"
+
+[yt.input.hotel_labels_0]
+    path = "//home/tests/update_labels/feeders/partner_0/some_date/labels"
+    converter = "label_to_proto"
+
+[[yt.input.hotel_labels_0.data]]
+    Label = "hotel_label_0_0"
+    Source = "hotel_label_source_0_0"
+    Medium = "hotel_label_medium_0_0"
+    Campaign = "hotel_label_campaign_0_0"
+    Content = "hotel_label_content_0_0"
+    Term = "hotel_label_term_0_0"
+    YandexUid = "hotel_label_yandex_uid_0_0"
+    OperatorId = 21
+    Query = "hotel_label_query_0_0"
+    Price = 1
+    CacheTimestamp = 2
+    Permalink = 3
+    OfferId = "hotel_label_offer_id_0_0"
+    OfferSource = "hotel_label_offer_source_0_0"
+    OfferCampaign = "hotel_label_offer_campaign_0_0"
+    OriginalHotelId = "hotel_label_original_hotel_id_0_0"
+    PassportUid = "hotel_label_passport_uid_0_0"
+    Uuid = "hotel_label_uuid_0_0"
+    PartnerId = 2
+    CheckInDate = "2019-04-05"
+    Nights = 1
+    Occupancy = "2"
+    IntTestIds = [5,6,7]
+    IntTestBuckets = [51,61,71]
+    RequestRegion = 10
+    UserRegion = 10
+    ICookie = "ICookie-10"
+    GeoOrigin = "GeoOrigin-10"
+    GeoClientId = "GeoClientId-10"
+    RedirDestination = 0
+    Surface = 0
+    UserDevice = "UserDevice-10"
+    Gclid = "Gclid-10"
+    YaTravelReqId = "YaTravelReqId-10"
+    SerpReqId = "SerpReqId-10"
+    SearcherReqId = "SearcherReqId-10"
+    YtpReferer = "Referer-10"
+
+[[yt.input.hotel_labels_0.data]]
+    Label = "hotel_label_0_1"
+    Source = "hotel_label_source_0_1"
+    Medium = "hotel_label_medium_0_1"
+    Campaign = "hotel_label_campaign_0_1"
+    Content = "hotel_label_content_0_1"
+    Term = "hotel_label_term_0_1"
+    YandexUid = "hotel_label_yandex_uid_0_1"
+    OperatorId = 21
+    Query = "hotel_label_query_0_1"
+    Price = 11
+    CacheTimestamp = 12
+    Permalink = 13
+    OfferId = "hotel_label_offer_id_0_1"
+    OfferSource = "hotel_label_offer_source_0_1"
+    OfferCampaign = "hotel_label_offer_campaign_0_1"
+    OriginalHotelId = "hotel_label_original_hotel_id_0_1"
+    PassportUid = "hotel_label_passport_uid_0_1"
+    Uuid = "hotel_label_uuid_0_1"
+    PartnerId = 2
+    CheckInDate = "2019-04-06"
+    Nights = 2
+    Occupancy = "2"
+    IntTestIds = [6,7,8]
+    IntTestBuckets = [61,71,81]
+    RequestRegion = 11
+    UserRegion = 11
+    ICookie = "ICookie-11"
+    GeoOrigin = "GeoOrigin-11"
+    GeoClientId = "GeoClientId-11"
+    RedirDestination = 1
+    Surface = 1
+    UserDevice = "UserDevice-11"
+    Gclid = "Gclid-11"
+    YaTravelReqId = "YaTravelReqId-11"
+    SerpReqId = "SerpReqId-11"
+    SearcherReqId = "SearcherReqId-11"
+    YtpReferer = "Referer-11"
+
+[yt.input.hotel_labels_1]
+    path = "//home/tests/update_labels/feeders/partner_1/some_date/labels"
+    converter = "label_to_proto"
+
+[[yt.input.hotel_labels_1.data]]
+    Label = "hotel_label_1_0"
+    Source = "hotel_label_source_1_0"
+    Medium = "hotel_label_medium_1_0"
+    Campaign = "hotel_label_campaign_1_0"
+    Content = "hotel_label_content_1_0"
+    Term = "hotel_label_term_1_0"
+    YandexUid = "hotel_label_yandex_uid_1_0"
+    OperatorId = 21
+    Query = "hotel_label_query_1_0"
+    Price = 1
+    CacheTimestamp = 2
+    Permalink = 3
+    OfferId = "hotel_label_offer_id_1_0"
+    OfferSource = "hotel_label_offer_source_1_0"
+    OfferCampaign = "hotel_label_offer_campaign_1_0"
+    OriginalHotelId = "hotel_label_original_hotel_id_1_0"
+    PassportUid = "hotel_label_passport_uid_1_0"
+    Uuid = "hotel_label_uuid_1_0"
+    PartnerId = 2
+    CheckInDate = "2019-04-07"
+    Nights = 3
+    Occupancy = "2"
+    IntTestIds = [7,8,9]
+    IntTestBuckets = [71,81,91]
+    RequestRegion = 12
+    UserRegion = 12
+    ICookie = "ICookie-12"
+    GeoOrigin = "GeoOrigin-12"
+    GeoClientId = "GeoClientId-12"
+    RedirDestination = 2
+    Surface = 2
+    UserDevice = "UserDevice-12"
+    Gclid = "Gclid-12"
+    YaTravelReqId = "YaTravelReqId-12"
+    SerpReqId = "SerpReqId-12"
+    SearcherReqId = "SearcherReqId-12"
+    YtpReferer = "Referer-12"
+
+[[yt.input.hotel_labels_1.data]]
+    Label = "hotel_label_1_1"
+    Source = "hotel_label_source_1_1"
+    Medium = "hotel_label_medium_1_1"
+    Campaign = "hotel_label_campaign_1_1"
+    Content = "hotel_label_content_1_1"
+    Term = "hotel_label_term_1_1"
+    YandexUid = "hotel_label_yandex_uid_1_1"
+    OperatorId = 21
+    Query = "hotel_label_query_1_1"
+    Price = 11
+    CacheTimestamp = 12
+    Permalink = 13
+    OfferId = "hotel_label_offer_id_1_1"
+    OfferSource = "hotel_label_offer_source_1_1"
+    OfferCampaign = "hotel_label_offer_campaign_1_1"
+    OriginalHotelId = "hotel_label_original_hotel_id_1_1"
+    PassportUid = "hotel_label_passport_uid_1_1"
+    Uuid = "hotel_label_uuid_1_1"
+    PartnerId = 2
+    CheckInDate = "2019-04-08"
+    Nights = 4
+    Occupancy = "2"
+    IntTestIds = [8,9,10]
+    IntTestBuckets = [81,91,101]
+    RequestRegion = 13
+    UserRegion = 13
+    ICookie = "ICookie-13"
+    GeoOrigin = "GeoOrigin-13"
+    GeoClientId = "GeoClientId-13"
+    RedirDestination = 3
+    Surface = 3
+    UserDevice = "UserDevice-13"
+    Gclid = "Gclid-13"
+    YaTravelReqId = "YaTravelReqId-13"
+    SerpReqId = "SerpReqId-13"
+    SearcherReqId = "SearcherReqId-13"
+    YtpReferer = "Referer-13"
+
+[yt.output.labels]
+    path = "//home/tests/update_labels/labels/labels"
+
+#data from hotel (feeder) tables
+[[yt.output.labels.data]]
+    label = "hotel_label_0_0"
+    label_source = "hotel_label_source_0_0"
+    label_medium = "hotel_label_medium_0_0"
+    label_campaign = "hotel_label_campaign_0_0"
+    label_content = "hotel_label_content_0_0"
+    label_term = "hotel_label_term_0_0"
+    label_yandex_uid = "hotel_label_yandex_uid_0_0"
+    label_operator_id = "21"
+    label_query = "hotel_label_query_0_0"
+    label_price = 1
+    label_cache_timestamp = 2
+    label_permalink = 3
+    label_offer_id = "hotel_label_offer_id_0_0"
+    label_offer_source = "hotel_label_offer_source_0_0"
+    label_offer_campaign = "hotel_label_offer_campaign_0_0"
+    label_original_hotel_id = "hotel_label_original_hotel_id_0_0"
+    label_passport_uid = "hotel_label_passport_uid_0_0"
+    label_uuid = "hotel_label_uuid_0_0"
+    label_partner_id = "2"
+    label_check_in_date = "2019-04-05"
+    label_nights = 1
+    label_occupancy = "2"
+    label_int_test_ids = [5,6,7]
+    label_int_test_buckets = [51,61,71]
+    label_request_region = 10
+    label_user_region = 10
+    label_icookie = "ICookie-10"
+    label_geo_origin = "GeoOrigin-10"
+    label_geo_client_id = "GeoClientId-10"
+    label_redir_destination = ""
+    label_surface = ""
+    label_user_device = "UserDevice-10"
+    label_gclid = "Gclid-10"
+    label_ya_travel_req_id = "YaTravelReqId-10"
+    label_serp_req_id = "SerpReqId-10"
+    label_searcher_req_id = "SearcherReqId-10"
+    label_ytp_referer = "Referer-10"
+
+[[yt.output.labels.data]]
+    label = "hotel_label_0_1"
+    label_source = "hotel_label_source_0_1"
+    label_medium = "hotel_label_medium_0_1"
+    label_campaign = "hotel_label_campaign_0_1"
+    label_content = "hotel_label_content_0_1"
+    label_term = "hotel_label_term_0_1"
+    label_yandex_uid = "hotel_label_yandex_uid_0_1"
+    label_operator_id = "21"
+    label_query = "hotel_label_query_0_1"
+    label_price = 11
+    label_cache_timestamp = 12
+    label_permalink = 13
+    label_offer_id = "hotel_label_offer_id_0_1"
+    label_offer_source = "hotel_label_offer_source_0_1"
+    label_offer_campaign = "hotel_label_offer_campaign_0_1"
+    label_original_hotel_id = "hotel_label_original_hotel_id_0_1"
+    label_passport_uid = "hotel_label_passport_uid_0_1"
+    label_uuid = "hotel_label_uuid_0_1"
+    label_partner_id = "2"
+    label_check_in_date = "2019-04-06"
+    label_nights = 2
+    label_occupancy = "2"
+    label_int_test_ids = [6,7,8]
+    label_int_test_buckets = [61,71,81]
+    label_request_region = 11
+    label_user_region = 11
+    label_icookie = "ICookie-11"
+    label_geo_origin = "GeoOrigin-11"
+    label_geo_client_id = "GeoClientId-11"
+    label_redir_destination = "1"
+    label_surface = "1"
+    label_user_device = "UserDevice-11"
+    label_gclid = "Gclid-11"
+    label_ya_travel_req_id = "YaTravelReqId-11"
+    label_serp_req_id = "SerpReqId-11"
+    label_searcher_req_id = "SearcherReqId-11"
+    label_ytp_referer = "Referer-11"
+
+[[yt.output.labels.data]]
+    label = "hotel_label_1_0"
+    label_source = "hotel_label_source_1_0"
+    label_medium = "hotel_label_medium_1_0"
+    label_campaign = "hotel_label_campaign_1_0"
+    label_content = "hotel_label_content_1_0"
+    label_term = "hotel_label_term_1_0"
+    label_yandex_uid = "hotel_label_yandex_uid_1_0"
+    label_operator_id = "21"
+    label_query = "hotel_label_query_1_0"
+    label_price = 1
+    label_cache_timestamp = 2
+    label_permalink = 3
+    label_offer_id = "hotel_label_offer_id_1_0"
+    label_offer_source = "hotel_label_offer_source_1_0"
+    label_offer_campaign = "hotel_label_offer_campaign_1_0"
+    label_original_hotel_id = "hotel_label_original_hotel_id_1_0"
+    label_passport_uid = "hotel_label_passport_uid_1_0"
+    label_uuid = "hotel_label_uuid_1_0"
+    label_partner_id = "2"
+    label_check_in_date = "2019-04-07"
+    label_nights = 3
+    label_occupancy = "2"
+    label_int_test_ids = [7,8,9]
+    label_int_test_buckets = [71,81,91]
+    label_request_region = 12
+    label_user_region = 12
+    label_icookie = "ICookie-12"
+    label_geo_origin = "GeoOrigin-12"
+    label_geo_client_id = "GeoClientId-12"
+    label_redir_destination = "2"
+    label_surface = "2"
+    label_user_device = "UserDevice-12"
+    label_gclid = "Gclid-12"
+    label_ya_travel_req_id = "YaTravelReqId-12"
+    label_serp_req_id = "SerpReqId-12"
+    label_searcher_req_id = "SearcherReqId-12"
+    label_ytp_referer = "Referer-12"
+
+[[yt.output.labels.data]]
+    label = "hotel_label_1_1"
+    label_source = "hotel_label_source_1_1"
+    label_medium = "hotel_label_medium_1_1"
+    label_campaign = "hotel_label_campaign_1_1"
+    label_content = "hotel_label_content_1_1"
+    label_term = "hotel_label_term_1_1"
+    label_yandex_uid = "hotel_label_yandex_uid_1_1"
+    label_operator_id = "21"
+    label_query = "hotel_label_query_1_1"
+    label_price = 11
+    label_cache_timestamp = 12
+    label_permalink = 13
+    label_offer_id = "hotel_label_offer_id_1_1"
+    label_offer_source = "hotel_label_offer_source_1_1"
+    label_offer_campaign = "hotel_label_offer_campaign_1_1"
+    label_original_hotel_id = "hotel_label_original_hotel_id_1_1"
+    label_passport_uid = "hotel_label_passport_uid_1_1"
+    label_uuid = "hotel_label_uuid_1_1"
+    label_partner_id = "2"
+    label_check_in_date = "2019-04-08"
+    label_nights = 4
+    label_occupancy = "2"
+    label_int_test_ids = [8,9,10]
+    label_int_test_buckets = [81,91,101]
+    label_request_region = 13
+    label_user_region = 13
+    label_icookie = "ICookie-13"
+    label_geo_origin = "GeoOrigin-13"
+    label_geo_client_id = "GeoClientId-13"
+    label_redir_destination = "3"
+    label_surface = "3"
+    label_user_device = "UserDevice-13"
+    label_gclid = "Gclid-13"
+    label_ya_travel_req_id = "YaTravelReqId-13"
+    label_serp_req_id = "SerpReqId-13"
+    label_searcher_req_id = "SearcherReqId-13"
+    label_ytp_referer = "Referer-13"
+
+# data from labels table
+[[yt.output.labels.data]]
+    label = "label_collected"
+    label_source = "label_source"
+    label_medium = "label_medium"
+    label_campaign = "label_campaign"
+    label_content = "label_content"
+    label_term = "label_term"
+    label_yandex_uid = "label_yandex_uid"
+    label_operator_id = "label_operator_id"
+    label_query = "label_query"
+    label_price = 11
+    label_cache_timestamp = 12
+    label_permalink = 13
+    label_offer_id = "label_offer_id"
+    label_offer_source = "label_offer_source"
+    label_offer_campaign = "label_offer_campaign"
+    label_original_hotel_id = "label_original_hotel_id"
+    label_passport_uid = "label_passport_uid"
+    label_uuid = "label_uuid"
+    label_partner_id = "2"
+    label_check_in_date = "2019-04-05"
+    label_nights = 1
+    label_occupancy = "2"
+    label_int_test_ids = [5,6,7]
+    label_int_test_buckets = [51,61,71]
+    label_request_region = 3
+    label_user_region = 3
+    label_icookie = "ICookie-3"
+    label_geo_origin = "GeoOrigin-3"
+    label_geo_client_id = "GeoClientId-3"
+    label_redir_destination = "3"
+    label_surface = "3"
+    label_user_device = "UserDevice-3"
+    label_gclid = "Gclid-3"
+    label_ya_travel_req_id = "YaTravelReqId-3"
+    label_serp_req_id = "SerpReqId-3"
+    label_searcher_req_id = "SearcherReqId-3"
+    label_ytp_referer = "Referer-3"
+
+#data from redir logs
+[[yt.output.labels.data]]
+    label = "proto_label_0"
+    label_source = "proto_label_source_0"
+    label_medium = "proto_label_medium_0"
+    label_campaign = "proto_label_campaign_0"
+    label_content = "proto_label_content_0"
+    label_term = "proto_label_term_0"
+    label_yandex_uid = "proto_label_yandex_uid_0"
+    label_operator_id = "21"
+    label_query = "proto_label_query_0"
+    label_price = 1
+    label_cache_timestamp = 2
+    label_permalink = 3
+    label_offer_id = "proto_label_offer_id_0"
+    label_offer_source = "proto_label_offer_source_0"
+    label_offer_campaign = "proto_label_offer_campaign_0"
+    label_original_hotel_id = "proto_label_original_hotel_id_0"
+    label_passport_uid = "proto_label_passport_uid_0"
+    label_uuid = "proto_label_uuid_0"
+    label_partner_id = "2"
+    label_check_in_date = "2019-04-05"
+    label_nights = 1
+    label_occupancy = "2"
+    label_int_test_ids = [5,6,7]
+    label_int_test_buckets = [51,61,71]
+    label_request_region = 0
+    label_user_region = 0
+    label_icookie = "ICookie-0"
+    label_geo_origin = "GeoOrigin-0"
+    label_geo_client_id = "GeoClientId-0"
+    label_redir_destination = ""
+    label_surface = ""
+    label_user_device = "UserDevice-0"
+    label_gclid = "Gclid-0"
+    label_ya_travel_req_id = "YaTravelReqId-0"
+    label_serp_req_id = "SerpReqId-0"
+    label_searcher_req_id = "SearcherReqId-0"
+    label_ytp_referer = "Referer-0"
+
+[[yt.output.labels.data]]
+    label = "proto_label_1"
+    label_source = "proto_label_source_1"
+    label_medium = "proto_label_medium_1"
+    label_campaign = "proto_label_campaign_1"
+    label_content = "proto_label_content_1"
+    label_term = "proto_label_term_1"
+    label_yandex_uid = "proto_label_yandex_uid_1"
+    label_operator_id = "21"
+    label_query = "proto_label_query_1"
+    label_price = 11
+    label_cache_timestamp = 12
+    label_permalink = 13
+    label_offer_id = "proto_label_offer_id_1"
+    label_offer_source = "proto_label_offer_source_1"
+    label_offer_campaign = "proto_label_offer_campaign_1"
+    label_original_hotel_id = "proto_label_original_hotel_id_1"
+    label_passport_uid = "proto_label_passport_uid_1"
+    label_uuid = "proto_label_uuid_1"
+    label_partner_id = "2"
+    label_check_in_date = "2019-04-06"
+    label_nights = 2
+    label_occupancy = "2"
+    label_int_test_ids = [6,7,8]
+    label_int_test_buckets = [61,71,81]
+    label_request_region = 1
+    label_user_region = 1
+    label_icookie = "ICookie-1"
+    label_geo_origin = "GeoOrigin-1"
+    label_geo_client_id = "GeoClientId-1"
+    label_redir_destination = "1"
+    label_surface = "1"
+    label_user_device = "UserDevice-1"
+    label_gclid = "Gclid-1"
+    label_ya_travel_req_id = "YaTravelReqId-1"
+    label_serp_req_id = "SerpReqId-1"
+    label_searcher_req_id = "SearcherReqId-1"
+    label_ytp_referer = "Referer-1"
+
+[[yt.output.labels.data]]
+    label = "proto_label_2"
+    label_source = "proto_label_source_2"
+    label_medium = "proto_label_medium_2"
+    label_campaign = "proto_label_campaign_2"
+    label_content = "proto_label_content_2"
+    label_term = "proto_label_term_2"
+    label_yandex_uid = "proto_label_yandex_uid_2"
+    label_operator_id = "21"
+    label_query = "proto_label_query_2"
+    label_price = 21
+    label_cache_timestamp = 22
+    label_permalink = 23
+    label_offer_id = "proto_label_offer_id_2"
+    label_offer_source = "proto_label_offer_source_2"
+    label_offer_campaign = "proto_label_offer_campaign_2"
+    label_original_hotel_id = "proto_label_original_hotel_id_2"
+    label_passport_uid = "proto_label_passport_uid_2"
+    label_uuid = "proto_label_uuid_2"
+    label_partner_id = "2"
+    label_check_in_date = "2019-04-07"
+    label_nights = 3
+    label_occupancy = "2"
+    label_int_test_ids = [7,8,9]
+    label_int_test_buckets = [71,81,91]
+    label_request_region = 2
+    label_user_region = 2
+    label_icookie = "ICookie-2"
+    label_geo_origin = "GeoOrigin-2"
+    label_geo_client_id = "GeoClientId-2"
+    label_redir_destination = "2"
+    label_surface = "2"
+    label_user_device = "UserDevice-2"
+    label_gclid = "Gclid-2"
+    label_ya_travel_req_id = "YaTravelReqId-2"
+    label_serp_req_id = "SerpReqId-2"
+    label_searcher_req_id = "SearcherReqId-2"
+    label_ytp_referer = "Referer-2"
+
+[yt.output.processed_labels]
+    path = "//home/tests/update_labels/labels/processed_labels"
+    fields_to_skip = ["content_revision"]
+
+[[yt.output.processed_labels.data]]
+    table = "//home/tests/update_labels/feeders/partner_0/latest/labels"
+
+[[yt.output.processed_labels.data]]
+    table = "//home/tests/update_labels/feeders/partner_1/latest/labels"
+
+[[yt.output.processed_labels.data]]
+    table = "//home/tests/update_labels/redir_logs/proto_table"

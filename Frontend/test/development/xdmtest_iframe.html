@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="easyXDM-2.4.16.3/easyXDM.debug.js"></script>
+    <script>
+        easyXDM.DomHelper.requiresJSON("easyXDM-2.4.16.3/json2.js");
+    </script>
+</head>
+<body>
+    <script>
+//        var rpc = new easyXDM.Rpc({
+//                    remoteHelper : 'http://sitesearch-external.orion.lori.yandex.ru/version2.0/test/development/easyXDM-2.4.16.3/name.html',
+//                    local : 'easyXDM-2.4.16.3/name.html',
+//                    swf : 'http://sitesearch-external.orion.lori.yandex.ru/version2.0/test/development/easyXDM-2.4.16.3/easyxdm.swf',
+//                    onReady : function() {
+//                        alert('onReady, iframe');
+//                        rpc.resizeIframe(document.body.scrollHeight);
+//                    }
+//                },
+//                {
+//                    remote : {
+//                        resizeIframe : {}
+//                    }
+//                });
+
+        var socket = new easyXDM.Socket({
+            remoteHelper : 'http://sitesearch-external.orion.lori.yandex.ru/version2.0/test/development/easyXDM-2.4.16.3/name.html',
+            local : 'easyXDM-2.4.16.3/name.html',
+            swf : 'http://sitesearch-external.orion.lori.yandex.ru/version2.0/test/development/easyXDM-2.4.16.3/easyxdm.swf',
+            onReady : function() {
+                alert('onReady, iframe');
+                socket.postMessage(document.body.scrollHeight);
+            }
+        });
+
+    </script>
+    <h2>Если ты меня видишь, значит хорошо</h2>
+    <button onclick="document.location.reload()">aga</button>
+    <div id="log" style="height: 200px; border: 1px solid #000; overflow: auto;"></div>
+</body>
+</html>

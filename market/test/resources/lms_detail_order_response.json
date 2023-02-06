@@ -1,0 +1,151 @@
+{
+  "meta": {
+    "fields": [
+      {
+        "name": "externalId",
+        "title": "ID заказа",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false
+      },
+      {
+        "name": "sortingCenterId",
+        "title": "Id сортцентра",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false
+      },
+      {
+        "name": "sortingCenterName",
+        "title": "Сортцентр",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false
+      },
+      {
+        "name": "zoneId",
+        "title": "Зона",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false
+      },
+      {
+        "name": "cellNumber",
+        "title": "Номер ячейки",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false
+      },
+      {
+        "name": "placeCount",
+        "title": "Количество мест",
+        "type": "NUMBER",
+        "editable": false,
+        "options": [],
+        "hidden": false
+      },
+      {
+        "name": "courierName",
+        "title": "Курьер",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false
+      },
+      {
+        "name": "courierId",
+        "title": "Id Курьера",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false
+      },
+      {
+        "name": "ffStatus",
+        "title": "Статус заказа",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false
+      },
+      {
+        "name": "acceptedDate",
+        "title": "Дата приемки",
+        "type": "DATE",
+        "editable": false,
+        "options": [],
+        "hidden": false
+      },
+      {
+        "name": "cellId",
+        "title": "Id ячейки",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false
+      }
+    ],
+    "actions": [
+      {
+        "title": "Вернуть в буферную зону",
+        "description": "При нажатии на кнопку заказ перейдет в статус принято на сц, а посылки в статус ACCEPTED",
+        "slug": "/returnToBuffer",
+        "identifiedBy": [],
+        "type": "ROW_ACTION",
+        "method": "POST_BODY",
+        "authorities": []
+      },
+      {
+        "title": "Отгрузить курьеру",
+        "description": "Заказ перейдет в статус отгружено курьера на последнего назначенного курьера",
+        "slug": "/shipToCourier",
+        "identifiedBy": [],
+        "type": "ROW_ACTION",
+        "method": "POST_BODY",
+        "authorities": []
+      },
+      {
+        "title": "Вернуть на склад",
+        "description": "При нажатии на кнопку заказ перейдет в статус возвращенного на склад, а посылки в статус SHIPPED",
+        "slug": "/returnToWarehouse",
+        "identifiedBy": [],
+        "type": "ROW_ACTION",
+        "method": "POST_BODY",
+        "authorities": []
+      }
+    ],
+    "mode": "EDIT",
+    "deletable": false,
+    "children": [
+      {
+        "title": "Посылки заказа",
+        "slug": "sc/places",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "id",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      }
+    ],
+    "tabs": []
+  },
+  "item": {
+    "id": %s,
+    "values": {
+      "placeCount": 1,
+      "courierName": "Иван Пивовар Таранов",
+      "ffStatus": "ORDER_CREATED_FF",
+      "sortingCenterId": "12",
+      "externalId": "1",
+      "courierId": "1",
+      "sortingCenterName": "СЦ partner-12"
+    },
+    "title": "LMSOrderDto"
+  }
+}

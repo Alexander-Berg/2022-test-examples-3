@@ -1,0 +1,228 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый market_mbi_partner-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_mbi_partner-testing
+
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_partner-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    children:
+    - NANNY%testing_market_mbi_partner_vla
+    - NANNY%testing_market_mbi_partner_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications:
+    - template_kwargs:
+        login: mbi-release-tg
+        method: telegram
+        status:
+        - CRIT
+        - WARN
+        - OK
+      template_name: on_status_change
+    service: disk_free_space
+    tags:
+    - market_testing
+    - market_mbi
+    - market_rtc
+    - partner
+    - market
+    - _market_
+
+  # Check fresh-hprof-files
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_partner-testing&service=fresh-hprof-files&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_mbi_partner_vla
+    - NANNY%testing_market_mbi_partner_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications:
+    - template_kwargs:
+        login: mbi-testing-tg
+        method: telegram
+        status:
+        - CRIT
+        - WARN
+        - OK
+      template_name: on_status_change
+    service: fresh-hprof-files
+    tags:
+    - market_testing
+    - market_mbi
+    - market_rtc
+    - partner
+    - market
+    - _market_
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_partner-testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_mbi_partner_vla
+    - NANNY%testing_market_mbi_partner_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications:
+    - template_kwargs:
+        login: mbi-testing-tg
+        method: telegram
+        status:
+        - CRIT
+        - WARN
+        - OK
+      template_name: on_status_change
+    service: logrotate
+    tags:
+    - market_testing
+    - market_mbi
+    - market_rtc
+    - partner
+    - market
+    - _market_
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_partner-testing&service=ping&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /ping
+      regexp: ^0;
+      warn_codes: []
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 100%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 146%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_mbi_partner_vla:ping:all
+    - NANNY%testing_market_mbi_partner_sas:ping:all
+    notifications:
+    - template_kwargs:
+        login: mbi
+        method: telegram
+      template_name: on_status_change
+    service: ping
+    tags:
+    - market_testing
+    - market_mbi
+    - market_rtc
+    - partner
+    - market
+    - _market_
+    - ping
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_partner-testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_mbi_partner_vla
+    - NANNY%testing_market_mbi_partner_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications:
+    - template_kwargs:
+        login: mbi-testing-tg
+        method: telegram
+        status:
+        - CRIT
+        - WARN
+        - OK
+      template_name: on_status_change
+    service: push-client-status
+    tags:
+    - market_testing
+    - market_mbi
+    - market_rtc
+    - partner
+    - market
+    - _market_
+
+  # Cocon checkers errors
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_partner-testing&service=market_mbi_checkers_failures&last=1DAY&mode=edit
+  - service: market_mbi_checkers_failures
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    refresh_time: 60
+    ttl: 180
+    flaps:
+      boost_time: 0
+      critical_time: 900
+      stable_time: 180
+    tags:
+      - market_testing
+      - market_mbi
+      - market_rtc
+      - partner
+      - market
+      - _market_
+
+  # Market partner tariffs handle errors
+  # https://juggler.yandex-team.ru/raw_events/?query=service%3D5xx_errors_mbi_partner_tariffs_calculator_testing%7Cservice%3D5xx_errors_mbi_partner_tariffs_catalog_testing%7Cservice%3D4xx_errors_mbi_partner_tariffs_calculator_testing%7Cservice%3D4xx_errors_mbi_partner_tariffs_catalog_testing
+  - service: 5xx_errors_mbi_partner_tariffs_testing
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    children:
+    - market_mbi_shops:5xx_errors_mbi_partner_tariffs_catalog_testing
+    - market_mbi_shops:5xx_errors_mbi_partner_tariffs_calculator_testing
+    - market_mbi_shops:4xx_errors_mbi_partner_tariffs_catalog_testing
+    - market_mbi_shops:4xx_errors_mbi_partner_tariffs_calculator_testing
+    flaps:
+      boost_time: 0
+      critical_time: 900
+      stable_time: 180
+    notifications:
+    - template_kwargs:
+        login: mbi-testing-tg
+        method: telegram
+        status:
+        - CRIT
+        - OK
+      template_name: on_status_change
+    tags:
+      - market_testing
+      - market_mbi
+      - market_rtc
+      - partner
+      - market
+      - _market_
+
+  default:
+    check_options: {}
+    host: market_mbi_partner-testing
+    namespace: market.mbi_shops
+    refresh_time: 60
+    ttl: 900

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export PYTHONPATH="/app:/app/fan_$1"
+umask 0002
+cd /app
+pytest -p no:cacheprovider -c "fan_$1/pytest.ini" "${@:2}"

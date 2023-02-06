@@ -1,0 +1,213 @@
+{
+    "VerboseLevel": 6,
+    "YtVerboseLevel": "Error",
+
+    "YtCluster": "{{yt_cluster}}",
+    "YtLog": "{{yt_log}}",
+    "Port": {{port}},
+
+    "ClientsPerCluster": 5,
+    "GlobalLog": "{{global_log}}",
+
+    "YtWriteTrottlerQuota": {
+        "MaxAccumulatedQuota": 20000
+    },
+
+    "HeavyWorkerThreads": 4,
+    "Destinations": [
+        {
+            "Name": "{{ output_queue }}",
+            "ShardsCount": {{ shard_count }},
+            "QytWriter": {
+                "Queues": [
+                    {
+                        "Cluster": "{{ yt_cluster }}",
+                        "Path": "{{ output_queue }}"
+                    }
+                ]
+            }
+        }
+    ],
+
+    "Resharders": [
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "{{request_cs_path}}",
+                    "LaunchShardProcessorInFiber": true,
+                    "WorkerMinorName": "w_requests_log",
+                    "ThreadLabelPrefix": "t_requests_log",
+                    "MaxShards": 100,
+                    "MaxShardsToCheck": 100
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "StatelessShardProcessorConfig": {
+                    "ThreadLabelPrefix": "requests_log"
+                },
+
+                "Suppliers": [
+                    {
+                        "Alias": "sas_requests_log",
+                        "YtSupplier": {
+                            "QueueConsumer": "resharder",
+                            "QueuePath": "{{request_queue}}",
+                            "Cluster": "{{yt_cluster}}"
+                        }
+                    }
+                ],
+
+                "TrottlerQuota": {
+                    "MaxAccumulatedRowsQuota": 3000000.0,
+                    "QuotaRestorationThreshold": 0.1,
+                    "RowsPerSecond": 300000.0
+                },
+
+                "SrcDcLabel": "sas",
+                "SrcTopicLabel": "images-to-picrobot",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "{{output_queue}}",
+            "RowProcessor": {
+                "InputType": "IMAGE_REQUEST"
+            }
+        },
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "{{video_request_cs_path}}",
+                    "LaunchShardProcessorInFiber": true,
+                    "WorkerMinorName": "w_video_requests_log",
+                    "ThreadLabelPrefix": "t_video_requests_log",
+                    "MaxShards": 100,
+                    "MaxShardsToCheck": 100
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "StatelessShardProcessorConfig": {
+                    "ThreadLabelPrefix": "video_requests_log"
+                },
+
+                "Suppliers": [
+                    {
+                        "Alias": "sas_video_requests_log",
+                        "YtSupplier": {
+                            "QueueConsumer": "resharder",
+                            "QueuePath": "{{video_request_queue}}",
+                            "Cluster": "{{yt_cluster}}"
+                        }
+                    }
+                ],
+
+                "TrottlerQuota": {
+                    "MaxAccumulatedRowsQuota": 3000000.0,
+                    "QuotaRestorationThreshold": 0.1,
+                    "RowsPerSecond": 300000.0
+                },
+
+                "SrcDcLabel": "sas",
+                "SrcTopicLabel": "videos-to-picrobot",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "{{output_queue}}",
+            "RowProcessor": {
+                "InputType": "VIDEO_REQUEST"
+            }
+        },
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "{{image_cs_path}}",
+                    "LaunchShardProcessorInFiber": true,
+                    "WorkerMinorName": "w_images_log",
+                    "ThreadLabelPrefix": "t_images_log",
+                    "MaxShards": 100,
+                    "MaxShardsToCheck": 100
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "StatelessShardProcessorConfig": {
+                    "ThreadLabelPrefix": "images_log"
+                },
+
+                "Suppliers": [
+                    {
+                        "Alias": "sas_images_log",
+                        "YtSupplier": {
+                            "QueueConsumer": "resharder",
+                            "QueuePath": "{{image_queue}}",
+                            "Cluster": "{{yt_cluster}}"
+                        }
+                    }
+                ],
+
+                "TrottlerQuota": {
+                    "MaxAccumulatedRowsQuota": 3000000.0,
+                    "QuotaRestorationThreshold": 0.1,
+                    "RowsPerSecond": 300000.0
+                },
+
+                "SrcDcLabel": "sas",
+                "SrcTopicLabel": "rthub-to-picrobot",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "{{output_queue}}",
+            "RowProcessor": {
+                "Source": "testing",
+                "InputType": "MDS_RESULT"
+            }
+        },
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "{{event_cs_path}}",
+                    "LaunchShardProcessorInFiber": true,
+                    "WorkerMinorName": "w_events_log",
+                    "ThreadLabelPrefix": "t_events_log",
+                    "MaxShards": 100,
+                    "MaxShardsToCheck": 100
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "StatelessShardProcessorConfig": {
+                    "ThreadLabelPrefix": "images_log"
+                },
+
+                "Suppliers": [
+                    {
+                        "Alias": "events_log",
+                        "YtSupplier": {
+                            "QueueConsumer": "resharder",
+                            "QueuePath": "{{event_queue}}",
+                            "Cluster": "{{yt_cluster}}"
+                        }
+                    }
+                ],
+
+                "TrottlerQuota": {
+                    "MaxAccumulatedRowsQuota": 3000000.0,
+                    "QuotaRestorationThreshold": 0.1,
+                    "RowsPerSecond": 300000.0
+                },
+
+                "SrcDcLabel": "sas",
+                "SrcTopicLabel": "vent_queue",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "{{output_queue}}",
+            "RowProcessor": {
+                "InputType": "EVENT_MESSAGE"
+            }
+        }
+    ],
+
+    "SharedTransactionPeriod": 200
+}

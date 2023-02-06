@@ -1,0 +1,16 @@
+type: ydeploy
+release:
+  ydeploy:
+    stageId: mathcongress-testing
+    stage:
+      spec:
+        deploy_units:
+          admin: {}
+          admin-backend: {}
+          backend: {}
+          frontend:
+            images_for_boxes:
+              frontend:
+                tag: ${DOCKER_IMAGE_TAG}
+        revision_info:
+          description: Update frontend version to ${DOCKER_IMAGE_TAG}

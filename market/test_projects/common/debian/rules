@@ -1,0 +1,28 @@
+#!/usr/bin/make -f
+
+package=yandex-market-project-builder-common
+
+build:
+	dh_testdir
+	touch build
+
+clean:
+	dh_testroot
+	dh_testdir
+	dh_clean
+
+binary-indep: build
+
+binary-arch: build
+
+binary: binary-indep binary-arch
+	dh_testroot
+	dh_testdir
+	dh_installdeb
+	dh_gencontrol
+	dh_fixperms
+	dh_md5sums
+	dh_builddeb
+
+
+.PHONY: binary binary-arch binary-indep clean checkroot

@@ -1,0 +1,85 @@
+#%RAML 0.8
+title: mbody
+baseUri: https://{host}:8888
+baseUriParameters:
+  host:
+    default: localhost
+/ping:
+  get:
+    description: Проверяет работоспособность демона
+/message:
+  get:
+    description: Формирует отображение письма
+    queryParameters:
+      stid:
+        description: мулечный/MDS-ный идентификатор письма, по нему достаем исходник письма
+      mid:
+        description: id-шник письма из метабазы
+      to:
+        description: получатель письма, для системных писем, у к-рых нет хедера To
+      uid:
+        description: uid получателя. Нужен для логгирования видео-ссылок, похода в томиту и
+          оборачивания ссылок в обычных (не-смс) письмах
+      charset:
+        description: кодировка письма. Передается, если его передала верстка.
+          Если параметр передан, то именно эта кодировка берется для раскодирования письма
+          (а не та, что указана в хедере)
+      types:
+        description: типы письма через запятую http://wiki.yandex-team.ru/pochta/types
+      flags:
+        description: специальный флаги, которые передают клиенты
+      tz:
+        description: паспортная тайм-зона юзера
+      user_domain:
+        description: домен, для ПДД. Нужен для оборачивания ссылок
+      auth_domain:
+        description: домен, с которого пришел запрос (.yandex.ru, .yandex.ua, .yandex-team.ru итд).
+          Нужен для оборачивания ссылок
+      sanitize_level:
+        description: spam для спамовых писем, для остальных пустой. Нужен для санитайзера
+      secure:
+        description: 1 если к wmi пришел https-запрос, для остальных пустой.
+          Нужен для санитайзера и оборачивания ссылок
+      lang:
+        description: язык документа, пробрасывается из верстки в factextractor
+/sms:
+  get:
+    description: формирует отображение смс-письма
+    queryParameters:
+      sender_uid:
+        description: uid отправителя
+        required: true
+      sender_mid:
+        description: mid смс-письма из ящика отправителя
+        required: true
+      sms_sid:
+        description: зашифрованная строка из урла смс-письма, нужен для оборачивания ссылок
+        required: true
+      auth_domain:
+        description: домен, с которого пришел запрос (.yandex.ru, .yandex.ua, .yandex-team.ru итд).
+          Нужен для оборачивания ссылок
+        required: true
+      lang:
+        description: язык письма, пробрасыается из mbody в factextractor
+        required: false
+/headers:
+   get:
+    description: отдает все хедеры письма по mid и uid
+    queryParameters:
+      uid:
+        description: uid отправителя
+        required: true
+      mid:
+        description: mid смс-письма из ящика отправителя
+        required: true
+/message_source:
+   get:
+    description: отдает полные сорсы письма по mid и uid
+    queryParameters:
+      uid:
+        description: uid отправителя
+        required: true
+      mid:
+        description: mid письма из ящика отправителя
+        required: true
+

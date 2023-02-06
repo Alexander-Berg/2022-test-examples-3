@@ -1,0 +1,24 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+			http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <include file="tables/tables.changelog.xml" relativeToChangelogFile="true"/>
+
+    <changeSet id="v_uc_net_check_part" author="kukabara">
+        <comment>Urls for pinger</comment>
+        <sqlFile path="views/uc/v_uc_net_check_part.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="v_uc_session_report" author="kukabara">
+        <sqlFile path="views/uc/v_uc_session_report.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="insert_test_url" author="kukabara">
+        <sql>
+            insert into uc_net_check (id, url) values (nextval('s_uc_net_check'), 'http://yandex.ru');
+            insert into uc_net_check (id, url) values (nextval('s_uc_net_check'), 'http://market.yandex.ru');
+        </sql>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,625 @@
+{
+  "en": [
+     {
+       "origin": "Показ объявлений, ведущих на [% IF single_d %]этот сайт[% ELSE %]эти сайты[% END %], был приостановлен согласно настройкам [% IF single_c %]рекламной кампании[% ELSE %]рекламных кампаний[% END %]:\n[% FOREACH c = camp_list %][%IF loop.index %],\n[% END %]N[% c.cid %] ([% c.name %])[% END %].\nОстановленные объявления помечены восклицательным знаком на странице со списком активных объявлений. Показы будут автоматически включены после восстановления работоспособности сайт[% IF single_d %]а[% ELSE %]ов[% END %].\n[%- ELSE %]Согласно данным мониторинга, [% IF single_d %]начал[% ELSE %]начали[% END %] работать в нормальном режиме [% IF single_d %]сайт[% ELSE %]сайты[% END %]:\n[% FOREACH domain = domain_list %][%IF loop.index %],\n[% END %][% domain %][% END %].",
+       "normalized_tags_diff": [
+         "+ [%ELSE%]",
+         "+ [%END%]",
+         "+ [%IFsingle_d%]"
+       ],
+       "translation": "Ads leading to [% IF single_d %]this site[% ELSE %]these sites[% END %] have been stopped in accordance with the settings of the [% IF single_c %]ad campaign[% ELSE %]ad campaigns[% END %]:\n[% FOREACH c = camp_list %][%IF loop.index %],\n[% END %]N[% c.cid %] ([% c.name %])[% END %].\nStopped ads are highlighted with an exclamation mark on the page listing the active ads. Impressions will be started automatically after the site[% IF single_d %][% ELSE %]s[% END %] in question [% IF single_d %]is[%ELSE%]are[%END%] back online.\n[%- ELSE %]According to Site Monitoring data, the following [% IF single_d %]site[% ELSE %]sites[% END %] [% IF single_d %]is[% ELSE %]are[% END %] back online:\n[% FOREACH domain = domain_list %][%IF loop.index %],\n[% END %][% domain %][% END %]."  
+     },
+      
+    {
+      "origin": "Отказаться от предупреждений об изменении статуса Вы можете, изменив настройки уведомлений \nв параметрах рекламной кампании https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=editCamp&cid=[% cid %] \nи в \"Настройках пользователя\" https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=userSettings", 
+      "normalized_tags_diff": [
+        "- [%direct_tld%]"
+      ], 
+      "translation": "You can opt out of receiving status change warnings by editing the notification settings in the advertising campaign settings https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=editCamp&cid=[% cid %]\n and in \"User settings\" https://direct.yandex.com/registered/main.pl?cmd=userSettings"
+    }, 
+    {
+      "origin": "[% IF !stat.accepted && !stat.declined_partly %]К сожалению, [% END %]Ваша кампания N[% cid %] \"[% camp_name %]\" [% IF stat.accepted %][% 'частично ' IF stat.declined_partly || stat.declined %]принята[% ELSE %]отклонена[% END %] модератором.\n[%~ IF stat.accepted || stat.declined_partly ~%]\n[%~ IF wallet_cid > 0 ~%]\n[%~ IF wallet_total <= 0 %]\nПоказы начнутся после зачисления средств на счет. Для этого сформируйте счет и выберите удобный для вас способ оплаты: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=pay&cid=[% wallet_cid %] .\n[%~ END ~%]\n[%~ ELSIF summ <= 0 %]\nПоказы начнутся после зачисления средств на рекламную кампанию. Для этого сформируйте счет и выберите удобный для вас способ оплаты: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=pay&cid=[% cid %] .\n[%~ END ~%]\n[%~ END %]", 
+      "normalized_tags_diff": [
+        "- [%~ELSIFsumm<=0%]", 
+        "+ [%~ELSIF!(summ+0)%]", 
+        "+ [%~IF!(wallet_total+0)%]", 
+        "- [%~IFwallet_total<=0%]"
+      ], 
+      "translation": "[% IF !stat.accepted && !stat.declined_partly %]Unfortunately, [% END %]Your campaign N[% cid %] \"[% camp_name %]\" [% IF stat.accepted %][% 'partially ' IF stat.declined_partly || stat.declined %]accepted[% ELSE %]rejected[% END %] by the moderator.\n[%~ IF stat.accepted || stat.declined_partly ~%]\n[%~ IF wallet_cid > 0 ~%]\n[%~ IF !(wallet_total + 0) %]\nImpressions will launch after funds are added to your account. Just set up an account and choose your payment method: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=pay&cid=[% wallet_cid %] .\n[%~ END ~%]\n[%~ ELSIF !(summ + 0) %]\nImpressions will launch after funds are added to your ad campaign. Just set up an account and choose your payment method: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=pay&cid=[% cid %] .\n[%~ END ~%]\n[%~ END %]"
+    }, 
+    {
+        "origin": "Отказаться от предупреждений об автоуточнении фраз Вы можете, изменив настройки уведомлений \nв параметрах рекламной кампании https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=editCamp&cid=[% cid %] \nи в \"Настройках пользователя\" https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=userSettings",
+        "normalized_tags_diff": [
+            "- [%direct_tld%]"
+            ],
+        "translation": "You can opt out of receiving automatic keyword refinement warnings by editing the notification settings in the advertising campaign settings https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=editCamp&cid=[% cid %] and in \"User settings\" https://direct.yandex.com/registered/main.pl?cmd=userSettings"
+    },
+    {
+      "origin": "[% IF autobudget_strategy == 'autobudget_week_bundle' %]\nСистема автоматического назначения ставок проанализировала требуемое количество кликов, которое указано в параметрах кампании N [% cid %] ([% name %]).\nСогласно прогнозу[% IF strategy_decoded.bid > 0 %], при максимальной ставке [% format_sum_of_money(currency, strategy_decoded.bid) %],[% ELSIF strategy_decoded.avg_bid > 0 %], при средней ставке [% format_sum_of_money(currency, strategy_decoded.avg_bid) %],[% END %] обеспечить [% strategy_decoded.limit_clicks %] кликов невозможно.\n[% IF autobudgetForecastClicks > 0 %]Максимально число кликов, которое может быть достигнуто при текущих условиях, — [% autobudgetForecastClicks %].[% ELSE %] По Вашим баннерам не будет ни одного клика.[% END %]\n[% ELSE %]Система автоматического назначения ставок произвела оценку реалистичности указанного в параметрах кампании недельного бюджета.\nСогласно прогнозу, [% IF strategy_decoded.bid %]при максимальной ставке [% format_sum_of_money(currency, strategy_decoded.bid) %], [% END %][% IF autobudgetForecast > 0 %]максимальный недельный бюджет \nВашей кампании будет составлять [% format_sum_of_money(currency, autobudgetForecast) %][% ELSE %]по Вашим баннерам не будет \nни одного клика[% END %].  Заявленный недельный бюджет в [% format_sum_of_money(currency, strategy_decoded.sum) %] не может быть реализован.\n[% END %]\n[% IF help.advice ~%]\nОзнакомиться с советами о том, как увеличить эффективность рекламной кампании можно здесь:\nhttp://help.yandex.ru/direct/?id=[% help.advice | url %]\n[% END ~%]", 
+      "normalized_tags_diff": [
+        "- [%IFautobudget_strategy=='<cuted-string>'%]", 
+        "+ [%IFstrategy=='<cuted-string>'%]", 
+        "- [%format_sum_of_money(currency,strategy_decoded.bid)%]"
+      ], 
+      "translation": "[% IF strategy == 'autobudget_week_bundle' %]\n The automatic bidding system has analyzed the requisite number of clicks specified in the settings for campaign [% cid %] ([% name %]).\n According to the forecast[% IF strategy_decoded.bid > 0 %], with the maximum bid being % format_sum_of_money(currency, strategy_decoded.bid) %],[% ELSIF strategy_decoded.avg_bid > 0 %], and the average bid being [% format_sum_of_money(currency, strategy_decoded.avg_bid) %],[% END %] it is impossible to provide [% strategy_decoded.limit_clicks %] clicks.\n [% IF autobudgetForecastClicks > 0 %]The maximum number of clicks that can be achieved under the current conditions is [% autobudgetForecastClicks %].[% ELSE %] Your banners will not get a single click.[% END %]\n [% ELSE %]The automatic bidding system has assessed the weekly budget specified in the campaign settings to determine if it is realistic. According to the forecast, \n[% IF strategy_decoded.bid %]with the maximum bid being [% format_sum_of_money(currency, strategy_decoded.bid) %], [% END %][% IF autobudgetForecast > 0 %]the maximum weekly budget of your campaign will be [% format_sum_of_money(currency, autobudgetForecast) %][% ELSE %]your banners will not get a single click[% END %].  The declared weekly budget of [% format_sum_of_money(currency, strategy_decoded.sum) %] cannot be met.\n [% END %] \n[% IF help.advice ~%]\nAdvice on making your advertising campaign more efficient is available here: \nhttp://direct.yandex.com/help/?id=[% help.advice | url %]\n[% END ~%]"
+    }, 
+    {
+      "origin": "Description: Письмо о несоблюдении автобюджета\nSubject: Яндекс.Директ / Клиент [% client_login %] / N [% cid %] ([% name %]) / [% IF autobudget_strategy == 'autobudget_week_bundle' %]Не может быть достигнуто заявленное количество кликов[% ELSE %]Заявленный бюджет не может быть реализован[% END %]", 
+      "normalized_tags_diff": [
+        "- [%IFautobudget_strategy=='<cuted-string>'%]", 
+        "+ [%IFstrategy=='<cuted-string>'%]"
+      ], 
+      "translation": "Description: Notification about failure to meet the autobudget \nSubject: Yandex.Direct/Customer [% client_login %]/ No. [% cid %] ([% name %])/[% IF strategy == 'autobudget_week_bundle' %]The specified number of clicks cannot be achieved[% ELSE %]The specified budget cannot be met[% END %]"
+    }, 
+    {
+      "origin": "Месячный бюджет: [% (FORM.budget) ? format_sum_of_money(currency, FORM.budget) :'(не установлен)' %]\n--------\nЦель кампании: [% FORM.target_camp %] ", 
+      "normalized_tags_diff": [
+        "- [%(FORM.budget)?format_sum_of_money(currency,FORM.budget):'<cuted-string>'%]", 
+        "+ [%(FORM.budget)?format_sum_of_money(currency,FORM.budget,'<cuted-string>'):'<cuted-string>'%]"
+      ], 
+      "translation": "Monthly budget: [% (FORM.budget) ? format_sum_of_money(currency, FORM.budget, ' ') :'(not specified)' %] \n-------- \nCampaign objective: [% FORM.target_camp %] "
+    }, 
+    {
+      "origin": "[% IF !stat.accepted && !stat.declined_partly %]К сожалению, [% END %]Ваша кампания N[% cid %] \"[% camp_name %]\" [% IF stat.accepted %][% 'частично ' IF stat.declined_partly || stat.declined %]принята[% ELSE %]отклонена[% END %] модератором.\n[%~ IF stat.accepted || stat.declined_partly ~%]\n[%~ IF wallet_cid > 0 ~%]\n[%~ IF !(wallet_total + 0) %]\nПоказы начнутся после зачисления средств на счет. Для этого сформируйте счет и выберите удобный для вас способ оплаты: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=pay&cid=[% wallet_cid %] .\n[%~ END ~%]\n[%~ ELSIF !(summ + 0) %]\nПоказы начнутся после зачисления средств на рекламную кампанию. Для этого сформируйте счет и выберите удобный для вас способ оплаты: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=pay&cid=[% cid %] .\n[%~ END ~%]\n[%~ END %]", 
+      "normalized_tags_diff": [
+        "- [%direct_tld%]"
+      ], 
+      "translation": "[% IF !stat.accepted && !stat.declined_partly %]Unfortunately[% END %]Your campaign N[% cid %] \"[% camp_name %]\" [% IF stat.accepted %][% 'partially ' IF stat.declined_partly || stat.declined %]accepted[% ELSE %]rejected[% END %] by the moderator.\n[%~ IF stat.accepted || stat.declined_partly ~%]\n[%~ IF wallet_cid > 0 ~%]\n[%~ IF !(wallet_total + 0) %]\nImpressions will launch after funds are added to your account. Just set up an account and choose your payment method: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=pay&cid=[% wallet_cid %] .\n[%~ END ~%]\n[%~ ELSIF !(summ + 0) %]\nImpressions will launch after funds are added to your ad campaign. Just set up an account and choose your payment method: https://direct.yandex.com/registered/main.pl?cmd=pay&cid=[% cid %] .\n[%~ END ~%]\n[%~ END %]"
+    }, 
+    {
+      "origin": "Здравствуйте, [% FIO %]!", 
+      "normalized_tags_diff": [
+        "- [%FIO%]", 
+        "+ [%fio%]"
+      ], 
+      "translation": "Hello [% fio %]"
+    }, 
+    {
+      "origin": "[% IF auto_optimize_request == 'Sended' || is_support %]Наши специалисты в рамках услуги \"Первая помощь\" рассмотрели Вашу кампанию № [% cid %] и пришли  к выводу, что она не нуждается в улучшении.\n[% ELSE %]Мы внимательно проанализировали Вашу рекламную кампанию.\nК сожалению, Ваша заявка на услугу \"Первой помощи\" для кампании № [% cid %],\"[% name_camp %]\" отклонена.\n[% END %]", 
+      "normalized_tags_diff": [
+        "- [%IFauto_optimize_request=='<cuted-string>'||is_support%]", 
+        "+ [%IFauto_optimize_request=='<cuted-string>'||request_type=='<cuted-string>'%]"
+      ], 
+      "translation": "[% IF auto_optimize_request == 'Sended' || request_type == 'Support' %]Our specialists have reviewed your campaign No. [% cid %] as part of our \"First Aid\" service and found that it does not need improving.\n[% ELSE %]We have closely reviewed your advertising campaign.\nUnfortunately, your request for the \"First Aid\" service for campaign No. [% cid %],\"[% name_camp %]\", has been rejected.\n[% END %]"
+    }, 
+    {
+      "origin": "Description: Уведомление пользователю о заказе услуги \"Первой помощи\"\nSubject: Яндекс.Директ/[% IF is_support %]Услуга[% ELSE %]Вы заказали услугу[% END %] \"Первой помощи\" для кампании № [% cid %]", 
+      "normalized_tags_diff": [
+        "- [%IFis_support%]", 
+        "+ [%IFrequest_type=='<cuted-string>'%]"
+      ], 
+      "translation": "Description: Notification to customer about \"First Aid\" service request\nSubject: Yandex.Direct/[% IF request_type == 'Support' %]Service[% ELSE %]You have ordered[% END %] the \"First Aid\" service for campaign No. [% cid %]"
+    }, 
+    {
+      "origin": "[% IF is_support %]\nВаша кампания № [% cid %], \"[% name_camp %]\" отправлена нашим специалистам для оптимизации в рамках услуги \"Первая помощь\".\nОни бесплатно проанализируют Вашу кампанию и дадут свои рекомендации по её улучшению. О результате будет сообщено в интерфейсе кампании в разделе «Рекомендации».\nВы сможете воспользоваться предложенными вариантами или отказаться от них по своему усмотрению.\n[% ELSE %]\nВы заказали услугу \"Первой помощи\" для кампании № [% cid %], \"[% name_camp %]\".\nМы рассмотрим Вашу заявку и отправим ответ на адрес, который указан в параметрах кампании.\nДополнительно о результате будет сообщено в интерфейсе кампании в разделе «Рекомендации». \n[% END %]", 
+      "normalized_tags_diff": [
+        "- [%IFis_support%]", 
+        "+ [%IFrequest_type=='<cuted-string>'%]"
+      ], 
+      "translation": "[% IF request_type == 'Support' %]\n We have referred your campaign No. [% cid %], \"[% name_camp %]\" to our specialists for optimization as part of the \"First Aid\" service. They will analyze your campaign free of charge and recommend ways to improve it. The results will be posted in the \"Recommendations\" section of the campaign interface.\n You can use one of the recommended versions or reject them as you see fit.\n [% ELSE %]\n You have requested the \"First Aid\" service for campaign No. [% cid %], \"[% name_camp %]\".\n We will review your request and send a reply to the address specified in the campaign settings.\n The results will be also posted in the \"Recommendations\" section of the campaign interface. [% END %]"
+    }, 
+    {
+      "origin": "[% IF auto_optimize_request == 'Sended' || is_support %]В рамках услуги \"Первая помощь\" Ваш заказ № [% cid %] ([% name_camp %]) был проанализирован специалистами Яндекса. \n[% ELSE %]Ваша заявка на услугу \"Первая помощь\" для кампании № [% cid %], \"[% name_camp %]\" выполнена.\n[% END %]", 
+      "normalized_tags_diff": [
+        "- [%IFauto_optimize_request=='<cuted-string>'||is_support%]", 
+        "+ [%IFauto_optimize_request=='<cuted-string>'||request_type=='<cuted-string>'%]"
+      ], 
+      "translation": "[% IF auto_optimize_request == 'Sended' || request_type == 'Support' %] Your campaign No. [% cid %] ([% name_camp %]) has been analyzed by our specialists.\n[% ELSE %]Your \"First Aid\" request for campaign No. [% cid %], \"[% name_camp %]\" has been completed.\n[% END %]"
+    }, 
+    {
+      "origin": "[% IF is_support %]В рамках услуги \"Первая помощь\" Ваш заказ № [% cid %] ([% name_camp %]) был оптимизирован специалистами Яндекса.\n[% ELSE %]Ваша заявка на услугу \"Первая помощь\" для заказа № [% cid %] выполнена.\n[% END %]", 
+      "normalized_tags_diff": [
+        "- [%IFis_support%]", 
+        "+ [%IFrequest_type=='<cuted-string>'%]"
+      ], 
+      "translation": "[% IF request_type == 'Support' %]As part of the \"First Aid\" service, Yandex specialists have optimized your order No. [% cid %] ([% name_camp %]).\n [% ELSE %]Your request for the \"First Aid\" service for order No. [% cid %] has been completed. [% END %]"
+    }, 
+    {
+      "origin": "Логин главного представителя: [% client_login %]\n[% IF client_reps.size > 0 %]Представители: [% FOR rep = client_reps %]\n  [% rep.FIO %] ([% rep.login %])\n[% END %][% END %]", 
+      "normalized_tags_diff": [
+        "+ [%client_login%]"
+      ], 
+      "translation": "Chief representative login name: [% client_login %] [% IF client_reps.size > 0 %]Representatives: [% FOR rep = client_reps %]\n [% rep.FIO %] ([% rep.login %])\n[% END %][% END %]https://direct.yandex.com/registered/main.pl?cmd=showCamps&ulogin=[% client_login %]"
+    },
+    {
+      "origin": "Показ объявлений, ведущих на [% IF single_d %]этот сайт[% ELSE %]эти сайты[% END %], был приостановлен согласно настройкам [% IF single_c %]рекламной кампании[% ELSE %]рекламных кампаний[% END %]:\n[% FOREACH c = camp_list %][%IF loop.index %],\n[% END %]N[% c.cid %] ([% c.name %])[% END %].\nОстановленные объявления помечены восклицательным знаком на странице со списком активных объявлений. Если Вы не возобновите показы вручную, они будут автоматически включены после восстановления работоспособности сайт[% IF single_d %]а[% ELSE %]ов[% END %].\n[%- ELSE %]Согласно данным мониторинга, [% IF single_d %]начал[% ELSE %]начали[% END %] работать в нормальном режиме [% IF single_d %]сайт[% ELSE %]сайты[% END %]:\n[% FOREACH domain = domain_list %][%IF loop.index %],\n[% END %][% domain %][% END %].",
+      "normalized_tags_diff": [
+        "+ [%ELSE%]",
+        "+ [%END%]",
+        "+ [%IFsingle_d%]"
+      ],
+      "translation": "Ads leading to [% IF single_d %]this site[% ELSE %]these sites[% END %] have been stopped in accordance with the settings of the [% IF single_c %]ad campaign[% ELSE %]ad campaigns[% END %]:\n[% FOREACH c = camp_list %][%IF loop.index %],\n[% END %]N[% c.cid %] ([% c.name %])[% END %].\nThe suspended advertisements are highlighted with an exclamation mark on the page listing the active advertisements. Unless you restart the advertisements manually, they will be restarted automatically after the site[% IF single_d %][% ELSE %]s[% END %] in question [% IF single_d %]is[%ELSE%]are[%END%] back online.\n[%- ELSE %]According to Site Monitoring data, the following [% IF single_d %]site[% ELSE %]sites[% END %] [% IF single_d %]is[% ELSE %]are[% END %] back online:\n[% FOREACH domain = domain_list %][%IF loop.index %],\n[% END %][% domain %][% END %]."
+    },
+    {
+      "origin": "[% IF is_rejected_mail %]\nБолее подробно причины отклонения указаны в интерфейсе Яндекс.Директа. Объявления могут быть отклонены по следующим причинам: https://yandex.[% direct_tld %]/support/direct-tooltips/why-banner-reject.xml.\n[% ELSE %]\nЧасто задаваемые вопросы про модерацию можно посмотреть здесь: https://yandex.[% direct_tld %]/support/direct-tooltips/why-banner-reject.xml\n[% END %]",
+      "normalized_tags_diff": [
+        "- [%direct_tld%]"
+      ],
+      "translation": "[% IF is_rejected_mail %]\n The detailed reasons for the rejection are provided in the Yandex.Bayan interface. [% ELSE %]\n Frequently asked questions about moderation can be viewed here: https://yandex.[% direct_tld %]/support/direct-tooltips/why-banner-reject.xml\n [% END %]"
+    },
+    {
+      "origin": "[% IF is_rejected_mail %]\nБолее подробно причины отклонения указаны в интерфейсе Яндекс.Директа. Объявления могут быть отклонены по следующим причинам: https://yandex.[% direct_tld %]/support/direct-tooltips/why-banner-reject.xml.\n[% ELSE %]\nЧасто задаваемые вопросы про модерацию можно посмотреть здесь: https://yandex.[% direct_tld %]/support/direct-tooltips/why-banner-reject.xml\n[% END %]",
+      "normalized_tags_diff": [
+        "- [%direct_tld%]"
+      ],
+      "translation": "[% IF is_rejected_mail %]\n The detailed reasons for the rejection are provided in the Yandex.Direct interface. [% ELSE %] \nFrequently asked questions about moderation can be viewed here: https://yandex.[% direct_tld %]/support/direct-tooltips/why-banner-reject.xml\n [% END %]"
+    },
+    {
+      "origin": "    Это автоматическое письмо. Пожалуйста, не отвечайте на него.\n    Если у Вас появились вопросы, Вы можете задать их\n    [%- SWITCH COUNTRY_REGION_ID -%]\n    [%- CASE 225 # Россия   %] менеджерам отдела клиентского сервиса через форму обратной связи https://yandex.ru/support/direct/troubleshooting/start.xml или по телефону: 8 800 234-24-80 (звонок из регионов России бесплатный)[%- IF !is_agency_notification -%], +7 (495) 739-37-77[%- END %].\n                                Режим работы: ежедневно с 5:00 до 00:00 по московскому времени\n    [%- CASE 187 # Украина  %] [% IF is_agency_notification\n                                        && (     manager_login == 'yndx-sedletskaya-manager'\n                                              || manager_login == 'yndx-msidenko-direct-manager'\n                                              || manager_login == 'yndx-kozhanova-manager'\n                                              || manager_login == 'yndx-vecher-manager'\n                                              || manager_login == 'yndx-perishkova-manager'\n                                              || manager_login == 'yndx-chdv-manager'\n                                            ) -%]\nспециалистам службы поддержки - через форму обратной связи https://yandex.ua/support/direct/troubleshooting/start.xml или по телефону 0 800 60-48-61 доб. 2890 (звонок со стационарных телефонов из Украины бесплатный).\n                                [%- ELSE -%]\nменеджерам отдела клиентского сервиса через форму обратной связи https://yandex.ua/support/direct/troubleshooting/start.xml или по телефону 0 800 60-48-61 доб. 2890 (звонок со стационарных телефонов из Украины бесплатный).\n                                [%- END %]\n                                Режим работы: будние дни с 9:00 до 21:00\n    [%- CASE 983 # Турция   %] специалистам службы поддержки — через форму обратной связи https://yandex.com.tr/support/direct/troubleshooting/start.xml.\n                                Режим работы: будние дни с 10:00 до 19:00 по турецкому времени\n    [%- CASE 149 # Беларусь %] менеджерам отдела клиентского сервиса через форму обратной связи https://yandex.ru/support/direct/troubleshooting/start.xml или по телефону: 8-820-00-73-0052 (звонок из Беларуси бесплатный), +7 (495) 739-37-77.\n                                Режим работы: будние дни с 10:00 до 19:00 по московскому времени\n    [%- CASE DEFAULT        %] менеджерам отдела клиентского сервиса через форму обратной связи https://yandex.com/support/direct/troubleshooting/start.xml или по телефону:\n                                +7 (495) 780-65-20, 8 800 234-24-80 доб. 2480 (звонок из регионов России бесплатный).\n                                Режим работы: будние дни с 10:00 до 20:00 по московскому времени\n    [%- END # SWITCH -%]\n[%- END %]\nПомощь Директа: [% HELP_URL %]\n[% END; END; # filters %]", 
+      "normalized_tags_diff": [
+        "- [%-CASEDEFAULT%]", 
+        "+ [%-CASEDEFAULT-%]", 
+        "+ [%-IFis_agency_notification&&(manager_login=='<cuted-string>'||manager_login=='<cuted-string>'||manager_login=='<cuted-string>'||manager_login=='<cuted-string>'||manager_login=='<cuted-string>'||manager_login=='<cuted-string>')-%]", 
+        "- [%IFis_agency_notification&&(manager_login=='<cuted-string>'||manager_login=='<cuted-string>'||manager_login=='<cuted-string>'||manager_login=='<cuted-string>'||manager_login=='<cuted-string>'||manager_login=='<cuted-string>')-%]"
+      ], 
+      "translation": "    This message is generated automatically. Please do not respond to it.\n    If you have any questions, please contact\n    [%- SWITCH COUNTRY_REGION_ID -%]\n    [%- CASE 225 # Россия   -%] the support service using the feedback form https://yandex.ru/support/direct/troubleshooting/start.xml or call: 8 800 234-24-80 (toll free from Russian regions)[%- IF !is_agency_notification -%], +7 (495) 739-37-77 [%- END %].\n                                Office hours: daily, 05:00 – 00:00, Moscow Time\n    [%- CASE 187 # Украина  -%] [%- IF is_agency_notification\n                                        && (     manager_login == 'yndx-sedletskaya-manager'\n                                              || manager_login == 'yndx-msidenko-direct-manager'\n                                              || manager_login == 'yndx-kozhanova-manager'\n                                              || manager_login == 'yndx-vecher-manager'\n                                              || manager_login == 'yndx-perishkova-manager'\n                                              || manager_login == 'yndx-chdv-manager'\n                                            ) -%] the support service using the feedback form https://yandex.ua/support/direct/troubleshooting/start.xml or call 0 800 60-48-61 ext. 2890 (toll free from Ukraine).\n                                [%- ELSE -%] the support service using the feedback form https://yandex.ua/support/direct/troubleshooting/start.xml or call 0 800 60-48-61 ext. 2890 (toll free from Ukraine).\n                                [%- END %]\n                                Office hours: Monday – Friday 9:00 - 21:00\n    [%- CASE 983 # Турция   -%] the support service using the feedback form https://yandex.com.tr/support/direct/troubleshooting/start.xml.\n                                Office hours: Monday – Friday, 10:00 – 19:00, Eastern European Time\n    [%- CASE 149 # Беларусь -%] the support service using the feedback form https://yandex.ru/support/direct/troubleshooting/start.xml or call: 8-820-00-73-0052 (toll free from Belarus), +7 (495) 739-37-77.\n                                Office hours: Monday – Friday 10:00 - 19:00, Moscow Time\n    [%- CASE DEFAULT        -%] the support service using the feedback form https://yandex.com/support/direct/troubleshooting/start.xml or call:\n                                +7 (495) 780-65-20, 8 800 234-24-80 ext. 2480 (toll free from Russian regions).\n                                Office hours: Monday – Friday 10:00 - 20:00, Moscow Time\n    [%- END # SWITCH -%]\n[%- END %]\nYandex.Direct Help: [% HELP_URL %]\n[% END; END; # filters %]"
+    },
+    {
+      "origin": "    Это автоматическое письмо. Пожалуйста, не отвечайте на него.\n    Если у Вас появились вопросы, Вы можете задать их\n    [%- SWITCH COUNTRY_REGION_ID -%]\n    [%- CASE 225 # Россия   %] менеджерам отдела клиентского сервиса через форму обратной связи https://yandex.ru/support/direct/troubleshooting/start.xml или по телефону: 8 800 234-24-80 (звонок из регионов России бесплатный)[%- IF !is_agency_notification -%], +7 (495) 739-37-77[%- END %].\n                                Режим работы: ежедневно с 5:00 до 00:00 по московскому времени\n    [%- CASE 187 # Украина  %] [% IF is_agency_notification\n                                        && (     manager_login == 'yndx-sedletskaya-manager'\n                                              || manager_login == 'yndx-msidenko-direct-manager'\n                                              || manager_login == 'yndx-kozhanova-manager'\n                                              || manager_login == 'yndx-vecher-manager'\n                                              || manager_login == 'yndx-perishkova-manager'\n                                              || manager_login == 'yndx-chdv-manager'\n                                            ) -%]\nспециалистам службы поддержки - через форму обратной связи https://yandex.ua/support/direct/troubleshooting/start.xml или по телефону +7 (495) 739-37-77.\n                                [%- ELSE -%]\nменеджерам отдела клиентского сервиса через форму обратной связи https://yandex.ua/support/direct/troubleshooting/start.xml или по телефону +7 (495) 739-37-77.\n                                [%- END %]\n                                Режим работы: будние дни с 9:00 до 21:00\n    [%- CASE 983 # Турция   %] специалистам службы поддержки — через форму обратной связи https://yandex.com.tr/support/direct/troubleshooting/start.xml.\n                                Режим работы: будние дни с 10:00 до 19:00 по турецкому времени\n    [%- CASE 149 # Беларусь %] менеджерам отдела клиентского сервиса через форму обратной связи https://yandex.ru/support/direct/troubleshooting/start.xml или по телефону: 8-820-00-73-0052 (звонок из Беларуси бесплатный), +7 (495) 739-37-77.\n                                Режим работы: будние дни с 10:00 до 19:00 по московскому времени\n    [%- CASE DEFAULT        %] менеджерам отдела клиентского сервиса через форму обратной связи https://yandex.com/support/direct/troubleshooting/start.xml или по телефону:\n                                +7 (495) 780-65-20, 8 800 234-24-80 доб. 2480 (звонок из регионов России бесплатный).\n                                Режим работы: будние дни с 10:00 до 20:00 по московскому времени\n    [%- END # SWITCH -%]\n[%- END %]\nПомощь Директа: [% HELP_URL %]\n[% END; END; # filters %]", 
+      "normalized_tags_diff": [
+        "- [%-CASEDEFAULT%]", 
+        "+ [%-CASEDEFAULT-%]", 
+        "+ [%-IFis_agency_notification&&(manager_login=='<cuted-string>'||manager_login=='<cuted-string>'||manager_login=='<cuted-string>'||manager_login=='<cuted-string>'||manager_login=='<cuted-string>'||manager_login=='<cuted-string>')-%]", 
+        "- [%IFis_agency_notification&&(manager_login=='<cuted-string>'||manager_login=='<cuted-string>'||manager_login=='<cuted-string>'||manager_login=='<cuted-string>'||manager_login=='<cuted-string>'||manager_login=='<cuted-string>')-%]"
+      ], 
+      "translation": "    This message is generated automatically. Please do not respond to it.\n    If you have any questions, please contact\n    [%- SWITCH COUNTRY_REGION_ID -%]\n    [%- CASE 225 # Россия   -%] the support service using the feedback form https://yandex.ru/support/direct/troubleshooting/start.xml or call: 8 800 234-24-80 (toll free from Russian regions)[%- IF !is_agency_notification -%], +7 (495) 739-37-77 [%- END %].\n                                Office hours: daily, 05:00 – 00:00, Moscow Time\n    [%- CASE 187 # Украина  -%] [%- IF is_agency_notification\n                                        && (     manager_login == 'yndx-sedletskaya-manager'\n                                              || manager_login == 'yndx-msidenko-direct-manager'\n                                              || manager_login == 'yndx-kozhanova-manager'\n                                              || manager_login == 'yndx-vecher-manager'\n                                              || manager_login == 'yndx-perishkova-manager'\n                                              || manager_login == 'yndx-chdv-manager'\n                                            ) -%] the support service using the feedback form https://yandex.ua/support/direct/troubleshooting/start.xml or call +7 (495) 739-37-77.\n                                [%- ELSE -%] the support service using the feedback form https://yandex.ua/support/direct/troubleshooting/start.xml or call +7 (495) 739-37-77.\n                                [%- END %]\n                                Office hours: Monday – Friday 9:00 - 21:00\n    [%- CASE 983 # Турция   -%] the support service using the feedback form https://yandex.com.tr/support/direct/troubleshooting/start.xml.\n                                Office hours: Monday – Friday, 10:00 – 19:00, Eastern European Time\n    [%- CASE 149 # Беларусь -%] the support service using the feedback form https://yandex.ru/support/direct/troubleshooting/start.xml or call: 8-820-00-73-0052 (toll free from Belarus), +7 (495) 739-37-77.\n                                Office hours: Monday – Friday 10:00 - 19:00, Moscow Time\n    [%- CASE DEFAULT        -%] the support service using the feedback form https://yandex.com/support/direct/troubleshooting/start.xml or call:\n                                +7 (495) 780-65-20, 8 800 234-24-80 ext. 2480 (toll free from Russian regions).\n                                Office hours: Monday – Friday 10:00 - 20:00, Moscow Time\n    [%- END # SWITCH -%]\n[%- END %]\nYandex.Direct Help: [% HELP_URL %]\n[% END; END; # filters %]"
+    },
+    {
+      "origin": "Здравствуйте, [% fio %]!\nВсе кампании в Яндекс.Директе на логине [% client_login %] приостановлены, потому что[% IF auto_overdraft_active == 'true' %] достигнут порог отключения с учётом неоплаченных счетов.[% ELSE %] на общем счёте закончились средства.[% END %]\nЭто означает, что потенциальные клиенты не видят вашу рекламу.\nЧтобы объявления снова начали показываться, пожалуйста, внесите оплату.\nДля этого воспользуйтесь кнопкой «Пополнить» на странице «Общий счёт»:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=clientWallet&ulogin=[% client_login %]\nЧтобы реклама не останавливалась из-за внезапного окончания средств на счёте, подключайте автоплатёж в разделе «Общий счёт». Подробнее об автоплатеже — https://yandex.[% direct_tld %]/support/direct/payments/shared-account.html#shared-account__autopayment\n[% PROCESS i_footer %]", 
+      "normalized_tags_diff": [
+        "- [%direct_tld%]"
+      ], 
+      "translation": "Hello, [% fio %]\nAll of your ad campaigns in Yandex.Direct under the login name [% client_login %] have been stopped because[% IF auto_overdraft_active == 'true' %] overdraft limit is has reached, unpaid bills taken into account.[% ELSE %] funds have run out in the shared account.[% END %]\nThis means that potential customers cannot see your ads.\nTo start displaying ads again, please top up your account.\nTo top up the account, please use the Pay option on the shared account page:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=clientWallet&ulogin=[% client_login %]\n[% PROCESS i_footer %]"
+    }, 
+    {
+      "origin": "[% IF campaign_type == 'wallet' %]\nЧтобы реклама не останавливалась из-за внезапного окончания средств на счёте, подключайте автоплатёж в разделе «Общий счёт». Подробнее об автоплатеже — https://yandex.[% direct_tld %]/support/direct/payments/shared-account.html#shared-account__autopayment", 
+      "normalized_tags_diff": [
+        "- [%direct_tld%]"
+      ], 
+      "translation": "[% IF campaign_type == 'wallet' %]"
+    }, 
+    {
+      "origin": "P.S.: Историю взаиморасчетов можно посмотреть в интерфейсе: https://yandex.[% direct_tld %]/support/direct/payments/docs.html", 
+      "normalized_tags_diff": [
+        "- [%direct_tld%]", 
+        "+ [%PROCESSi_footer%]"
+      ], 
+      "translation": "[% PROCESS i_footer %]"
+    }, 
+    {
+      "origin": "[% PROCESS i_footer %]", 
+      "normalized_tags_diff": [
+        "- [%PROCESSi_footer%]"
+      ], 
+      "translation": " "
+    }, 
+    {
+      "origin": "Показы будут остановлены, когда баланс общего счёта достигнет установленного Вами порога отключения с учётом неоплаченных счетов.\n[%\nELSE\n%]Чтобы внести оплату, пожалуйста, воспользуйтесь кнопкой «Пополнить» на странице «Общий счёт»:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=clientWallet\nПоказы будут остановлены, когда баланс общего счёта достигнет порога отключения.\n[% END %]\n[% ELSE %]Деньги, внесённые Вами за кампанию №[% cid %] ([% camp_name %]), заканчиваются.\nПоказы будут остановлены, когда баланс достигнет 0.\nЧтобы внести оплату, на странице «Мои кампании» введите сумму в поле «Положить деньги» и нажмите кнопку «Оплатить»:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl\n[% END %]\nЧтобы реклама не останавливалась из-за внезапного окончания средств на счёте, подключайте автоплатёж в разделе «Общий счёт». Подробнее об автоплатеже — https://yandex.[% direct_tld %]/support/direct/payments/shared-account.html#shared-account__autopayment", 
+      "normalized_tags_diff": [
+        "- [%direct_tld%]"
+      ], 
+      "translation": "Impressions will be stopped when the shared account balance reaches your deactivation threshold (after figuring in unpaid invoices).\n[%\nELSE\n%]To add funds, click \"Top up\" on the \"Shared account\" page:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=clientWallet\nImpressions will be stopped when the shared account balance reaches the deactivation threshold.\n[% END %]\n[% ELSE %]Funds credited for campaign No. [% cid %] ([% camp_name %]) are running out.\nImpressions will be stopped when the balance reaches 0.\nTo add funds, go to the \"My campaigns\" page, enter an amount in \"Add money\", and click \"Pay\".\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl\n[% END %]\n"
+    },
+    {
+      "origin": "Если в течение 90 часов ошибка исправится, автоплатёж включится автоматически. Чтобы возобновить автоплатёж вручную, нажмите кнопку «Возобновить» на странице \"Мои кампании\":\nhttps://direct.yandex.ru/registered/main.pl\nВы также можете выбрать для автоплатежа другую карту или кошелек в Яндекс.Деньгах.",
+      "normalized_tags_diff": [
+        "+ [%direct_tld%]"
+      ],
+      "translation": "If the error is corrected within 90 hours, autopay will resume automatically. To manually resume autopay, click the  \"Resume\" button on the  \"My campaigns\" page:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl\nYou can also choose a different cart of Yandex.Money wallet for autopay."
+    },
+    {
+      "origin": "Description: достигнут порог отключения - sms КЛИЕНТУ\nSubject: Директ: показы рекламы остановились, т.к. задолженность достигла порога отключения. Пополнить счёт [% sms_pay_url %]",
+      "normalized_tags_diff": [
+        "- [%sms_pay_url%]"
+      ],
+      "translation": "Description: overdraft limit reached - sms to CLIENT\nSubject: Direct: overdraft limit reached, impressions have stopped."
+    },
+    {
+      "origin": "Description: поступление денег на кампанию - sms КЛИЕНТУ\nSubject: Директ: зачислен платеж [% format_sum_of_money(currency, sum_payed) %][% \" (без НДС)\" IF without_nds %] на [% IF campaign_type != 'wallet' ~%]заказ  N[% cid %][% ELSE %]счёт[% END %]. [% IF direct_tld == 'ru' %]Чтобы реклама не остановилась неожиданно, подключите автоплатёж https://ya.cc/direct/autopay[% END %]",
+      "normalized_tags_diff": [
+        "- [%END%]",
+        "- [%IFdirect_tld=='<cuted-string>'%]"
+      ],
+      "translation": "Description: deposit of money on campaign - sms to CLIENT\nSubject: Direct: A payment of [% format_sum_of_money(currency, sum_payed) %][% \" (without VAT)\" IF without_nds %] has been credited to [% IF campaign_type != 'wallet' ~%]order No. [% cid %][% ELSE %]account[% END %]."
+    },
+    {
+      "origin": "Description: SMS: предупреждение о 80%-ом расходе средств - sms КЛИЕНТУ\nSubject: Директ: [% IF campaign_type == 'wallet' %]На счёте[% ELSE %]На кампании N[% cid %][% END %] [% format_sum_of_money(currency, rest) %], менее [% procent %]% от последнего платежа. Пополнить [% sms_pay_url %]",
+      "normalized_tags_diff": [
+        "- [%format_sum_of_money(currency,rest)%]"
+      ],
+      "translation": "Description: SMS: warning about spending 80% of funds - text message to CLIENT\nSubject: Direct: Less than [% procent %]% remaining from your last payment [% IF campaign_type == 'wallet' %]to your account balance[% ELSE %]for campaign N[% cid %][% END %]. Top up your balance [% sms_pay_url %]"
+    }
+  ], 
+  "tr": [
+  {
+      "origin": "Здравствуйте, [% fio %]!\nВсе кампании в Яндекс.Директе на логине [% client_login %] приостановлены, потому что[% IF auto_overdraft_active == 'true' %] достигнут порог отключения с учётом неоплаченных счетов.[% ELSE %] на общем счёте закончились средства.[% END %]\nЭто означает, что потенциальные клиенты не видят вашу рекламу.\nЧтобы объявления снова начали показываться, пожалуйста, внесите оплату.\nДля этого воспользуйтесь кнопкой «Пополнить» на странице «Общий счёт»:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=clientWallet&ulogin=[% client_login %]\n[% PROCESS i_footer %]",
+      "normalized_tags_diff": [
+          "- [%ELSE%]",
+          "- [%END%]",
+          "- [%IFauto_overdraft_active=='<cuted-string>'%]",
+          "- [%client_login%]"
+      ],
+      "translation": "Merhaba, [% fio %]!\n[% client_login %] kullanıcı adına ait Yandex.Direct'teki tüm reklam kampanyalarınız ortak hesaptaki bakiye bittiği için durduruldu.\nBu, potansiyel müşteriler reklamınızı görmüyor anlamına geliyor.\nReklamların yeniden gösterilmeye başlaması için lütfen hesaba bakiye yükleyin.\nYeni bakiye yüklemek için şu sayfada \"Kampanyalarım\" bölümünde \"Ek ödeme\" seçeneğini kullanın:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl\n[% PROCESS i_footer %]"
+  },
+  {
+      "origin": "[%IF stat.accepted || stat.postmoderated%]Объявления из Вашей кампании N[% cid %] \"[% camp_name %]\" были приняты к показам на основании автом          атической проверки\n[%~ IF wallet_cid > 0 ~%]\n[%~ IF wallet_total <= 0%] и будут запущены после внесения оплаты на счёт.\nЧтобы оплатить общий счёт перейдите в раздел \"Мои кампании\" на https://direct.yandex.[% direct_tld %]/registered/main.pl\n[%~ ELSE ~%]\n.\n[%~ END ~%]\n[%~ ELSIF summ <= 0 %] и будут запущены после внесения оплаты. Чтобы оплатить кампанию\nнажмите на относящуюся к ней ссылку \"Оплатить\" в разделе \"Мои кампании\" на https://direct.yandex.[% direct_tld %]/registered/main.pl\n[%~ ELSE ~%]\n.\n[%~ END %]\nОбратите внимание, что проверка модератором автоматически принятых объявлений проводится в течение трех суток. Допущенные к показам объявления могут быть впоследствии отклонены из-за несоответствия требованиям к рекламным материалам (https://yandex.[% direct_tld %]/legal/direct_adv_rules/).", 
+      "normalized_tags_diff": [
+          "- [%~ELSIFsumm<=0%]", 
+      "+ [%~ELSIFsumm<=0~%]", 
+      "- [%~IFwallet_total<=0%]", 
+      "+ [%~IFwallet_total<=0~%]"
+          ], 
+      "translation": "[%IF stat.accepted || stat.postmoderated%]Otomatik moderasyon sonucuna göre [% cid %] numaralı \"[% camp_name %]\" kampanyanızın gösterime kabul edildi\n[%~ IF wallet_cid > 0 ~%]\n[%~ IF wallet_total <= 0 ~%] ve reklamlar ödeme hesaba geçtikten sonra başlatılacak.\nOrtak hesabı ödemek için https://direct.yandex.[% direct_tld %]/registered/main.pl adresine \"Kampanyalarım\" bölümüne geçin\n[%~ ELSE ~%]\n.\n[%~ END ~%]\n[%~ ELSIF summ <= 0 ~%]\nve ödeme yapıldıktan sonra başlatılacak. Kampanyayı ödemek için https://direct.yandex.[% direct_tld %]/registered/main.pl adresinde bulunan \"Kampanyalarım\" bölümünde kampanyaya ilişkin \"Öde\" bağlantısına tıklayın \n[%~ ELSE ~%]\n.\n[%~ END %]\nDikkat: Otomatik olarak kabul edilen reklamların moderatör tarafından üç gün içinde kontrol edilir. Gösterimlere izin verilen reklamlar, reklam materyallerinde aranan koşullara (https://yandex.[% direct_tld %]/legal/direct_adv_rules/) uygun olmadığı için sonradan da reddedilebilir."
+  },
+    {
+      "origin": "Description: Письмо менеджеру по окончании работы с медиапланом\nSubject: Медиаплан для кампании №[% cid %] ([% camp_name %]) клиента [% ulogin %] завершен", 
+      "normalized_tags_diff": [
+        "- [%camp_name%]"
+      ], 
+      "translation": "Description: Medya planı çalışmasının tamamlandığına dair yöneticiye posta\nSubject: [% ulogin %] kullanıcı adlı müşterinin [% cid %] numaralı kampanyası için medya planı bitti"
+    }, 
+    {
+      "origin": "На счет клиента [% client_login %] ([% client_fio %]) поступила оплата за [% sum_payed_units_rate %] [% get_word_for_digit(sum_payed_units_rate ,'тысяча' ,'тысячи' ,'тысяч') %] показов на кампанию N[% cid %] ([% camp_name %]).\nКампания [% IF in_future %]будет [% END %]запущена в соответствии с указанной в параметрах кампании\nдатой старта ([% start_time %]).", 
+      "normalized_tags_diff": [
+        "- [%camp_name%]", 
+        "- [%cid%]", 
+        "- [%client_fio%]", 
+        "- [%client_login%]", 
+        "- [%get_word_for_digit(sum_payed_units_rate,'<cuted-string>','<cuted-string>','<cuted-string>')%]", 
+        "- [%start_time%]", 
+        "- [%sum_payed_units_rate%]"
+      ], 
+      "translation": "~~\nKampanya [% IF in_future %] [% END %] kampanya başlangıç tarihi parametrelerinde belirtilen şekilde\n~~"
+    }, 
+    {
+      "origin": "Здравствуйте, [% fio %]!\nЗаказанный вами отчет \"[% report_name %]\" по кампании [% cid %] ([% camp_name %]) готов. \nВы можете скачать отчет в виде Excel-файла в разделе «Статистика в xls» на странице просмотра статистики: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=listOfflineReports&cid=[% cid %]", 
+      "normalized_tags_diff": [
+        "- [%camp_name%]"
+      ], 
+      "translation": "Merhaba, [% fio %]!\n[% cid %] kampanyası için sipariş ettiğiniz rapor \"[% report_name %]\" hazır. \nRaporu Excel dosyası olarak istatistik görüntüleme sayfasının \"xls biçiminde istatistikler\" bölümünden indirebilirsiniz: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=listOfflineReports&cid=[% cid %]"
+    }, 
+    {
+      "origin": "Отказаться от предупреждений об изменении статуса Вы можете, изменив настройки уведомлений \nв параметрах рекламной кампании https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=editCamp&cid=[% cid %] \nи в \"Настройках пользователя\" https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=userSettings", 
+      "normalized_tags_diff": [
+        "- [%direct_tld%]"
+      ], 
+      "translation": "Bildirim ayarlarını değiştirerek durum değişikliği hakkında uyarı almayı \niptal edebilirsiniz https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=editCamp&cid=[% cid %] \n\"Kullanıcı ayarları\"ndan da aynı işlem yapılabilir https://direct.yandex.com.tr/registered/main.pl?cmd=userSettings"
+    }, 
+    {
+      "origin": "Чтобы возобновить показы на страницах результатов поиска необходимо сначала увеличить \nцену клика, затем повысить эффективность рекламных кампаний. При этом минимальная действующая на поиске цена может начать снижаться, и снова стать равной [% format_const(currency, 'MIN_PRICE') %]", 
+      "normalized_tags_diff": [
+        "- [%format_const(currency,'<cuted-string>')%]"
+      ], 
+      "translation": "Arama sonuçlarında gösterimi tekrar açabilmek için \nönce tıklama fiyatını yükseltmek, sonra da reklam kampanyası etkinliğini arttırmak gerekli. Bununla beraber aramadaki en düşük fiyat düşmeye başlayıp 0,01 krediye eşit hale gelebilir."
+    }, 
+    {
+      "origin": "[% IF !stat.accepted && !stat.declined_partly %]К сожалению, [% END %]Ваша кампания N[% cid %] \"[% camp_name %]\" [% IF stat.accepted %][% 'частично ' IF stat.declined_partly || stat.declined %]принята[% ELSE %]отклонена[% END %] модератором.\n[%~ IF stat.accepted || stat.declined_partly ~%]\n[%~ IF wallet_cid > 0 ~%]\n[%~ IF wallet_total <= 0 %]\nПоказы начнутся после зачисления средств на счет. Для этого сформируйте счет и выберите удобный для вас способ оплаты: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=pay&cid=[% wallet_cid %] .\n[%~ END ~%]\n[%~ ELSIF summ <= 0 %]\nПоказы начнутся после зачисления средств на рекламную кампанию. Для этого сформируйте счет и выберите удобный для вас способ оплаты: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=pay&cid=[% cid %] .\n[%~ END ~%]\n[%~ END %]", 
+      "normalized_tags_diff": [
+        "- [%~ELSIFsumm<=0%]", 
+        "+ [%~ELSIF!(summ+0)%]", 
+        "+ [%~IF!(wallet_total+0)%]", 
+        "- [%~IFwallet_total<=0%]"
+      ], 
+      "translation": "[% IF !stat.accepted && !stat.declined_partly %]Üzgünüz, [% END %]Size ait kampanya N[% cid %] \"[% camp_name %]\" moderatör tarafından [% IF stat.accepted %][% 'kısmen ' IF stat.declined_partly || stat.declined %]kabul edildi[% ELSE %]reddedildi[% END %].\n[%~ IF stat.accepted || stat.declined_partly ~%]\n[%~ IF wallet_cid > 0 ~%]\n[%~ IF !(wallet_total + 0) %]\nGösterimler hesaba bakiye yatırıldığında başlarlar. Bunun için hesap oluşturun ve uygun bir ödeme şekli seçin: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=pay&cid=[% wallet_cid %] .\n[%~ END ~%]\n[%~ ELSIF !(summ + 0) %]\nGösterimler reklam kampanyasına bakiye yatırıldığında başlarlar. Bunun için hesap oluşturun ve uygun bir ödeme şekli seçin: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=pay&cid=[% cid %] .\n[%~ END ~%]\n[%~ END %]"
+    }, 
+    {
+      "origin": "[% IF stat.declined || stat.sitelinks_set_declined || stat.contactinfo_declined || stat.image_declined -%]\nПосмотреть причины отклонения, а также исправить [%- FOR k IN ['declined', 'sitelinks_set_declined', 'contactinfo_declined', 'image_declined'] -%]\n[%- IF stat.defined(k) && stat.$k %][% separator %][% SET separator = \", \" %][% obj_name.$k %][% END -%]\n    [%- END -%] вы можете в интерфейсе:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=showCamp&cid=[% cid %]\n[% END %]\n[% IF stat.edited_by_moderator %]Внимание! В некоторых баннерах были исправлены опечатки. Вы можете посмотреть исправленную версию на странице кампании. Исправленные баннеры помечены соответствующим сообщением. \n[% END # if stat.edited_by_moderator -%]", 
+      "normalized_tags_diff": [
+        "+ [%-IFAgencyUID;'<cuted-string>'_client_login;END-%]"
+      ], 
+      "translation": "[% IF stat.declined || stat.sitelinks_set_declined || stat.contactinfo_declined || stat.image_declined -%]\nReddedilme nedenlerini incelemek ve düzeltmeleri yapmak [%- FOR k IN ['declined', 'sitelinks_set_declined', 'contactinfo_declined', 'image_declined'] -%]\n[%- IF stat.defined(k) && stat.$k %][% separator %][% SET separator = \", \" %][% obj_name.$k %][% END -%]\n    [%- END -%] için arayüze gidin: \nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=showCamp&cid=[% cid %][%- IF AgencyUID; '&ulogin=' _ client_login; END -%]\n[% END %]\n[% IF stat.edited_by_moderator %]Dikkat! Bazı bannerlarda yazım hataları düzeltildi. Düzeltmeleri kampanya sayfasında görebilirsiniz. Düzeltilmiş bannerlar ilgili etiketle işaretlendi. \n[% END # if stat.edited_by_moderator -%]"
+    }, 
+    {
+        "origin": "Отказаться от предупреждений об автоуточнении фраз Вы можете, изменив настройки уведомлений \nв параметрах рекламной кампании https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=editCamp&cid=[% cid %] \nи в \"Настройках пользователя\" https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=userSettings",
+        "normalized_tags_diff": [
+            "- [%direct_tld%]"
+            ],
+        "translation": "Sözcük grubu iyileştirme bildirimleri almak istemiyorsanız aşağıdaki adreste yer alan reklam kampanyası parametrelerindeki bildirim ayarlarını \ndeğiştirebilirsiniz https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=editCamp&cid=[% cid %] \n\"Kullanıcı ayarları\"nda da bildirim alımı kapatılabilir https://direct.yandex.com.tr/registered/main.pl?cmd=userSettings"
+    },
+    {
+      "origin": "Кампания [% cid %] ([% camp_name %]) Вашего клиента [% user_login %] ждёт перевода на персональное обслуживание.", 
+      "normalized_tags_diff": [
+        "- [%camp_name%]"
+      ], 
+      "translation": "[% user_login %] müşterinizin [% cid %] kampanyası özel yönetici tarifesine geçiş yapmak için onay bekliyor."
+    }, 
+    {
+      "origin": "Description: Письмо о несоблюдении автобюджета\nSubject: Яндекс.Директ / Клиент [% client_login %] / N [% cid %] ([% name %]) / [% IF autobudget_strategy == 'autobudget_week_bundle' %]Не может быть достигнуто заявленное количество кликов[% ELSE %]Заявленный бюджет не может быть реализован[% END %]", 
+      "normalized_tags_diff": [
+        "- [%name%]"
+      ], 
+      "translation": "Description: Bütçenin uygunsuzluğuna dair e-postaf\nSubject: Yandex.Direct/Müşteri [% client_login %]/ N [% cid %]/[% IF autobudget_strategy == 'autobudget_week_bundle' %]İstenen tıklama sayısına ulaşılamıyor[% ELSE %]Belirtilen bütçe tutturulamaz[% END %]"
+    }, 
+    {
+      "origin": "Месячный бюджет: [% (FORM.budget) ? format_sum_of_money(currency, FORM.budget) :'(не установлен)' %]\n--------\nЦель кампании: [% FORM.target_camp %] ", 
+      "normalized_tags_diff": [
+        "- [%(FORM.budget)?format_sum_of_money(currency,FORM.budget):'<cuted-string>'%]", 
+        "+ [%(FORM.budget)?format_sum_of_money(currency,FORM.budget,'<cuted-string>'):'<cuted-string>'%]"
+      ], 
+      "translation": "Aylık bütçe: [% (FORM.budget) ? format_sum_of_money(currency, FORM.budget, ' ') :'(belirtilmedi)' %]\n--------\nKampanya hedefi: [% FORM.target_camp %] "
+    }, 
+    {
+      "origin": "Деньги, поступившие ранее на заказ N[% cid %] ([% camp_name %]) в размере [% format_sum_of_money(currency, sum_last) %], израсходованы более,\nчем на [% 100 - procent %]%. Если вы не планируете останавливать эту кампанию, возможно, имеет смысл\nпополнить счет, чтобы кампания не прерывалась.\nЭто можно сделать, воспользовавшись опцией \"Доплатить\" на странице \"Мои объявления\"\nна https://direct.yandex.[% direct_tld %]/registered/main.pl", 
+      "normalized_tags_diff": [
+        "- [%camp_name%]"
+      ], 
+      "translation": "Daha önce N[% cid %] siparişine yatırdığınız [% format_sum_of_money(currency, sum_last) %] tutarındaki paranın\n%[% 100 - procent %] kadarlık kısmından fazlası tükendi. Bu kampanyayı durdurmayı düşünmüyorsanız kampanyanın kesintiye uğramaması amacıyla\nhesabınıza para yatırabilirsiniz.\n\"Reklamlarım\" sayfasında \"Öde\" seçeneğini kullanarak\npara yatırabilirsiniz https://direct.yandex.[% direct_tld %]/registered/main.pl"
+    }, 
+    {
+        "origin": "[% IF campaign_type != 'wallet' ~%]\nНа счет клиента [% client_login %] ([% client_fio %]) поступила оплата кампании N[% cid %] ([% camp_name %]) в размере [% format_sum_of_money(currency, sum_payed) %][% \" (без НДС)\" IF without_nds %] [% IF pay_type == \"blocked\" %]На данный момент кампания ожидает модерации и денежные переносы с или на нее невозможны.\nВ случае принятия кампании модератором она[% ELSE %]Кампания[% END %] [% IF in_future || pay_type == \"with_block\" %]начнет показы[% ELSE %]будет запущена[% END %] в соответствии с указанной в параметрах кампании датой старта ([% start_time %]) и настройками временного таргетинга.\n[%~ ELSE ~%]\nНа счет клиента [% client_login %] поступила оплата в размере [% format_sum_of_money(currency, sum_payed) %][% \" (без НДС)\" IF without_nds %] [% IF pay_type == \"blocked\" %]На данный момент ваши кампании ожидают модерации.\nВ случае принятия кампаний модератором они[% ELSE %]Кампании[% END %] [% IF in_future || pay_type == \"with_block\" %]начнут показы[% ELSE %]будут запущены[% END %] в соответствии с указанной в параметрах датой старта и настройками временного таргетинга.\n[%~ END ~%]",
+        "normalized_tags_diff": [
+        "- [%client_fio%]",
+        "- [%client_login%]"
+            ],
+        "translation": "[% IF campaign_type != 'wallet' ~%]\n[% cid %] numaralı ([% camp_name %]) kampanya için toplam [% format_sum_of_money(currency, sum_payed) %][% \" (KDV hariç)\" IF without_nds %] [% IF pay_type == \"blocked\" %]miktarında para hesabınıza yatırıldı. Şu anda kampanya denetlenmeyi beklediği için herhangi bir para transferi yapılamaz.\nKampanya moderatör tarafından onaylanırsa kampanya ayarlarında belirtilen başlangıç tarihi ([% start_time %]) ve zaman hedefleme ayarlarına uygun olarak [% ELSE %]Kampanya[% END %] [% IF in_future || pay_type == \"with_block\" %]gösterimlere başlar[% ELSE %]başlatılır[% END %].\n[%~ ELSE ~%]\n[% client_login %] adlı hesabınıza toplam [% format_sum_of_money(currency, sum_payed) %][% \" (KDV hariç)\" IF without_nds %] [% IF pay_type == \"blocked\" %] miktarında para yatılırdı. Şu anda kampanyalarınız denetlenmeyi bekliyor.\nKampanyanız moderatör tarafından onaylanırsa kampanya ayarlarında belirtilen başlangıç tarihi ve zaman hedefleme ayarlarına uygun olarak[% ELSE %]Kampanyalar[% END %] [% IF in_future || pay_type == \"with_block\" %]gösterimlere başlar[% ELSE %]başlatılır[% END %].\n[%~ END ~%]"
+    },
+    {
+      "origin": "Показ объявлений, ведущих на [% IF single_d %]этот сайт[%ELSE%]эти сайты[%END%], был приостановлен согласно настройкам [% IF single_c%]рекламной кампании[%ELSE%]рекламных кампаний[%END%]:\n[%FOREACH c = camp_list%][%IF loop.index %],\n[%END%]N[% c.cid %] ([% c.name %])[%END%].\nОстановленные объявления помечены восклицательным знаком на странице со списком активных объявлений. Если Вы не возобновите показы вручную, они будут автоматически включены после восстановления работоспособности сайт[% IF single_d %]а[%ELSE%]ов[%END%].\n[%- ELSE%]Согласно данным мониторинга, [% IF single_d %]начал[%ELSE%]начали[%END%] работать в нормальном режиме [% IF single_d %]сайт[%ELSE%]сайты[%END%]:\n[% FOREACH d=domain_list %][%IF loop.index %],\n[%END%][% d.domain %] ([% format_date(d.time,'strftime','%d {month_r} в %H:%M') %])[%END%].", 
+      "normalized_tags_diff": [
+        "- [%ELSE%]", 
+        "- [%END%]", 
+        "- [%IFsingle_d%]"
+      ], 
+      "translation": "[% IF single_d %]sitesine[%ELSE%]sitelere[%END%] yönlendiren reklam gösterimi [% IF single_c%]reklam kampanyası[%ELSE%]reklam kampanyaları[%END%]ayarlarından dolayı durduruldu:\n[%FOREACH c = camp_list%][%IF loop.index %],\n[%END%]N[% c.cid %] ([% c.name %])[%END%].\nDurdurulan reklamlar, aktif reklam listesi olan sayfada ünlem işaretiyle işaretlendi. Gösterimi elle tekrar devam ettirmezseniz [% IF single_d %]site[%ELSE%]siteler[%END%]çalışır duruma geldikten sonra otomatik olarak etkinleşecektir.\n[%- ELSE%]İzleme verilerine göre, [% IF single_d %]site[%ELSE%]siteler[%END%] normal olarak çalışmaya başladı:\n[% FOREACH d=domain_list %][%IF loop.index %],\n[%END%][% d.domain %] ([% format_date(d.time,'strftime','%d {month_r} > %H:%M') %])[%END%]."
+    }, 
+    {
+      "origin": "[% IF !stat.accepted && !stat.declined_partly %]К сожалению, [% END %]Ваша кампания N[% cid %] \"[% camp_name %]\" [% IF stat.accepted %][% 'частично ' IF stat.declined_partly || stat.declined %]принята[% ELSE %]отклонена[% END %] модератором.\n[%~ IF stat.accepted || stat.declined_partly ~%]\n[%~ IF wallet_cid > 0 ~%]\n[%~ IF !(wallet_total + 0) %]\nПоказы начнутся после зачисления средств на счет. Для этого сформируйте счет и выберите удобный для вас способ оплаты: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=pay&cid=[% wallet_cid %] .\n[%~ END ~%]\n[%~ ELSIF !(summ + 0) %]\nПоказы начнутся после зачисления средств на рекламную кампанию. Для этого сформируйте счет и выберите удобный для вас способ оплаты: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=pay&cid=[% cid %] .\n[%~ END ~%]\n[%~ END %]", 
+      "normalized_tags_diff": [
+        "- [%direct_tld%]"
+      ], 
+      "translation": "[% IF !stat.accepted && !stat.declined_partly %]Üzgünüz, [% END %]Size ait kampanya N[% cid %] \"[% camp_name %]\" moderatör tarafından [% IF stat.accepted %][% 'kısmen ' IF stat.declined_partly || stat.declined %]kabul edildi[% ELSE %]reddedildi[% END %].\n[%~ IF stat.accepted || stat.declined_partly ~%]\n[%~ IF wallet_cid > 0 ~%]\n[%~ IF !(wallet_total + 0) %]\nGösterimler hesaba bakiye yatırıldığında başlarlar. Bunun için hesap oluşturun ve uygun bir ödeme şekli seçin: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=pay&cid=[% wallet_cid %] .\n[%~ END ~%]\n[%~ ELSIF !(summ + 0) %]\nGösterimler reklam kampanyasına bakiye yatırıldığında başlarlar. Bunun için hesap oluşturun ve uygun bir ödeme şekli seçin: https://direct.yandex.com.tr/registered/main.pl?cmd=pay&cid=[% cid %] .\n[%~ END ~%]\n[%~ END %]"
+    }, 
+    {
+      "origin": "Чтобы возобновить показы на страницах результатов поиска необходимо сначала увеличить \nцену клика, затем повысить эффективность рекламных кампаний. При этом минимальная действующая на поиске цена может начать снижаться, и снова стать равной [% format_const(currency, 'MIN_PRICE') %]", 
+      "normalized_tags_diff": [
+        "- [%format_const(currency,'<cuted-string>')%]"
+      ], 
+      "translation": "Arama sonuçlarında gösterimi tekrar açabilmek için \nönce tıklama fiyatını yükseltmek, sonra da reklam kampanyası etkinliğini arttırmak gerekli. Bununla beraber aramadaki en düşük fiyat düşmeye başlayıp 0,01 krediye eşit hale gelebilir."
+    }, 
+    {
+      "origin": "Здравствуйте, [% FIO %]!", 
+      "normalized_tags_diff": [
+        "- [%FIO%]", 
+        "+ [%fio%]"
+      ], 
+      "translation": "Merhaba, [% fio %]!"
+    }, 
+    {
+      "origin": "Здравствуйте [% manager.fio %]!", 
+      "normalized_tags_diff": [
+        "- [%manager.fio%]", 
+        "+ [%manager.FIO%]"
+      ], 
+      "translation": "Merhaba [% manager.FIO %]!"
+    }, 
+    {
+      "origin": "[% IF auto_optimize_request == 'Sended' || is_support %]Наши специалисты в рамках услуги \"Первая помощь\" рассмотрели Вашу кампанию № [% cid %] и пришли  к выводу, что она не нуждается в улучшении.\n[% ELSE %]Мы внимательно проанализировали Вашу рекламную кампанию.\nК сожалению, Ваша заявка на услугу \"Первой помощи\" для кампании № [% cid %],\"[% name_camp %]\" отклонена.\n[% END %]", 
+      "normalized_tags_diff": [
+        "- [%IFauto_optimize_request=='<cuted-string>'||is_support%]", 
+        "+ [%IFauto_optimize_request=='<cuted-string>'||request_type=='<cuted-string>'%]"
+      ], 
+      "translation": "[% IF auto_optimize_request == 'Sended' || request_type == 'Support' %]Uzmanlarımız \"İlk yardım\" hizmeti çerçevesinde [% cid %] numaralı kampanyanızı inceledi ve iyileştirme ihtiyacı olmadığına karar verdi.\n[% ELSE %]Reklam kampanyanızı dikkatlice inceledik.\n[% cid %],\"[% name_camp %]\" numaralı kampanya için \"İlk yardım\" hizmeti talebiniz reddedildi.\n[% END %]"
+    }, 
+    {
+      "origin": "Description: Уведомление пользователю о заказе услуги \"Первой помощи\"\nSubject: Яндекс.Директ/[% IF is_support %]Услуга[% ELSE %]Вы заказали услугу[% END %] \"Первой помощи\" для кампании № [% cid %]", 
+      "normalized_tags_diff": [
+        "- [%IFis_support%]", 
+        "+ [%IFrequest_type=='<cuted-string>'%]"
+      ], 
+      "translation": "Description: Müşteriye \"İlk yardım\" hizmeti siparişi hakkında bildirim\nSubject: Yandex.Direct/[% IF request_type == 'Support' %][% ELSE %][% cid %] numaralı kampanya için \"İlk yardım\" [% END %] hizmeti sipariş ettiniz"
+    }, 
+    {
+      "origin": "[% IF is_support %]\nВаша кампания № [% cid %], \"[% name_camp %]\" отправлена нашим специалистам для оптимизации в рамках услуги \"Первая помощь\".\nОни бесплатно проанализируют Вашу кампанию и дадут свои рекомендации по её улучшению. О результате будет сообщено в интерфейсе кампании в разделе «Рекомендации».\nВы сможете воспользоваться предложенными вариантами или отказаться от них по своему усмотрению.\n[% ELSE %]\nВы заказали услугу \"Первой помощи\" для кампании № [% cid %], \"[% name_camp %]\".\nМы рассмотрим Вашу заявку и отправим ответ на адрес, который указан в параметрах кампании.\nДополнительно о результате будет сообщено в интерфейсе кампании в разделе «Рекомендации». \n[% END %]", 
+      "normalized_tags_diff": [
+        "- [%IFis_support%]", 
+        "+ [%IFrequest_type=='<cuted-string>'%]"
+      ], 
+      "translation": "[% IF request_type == 'Support' %]\n[% cid %] numaralı kampanyanız \"[% name_camp %]\" \"İlk yardım\" hizmeti çerçevesinde optimizasyon için uzmanlarımıza gönderildi.\nUzmanlarımız kampanyanızı ücretsiz olarak analiz edip size iyileştirme önerileri verecektir. Sonuç, kampanya arayüzünde \"Öneriler\" bölümünden bildirilecektir.\nKendi kararınıza göre önerilen seçenekleri kullanabilir ya da reddedebilirsiniz.\n[% ELSE %]\n[% cid %] numaralı \"[% name_camp %]\" kampanyanız için \"İlk yardım\" hizmeti sipariş ettiniz.\nTalebinizi değerlendirip yanıtımızı kampanya parametrelerinde belirtilmiş olan adrese göndereceğiz.\nAyrıca sonuç, kampanya arayüzünde \"Öneriler\" bölümünden bildirilecektir. \n[% END %]"
+    }, 
+    {
+      "origin": "[% IF auto_optimize_request == 'Sended' || is_support %]В рамках услуги \"Первая помощь\" Ваш заказ № [% cid %] ([% name_camp %]) был проанализирован специалистами Яндекса. \n[% ELSE %]Ваша заявка на услугу \"Первая помощь\" для кампании № [% cid %], \"[% name_camp %]\" выполнена.\n[% END %]", 
+      "normalized_tags_diff": [
+        "- [%IFauto_optimize_request=='<cuted-string>'||is_support%]", 
+        "+ [%IFauto_optimize_request=='<cuted-string>'||request_type=='<cuted-string>'%]"
+      ], 
+      "translation": "[% IF auto_optimize_request == 'Sended' || request_type == 'Support' %][% cid %] ([% name_camp %]) numaralı siparişiniz \"İlk yardım\" hizmeti çerçevesinde Yandex uzmanları tarafından analiz edildi. \n[% ELSE %][% cid %], \"[% name_camp %]\" numaralı kampanya için \"İlk yardım\" hizmeti talebiniz gerçekleştirildi.\n[% END %]"
+    }, 
+    {
+      "origin": "[% IF is_support %]В рамках услуги \"Первая помощь\" Ваш заказ № [% cid %] ([% name_camp %]) был оптимизирован специалистами Яндекса.\n[% ELSE %]Ваша заявка на услугу \"Первая помощь\" для заказа № [% cid %] выполнена.\n[% END %]", 
+      "normalized_tags_diff": [
+        "- [%IFis_support%]", 
+        "+ [%IFrequest_type=='<cuted-string>'%]"
+      ], 
+      "translation": "[% IF request_type == 'Support' %]\"İlk yardım\" hizmeti çerçevesinde [% cid %] ([% name_camp %]) numaralı siparişiniz Yandex uzmanları tarafından iyileştirildi.\n[% ELSE %][% cid %] numaralı siparişiniz için \"İlk yardım\" hizmeti talebiniz gerçekleştirildi.\n[% END %]"
+    }, 
+    {
+      "origin": "Description: Баян/поступление денег на кампанию - письмо МЕНЕДЖЕРУ\nSubject: Яндекс.Баян/Клиент [% client_login %]/ N [% cid %]/На Ваш счет поступила оплата", 
+      "normalized_tags_diff": [
+        "- [%cid%]", 
+        "- [%client_login%]"
+      ], 
+      "translation": "Description: ~~\nSubject: ~~"
+    }, 
+    {
+      "origin": "Поступила оплата за [% sum_payed_units_rate %] [% get_word_for_digit(sum_payed_units_rate ,'тысяча' ,'тысячи' ,'тысяч') %] показов на кампанию N[% cid %] ([% camp_name %]).\nКампания [% IF in_future %]будет [% END %]запущена в соответствии с указанной в параметрах кампании\nдатой старта ([% start_time %]).", 
+      "normalized_tags_diff": [
+        "- [%camp_name%]", 
+        "- [%cid%]", 
+        "- [%get_word_for_digit(sum_payed_units_rate,'<cuted-string>','<cuted-string>','<cuted-string>')%]", 
+        "- [%start_time%]", 
+        "- [%sum_payed_units_rate%]"
+      ], 
+      "translation": "~~\nKampanya [% IF in_future %] [% END %] kampanya başlangıç tarihi parametrelerinde belirtilen şekilde\n~~"
+    }, 
+    {
+      "origin": "Наша система осуществляет регулярные проверки рекламных кампаний, чтобы автоматически выявить и исключить недобросовестные клики. \nПо результатам очередной проверки для ваших кампаний была проведена корректировка статистики и возврат средств на баланс кампаний:\n[% FOREACH c = cids ~%]\nВ кампании №[% c.cid %] за [% c.prefix %] [% c.periods_text.join(', ') %] на общую сумму [% format_price(c.sum) %] [% c.currency %]\n[% END %]\n[% IF has_wallet %]\nПо умолчанию возвращенные после корректировки средства зачисляются на счет той кампании, с которой были списаны. Для вашего аккаунта подключен \"Общий счет\" и деньги могут быть автоматически перенесены на него в течение суток (это работает в тех случаях, когда по платежу не были сформированы закрывающие документы). При переносе денег на \"Общий счет\" вы получите отдельное уведомление.\n[% END %]\nПерейти к списку кампаний можно по ссылке: \nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=showCamps\nПодробнее о фильтрации недобросовестных кликов: \nhttp://help.yandex.ru/direct/?id=1128304 ", 
+      "normalized_tags_diff": [
+        "+ [%client_login%]"
+      ], 
+      "translation": "Sistemimiz tıklama sahtekarlığını otomatik olarak tespit etmek ve sistemden çıkarmak için belli aralıklarla reklam kampanyalarını denetler. \nDenetleme sonucunda kampanyalarınızın istatistiklerinin düzeltilmesi ve paranın kampanya bakiyesine geri yatırılması:\n[% FOREACH c = cids ~%]\nKampanya №[% c.cid %] [% c.prefix %] [% c.periods_text.join(', ') %] aralık için toplam [% format_price(c.sum) %] [% c.currency %]\n[% END %]\n[% IF has_wallet %]\nDüzeltmeden sonra geri yatırılan para varsayılan olarak hangi kampanyadan alındıysa o kampanyanın hesabına yatırılır. Hesabınız \"Ortak hesaba\" bağlıdır ve 24 saat içinde para otomatik olarak o hesaba aktarılabilir (bu seçenek ödeme ile ilgili gerekli belgeler oluşturulmadığı durumlarda faydalı olabilir). Para \"Ortak hesaba\" aktarıldığında ayrıca bilgilendirileceksiniz.\n[% END %]\nKampanya listesine geçmek için bu bağlantıya tıklayın: \nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=showCamps&ulogin=[% client_login %]\nTıklama sahtekarlığının filtrelemesi hakkında ayrıntılı bilgi: \nhttp://help.yandex.ru/direct/?id=1128304"
+    },
+    {
+      "origin": "Пожалуйста, обратите внимание, что для Вас завершился период расширенных консультаций с менеджером Яндекса. Надеемся, что они принесли пользу Вашему бизнесу.\nВам всегда помогут в нашем отделе клиентского сервиса. Мы будем рады ответить на любые вопросы по работе в Директе или просто дать совет. Пишите нам через форму обратной связи (https://yandex.[% direct_tld %]/support/direct/troubleshooting/other.xml) или звоните по телефону (https://yandex.[% direct_tld %]/support/direct/contact-us.xml).\nЖелаем Вам успешного размещения!", 
+      "normalized_tags_diff": [
+        "- [%direct_tld%]", 
+        "- [%direct_tld%]"
+      ], 
+      "translation": "Lütfen dikkat: Yandex yöneticisine gelişmiş danışma süreniz sona erdi. Bu hizmetin iş başarınıza katkı sağladığını ümit ediyoruz."
+    },
+   {
+     "origin": "Здравствуйте, [% fio %]!\nВсе кампании в Яндекс.Директе на логине [% client_login %] приостановлены, потому что[% IF auto_overdraft_active == 'true' %] достигнут порог отключения с учётом неоплаченных счетов.[% ELSE %] на общем счёте закончились средства.[% END %]\nЭто означает, что потенциальные клиенты не видят вашу рекламу.\nЧтобы объявления снова начали показываться, пожалуйста, внесите оплату.\nДля этого воспользуйтесь кнопкой «Пополнить» на странице «Общий счёт»:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=clientWallet&ulogin=[% client_login %]\nЧтобы реклама не останавливалась из-за внезапного окончания средств на счёте, подключайте автоплатёж в разделе «Общий счёт». Подробнее об автоплатеже — https://yandex.[% direct_tld %]/support/direct/payments/shared-account.html#shared-account__autopayment\n[% PROCESS i_footer %]", 
+     "normalized_tags_diff": [
+       "- [%direct_tld%]"
+     ], 
+     "translation": "Sayın [% fio %],\n[% client_login %] kullanıcı adındaki tüm Yandex.Direct kampanyaları durduruldu. Nedeni: [% IF auto_overdraft_active == 'true' %] Ödenmemiş faturalar dahil olmak üzere, hesap bakiyesi devre dışı bırakma eşiğine ulaştı.[% ELSE %] Ortak hesap bakiyesi sıfıra indi.[% END %]\nBu durum, potansiyel müşterilerinizin reklamınızı görmediği anlamına gelir.\nReklamların tekrar gösterilmeye başlaması için lütfen ödeme yapın.\nBunun için 'Ortak hesap' sayfasında 'Para yatır' butonunu kullanın:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=clientWallet&ulogin=[% client_login %]\n[% PROCESS i_footer %]"
+   }, 
+   {
+     "origin": "[% IF campaign_type == 'wallet' %]\nЧтобы реклама не останавливалась из-за внезапного окончания средств на счёте, подключайте автоплатёж в разделе «Общий счёт». Подробнее об автоплатеже — https://yandex.[% direct_tld %]/support/direct/payments/shared-account.html#shared-account__autopayment", 
+     "normalized_tags_diff": [
+       "- [%direct_tld%]"
+     ], 
+     "translation": "[% IF campaign_type == 'wallet' %]"
+   }, 
+   {
+     "origin": "P.S.: Историю взаиморасчетов можно посмотреть в интерфейсе: https://yandex.[% direct_tld %]/support/direct/payments/docs.html", 
+     "normalized_tags_diff": [
+       "- [%direct_tld%]", 
+       "+ [%PROCESSi_footer%]"
+     ], 
+     "translation": "[% PROCESS i_footer %]"
+   }, 
+   {
+     "origin": "[% PROCESS i_footer %]", 
+     "normalized_tags_diff": [
+       "- [%PROCESSi_footer%]"
+     ], 
+     "translation": " "
+   }, 
+   {
+     "origin": "Показы будут остановлены, когда баланс общего счёта достигнет установленного Вами порога отключения с учётом неоплаченных счетов.\n[%\nELSE\n%]Чтобы внести оплату, пожалуйста, воспользуйтесь кнопкой «Пополнить» на странице «Общий счёт»:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=clientWallet\nПоказы будут остановлены, когда баланс общего счёта достигнет порога отключения.\n[% END %]\n[% ELSE %]Деньги, внесённые Вами за кампанию №[% cid %] ([% camp_name %]), заканчиваются.\nПоказы будут остановлены, когда баланс достигнет 0.\nЧтобы внести оплату, на странице «Мои кампании» введите сумму в поле «Положить деньги» и нажмите кнопку «Оплатить»:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl\n[% END %]\nЧтобы реклама не останавливалась из-за внезапного окончания средств на счёте, подключайте автоплатёж в разделе «Общий счёт». Подробнее об автоплатеже — https://yandex.[% direct_tld %]/support/direct/payments/shared-account.html#shared-account__autopayment", 
+     "normalized_tags_diff": [
+       "- [%direct_tld%]"
+     ], 
+     "translation": "Ortak hesap bakiyesi belirttiğiniz alt limite ulaştığında reklam gösterimleriniz durdurulacaktır.\n[%\nELSE\n%]Hesaba para yatırmak için lütfen Ortak Hesap sayfasına gidip “Para yatır” butonuna tıklayın:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=clientWallet\nOrtak hesap bakiyesi kapatma sınırına ulaştığında reklam gösterimleriniz durdurulacaktır.\n[% END %]\n[% ELSE %][% camp_name %] isim ve [% cid %] numaralı kampanya için yatırdığınız bakiye bitmek üzere.\nHesap bakiyeniz sıfıra indiğinde reklam gösterimleriniz durdurulacaktır.\nPara yatırmak için Kampanyalarım sayfasında “Para yatır” alanına istediğiniz tutarı yazın ve “Ödeme yap” butonuna tıklayın:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl\n[% END %]"
+   },
+   {
+     "origin": "Description: достигнут порог отключения - sms КЛИЕНТУ\nSubject: Директ: показы рекламы остановились, т.к. задолженность достигла порога отключения. Пополнить счёт [% sms_pay_url %]",
+     "normalized_tags_diff": [
+       "- [%sms_pay_url%]"
+     ],
+     "translation": "Description: Kapatma sınırına ulaşıldı - MÜŞTERİYE SMS\nSubject: Direct: Fazla harcama kapatma sınırına ulaştı; gösterimler durduruldu."
+   },
+   {
+     "origin": "Description: поступление денег на кампанию - sms КЛИЕНТУ\nSubject: Директ: зачислен платеж [% format_sum_of_money(currency, sum_payed) %][% \" (без НДС)\" IF with out_nds %] на [% IF campaign_type != 'wallet' ~%]заказ  N[% cid %][% ELSE %]счёт[% END %]. [% IF direct_tld == 'ru' %]Чтобы реклама не остановилась неожиданно, подключите автоплатёж https://ya.cc/direct/autopay[% END %]",
+     "normalized_tags_diff": [
+       "- [%END%]",
+       "- [%IFdirect_tld=='<cuted-string>'%]"
+     ],
+     "translation": "Description: Kampanyaya bakiye aktarımı - MÜŞTERİYE SMS\nSubject: Direct: [% IF campaign_type != 'wallet' ~%][% cid %] numaralı siparişe[% ELSE %]hesaba[% END %][% format_sum_of_money(currency, sum_payed) %] [% \" (KDV'siz)\" IF without_nds %] ödeme yapıldı."
+   }
+  ], 
+  "uk": [
+     {
+       "origin": "[%IF stat.accepted || stat.postmoderated%]Объявления из Вашей кампании N[% cid %] \"[% camp_name %]\" были приняты к показам на основании автоматической проверки\n[%~ IF wallet_cid > 0 ~%]\n[%~ IF wallet_total <= 0%] и будут запущены после внесения оплаты на счёт.\nЧтобы оплатить общий счёт перейдите в раздел \"Мои кампании\" на https://direct.yandex.[% direct_tld %]/registered/main.pl\n[%~ ELSE ~%]\n.\n[%~ END ~%]\n[%~ ELSIF summ <= 0 %] и будут запущены после внесения оплаты. Чтобы оплатить кампанию\nнажмите на относящуюся к ней ссылку \"Оплатить\" в разделе \"Мои кампании\" на https://direct.yandex.[% direct_tld %]/registered/main.pl\n[%~ ELSE ~%]\n.\n[%~ END %]\nОбратите внимание, что проверка модератором автоматически принятых объявлений проводится в течение трех суток. Допущенные к показам объявления могут быть впоследствии отклонены из-за несоответствия требованиям к рекламным материалам (https://yandex.[% direct_tld %]/legal/direct_adv_rules/).", 
+       "normalized_tags_diff": [
+         "- [%~ELSIFsumm<=0%]", 
+         "+ [%~ELSIFsumm<=0~%]", 
+         "- [%~IFwallet_total<=0%]", 
+         "+ [%~IFwallet_total<=0~%]"
+       ], 
+       "translation": "[%IF stat.accepted || stat.postmoderated%]Оголошення із Вашої кампанії N[% cid %] \"[% camp_name %]\" було прийнято до показів на підставі автоматичної перевірки\n[%~ IF wallet_cid > 0 ~%]\n[%~ IF wallet_total <= 0 ~%] і буде запущено після внесення оплати на рахунок.\nЩоб оплатити загальний рахунок, перейдіть у розділ \"Мої кампанії\" на https://direct.yandex.[% direct_tld %]/registered/main.pl\n[%~ ELSE ~%]\n.\n[%~ END ~%]\n[%~ ELSIF summ <= 0 ~%] і буде запущено після внесення оплати. Щоб оплатити кампанію,\nнатисніть на відповідне посилання \"Оплатити\" у розділі \"Мої кампанії\" на https://direct.yandex.[% direct_tld %]/registered/main.pl\n[%~ ELSE ~%]\n.\n[%~ END %]\nЗверніть увагу, що перевірка модератором автоматично прийнятих оголошень проводиться протягом трьох діб. Допущені до показів оголошення в результаті може бути відхилено через невідповідність вимогам до рекламних матеріалів (https://yandex.[% direct_tld %]/legal/direct_adv_rules/)."
+     },
+
+  {
+      "origin": "Подробнее об \"оценке эффективности\" можно посмотреть здесь: \nhttps://yandex.[% direct_tld %]/support/direct/efficiency/increase-profit.xml \n[% ELSE # for easy clients %]К сожалению, эффективность Вашего заказа N [% cid %] ([% camp_name %]) оказалась низкой, поэтому показы объявлений приостановлены на:\n- страницах результатов поиска Яндекса;\n- страницах поисковых сервисов Яндекса.\nПоказы по этим фразам продолжаются только в сетях и на странице \"Все объявления\".\nЧтобы возобновить показы на страницах результатов поиска необходимо повысить эффективность объявлений.\nКак сделать объявление эффективным: https://yandex.[% direct_tld %]/support/direct-light/efficiency.xml\n[% END %]", 
+      "normalized_tags_diff": [
+          "- [%direct_tld%]"
+          ], 
+      "translation": "Докладніше про оцінку ефективності можна подивитися тут: \nhttps://yandex.[% direct_tld %]/support/direct/efficiency/increase-profit.xml \n[% ELSE # for easy clients %]На жаль, ефективність Вашого замовлення N [% cid %] ([% camp_name %]) виявилася низькою, тому покази оголошень призупинено на:\n- сторінках результатів пошуку Яндекса;\n- сторінках пошукових сервісів Яндекса.\nПокази за цими фразами тривають лише у мережах і на сторінці «Усі оголошення».\nЩоб відновити покази на сторінках результатів пошуку, необхідно підвищити ефективність оголошень.\nЯк зробити оголошення ефективним: https://yandex.ua/support/direct-light/efficiency.xml\n[% END %]"
+  },
+    {
+      "origin": "[% IF adgroups %][% FOR adgroup = adgroups %]\nГруппа №[% adgroup.pid %][% IF adgroup.group_name %], \"[% adgroup.group_name %]\"[% END -%]\n[%- FOR banner = adgroup.banners %][% FOR ph = banner.ph_spec %]\n  По ключевому слову/словосочетанию \"[% ph.phrase %]\" большинство объявлений из группы вытеснено из спецразмещения.[% END %][% FOR ph = banner.ph_first %]\n  По ключевому слову/словосочетанию \"[% ph.phrase %]\" большинство объявлений из группы вытеснено с первой позиции.[% END %][% FOR ph = banner.ph_gar %]\n  По ключевому слову/словосочетанию \"[% ph.phrase %]\" большинство объявлений из группы вытеснено из гарантированных показов.[% END %][% END %][% END %][% END %]", 
+      "normalized_tags_diff": [
+        "- [%END-%]", 
+        "+ [%END%]"
+      ], 
+      "translation": "[% IF adgroups %][% FOR adgroup = adgroups %]\nГрупа №[% adgroup.pid %][% IF adgroup.group_name %], \"[% adgroup.group_name %]\"[% END%]\n[%- FOR banner = adgroup.banners %][% FOR ph = banner.ph_spec %]\nЗа ключовим словом/словосполученням \"[% ph.phrase %]\" більшість оголошень із групи витіснено зі спецрозміщення.[% END %][% FOR ph = banner.ph_first %]\nЗа ключовим словом/словосполученням \"[% ph.phrase %]\" більшість оголошень із групи витіснено з першої позиції.[% END %][% FOR ph = banner.ph_gar %]\nЗа ключовим словом/словосполученням \"[% ph.phrase %]\" більшість оголошень із групи витіснено з гарантованих показів.[% END %][% END %][% END %][% END %]"
+    }, 
+    {
+      "origin": "[% IF stat.declined || stat.sitelinks_set_declined || stat.contactinfo_declined || stat.image_declined -%]\nПосмотреть причины отклонения, а также исправить [%- FOR k IN ['declined', 'sitelinks_set_declined', 'contactinfo_declined', 'image_declined'] -%]\n[%- IF stat.defined(k) && stat.$k %][% separator %][% SET separator = \", \" %][% obj_name.$k %][% END -%]\n    [%- END -%] вы можете в интерфейсе:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=showCamp&cid=[% cid %]\n[% END %]\n[% IF stat.edited_by_moderator %]Внимание! В некоторых баннерах были исправлены опечатки. Вы можете посмотреть исправленную версию на странице кампании. Исправленные баннеры помечены соответствующим сообщением. \n[% END # if stat.edited_by_moderator -%]", 
+      "normalized_tags_diff": [
+        "- [%END-%]", 
+        "+ [%END%]"
+      ], 
+      "translation": "[% IF stat.declined || stat.sitelinks_set_declined || stat.contactinfo_declined || stat.image_declined -%]\nПодивитися причини відхилення, а також виправити [%- FOR k IN ['declined', 'sitelinks_set_declined', 'contactinfo_declined', 'image_declined'] -%]\n[%- IF stat.defined(k) && stat.$k %][% separator %][% SET separator = \", \" %][% obj_name.$k %][% END%]\n[%- END -%] ви можете в інтерфейсі:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=showCamp&cid=[% cid %]\n[% END %]\n[% IF stat.edited_by_moderator %]Увага! У деяких банерах було виправлено помилки. Ви можете подивитися виправлену версію на сторінці кампанії. Виправлені банери позначено відповідним повідомленням. \n[% END # if stat.edited_by_moderator -%]"
+    }, 
+    {
+      "origin": "[% IF adgroups %][% FOREACH adgroup = adgroups %][% NEXT IF !adgroup.is_accepted %]Группа №[% adgroup.pid %][% IF adgroup.group_name %], \"[% adgroup.group_name %]\"[% END %]\n[% FOR b = adgroup.banners %][% NEXT IF !b.is_accepted %] M-[% b.bid %], \"[% b.title %]\"\n[% END %][% END %][% END -%]", 
+      "normalized_tags_diff": [
+        "- [%END-%]", 
+        "+ [%END%]"
+      ], 
+      "translation": "[% IF adgroups %][% FOREACH adgroup = adgroups %][% NEXT IF !adgroup.is_accepted %]Група №[% adgroup.pid %][% IF adgroup.group_name %], \"[% adgroup.group_name %]\"[% END %]\n[% FOR b = adgroup.banners %][% NEXT IF !b.is_accepted %] M-[% b.bid %], \"[% b.title %]\"\n[% END %][% END %][% END%]"
+    }, 
+    {
+      "origin": "[% IF stat.declined || stat.sitelinks_set_declined || stat.contactinfo_declined || stat.image_declined -%]\nПосмотреть причины отклонения, а также исправить [%- FOR k IN ['declined', 'sitelinks_set_declined', 'contactinfo_declined', 'image_declined'] -%]\n[%- IF stat.defined(k) && stat.$k %][% separator %][% SET separator = \", \" %][% obj_name.$k %][% END -%]\n    [%- END -%] вы можете в интерфейсе: \nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=showCamp&cid=[% cid %][%- IF AgencyUID; '&ulogin=' _ client_login; END -%]\n[% END %]\n[% IF stat.edited_by_moderator %]Внимание! В некоторых баннерах были исправлены опечатки. Вы можете посмотреть исправленную версию на странице кампании. Исправленные баннеры помечены соответствующим сообщением. \n[% END # if stat.edited_by_moderator -%]", 
+      "normalized_tags_diff": [
+        "- [%END-%]", 
+        "+ [%END%]"
+      ], 
+      "translation": "[% IF stat.declined || stat.sitelinks_set_declined || stat.contactinfo_declined || stat.image_declined -%]\nПодивитися причини відхилення, а також виправити [%- FOR k IN ['declined', 'sitelinks_set_declined', 'contactinfo_declined', 'image_declined'] -%]\n[%- IF stat.defined(k) && stat.$k %][% separator %][% SET separator = \", \" %][% obj_name.$k %][% END%]\n[%- END -%] ви можете в інтерфейсі: \nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=showCamp&cid=[% cid %][%- IF AgencyUID; '&ulogin=' _ client_login; END -%]\n[% END %]\n[% IF stat.edited_by_moderator %]Увага! У деяких банерах було виправлено помилки. Ви можете подивитися виправлену версію на сторінці кампанії. Виправлені банери позначено відповідним повідомленням. \n[% END # if stat.edited_by_moderator -%]"
+    }, 
+    {
+      "origin": "[% IF adgroups %][% FOREACH adgroup = adgroups %][% NEXT IF !adgroup.is_accepted %]Группа №[% adgroup.pid %][% IF adgroup.group_name %], \"[% adgroup.group_name %]\"[% END %]\n[% FOR b = adgroup.banners %][% NEXT IF !b.is_accepted %] M-[% b.bid %], \"[% b.title %]\"\n[% END %][% END %][% END -%]", 
+      "normalized_tags_diff": [
+        "- [%END-%]", 
+        "+ [%END%]"
+      ], 
+      "translation": "[% IF adgroups %][% FOREACH adgroup = adgroups %][% NEXT IF !adgroup.is_accepted %]Група №[% adgroup.pid %][% IF adgroup.group_name %], \"[% adgroup.group_name %]\"[% END %]\n[% FOR b = adgroup.banners %][% NEXT IF !b.is_accepted %] M-[% b.bid %], \"[% b.title %]\"\n[% END %][% END %][% END%]"
+    }, 
+    {
+      "origin": "[% IF !stat.accepted && !stat.declined_partly %]К сожалению, [% END %]Ваша кампания N[% cid %] \"[% camp_name %]\" [% IF stat.accepted %][% 'частично ' IF stat.declined_partly || stat.declined %]принята[% ELSE %]отклонена[% END %] модератором.\n[%~ IF stat.accepted || stat.declined_partly ~%]\n[%~ IF wallet_cid > 0 ~%]\n[%~ IF !(wallet_total + 0) %]\nПоказы начнутся после зачисления средств на счет. Для этого сформируйте счет и выберите удобный для вас способ оплаты: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=pay&cid=[% wallet_cid %] .\n[%~ END ~%]\n[%~ ELSIF !(summ + 0) %]\nПоказы начнутся после зачисления средств на рекламную кампанию. Для этого сформируйте счет и выберите удобный для вас способ оплаты: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=pay&cid=[% cid %] .\n[%~ END ~%]\n[%~ END %]", 
+      "normalized_tags_diff": [
+        "- [%direct_tld%]"
+      ], 
+      "translation": "[% IF !stat.accepted && !stat.declined_partly %]На жаль, [% END %]Вашу кампанію N[% cid %] \"[% camp_name %]\" [% IF stat.accepted %][% 'частково' IF stat.declined_partly || stat.declined %]прийнято[% ELSE %]відхилено[% END %] модератором.\n[%~ IF stat.accepted || stat.declined_partly ~%]\n[%~ IF wallet_cid > 0 ~%]\n[%~ IF !(wallet_total + 0) %]\nПокази почнуться після зарахування коштів на рахунок. Для цього сформуйте рахунок та виберіть зручний для вас спосіб оплати: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=pay&cid=[% wallet_cid %] .\n[%~ END ~%]\n[%~ ELSIF !(summ + 0) %]\nПокази почнуться після зарахування коштів на рекламну кампанію. Для цього сформуйте рахунок і виберіть зручний для вас спосіб оплати: https://direct.yandex.ua/registered/main.pl?cmd=pay&cid=[% cid %] .\n[%~ END ~%]\n[%~ END %]"
+    }, 
+    {
+      "origin": "Подробнее об \"оценке эффективности\" можно посмотреть здесь: \nhttps://yandex.[% direct_tld %]/support/direct/efficiency/increase-profit.xml \n[% ELSE # for easy clients %]К сожалению, эффективность Вашего заказа N [% cid %] ([% camp_name %]) оказалась низкой, поэтому показы объявлений приостановлены на:\n- страницах результатов поиска Яндекса;\n- страницах поисковых сервисов Яндекса.\nПоказы по этим фразам продолжаются только на сайтах — участниках РСЯ, на странице \"Все объявления\".\nЧтобы возобновить показы на страницах результатов поиска необходимо повысить эффективность объявлений.\nКак сделать объявление эффективным: https://yandex.[% direct_tld %]/support/direct-light/efficiency.xml\n[% END %]", 
+      "normalized_tags_diff": [
+        "- [%direct_tld%]"
+      ], 
+      "translation": "Докладніше про оцінку ефективності можна подивитися тут: \nhttps://yandex.[% direct_tld %]/support/direct/efficiency/increase-profit.xml \n[% ELSE # for easy clients %]На жаль, ефективність Вашого замовлення N [% cid %] ([% camp_name %]) виявилася низькою, тому покази оголошень призупинено на:\n- сторінках результатів пошуку Яндекса;\n- сторінках пошукових сервісів Яндекса.\nПокази за цими фразами тривають лише на сайтах — учасниках РМЯ, на сторінці «Усі оголошення».\nЩоб відновити покази на сторінках результатів пошуку, необхідно підвищити ефективність оголошень.\nЯк зробити оголошення ефективним: https://yandex.ua/support/direct-light/efficiency.xml\n[% END %]"
+    }, 
+    {
+      "origin": "Расчет потенциала клиента [% client_name %] категория [% category_name %] готов. ", 
+      "normalized_tags_diff": [
+        "- [%client_name%]", 
+        "+ [%create_webdir_failed%]"
+      ], 
+      "translation": "Розрахунок потенціалу клієнта [% create_webdir_failed %] категорія [% category_name %] готовий. "
+    }, 
+    {
+      "origin": "Description: Уведомление о создании заказанного отчета по потенциалу клиента - МЕДИАПЛАНЕРУ\nSubject: Яндекс.Директ/Выгрузка потенциала клиента [% client_name %] категория [% category_name %] / [% operator_login %]", 
+      "normalized_tags_diff": [
+        "- [%client_name%]", 
+        "+ [%create_webdir_failed%]"
+      ], 
+      "translation": "Description: Повідомлення про створення замовленого звіту за потенціалом клієнта - МЕДІАПЛАНЕРУ\nSubject: Яндекс.Директ/Вивантаження потенціалу клієнта [% create_webdir_failed %] категорія [% category_name %] / [% operator_login %]"
+    }, 
+    {
+      "origin": "Полный список кампаний:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=showCamps&ulogin=[% client_login %]", 
+      "normalized_tags_diff": [
+        "+ [%cid%]"
+      ], 
+      "translation": "Повний список кампаній:\nhttps://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=editCamp&cid=[% cid %]&ulogin=[% client_login %] ."
+    }, 
+    {
+      "origin": "Изменить дату старта Вы можете здесь: https://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=editCamp&cid=[% cid %]&ulogin=[% client_login %] .", 
+      "normalized_tags_diff": [
+        "- [%client_login%]"
+      ], 
+      "translation": "Змінити дату старту Ви можете тут: http://direct.yandex.[% direct_tld %]/registered/main.pl?cmd=editCamp&cid=[% cid %] ."
+    }
+  ]
+}

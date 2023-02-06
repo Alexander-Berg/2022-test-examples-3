@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="false" default-autowire="byName">
+
+    <bean id="persNotifyEmbeddedDbUtil" class="ru.yandex.pers.notify.db.PersNotifyEmbeddedDbUtil" factory-method="valueOf">
+        <constructor-arg value="INSTANCE"/>
+    </bean>
+
+    <bean id="dataSource" factory-bean="persNotifyEmbeddedDbUtil" factory-method="getPersNotifyDataSource"/>
+
+    <alias name="dataSource" alias="persNotifyDataSource"/>
+    <alias name="dataSource" alias="dataSourceRo"/>
+    <alias name="dataSource" alias="persNotifyDataSourceRo"/>
+
+    <bean id="persAreaEmbeddedDbUtil" class="ru.yandex.market.pers.area.db.PersAreaEmbeddedDbUtil" factory-method="valueOf">
+        <constructor-arg value="INSTANCE"/>
+    </bean>
+
+    <bean id="persAreaDataSource" factory-bean="persAreaEmbeddedDbUtil" factory-method="getPersAreaDataSource"/>
+
+    <alias name="persAreaDataSource" alias="persAreaDataSourceRo"/>
+</beans>

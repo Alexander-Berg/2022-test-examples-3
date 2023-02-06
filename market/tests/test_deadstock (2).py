@@ -1,0 +1,76 @@
+from core.application import Application
+from core.testenv import testenv
+from core.yt_context import YtContext
+from core.tables import PriceGroups
+import os, json, logging
+from datetime import datetime, timedelta
+import pytest
+
+
+@pytest.fixture
+def application(testenv):
+    return Application(testenv)
+
+
+@pytest.fixture
+def yt_context(testenv):
+    ctx = YtContext(testenv)
+    ctx.erp_input \
+        .add_row(group_id=0, msku=1, ssku="10", high_price=8000, current_price=8000, low_price=8000, purchase_price=6000, price_group=PriceGroups.deadstock)
+    ctx.demand_input \
+        .add_row(0, 8000, 0.25)
+    ctx.config \
+        .add_row(
+            0, 0,
+            "trivial", {},
+            "margin.v1", {
+                "max_delta": 0.05,
+                "max_lower_price_delta": 0.3,
+                "target_margin_threshold": 0.0001,
+            },
+            "dummy", {}
+        )
+
+    with ctx:
+        yield ctx
+
+
+# проверка дневного расчета
+def test_basic_daily(application, yt_context):
+    prices_path, margins_path, _, _ = application.get_tables()
+    application.run(yt_context)
+
+     # check that table with prices and corresponding link are created
+    assert yt_context.client.exists(yt_context.root + "/" + prices_path)
+    assert yt_context.client.get(yt_context.root + "/prices/latest/@path") == yt_context.root + "/" + prices_path
+    # check prices data
+    prices = yt_context.read_whole(prices_path)
+    assert len(prices) == 1
+    assert prices[0] == {
+        "high_price": 8000.0,
+        "msku": 1L,
+        "ssku": "10",
+        "low_price": 8000.0,
+        "new_price": 8000.0,
+        "current_price": 8000.0,
+        "group_id": 0,
+        "demand": 0,
+        "is_price_random": False,
+        "raw_low_price": 8000.0,
+        "raw_high_price": 8000.0,
+        "buy_price": 6000.0,
+        "price_group_type": PriceGroups.deadstock.name,
+        "price_group_priority": PriceGroups.deadstock.priority,
+        "base_rule_name": PriceGroups.deadstock.base_rule_name,
+        'is_deadstock': True,
+        "is_promo": False,
+        "is_kvi": False,
+        "stock": 1000000,
+    }
+    # check that table with margins and corresponding link are created
+    assert yt_context.client.exists(yt_context.root + "/" + margins_path)
+    assert yt_context.client.get(yt_context.root + "/margins/latest/@path") == yt_context.root + "/" + margins_path
+    # check margins data
+    margins = yt_context.read_whole(margins_path)
+    assert len(margins) == 1
+    assert margins[0] == {"group_id": 0, "margin": 0.0}

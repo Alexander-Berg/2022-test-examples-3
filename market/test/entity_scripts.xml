@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scripts xmlns:c="urn:jmf:common:1.0"
+         xmlns="urn:jmf:scripts:1.0">
+    <scrpt>
+        <code>createTrigger</code>
+        <title>
+            <c:value>Заполнение значение из триггера на создание</c:value>
+        </title>
+        <body>api.bcp.edit(obj, ['attr1': 'valueFromTrigger']);</body>
+    </scrpt>
+    <scrpt>
+        <code>editTrigger</code>
+        <title>
+            <c:value>Заполнение значение из триггера на редактирование</c:value>
+        </title>
+        <body>
+            <![CDATA[
+if (obj.attr0 != old.attr0) {
+    api.bcp.edit(obj, ['attr1': 'valueFromEditTrigger']);
+}
+]]>
+        </body>
+    </scrpt>
+    <scrpt>
+        <code>deleteTrigger</code>
+        <title>
+            <c:value>Заполнение значение из триггера на удаление</c:value>
+        </title>
+        <body>api.bcp.create('simple$type1', ['attr0': 'valueFromDeleteTrigger']);</body>
+    </scrpt>
+
+    <scrpt>
+        <code>cyclingProtection</code>
+        <title>
+            <c:value>Защита от зацикливания</c:value>
+        </title>
+        <body>api.bcp.edit(obj, ['attr2': (obj.attr2?obj.attr2:'1') + '0']);</body>
+    </scrpt>
+
+    <scrpt>
+        <code>asyncTriggerScript</code>
+        <title>
+            <c:value></c:value>
+        </title>
+        <body>api.bcp.edit(obj, ['attr0': obj.attr0 + 1])</body>
+    </scrpt>
+
+    <scrpt>
+        <code>attr0script</code>
+        <title>
+            <c:value>Скрипт для тестировани вычислимых атрибутов</c:value>
+        </title>
+        <body>obj.attr0</body>
+    </scrpt>
+</scripts>

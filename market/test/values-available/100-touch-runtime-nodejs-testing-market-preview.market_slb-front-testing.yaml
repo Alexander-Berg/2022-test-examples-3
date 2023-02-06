@@ -1,0 +1,20 @@
+context:
+  default:
+    service_name: touch_market_runtime_nodejs_testing_market_preview
+    servername_regexp: touch-testing-market-preview\\.market\\.([\\w\\d]+\\.)?yandex\\.(ru|ua|com|kz|by)
+    vs: market
+    health_check: '"GET /ping HTTP/1.1\r\nHost: heartbeat.market.yandex.ru\r\n\r\n"'
+    exp_getter: true
+    antirobot: false
+    cert: m.market
+  testing:
+    cert: fslb-testing
+
+servers:
+  default:
+    main:
+    - name: GREY%fslb.yandex.ru
+      timeout: 35s
+      weight: 100
+      port: 10000
+      plain_http_backend: true

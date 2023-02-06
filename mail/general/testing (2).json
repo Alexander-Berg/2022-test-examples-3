@@ -1,0 +1,124 @@
+{
+    "logpath": "/var/log/logbroker-client/",
+    "logger_builder": "logbroker_client_common.logs.config",
+    "workers": {
+        "count": 5,
+        "class": "logbroker_client.consumers.simple.worker.LogbrokerWorker",
+        "args": {
+            "handler": {
+                "class": "logbroker_client_common.handler.CommonHandler",
+                "args": {
+                    "flush_lines": 1000,
+                    "format": "TSKV",
+                    "slow_log": 0.5,
+                    "stream": {
+                        "calendar_mailhook": {
+                            "filename": ".+/attach.tskv",
+                            "server": ".*",
+                            "processor": "calendar_mailhook_processor.MailAttachLogProcessor",
+                            "args": {
+                                "prod": {
+                                    "blackbox": {
+                                        "url": "https://blackbox.yandex.net/blackbox",
+                                        "self_ip": "127.0.0.1"
+                                    },
+                                    "calendar": "http://calendar-mailhook.yandex-team.ru:80/mailhook/",
+                                    "sharpei": "http://sharpei-production.mail.yandex.net/conninfo",
+                                    "storage": "http://storage.mail.yandex.net:10010",
+                                    "ml": {
+                                        "url": "http://ml.yandex-team.ru/apiv3/lists/subscribers",
+                                        "tvm": {
+                                            "client": "2000591",
+                                            "secret_env": "ML_2000591_CLIENT_TVM_SECRET"
+                                        }
+                                    },
+                                    "pg": {
+                                        "user": "winmail",
+                                        "pwd_env": "DB_PASSWORD_PROD"
+                                    }
+                                },
+                                "corp": {
+                                    "blackbox": {
+                                        "url": "https://blackbox.yandex-team.ru/blackbox",
+                                        "self_ip": "127.0.0.1"
+                                    },
+                                    "calendar": "http://calendar-mailhook.yandex-team.ru:80/mailhook/",
+                                    "sharpei": "http://sharpei-intranet-production.mail.yandex.net/conninfo",
+                                    "storage": "http://storage.mail.yandex.net:10010",
+                                    "ml": {
+                                        "url": "http://ml.yandex-team.ru/apiv3/lists/subscribers",
+                                        "tvm": {
+                                            "client": "2000591",
+                                            "secret_env": "ML_2000591_CLIENT_TVM_SECRET"
+                                        }
+                                    },
+                                    "pg": {
+                                        "user": "winmail",
+                                        "pwd_env": "DB_PASSWORD_CORP"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "emitter": {
+        "class": "logbroker_client.consumers.simple.emitter.PartitionsCountEmitter",
+        "storage": {
+            "class": "logbroker_client.runner.storages.memory.MemoryTaskStorage"
+        },
+        "args": {
+            "balancer_host": "%(dc)s.logbroker.yandex.net:8999",
+            "data_port": 8999,
+            "client": "mail@mail-attach-testing-logreader",
+            "ident": "mail",
+            "workers_count": 4,
+            "per_host_config": {
+                "^vla[0-9]+": {
+                    "topics": [
+                        "rt3.vla--mail--mail-attach-log"
+                    ],
+                    "dc": "vla",
+                    "read_partitions_count": 5
+                },
+                "^myt5": {
+                    "topics": [
+                        "rt3.vla--mail--mail-attach-log"
+                    ],
+                    "dc": "vla",
+                    "read_partitions_count": 5
+                },
+                "^iva[0-9]+": {
+                    "topics": [
+                        "rt3.iva--mail--mail-attach-log"
+                    ],
+                    "dc": "iva",
+                    "read_partitions_count": 5
+                },
+                "^myt[0-4]+": {
+                    "topics": [
+                        "rt3.myt--mail--mail-attach-log"
+                    ],
+                    "dc": "myt",
+                    "read_partitions_count": 5
+                },
+                "^man[0-5]+": {
+                    "topics": [
+                        "rt3.man--mail--mail-attach-log"
+                    ],
+                    "dc": "man",
+                    "read_partitions_count": 5
+                },
+                "^sas[0-9]+": {
+                    "topics": [
+                        "rt3.sas--mail--mail-attach-log"
+                    ],
+                    "dc": "sas",
+                    "read_partitions_count": 5
+                }
+            }
+        }
+    }
+}

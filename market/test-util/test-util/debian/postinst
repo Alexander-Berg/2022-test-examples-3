@@ -1,0 +1,37 @@
+#!/bin/sh
+
+DOMAIN=checkout
+DAEMON=market-checkout-test-util
+LOGDIR=/var/log/$DOMAIN
+RUNDIR=/var/run/$DOMAIN
+
+case $1 in
+configure)
+    mkdir -p $LOGDIR
+	mkdir -p $RUNDIR
+
+	if ! chown $DOMAIN:nogroup -R $LOGDIR $RUNDIR 2>/dev/null
+	then
+		useradd $DOMAIN -g nogroup
+		chown $DOMAIN:nogroup -R $LOGDIR $RUNDIR
+	fi
+	update-rc.d $DAEMON defaults > /dev/null
+	chown $DOMAIN:nogroup /etc/init.d/$DAEMON
+	chmod +x /etc/init.d/$DAEMON
+;;
+
+abort-upgrade|abort-remove|abort-deconfigure)
+;;
+*)
+	echo "postinst called with unknown argument \`$1'" >&2
+;;
+
+esac
+
+mkdir -p /var/log/$DOMAIN/hprof/$DAEMON
+chown $DOMAIN:nogroup /var/log/$DOMAIN/hprof/$DAEMON
+
+mkdir -p /var/lib/yandex/${DAEMON}
+chown $DOMAIN:nogroup /var/lib/yandex/${DAEMON}
+
+exit 0

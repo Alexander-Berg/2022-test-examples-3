@@ -1,0 +1,28 @@
+# Параметры обработки
+params:
+  default:
+    resolve: yes
+    templates:
+      - user_mslb_http.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          "check ssl verify none observe layer7"
+      on_error:       fastinter
+      weight:         1
+    globals:
+      ping_expect:    "status 200"
+      service_name:   ipa-load-sample.blue.tst.vs.market.yandex.net
+      service_port:   80
+      timeout_server: 60s
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+    - name: YP@testing-market-front-api-load-sample-sas
+      sort_order: shuffled
+      dns_resolvers: yandex-ns
+      resolve: false

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <lom_order
+            id="1"
+            barcode="777"
+            platform_client_id="3"
+            sender_id="1"
+            status="ENQUEUED"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="1"
+            external_id="1"
+            partner_id="1"
+            partner_type="DELIVERY"
+            segment_type="MOVEMENT"
+            shipment_date="2021-11-20"
+            waybill_segment_index="0"
+            partner_name="Какой-то партнёр"
+    />
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="1"
+            waybill_segment_type="MOVEMENT"
+            expected_status="IN"
+            producer_name="test_unsupported"
+            processing_status="PROCESSED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2021-11-20 10:00:00 +0300"
+            schedule_time="2021-11-20 12:00:00 +0300"
+    />
+
+    <plan_fact_group
+            id="1"
+            aggregation_key="date:2021-11-21;producerName:test_unsupported;"
+            aggregation_type="DATE_PRODUCER"
+            processing_status="ENQUEUED"
+            expected_status="IN"
+            schedule_time="2021-11-21 12:00:00 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 21],
+                        "producerName": "test_unsupported"
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="1"
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="IN"
+            aggregation_type="DATE_PRODUCER"
+            rule_processor="STARTREK"
+            rule='{
+                "queue": "MONITORINGSNDBX",
+                "_type": ".AutoCancelAfterDropshipPayload"
+            }'
+    />
+</dataset>

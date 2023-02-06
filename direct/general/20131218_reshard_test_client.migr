@@ -1,0 +1,28 @@
+# approved by zhur
+
+{
+  type => 'manual',
+  when => 'any',
+  time_estimate => "от нескольких минут до часов, в зависимости от количества данных у клиента",
+  text => qq#
+Инструкция по ручному переносу клиента в другой шард
+Заявки на перенос требуют подтверждения от zhur или lena-san
+
+Для определённости, скрипт стоит всегда запускать на ppcback01f
+параметры указаны для переноса клиента spb-tester5 во второй шард, для других заявок
+нужно поправить значения параметров --login и --shard
+
+1. тестовый прогон - прогрев базы данных, логирование всех данных
+sudo -u ppc time /var/www/ppc.yandex.ru/protected/one-shot/reshard-user.pl --transaction-per-table --login spb-tester5 --shard 2 --simulate
+
+2. тестовый прогон - оценка времени выполнения, логирование отключено
+sudo -u ppc time /var/www/ppc.yandex.ru/protected/one-shot/reshard-user.pl --transaction-per-table --login spb-tester5 --shard 2 --simulate --no-log-data
+
+3. если время выполнения 2-го шага больше времени, которое указал заказчик в заявке - отдельно взять подтверждение
+если меньше - выполнить непосредственный перенос (с блокировкой пользователя, паузой 5 минут, без логирования переносимых строк)
+sudo -u ppc time /var/www/ppc.yandex.ru/protected/one-shot/reshard-user.pl --transaction-per-table --login spb-tester5 --shard 2 --block --block-sleep 300 --no-log-data
+
+команду можно перезапускать, если она упала из-за системных ошибок
+пока команда не отработает корректно - клиент не сможет работать с интерфейсом и API
+#
+}

@@ -1,0 +1,22 @@
+context:
+  default:
+    service_name: affiliate_runtime_market
+    servername_regexp: (affiliate|aflt|aff)\\.market\\.([\\w\\d]+\\.)?yandex\\.(ru|ua|kz|by|com)(\\.)?
+    vs: market
+    antirobot: true
+    antirobot_service_name: market
+    health_check: '"GET /ping HTTP/1.1\r\nHost: heartbeat-affiliate.market.yandex.ru\r\n\r\n"'
+    exp_getter: true
+    cert: affiliate.market.yandex
+
+  testing:
+    cert: fslb-testing
+
+servers:
+  default:
+    main:
+    - name: GREY%market-affiliate.tst.vs.market.yandex.net
+      keepalive_count: 2
+      plain_http_backend: true
+      port: 9080
+      timeout: 35s

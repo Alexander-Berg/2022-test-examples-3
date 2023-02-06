@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <service
+        id="1"
+        name="service"
+        initial_state_id="1000"
+    />
+
+    <capacity
+        id="100"
+        name="capacity"
+        value="1"
+    />
+
+    <capacity_unit
+        id="1"
+        capacity_id="100"
+        readable_name="test_capacity_unit"
+    />
+
+    <state
+        id="1000"
+        name="state"
+        service_id="1"
+        capacity_id="100"
+    />
+
+    <state
+        id="1001"
+        name="state"
+        service_id="1"
+        capacity_id="100"
+    />
+
+    <edge
+        id="1"
+        from_state_id="1001"
+        to_state_id="1000"
+        priority="2"
+    />
+
+    <edge_restriction
+        id="1"
+        type="EVENT_REQUIRED"
+        edge_id="1"
+    />
+
+    <restriction_param
+        edge_restriction_id="1"
+        name="EVENT_TYPE"
+        value="TO_INITIAL_STATE"
+    />
+
+    <yard_client
+        id="0"
+        name="client"
+        external_id="extClient"
+        phone="123123123"
+        service_id="1"
+        created_at="2021-05-01 10:00:00"
+        state_id="1000"
+    />
+
+    <ticket
+        id="0"
+        ticket_code="Р042"
+        service_id="1"
+        yard_client_id="0"
+        type="SIGNING_DOCUMENTS"
+        created_at="2021-05-01 9:00:00"
+        updated_at="2021-05-01 9:00:00"
+        site_id="100"
+        operator_window_id="1"
+    />
+
+    <yard_client_event
+        yard_client_id="0"
+        type="TO_INITIAL_STATE"
+    />
+
+    <client_queue/>
+</dataset>

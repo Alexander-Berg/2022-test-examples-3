@@ -1,0 +1,11 @@
+compress
+/var/log/checkout/market-checkout-push-api.log {
+    daily
+    rotate 32
+    missingok
+    dateext
+    dateformat .%Y-%m-%d
+    postrotate
+       kill -HUP `cat /var/run/checkout/market-checkout-push-api.pid`
+    endscript
+}

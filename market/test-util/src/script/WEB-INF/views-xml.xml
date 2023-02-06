@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="false"
+       default-autowire="no">
+
+    <import resource="classpath:WEB-INF/push-api-class-mappings.xml"/>
+
+    <!--<import resource="classpath:checkout-referee-class-mappings.xml"/>
+    <import resource="classpath:checkout-referee-client.xml"/>-->
+
+    <bean id="xml" class="ru.yandex.market.checkout.common.web.HttpMessageConverterView">
+        <property name="contentType" value="application/xml; charset=utf-8"/>
+        <property name="messageConverter" ref="classMappingXmlMessageConverter"/>
+    </bean>
+
+</beans>

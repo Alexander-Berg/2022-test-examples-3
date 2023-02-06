@@ -1,0 +1,204 @@
+{% macro metrika_event_app(app_id, puid, cryptaid, uuid, deviceid, idfa, gaid, os, version, session, event, object_type, object_id) %}
+    [
+        "2607118",
+        "{{ app_id }}",
+        "1506963677",
+        {% if puid %}"{{ puid }}"{% else %}null{% endif %},
+        "{{ uuid }}",
+        {% if deviceid %}"{{ deviceid }}"{% else %}null{% endif %},
+        {% if cryptaid %}"{{ cryptaid }}"{% else %}null{% endif %},
+        {% if idfa %}"{{ idfa }}"{% else %}null{% endif %},
+        {% if gaid %}"{{ gaid }}"{% else %}null{% endif %},
+        "{{ os }}",
+        "{{ version }}",
+        "4",
+        "ContentPages:MainScreen:Feed:{{ event }}",
+        "{\"subjectId\":\"{{ object_id }}\",\"subjectType\":\"{{ object_type }}\"}",
+        "{{ session }}"
+    ]
+{% endmacro %}
+
+{% macro metrika_event_ios(event, object_type, object_id) %}
+    {{ metrika_event_app("ru.yandex.ymarket", "p1", "crypta/1", "uu/1", "dd/1", "idfa/1", null, 2, "600.2", "1", event, object_type, object_id) }}
+{% endmacro %}
+
+{% macro metrika_event_android(event, object_type, object_id) %}
+    {{ metrika_event_app("ru.yandex.market", null, null, "uu/2", null, null, "gaid/2", 1, "6.15.3", "2", event, object_type, object_id) }}
+{% endmacro %}
+
+{% macro feed_action_app(action, object_type, object_id, puid, cryptaid, uuid, deviceid, idfa, gaid, os, version, session, place) %}
+    [
+        1506963677000,
+        {
+            "puid": {% if puid %}"{{ puid }}"{% else %}null{% endif %},
+            "yandexuid": null,
+            "uuid": {% if uuid %}"{{ uuid }}"{% else %}null{% endif %},
+            "deviceid": {% if deviceid %}"{{ deviceid }}"{% else %}null{% endif %},
+            "cryptaid": {% if cryptaid %}"{{ cryptaid }}"{% else %}null{% endif %},
+            "idfa": {% if idfa %}"{{ idfa }}"{% else %}null{% endif %},
+            "gaid": {% if gaid %}"{{ gaid }}"{% else %}null{% endif %}
+        },
+        "{{ action }}",
+        "{{ object_type }}",
+        "{{ object_id }}",
+        {
+            "platform": "{{ os }}",
+            "version": "{{ version }}",
+            "session": "{{ session }}",
+            "place": "{{ place }}",
+            "request_id": null
+        },
+        "{{ day }}"
+    ]
+{% endmacro %}
+
+{% macro feed_action_ios(action, object_type, object_id, place) %}
+    {{ feed_action_app(action, object_type, object_id, "p1", "crypta/1", "uu/1", "dd/1", "idfa/1", null, "ios", "600.2", "1", place) }}
+{% endmacro %}
+
+{% macro feed_action_android(action, object_type, object_id, place) %}
+    {{ feed_action_app(action, object_type, object_id, null, null, "uu/2", null, null, "gaid/2", "android", "6.15.3", "2", place) }}
+{% endmacro %}
+
+{% macro metrika_event_web(eventtime, yandexuid, puid, cryptaid, host, goal, params) %}
+    [
+        "{{ eventtime }}",
+        "referer",
+        "goal://{{ host }}/{{ goal }}",
+        "{{ params }}",
+        "{{ yandexuid }}",
+        "160656",
+        "0",
+        "browserinfo",
+        "0",
+        "watchid",
+        "clientip6",
+        {% if puid %}"{{ puid }}"{% else %}"0"{% endif %},
+        {% if cryptaid %}"{{ cryptaid }}"{% else %}"0"{% endif %}
+    ]
+{% endmacro %}
+
+{% macro metrika_event_touch(eventtime, goal, params) %}
+    {{ metrika_event_web(eventtime, "y1", "p1", "crypta/1", "m.market.yandex.ru", goal, params) }}
+{% endmacro %}
+
+{% macro feed_action_web(action, object_type, object_id, puid, yandexuid, cryptaid, host, place) %}
+    [
+        1506963677000,
+        {
+            "puid": {% if puid %}"{{ puid }}"{% else %}null{% endif %},
+            "yandexuid": {% if yandexuid %}"{{ yandexuid }}"{% else %}null{% endif %},
+            "cryptaid": {% if cryptaid %}"{{ cryptaid }}"{% else %}null{% endif %}
+        },
+        "{{ action }}",
+        "{{ object_type }}",
+        "{{ object_id }}",
+        {
+            "host": "{{ host }}",
+            "place": "{{ place }}",
+            "request_id": null
+        },
+        "{{ day }}"
+    ]
+{% endmacro %}
+
+{% macro feed_action_touch(action, object_type, object_id, place) %}
+    {{ feed_action_web(action, object_type, object_id, "p1", "y1", "crypta/1", "m.market.yandex.ru", place) }}
+{% endmacro %}
+
+{% if table == "events_feed_actions" %}
+    {# Result data. #}
+    {% table "events" %}
+        {{ feed_action_ios("show", "article", "a1", "IOSUgcFeedArticle") }},
+        {{ feed_action_ios("hide", "article", "a2", "IOSUgcFeedArticle") }},
+        {{ feed_action_ios("like", "article", "a3", "IOSUgcFeedArticle") }},
+        {{ feed_action_ios("like", "article", "a4", "IOSUgcFeedArticle") }},
+        {{ feed_action_ios("like", "article", "a5", "IOSUgcFeedArticle") }},
+        {{ feed_action_ios("dislike", "article", "a6", "IOSUgcFeedArticle") }},
+        {{ feed_action_ios("dislike", "article", "a7", "IOSUgcFeedArticle") }},
+        {{ feed_action_ios("click", "article", "a8", "IOSUgcFeedArticle") }},
+        {{ feed_action_ios("open_comments", "question", "q1", "IOSUgcFeedQuestion") }},
+        {{ feed_action_ios("open_comments", "question", "q2", "IOSUgcFeedQuestion") }},
+
+        {{ feed_action_android("open_comments", "question", "q3", "AndroidUgcFeedQuestion") }},
+        {{ feed_action_android("open_comments", "question", "q4", "AndroidUgcFeedQuestion") }},
+        {{ feed_action_android("unfold_description", "question", "q5", "AndroidUgcFeedQuestion") }},
+        {{ feed_action_android("unfold_comment", "question", "q6", "AndroidUgcFeedQuestion") }},
+        {{ feed_action_android("open_image", "review", "r1", "AndroidUgcFeedReview") }},
+        {{ feed_action_android("swipe_image", "review", "r2", "AndroidUgcFeedReview") }},
+        {{ feed_action_android("swipe_image", "review", "r3", "AndroidUgcFeedReview") }},
+        {{ feed_action_android("unmute_video", "video_review", "v1", "AndroidUgcFeedVideoReview") }},
+        {{ feed_action_android("watch_video_to_end", "video_review", "v2", "AndroidUgcFeedVideoReview") }},
+        {{ feed_action_android("open_full_screen", "video_review", "v3", "AndroidUgcFeedVideoReview") }},
+
+        {{ feed_action_touch("show", "article", "a1", "TouchUgcFeedArticle") }},
+        {{ feed_action_touch("show", "review", "r1", "TouchUgcFeedReview") }},
+        {{ feed_action_touch("show", "question", "q1", "TouchUgcFeedQuestion") }},
+        {{ feed_action_touch("show", "video_review", "v1", "TouchUgcFeedVideoReview") }},
+        {{ feed_action_touch("click", "article", "a1", "TouchUgcFeedArticle") }},
+        {{ feed_action_touch("click", "review", "r1", "TouchUgcFeedReview") }},
+        {{ feed_action_touch("click", "question", "q1", "TouchUgcFeedQuestion") }},
+        {{ feed_action_touch("click", "video_review", "v1", "TouchUgcFeedVideoReview") }},
+        {{ feed_action_touch("open_image", "review", "r1", "TouchUgcFeedReview") }},
+        {{ feed_action_touch("swipe_image", "review", "r1", "TouchUgcFeedReview") }},
+        {{ feed_action_touch("open_comments", "article", "a1", "TouchUgcFeedArticle") }},
+        {{ feed_action_touch("open_comments", "review", "r1", "TouchUgcFeedReview") }},
+        {{ feed_action_touch("open_comments", "question", "q1", "TouchUgcFeedQuestion") }},
+        {{ feed_action_touch("open_comments", "video_review", "v1", "TouchUgcFeedVideoReview") }},
+        {{ feed_action_touch("like", "article", "a1", "TouchUgcFeedArticle") }},
+        {{ feed_action_touch("like", "review", "r1", "TouchUgcFeedReview") }},
+        {{ feed_action_touch("like", "question", "q1", "TouchUgcFeedQuestion") }},
+        {{ feed_action_touch("like", "video_review", "v1", "TouchUgcFeedVideoReview") }},
+        {{ feed_action_touch("dislike", "video_review", "v1", "TouchUgcFeedVideoReview") }},
+        {{ feed_action_touch("dislike", "article", "a1", "TouchUgcFeedArticle") }},
+        {{ feed_action_touch("dislike", "review", "r1", "TouchUgcFeedReview") }}
+    {% endtable %}
+{% elif table == "logfeller_market_apps_metrika_mobile_log" %}
+    {% table table %}
+        {{ metrika_event_ios("Cell:VISIBLE", "JournalArticle", "a1") }},
+        {{ metrika_event_ios("Cell:HIDDEN", "JournalArticle", "a2") }},
+        {{ metrika_event_ios("LikeButton:TAP", "JournalArticle", "a3") }},
+        {{ metrika_event_ios("Cell:LIKE", "JournalArticle", "a4") }},
+        {{ metrika_event_ios("LIKE", "JournalArticle", "a5") }},
+        {{ metrika_event_ios("Cell:DISLIKE", "JournalArticle", "a6") }},
+        {{ metrika_event_ios("DISLIKE", "JournalArticle", "a7") }},
+        {{ metrika_event_ios("Cell:NAVIGATE", "JournalArticle", "a8") }},
+        {{ metrika_event_ios("AddCommentButton:NAVIGATE", "Question", "q1") }},
+        {{ metrika_event_ios("CommentWidget:CommentText:NAVIGATE", "Question", "q2") }},
+
+        {{ metrika_event_android("CommentWidget:NAVIGATE", "Question", "q3") }},
+        {{ metrika_event_android("CommentsButton:NAVIGATE", "Question", "q4") }},
+        {{ metrika_event_android("Description:TAP", "Question", "q5") }},
+        {{ metrika_event_android("CommentWidget:CommentText:TAP", "Question", "q6") }},
+        {{ metrika_event_android("GalleryScreen:SHOW_SCREEN", "Opinion", "r1") }},
+        {{ metrika_event_android("GalleryScreen:SWIPE_LEFT", "Opinion", "r2") }},
+        {{ metrika_event_android("GalleryScreen:SWIPE_RIGHT", "Opinion", "r3") }},
+        {{ metrika_event_android("Cell:Video:UNMUTE", "Video", "v1") }},
+        {{ metrika_event_android("Cell:Video:FINISHED", "Video", "v2") }},
+        {{ metrika_event_android("Cell:Video:OPEN", "Video", "v3") }}
+    {% endtable %}
+{% elif table == "logfeller_bs_watch_log" %}
+    {% table table %}
+        {{ metrika_event_touch(1506963677, "ugc-feed_article_visible", "{\\\"articleId\\\": \\\"a1\\\"}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_review_visible", "{\\\"reviewId\\\": \\\"r1\\\"}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_question_visible", "{\\\"questionId\\\": \\\"q1\\\"}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_video_visible", "{\\\"videoId\\\": \\\"v1\\\"}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_article_content_click", "{\\\"articleId\\\": \\\"a1\\\"}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_review_product-snippet_navigate", "{\\\"reviewId\\\": \\\"r1\\\"}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_question_product-snippet_navigate", "{\\\"questionId\\\": \\\"q1\\\"}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_video_product-snippet_navigate", "{\\\"videoId\\\": \\\"v1\\\"}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_review_gallery_gallery-modal_visible", "{\\\"reviewId\\\": \\\"r1\\\"}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_review_gallery_gallery-slided", "{\\\"reviewId\\\": \\\"r1\\\"}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_article_comments_click", "{\\\"articleId\\\": \\\"a1\\\"}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_review_comments_click", "{\\\"reviewId\\\": \\\"r1\\\"}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_question_answers_click", "{\\\"questionId\\\": \\\"q1\\\"}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_video_comments_click", "{\\\"videoId\\\": \\\"v1\\\"}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_article_ugc-feed-update-article-vote", "{\\\"articleId\\\": \\\"a1\\\", \\\"vote\\\": 1}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_review_review-vote-vote-request", "{\\\"reviewId\\\": \\\"r1\\\", \\\"vote\\\": 1}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_question_question-vote-question-add", "{\\\"questionId\\\": \\\"q1\\\"}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_video_add-ugc-video-vote-up", "{\\\"videoId\\\": \\\"v1\\\"}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_video_add-ugc-video-vote-down", "{\\\"videoId\\\": \\\"v1\\\"}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_article_ugc-feed-update-article-vote", "{\\\"articleId\\\": \\\"a1\\\", \\\"vote\\\": -1}") }},
+        {{ metrika_event_touch(1506963677, "ugc-feed_review_review-vote-vote-request", "{\\\"reviewId\\\": \\\"r1\\\", \\\"vote\\\": -1}") }}
+    {% endtable %}
+{% endif %}

@@ -1,0 +1,717 @@
+{
+    "items": [
+      {
+        "action_button_text": null,
+        "action_type": "tree",
+        "schema": {
+          "options": [
+            {
+              "message_text": "!how_it_works",
+              "node": "how_it_works",
+              "type": "message",
+              "text": "Как это работает"
+            },
+            {
+              "message_text": "!do_i_participate",
+              "node": {
+                "default": "referral_program_not_now",
+                "conditions": [
+                  {
+                    "node": "referral_program_blocked",
+                    "condition": {
+                      "tag_name": "disable_referral_program",
+                      "type": "has_tag"
+                    }
+                  },
+                  {
+                    "node": "referral_program_is_active",
+                    "condition": {
+                      "type": "and",
+                      "subconditions": [
+                        {
+                          "name": "enable_referral_program",
+                          "type": "has_action"
+                        },
+                        {
+                          "type": "dictionary_tag_value",
+                          "policy": "defined",
+                          "tag_name": "user_app_settings",
+                          "field": "referral_code"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": "referral_program_is_active_no_code",
+                    "condition": {
+                      "type": "and",
+                      "subconditions": [
+                        {
+                          "name": "enable_referral_program",
+                          "type": "has_action"
+                        },
+                        {
+                          "type": "not",
+                          "subconditions": [
+                            {
+                              "type": "dictionary_tag_value",
+                              "policy": "defined",
+                              "tag_name": "user_app_settings",
+                              "field": "referral_code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "type": "message",
+              "text": "Участвую ли я в этой программе"
+            },
+            {
+              "message_text": "!when_i_get_bonuses",
+              "node": "when_i_get_bonuses",
+              "type": "message",
+              "text": "Когда я получу бонусы за друга"
+            },
+            {
+              "message_text": "!how_much_i_get",
+              "node": "how_much_i_get",
+              "type": "message",
+              "text": "Сколько я получу"
+            },
+            {
+              "message_text": "!my_friend_registred_no_bonuses",
+              "node": "my_friend_registred_no_bonuses",
+              "type": "message",
+              "text": "Друг зарегистрировался, но баллы не пришли"
+            },
+            {
+              "message_text": "!i_registered_with_code_no_discount",
+              "node": {
+                "default": "i_registered_with_code_no_discount",
+                "conditions": [
+                  {
+                    "node": "registered_with_code_no_rides",
+                    "condition": {
+                      "type": "and",
+                      "subconditions": [
+                        {
+                          "tag_name": "referral_program_user",
+                          "type": "has_tag"
+                        },
+                        {
+                          "tag_name": "referral_tag",
+                          "type": "has_tag"
+                        },
+                        {
+                          "value": false,
+                          "type": "had_rides"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": "have_rides_have_tag",
+                    "condition": {
+                      "type": "and",
+                      "subconditions": [
+                        {
+                          "tag_name": "referral_program_user",
+                          "type": "has_tag"
+                        },
+                        {
+                          "tag_name": "referral_tag",
+                          "type": "has_tag"
+                        },
+                        {
+                          "value": true,
+                          "type": "had_rides"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": "have_sessions_no_tag",
+                    "condition": {
+                      "type": "and",
+                      "subconditions": [
+                        {
+                          "tag_name": "referral_program_user",
+                          "type": "has_tag"
+                        },
+                        {
+                          "type": "not",
+                          "subconditions": [
+                            {
+                              "tag_name": "referral_tag",
+                              "type": "has_tag"
+                            }
+                          ]
+                        },
+                        {
+                          "value": true,
+                          "type": "had_rides"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": "no_sessions_no_tag",
+                    "condition": {
+                      "type": "and",
+                      "subconditions": [
+                        {
+                          "tag_name": "referral_program_user",
+                          "type": "has_tag"
+                        },
+                        {
+                          "type": "not",
+                          "subconditions": [
+                            {
+                              "tag_name": "referral_tag",
+                              "type": "has_tag"
+                            }
+                          ]
+                        },
+                        {
+                          "value": false,
+                          "type": "had_rides"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "type": "message",
+              "text": "Я зарегистрировался по коду друга, но не получил скидку"
+            }
+          ],
+          "type": "options"
+        },
+        "id": "intro",
+        "pre_action_messages": [
+          {
+            "type": "welcome_text",
+            "text": "Мы проводим акцию «Приведи друга»"
+          },
+          {
+            "type": "plaintext",
+            "text": "И разумеется за это полагаются приятные скидки и кое-какие бонусы."
+          },
+          {
+            "type": "plaintext",
+            "text": "А здесь можно прочитать полные условия:"
+          },
+          {
+            "link": "https://yandex.ru/legal/ny_drive/",
+            "icon": "https://carsharing.s3.yandex.net/drive/static/registration-icons/link.png",
+            "type": "image_link",
+            "text": "Подробные условия от юристов"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "action_button_text": "Правда",
+        "action_type": "button",
+        "id": "how_it_works",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Все просто. У вас есть уникальный промокод в приложении в разделе «Блага». Вы делитесь им с другом, который собирается зарегистрироваться. После регистрации и до первой брони он вводит его в разделе «Блага» и получает скидку 50% на первую поездку. Скидка не более 300 рублей, но тоже неплохо же."
+          },
+          {
+            "type": "plaintext",
+            "text": "А дальше самое интересное: после каждой поездки друга в течение 30 дней после активации вашего кода вам будет начисляться 5% кэшбэк на бонусный счет. С одного друга можно получить не более 700 рублей. Корпоративные поездки не учитываются."
+          },
+          {
+            "type": "plaintext",
+            "text": "Как-то так. Если с другом вышел в путь — веселей дорога, не правда ли? :)"
+          }
+        ],
+        "next_step": "intro_options_only"
+      },
+      {
+        "action_button_text": "Что ж, подождем",
+        "action_type": "button",
+        "id": "referral_program_not_now",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Сейчас вам недоступна реферальная программа. Сейчас мы тестируем её и очень скоро она станет доступна всем."
+          }
+        ],
+        "next_step": "intro_options_only"
+      },
+      {
+        "action_button_text": "Хорошо",
+        "action_type": "button",
+        "id": "referral_program_is_active",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Да, ваш код $referral_code, в разделе «Блага» вы можете скопировать код и переслать кому-то. В чате «Реферальгная программа» можно следить за начислениями."
+          }
+        ],
+        "next_step": "intro_options_only"
+      },
+      {
+        "action_button_text": "Хорошо",
+        "action_type": "button",
+        "id": "referral_program_is_active_no_code",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Да, вы можете получить свой код в разделе «Блага». Там же вы можете скопировать код и переслать кому-то. В чате «Реферальгная программа» можно следить за начислениями."
+          }
+        ],
+        "next_step": "intro_options_only"
+      },
+      {
+        "action_type": "context_buttons",
+        "schema": {
+          "options": [
+            {
+              "message_text": "!ok",
+              "node": "intro_options_only",
+              "type": "message",
+              "text": "Все понятно"
+            },
+            {
+              "message_text": "!call_support",
+              "node": "referral_program_call_support|Пожалуйста, напишите, в чем вопрос.",
+              "type": "message",
+              "text": "У меня остались вопросы"
+            }
+          ],
+          "type": "options"
+        },
+        "id": "referral_program_blocked",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "К сожалению, возможность участвовать в реферальной программе для вас закрыта."
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "action_button_text": "Понятно",
+        "action_type": "button",
+        "id": "when_i_get_bonuses",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "После активации вашего кода вам будет начисляться кэшбэк с поездок друга в течение 30 дней. Кэшбэк начисляется в течение часа после окончания и оплаты поездки."
+          },
+          {
+            "type": "plaintext",
+            "text": "Почему кэшбэк может не приходить:\n * ваш друг не зарегистрировался или не смог пройти регистрацию\n *он был зарегистрирован в Драйве ранее\n * он забыл ввести ваш промокод до первой поездки \n * он зарегистрировался впервые, ввел код, но не сделал ни одной поездки с оплатой банковской картой"
+          }
+        ],
+        "next_step": "intro_options_only"
+      },
+      {
+        "action_button_text": "Ok",
+        "action_type": "button",
+        "id": "how_much_i_get",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "5% от стоимости поездок вашего друга с учетом всех скидок. Максимум от каждого приведенного друга можно получить не более 700 ₽ кэшбэка."
+          }
+        ],
+        "next_step": "intro_options_only"
+      },
+      {
+        "action_type": "context_buttons",
+        "schema": {
+          "options": [
+            {
+              "message_text": "!ok",
+              "node": "intro_options_only",
+              "type": "message",
+              "text": "Нет, еще не все сошлось"
+            },
+            {
+              "message_text": "!call_support",
+              "node": "referral_program_call_support|Сообщите, пожалуйста, номер телефона приглашенного по вашему коду друга.",
+              "type": "message",
+              "text": "Да, все соответствует"
+            }
+          ],
+          "type": "options"
+        },
+        "id": "my_friend_registred_no_bonuses",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Проверьте, что все условия соблюдены:\n * ваш друг впервые и успешно зарегистрировался в Драйве, ему стали доступны машины в приложении\n * он не был зарегистрирован в Драйве ранее\n * он ввел ваш промокод до совершения первой поездки (даже если это была просто бронь машины) \n * он сделал хоть одну поездку с оплатой банковской картой\n\nВсе так и есть?"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_referral",
+        "allowed_message_types": [
+          "plaintext",
+          "media_resources",
+          "order",
+          "location"
+        ],
+        "id": "i_registered_with_code_no_discount",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Уточните, пожалуйста, ваш вопрос."
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "action_type": "context_buttons",
+        "schema": {
+          "options": [
+            {
+              "message_text": "!ok",
+              "node": "intro_options_only",
+              "type": "message",
+              "text": "Проверю"
+            },
+            {
+              "message_text": "!call_support",
+              "node": "referral_program_call_support|Что за вопрос?",
+              "type": "message",
+              "text": "Остался вопрос"
+            }
+          ],
+          "type": "options"
+        },
+        "id": "registered_with_code_no_rides",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Всё хорошо, скидка в 50% ждёт первую поездку. Увидеть доступные скидки можно в меню, раздел «Блага»."
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "action_type": "context_buttons",
+        "schema": {
+          "options": [
+            {
+              "message_text": "!ok",
+              "node": "intro_options_only",
+              "type": "message",
+              "text": "Пока нет"
+            },
+            {
+              "message_text": "!have_rides_have_tag_get_ride",
+              "node": "referral_program_call_support_get_ride",
+              "type": "message",
+              "text": "Да"
+            }
+          ],
+          "type": "options"
+        },
+        "id": "have_rides_have_tag",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Скидка предоставляется только на первую поездку с оплатой банковской картой. У вас была такая?"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "action_type": "context_buttons",
+        "schema": {
+          "options": [
+            {
+              "message_text": "!ok",
+              "node": "intro_options_only",
+              "type": "message",
+              "text": "Нет, все ок"
+            },
+            {
+              "message_text": "!have_rides_have_tag_get_ride",
+              "node": "referral_program_call_support_get_ride",
+              "type": "message",
+              "text": "Да"
+            }
+          ],
+          "type": "options"
+        },
+        "id": "have_sessions_no_tag",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Реферальный код сработал, по нему скидка 50% полагается на первую поездку в вашем аккаунте. Проверить доступные скидку всегда можно в меню, раздел «Блага». Хотите уточнить, была ли предоставлена скидка на конкретную поездку?"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "action_type": "context_buttons",
+        "schema": {
+          "options": [
+            {
+              "message_text": "!ok",
+              "node": "intro_options_only",
+              "type": "message",
+              "text": "Нет, спасибо"
+            },
+            {
+              "message_text": "!referral_program_call_support",
+              "node": "referral_program_call_support|Какие?",
+              "type": "message",
+              "text": "Да"
+            }
+          ],
+          "type": "options"
+        },
+        "id": "no_sessions_no_tag",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Скидка действует только на поездку, совершённую в первые две недели после регистрации. Не расстраивайтесь, у нас есть и другие прекрасные скидки. Заходите в раздел «Блага».\nУ вас остались ещё к нам вопросы?"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_referral",
+        "allowed_message_types": [
+          "plaintext",
+          "order"
+        ],
+        "id": "referral_program_call_support_get_ride",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Нажмите на скрепку и приложите поездку, о которой речь."
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_referral",
+        "allowed_message_types": [
+          "plaintext",
+          "media_resources",
+          "order",
+          "location"
+        ],
+        "id": "referral_program_call_support",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "%1"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "action_button_text": null,
+        "action_type": "tree",
+        "schema": {
+          "options": [
+            {
+              "message_text": "!how_it_works",
+              "node": "how_it_works",
+              "type": "message",
+              "text": "Как это работает"
+            },
+            {
+              "message_text": "!do_i_participate",
+              "node": {
+                "default": "referral_program_not_now",
+                "conditions": [
+                  {
+                    "node": "referral_program_blocked",
+                    "condition": {
+                      "tag_name": "disable_referral_program",
+                      "type": "has_tag"
+                    }
+                  },
+                  {
+                    "node": "referral_program_is_active",
+                    "condition": {
+                      "type": "and",
+                      "subconditions": [
+                        {
+                          "name": "enable_referral_program",
+                          "type": "has_action"
+                        },
+                        {
+                          "type": "dictionary_tag_value",
+                          "policy": "defined",
+                          "tag_name": "user_app_settings",
+                          "field": "referral_code"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": "referral_program_is_active_no_code",
+                    "condition": {
+                      "type": "and",
+                      "subconditions": [
+                        {
+                          "name": "enable_referral_program",
+                          "type": "has_action"
+                        },
+                        {
+                          "type": "not",
+                          "subconditions": [
+                            {
+                              "type": "dictionary_tag_value",
+                              "policy": "defined",
+                              "tag_name": "user_app_settings",
+                              "field": "referral_code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "type": "message",
+              "text": "Участвую ли я в этой программе"
+            },
+            {
+              "message_text": "!when_i_get_bonuses",
+              "node": "when_i_get_bonuses",
+              "type": "message",
+              "text": "Когда я получу бонусы за друга"
+            },
+            {
+              "message_text": "!how_much_i_get",
+              "node": "how_much_i_get",
+              "type": "message",
+              "text": "Сколько я получу"
+            },
+            {
+              "message_text": "!my_friend_registred_no_bonuses",
+              "node": "my_friend_registred_no_bonuses",
+              "type": "message",
+              "text": "Друг зарегистрировался, но баллы не пришли"
+            },
+            {
+              "message_text": "!i_registered_with_code_no_discount",
+              "node": {
+                "default": "i_registered_with_code_no_discount",
+                "conditions": [
+                  {
+                    "node": "registered_with_code_no_rides",
+                    "condition": {
+                      "type": "and",
+                      "subconditions": [
+                        {
+                          "tag_name": "referral_program_user",
+                          "type": "has_tag"
+                        },
+                        {
+                          "tag_name": "referral_tag",
+                          "type": "has_tag"
+                        },
+                        {
+                          "value": false,
+                          "type": "had_rides"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": "have_rides_have_tag",
+                    "condition": {
+                      "type": "and",
+                      "subconditions": [
+                        {
+                          "tag_name": "referral_program_user",
+                          "type": "has_tag"
+                        },
+                        {
+                          "tag_name": "referral_tag",
+                          "type": "has_tag"
+                        },
+                        {
+                          "value": true,
+                          "type": "had_rides"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": "have_sessions_no_tag",
+                    "condition": {
+                      "type": "and",
+                      "subconditions": [
+                        {
+                          "tag_name": "referral_program_user",
+                          "type": "has_tag"
+                        },
+                        {
+                          "type": "not",
+                          "subconditions": [
+                            {
+                              "tag_name": "referral_tag",
+                              "type": "has_tag"
+                            }
+                          ]
+                        },
+                        {
+                          "value": true,
+                          "type": "had_rides"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "node": "no_sessions_no_tag",
+                    "condition": {
+                      "type": "and",
+                      "subconditions": [
+                        {
+                          "tag_name": "referral_program_user",
+                          "type": "has_tag"
+                        },
+                        {
+                          "type": "not",
+                          "subconditions": [
+                            {
+                              "tag_name": "referral_tag",
+                              "type": "has_tag"
+                            }
+                          ]
+                        },
+                        {
+                          "value": false,
+                          "type": "had_rides"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "type": "message",
+              "text": "Я зарегистрировался по коду друга, но не получил скидку"
+            }
+          ],
+          "type": "options"
+        },
+        "id": "intro_options_only",
+        "pre_action_messages": [
+          
+        ],
+        "next_step": null
+      }
+    ]
+}

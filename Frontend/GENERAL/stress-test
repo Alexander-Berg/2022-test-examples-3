@@ -1,0 +1,33 @@
+#! /usr/bin/env node
+
+const pMap = require('p-map');
+const { glob } = require('glob');
+const { info } = require('log-symbols');
+const autocannon = require('autocannon');
+const appConfig = require('../build/config').config;
+
+const apiUrl = 'http://localhost:' + appConfig.trackerServicePort;
+
+async function shoot(payloadPath) {
+    const payload = require('../' + payloadPath);
+    const body = payload.body ? JSON.stringify(payload.body) : undefined;
+    const instance = autocannon({
+        url: apiUrl + payload.pathExample,
+        headers: {
+            'content-type': 'application/json',
+        },
+        body,
+        method: payload.method,
+        duration: 10,
+        connections: 100,
+    });
+
+    autocannon.track(instance, { renderProgressBar: false });
+    console.error('\n\n-------------------------------\n');
+    console.error(info, `[${payload.method} ${payload.path}] shoot url ${payload.pathExample} with body ${body}`);
+    await instance;
+}
+
+pMap(glob.sync('payloads/*.json'), shoot, { concurrency: 1 })
+    .then(() => process.exit(0))
+    .catch(() => process.exit(1));

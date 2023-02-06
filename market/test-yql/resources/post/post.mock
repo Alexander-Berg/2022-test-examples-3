@@ -1,0 +1,33 @@
+#table with posts
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-qa/tables/post_post
+SCHEMA id:int64, state:int16, mod_state:int16, user_id:string, user_type:int16
+SCHEMA text:string, cr_time:string, upd_time:string
+{"id":1, "state":0, "mod_state":1, "user_id":"1", "user_type":4, "text":"Текст поста с id=1", "cr_time":"2022-07-18T00:00:00", "upd_time":"2022-07-18T00:00:00"}
+{"id":2, "state":0, "mod_state":1, "user_id":"2", "user_type":4, "text":"Текст поста с id=2", "cr_time":"2022-07-18T00:00:00", "upd_time":"2022-07-18T00:00:00"}
+{"id":3, "state":0, "mod_state":2, "user_id":"3", "user_type":5, "text":"Текст поста с id=3", "cr_time":"2022-07-18T00:00:00", "upd_time":"2022-07-18T00:00:00"}
+{"id":4, "state":0, "mod_state":1, "user_id":"4", "user_type":5, "text":"Текст поста с id=4", "cr_time":"2022-07-18T00:00:00", "upd_time":"2022-07-18T00:00:00"}
+{"id":5, "state":0, "mod_state":1, "user_id":"5", "user_type":0, "text":"Текст поста с id=5", "cr_time":"2022-07-18T00:00:00", "upd_time":"2022-07-18T00:00:00"}
+{"id":6, "state":0, "mod_state":1, "user_id":"6", "user_type":0, "text":"Текст поста с id=6", "cr_time":"2022-07-18T00:00:00", "upd_time":"2022-07-18T00:00:00"}
+
+
+
+#table with votes
+#entity_id=1 - 2 votes
+#entity_id=2 - 1 vote (another entity type)
+#entity_id=3 - 1 vote (but post int bad status)
+#entity_id=4 - 0 vote
+#entity_id=5 - 0 vote (another entity type)
+#entity_id=6 - 4 votes
+#different amount of votes, plus with other entity_type
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-qa/tables/qa_vote
+SCHEMA entity_type:int16, entity_id:string, type:int16
+{"entity_type":11, "entity_id":"1", "type":1}
+{"entity_type":11, "entity_id":"1", "type":1}
+{"entity_type":10, "entity_id":"2", "type":1}
+{"entity_type":11, "entity_id":"2", "type":1}
+{"entity_type":11, "entity_id":"3", "type":1}
+{"entity_type":10, "entity_id":"5", "type":1}
+{"entity_type":11, "entity_id":"6", "type":1}
+{"entity_type":11, "entity_id":"6", "type":1}
+{"entity_type":11, "entity_id":"6", "type":1}
+{"entity_type":11, "entity_id":"6", "type":1}

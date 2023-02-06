@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <appender name="business-log-console" class="ch.qos.logback.core.ConsoleAppender">
+
+        <!-- Описание формата logstash-logback-encoder - https://github.com/logstash/logstash-logback-encoder -->
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+
+                <provider class="ru.yandex.market.wms.common.spring.service.logging.MdcProvider">
+                    <fieldName>service</fieldName>
+                    <mdcKey>service</mdcKey>
+                </provider>
+
+                <provider class="ru.yandex.market.wms.common.spring.service.logging.MdcProvider">
+                    <fieldName>process</fieldName>
+                    <mdcKey>process</mdcKey>
+                </provider>
+
+                <provider class="ru.yandex.market.wms.common.spring.service.logging.MdcProvider">
+                    <fieldName>status</fieldName>
+                    <mdcKey>status</mdcKey>
+                </provider>
+
+                <provider class="ru.yandex.market.wms.common.spring.service.logging.MdcProvider">
+                    <fieldName>requestId</fieldName>
+                    <mdcKey>X-Market-Req-ID</mdcKey>
+                </provider>
+
+                <timestamp>
+                    <fieldName>date</fieldName>
+                    <pattern>yyyy-MM-dd</pattern>
+                </timestamp>
+
+                <timestamp>
+                    <fieldName>timestamp</fieldName>
+                    <pattern>[UNIX_TIMESTAMP_AS_NUMBER]</pattern>
+                </timestamp>
+
+                <threadName>
+                    <fieldName>thread</fieldName>
+                </threadName>
+
+                <loggerName>
+                    <fieldName>logger</fieldName>
+                    <shortenedLoggerNameLength>24</shortenedLoggerNameLength>
+                </loggerName>
+
+                <stackTrace>
+                    <fieldName>stacktrace</fieldName>
+                </stackTrace>
+
+
+                <provider class="ru.yandex.market.wms.common.spring.service.logging.HostNameProvider">
+                    <fieldName>host</fieldName>
+                </provider>
+
+                <provider class="net.logstash.logback.composite.loggingevent.ArgumentsJsonProvider">
+                    <fieldName>arguments</fieldName>
+                </provider>
+
+
+                <pattern>
+                    <pattern>
+                        {
+                        "message": "#tryJson{%message}"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+</included>

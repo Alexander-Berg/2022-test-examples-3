@@ -1,0 +1,91 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый fulfillment_cte_solomon_testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dfulfillment_cte_solomon_testing
+
+juggler:
+  checks:
+
+  # Check fulfillment-cte-many-jdbc-connections
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_cte_solomon_testing&service=fulfillment-cte-many-jdbc-connections&last=1DAY&mode=edit
+  - children:
+    - EVENTS%host=fulfillment_cte_solomon_testing & service=fulfillment-cte-jdbc-connections:all:all
+    service: fulfillment-cte-many-jdbc-connections
+
+  # Check fulfillment-cte-many-jetty-connections
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_cte_solomon_testing&service=fulfillment-cte-many-jetty-connections&last=1DAY&mode=edit
+  - children:
+    - EVENTS%host=fulfillment_cte_solomon_testing & service=fulfillment-cte-jetty-connections:all:all
+    service: fulfillment-cte-many-jetty-connections
+
+  # Check fulfillment-cte-4xx-percent
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_cte_solomon_testing&service=fulfillment-cte-http-4xx-percent-testing&last=1DAY&mode=edit
+  - children:
+    - EVENTS%host=fulfillment_cte_solomon_testing & service=fulfillment-cte-http-4xx-percent-testing:all:all
+    service: fulfillment-cte-4xx-percent
+
+  # Check fulfillment-cte-5xx-percent
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_cte_solomon_testing&service=fulfillment-cte-http-5xx-percent-testing&last=1DAY&mode=edit
+  - children:
+    - EVENTS%host=fulfillment_cte_solomon_testing & service=fulfillment-cte-http-5xx-percent-testing:all:all
+    service: fulfillment-cte-5xx-percent
+
+  - children:
+    - EVENTS%host=fulfillment_cte_solomon_testing & service=fulfillment-cte-queue-tasks-few-attempts-number-testing-*:all:all
+    service: queue-tasks-few-attempts-number
+
+  - children:
+    - EVENTS%host=fulfillment_cte_solomon_testing & service=fulfillment-cte-queue-tasks-many-attempts-number-testing-*:all:all
+    service: queue-tasks-many-attempts-number
+
+    # Check number of invalid categories in supply item
+  - aggregator_kwargs:
+      limits:
+        - crit: 0%
+          day_end: 7
+          day_start: 1
+          time_end: 20
+          time_start: 12
+          warn: 20%
+        - crit: 101%
+          day_end: 7
+          day_start: 1
+          time_end: 11
+          time_start: 21
+          warn: '0'
+      nodata_mode: force_ok
+    children:
+      - EVENTS%host=fulfillment_cte_solomon_testing & service=fulfillment-cte-testing-invalid-category-count:all:all
+    service: fulfillment-cte-testing-invalid-category-count
+
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    check_options: {}
+    host: fulfillment_cte_solomon_testing
+    namespace: market.ff
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - marketfulfillmentcte
+    - testing
+    - ffsupdev
+    - market
+    - _market_
+    ttl: 900

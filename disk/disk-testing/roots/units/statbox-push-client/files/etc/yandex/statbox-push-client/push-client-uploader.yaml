@@ -1,0 +1,29 @@
+---
+ident: disk-uploader
+
+logger-mode: file
+logger-file: /var/log/statbox/watcher.log
+logger-level: 5
+logger-timeformat: "%d.%m.%Y-%H.%M.%S"
+
+watcher-method: inotify
+watcher-state: "/var/spool/push-client"
+
+network-master-addr: "logbroker-pre.yandex.net"
+network-proto: rt
+
+files:
+  - name: /var/log/yandex/disk/uploader-stat.log
+    log_type: ydisk-uploader-stat-log
+  - name: /var/log/yandex/disk/uploader-events-tskv.log
+    log_type: ydisk-events-log
+  - name: /var/log/yandex/disk/uploader-access-tskv.log
+    log_type: ydisk-java-access-log
+  - name: /var/log/yandex/disk/uploader-tskv.log
+    log_type: ydisk-uploader-log
+  - name: /var/log/yandex/disk/uploader-antifo.log
+    log_type: ydisk-uploader-zip-traffic-log
+  - name: /var/log/yandex/disk/uploader-exif-tskv.log
+    log_type: ydisk-uploader-exif-log
+  - name: /var/log/nginx/access-tskv.log
+    log_type: ydisk-nginx-access-log

@@ -1,0 +1,50 @@
+common:
+    cluster: "disk_ratelimiter" # Conductor group name or list of host fqdns
+    # cookie: "explicit_cookie" # Optional, overrides group-name-based cookie
+    spare_hosts: 1  # Used to derive shard count
+
+http:
+    port: 1880
+    pool_size: 30
+    log_access: true
+
+groups:
+    userapp:
+        rps: 10
+        burst: 50
+    cloud_api_user:
+        rps: 40
+        burst: 60
+    cloud_api_user_handler:
+        rps: 1
+        burst: 1
+    cloud_api_schema:
+        rps: 1000
+        burst: 1
+    cloud_api_external_upload_user:
+        rps: 5
+        burst: 5
+    cloud_api_external_upload_host:
+        rps: 30
+        burst: 1
+    handle_update_user_yateam_status:
+        rps: 0.1
+        burst: 1
+    photoslice_update_user:
+        rps: 0.1 # 1 request per 10 seconds
+        burst: 1
+        default_wait: 10000 # 10 seconds max wait (virtual queue of size 1)
+    photoslice_update_user_mobile:
+        rps: 0.017 # 1 request per 60 seconds
+        burst: 1
+        default_wait: 60000 # 60 seconds max wait (virtual queue of size 1)
+    photoslice_update_user_no_subs:
+        rps: 0.0035 # 1 request per 300 seconds
+        burst: 1
+        default_wait: 300000 # 300 seconds max wait (virtual queue of size 1)
+    cloud_api_special_yamb:
+        rps: 5000
+        burst: 1000
+    web_promo_sms:
+        burst: 5
+        rps: 0.01

@@ -1,0 +1,627 @@
+{
+  "meta": {
+    "columns": [
+      {
+        "name": "orderId",
+        "title": "Идентификатор заказа",
+        "type": "NUMBER",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "deliveryServiceExternalId",
+        "title": "Идентификатор в СД",
+        "type": "STRING",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "sortingCenterExternalId",
+        "title": "Идентификатор в СЦ",
+        "type": "STRING",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "externalId",
+        "title": "Идентификатор в магазине",
+        "type": "STRING",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "barcode",
+        "title": "Штрихкод заказа",
+        "type": "STRING",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "status",
+        "title": "Статус заказа",
+        "type": "LIST",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [
+          {
+            "id": null,
+            "displayName": "—",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "DRAFT",
+            "displayName": "Черновик",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "VALIDATING",
+            "displayName": "На проверке",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "VALIDATION_ERROR",
+            "displayName": "Ошибка проверки",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "PROCESSING",
+            "displayName": "В обработке",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "PROCESSING_ERROR",
+            "displayName": "Ошибка обработки",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "ENQUEUED",
+            "displayName": "Создан",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "CANCELLED",
+            "displayName": "Отменён",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "FINISHED",
+            "displayName": "Заказ завершен",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "RETURNING",
+            "displayName": "Заказ возвращается",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "RETURNED",
+            "displayName": "Заказ возвращён",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "LOST",
+            "displayName": "Заказ потерян",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "DELIVERED",
+            "displayName": "Заказ доставлен",
+            "slug": null,
+            "openNewTab": false
+          }
+        ],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "partners",
+        "title": "Партнеры",
+        "type": "ARRAY",
+        "arrayType": "REFERENCE",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": {
+          "optionsSlug": "lms/partner",
+          "multiple": true,
+          "authorities": [
+            "ROLE_PARTNER"
+          ],
+          "titleFieldName": "readableName",
+          "idFieldName": "id",
+          "hint": "Название партнёра или ID",
+          "pageSize": 20,
+          "queryParamName": "searchQuery"
+        },
+        "secret": null
+      },
+      {
+        "name": "units",
+        "title": "Места",
+        "type": "FORMAT_TEXT",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "recipient",
+        "title": "Получатель",
+        "type": "STRING",
+        "sortable": false,
+        "editable": false,
+        "filtrable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "address",
+        "title": "Адрес доставки",
+        "type": "STRING",
+        "sortable": false,
+        "editable": false,
+        "filtrable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "senderId",
+        "title": "Идентификатор сендера",
+        "type": "REFERENCE",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "shipmentType",
+        "title": "Тип отгрузки",
+        "type": "LIST",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [
+          {
+            "id": null,
+            "displayName": "—",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "WITHDRAW",
+            "displayName": "Забор",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "IMPORT",
+            "displayName": "Самопривоз",
+            "slug": null,
+            "openNewTab": false
+          }
+        ],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "shipmentId",
+        "title": "Отгрузка",
+        "type": "REFERENCE",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "deliveryType",
+        "title": "Тип доставки",
+        "type": "LIST",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [
+          {
+            "id": null,
+            "displayName": "—",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "PICKUP",
+            "displayName": "Доставка в пункт выдачи заказа",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "COURIER",
+            "displayName": "Доставка курьером",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "POST",
+            "displayName": "Доставка почтой России",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "MOVEMENT",
+            "displayName": "Перемещение",
+            "slug": null,
+            "openNewTab": false
+          }
+        ],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "shipmentDate",
+        "title": "Дата отгрузки",
+        "type": "DATE",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "deliveryDateMin",
+        "title": "Дата доставки (от)",
+        "type": "DATE",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "deliveryDateMax",
+        "title": "Дата доставки (до)",
+        "type": "DATE",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "created",
+        "title": "Дата создания",
+        "type": "DATE",
+        "sortable": true,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null,
+        "filters": {
+          "filters": [
+            {
+              "name": "createdFrom",
+              "title": "Дата создания от (включительно)",
+              "type": "DATE"
+            },
+            {
+              "name": "createdTo",
+              "title": "Дата создания до (включительно)",
+              "type": "DATE"
+            }
+          ]
+        }
+      },
+      {
+        "name": "platformClient",
+        "title": "Клиент платформы",
+        "type": "LIST",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [
+          {
+            "id": null,
+            "displayName": "—",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "YANDEX_DELIVERY",
+            "displayName": "Яндекс.Доставка",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "BERU",
+            "displayName": "Покупки.Маркет",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "DBS",
+            "displayName": "DBS",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "YANDEX_GO",
+            "displayName": "Яндекс.Go (доставка наружу)",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "FAAS",
+            "displayName": "FaaS",
+            "slug": null,
+            "openNewTab": false
+          }
+        ],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "createdAtLastMile",
+        "title": "Заказ создан в СД последней мили",
+        "type": "BOOLEAN",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      }
+    ],
+    "mode": "VIEW",
+    "actions": [
+      {
+        "title": "Скачать заказы",
+        "description": "Скачать csv-файл с заказами.",
+        "slug": "/download/orders-file-csv",
+        "identifiedBy": [],
+        "type": "GRID_ACTION",
+        "method": "GET_BLANK",
+        "icon": "cloud_download",
+        "authorities": [
+          "ROLE_ORDERS_DOWNLOAD"
+        ]
+      },
+      {
+        "title": "Обновить даты отгрузки",
+        "description": "Массово обновить даты отгрузки заказов через загрузку файла и продолжить обработку этих заказов.",
+        "slug": "/create-change-shipment-dates-task",
+        "identifiedBy": [],
+        "type": "GRID_ACTION",
+        "method": "POST_MULTIPART",
+        "icon": "cloud_upload",
+        "authorities": [
+          "ROLE_CHANGE_ORDER_REQUESTS_EDIT"
+        ]
+      },
+      {
+        "title": "Изменить возвратный сегмент",
+        "description": "Массово изменить возвратные сегменты заказов через загрузку файла.",
+        "slug": "/create-change-orders-return-segments-task",
+        "identifiedBy": [],
+        "type": "GRID_ACTION",
+        "method": "POST_MULTIPART",
+        "icon": "cloud_upload",
+        "authorities": [
+          "ROLE_CHANGE_ORDER_REQUESTS_EDIT"
+        ]
+      },
+      {
+        "title": "Перевызвать курьера",
+        "description": "Массово перевызвать курьеров для заказов через загрузку файла.",
+        "slug": "/recall-courier-from-file",
+        "identifiedBy": [],
+        "type": "GRID_ACTION",
+        "method": "POST_MULTIPART",
+        "icon": "cloud_upload",
+        "authorities": [
+          "ROLE_RECALL_COURIER"
+        ]
+      }
+    ],
+    "newButtonTitle": "Создать",
+    "defaultSort": null,
+    "searchString": null
+  },
+  "totalCount": -1,
+  "items": [
+    {
+      "id": 7,
+      "values": {
+        "address": "test-zip-code, test-country, test-federal-district, test-region, test-locality, test-sub-region, test-settlement",
+        "orderId": 7,
+        "deliveryDateMax": "2019-06-08",
+        "created": "2019-06-02",
+        "sortingCenterExternalId": "order_7_from_partner_id_9",
+        "deliveryServiceExternalId": "order_7_from_partner_id_10",
+        "units": {
+          "text": ""
+        },
+        "createdAtLastMile": true,
+        "platformClient": "BERU",
+        "shipmentType": "IMPORT",
+        "senderId": {
+          "id": null,
+          "displayName": "7",
+          "slug": null,
+          "openNewTab": false
+        },
+        "deliveryDateMin": "2019-06-07",
+        "partners": [
+          {
+            "id": "9",
+            "displayName": "9",
+            "slug": "lms/partner",
+            "openNewTab": false
+          },
+          {
+            "id": "10",
+            "displayName": "10",
+            "slug": "lms/partner",
+            "openNewTab": false
+          }
+        ],
+        "shipmentId": {
+          "id": "6",
+          "displayName": "6",
+          "slug": "lom/shipments",
+          "openNewTab": false
+        },
+        "shipmentDate": "2019-07-01",
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": 6,
+      "values": {
+        "address": "test-zip-code, test-country, test-federal-district, test-region, test-locality, test-sub-region, test-settlement",
+        "orderId": 6,
+        "created": "2019-06-02",
+        "sortingCenterExternalId": "order_6_from_partner_id_9",
+        "units": {
+          "text": ""
+        },
+        "createdAtLastMile": false,
+        "platformClient": "YANDEX_DELIVERY",
+        "shipmentType": "WITHDRAW",
+        "senderId": {
+          "id": "6",
+          "displayName": "6",
+          "slug": "nesu/senders",
+          "openNewTab": false
+        },
+        "partners": [
+          {
+            "id": "9",
+            "displayName": "9",
+            "slug": "lms/partner",
+            "openNewTab": false
+          }
+        ],
+        "shipmentId": {
+          "id": "5",
+          "displayName": "5",
+          "slug": "lom/shipments",
+          "openNewTab": false
+        },
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": 5,
+      "values": {
+        "address": "test-zip-code, test-country, test-federal-district, test-region, test-locality, test-sub-region, test-settlement",
+        "orderId": 5,
+        "created": "2019-06-02",
+        "units": {
+          "text": ""
+        },
+        "createdAtLastMile": false,
+        "platformClient": "YANDEX_DELIVERY",
+        "senderId": {
+          "id": "5",
+          "displayName": "5",
+          "slug": "nesu/senders",
+          "openNewTab": false
+        },
+        "partners": [],
+        "status": "DRAFT"
+      }
+    },
+    {
+      "id": 4,
+      "values": {
+        "address": "test-zip-code, test-country, test-federal-district, test-region, test-locality, test-sub-region, test-settlement",
+        "orderId": 4,
+        "created": "2019-06-02",
+        "units": {
+          "text": ""
+        },
+        "createdAtLastMile": false,
+        "platformClient": "YANDEX_DELIVERY",
+        "shipmentType": "WITHDRAW",
+        "senderId": {
+          "id": "1",
+          "displayName": "1",
+          "slug": "nesu/senders",
+          "openNewTab": false
+        },
+        "partners": [],
+        "shipmentId": {
+          "id": "4",
+          "displayName": "4",
+          "slug": "lom/shipments",
+          "openNewTab": false
+        },
+        "shipmentDate": "2019-07-04",
+        "status": "DRAFT"
+      }
+    }
+  ]
+}

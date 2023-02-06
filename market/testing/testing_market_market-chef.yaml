@@ -1,0 +1,44 @@
+abc: bff_purchase
+command: ""
+dc:
+  sas:
+    max_unavailable: 1
+    pod_count: 1
+  vla:
+    max_unavailable: 1
+    pod_count: 1
+environment: testing
+itype: marketmarketcheftestingservice
+name: market-chef
+network_id: _MARKET_TEST_NETS_
+params:
+  infra:
+    exp3_consumer: market-chef
+    exp3_secret_alias: template_exp3-matcher-tvm_secret_testing
+    exp3_secret_id: sec-01g63032k07w64gwsw5m3f3nj4
+    exp3_secret_version: ver-01g65rb2kmvmp5xapfdh8tmxsp
+quota:
+  cpu:
+    guarantee: 4000
+    limit: 4000
+  disk:
+  - bandwidth_guarantee: 15728640
+    bandwidth_limit: 31457280
+    capacity: 10737418240
+    class: hdd
+  memory:
+    guarantee: 1073741824
+    limit: 1073741824
+  network:
+    guarantee: 10485760
+    limit: 0
+template:
+  modifiers:
+  - box/infra.jsonnet
+  - box/base_app.jsonnet
+  - remove_duplicates.jsonnet
+  - update_layers.jsonnet
+  - set_infra_params.jsonnet
+  root: base.jsonnet
+  tools:
+  - tools.libjsonnet

@@ -1,0 +1,120 @@
+bin_path = "travel/cpa/data_processing/merge_train_refunds/merge_train_refunds"
+
+args = [
+    "--yt-proxy", "%(yt_proxy)s",
+    "--src-dir", "//home/tests/merge_train_refunds/train_refunds_logs",
+    "--dst-dir", "//home/tests/merge_train_refunds/cpa"
+]
+
+checkers = [
+    "yt",
+]
+
+[yt.input.refunds_logs]
+    path = "//home/tests/merge_train_refunds/train_refunds_logs/logs_table"
+
+[[yt.input.refunds_logs.data]]
+    RefundedAt = 2000000002
+    OrderId = "order_id_0"
+    OrderPrettyId = "YA-0000-0000-0001"
+    OrderRefundId = "order_refund_id_0"
+    NumberOfTickets = 1
+    RefundTicketMoney_Amount = 100.0
+    RefundTicketMoney_Currency = "RUB"
+    RefundFeeMoney_Amount = 10.0
+    RefundFeeMoney_Currency = "RUB"
+    RefundInsuranceMoney_Amount = 20.0
+    RefundInsuranceMoney_Currency = "RUB"
+    PartnerRefundFeeMoney_Amount = 5.0
+    PartnerRefundFeeMoney_Currency = "RUB"
+
+[[yt.input.refunds_logs.data]]
+    RefundedAt = 1000000000
+    OrderId = "order_id_2"
+    OrderPrettyId = "YA-0000-0000-0002"
+    OrderRefundId = "order_refund_id_2"
+    NumberOfTickets = 1
+    RefundTicketMoney_Amount = 100.0
+    RefundTicketMoney_Currency = "RUB"
+    RefundFeeMoney_Amount = 10.0
+    RefundFeeMoney_Currency = "RUB"
+    RefundInsuranceMoney_Amount = 20.0
+    RefundInsuranceMoney_Currency = "RUB"
+    PartnerRefundFeeMoney_Amount = 5.0
+    PartnerRefundFeeMoney_Currency = "RUB"
+
+[yt.input.train_refunds]
+    path = "//home/tests/merge_train_refunds/cpa/train/refunds"
+
+[[yt.input.train_refunds.data]]
+    RefundedAt = 2000000000
+    OrderId = "order_id_1"
+    OrderPrettyId = "YA-0000-0000-0002"
+    OrderRefundId = "order_refund_id_1"
+    NumberOfTickets = 2
+    RefundTicketMoney_Amount = 200.0
+    RefundTicketMoney_Currency = "RUB"
+    RefundFeeMoney_Amount = 15.0
+    RefundFeeMoney_Currency = "RUB"
+    RefundInsuranceMoney_Amount = 25.0
+    RefundInsuranceMoney_Currency = "RUB"
+    PartnerRefundFeeMoney_Amount = 6.0
+    PartnerRefundFeeMoney_Currency = "RUB"
+
+[yt.output.train_refunds]
+    path = "//home/tests/merge_train_refunds/cpa/train/refunds"
+    ignore_unknown_fields = true
+
+# data from logs table merge with existing data sorted by RefundedAt
+
+[[yt.output.train_refunds.data]]
+    RefundedAt = 1000000000
+    OrderId = "order_id_2"
+    OrderPrettyId = "YA-0000-0000-0002"
+    OrderRefundId = "order_refund_id_2"
+    NumberOfTickets = 1
+    RefundTicketMoney_Amount = 100.0
+    RefundTicketMoney_Currency = "RUB"
+    RefundFeeMoney_Amount = 10.0
+    RefundFeeMoney_Currency = "RUB"
+    RefundInsuranceMoney_Amount = 20.0
+    RefundInsuranceMoney_Currency = "RUB"
+    PartnerRefundFeeMoney_Amount = 5.0
+    PartnerRefundFeeMoney_Currency = "RUB"
+
+[[yt.output.train_refunds.data]]
+    RefundedAt = 2000000000
+    OrderId = "order_id_1"
+    OrderPrettyId = "YA-0000-0000-0002"
+    OrderRefundId = "order_refund_id_1"
+    NumberOfTickets = 2
+    RefundTicketMoney_Amount = 200.0
+    RefundTicketMoney_Currency = "RUB"
+    RefundFeeMoney_Amount = 15.0
+    RefundFeeMoney_Currency = "RUB"
+    RefundInsuranceMoney_Amount = 25.0
+    RefundInsuranceMoney_Currency = "RUB"
+    PartnerRefundFeeMoney_Amount = 6.0
+    PartnerRefundFeeMoney_Currency = "RUB"
+
+[[yt.output.train_refunds.data]]
+    RefundedAt = 2000000002
+    OrderId = "order_id_0"
+    OrderPrettyId = "YA-0000-0000-0001"
+    OrderRefundId = "order_refund_id_0"
+    NumberOfTickets = 1
+    RefundTicketMoney_Amount = 100.0
+    RefundTicketMoney_Currency = "RUB"
+    RefundFeeMoney_Amount = 10.0
+    RefundFeeMoney_Currency = "RUB"
+    RefundInsuranceMoney_Amount = 20.0
+    RefundInsuranceMoney_Currency = "RUB"
+    PartnerRefundFeeMoney_Amount = 5.0
+    PartnerRefundFeeMoney_Currency = "RUB"
+
+[yt.output.processed_snapshots]
+    path = "//home/tests/merge_train_refunds/cpa/processed_train_refunds"
+    fields_to_skip = ["content_revision"]
+
+[[yt.output.processed_snapshots.data]]
+    table = "//home/tests/merge_train_refunds/train_refunds_logs/logs_table"

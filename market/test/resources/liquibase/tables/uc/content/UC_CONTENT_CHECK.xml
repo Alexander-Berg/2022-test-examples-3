@@ -1,0 +1,27 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+			http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <changeSet id="uc_content_check" author="imelnikov" context="tables">
+        <createTable tableName="UC_CONTENT_CHECK">
+            <column name="ID" type="NUMBER">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="URL_ID" type="bigint">
+                <constraints foreignKeyName="IDX_UC_CONTENT_CHECK_URL_ID" references="UC_NET_CHECK(ID)"/>
+            </column>
+            <column name="CHECKER_ID" type="NUMBER">
+                <constraints foreignKeyName="IDX_UC_CONTENT_CHECK_C_ID" references="UC_CONTENT_CHECKER(ID)"/>
+            </column>
+            <column name="TASK_BODY" type="VARCHAR2(4000 BYTE)"/>
+            <column name="START_TIME" type="TIMESTAMP(6)"/>
+            <column name="FINISHED_TIME" type="TIMESTAMP(6)"/>
+            <column name="RESULT" type="NUMBER(1,0)"/>
+        </createTable>
+
+        <createSequence sequenceName="sq_uc_content_check"/>
+    </changeSet>
+
+</databaseChangeLog>

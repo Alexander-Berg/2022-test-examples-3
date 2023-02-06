@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>innerpochta-wmi</artifactId>
+        <groupId>ru.yandex.autotests</groupId>
+        <version>1.4.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>testpers-mail-monitoring</artifactId>
+    <name>autotests-testpers-mail-monitorings</name>
+    <description>Project with autotests used as monitorings</description>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>ru.yandex.qatools.allure</groupId>
+            <artifactId>allure-junit-adaptor</artifactId>
+        </dependency>
+
+        <!-- http://code.google.com/p/rest-assured/ -->
+        <dependency>
+            <groupId>com.jayway.restassured</groupId>
+            <artifactId>rest-assured</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.yandex.autotests.lib.junit</groupId>
+            <artifactId>yandex-login-rule</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.yandex.qatools.elliptics</groupId>
+            <artifactId>elliptics-fluent</artifactId>
+        </dependency>
+
+        <!--https://github.com/kohsuke/wordnet-random-name-->
+        <dependency>
+            <groupId>org.kohsuke</groupId>
+            <artifactId>wordnet-random-name</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.yandex.qatools.matchers</groupId>
+            <artifactId>matcher-decorators</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.yandex.qatools.processors</groupId>
+            <artifactId>feature-matcher-generator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.yandex.terra</groupId>
+            <artifactId>terra-junit</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jsonschema2pojo</groupId>
+                <artifactId>jsonschema2pojo-maven-plugin</artifactId>
+                <configuration>
+                    <sourceDirectory>${basedir}/src/main/resources/json</sourceDirectory>
+                    <targetPackage>ru.yandex.autotests.testpers.mail.mon.beans</targetPackage>
+                    <annotationStyle>gson</annotationStyle>
+                    <sourceType>json</sourceType>
+                    <useLongIntegers>true</useLongIntegers>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+</project>

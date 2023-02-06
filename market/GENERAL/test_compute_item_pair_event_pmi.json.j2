@@ -1,0 +1,83 @@
+{% if table.endswith("pmi") %}
+    {# Result data. #}
+    {% table table %}
+        [
+            "I1",
+            "I2",
+            {{ 2.0 / (4.0 * 8.0) }},
+            {{ 10.0 / (40.0 * 20.0) }},
+            "{{ item_type }}",
+            "{{ item_type }}",
+            "{{ day }}"
+        ]
+    {% endtable %}
+{% elif table.startswith("features_item_pair") and table.endswith("statistics") %}
+    {
+        "schema": [
+            {
+                "name": "item_id",
+                "type": "String",
+                "ordering": "ascending"
+            },
+            {
+                "name": "linked_item_id",
+                "type": "String",
+                "ordering": "ascending"
+            },
+            {
+                "name": "pair_{{ event_type }}er_count",
+                "type": "Float"
+            },
+            {
+                "name": "pair_{{ event_type }}_count",
+                "type": "Float"
+            },
+            {
+                "name": "item_type",
+                "type": "String"
+            },
+            {
+                "name": "linked_item_type",
+                "type": "String"
+            },
+            {
+                "name": "day",
+                "type": "String"
+            }
+        ],
+        "records": [
+            ["I1", "I2", 2.0, 10.0, "{{ item_type }}", "{{ item_type }}", "{{ day }}"]
+        ]
+    }
+{% elif table.startswith("features_item") and table.endswith("statistics") %}
+    {
+        "schema": [
+            {
+                "name": "item_id",
+                "type": "String",
+                "ordering": "ascending"
+            },
+            {
+                "name": "{{ event_type }}_count",
+                "type": "Float"
+            },
+            {
+                "name": "{{ event_type }}er_count",
+                "type": "Float"
+            },
+            {
+                "name": "item_type",
+                "type": "String"
+            },
+            {
+                "name": "day",
+                "type": "String"
+            }
+        ],
+        "records": [
+            {# Note that here event count goes before user count. #}
+            ["I1", 40.0, 4.0, "{{ item_type }}", "{{ day }}"],
+            ["I2", 20.0, 8.0, "{{ item_type }}", "{{ day }}"]
+        ]
+    }
+{% endif %}

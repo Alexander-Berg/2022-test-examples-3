@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:mockito="http://www.mockito.org/spring/mockito"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd   http://www.mockito.org/spring/mockito http://www.mockito.org/spring/mockito.xsd"
+       default-autowire="byName">
+
+    <context:annotation-config/>
+
+    <!--используем почти честный кеш-->
+    <bean class="ru.yandex.market.core.config.MemCachedTestConfig"/>
+
+    <!--выключаем yt-->
+    <bean class="ru.yandex.market.core.config.YtTestConfig"/>
+
+    <mockito:mock id="dataSource" class="javax.sql.DataSource"/>
+    <bean class="ru.yandex.market.core.database.JdbcBoilerplateConfig"/>
+
+    <bean id="deliveryOptionsDao" class="ru.yandex.market.core.delivery.tariff.db.dao.DeliveryOptionsDao"/>
+    <bean id="deliveryTariffDao" class="ru.yandex.market.core.delivery.tariff.db.dao.DeliveryTariffDao"/>
+    <bean id="deliveryCategoryRuleDao" class="ru.yandex.market.core.delivery.tariff.db.dao.rule.DeliveryCategoryRuleDao">
+        <constructor-arg name="activeParamService" ref="activeParamService"/>
+    </bean>
+    <bean id="deliveryPriceRuleDao" class="ru.yandex.market.core.delivery.tariff.db.dao.rule.DeliveryPriceRuleDao"/>
+    <bean id="deliveryWeightRuleDao" class="ru.yandex.market.core.delivery.tariff.db.dao.rule.DeliveryWeightRuleDao"/>
+    <bean id="deliveryPaymentDao" class="ru.yandex.market.core.delivery.tariff.db.dao.DeliveryPaymentDao"/>
+
+    <bean id="deliveryRuleService" class="ru.yandex.market.core.delivery.tariff.service.impl.DbDeliveryRuleService"/>
+
+    <bean id="deliveryPaymentService" class="ru.yandex.market.core.delivery.tariff.service.impl.DbDeliveryPaymentService">
+        <constructor-arg name="asyncCheckouterService" ref="asyncCheckouterService"/>
+        <constructor-arg name="deliveryPaymentDao" ref="deliveryPaymentDao"/>
+        <constructor-arg name="historyService" ref="historyService"/>
+        <constructor-arg name="tarifficatorRegionGroupPaymentApi" ref="tarifficatorRegionGroupPaymentApi"/>
+    </bean>
+
+    <bean id="deliveryTariffService" class="ru.yandex.market.core.delivery.tariff.service.impl.DbDeliveryTariffService">
+        <property name="paramService" ref="paramService"/>
+        <property name="deliveryTariffDao" ref="deliveryTariffDaoMock"/>
+        <property name="feedService" ref="feedService"/>
+    </bean>
+
+    <bean id="dbRegionService" class="ru.yandex.market.core.geobase.DbRegionService"/>
+
+    <bean id="regionService"
+          class="ru.yandex.market.core.geobase.cache.MemCachedRegionService"
+          c:memCachingService-ref="memCachingService"
+          c:delegate-ref="dbRegionService"
+          c:config="#{null}">
+    </bean>
+
+    <mockito:mock id="deliveryTariffDaoMock" class="ru.yandex.market.core.delivery.tariff.db.dao.DeliveryTariffDao"/>
+    <mockito:mock id="feedCategoryService" class="ru.yandex.market.core.category.FeedCategoryService"/>
+    <mockito:mock id="feedService" class="ru.yandex.market.core.feed.FeedService"/>
+    <mockito:mock id="paramService" class="ru.yandex.market.core.param.ParamService"/>
+    <mockito:mock id="historyService" class="ru.yandex.market.core.history.DbHistoryService"/>
+    <mockito:mock id="asyncCheckouterService" class="ru.yandex.market.api.cpa.checkout.AsyncCheckouterService"/>
+    <mockito:mock id="activeParamService" class="ru.yandex.market.core.environment.ActiveParamService"/>
+    <mockito:mock id="tarifficatorRegionGroupPaymentApi" class="ru.yandex.market.logistics.tarificator.open.api.client.api.RegionGroupPaymentApi"/>
+</beans>

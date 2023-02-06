@@ -1,0 +1,487 @@
+services:
+  data_api:
+    base_url: http://dataapi.dst.yandex.net:21859
+  data_api_profile:
+    base_url: http://dataapi.dst.yandex.net:21859/profile
+  clck:
+    base_url: https://clck.deploy.dsp.yandex.net/--
+  lenta_loader:
+    base_url: http://lenta-loader-1.lenta-loader.testing.disk-lenta-loader.disk.stable.qloud-d.yandex.net:21890
+  notifier:
+    base_url: http://notifier-1.notifier.testing.disk-notifier.disk.stable.qloud-d.yandex.net:51978/notifier/
+  passport:
+    blackbox_url: https://blackbox-mimino.yandex.net/blackbox?method=%s
+    passport_url: http://passport-internal.yandex.ru/passport?mode=%s
+    avatars_url: https://avatars.mds.yandex.net/get-yapic/%s/islands-200
+  passport_dedicated:
+    passport_url: http://passport-internal.yandex.ru/passport?mode=%s
+  BlackboxService:
+    base_url: https://blackbox-mimino.yandex.net/
+    tvm_2_0:
+      client_id: 239
+  tvm_2_0:
+    blackbox_env: Prod
+    yateam_blackbox_env: ProdYateam
+    client_id: 132
+  tvm:
+    client_id: 132
+    consumer: disk-platform
+  TVMService:
+    base_url: https://tvm-api.yandex.net/
+  NewUAAS:
+    base_url: https://uaas.dst.yandex.net/api/experiments
+    timeout: 1
+
+platform:
+  disk_apps_ids: [e1db7f9eea164feeb013e0c16ec33357, f6ba541f65084e688107879721631a65, ff90127313fd4378873d6b57914e8e11, c9a234d49f724f1fbff15c8fb88e81bf, c2eb973dc70145a8af56cf82ea2dac58, 'disk_verstka', 'disk_verstka_ext']
+  mobile_apps_ids: [c2eb973dc70145a8af56cf82ea2dac58, bed317646ebf4d4399098b965c183eb2]
+  auth:
+    # Тут добавляем клиентов, которые могут авторизоваться: во внешнем api по куке, во внутреннем - по токену
+    #
+    # Шаблон для добавления нового сервиса c авторизацией по куке:
+    #
+    # Нужно сгенерировать какой-нибудь cookie_auth_client_id и сказать сервису базовый url для платформы:
+    #     https://cloud-api.yandex.ru/<cookie_auth_client_id>/v1
+    # Также нужно не забыть прописать allowed_origin_hosts, т.к. есть проверка по Origin, с которым пришел запрос
+    # В allowed_origin_hosts поддерживаются regexp'ы, для этого надо в начало и конец добавить ^ и $ соответственно,
+    # тогда строчка хоста будет интерпретироваться как регулярное выражение, иначе будет искаться полное совпадение
+    # здесь экранировать обратные слеши не надо, пишем как будто это raw string, например:
+    # allowed_origin_hosts: ['^disk\.yandex\.(ru|ua|by|kz|com|com\.tr)$', 'yandex.net']
+    #
+    # - name: <имя сервиса>
+    #   enabled: true
+    #   auth_methods:
+    #     - cookie
+    #   cookie_auth_client_id: <cookie_auth_client_id>
+    #   allowed_origin_hosts: ['^yandex\.(ru|ua|by|kz|com|com\.tr)$']
+    #   oauth_client_id: <any_oauth_client_id>
+    #   oauth_client_name: <any_oauth_client_name>
+    #   oauth_scopes: ['cloud_api:disk.read', 'cloud_api:disk.write', 'cloud_api:disk.info']
+    #
+    # - name: <имя сервиса>
+    #   enabled: true
+    #   auth_methods:
+    #     - token
+    #   token: <client_token>
+    #   oauth_client_id: <any_oauth_client_id>
+    #   oauth_client_name: <any_oauth_client_name>
+    #   oauth_scopes: ['cloud_api:disk.read', 'cloud_api:disk.write', 'cloud_api:disk.info']
+    #
+
+    ##### Старый вид конфигов для определение клиента через Origin. !!!DEPRECATED!!!
+    - name: disk
+      enabled: true
+      auth_methods:
+        - cookie
+        - tvm
+      allowed_origin_hosts: ['^disk\.yandex\.(ru|ua|by|kz|com|com\.tr)$', 'yandex.net']
+      tvm_client_ids: [121]
+      oauth_client_id: 123-test-123
+      oauth_client_name: internal-test
+      oauth_scopes: ['cloud_api.data:user_data', 'cloud_api.data:app_data']
+
+    - name: yandex_ru  # Яндекс.Картинки
+      enabled: true
+      auth_methods:
+        - cookie
+      allowed_origin_hosts:
+        - ^yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^www\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^.*\.serp\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^.*\.priemka\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^local\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+      oauth_client_id: maps_common  # временное решение для доступа Карт к DataSync с домена yandex.ru пока не сойдётся https://st.yandex-team.ru/CHEMODAN-26942
+      oauth_client_name: yandex.ru
+      oauth_scopes: ['cloud_api:disk.read', 'cloud_api:disk.write', 'cloud_api:disk.info', 'cloud_api:disk.app_folder', 'cloud_api.data:app_data', 'cloud_api.data:user_data']
+
+    - name: translate_yandex_ru  # https://st.yandex-team.ru/CHEMODAN-27137
+      enabled: true
+      auth_methods:
+        - cookie
+      allowed_origin_hosts:
+        # продакшн
+        - ^translate\.yandex\.(ru|ua|by|kz|com)$
+        - ceviri.yandex.com.tr
+        # тестинг
+        - ^test\.translate\.yandex\.(ru|ua|by|kz|com)$
+        - test.ceviri.yandex.com.tr
+      oauth_client_id: yatranslate
+      oauth_client_name: YaTranslateWeb
+      oauth_scopes: ['cloud_api.data:user_data', 'cloud_api.data:app_data']
+
+    ##### Новые конфиги для определение клиентов через path. Добавляем новых сюда.
+    - name: maps_common
+      enabled: true
+      auth_methods:
+        - cookie
+      cookie_auth_client_id: maps_common
+      allowed_origin_hosts:
+        - ^(.*\.)?(maps|harita)\.(dev\.)?yandex\.%(tlds)s$
+        - ^yandex\.%(tlds)s$
+        - ^www\.yandex\.%(tlds)s$
+        - ^l7test.yandex.%(tlds)s$
+      oauth_client_id: maps_common
+      oauth_client_name: YaMapsWeb
+      oauth_scopes: ['cloud_api:data.app_data', 'cloud_api:data.user_data', 'cloud_api.data:app_data', 'cloud_api.data:user_data']
+
+    - name: serp_organizations
+      enabled: true
+      auth_methods:
+        - cookie
+      cookie_auth_client_id: serp_organizations
+      allowed_origin_hosts:
+        - ^.*yandex\.(ru|ua|by|kz|com|com\.tr)$
+      oauth_client_id: serp_organizations
+      oauth_client_name: SerpOrganizations
+      oauth_scopes: ['cloud_api:data.app_data', 'cloud_api:data.user_data', 'cloud_api.data:app_data', 'cloud_api.data:user_data']
+
+    - name: images  # Яндекс.Картинки
+      enabled: true
+      auth_methods:
+        - cookie
+      cookie_auth_client_id: images
+      allowed_origin_hosts:
+        - ^yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^www\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^.*\.serp\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^.*\.priemka\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^local\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+      oauth_client_id: images
+      oauth_client_name: images
+      oauth_scopes: ['cloud_api:disk.read', 'cloud_api:disk.write', 'cloud_api:disk.info', 'cloud_api:disk.app_folder', 'cloud_api.data:app_data', 'cloud_api.data:user_data']
+
+    - name: serp_verstka  # верстка СЕРПа
+      enabled: true
+      auth_methods:
+        - cookie
+      cookie_auth_client_id: serp_verstka
+      allowed_origin_hosts:
+        - ^yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^www\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^.*\.serp\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^web4-pull-[0-9]+-rr-templates\.hamster\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^.*\.priemka\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^local\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+      oauth_client_id: serp_verstka
+      oauth_client_name: serp_verstka
+      oauth_scopes: ['cloud_api:disk.read', 'cloud_api:disk.write', 'cloud_api:disk.info', 'cloud_api:disk.app_folder', 'cloud_api.data:app_data', 'cloud_api.data:user_data']
+
+    - name: maps_constructor
+      enabled: true
+      auth_methods:
+        - cookie
+      cookie_auth_client_id: maps_constructor
+      allowed_origin_hosts:
+        # продакшн
+        - ^constructor\.maps\.yandex\.(ru|ua|com|com\.tr)$
+        # тестинг
+        - ^constructor-front01g\.tst\.maps\.yandex\.(ru|ua|com|com\.tr)$
+        # девелопмент
+        - ^constructor\..*?fuji\.dev\.cloud\.maps\.yandex\.(com|com\.tr|ru|ua)$
+        # новый продакшн/тестинг
+        - ^(l7test\.)?yandex\.(com|com\.tr|ru|ua)$
+        # и еще два таких же адреса с www
+        - ^www\.(l7test\.)?yandex\.(com|com\.tr|ru|ua)$
+      oauth_client_id: maps_constructor
+      oauth_client_name: maps_constructor
+      oauth_scopes: ['cloud_api:disk.read', 'cloud_api:disk.write', 'cloud_api:disk.info', 'cloud_api:disk.app_folder']
+
+    - name: translate  # https://st.yandex-team.ru/CHEMODAN-27137
+      enabled: true
+      auth_methods:
+        - cookie
+      cookie_auth_client_id: translate
+      allowed_origin_hosts:
+        # продакшн
+        - ^translate\.yandex\.(ru|ua|by|kz|com)$
+        - ceviri.yandex.com.tr
+        # тестинг
+        - ^test\.translate\.yandex\.(ru|ua|by|kz|com)$
+        - test.ceviri.yandex.com.tr
+      oauth_client_id: translate
+      oauth_client_name: translate
+      oauth_scopes: ['cloud_api.data:user_data', 'cloud_api.data:app_data']
+
+    - name: videosearch
+      enabled: true
+      auth_methods:
+        - token
+      token: 38f05cbce66e4e8984cf70a5252c9905
+      oauth_client_id: videosearch
+      oauth_client_name: videosearch
+      oauth_scopes: ['cloud_api.profile:generic.videosearch.likes.read']
+
+    - name: videosearch_verstka
+      enabled: true
+      auth_methods:
+        - cookie
+      cookie_auth_client_id: video
+      allowed_origin_hosts:
+        - ^yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^.*\.serp\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^local\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^.*\.local\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^.*\.rserp\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^.*\.hamster\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+        - ^.*\.priemka\.yandex\.(ru|ua|by|kz|com|com\.tr)$
+      oauth_client_id: videosearch_verstka
+      oauth_client_name: videosearch_verstka
+      oauth_scopes: ['cloud_api.profile:generic.videosearch.likes.read', 'cloud_api.profile:generic.videosearch.likes.write']
+
+    - name: hamovniki
+      enabled: true
+      auth_methods:
+        - token
+      token: d373373fa2c64d27861a8578ea68f1bf
+      oauth_client_id: hamovniki
+      oauth_client_name: hamovniki
+      oauth_scopes: ['']  # тут должен быть скоуп, соответвующий ручке /v2/personality/profile/addresses
+
+    - name: district
+      enabled: true
+      auth_methods:
+        - token
+      token: 8d5c979a05a2432b89b9618fa4651714
+      oauth_client_id: district
+      oauth_client_name: district
+      oauth_scopes:
+        - 'cloud_api.profile:generic.district.polygons.read'
+        - 'cloud_api.profile:generic.district.polygons.write'
+        - 'cloud_api.profile:generic.extracted_addresses.read' # и еще тут должен быть скоуп, соответвующий ручке /v2/personality/profile/addresses
+
+    - name: touch_morda
+      enabled: true
+      auth_methods:
+        - token
+      token: a8a8b5f9e7cc4d219bbf112f2ef16cfe
+      oauth_client_id: touch_morda
+      oauth_client_name: touch_morda
+      oauth_scopes: ['cloud_api.profile:generic.district.polygons.read']
+
+    - name: ya_navigator
+      enabled: true
+      auth_methods:
+        - token
+      token: c95cf886ef444359be96c586a3f89565
+      oauth_client_id: ya_navigator
+      oauth_client_name: ya_navigator
+      oauth_scopes: ['']  # тут должен быть скоуп, соответвующий ручке /v2/personality/profile/addresses
+
+    - name: portal_tune
+      enabled: true
+      auth_methods:
+        - token
+      token: 3cb666d756b34bbc8ba1604c2624a4a7
+      oauth_client_id: portal_tune
+      oauth_client_name: portal_tune
+      oauth_scopes: ['']  # тут должен быть скоуп, соответвующий ручке /v2/personality/profile/addresses
+
+    - name: portal_achievements  # https://st.yandex-team.ru/CHEMODAN-36121
+      enabled: true
+      auth_methods:
+        - token
+      token: 8bb689bb98d642d3a6a2fd33f6db40e6
+      oauth_client_id: portal_achievements
+      oauth_client_name: portal_achievements
+      oauth_scopes: ['cloud_api.profile:generic.achievements.read', 'cloud_api.profile:generic.achievements.write']
+
+    - name: market
+      enabled: true
+      auth_methods:
+        - token
+      token: 3bddd1a316ea44d89a1e4db6b2843c3b
+      oauth_client_id: market
+      oauth_client_name: market
+      oauth_scopes: ['cloud_api.profile:generic.market.delivery_addresses.write', 'cloud_api.profile:generic.market.delivery_addresses.read']
+
+    - name: ya_home
+      enabled: true
+      auth_methods:
+        - token
+      token: c14e9620915645ba832f3a09264067e2
+      oauth_client_id: ya_home
+      oauth_client_name: ya_home
+      oauth_scopes:
+        - 'yadisk:all'
+        - 'cloud_api.profile:generic.extracted_addresses.read'
+        - 'cloud_api.profile:generic.extracted_addresses.write'
+        - 'cloud_api.profile:generic.morda.desktopnotifications.read'
+        - 'cloud_api.profile:generic.morda.desktopnotifications.write'
+
+    - name: videoplatform
+      enabled: true
+      auth_methods:
+        - token
+      token: 32763492a00e4cc88b9435549bf35644
+      oauth_client_id: videoplatform
+      oauth_client_name: videoplatform
+      oauth_scopes: ['cloud_api.profile:generic.videosearch.likes.read', 'cloud_api.profile:generic.videosearch.likes.write']
+
+    - name: ya_money
+      enabled: true
+      auth_methods:
+        - token
+      token: 80bbf4b3ac2e48e18e2e9ed3bc8a32de
+      oauth_client_id: ya_money
+      oauth_client_name: ya_money
+      oauth_scopes: ['cloud_api:disk.info', 'cloud_api:disk.read', 'cloud_api:disk.write']
+
+    - name: ya_tickets
+      enabled: true
+      auth_methods:
+        - token
+      token: 46190700988243529b6f4b207d517118
+      oauth_client_id: ya_tickets
+      oauth_client_name: ya_tickets
+      oauth_scopes: ['']  # тут должен быть скоуп для /v1/{uid}/personality/profile/ya-tickets/orders/{order_id}
+
+    - name: disk_verstka
+      enabled: true
+      auth_methods:
+        - token
+        - tvm
+      tvm_client_ids: [109, 110]
+      token: a03dc1a93b4849f78e8394527bf6d370
+      oauth_client_id: disk_verstka
+      oauth_client_name: disk_verstka
+      oauth_scopes: ['cloud_api:disk.read', 'yadisk:all']  # тут должен быть скоуп для /v1/commentaries, /v1/disk/photoslice и /v1/event-history
+
+    - name: disk_verstka_ext
+      enabled: true
+      auth_methods:
+        - cookie
+      cookie_auth_client_id: yadisk_web
+      allowed_origin_hosts:
+        - ^.*\.ufo-trusty\.dsd\.yandex\.%(tlds)s$
+        - ^disk\.dst\.yandex\.%(tlds)s$
+        - ^disk[0-9]*\.dsp\.yandex\.%(tlds)s$
+        - ^disk\.yandex\.%(tlds)s$
+        - ^.*\.ufo-iva6\.dsd\.yandex\.%(tlds)s$
+        - ^yadi\.sk$
+        - ^.*\.yadi\.sk$
+        - ^assessors-front\.dsp\.yandex\.%(tlds)s$
+      oauth_client_id: disk_verstka_ext
+      oauth_client_name: disk_verstka_ext
+      oauth_scopes: ['cloud_api.data:app_data', 'cloud_api:disk.read', 'cloud_api:disk.write', 'yadisk:all']  # тут должен быть скоуп для /v1/data/app/databases/lenta_blocks
+
+    - name: disk_adminka
+      enabled: true
+      auth_methods:
+        - token
+      token: 13e5dbc042014139adff0ec4570e5dde
+      oauth_client_id: disk_adminka
+      oauth_client_name: disk_adminka
+      oauth_scopes: ['yadisk:all']  # тут должен быть скоуп для /v1/event-history/clusterize
+
+    - name: ya_money_sts
+      enabled: true
+      auth_methods:
+        - token
+      token: 90106e32833c40d49cfde50bd0822e01
+      oauth_client_id: yamoney
+      oauth_client_name: ya_money_sts
+      oauth_scopes: ['cloud_api.data:set_revision']  # скоуп для /v1/data/{context}/databases/{database_id}/set-revision
+
+    - name: passport
+      enabled: true
+      auth_methods:
+        - token
+      token: 5a4ad0040af245169861958112dd816b
+      oauth_client_id: passport
+      oauth_client_name: passport
+      oauth_scopes: ['cloud_api.profile:generic.market.delivery_addresses.write', 'cloud_api.profile:generic.market.delivery_addresses.read']  # тут должен быть скоуп, соответвующий ручке /v2/personality/profile/addresses + delivery_addresses
+
+    - name: yanews
+      enabled: true
+      auth_methods:
+        - token
+      token: 405b4bad274341538a625358e75a8c72
+      oauth_client_id: yanews
+      oauth_client_name: yanews
+      oauth_scopes:
+        - 'cloud_api.profile:generic.yanews.smi.write'
+        - 'cloud_api.profile:generic.yanews.smi.read'
+        - 'cloud_api.profile:generic.yanews.rubrics.write'
+        - 'cloud_api.profile:generic.yanews.rubrics.read'
+        - 'cloud_api.profile:generic.yanews.search.write'
+        - 'cloud_api.profile:generic.yanews.search.read'
+        - 'cloud_api.profile:generic.yanews.settings.write'
+        - 'cloud_api.profile:generic.yanews.settings.read'
+        - 'cloud_api.data:app_data'
+        - 'cloud_api.data:user_data'
+
+    - name: yabus
+      enabled: true
+      auth_methods:
+        - token
+      token: f01593cac2f84f6e9ba7d406cd452ecc
+      oauth_client_id: yabus
+      oauth_client_name: yabus
+      oauth_scopes:
+        -  'cloud_api.profile:generic.persdata.documents.read'
+        -  'cloud_api.profile:generic.persdata.documents.write'
+
+    - name: spamoborona  # https://st.yandex-team.ru/CHEMODAN-34290
+      enabled: true
+      auth_methods:
+        - token
+      token: 068e742466a54f72ae35f6428b9e28bd
+      oauth_client_id: spamoborona
+      oauth_client_name: spamoborona
+
+    - name: yabrowser  # https://st.yandex-team.ru/CHEMODAN-34969
+      enabled: true
+      auth_methods:
+        - token
+      token: d524310b846d0b6cac1779fc855397b7
+      oauth_client_id: yabrowser
+      oauth_client_name: yabrowser
+
+    - name: docviewer  # https://st.yandex-team.ru/CHEMODAN-34969
+      enabled: true
+      auth_methods:
+        - token
+      token: e77a60ec52fcf90c30742cd8c86ec9ff
+      oauth_client_id: docviewer
+      oauth_client_name: docviewer
+
+    - name: personal_cards
+      enabled: true
+      auth_methods:
+        - tvm
+      tvm_client_ids: [2000044]
+      oauth_client_id: personal_cards
+      oauth_client_name: personal_cards
+      oauth_scopes: [''] # Тут должен быть скоуп до /v2/personality/profile/addresses
+
+    - name: testing_personal_cards
+      enabled: true
+      auth_methods:
+        - tvm
+      tvm_client_ids: [2000041]
+      oauth_client_id: testing_personal_cards
+      oauth_client_name: testing_personal_cards
+      oauth_scopes: [''] # Тут должен быть скоуп до /v2/personality/profile/addresses
+
+    - name: mobile_search_app  # https://st.yandex-team.ru/CHEMODAN-36410
+      enabled: true
+      auth_methods:
+        - ext_tokens
+      ext_tokens:
+        - '180b8e61e91a432cb7a0732e7b3b8c20'
+      oauth_client_id: mobile_search_app
+      oauth_client_name: mobile_search_app
+      oauth_scopes:
+        - 'cloud_api:data.user_data'
+        - 'cloud_api:data.app_data'
+
+    - name: passport_backend
+      enabled: true
+      auth_methods:
+        - tvm_2_0
+      tvm_2_0_client_ids: [2000079, 2000060]
+      oauth_client_id: passport_backend
+      oauth_client_name: passport_backend
+      oauth_scopes:
+        - 'cloud_api:disk.read'
+        - 'cloud_api.profile:generic.videosearch.likes.read'

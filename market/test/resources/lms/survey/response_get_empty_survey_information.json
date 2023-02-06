@@ -1,0 +1,153 @@
+{
+    "meta": {
+        "fields": [
+            {
+                "name": "surveyTitle",
+                "title": "Тема (заголовок) опроса, показываем пользователю в списке его опросов",
+                "type": "STRING",
+                "editable": true,
+                "options": [],
+                "hidden": false
+            },
+            {
+                "name": "body",
+                "title": "Тело опроса, с описанием и призывом пройти опрос",
+                "type": "STRING",
+                "editable": true,
+                "options": [],
+                "hidden": false
+            },
+            {
+                "name": "shortDescription",
+                "title": "Краткое описание, показываем в списке всех опросов администратору в ЛМС",
+                "type": "STRING",
+                "editable": true,
+                "options": [],
+                "hidden": false
+            },
+            {
+                "name": "url",
+                "title": "Ссылка на ФОС",
+                "type": "STRING",
+                "editable": true,
+                "options": [],
+                "hidden": false
+            },
+            {
+                "name": "frequency",
+                "title": "Крон выражение для показа",
+                "type": "STRING",
+                "editable": true,
+                "options": [],
+                "hidden": false
+            },
+            {
+                "name": "startDate",
+                "title": "Дата начала создания опросов",
+                "type": "DATE",
+                "editable": true,
+                "options": [],
+                "hidden": false
+            },
+            {
+                "name": "endDate",
+                "title": "Дата когда прекращаем создавать новые опросы (включительно)",
+                "type": "DATE",
+                "editable": true,
+                "options": [],
+                "hidden": false
+            },
+            {
+                "name": "campaignFeatures",
+                "title": "Обобщенные свойства кампаний, которых опрашиваем",
+                "type": "TEXT",
+                "editable": true,
+                "options": [],
+                "hidden": false
+            },
+            {
+                "name": "campaignIds",
+                "title": "ID компаний, которых дополнительно опрашиваем",
+                "type": "TEXT",
+                "editable": true,
+                "options": [],
+                "hidden": false
+            },
+            {
+                "name": "frequencyDescription",
+                "title": "Крон выражение для показа",
+                "type": "TEXT",
+                "editable": true,
+                "options": [],
+                "hidden": false
+            },
+            {
+                "name": "campaignFeaturesDescription",
+                "title": "Обобщенные свойства кампаний, которых опрашиваем",
+                "type": "TEXT",
+                "editable": true,
+                "options": [],
+                "hidden": false
+            },
+            {
+                "name": "campaignIdsDescription",
+                "title": "ID компаний, которых дополнительно опрашиваем",
+                "type": "TEXT",
+                "editable": true,
+                "options": [],
+                "hidden": false
+            },
+            {
+                "name": "surveyByPickupPoint",
+                "title": "Создать опрос по каждому активному ПВЗ удовлетворяющему условиям",
+                "type": "BOOLEAN",
+                "editable": true,
+                "options": [],
+                "hidden": false
+            }
+        ],
+        "actions": [],
+        "mode": "CREATE",
+        "deletable": false,
+        "children": [],
+        "tabs": [
+            {
+                "title": "Поля опроса",
+                "fields": [
+                    "surveyTitle",
+                    "body",
+                    "shortDescription",
+                    "url",
+                    "frequency",
+                    "startDate",
+                    "endDate",
+                    "campaignFeatures",
+                    "campaignIds",
+                    "surveyByPickupPoint"
+                ]
+            },
+            {
+                "title": "Описание полей",
+                "fields": [
+                    "frequencyDescription",
+                    "campaignFeaturesDescription",
+                    "campaignIdsDescription"
+                ]
+            }
+        ]
+    },
+    "item": {
+        "values": {
+            "frequencyDescription": {
+                "text": "Крон-выражение по которому показываем опрос, не может быть пустым. Важно: время между показами должно быть одинаковым в выражении. Например каждый час/день/неделю/каждый понедельник/каждые 30 минут/каждый год и тд - это особенность  реализации. Выражение типа: каждый день утром в 8 и вечером в 21 работать не будет, так как время между показами 11 и 13 часов. Для такого случая нужно сделать два отдельных баннера, один каждый день утром в 8, другой каждый день в 21. Крон-выражения удобно генерировать вот тут: https://www.freeformatter.com/cron-expression-generator-quartz.html "
+            },
+            "campaignFeaturesDescription" : {
+                "text": "Фичи компаний, для которых показываем опрос. Например, BRANDED - партнеры, которые владеют хотя бы одним активным брендированным ПВЗ. NOT_BRANDED - партнеры, которые владеют хотя бы одним активным не брендированным ПВЗ. DROP_OFF - партнеры, которые владеют хотя бы одним активным дропофом. Может быть пустым. Доступные сейчас фичи: BRANDED, NOT_BRANDED, DROP_OFF"
+            },
+            "campaignIdsDescription" : {
+                "text": "ID конкретных компаний, которым показываем опрос. Это значения только из таблицы legal_partner.id или значения только из таблицы pickup_point.id. Может быть пустым"
+            }
+        },
+        "title": "Создание нового опроса"
+    }
+}

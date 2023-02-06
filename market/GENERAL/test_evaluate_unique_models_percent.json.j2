@@ -1,0 +1,66 @@
+{% set table = table|default("statistics_evaluate_models_percent") %}
+
+{# TODO: Add tests some Touch place #}
+
+{% if table == "statistics_evaluate_models_percent" %}
+    {% table "statistics" %}
+        ["DesktopEmptySERPEndless", "Total", "total", 50.0, "{{ day }}"],
+        ["DesktopSERP", "Total", "total", 50.0, "{{ day }}"],
+        ["Desktop", "Total", "total", 50.0, "{{ day }}"],
+        ["Market", "Total", "total", 50.0, "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_metrika_actions" %}
+    {% table "events" %}
+        [
+            1508752270000,
+            {"yandexuid": "1", "puid": null, "uuid": null},
+            "click",
+            "model",
+            "1",
+            {"place": "DesktopEmptySERPEndless", "batch": "1"},
+            "{{ day }}"
+        ],
+        [
+            1508752270000,
+            {"yandexuid": "2", "puid": null, "uuid": null},
+            "click",
+            "model",
+            "1",
+            {"place": "DesktopEmptySERPEndless", "batch": "2"},
+            "{{ day }}"
+        ],
+        [
+            1508752270000,
+            {"yandexuid": "3", "puid": null, "uuid": null},
+            "click",
+            "offer",
+            "333",
+            {"place": "DesktopEmptySERPEndless", "batch": "3"},
+            "{{ day }}"
+        ]
+    {% endtable %}
+{% elif table == "logfeller_bs_watch_log_1d" %}
+    {% macro hit(model_id, yandexuid) -%}
+    [
+        "1516620000",
+        "https://market.yandex.ru",
+        "https://market.yandex.ru/product/{{ model_id }}",
+        "",
+        "{{ yandexuid }}",
+        "160656",
+        "0",
+        "rn:903853009:hid:1067438003:ds:,,,,,,,,,,,,:rqnl:1:st:1516620367:u:1515351926292080104",
+        "0",
+        "1",
+        "::ffff:91.107.117.120"
+    ]
+    {%- endmacro %}
+
+    {% table "logfeller_bs_watch_log" %}
+        {{ hit("1", "1") }},
+        {{ hit("1", "1") }},
+        {{ hit("1", "2") }},
+        {{ hit("2", "3") }},
+        {{ hit("2", "4") }}
+    {% endtable %}
+{% endif %}

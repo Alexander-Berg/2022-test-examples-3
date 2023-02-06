@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="MARKETWMS-17190" author="j-sverhnova">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(*) from wmwhse1.NSQLCONFIG WHERE CONFIGKEY = 'RECEIPT_HIGH_PRIORITY_COEFF';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            <![CDATA[
+            exec wmwhse1.nsqlconfig_create_int
+            @Key = 'RECEIPT_HIGH_PRIORITY_COEFF',
+            @Value = 100,
+            @Default = 0,
+            @MODIFIABLE = 0,
+            @Description = N'Повышающий коэффициент для сервиса поставок HIGH_PRIORITY';
+            ]]>
+        </sql>
+        <rollback>
+            <delete schemaName="wmwhse1" tableName="NSQLCONFIG">
+                <where>CONFIGKEY = 'RECEIPT_HIGH_PRIORITY_COEFF'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

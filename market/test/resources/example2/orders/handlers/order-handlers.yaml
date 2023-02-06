@@ -1,0 +1,224 @@
+module: order-handlers
+operators:
+  - id: get-order-handler
+    visibility: public
+    value#processing-handler:
+      id: get-order
+      on-fallbacking: do-nothing
+      requests:
+        - id: get-order
+          resource: get-order
+          query:
+            id#xget: /event/item_id
+          content-type: application/json
+          fail-policy:
+            - selector: 404
+              action: ignore
+      result:
+        has-order#equal:
+          - value#xget: /sources/get-order/response/status-code
+          - value: 200
+        id#xget:
+          path: /sources/get-order/response/body/id
+          default-value:
+        status#xget:
+          path: /sources/get-order/response/body/status
+          default-value:
+        substatus#xget:
+          path: /sources/get-order/response/body/substatus
+          default-value:
+        items#xget:
+          path: /sources/get-order/response/body/items
+          default-value:
+        fulfilment#xget:
+          path: /sources/get-order/response/body/fulfilment
+          default-value:
+        delivery#xget:
+          path: /sources/get-order/response/body/delivery
+          default-value:
+        deliveryOptions#xget:
+          path: /sources/get-order/response/body/deliveryOptions
+          default-value:
+        properties#xget:
+          path: /sources/get-order/response/body/properties
+          default-value:
+  - id: update-order-status-handler
+    enabled#xget: /shared-state/has-order
+    visibility: public
+    value#processing-handler:
+      id: update-order-status
+      on-fallbacking: do-nothing
+      requests:
+        - id: update-order-status
+          resource: update-order-status
+          body:
+            newStatus#xget: /event/payload/new-status
+            order:
+              id#xget: /shared-state/id
+              status#xget: /shared-state/status
+          content-type: application/json
+          fail-policy:
+            - selector: 4*
+              action: ignore
+      result:
+        order-status-changed#equal:
+          - value#xget: /sources/update-order-status/response/status-code
+          - value: 200
+        status#xget: /sources/update-order-status/response/body/status
+  - id: persist-order-handler
+    enabled#xget: /shared-state/order-status-changed
+    visibility: public
+    value#processing-handler:
+      id: persist-order
+      on-fallbacking: do-nothing
+      requests:
+        - id: persist-order
+          resource: persist-order
+          body:
+            id#xget: /shared-state/id
+            status#xget: /shared-state/status
+          content-type: application/json
+  - id: update-order-one-item-instances-handler
+    enabled#xget: /shared-state/has-order # надо что-бы ругалось если такого события нет
+    visibility: public
+    value#processing-handler:
+      id: update-order-one-item-instances
+      on-fallbacking: do-nothing
+      resources:
+        - id: update-order-one-item-instances
+          url: $update-order-one-item-instances-url
+          method: put
+          max-retries: 1
+          caching-enabled: false
+      requests:
+        - id: update-order-one-item-instances
+          resource: update-order-one-item-instances
+          path-params:
+            orderId#xget: /event/item_id
+            itemId#xget: /event/payload/orderItemId
+          body#xget: /event/payload/instances
+          content-type: application/json
+          fail-policy:
+            - selector: 4*
+              action: ignore
+      result: {}
+  - id: validate-order-item-instances-handler
+    enabled#xget: /shared-state/has-order # наверное надо в current-state?
+    visibility: public
+    value#processing-handler:
+      id: validate-order-item-instances-handler
+      on-fallbacking: do-nothing
+      resources:
+        - id: validate-order-item-instances
+          url: $validate-order-item-instances-url
+          method: post
+          max-retries: 1
+          caching-enabled: false
+      requests:
+        - id: validate-order-item-instances
+          resource: validate-order-item-instances
+          path-params:
+            orderId#xget: /event/item_id
+          headers:
+            IgnoreTvmCheck: true
+          body:
+            instances#xget: /event/payload/instances
+            status#xget: /shared-state/status
+            substatus#xget: /shared-state/substatus
+            items#xget: /shared-state/items
+            fulfilment#xget: /shared-state/fulfilment
+            delivery#xget: /shared-state/delivery
+            deliveryOptions#xget: /shared-state/deliveryOptions
+            eda#xget: /shared-state/properties/isEda
+          content-type: application/json
+          fail-policy:
+            - selector: 4*
+              action: ignore
+      result:
+        isValid#equal:
+          - value#xget: /sources/validate-order-item-instances/response/status-code
+          - value: 200
+  - id: preprocess-order-item-instances-handler
+    enabled#xget: /shared-state/isValid
+    visibility: public
+    value#processing-handler:
+      id: preprocess-order-item-instances-handler
+      on-fallbacking: do-nothing
+      resources:
+        - id: preprocess-order-item-instances
+          url: $preprocess-order-item-instances-url
+          method: post
+          max-retries: 1
+          caching-enabled: false
+      requests:
+        - id: preprocess-order-item-instances
+          resource: preprocess-order-item-instances
+          path-params:
+            orderId#xget: /event/item_id
+          headers:
+            IgnoreTvmCheck: true
+          body:
+            instances#xget: /event/payload/instances
+            status#xget: /shared-state/status
+            substatus#xget: /shared-state/substatus
+            items#xget: /shared-state/items
+            fulfilment#xget: /shared-state/fulfilment
+            delivery#xget: /shared-state/delivery
+            deliveryOptions#xget: /shared-state/deliveryOptions
+            eda#xget: /shared-state/properties/isEda
+          content-type: application/json
+          fail-policy:
+            - selector: 4*
+              action: ignore
+      result:
+        isPreprocessed#equal:
+          - value#xget: /sources/preprocess-order-item-instances/response/status-code
+          - value: 200
+        items#xget:
+          path: /sources/preprocess-order-item-instances/response/body
+  - id: update-order-item-instances-handler
+    enabled#xget: /shared-state/isProcessed
+    visibility: public
+    value#processing-handler:
+      id: update-order-item-instances-handler
+      on-fallbacking: do-nothing
+      resources:
+        - id: update-order-item-instances
+          url: $update-order-item-instances-url
+          method: post
+          max-retries: 1
+          caching-enabled: false
+      requests:
+        - id: update-order-item-instances
+          resource: update-order-item-instances
+          path-params:
+            orderId#xget: /event/item_id
+          body#xget: /shared-state/items
+          content-type: application/json
+          fail-policy:
+            - selector: 4*
+              action: ignore
+      result: {}
+  - id: get-checkouter-order-handler
+    visibility: public
+    value#processing-handler:
+      id: get-checkouter-order-handler
+      on-fallbacking: do-nothing
+      resources:
+        - id: get-checkouter-order
+          url: $get-checkouter-order-url
+          method: get
+          max-retries: 3
+          caching-enabled: false
+          tvm-name: market-checkouter
+      requests:
+        - id: get-checkouter-order
+          resource: get-checkouter-order
+          path-params:
+            orderId#xget: /event/item_id
+          content-type: application/json
+          fail-policy:
+            - selector: 4*
+              action: ignore
+      result:
+        order#xget: /sources/get-checkouter-order/response/body

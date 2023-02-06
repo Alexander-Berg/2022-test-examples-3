@@ -1,0 +1,48 @@
+---
+- hosts: all
+  sudo: yes
+  tasks:
+    - name: apt-sources.list.d
+      copy: src=data/apt-sources.list.d/{{ item }} dest=/etc/apt/sources.list.d/{{ item }} owner=root group=root mode=0644
+      with_items:
+        - direct-common-prestable.list
+        - direct-common-stable.list
+        - direct-common-testing.list
+        - direct-common-unstable.list
+        - direct-precise-prestable.list
+        - direct-precise-stable.list
+        - direct-precise-testing.list
+        - direct-precise-unstable.list
+        - yandex-precise-stable.list
+
+- hosts: all
+  sudo: yes
+  tasks:
+    - name: apt no quiet
+      shell: rm -f /etc/apt/apt.conf.d/98quiet
+
+- hosts: all
+  sudo: yes
+  tasks: 
+    - name: apt-get update
+      shell: apt-get update
+
+- name: special users
+  hosts: all
+  sudo: yes
+  tasks:
+    - name: direct special user
+      apt: pkg=yandex-direct-user state=installed update_cache=false force=yes
+    - name: directmod special user
+      apt: pkg=yandex-geocontext-user state=installed update_cache=false force=yes
+
+- name: packages
+  hosts: all
+  sudo: yes
+  tasks:
+    - name: misc packages 
+      apt: name={{ item }} state=installed update_cache=false force=yes dpkg_options='force-confnew'
+      with_items:
+        - screen
+        - subversion
+

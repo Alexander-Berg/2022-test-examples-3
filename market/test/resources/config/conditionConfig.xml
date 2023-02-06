@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-autowire="byName" default-lazy-init="false">
+
+    <bean id="eqConditionFactory" class="ru.yandex.common.framework.filter.condition.factory.SimpleEqFactoryQuery">
+        <property name="columnName" value="col1"/>
+        <property name="name" value="name1"/>
+    </bean>
+    <bean id="inConditionFactory" class="ru.yandex.common.framework.filter.condition.factory.InQueryConditionFactory">
+        <property name="columnName" value="col2"/>
+        <property name="name" value="name2"/>
+    </bean>
+    <bean id="notInFactory" class="ru.yandex.common.framework.filter.condition.factory.NotQueryConditionFactory">
+        <property name="subFactory" ref="inConditionFactory"/>
+    </bean>
+    <bean id="orFactory" class="ru.yandex.common.framework.filter.condition.factory.OrQueryConditionFactory">
+        <property name="subFactories">
+            <list>
+                <ref bean="eqConditionFactory"/>
+                <ref bean="inConditionFactory"/>
+            </list>
+        </property>
+    </bean>
+    <bean id="andFactory" class="ru.yandex.common.framework.filter.condition.factory.AndQueryConditionFactory">
+        <property name="subFactories">
+            <list>
+                <ref bean="notInFactory"/>
+                <ref bean="orFactory"/>
+            </list>
+        </property>
+    </bean>
+</beans>

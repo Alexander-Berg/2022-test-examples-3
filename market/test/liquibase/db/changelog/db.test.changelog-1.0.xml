@@ -1,0 +1,91 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="dukeartem (generated)" id="1551616766342-1">
+        <createTable remarks="Если внешняя система определила пользователя, как &quot;злостный нарушитель&quot; добавив его в эту таблицу мы запретим заходить и регистрироваться ему у нас" tableName="blacklist">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="blacklist_pk"/>
+            </column>
+            <column defaultValue="NULL::character varying" name="marketid" remarks="идентификатор смапленного пользователя для блокировки его по всем связям" type="VARCHAR"/>
+            <column defaultValue="NULL::character varying" name="sberid" remarks="идентификатор пользователя из конкретной(в данном случае Сбербанк) внешней системы по которому мы определяем, что сторонняя система его заблокировала" type="VARCHAR"/>
+            <column name="create_time" remarks="таймштамп, когда мы забанили пользователя" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="description" remarks="описание причины блокировки" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="dukeartem (generated)" id="1551616766342-2">
+        <createTable remarks="хранит соответствие между пользователем Маркета и уникального идентификатора из сторонней системы" tableName="main">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="main_pk"/>
+            </column>
+            <column name="marketid" remarks="сиквенс выделяемый пользователю из какого-то достаточно большого диапозона и это то что прорастёт в другие сервисы" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sberid" remarks="получен от сбера при авторизации" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="dukeartem (generated)" id="1551616766342-3">
+        <createTable remarks="хранит по marketid информацию о пользователе, которую мы не можем добыть из других систем за адекватное время или в удобном для пользователя виде." tableName="user_info">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="user_info_pk"/>
+            </column>
+            <column name="marketid" remarks="связан с main.marketid" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="firstname" remarks="(персональные данные)имя человека" type="TEXT"/>
+            <column name="lastname" remarks="(персональные данные)фамилия человека" type="TEXT"/>
+            <column name="fathername" remarks="(персональные данные)отчество человека" type="TEXT"/>
+            <column name="sex" remarks="пол человека - 1 - &quot;мужской&quot;, 0 -&quot;женский&quot;, -1 - &quot;не указан&quot;" type="SMALLINT" defaultValue="-1"/>
+            <column name="birthday" remarks="(персональные данные)день рождение в формате YYYY-MM-DD" type="TEXT"/>
+            <column name="phones" remarks="(персональные данные)телефоны для связи с клиентом, возможно несколько, хранится в json {1: &quot;+71231112233&quot;}" type="TEXT"/>
+            <column name="emails" remarks="(персональные данные)email адреса для связи с клиентом, возможно несколько, хранится в json {1: &quot;vasya@yandex.ru&quot;}" type="TEXT"/>
+            <column name="deliveryaddrs" remarks="адреса доставки клиента, возможно несколько, хранится в json {&quot;локация&quot;: &quot;адрес&quot;}" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="dukeartem (generated)" id="1551616766342-4">
+        <createTable remarks="Таблица в которой хранятся все активные сессии привязанные к какому-то marketid и время когда они были добавлены" tableName="whitelist">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="whitelist_pk"/>
+            </column>
+            <column name="marketid" remarks="идентификатор смапленного пользователя" type="VARCHAR"/>
+            <column name="sessionid" remarks="идентификатор сессии пользователя" type="VARCHAR"/>
+            <column name="random" remarks="рандомное число из пользовательской куки" type="VARCHAR"/>
+            <column name="create_time" remarks="время когда был появилась связь marketid+sessionid+random" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="dukeartem (generated)" id="1551616766342-5">
+        <createIndex indexName="blacklist_marketid_uindex" tableName="blacklist" unique="true">
+            <column name="marketid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="dukeartem (generated)" id="1551616766342-6">
+        <createIndex indexName="blacklist_sberid_uindex" tableName="blacklist" unique="true">
+            <column name="sberid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="dukeartem (generated)" id="1551616766342-7">
+        <createIndex indexName="main_marketid_uindex" tableName="main" unique="true">
+            <column name="marketid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="dukeartem (generated)" id="1551616766342-8">
+        <createIndex indexName="main_sberid_uindex" tableName="main" unique="true">
+            <column name="sberid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="dukeartem (generated)" id="1551616766342-9">
+        <createIndex indexName="user_info_marketid_uindex" tableName="user_info" unique="true">
+            <column name="marketid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="dukeartem (generated)" id="1551616766342-10">
+        <createIndex indexName="whitelist_marketid_sessionid_random_uindex" tableName="whitelist" unique="true">
+            <column name="marketid"/>
+            <column name="sessionid"/>
+            <column name="random"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="dukeartem (generated)" id="1551616766342-11">
+        <createSequence cycle="false" incrementBy="1" maxValue="2305843009213693951" minValue="2190550858753009250" schemaName="public" sequenceName="marketid_seq" startValue="2190550858753009250"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <return
+            id="1"
+            source="PICKUP_POINT"
+            order_external_id="order-external-id-1"
+    />
+
+    <return_box
+            id="1"
+            return_id="1"
+            external_id="box-external-id-1"
+    />
+
+    <return_box
+            id="3"
+            return_id="1"
+            external_id="box-external-id-3"
+    />
+
+    <return_segment
+            id="1"
+            return_id="1"
+            return_box_id="1"
+            logistic_point_id="1001"
+            logistic_point_type="PICKUP"
+            logistic_point_partner_id="2001"
+            status="OUT"
+            current_route_history_id="[null]"
+    />
+
+    <return_segment
+            id="2"
+            return_id="1"
+            return_box_id="1"
+            logistic_point_id="1002"
+            logistic_point_type="SORTING_CENTER"
+            logistic_point_partner_id="2002"
+            status="OUT"
+            current_route_history_id="1"
+    />
+
+    <return_box_route_history
+            id="1"
+            route_uuid="1c2341b2-b1ec-4718-840d-b7744fc494e7"
+            return_box_id="1"
+            return_segment_id="2"
+    />
+
+    <return_segment
+            id="3"
+            return_id="1"
+            return_box_id="1"
+            logistic_point_id="1003"
+            logistic_point_type="DROPOFF"
+            logistic_point_partner_id="2003"
+            status="TRANSIT_PREPARED"
+            current_route_history_id="4"
+    />
+
+    <return_segment
+            id="13"
+            return_id="1"
+            return_box_id="3"
+            logistic_point_id="1003"
+            logistic_point_type="DROPOFF"
+            logistic_point_partner_id="2003"
+            status="TRANSIT_PREPARED"
+            current_route_history_id="5"
+    />
+
+    <return_box_route_history
+            id="2"
+            route_uuid="1c2341b2-b1ec-4718-840d-b7744fc494e7"
+            return_box_id="1"
+            return_segment_id="3"
+    />
+
+    <return_box_route_history
+            id="3"
+            route_uuid="1c2341b2-b1ec-4718-840d-b7744fc494e7"
+            return_box_id="3"
+            return_segment_id="13"
+    />
+
+    <return_box_route_history
+            id="4"
+            route_uuid="e11c5e64-3694-40c9-b9b4-126efedaa098"
+            return_box_id="1"
+            return_segment_id="3"
+    />
+
+    <return_box_route_history
+            id="5"
+            route_uuid="e11c5e64-3694-40c9-b9b4-126efedaa098"
+            return_box_id="3"
+            return_segment_id="13"
+    />
+
+    <!-- просрочена -->
+    <control_point
+            id="1"
+            return_id="1"
+            type="SHORT_TERM_STORAGE"
+            status="EXPIRED"
+            logistic_point_id="1003"
+            partner_id="2003"
+            to_partner_id="1000"
+            expire_at="2022-05-25 08:45:00 +0000"
+    />
+
+    <!--  сегмент другого возврата на той же лог-точке  -->
+
+    <return
+            id="2"
+            source="PICKUP_POINT"
+            order_external_id="order-external-id-2"
+    />
+    <return_box
+            id="2"
+            return_id="2"
+            external_id="box-external-id-2"
+    />
+    <return_segment
+            id="4"
+            return_id="2"
+            return_box_id="2"
+            logistic_point_id="1003"
+            logistic_point_type="DROPOFF"
+            logistic_point_partner_id="2003"
+            status="TRANSIT_PREPARED"
+    />
+
+    <queue_tasks
+            queue_name="PARSE_RETURN_ROUTE_TO_UTILIZER"
+            payload='{"requestId":"test-request-id/2","returnId":1,"routeUuid":"e11c5e64-3694-40c9-b9b4-126efedaa098","returnSegmentIds":[3,13]}'
+    />
+</dataset>

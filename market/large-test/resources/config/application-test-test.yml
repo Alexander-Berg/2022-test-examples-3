@@ -1,0 +1,79 @@
+spring.datasource.url: jdbc:h2:mem:SCPRD;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1
+
+AppServer: localhost
+
+warehouse-timezone: Europe/Moscow
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms.receiving: debug
+    org.springframework.jdbc.core: debug
+    root: info
+
+spring:
+  transaction.default-timeout: 30s
+  main:
+    allow-bean-definition-overriding: true
+  config:
+    import:
+      - classpath:application-fragment-mq-test.yml
+      - classpath:application-fragment-common-test.yml
+  liquibase:
+    enabled: false
+  datasource:
+    username: wms_install_admin
+    password: Passw0rd!
+token: xxxxxxxxxxxxxxxxxxxxxxmarschrouteT.T.Tokenxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+oltp:
+  url: http://localhost:8383
+
+check:
+  authentication: 'no'
+
+servicebus:
+  api:
+    host: http://localhost:8382
+
+core:
+  api:
+    host: http://localhost:8384
+
+consolidation:
+  api:
+    host: http://localhost:4448
+    timeout: 1
+
+wms:
+  transportation:
+    moduleName: transportation
+    host: 'http://localhost:1231/transportation'
+    tvm:
+      serviceId: 0
+  core:
+    tvm:
+      serviceId: 0
+  reporter:
+    host: 'http://localhost:1231/reporter'
+    tvm:
+      serviceId: 0
+  consolidation:
+    moduleName: consolidation
+    host: 'http://localhost:1231/consolidation'
+    tvm:
+      serviceId: 0
+  inventory-management:
+    host: 'http://localhost:1231/inventory-management'
+    tvm:
+      serviceId: 0
+
+picking:
+  tvm:
+    serviceId: 0
+    secret: ""
+    api-methods: /transport-orders
+    log-only-mode: false
+    check-user-ticket: false
+    cache:
+      dir: ""

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <environment_param ID="1" NAME="enable-not-acceptable-unit-count" VALUE="true"/>
+
+    <supplier
+        ID="1"
+        NAME="supplier1"
+        BUSINESS_TYPE='{"dropship": false}'
+    />
+
+    <supplier
+        ID="2"
+        NAME="supplier2"
+        BUSINESS_TYPE='{"dropship": true}'
+    />
+
+    <fulfillment_service
+        ID="100"
+        NAME="test"
+        STATUS="1"
+        TYPE="1"
+    />
+    <shop_request
+        ID="1"
+        SUPPLIER_ID="1"
+        SERVICE_ID="100"
+        STATUS="0"
+        TYPE="7"
+        ITEMS_TOTAL_COUNT="1"
+    />
+    <registry
+        id="1"
+        request_id="1"
+        type="8"
+    />
+
+
+    <registry_unit
+        registry_id="1"
+        type="10"
+        identifiers='{"parts": [{"type": "ORDER_ID", "value": "1"}, {"type": "BOX_ID", "value": "box1"}, {"type": "ORDER_RETURN_ID", "value": "extId1"}]}'
+        unit_counts='{"unitCounts": [{"type": "NOT_ACCEPTABLE", "count": 3, "comments": ["Данная коробка дропшип и подлежит возврату на СЦ. Отложите ее для отправки обратно."], "relatedUnitIds": [{}]}]}'
+        parents="[]"
+        meta="{}"
+    />
+
+    <registry_unit_invalid
+        source_registry_id="1"
+        type="10"
+        identifiers='{"parts": [{"type": "BOX_ID", "value": "box2"}]}'
+        status="INVALID"
+        unit_counts='{"unitCounts": [{"type": "FIT", "count": 1, "relatedUnitIds": [{}]}]}'
+    />
+
+</dataset>

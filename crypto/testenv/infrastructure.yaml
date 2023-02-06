@@ -1,0 +1,377 @@
+BUILD_DOCKER:
+    multiple_jobs:
+        BUILD_CRYPTA_NANNY_IMAGE_DOCKER:
+            filter:
+                commit_path_prefixes:
+                    - /trunk/arcadia/crypta/
+                observed_paths:
+                    - ^arcadia/crypta/utils/docker
+                    - ^arcadia/crypta/utils/docker/crypta-nanny-image.json
+            packages: crypta/utils/docker/crypta-nanny-image.json
+            auto_release: false
+            auto_release_env: null
+            release_to_ya_deploy: false
+
+        BUILD_CRYPTA_YT_STATS_DOCKER:
+            filter:
+                commit_path_prefixes:
+                  - /trunk/arcadia/crypta/
+                observed_paths:
+                  - ^arcadia/crypta/utils/yt_stats/config
+                  - ^arcadia/crypta/utils/yt_stats/docker
+                  - ^arcadia/crypta/utils/yt_stats/docker/Dockerfile
+                  - ^arcadia/crypta/utils/yt_stats/docker/crypta-yt-stats.json
+                  - ^arcadia/crypta/utils/yt_stats/docker/supervisor
+                targets:
+                  - crypta/utils/run_periodic_task/bin
+                  - crypta/utils/templater
+                  - crypta/utils/yt_stats/bin
+                  - yt/python/yt/tools/bin/lock_make
+            packages: crypta/utils/yt_stats/docker/crypta-yt-stats.json
+            auto_release: true
+            auto_release_env: stable
+            release_to_ya_deploy: true
+
+        BUILD_CRYPTA_VAULT_DOCKER:
+            filter:
+                commit_path_prefixes:
+                  - /trunk/arcadia/crypta/
+                observed_paths:
+                  - ^arcadia/crypta/utils/vault/server/config
+                  - ^arcadia/crypta/utils/vault/server/docker
+                  - ^arcadia/crypta/utils/vault/server/docker/crypta-vault.json
+                  - ^arcadia/crypta/utils/vault/server/docker/entrypoint.sh
+                  - ^arcadia/crypta/utils/vault/server/docker/supervisor
+                targets:
+                  - crypta/utils/vault/server/bin
+            packages: crypta/utils/vault/server/docker/crypta-vault.json
+            auto_release: false
+            auto_release_env: null
+            release_to_ya_deploy: true
+
+        BUILD_CRYPTA_RTMR_RESOURCE_SERVICE_DOCKER:
+            filter:
+                commit_path_prefixes:
+                - /trunk/arcadia/crypta/
+                observed_paths:
+                - ^arcadia/crypta/utils/rtmr_resource_service/config
+                - ^arcadia/crypta/utils/rtmr_resource_service/docker
+                - ^arcadia/crypta/utils/rtmr_resource_service/docker/crypta-rtmr-resource-service.json
+                - ^arcadia/crypta/utils/rtmr_resource_service/docker/entrypoint.sh
+                targets:
+                - crypta/utils/rtmr_resource_service/bin/releaser/bin
+                - crypta/utils/rtmr_resource_service/bin/server/bin
+                - crypta/utils/rtmr_resource_service/bin/state_synchronizer/bin
+                - crypta/utils/rtmr_resource_service/bin/yt_state_updater/bin
+                - crypta/utils/run_periodic_task/bin
+                - crypta/utils/templater
+            packages: crypta/utils/rtmr_resource_service/docker/crypta-rtmr-resource-service.json
+            auto_release: false
+            auto_release_env: null
+            release_to_ya_deploy: true
+
+    owners:
+      - g:crypta
+    type: CHECK
+    filter: gen:filter
+    check_task:
+        name: CRYPTA_BUILD_AND_RELEASE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                sandbox_container: 773239891
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_DOCKER
+                strip_binaries: false
+                compress_package_archive: true
+                package_type: docker
+                packages: gen:packages
+                docker_registry: registry.yandex.net
+                docker_image_repository: crypta
+                docker_user: robot-crypta
+                docker_token_vault_name: CRYPTA_DOCKER_REGISTRY_TOKEN
+                docker_push_image: true
+                run_tests: false
+                run_long_tests: false
+                ignore_fail_tests: false
+                ya_yt_store: true
+                auto_release: gen:auto_release
+                auto_release_env: gen:auto_release_env
+                auto_release_author: '{commit_author}'
+                release_to_ya_deploy: gen:release_to_ya_deploy
+                yp_token_vault: yp_token
+
+BUILD_BUNDLES:
+    multiple_jobs:
+        BUILD_CRYPTA_UATRAITS_DATA:
+            filter:
+                commit_path_prefixes:
+                  - /trunk/arcadia/metrika/uatraits/data/
+                  - /trunk/arcadia/crypta/
+                observed_paths:
+                  - ^arcadia/crypta/utils/uatraits_data/crypta-uatraits-data.json
+                  - ^arcadia/metrika/uatraits/data
+            packages: crypta/utils/uatraits_data/crypta-uatraits-data.json
+            resource_type: CRYPTA_UATRAITS_DATA
+            released: prestable
+            ttl: 30
+
+        BUILD_CRYPTA_RTMR_EXTFP_IPFILTER:
+            filter:
+                commit_path_prefixes:
+                  - /trunk/arcadia/crypta/
+                observed_paths:
+                  - ^arcadia/crypta/graph/rtmr/extfp_ipfilter/
+            packages: crypta/graph/rtmr/extfp_ipfilter/crypta-extfp-ipfilter.json
+            resource_type: CRYPTA_RTMR_EXTFP_IPFILTER
+            released: prestable
+            ttl: 30
+
+        BUILD_CRYPTA_MERGE_TO_BIGB_COLLECTOR_BUNDLE:
+            filter:
+                commit_path_prefixes:
+                - /trunk/arcadia/crypta/
+                observed_paths:
+                - ^arcadia/crypta/utils/merge_to_bigb_collector/bundle/crypta-merge-to-bigb-collector.json
+                targets:
+                - crypta/utils/merge_to_bigb_collector/bin
+            packages: crypta/utils/merge_to_bigb_collector/bundle/crypta-merge-to-bigb-collector.json
+            resource_type: CRYPTA_MERGE_TO_BIGB_COLLECTOR_BUNDLE
+            released: testing
+            ttl: 30
+
+    owners:
+      - g:crypta
+    type: CHECK
+    filter: gen:filter
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                packages: gen:packages
+                resource_type: gen:resource_type
+                package_resource_attrs:
+                    released: gen:released
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                strip_binaries: false
+                compress_package_archive: true
+                package_type: tarball
+                run_tests: false
+                run_long_tests: false
+                ignore_fail_tests: false
+                ya_yt_store: true
+        output_resources:
+            gen:resource_type: gen:ttl
+
+BUILD_CRYPTA_JUGGLER_BUNDLE:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        commit_path_prefixes:
+          - /trunk/arcadia/crypta/
+        targets:
+          - crypta/monitorings/test
+        observed_paths:
+          - ^arcadia/crypta/monitorings/MANIFEST.json
+          - ^arcadia/crypta/monitorings/crypta-juggler-bundle.json
+          - ^arcadia/crypta/monitorings/crypta_bundle
+    check_task:
+        name: BUILD_JUGGLER_CHECKS_BUNDLE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                package_path: crypta/monitorings/crypta-juggler-bundle.json
+                upload_to_mds: false
+                resource_type: JUGGLER_CHECKS_BUNDLE
+                force_resource: false
+                bundle_name: crypta_bundle
+                kill_timeout: 600
+        output_resources:
+            JUGGLER_CHECKS_BUNDLE: inf
+
+BUILD_PACKAGES:
+    multiple_jobs:
+        BUILD_CRYPTA_YABS_GRAPHITE_SENDER_CONFIG_PACKAGE:
+            observed_paths:
+              - ^arcadia/crypta/packages/crypta-yabs-graphite-sender-config/crypta-yabs-graphite-sender-config.json
+              - ^arcadia/crypta/packages/crypta-yabs-graphite-sender-config/debian
+              - ^arcadia/crypta/packages/crypta-yabs-graphite-sender-config/etc
+            packages: crypta/packages/crypta-yabs-graphite-sender-config/crypta-yabs-graphite-sender-config.json
+            publish_to: crypta-common
+
+        BUILD_CRYPTA_PUSH_CLIENT_MON_PACKAGE:
+            observed_paths:
+              - ^arcadia/crypta/packages/crypta-push-client-mon/crypta-push-client-mon.json
+              - ^arcadia/crypta/packages/crypta-push-client-mon/debian
+              - ^arcadia/crypta/packages/crypta-push-client-mon/etc
+              - ^arcadia/crypta/packages/crypta-push-client-mon/scripts
+            targets:
+              - crypta/packages/crypta-push-client-mon/tests/
+            packages: crypta/packages/crypta-push-client-mon/crypta-push-client-mon.json
+            publish_to: crypta-common
+
+        BUILD_CRYPTA_AUTOINIT_PACKAGE:
+            observed_paths:
+              - ^arcadia/crypta/packages/crypta-autoinit/crypta-autoinit.json
+              - ^arcadia/crypta/packages/crypta-autoinit/etc
+              - ^arcadia/crypta/packages/crypta-autoinit/usr
+            packages: crypta/packages/crypta-autoinit/crypta-autoinit.json
+            publish_to: crypta-common
+
+        BUILD_CRYPTA_COREDUMPS_CONFIG_PACKAGE:
+            observed_paths:
+              - ^arcadia/crypta/packages/crypta-coredumps-config/crypta-coredumps-config.json
+              - ^arcadia/crypta/packages/crypta-coredumps-config/debian
+              - ^arcadia/crypta/packages/crypta-coredumps-config/etc
+            packages: crypta/packages/crypta-coredumps-config/crypta-coredumps-config.json
+            publish_to: crypta-common
+
+        BUILD_CRYPTA_HW_WATCHER_CONFIG_PACKAGE:
+            observed_paths:
+              - ^arcadia/crypta/packages/crypta-hw-watcher-config/crypta-hw-watcher-config.json
+              - ^arcadia/crypta/packages/crypta-hw-watcher-config/etc
+            packages: crypta/packages/crypta-hw-watcher-config/crypta-hw-watcher-config.json
+            publish_to: crypta-common
+
+        BUILD_CRYPTA_JUGGLER_CONFIG_PACKAGE:
+            observed_paths:
+              - ^arcadia/crypta/packages/crypta-juggler-config/crypta-juggler-config.json
+              - ^arcadia/crypta/packages/crypta-juggler-config/debian
+              - ^arcadia/crypta/packages/crypta-juggler-config/etc
+              - ^arcadia/crypta/packages/crypta-juggler-config/home
+            packages: crypta/packages/crypta-juggler-config/crypta-juggler-config.json
+            publish_to: crypta-common
+
+        BUILD_CRYPTA_SALT_MINION_CONFIG_PACKAGE:
+            observed_paths:
+              - ^arcadia/crypta/packages/crypta-salt-minion-config/crypta-salt-minion-config.json
+              - ^arcadia/crypta/packages/crypta-salt-minion-config/etc
+            packages: crypta/packages/crypta-salt-minion-config/crypta-salt-minion-config.json
+            publish_to: crypta-common
+
+        BUILD_CRYPTA_VAULT_CLIENT_PACKAGE:
+            observed_paths:
+              - ^arcadia/crypta/utils/vault/client/config
+              - ^arcadia/crypta/utils/vault/client/packages/crypta-vault-client/crypta-vault-client.json
+              - ^arcadia/crypta/utils/vault/client/packages/crypta-vault-client/etc
+            targets:
+              - crypta/utils/vault/client/bin/
+            packages: crypta/utils/vault/client/packages/crypta-vault-client/crypta-vault-client.json
+            publish_to: crypta-trusty
+
+        BUILD_CRYPTA_TEMPLATER_PACKAGE:
+            observed_paths:
+              - ^arcadia/crypta/packages/crypta-templater/crypta-templater.json
+            targets:
+              - crypta/utils/templater
+            packages: crypta/packages/crypta-templater/crypta-templater.json
+            publish_to: crypta-trusty
+
+        BUILD_CRYPTA_TVM_CURL_PACKAGE:
+            observed_paths:
+              - ^arcadia/crypta/packages/crypta-tvm-curl/crypta-tvm-curl.json
+              - ^arcadia/crypta/packages/crypta-tvm-curl/usr/bin
+            packages: crypta/packages/crypta-tvm-curl/crypta-tvm-curl.json
+            publish_to: crypta-common
+
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        commit_path_prefixes:
+          - /trunk/arcadia/crypta/
+        observed_paths: gen:observed_paths
+        targets: gen:targets
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: YA_PACKAGE
+                strip_binaries: false
+                compress_package_archive: true
+                package_type: debian
+                packages: gen:packages
+                publish_package: true
+                publish_to: gen:publish_to
+                key_user: robot-secretary
+                dupload_max_attempts: 1
+                run_tests: false
+                run_long_tests: false
+                ignore_fail_tests: false
+                ya_yt_store: true
+        output_resources:
+            YA_PACKAGE: 30

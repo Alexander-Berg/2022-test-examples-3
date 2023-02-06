@@ -1,0 +1,51 @@
+mysql_version: '5.5'
+users:
+  root: ''
+  new: '*9876543243d23456789cabd'
+  kek: ''
+  '@k': '*576788'  
+hosts_aliases:
+  local:
+    special: [ localhost]
+    ip: ['1.1.1.1']
+  dev:
+    ip: [ '::1' ]
+  dev2:
+    ip: [ '106.98.53.0' ]
+
+grants:
+  - user: 'root'
+    host: 'local'
+    object_type: 'TABLE'
+    priv_level: [ '*.*' ]
+    priv_type: [ ALL ]
+    grant_option: True
+
+  - user: '@k'
+    host: 'dev2'
+    object_type: 'TABLE'
+    priv_level: [ 'd.*' ]
+    priv_type: [ 'LOCK TABLES', 'SELECT (col, cccol)' ]
+    grant_option: False
+
+  - user: '@k'
+    host: 'dev2'
+    object_type: 'TABLE'
+    priv_level: [ '*.*' ]
+    priv_type: [ 'ALL' ]
+    grant_option: False
+  
+  - user: 'kek'
+    host: 'dev2'
+    object_type: 'TABLE'
+    priv_level: [ '*.*' ]
+    priv_type: [ ALL ]
+    grant_option: False
+
+  - user: 'new'
+    host: 'dev'
+    object_type: 'PROCEDURE'
+    priv_level: [ 'db.myp' ]
+    priv_type: [ 'ALTER ROUTINE',  ]
+    grant_option: False
+    

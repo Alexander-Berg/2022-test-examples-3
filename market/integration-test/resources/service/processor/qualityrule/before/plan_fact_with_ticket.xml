@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <lom_order
+            id="1"
+            barcode="777"
+            platform_client_id="1"
+            sender_id="12345"
+            status="DRAFT"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="1"
+            external_id="101"
+            partner_id="987654321"
+            partner_type="DROPSHIP"
+            segment_type="FULFILLMENT"
+            waybill_segment_index="0"
+            shipment_date="2020-11-02"
+            partner_name="Рога и Копыта"
+    />
+
+    <lom_waybill_segment
+            id="2"
+            order_id="1"
+            external_id="102"
+            partner_id="987654322"
+            partner_type="DELIVERY"
+            segment_type="COURIER"
+            waybill_segment_index="1"
+            shipment_date="2020-11-02"
+            partner_name="Такси"
+            tags='["CALL_COURIER"]'
+    />
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="2"
+            waybill_segment_type="COURIER"
+            expected_status="TRANSIT_COURIER_RECEIVED"
+            processing_status="ENQUEUED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2020-11-01 15:00:00 +0300"
+            schedule_time="2021-03-01 20:00:00 +0300"
+            data='{
+                "ExpressShipmentProcessorAdditionalData": {
+                    "_type": ".ExpressShipmentProcessorAdditionalData",
+                    "issueKey": "MONITORINGSNDBX-1",
+                    "issueClosed": false
+                }
+            }'
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="TRANSIT_COURIER_RECEIVED"
+            waybill_segment_type="COURIER"
+            aggregation_type="NONE"
+            rule_processor="STARTREK"
+            rule='{
+                "_type": ".ExpressShipmentPayload",
+                "queue": "MONITORINGSNDBX",
+                "components": ["493"]
+            }'
+    />
+</dataset>

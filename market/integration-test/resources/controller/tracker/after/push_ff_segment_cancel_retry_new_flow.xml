@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <business_process_state
+            id="1"
+            queue_type="PROCESS_SEGMENT_CHECKPOINTS"
+            status="SYNC_PROCESS_SUCCEEDED"
+            sequence_id="1"
+            comment="Processing result: Successfully processed INFO_RECEIVED status."
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1","waybillSegmentId":1,"trackerId":100,"orderHistoryEventAuthor":{"abcServiceId":null,"yandexUid":null},"sequenceId":1}'
+    />
+
+     <business_process_state
+            id="2"
+            queue_type="PROCESS_WAYBILL_SEGMENT_CANCEL"
+            status="ENQUEUED"
+            sequence_id="2"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1/1","segmentCancellationRequestId":1,"sequenceId":2}'
+    />
+
+    <business_process_state
+            id="3"
+            queue_type="CREATE_BILLING_TRANSACTION_BY_SEGMENT_STATUSES"
+            status="ENQUEUED"
+            sequence_id="3"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1/2","orderId":1,"segmentCheckpoints":[{"trackerId":100,"trackerCheckpointId":1,"segmentStatus":"INFO_RECEIVED","date":"2019-08-06T13:40:00Z","trackerCheckpointStatus":"SORTING_CENTER_LOADED"}],"author":{"abcServiceId":null,"yandexUid":null},"sequenceId":3}'
+    />
+
+    <business_process_state_entity_id
+            business_process_state_id="1"
+            entity_type="WAYBILL_SEGMENT"
+            entity_id="1"
+    />
+    <business_process_state_entity_id
+            business_process_state_id="2"
+            entity_type="SEGMENT_CANCELLATION_REQUEST"
+            entity_id="1"
+    />
+
+    <business_process_state_entity_id
+            business_process_state_id="3"
+            entity_type="ORDER"
+            entity_id="1"
+    />
+</dataset>

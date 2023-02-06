@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:domains xmlns:c="urn:jmf:common:1.0"
+           xmlns:s="urn:jmf:security:structure:1.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+    <s:domain logic="default">
+        <s:roles>
+            <s:role id="activeEmployee">
+                <s:title>
+                    <c:value>Тестовая относительная роль</c:value>
+                </s:title>
+                <s:hasRoleChecker xsi:type="s:script">
+                    <s:scriptCode>isActive</s:scriptCode>
+                </s:hasRoleChecker>
+            </s:role>
+        </s:roles>
+        <s:profiles>
+            <s:profile id="@admin">
+                <s:title>
+                    <c:value>Администратор</c:value>
+                </s:title>
+            </s:profile>
+            <s:profile id="@user">
+                <s:title>
+                    <c:value>Пользователь</c:value>
+                </s:title>
+            </s:profile>
+            <s:profile id="activeEmployee">
+                <s:title>
+                    <c:value>Профиль для тестовой относительной роли</c:value>
+                </s:title>
+                <s:roles>
+                    <s:role id="activeEmployee"/>
+                </s:roles>
+            </s:profile>
+        </s:profiles>
+    </s:domain>
+
+</s:domains>

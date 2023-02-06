@@ -1,0 +1,314 @@
+www.station:
+  ?1:
+    title: 1
+    t_type: 1
+    majority: 2
+    time_zone: UTC
+  ?2:
+    title: 2
+    t_type: 1
+    majority: 2
+    time_zone: UTC
+  ?3:
+    title: 3
+    t_type: 1
+    majority: 2
+    time_zone: UTC
+  ?4:
+    title: 4
+    t_type: 1
+    majority: 2
+    time_zone: UTC
+  ?5:
+    title: 5
+    t_type: 1
+    majority: 2
+    time_zone: UTC
+
+www.supplier:
+  ?1:
+    title: Тестовый поставщик
+    code: test
+    lmt: '2015-01-01 00:00:00'
+  ?test_package:
+    title: Тестовый для пакета
+    code: test_package
+    lmt: '2015-01-01 00:00:00'
+
+importinfo.twostageimportpackage:
+  ?1:
+    supplier: ?test_package
+    title: 1
+
+www.route:
+  ?1:
+    t_type: 3
+    supplier: ?1
+
+www.rthread:
+  ?1:
+    route: ?1
+    type: 1
+    t_type: 3
+    ordinal_number: 0
+    number: 33322aaa
+    title: Корющи - Пастущи
+    tz_start_time: '18:20'
+    time_zone: Europe/Moscow
+
+www.rtstation:
+  ?1:
+    station: ?1
+    tz_departure: 0
+    tz_arrival: null
+    time_zone: Europe/Moscow
+    thread: ?1
+  ?2:
+    station: ?2
+    tz_departure: 11
+    tz_arrival: 10
+    time_zone: Europe/Moscow
+    thread: ?1
+  ?3:
+    station: ?3
+    tz_departure: null
+    tz_arrival: null
+    time_zone: Europe/Moscow
+    thread: ?1
+  ?4:
+    station: ?4
+    tz_departure: null
+    tz_arrival: 30
+    time_zone: Europe/Moscow
+    thread: ?1
+
+importinfo.blacklist:
+  ?t_type:
+    supplier: ?1
+    t_type: 3
+  ?type_t_type:
+    supplier: ?1
+    t_type: 3
+    thread_type: 1
+  ?not_t_type:
+    supplier: ?1
+    t_type: 2
+  ?not_type_t_type:
+    supplier: ?1
+    t_type: 3
+    thread_type: 2
+
+  ?number:
+    supplier: ?1
+    t_type: 3
+    number: '\d\d\d22[a]+'
+  ?not_match_number:
+    supplier: ?1
+    t_type: 3
+    number: '\d\d22[a]+'
+
+  ?supplier_number:
+    supplier: ?1
+    t_type: 3
+    supplier_number: '\d\d\d'
+  ?not_match_supplier_number:
+    supplier: ?1
+    t_type: 3
+    supplier_number: '\d\d22[a]+'
+
+  ?supplier_title:
+    supplier: ?1
+    t_type: 3
+    supplier_title: 'Козлы - .*'
+
+  ?not_supplier_title:
+    supplier: ?1
+    t_type: 3
+    supplier_title: 'Мозлы - .*\d'
+
+  ?start_time_exact:
+    supplier: ?1
+    t_type: 3
+    start_time_start: '14:20'
+  ?not_start_time_exact:
+    supplier: ?1
+    t_type: 3
+    start_time_start: '14:00'
+  ?start_time_msk_exact:
+    supplier: ?1
+    t_type: 3
+    start_time_start: '18:20'
+    is_moscow_time: true
+  ?not_start_time_msk_exact:
+    supplier: ?1
+    t_type: 3
+    start_time_start: '19:20'
+    is_moscow_time: true
+
+  ?start_time_range:
+    supplier: ?1
+    t_type: 3
+    start_time_start: '14:00'
+    start_time_end: '15:00'
+  ?not_start_time_range:
+    supplier: ?1
+    t_type: 3
+    start_time_start: '17:00'
+    start_time_end: '14:00'
+  ?start_time_msk_range:
+    supplier: ?1
+    t_type: 3
+    start_time_start: '23:00'
+    start_time_end: '19:00'
+    is_moscow_time: true
+  ?not_start_time_msk_range:
+    supplier: ?1
+    t_type: 3
+    start_time_start: '19:00'
+    start_time_end: '22:00'
+    is_moscow_time: true
+
+  ?finish_time_exact:
+    supplier: ?1
+    t_type: 3
+    finish_time_start: '14:50'
+  ?not_finish_time_msk_range:
+    supplier: ?1
+    t_type: 3
+    finish_time_start: '18:51'
+    finish_time_end: '19:00'
+    is_moscow_time: true
+
+  ?start_station:
+    supplier: ?1
+    t_type: 3
+    start_station: ?1
+  ?not_start_station:
+    supplier: ?1
+    t_type: 3
+    start_station: ?2
+  ?finish_station:
+    supplier: ?1
+    t_type: 3
+    finish_station: ?4
+  ?not_finish_station:
+    supplier: ?1
+    t_type: 3
+    finish_station: ?5
+
+  ?thread_station:
+    supplier: ?1
+    t_type: 3
+  ?not_thread_station:
+    supplier: ?1
+    t_type: 3
+  ?thread_station_departure:
+    supplier: ?1
+    t_type: 3
+  ?not_thread_station_departure:
+    supplier: ?1
+    t_type: 3
+  ?thread_station_arrival:
+    supplier: ?1
+    t_type: 3
+  ?not_thread_station_arrival:
+    supplier: ?1
+    t_type: 3
+  ?thread_station_arrival_none:
+    supplier: ?1
+    t_type: 3
+  ?thread_station_departure_none:
+    supplier: ?1
+    t_type: 3
+  ?combo:
+    supplier: ?1
+    t_type: 3
+    start_time_start: '14:20'
+    finish_time_start: '14:50'
+    finish_station: ?4
+  ?not_combo:
+    supplier: ?1
+    t_type: 3
+    start_time_start: '14:20'
+    finish_time_start: '14:50'
+    finish_station: ?3
+
+  ?test_package:
+    supplier: ?test_package
+    t_type: 3
+    start_time_start: '8:30'
+    finish_time_start: '9:02'
+    finish_time_end: '9:04'
+    start_station: ?1
+    supplier_number: 102
+    supplier_title: Караганда .*
+    number: '^$'
+
+
+importinfo.blacklistthreadstation:
+  ?1:
+    blacklist: ?thread_station
+    station: ?2
+  ?2:
+    blacklist: ?not_thread_station
+    station: ?5
+  ?3:
+    blacklist: ?thread_station_departure
+    station: ?2
+    departure_time_start: '14:31'
+  ?4:
+    blacklist: ?not_thread_station_departure
+    station: ?2
+    departure_time_start: '14:20'
+    departure_time_end: '15:31'
+    is_moscow_time: true
+  ?5:
+    blacklist: ?thread_station_arrival
+    station: ?2
+    arrival_time_start: '14:00'
+    arrival_time_end: '19:00'
+    is_moscow_time: true
+  ?6:
+    blacklist: ?not_thread_station_arrival
+    station: ?2
+    arrival_time_start: '14:31'
+  ?7:
+    blacklist: ?thread_station_arrival_none
+    station: ?3
+    arrival_time_start: '00:00'
+    arrival_time_end: '23:59'
+  ?8:
+    blacklist: ?thread_station_departure_none
+    station: ?3
+    departure_time_start: '00:00'
+    departure_time_end: '23:59'
+  ?9:
+    blacklist: ?combo
+    station: ?2
+    departure_time_start: '00:00'
+    departure_time_end: '23:59'
+    arrival_time_start: '18:30'
+    is_moscow_time: true
+  ?test_package:
+    blacklist: ?test_package
+    station: ?3
+    departure_time_start: '12:47'
+    is_moscow_time: true
+
+importinfo.stationmapping:
+  ?1:
+    station: ?1
+    code: g1_vendor_1
+    title: Начало
+    supplier: ?test_package
+  ?2:
+    station: ?2
+    code: g1_vendor_2
+    title: Конец
+    supplier: ?test_package
+  ?3:
+    code: g1_vendor_3
+    title: Середина
+    supplier: ?test_package
+    station: ?3
+

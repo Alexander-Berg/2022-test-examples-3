@@ -1,0 +1,44 @@
+juggler:
+  default:
+    host: market-order-service-tms-testing
+    namespace: market.mbi_shops
+    notifications:
+    - template_kwargs:
+        login: tg_os_hotline
+        method: telegram
+        status:
+        - CRIT
+        - WARN
+        - OK
+      template_name: on_status_change
+    ttl: 900
+    flaps:
+      stable_time: 600
+      critical_time: 3000
+      boost_time: 0
+
+  checks:    
+  - service: order-service-checkouter-events-unread-messages
+    refresh_time: 60
+    ttl: 900
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      nodata_mode: force_ok
+      limits:
+      - crit: '0'
+        warn: '0'
+        day_end: 7
+        day_start: 1
+        time_end: 23
+        time_start: 8
+    children:
+      - market-order-service-tms-testing:order_service_checkouter_events_unread_messages
+    tags:
+      - _market_
+      - _market_cleanup_tag_
+      - market
+      - market_testing
+      - market_rtc
+      - marketmbidevopsmbiorderservicetms
+      - testing
+      - a_mark_market-order-service-tms-testing

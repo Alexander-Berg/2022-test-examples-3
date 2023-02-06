@@ -1,0 +1,157 @@
+{
+  "meta": {
+    "name": "yandex-direct-test-steps-java",
+    "maintainer": "Sergey Kovach <buhter@yandex-team.ru>",
+    "description": "Direct Test Steps App",
+    "depends": [
+      "yandex-direct-user",
+      "yandex-direct-zk-delivery-configs",
+      "yandex-environment",
+      "yandex-direct-jdk11 (>=1.4486820-1)",
+      "yandex-direct-send-logs-to-logbroker (>=1.7327918-1)",
+      "yandex-du-dpkg-monitor-simple-java-conf (>=0.05-1)",
+      "yandex-du-access-check-conf-common (>=0.03-1)",
+      "nginx",
+      "nginx-common",
+      "util-linux",
+      "yandex-dau-direct-log (>=1.3343582-1)",
+      "yandex-dau-alive-checker",
+      "runit"
+    ],
+    "version": "1.{revision}-1"
+  },
+  "build": {
+    "targets": [
+      "direct/apps/test-steps"
+    ]
+  },
+  "data": [
+    {
+      "source": {
+        "type": "RELATIVE",
+        "path": "etc/sv/direct-test-steps"
+      },
+      "destination": {
+        "path": "/etc/sv/direct-test-steps"
+      }
+    },
+    {
+      "source": {
+        "type": "RELATIVE",
+        "path": "etc/init.d/nginx-direct-test-steps"
+      },
+      "destination": {
+        "path": "/etc/init.d/nginx-direct-test-steps"
+      }
+    },
+    {
+      "source": {
+        "type": "RELATIVE",
+        "path": "etc/logrotate.d/nginx-direct-test-steps"
+      },
+      "destination": {
+        "path": "/etc/logrotate.d/nginx-direct-test-steps"
+      }
+    },
+    {
+      "source": {
+        "type": "RELATIVE",
+        "path": "etc/nginx/direct-test-steps.conf"
+      },
+      "destination": {
+        "path": "/etc/nginx/direct-test-steps.conf"
+      }
+    },
+    {
+      "source": {
+        "type": "RELATIVE",
+        "path": "etc/cron.d/yandex-direct-test-steps-java"
+      },
+      "destination": {
+        "path": "/etc/cron.d/yandex-direct-test-steps-java"
+      }
+    },
+    {
+      "source": {
+        "type": "DIRECTORY"
+      },
+      "destination": {
+        "path": "/var/log/nginx-direct-test-steps"
+      }
+    },
+    {
+      "source": {
+        "type": "RELATIVE",
+        "path": "etc/monrun/direct-test-steps-alive.conf"
+      },
+      "destination": {
+        "path": "/etc/monrun/conf.d/direct-test-steps-alive.conf"
+      }
+    },
+    {
+      "source": {
+        "type": "DIRECTORY"
+      },
+      "destination": {
+        "path": "/etc/direct-spec"
+      }
+    },
+    {
+      "source": {
+        "type": "RELATIVE",
+        "path": "../../libs-internal/config/src/main/resources",
+        "files": [
+          "log4j2*"
+        ]
+      },
+      "destination": {
+        "path": "/etc/direct/test-steps/logging-config/"
+      }
+    },
+    {
+      "source": {
+        "type": "DIRECTORY"
+      },
+      "destination": {
+        "path": "/var/log/yandex",
+        "attributes": {
+          "owner": {
+            "value": "ppc",
+            "recursive": true
+          },
+          "mode": {
+            "value": "777",
+            "recursive": true
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "type": "DIRECTORY"
+      },
+      "destination": {
+        "path": "/var/www/direct-test-steps/htdocs",
+        "attributes": {
+          "owner": {
+            "value": "ppc",
+            "recursive": true
+          },
+          "mode": {
+            "value": "777",
+            "recursive": true
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "type": "BUILD_OUTPUT",
+        "path": "direct/apps/test-steps/yandex-direct-test-steps"
+      },
+      "destination": {
+        "path": "/var/www/direct-test-steps/direct-test-steps"
+      }
+    }
+  ]
+}

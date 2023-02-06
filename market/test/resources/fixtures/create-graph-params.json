@@ -1,0 +1,62 @@
+{
+    "serviceId": 1234,
+    "name": "test",
+    "initialState": "REGISTERED",
+    "states": [
+        {
+            "name": "REGISTERED",
+            "priorityFunction": {
+                "type": "ARRIVAL_TIME",
+                "params": [
+                    {
+                        "type": "SKIP_N_CLIENTS",
+                        "value": "15"
+                    }
+                ]
+            },
+            "final": false
+        },
+        {
+            "name": "ALLOCATED",
+            "priorityFunction": {
+                "type": "ARRIVAL_TIME",
+                "params": [
+                    {
+                        "type": "SKIP_N_CLIENTS",
+                        "value": "15"
+                    }
+                ]
+            },
+            "final": true
+        }
+    ],
+    "edges": [
+        {
+            "fromState": "REGISTERED",
+            "toState": "ALLOCATED",
+            "restrictions": [
+                {
+                    "type": "CONJUNCTION",
+                    "params": [
+                        {
+                            "type": "ELEMENTS_IN_ALMOST_EMPTY_QUEUE",
+                            "value": "value"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 1
+        }
+    ],
+    "capacities": [
+        {
+            "name": "SC_CAPACITY",
+            "states": [
+                "WAITING"
+            ],
+            "value": 0,
+            "capacityUnits": []
+        }
+    ]
+}

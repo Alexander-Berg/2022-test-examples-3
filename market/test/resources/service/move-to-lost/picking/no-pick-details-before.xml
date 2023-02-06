@@ -1,0 +1,310 @@
+<?xml version="1.0"?>
+<dataset>
+
+    <ORDERS ORDERKEY="ORD001" TYPE="0" />
+    <ORDERS ORDERKEY="ORD002" TYPE="0" />
+
+    <!--  Деталь заказа с резервом 1 штучки товара, не изменится, так как не найдены пик детали  -->
+    <ORDERDETAIL
+        ORDERKEY="ORD001"
+        ORDERLINENUMBER="01"
+        STORERKEY="0001"
+        SKU="ROV01"
+        OPENQTY="1"
+        QTYALLOCATED="1"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Деталь заказа с резервом другого товара, не шортируется и не будет обнуляться  -->
+    <ORDERDETAIL
+        ORDERKEY="ORD001"
+        ORDERLINENUMBER="02"
+        STORERKEY="0002"
+        SKU="ROV02"
+        OPENQTY="1"
+        QTYALLOCATED="1"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Деталь заказа с резервом 1 штучки товара из другого заказа, не изменится, так как не найдены пик детали  -->
+    <ORDERDETAIL
+        ORDERKEY="ORD002"
+        ORDERLINENUMBER="01"
+        STORERKEY="0001"
+        SKU="ROV01"
+        OPENQTY="1"
+        QTYALLOCATED="1"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Потерянная штучка товара, будет перенесена в LOST  -->
+    <SERIALINVENTORY
+        SERIALNUMBER="100001"
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123001"
+        LOC="LOC01"
+        ID=""
+        QTY="1"
+        ADDWHO="SETUP"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Еще одна штучка того же товара, тоже будет перенесена в LOST  -->
+    <SERIALINVENTORY
+        SERIALNUMBER="100002"
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123001"
+        LOC="LOC01"
+        ID=""
+        QTY="1"
+        ADDWHO="SETUP"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Другой товар в той же ячейке, не будет перенесен в LOST  -->
+    <SERIALINVENTORY
+        SERIALNUMBER="100003"
+        STORERKEY="0002"
+        SKU="ROV02"
+        LOT="123002"
+        LOC="LOC01"
+        ID=""
+        QTY="1"
+        ADDWHO="SETUP"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Такой же товар в другой ячейке, не будет перенесен в LOST  -->
+    <SERIALINVENTORY
+        SERIALNUMBER="100004"
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123001"
+        LOC="LOC02"
+        ID=""
+        QTY="1"
+        ADDWHO="SETUP"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Такой же товар в той же ячейке, но другой партии, не будет перенесен в LOST  -->
+    <SERIALINVENTORY
+        SERIALNUMBER="100005"
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123003"
+        LOC="LOC01"
+        ID=""
+        QTY="1"
+        ADDWHO="SETUP"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Отбор другого товара из этой же ячейки LOC01 - удаляться не должен  -->
+    <PICKDETAIL
+        PICKDETAILKEY="PDK2"
+        PICKHEADERKEY=" "
+        ORDERKEY="ORD002"
+        ORDERLINENUMBER="01"
+        STATUS="0"
+        STORERKEY="0002"
+        SKU="ROV02"
+        LOT="123002"
+        ASSIGNMENTNUMBER="ASGN02"
+        LOC="LOC01"
+        QTY="1"
+        WAVEKEY="WAVE0002"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Отбор такого же товара, но из другой ячейки - удаляться не должен -->
+    <PICKDETAIL
+        PICKDETAILKEY="PDK3"
+        PICKHEADERKEY=" "
+        ORDERKEY="ORD001"
+        ORDERLINENUMBER="01"
+        STATUS="9"
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123001"
+        ASSIGNMENTNUMBER="ASGN01"
+        LOC="LOC02"
+        QTY="1"
+        WAVEKEY="WAVE0001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Отбор такого же товара, но другой партии - удаляться не должен -->
+    <PICKDETAIL
+        PICKDETAILKEY="PDK4"
+        PICKHEADERKEY=" "
+        ORDERKEY="ORD001"
+        ORDERLINENUMBER="01"
+        STATUS="9"
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123003"
+        ASSIGNMENTNUMBER="ASGN01"
+        LOC="LOC01"
+        QTY="1"
+        WAVEKEY="WAVE0001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Задание на отбор 1 штучки шортанутого товара из ячейки LOC01 - не меняется, так как не найдены пик детали  -->
+    <USERACTIVITY
+        PICKDETAILKEY="PDK1"
+        STATUS="1"
+        TYPE="PK"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Другое задание на отбор - не будет переведен в статус COMPLETED("9")  -->
+    <USERACTIVITY
+        PICKDETAILKEY="PDK3"
+        STATUS="1"
+        TYPE="PK"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Задание на отбор 1 штучки шортанутого товара из ячейки LOC01 - не меняется, так как не найдены пик детали  -->
+    <TASKDETAIL
+        TASKDETAILKEY="TDK1"
+        PICKDETAILKEY="PDK1"
+        STATUS="0"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Другое задание на отбор - не будет переведен в статус CANCELLED("X")  -->
+    <TASKDETAIL
+        TASKDETAILKEY="TDK2"
+        PICKDETAILKEY="PDK3"
+        STATUS="0"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Не будет удалена, т.к. детали отбора не найднеы  -->
+    <LOTXIDHEADER
+        PICKDETAILKEY="PDK1"
+        LOTXIDKEY="LIDK1"
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Не будет удалена, т.к. детали отбора не найднеы  -->
+    <LOTXIDDETAIL
+        PICKDETAILKEY="PDK1"
+        LOTXIDKEY="LIDK1"
+        LOTXIDLINENUMBER="01"
+        LOT="123001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  По таблице LOT числится 100 штук товара - не меняется, так как не найдены пик детали
+          При этом только обновляется QTYONHOLD при перемещении серийников -->
+    <LOT
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123001"
+        QTYALLOCATED="100"
+        QTYONHOLD="0"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Другой товар, после обновления должно остаться 100  -->
+    <LOT
+        STORERKEY="0002"
+        SKU="ROV02"
+        LOT="123002"
+        QTYALLOCATED="100"
+        QTYONHOLD="0"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Другая партия того же товара, после обновления должно остаться 100  -->
+    <LOT
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123003"
+        QTYALLOCATED="100"
+        QTYONHOLD="0"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Балланс из LOC01 перетечет в LOST  -->
+    <LOTXLOCXID
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123001"
+        LOC="LOC01"
+        ID=""
+        QTY="2"
+        QTYALLOCATED="2"
+        QTYPICKED="0"
+        STATUS="OK"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <LOTXLOCXID
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123001"
+        LOC="LOST"
+        ID=""
+        QTY="0"
+        QTYALLOCATED="0"
+        QTYPICKED="0"
+        STATUS="HOLD"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  В ячейке LOC01 числится две штучки, обе переместятся в LOST  -->
+    <SKUXLOC
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOC="LOC01"
+        QTY="2"
+        QTYALLOCATED="2"
+        QTYPICKED="0"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <SKUXLOC
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOC="LOST"
+        QTY="0"
+        QTYALLOCATED="0"
+        QTYPICKED="0"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+</dataset>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug">
+
+    <!-- Don't forget to set system property
+-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
+     to make all loggers asynchronous. -->
+
+    <Appenders>
+        <RollingFile name="MAIN" fileName="${sys:log.dir}/${sys:app.name}.log"
+                     filePattern="${sys:log.dir}/${sys:app.name}.log.%d{yyyy-MM-dd}.gz">
+            <PatternLayout pattern="[%d] %-5p [%t] %m%n"/>
+            <TimeBasedTriggeringPolicy interval="1"/>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${sys:log.dir}" maxDepth="1">
+                    <IfFileName glob="${sys:app.name}.log.*.gz"/>
+                    <IfLastModified age="14d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <RollingFile name="TRACE" fileName="${sys:log.dir}/${sys:app.name}-trace.log"
+                     filePattern="${sys:log.dir}/${sys:app.name}-trace.log.%d{yyyy-MM-dd}.gz">
+            <PatternLayout pattern="%m%n"/>
+            <TimeBasedTriggeringPolicy interval="1"/>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${sys:log.dir}" maxDepth="1">
+                    <IfFileName glob="${sys:app.name}-trace.log.*.gz"/>
+                    <IfLastModified age="14d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="MAIN"/>
+        </Root>
+        <Logger name="requestTrace" level="trace" additivity="false">
+            <AppenderRef ref="TRACE"/>
+        </Logger>
+    </Loggers>
+</Configuration>

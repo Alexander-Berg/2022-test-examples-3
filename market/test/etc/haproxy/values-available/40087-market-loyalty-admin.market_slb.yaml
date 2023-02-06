@@ -1,0 +1,52 @@
+# Параметры обработки
+params:
+  default:
+    templates:
+      - user_mslb_http.tpl
+    generate: no
+  "%market_slb_search-testing":
+    generate: yes
+  "%market_slb_search-prestable":
+    generate: yes
+  "%market_slb_search-stable":
+    generate: yes
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          "check observe layer7"
+      inter:          1000
+      downinter:      3000
+      fall:           2
+      error_limit:    2
+      on_error:       mark-down
+      weight:         1
+      rise:           3
+    globals:
+      balance:        roundrobin
+      service_name:   admin.market-loyalty.vs.market.yandex.ru
+      service_port:   32453
+      timeout_connect: 300
+    options:
+      http-server-close:
+    meta:
+      monrun_ignore:  yes
+  testing:
+    globals:
+      service_name: admin.market-loyalty.tst.vs.market.yandex.ru
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+      - name: "N@production_market_loyalty_admin_msk"
+        weight: 3
+      - name: "N@production_market_loyalty_admin_sas"
+        weight: 3
+      - name: "N@production_market_loyalty_admin_vla"
+        weight: 3
+  testing:
+    main:
+      - name: "N@testing_market_loyalty_admin_sas"
+      - name: "N@testing_market_loyalty_admin_vla"

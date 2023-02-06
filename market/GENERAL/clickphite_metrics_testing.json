@@ -1,0 +1,77 @@
+{
+  "logHosts": "*",
+  "logPath": "**/clickphite-metric.log",
+  "clickhouseTable": "clickphite_testing",
+  "sources": [
+    "logbroker://market-health-testing--other"
+  ],
+  "parser": {
+    "dateFormat": "[dd/MMM/yyyy:HH:mm:ss Z]",
+    "tskvMatch": {
+      "metrics_sent_per_id": "metrics_send_per_id",
+      "start_timestamp_milliseconds": "start_date",
+      "end_timestamp_milliseconds": "end_date"
+    },
+    "columns": {
+      "host": {
+        "type": "String"
+      },
+      "table": {
+        "type": "String"
+      },
+      "period": {
+        "type": "String"
+      },
+      "start_date": {
+        "type": "DateTime"
+      },
+      "end_date": {
+        "type": "DateTime"
+      },
+      "query_time_millis": {
+        "type": "Int32"
+      },
+      "rows_read": {
+        "type": "UInt32"
+      },
+      "rows_ignored": {
+        "type": "UInt32"
+      },
+      "invalid_rows_ignored_per_id": {
+        "type": "Array(UInt32)"
+      },
+      "metric_ids": {
+        "type": "Array(String)"
+      },
+      "send_time_millis_per_id": {
+        "type": "Array(Int32)"
+      },
+      "storage_per_id": {
+        "type": "Array(Enum8('GRAPHITE' = 0, 'SOLOMON' = 1, 'STATFACE' = 2))"
+      },
+      "metrics_send_per_id": {
+        "type": "Array(UInt32)"
+      },
+      "total_metrics_count_in_group": {
+        "type": "UInt16"
+      },
+      "query_weight": {
+        "type": "Enum8('LIGHT' = 0, 'MEDIUM' = 1, 'HEAVY' = 2)"
+      },
+      "config_ids": {
+        "type": "Array(String)"
+      },
+      "status": {
+        "type": "Enum8('SUCCESS' = 0, 'FAILURE' = 1)"
+      },
+      "failure_service": {
+        "type": "String",
+        "default": ""
+      },
+      "total_time_millis": {
+        "type": "Int32",
+        "default": -1
+      }
+    }
+  }
+}

@@ -1,0 +1,180 @@
+annotations:
+  stagectl_epoch: 806
+  stagectl_vcs:
+    svn_branch: stage_controller/stable-144-2
+    svn_revision: 9102181
+    svn_tag: stage_controller/stable-144-2
+labels:
+  deploy_engine: env_controller
+  du_patchers_target_revision:
+    saaspush: 11
+  du_sidecar_target_revision:
+    saaspush:
+      podBin: 2621390537
+  migration_from: crm.saaspush.test
+  migration_type: qloud
+  notifications_last_timestamp: 1642087058251758000
+  stagectl_epoch: 589
+  stagectl_vcs:
+    svn_branch: stage_controller/stable-108-2
+    svn_revision: 7951591
+    svn_tag: stage_controller/stable-108-2
+  tags: []
+meta:
+  account_id: abc:service:200
+  acl:
+  - action: allow
+    permissions:
+    - read
+    - write
+    - create
+    - ssh_access
+    - root_ssh_access
+    - read_secrets
+    subjects:
+    - robot-drug-deploy
+  - action: allow
+    attributes:
+    - /access/deploy/mandatory_approvers
+    permissions:
+    - use
+    subjects:
+    - deploy:crm-test.crm-saaspush-test.MANDATORY_APPROVER
+  - action: allow
+    attributes:
+    - /control/approve
+    - /control/disapprove
+    permissions:
+    - write
+    subjects:
+    - deploy:crm-test.crm-saaspush-test.MANDATORY_APPROVER
+  - action: allow
+    attributes:
+    - ''
+    - /spec
+    - /labels
+    - /annotations
+    - /meta/project_id
+    permissions:
+    - read
+    - write
+    - create
+    subjects:
+    - deploy:crm-test.crm-saaspush-test.MAINTAINER
+  - action: allow
+    attributes:
+    - /access/deploy/box/default
+    permissions:
+    - ssh_access
+    - root_ssh_access
+    subjects:
+    - deploy:crm-test.crm-saaspush-test.MAINTAINER
+  id: crm-saaspush-test
+  inherit_acl: true
+  project_id: crm-test
+spec:
+  deploy_units:
+    saaspush:
+      endpoint_sets:
+      - port: 80
+      images_for_boxes:
+        saaspush:
+          name: crm/saaspush
+          registry_host: registry.yandex.net
+          tag: 1.1.13
+      logbroker_tools_sandbox_info:
+        revision: 2249562029
+      multi_cluster_replica_set:
+        replica_set:
+          clusters:
+          - cluster: vla
+            spec:
+              constraints:
+                antiaffinity_constraints:
+                - key: rack
+                  max_pods: 1
+              replica_count: 1
+          - cluster: sas
+            spec:
+              constraints:
+                antiaffinity_constraints:
+                - key: rack
+                  max_pods: 1
+              replica_count: 1
+          deployment_strategy:
+            max_unavailable: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+              - id: infra
+                labels:
+                  used_by_infra: true
+                quota_policy:
+                  bandwidth_guarantee: 1048576
+                  bandwidth_limit: 1048576
+                  capacity: 6442450944
+                storage_class: hdd
+              host_infra:
+                monitoring:
+                  labels:
+                    itype: saaspush
+                  unistats:
+                  - labels:
+                      itype: saaspush
+                    path: /tass
+                    port: 33804
+                    workload_id: saaspush
+              pod_agent_payload:
+                spec:
+                  boxes:
+                  - id: saaspush
+                    rootfs: {}
+                  mutable_workloads:
+                  - workload_ref: saaspush
+                  resources: {}
+                  workloads:
+                  - box_ref: saaspush
+                    env:
+                    - name: TVM_SECRET
+                      value:
+                        secret_env:
+                          alias: sec-01dq7m10q03ytkzp4z39hzs07w:ver-01dq7m10yrrfwh13ng7azs89ge
+                          id: client_secret
+                    - name: TVM_CLIENT_ID
+                      value:
+                        literal_env:
+                          value: '2001283'
+                    - name: CONFIG_FILE_NAME
+                      value:
+                        literal_env:
+                          value: saas_push.test.conf
+                    - name: WRITER_PORT
+                      value:
+                        literal_env:
+                          value: '80'
+                    - name: CONTROLLER_PORT
+                      value:
+                        literal_env:
+                          value: '33804'
+                    id: saaspush
+                    transmit_logs: true
+              resource_requests:
+                memory_guarantee: 1073741824
+                memory_limit: 1073741824
+                network_bandwidth_guarantee: 1048576
+                vcpu_guarantee: 100
+                vcpu_limit: 100
+              secret_refs:
+                sec-01dq7m10q03ytkzp4z39hzs07w:ver-01dq7m10yrrfwh13ng7azs89ge:
+                  secret_id: sec-01dq7m10q03ytkzp4z39hzs07w
+                  secret_version: ver-01dq7m10yrrfwh13ng7azs89ge
+      network_defaults:
+        network_id: _CRMTEST_DEPLOY_NETS_
+      patchers_revision: 11
+      pod_agent_sandbox_info:
+        revision: 2621390537
+      revision: 29
+  revision: 29
+  revision_info:
+    description: Update sidecars
+

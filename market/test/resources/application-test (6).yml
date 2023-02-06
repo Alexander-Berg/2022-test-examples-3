@@ -1,0 +1,64 @@
+warehouse-timezone: Europe/Moscow
+spring.datasource.url: jdbc:h2:mem:SCPRD;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1
+spring.datasource-scprdd1.url: jdbc:h2:mem:SCPRDD1;MODE=MSSQLServer
+spring.archivedatasource.url: jdbc:h2:mem:SCPRDARC;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1
+
+spring:
+  config:
+    import:
+      - application-fragment-common-test.yml
+  main:
+    allow-bean-definition-overriding: true
+  liquibase:
+    enabled: true
+
+AppServer: localhost
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms: debug
+    org.springframework.jdbc.core: debug
+    root: info
+
+check:
+  authentication: 'no'
+
+servicebus:
+  api:
+    host: http://localhost:8382
+
+wiremock.server.port: 9999
+
+picking:
+  api:
+    host: 'http://localhost:${wiremock.server.port}/picking'
+
+wms:
+  core:
+    tvm:
+      serviceId: 0
+      secret: xxxxxx
+      log-only-mode: false
+      check-user-ticket: false
+      cache:
+        dir: /var/cache/tvm
+    skuArchiving:
+      enabled:
+        false
+  transportation:
+    moduleName: transportation
+    host: 'http://localhost:1231/transportation'
+    tvm:
+      serviceId: 0
+  scheduler:
+    host: 'http://localhost:8388/scheduler'
+    tvm:
+      serviceId: 0
+  constraints:
+    moduleName: constraints
+    api.host: 'http://localhost:1232/constraints'
+    tvm:
+      serviceId: 0
+
+s3.use: false

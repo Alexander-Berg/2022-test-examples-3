@@ -1,0 +1,43 @@
+# Formalizer's balancer only for MBO.
+# There always should be only ONE ALIVE backend.
+# https://st.yandex-team.ru/CSADMIN-15820
+# About backend closing: https://st.yandex-team.ru/MARKETIR-6335
+
+# Параметры обработки
+params:
+  default:
+    resolve: yes
+    templates:
+      - user_mslb_http.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          "check observe layer7"
+      inter:          1000
+      downinter:      3000
+      slowstart:      60000
+      fall:           2
+      on_error:       mark-down
+    globals:
+      balance:        roundrobin
+      service_name:   formalizer-mbo.tst.vs.market.yandex.net
+      min_nbsrv:      1      
+      timeout_server: 4h
+      ping_expect:    "status 200"
+      service_port:   34518
+      display_port:   34519
+    meta:
+      monrun_ignore:  yes
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+      - name: "YP@testing_market_formalizer_mbo_yp_vla"
+        dns_resolvers: "yandex-ns"
+        resolve: no
+      - name: "YP@testing_market_formalizer_mbo_yp_sas"
+        dns_resolvers: "yandex-ns"
+        resolve: no

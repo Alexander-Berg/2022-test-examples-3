@@ -1,0 +1,66 @@
+common:
+    cluster: {conductor_discovery: {disk_test_ratelimiter: local}}
+    cookie: disk_test_ratelimiter
+    spare_hosts: 1  # Used to derive shard count
+
+http:
+    port: 1880
+    pool_size: 30
+    log_access: true
+
+groups:
+    userapp:
+        rps: 10
+        burst: 50
+    cloud_api_user:
+        rps: 20
+        burst: 100
+    cloud_api_user_handler:
+        rps: 1
+        burst: 1
+    handle_update_user_yateam_status:
+        rps: 0.1
+        burst: 1
+    photoslice_update_user:
+        cluster: {conductor_discovery: {disk_test_ratelimiter: global}}
+        shard_count: 2
+        rps: 0.2 # 1 request per 5 seconds
+        burst: 1
+        default_wait: 5000 # 5 seconds max wait (virtual queue of size 1)
+    dynamic:
+        mode: adhoc
+    event-loader-history-update:
+        cluster: {conductor_discovery: {disk_test_ratelimiter: global}}
+        shard_count: 2
+        rps: 0.2 # 1 request per 5 seconds
+        burst: 1
+        default_wait: 5000 # 5 seconds max wait (virtual queue of size 1)
+    comments_add_comment:
+        cluster: {conductor_discovery: {disk_test_ratelimiter: global}}
+        shard_count: 2
+        rps: 50
+        burst: 0
+    cloud_api_special_yamb:
+        rps: 5000
+        burst: 1000
+    web_promo_sms:
+        burst: 5
+        rps: 0.01
+    djfs-filter-tvm2-source-client:
+        burst: 50
+        rps: 8
+    ps_billing_web_by_client_xs:
+        rps: 0.1
+        burst: 1
+    ps_billing_web_by_client_s:
+        rps: 1
+        burst: 1
+    ps_billing_web_by_client_m:
+        rps: 10
+        burst: 5
+    ps_billing_web_by_client_l:
+        rps: 100
+        burst: 50
+    ps_billing_web_by_client_xl:
+        rps: 1000
+        burst: 500

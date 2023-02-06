@@ -1,0 +1,41 @@
+phantom:
+  enabled: false
+pandora:
+  package: yandextank.plugins.Pandora
+  enabled: true
+  pandora_cmd: /usr/local/bin/pandora
+  config_content:
+          pools:
+           - id: HTTP
+             gun:
+                 type: http
+                 target: 4bs65mu2kdulxmir.myt.yp-c.yandex.net:80
+             ammo:
+                  type: uri
+                  file: ./ammo.uri
+             result:
+                 type: phout
+                 destination: ./phout.log
+             rps:
+               - {duration: 30s, type: line,  from: 1, to: 40000}
+               - {duration: 300s, type: const,  ops: 40000}
+             startup:
+               - {type: once, times: 20000}
+          log:
+             level: error
+          monitoring:
+             expvar:
+                enabled: true
+                port: 1234
+uploader:
+  enabled: true
+  operator: ligreen
+  package: yandextank.plugins.DataUploader
+  task: LOAD-1088
+console:
+  enabled: true
+telegraf:
+  config: monitoring.xml
+  enabled: false
+  package: yandextank.plugins.Telegraf
+

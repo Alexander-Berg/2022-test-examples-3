@@ -1,0 +1,33 @@
+const data = require('../../tools/data');
+
+module.exports = data.createSnippet(
+    {
+        block: 'key-value',
+        items: [
+            {
+                title: 'Произведено',
+                value: 'США, 1989',
+            },
+            {
+                title: 'Режиссёры',
+                value: [
+                    'Марк Керклэнд, ',
+                    {
+                        block: 'link',
+                        text: 'Джефф Линч',
+                        url: 'https://ya.ru',
+                    },
+                    ', Сьюзи Диттер',
+                ],
+            },
+            {
+                title: {
+                    block: 'link',
+                    text: 'Категория',
+                    url: 'https://ya.ru',
+                },
+                value: '16+',
+            },
+        ],
+    }
+);

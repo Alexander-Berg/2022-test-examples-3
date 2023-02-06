@@ -1,0 +1,202 @@
+{
+  "meta": {
+    "name": "crypta-graphite-monitor",
+    "maintainer": "Crypta <crypta-dev@yandex-team.ru>",
+    "description": "Crypta graphite monitor",
+    "version": "{revision}-{branch}"
+  },
+  "build": {
+    "targets": [
+      "crypta/cookie_matching/monitorings/graphite/bin",
+      "crypta/dmp/adobe/monitorings/graphite/bin",
+      "crypta/dmp/yandex/monitorings/graphite/bin",
+      "crypta/utils/graphite_monitor/bin",
+      "crypta/utils/providers_index_builder/bin",
+      "crypta/utils/run_periodic_task/bin"
+    ]
+  },
+  "data": [
+    {
+      "source": {
+        "type": "BUILD_OUTPUT",
+        "path": "crypta/utils/graphite_monitor/bin/crypta-graphite-monitor"
+      },
+      "destination": {
+        "path": "/root/"
+      }
+    },
+    {
+      "source": {
+        "type": "BUILD_OUTPUT",
+        "path": "crypta/utils/run_periodic_task/bin/crypta-run-periodic-task"
+      },
+      "destination": {
+        "path": "/root/"
+      }
+    },
+    {
+      "source": {
+        "type": "ARCADIA",
+        "path": "crypta/utils/graphite_monitor/docker/entrypoint.sh"
+      },
+      "destination": {
+        "path": "/root/"
+      }
+    },
+    {
+      "source": {
+        "type": "ARCADIA",
+        "path": "crypta/utils/graphite_monitor/config",
+        "files": [
+          "logger.conf",
+          "task_config.yaml"
+        ]
+      },
+      "destination": {
+        "path": "/root/config/"
+      }
+    },
+    {
+      "source": {
+        "type": "RELATIVE",
+        "path": "Dockerfile"
+      },
+      "destination": {
+        "path": "/"
+      }
+    },
+    {
+      "source": {
+        "type": "RELATIVE",
+        "path": "."
+      },
+      "destination": {
+        "path": "/",
+        "files": [
+          "clients/*.yaml",
+          "templates/config.yaml"
+        ]
+      }
+    },
+    {
+      "source": {
+        "type": "ARCADIA",
+        "path": "crypta/utils/graphite_monitor/docker/supervisor",
+        "files": ["*"]
+      },
+      "destination": {
+        "path": "/supervisor/"
+      }
+    },
+    {
+      "source": {
+        "type": "ARCADIA",
+        "path": "crypta/utils/graphite_monitor/config/graphite_monitor"
+      },
+      "destination": {
+        "path": "/root/graphite_monitor.d/"
+      }
+    },
+    {
+      "source": {
+        "type": "ARCADIA",
+        "path": "crypta/utils/yt_stats/monitorings/graphite/config/crypta-yt-stats"
+      },
+      "destination": {
+        "path": "/root/graphite_monitor.d/"
+      }
+    },
+    {
+      "source": {
+        "type": "ARCADIA",
+        "path": "crypta/salt/server/monitorings/graphite/config/salt-server-updater"
+      },
+      "destination": {
+        "path": "/root/graphite_monitor.d/"
+      }
+    },
+    {
+      "source": {
+        "type": "ARCADIA",
+        "path": "crypta/idserv/monitorings/graphite",
+        "files": ["*-mon"]
+      },
+      "destination": {
+        "path": "/root/graphite_monitor.d/"
+      }
+    },
+    {
+      "source": {
+        "type": "ARCADIA",
+        "path": "crypta/deprecated/idserv/monitorings/graphite",
+        "files": ["*-mon"]
+      },
+      "destination": {
+        "path": "/root/graphite_monitor.d/"
+      }
+    },
+    {
+      "source": {
+        "type": "ARCADIA",
+        "path": "crypta/mac_md5_matching/monitorings/graphite/crypta-mac-md5-matching-mon"
+      },
+      "destination": {
+        "path": "/root/graphite_monitor.d/"
+      }
+    },
+    {
+      "source": {
+        "type": "ARCADIA",
+        "path": "crypta/utils/yt_sizes/monitorings/graphite/crypta-yt-sizes-yt-mon"
+      },
+      "destination": {
+        "path": "/root/graphite_monitor.d/"
+      }
+    },
+    {
+      "source": {
+        "type": "BUILD_OUTPUT",
+        "path": "crypta/dmp/yandex/monitorings/graphite/bin/crypta-dmp-yandex-generate-graphite-monitor-config"
+      },
+      "destination": {
+        "path": "/root/dmp/"
+      }
+    },
+    {
+      "source": {
+        "type": "ARCADIA",
+        "path": "crypta/dit/monitorings/graphite/crypta-dit-mon"
+      },
+      "destination": {
+        "path": "/root/graphite_monitor.d/"
+      }
+    },
+    {
+      "source": {
+        "type": "ARCADIA",
+        "path": "crypta/utils/yt_latencies/monitorings/graphite/yt-latencies-mon"
+      },
+      "destination": {
+        "path": "/root/graphite_monitor.d/"
+      }
+    },
+    {
+      "source": {
+        "type": "BUILD_OUTPUT",
+        "path": "crypta/dmp/adobe/monitorings/graphite/bin/crypta-adobe-generate-graphite-monitor-config"
+      },
+      "destination": {
+        "path": "/root/adobe/"
+      }
+    },
+    {
+      "source": {
+        "type": "BUILD_OUTPUT",
+        "path": "crypta/cookie_matching/monitorings/graphite/bin/crypta-cookie-matching-generate-graphite-monitor-config"
+      },
+      "destination": {
+        "path": "/root/cookie_matching/"
+      }
+    }
+  ]
+}

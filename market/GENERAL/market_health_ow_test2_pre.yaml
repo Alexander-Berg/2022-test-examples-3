@@ -1,0 +1,35 @@
+{%- import "variables.tmpl" as var with context %}
+{%- if var.log_files is defined and var.environment == "test2" %}
+files:
+{% for f in var.log_files -%}
+- name: /var/logs/yandex/{{ f }}
+  send_delay: 5
+  log_type: other
+  {%- if f.rstrip().endswith(".gc") or f.rstrip().endswith(".gc.log.0.current") %}
+  sid:
+    random: null
+  {%- endif %}
+{%- if var.push_client_chunk_meta is defined %}
+{{var.push_client_chunk_meta}}
+{%- else %}  
+  chunk:
+    send-server: 1
+    send-file: 1
+    send-meta:
+      slot: {{ env.BSCONFIG_IPORT }}
+{%- endif %}
+{% endfor %}
+{%- if var.environment == "test2" %}
+ident: market-health-testing
+{%- endif %}
+logger:
+  file: /var/logs/yandex/push-client/market_health_pre.log
+  level: {%- if var.push_client_log_level is defined %} {{var.push_client_log_level}} {%- else %} 5 {%- endif %}
+  mode:
+  - file
+network:
+  master_addr: logbroker-pre.yandex.net
+  proto: rt
+watcher:
+  state: pstate/push-client_market_health_pre
+{%- endif %}

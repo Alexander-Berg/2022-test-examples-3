@@ -1,0 +1,403 @@
+#%RAML 0.8
+title: calWebApi
+
+/?_models=get-events:
+   displayName: get-events
+   description: Список событий пользователя, без параметров возвращает события на текущий день
+   post:
+     headers:
+        Connection:
+            type: string
+            default: keep-alive
+            required: true
+        Host:
+            type: string
+            default: calendar.qa.yandex.ru
+            required: true
+        Content-Type:
+            type: string
+            default: application/json
+            required: true
+        x-yandex-maya-uid:
+            type: string
+            required: true
+        x-yandex-maya-ckey:
+            type: string
+            required: true
+        x-yandex-maya-locale:
+            type: string
+            default: ru
+            required: true
+        x-yandex-maya-timezone:
+            type: string
+            default: Europe/Moscow
+            required: true
+     responses:
+      200:
+        body:
+          application/json:
+            schema: !include schemas/getEventResp.json
+
+/?_models=do-delete-event:
+   displayName: do-delete-event
+   description: Удаление одного события (несколько событий передать нельзя)
+   post:
+     headers:
+        Connection:
+            type: string
+            default: keep-alive
+            required: true
+        Host:
+            type: string
+            default: calendar.qa.yandex.ru
+            required: true
+        Content-Type:
+            type: string
+            default: application/json
+            required: true
+        x-yandex-maya-uid:
+            type: string
+            required: true
+        x-yandex-maya-ckey:
+            type: string
+            required: true
+        x-yandex-maya-locale:
+            type: string
+            default: ru
+            required: true
+        x-yandex-maya-timezone:
+            type: string
+            default: Europe/Moscow
+            required: true
+
+/?_models=do-create-event:
+   displayName: do-create-event
+   description: Создание события
+   post:
+     headers:
+        Connection:
+            type: string
+            default: keep-alive
+            required: true
+        Host:
+            type: string
+            default: calendar.qa.yandex.ru
+            required: true
+        x-yandex-maya-uid:
+            type: string
+            required: true
+        x-yandex-maya-ckey:
+            type: string
+            required: true
+        x-yandex-maya-locale:
+            type: string
+            default: ru
+            required: true
+        x-yandex-maya-timezone:
+            type: string
+            default: Europe/Moscow
+            required: true
+     body:
+          application/json:
+            schema: !include schemas/createEventBody.json
+
+/?_models=do-create-layer:
+   displayName: do-create-layer
+   description: Создание слоя
+   post:
+     headers:
+        Connection:
+            type: string
+            default: keep-alive
+            required: true
+        Host:
+            type: string
+            default: calendar.qa.yandex.ru
+            required: true
+        x-yandex-maya-uid:
+            type: string
+            required: true
+        x-yandex-maya-ckey:
+            type: string
+            required: true
+        x-yandex-maya-locale:
+            type: string
+            default: ru
+            required: true
+        x-yandex-maya-timezone:
+            type: string
+            default: Europe/Moscow
+            required: true
+     body:
+          application/json:
+            schema: !include schemas/createLayerBody.json
+
+/?_models=get-user-layers:
+   displayName: get-user-layers
+   description: Все слои пользователя
+   post:
+     headers:
+        Connection:
+            type: string
+            default: keep-alive
+            required: true
+        Host:
+            type: string
+            default: calendar.qa.yandex.ru
+            required: true
+        Content-Type:
+            type: string
+            default: application/json
+            required: true
+        x-yandex-maya-uid:
+            type: string
+            required: true
+        x-yandex-maya-ckey:
+            type: string
+            required: true
+        x-yandex-maya-locale:
+            type: string
+            default: ru
+            required: true
+        x-yandex-maya-timezone:
+            type: string
+            default: Europe/Moscow
+            required: true
+
+/qa:
+   displayName: qa
+   description: Информация о пользователе
+   get:
+     headers:
+        Connection:
+            type: string
+            default: keep-alive
+            required: true
+        Host:
+            type: string
+            default: calendar.qa.yandex.ru
+            required: true
+
+/?_models=do-update-user-settings:
+   displayName: do-update-user-settings
+   description: Меняем настройки пользователя
+   post:
+     headers:
+        Connection:
+            type: string
+            default: keep-alive
+            required: true
+        Host:
+            type: string
+            default: calendar.qa.yandex.ru
+            required: true
+        x-yandex-maya-uid:
+            type: string
+            required: true
+        x-yandex-maya-ckey:
+            type: string
+            required: true
+        x-yandex-maya-locale:
+            type: string
+            default: ru
+            required: true
+        x-yandex-maya-timezone:
+            type: string
+            default: Europe/Moscow
+            required: true
+     body:
+          application/json:
+            schema: !include schemas/updateSettingsBody.json
+
+/?_models=do-toggle-layer:
+   displayName: do-toggle-layer
+   description: Включаем/Выключаем календари
+   post:
+     headers:
+        Connection:
+            type: string
+            default: keep-alive
+            required: true
+        Host:
+            type: string
+            default: calendar.qa.yandex.ru
+            required: true
+        Content-Type:
+            type: string
+            default: application/json
+            required: true
+        x-yandex-maya-uid:
+            type: string
+            required: true
+        x-yandex-maya-ckey:
+            type: string
+            required: true
+        x-yandex-maya-locale:
+            type: string
+            default: ru
+            required: true
+        x-yandex-maya-timezone:
+            type: string
+            default: Europe/Moscow
+            required: true
+
+/?_models=get-todo-sidebar:
+   displayName: get-todo-sidebar
+   description: Все списки дел и дела
+   post:
+     headers:
+        Connection:
+            type: string
+            default: keep-alive
+            required: true
+        Host:
+            type: string
+            default: calendar.qa.yandex.ru
+            required: true
+        Content-Type:
+            type: string
+            default: application/json
+            required: true
+        x-yandex-maya-uid:
+            type: string
+            required: true
+        x-yandex-maya-ckey:
+            type: string
+            required: true
+        x-yandex-maya-locale:
+            type: string
+            default: ru
+            required: true
+        x-yandex-maya-timezone:
+            type: string
+            default: Europe/Moscow
+            required: true
+
+/?_models=do-delete-todo-list:
+   displayName: do-delete-todo-list
+   description: Удаление списка дел
+   post:
+     headers:
+        Connection:
+            type: string
+            default: keep-alive
+            required: true
+        Host:
+            type: string
+            default: calendar.qa.yandex.ru
+            required: true
+        Content-Type:
+            type: string
+            default: application/json
+            required: true
+        x-yandex-maya-uid:
+            type: string
+            required: true
+        x-yandex-maya-ckey:
+            type: string
+            required: true
+        x-yandex-maya-locale:
+            type: string
+            default: ru
+            required: true
+        x-yandex-maya-timezone:
+            type: string
+            default: Europe/Moscow
+            required: true
+
+/?_models=do-create-todo-list:
+   displayName: do-create-todo-list
+   description: Создание списка дел
+   post:
+     headers:
+        Connection:
+            type: string
+            default: keep-alive
+            required: true
+        Host:
+            type: string
+            default: calendar.qa.yandex.ru
+            required: true
+        Content-Type:
+            type: string
+            default: application/json
+            required: true
+        x-yandex-maya-uid:
+            type: string
+            required: true
+        x-yandex-maya-ckey:
+            type: string
+            required: true
+        x-yandex-maya-locale:
+            type: string
+            default: ru
+            required: true
+        x-yandex-maya-timezone:
+            type: string
+            default: Europe/Moscow
+            required: true
+
+/?_models=do-create-todo-item:
+   displayName: do-create-todo-item
+   description: Создание дела
+   post:
+     headers:
+        Connection:
+            type: string
+            default: keep-alive
+            required: true
+        Host:
+            type: string
+            default: calendar.qa.yandex.ru
+            required: true
+        Content-Type:
+            type: string
+            default: application/json
+            required: true
+        x-yandex-maya-uid:
+            type: string
+            required: true
+        x-yandex-maya-ckey:
+            type: string
+            required: true
+        x-yandex-maya-locale:
+            type: string
+            default: ru
+            required: true
+        x-yandex-maya-timezone:
+            type: string
+            default: Europe/Moscow
+            required: true
+
+/?_models=do-delete-layer:
+   displayName: do-delete-layer
+   description: Удаление календаря
+   post:
+     headers:
+        Connection:
+            type: string
+            default: keep-alive
+            required: true
+        Host:
+            type: string
+            default: calendar.qa.yandex.ru
+            required: true
+        Content-Type:
+            type: string
+            default: application/json
+            required: true
+        x-yandex-maya-uid:
+            type: string
+            required: true
+        x-yandex-maya-ckey:
+            type: string
+            required: true
+        x-yandex-maya-locale:
+            type: string
+            default: ru
+            required: true
+        x-yandex-maya-timezone:
+            type: string
+            default: Europe/Moscow
+            required: true
+

@@ -1,0 +1,22 @@
+context:
+  default:
+    service_name: market_blue_touch_prestable
+    servername_regexp: touch-prestable\\.(checkout\\.market|bluemarket)\\.(fslb[\\w\\d]*\\.)?(yandex|beru)\\.(ru|ua|kz|by)
+    vs: market
+    cert: bluemarket
+    exp_getter: true
+    antirobot: true
+    antirobot_service_name: marketblue
+    balancing_method: active
+    health_check: '"GET /ping HTTP/1.1\r\nHost: heartbeat-blue-touch-prestable.market.yandex.ru\r\n\r\n"'
+    uaas_service_name: blue-market
+    no_yandex_uid: true
+
+servers:
+  default:
+    main:
+    - name: GREY%fslb.yandex.ru
+      timeout: 35s
+      weight: 100
+      port: 10004
+      plain_http_backend: true

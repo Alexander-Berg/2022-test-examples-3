@@ -1,0 +1,65 @@
+#!/bin/sh
+
+# если есть мастер-соединениие (созданное в direct-release), то используем его
+get_master_conn_param() {
+    env_name="SSH_MASTER_CONN_$(echo "$1" | tr a-z.- A-Z__)"
+    [[ -n "${!env_name}" ]] && echo "-S ${!env_name}" || echo ""
+}
+
+print_usage() {
+    echo "Usage: $script_name <service name> <version>"
+    echo "    or: $script_name <service name> --list-hosts  # no update, only list hosts"
+    echo "Example: $script_name java-intapi 1.1234567-1
+                   $script_name java-intapi --list-hosts"
+}
+
+script_name="direct-java-test-update"
+
+if [ "$1" = "-h" ]; then
+    print_usage
+    exit 0
+fi
+
+if [ "$1" = "--list-hosts" ]; then
+    list_hosts=1
+    service="$2"
+elif [ "$2" = "--list-hosts" ]; then
+    list_hosts=1
+    service="$1"
+else
+    service="$1"
+    version="$2"
+fi
+if [ -z "$service" ]; then
+    printf "%s: no service name given\n" "$script_name"
+    print_usage
+    exit 2
+fi
+up_cmd="limtest-up --zk-root /direct/np --limtest-name test $service"
+if [ -n "$list_hosts" ]; then
+    $up_cmd --overview | awk '{print $3}'
+    exit 0
+fi
+if [ -z "$version" ]; then
+    printf "%s: no version given\n" "$script_name"
+    print_usage
+    exit 2
+fi
+
+failed_hosts=""
+if [ "$service" = "java-api5" -o "$service" = "java-intapi" ]; then
+    # песочница ТС1 сейчас здесь
+    host=ppctest-sandbox1-front.ppc.yandex.ru
+    ssh $(get_master_conn_param "$host") -t -o 'StrictHostKeyChecking=no' updater@"$host" direct-java-deploy.pl --host localhost --force-yes "$service" "$version"
+    if [ $? -ne 0 ]; then
+        failed_hosts="$failed_hosts $host"
+    fi
+fi
+if [ -n "$failed_hosts" ]; then
+    printf "%s: update failed for hosts: %s\n" "$script_name" "$failed_hosts"
+    exit 1
+fi
+
+# странное название limtest-up оттого, что для java-ТС используем механизм, который задумывался для лимтестов
+# в будущем надеемся придумать название получше
+$up_cmd "$version" --log-filename-prefix=java-test-update $(get_master_conn_param "$host") --lock

@@ -1,0 +1,85 @@
+ci:
+  flows:
+    flow-cookie-matching:
+      jobs:
+        build-CRYPTA_CM_QUOTER_BUNDLE:
+          input:
+            package_resource_attrs: {}
+            packages: crypta/cm/services/quoter/bundle/crypta-cm-quoter.json
+            resource_type: CRYPTA_CM_QUOTER_BUNDLE
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package
+          title: Build CRYPTA_CM_QUOTER_BUNDLE
+        release-nanny-stable:
+          input:
+            config:
+              common_release_data:
+                nanny_common_release_data:
+                  release_stage: stable
+              deploy_system: NANNY
+              wait_for_deploy: true
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-CRYPTA_CM_QUOTER_BUNDLE.resources[?type == 'CRYPTA_CM_QUOTER_BUNDLE'])[0].id}
+                type: CRYPTA_CM_QUOTER_BUNDLE
+          needs:
+          - start-stable
+          stage: stable
+          task: common/releases/simple_releaser
+          title: Release to stable (Nanny)
+        release-nanny-testing:
+          input:
+            config:
+              common_release_data:
+                nanny_common_release_data:
+                  release_stage: testing
+              deploy_system: NANNY
+              wait_for_deploy: true
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-CRYPTA_CM_QUOTER_BUNDLE.resources[?type == 'CRYPTA_CM_QUOTER_BUNDLE'])[0].id}
+                type: CRYPTA_CM_QUOTER_BUNDLE
+          needs:
+          - start-testing
+          stage: testing
+          task: common/releases/simple_releaser
+          title: Release to testing (Nanny)
+        start-build:
+          stage: build
+          task: dummy
+          title: Start build
+        start-stable:
+          manual: true
+          needs:
+          - release-nanny-testing
+          stage: stable
+          task: dummy
+          title: Start stable
+        start-testing:
+          needs:
+          - build-CRYPTA_CM_QUOTER_BUNDLE
+          stage: testing
+          task: dummy
+          title: Start testing
+  releases:
+    cookie-matching:
+      auto: true
+      filters:
+      - abs-paths:
+        - crypta/cm/**
+        discovery: dir
+      flow: flow-cookie-matching
+      stages:
+      - displace: true
+        id: build
+      - displace: true
+        id: testing
+      - id: stable
+      title: Cookie Matching
+  runtime:
+    sandbox-owner: CRYPTA
+  secret: sec-01efps66gnbmejg9wvc9ptvhmc
+service: cryptadev
+title: Cookie Matching

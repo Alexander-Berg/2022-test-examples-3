@@ -1,0 +1,61 @@
+# now = 2021-01-01T00:00:00 = 1609459200000
+MOCK VAR $now
+SET DateTime::FromMilliseconds(1609459200000)
+
+# CASES:
+# - 1) vendor without models
+# - 2) vendor with 1 model
+# - 3) vendor with 1 model - expired
+# - 4) vendor with 1 model - low balance
+# - 5) vendor with 2 models (one with target)
+# - 6) vendor with 2 models (one too expensive)
+# - campaign with 2 models
+# - campaign with 2 models (one will muss due to unbalanced correction: 50*2 > 120-30 > 30*2)
+
+
+MOCK TABLE //home/market/_YT_ENV_/vendors/dumps/paid_opinion_model/PAID_OPINION_MODEL
+SCHEMA DATASOURCE_ID:uint64
+SCHEMA MODEL_ID:uint64, PRICE:uint64, CHARGE:string
+SCHEMA TARGET_COUNT:uint64
+{"DATASOURCE_ID": 2, "MODEL_ID": 1, "PRICE": 50, "CHARGE":"1.33"}
+{"DATASOURCE_ID": 3, "MODEL_ID": 1, "PRICE": 50, "CHARGE":"1.33"}
+{"DATASOURCE_ID": 4, "MODEL_ID": 1, "PRICE": 50, "CHARGE":"1.33"}
+{"DATASOURCE_ID": 5, "MODEL_ID": 1, "PRICE": 50, "CHARGE":"1.33"}
+{"DATASOURCE_ID": 5, "MODEL_ID": 2, "PRICE": 50, "CHARGE":"1.33", "TARGET_COUNT":12}
+{"DATASOURCE_ID": 6, "MODEL_ID": 1, "PRICE": 50, "CHARGE":"1.33"}
+{"DATASOURCE_ID": 6, "MODEL_ID": 2, "PRICE": 100, "CHARGE":"2.66"}
+
+
+# sorry, can't mock //home/market/_YT_ENV_/pers-grade/author/paid_opinion_campaign
+# since it uses TableName(TablePath(), "yt") to find out table name :(
+# it could be mocked with DIR_MOCK, but TableName can't work with "with inline"
+
+MOCK VAR_TABLE $campaign_paid_content_raw
+SCHEMA payer_type:int32, payer_id:string, model_id:uint64,
+SCHEMA price:uint64, target_count:uint64
+SCHEMA price_photo:uint64, target_count_photo:uint64
+SCHEMA price_video:uint64, target_count_video:uint64
+{"payer_type":0, "payer_id":"market_paid_1", "model_id":1, "price":30}
+{"payer_type":0, "payer_id":"market_paid_1", "model_id":2, "price":30, "target_count":5}
+{"payer_type":0, "payer_id":"market_paid_1", "model_id":2, "price_photo":40, "target_count_photo":6}
+{"payer_type":0, "payer_id":"market_paid_1", "model_id":2, "price_video":45, "target_count_video":7}
+{"payer_type":0, "payer_id":"market_paid_2", "model_id":1, "price":30}
+{"payer_type":0, "payer_id":"market_paid_2", "model_id":2, "price":50}
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-pay/tables/pay_payer_balance
+SCHEMA payer_type:int32, payer_id:utf8
+SCHEMA balance:double, end_time:utf8
+{"payer_type":0, "payer_id":"market_paid_1", "balance":100.0, "end_time": "2021-01-02T00:00:00"}
+{"payer_type":0, "payer_id":"market_paid_2", "balance":120.0, "end_time": "2021-01-02T00:00:00"}
+{"payer_type":1, "payer_id":"1", "balance":3.0, "end_time": "2021-01-02T00:00:00"}
+{"payer_type":1, "payer_id":"2", "balance":3.0, "end_time": "2021-01-02T00:00:00"}
+{"payer_type":1, "payer_id":"3", "balance":3.0, "end_time": "2020-01-01T00:00:00"}
+{"payer_type":1, "payer_id":"4", "balance":1.0, "end_time": "2021-01-02T00:00:00"}
+{"payer_type":1, "payer_id":"5", "balance":3.0, "end_time": "2021-01-02T00:00:00"}
+{"payer_type":1, "payer_id":"6", "balance":3.0, "end_time": "2021-01-02T00:00:00"}
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-pay/tables/pay_unbalanced_pays
+SCHEMA payer_type:int32, payer_id:utf8
+SCHEMA amount:double
+{"payer_type":0, "payer_id":"market_paid_2", "amount":30.0}
+

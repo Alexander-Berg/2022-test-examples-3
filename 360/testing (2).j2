@@ -1,0 +1,29 @@
+{% extends "base.yaml" %}
+{% import "secrets/testing.j2" as secrets %}
+{% import "tvm/testing.j2" as tvm %}
+
+{% block infra_environment %}6326{% endblock %}
+{% block l3_ip_ptr_value %}api360-testing.mail.yandex.net{% endblock %}
+
+{% block ratelimiter_options %}--ping 100 --directory 25 --debug{% endblock %}
+
+{%
+set deploy_units = {
+    "api360": {
+        "network_macro": "_MAILTESTNETS_",
+        "ENVIRONMENT_TYPE":  "testing",
+        "ENVIRONMENT":  "testing",
+        "_app": "sbr:2941497179",
+        "per_cluster": False,
+        "max_unavailable": 1,
+        "memory_guarantee": 2,
+        "vcpu_guarantee": 1000,
+        "clusters": {
+            "sas": 1,
+            "vla": 1,
+        },
+        "secrets": secrets.secrets,
+        "tvm": tvm.tvm,
+    },
+}
+%}

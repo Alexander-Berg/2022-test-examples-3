@@ -1,0 +1,32 @@
+{% if table == "features_item_pair_offer_offer_external_order_statistics" %}
+    {# Result data. #}
+    {% table "features_item_pair_offer_offer_external_order_statistics" %}
+        ["O1", "O2", 2.0, 4.0, "offer", "offer", "{{ day }}"],
+        ["O2", "O1", 1.0, 3.0, "offer", "offer", "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_external_orders" %}
+    {% macro external_order(timestamp, yandexuid, offer_id) -%}
+        [
+            {{ timestamp }},
+            {
+                "yandexuid": "{{ yandexuid }}"
+            },
+            "order",
+            "offer",
+            "{{ offer_id }}",
+            {},
+            "{{ day }}"
+        ]
+    {%- endmacro %}
+    {% table "events" %}
+        {% if shift == 0 %}
+            {{ external_order(1503225532000, "19276", "O2") }},
+            {{ external_order(1503225532001, "19274", "O1") }},
+            {{ external_order(1503225532002, "19276", "O1") }},
+            {{ external_order(1503225532003, "19276", "O2") }},
+            {{ external_order(1503225532004, "19274", "O2") }},
+            {{ external_order(1503225532005, "19276", "O1") }},
+            {{ external_order(1503225532006, "19276", "O2") }}
+        {% endif %}
+    {% endtable %}
+{% endif %}

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <return
+        source="PICKUP_POINT"
+        order_external_id="order-external-id-1"
+    />
+    <return
+        source="PICKUP_POINT"
+        order_external_id="order-external-id-2"
+    />
+    <return
+        source="PICKUP_POINT"
+        order_external_id="order-external-id-3"
+    />
+    <return
+        source="PICKUP_POINT"
+        order_external_id="order-external-id-4"
+    />
+
+    <!-- просрочена -->
+    <control_point
+        return_id="1"
+        type="SHORT_TERM_STORAGE"
+        status="EXPIRED"
+        logistic_point_id="100"
+        partner_id="500"
+        to_partner_id="1000"
+        expire_at="2022-05-25 08:45:00 +0000"
+    />
+
+    <!-- завершена -->
+    <control_point
+        return_id="2"
+        type="SHORT_TERM_STORAGE"
+        status="FINISHED"
+        logistic_point_id="100"
+        partner_id="500"
+        to_partner_id="1000"
+        expire_at="2022-05-25 08:45:00 +0000"
+    />
+
+    <!--  не просрочена  -->
+    <control_point
+        return_id="3"
+        type="SHORT_TERM_STORAGE"
+        status="STARTED"
+        logistic_point_id="100"
+        partner_id="500"
+        to_partner_id="1000"
+        expire_at="2022-05-25 09:45:00 +0000"
+    />
+
+    <!--  точка утилизации  -->
+    <control_point
+        return_id="4"
+        type="UTILIZATION"
+        status="STARTED"
+        logistic_point_id="100"
+        partner_id="500"
+        to_partner_id="1000"
+        expire_at="[null]"
+    />
+
+    <queue_tasks
+        queue_name="GET_ROUTE_TO_UTILIZER"
+        payload='{"requestId":"test-request-id/1","controlPointId":1}'
+    />
+</dataset>

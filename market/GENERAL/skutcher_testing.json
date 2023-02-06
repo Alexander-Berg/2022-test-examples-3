@@ -1,0 +1,52 @@
+{
+  "owner": "marketir",
+  "tableName": "skutcher_health_testing",
+  "splits": {
+    "dc": "if(substring(host, 1, 3) in ('iva', 'man', 'vla', 'sas'), substring(host, 1, 3), if(endsWith(host, 'yp-c.yandex.net'), substring(host, position(host, '.') + 1, 3), if(dictGetString('dc', 'dc', sipHash64(host)) <> '', dictGetString('dc', 'dc', sipHash64(host)), 'undefined_dc')))",
+    "host": "host",
+    "method": "method"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "ir.skutcher.testing.rps.host.${host}",
+        "ir.skutcher.testing.rps.dc.${dc}",
+        "ir.skutcher.testing.rps.method.${method}",
+        "ir.skutcher.testing.rps.total"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "count() / 60",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "ir.skutcher.testing.offers-per-second.host.${host}",
+        "ir.skutcher.testing.offers-per-second.dc.${dc}",
+        "ir.skutcher.testing.offers-per-second.total"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "sum(offers_count) / 60",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "ir.skutcher.testing.work_time.host.${host}",
+        "ir.skutcher.testing.work_time.dc.${dc}",
+        "ir.skutcher.testing.work_time.total"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "work_time_ms",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "ir.skutcher.testing.work_time.per_offer.host.${host}",
+        "ir.skutcher.testing.work_time.per_offer.dc.${dc}",
+        "ir.skutcher.testing.work_time.per_offer.total"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "toInt64(work_time_ms / offers_count), offers_count",
+      "type": "QUANTILE_TIMING_WEIGHTED"
+    }
+  ]
+}

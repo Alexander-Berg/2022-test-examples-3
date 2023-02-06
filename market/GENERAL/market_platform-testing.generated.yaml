@@ -1,0 +1,147 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый market_platform-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_platform-testing
+
+juggler:
+  checks:
+
+  # Check api.errors.percent
+  # https://juggler.yandex-team.ru/check_details/?host=market_platform-testing&service=api.errors.percent&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: skip
+    children:
+    - clickphite-monitoring:crm.platform.errors.percent
+    notifications:
+    - template_kwargs:
+        login: crm_platform_hotline
+        method: telegram
+      template_name: on_status_change
+    service: api.errors.percent
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=market_platform-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_platform_vla
+    - NANNY%testing_market_platform_sas
+    notifications: []
+    service: disk_free_space
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=market_platform-testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_platform_vla
+    - NANNY%testing_market_platform_sas
+    notifications: []
+    service: logrotate
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=market_platform-testing&service=ping&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_platform_vla
+    - NANNY%testing_market_platform_sas
+    notifications:
+    - template_kwargs:
+        login: crm_platform_hotline
+        method: telegram
+      template_name: on_status_change
+    service: ping
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=market_platform-testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_platform_vla
+    - NANNY%testing_market_platform_sas
+    notifications: []
+    service: push-client-status
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    check_options: {}
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_platform-testing
+    namespace: market.common
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - marketplatform
+    - testing
+    - market
+    - _market_
+    ttl: 900

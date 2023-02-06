@@ -1,0 +1,55 @@
+package {{testPackage}};
+
+import {{rootPackage}}.AbstractFunctionalTest;
+import {{apiPackage}}.{{classname}}Client;
+{{#imports}}import {{import}};
+{{/imports}}
+import java.io.IOException;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+{{^fullJavaUtil}}
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+{{/fullJavaUtil}}
+/**
+* API tests for {{classname}}
+*/
+public class {{classname}}Test extends AbstractFunctionalTest {
+
+    @Autowired
+    private {{classname}}Client api;
+
+    {{#operations}}
+    {{#operation}}
+    {{#vendorExtensions.x-testEnabled}}
+    /**
+    {{#summary}}
+        * {{summary}}
+        *
+    {{/summary}}
+    {{#notes}}
+        * {{notes}}
+        *
+    {{/notes}}
+    * @throws ApiException
+    *          if the Api call fails
+    */
+    @Test
+    public void {{operationId}}Test(){
+        {{#allParams}}
+        {{{dataType}}} {{paramName}} = {{{example}}};
+        {{^isPrimitiveType}}{{#vars}}{{#example}}{{#isPrimitiveType}}{{paramName}}.{{setter}}({{#isString}}"{{{example}}}"{{/isString}}{{^isString}}{{{dataType}}}.valueOf({{{example}}}){{/isString}});
+        {{/isPrimitiveType}}{{/example}}{{#isModel}}{{paramName}}.{{setter}}(new {{baseType}}());{{/isModel}}{{/vars}}{{/isPrimitiveType}}
+        {{/allParams}}
+
+        {{#returnType}}{{{returnType}}} response = {{/returnType}}api.{{operationId}}({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}}).schedule().join();
+    }
+    {{/vendorExtensions.x-testEnabled}}
+    {{/operation}}
+    {{/operations}}
+}

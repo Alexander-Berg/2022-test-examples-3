@@ -1,0 +1,173 @@
+# 1 сапплаер не выберется, потому что у него есть оффер не с тем статусом
+# 2 и 3 сапплаеры выберутся для отправки
+# не подходит, статусы старые
+-
+  id: 1
+  businessId: 1
+  acceptanceStatus: TRASH
+  acceptanceStatusModified: 2018-10-04T23:14:11
+  processingStatus: PROCESSED
+  processingStatusModified: 2018-10-04T23:14:11
+  supplierSkuMappingStatus: NONE
+  mappingDestination: BLUE
+  shopSku: good-1
+  title: Тесты нотификаций
+  shopCategoryName: Нотификации
+  golden: false
+
+# не подойдет, потому что статусы не те
+-
+  id: 2
+  businessId: 1
+  acceptanceStatus: OK
+  processingStatus: IN_PROCESS
+  supplierSkuMappingStatus: REJECTED
+  mappingDestination: BLUE
+  shopSku: good-2
+  title: Тесты нотификаций
+  shopCategoryName: Нотификации
+  golden: false
+
+# подойдет, потому что TRASH
+-
+  id: 3
+  businessId: 1
+  acceptanceStatus: TRASH
+  processingStatus: PROCESSED
+  mappingDestination: BLUE
+  shopSku: good-3
+  title: Тесты нотификаций
+  shopCategoryName: Нотификации
+  golden: false
+
+# подойдет, потому PROCESSED и ACCEPTED
+-
+  id: 4
+  businessId: 2
+  acceptanceStatus: OK
+  processingStatus: PROCESSED
+  supplierSkuMappingStatus: ACCEPTED
+  mappingDestination: BLUE
+  shopSku: good-4
+  title: Тесты нотификаций
+  shopCategoryName: Нотификации
+  golden: false
+  categoryId: 99
+  approvedSkuMappingConfidence: CONTENT
+  approvedSkuMapping:
+    mappingId: 101010
+    timestamp: 2017-10-28T10:15:20
+
+# подойдет, потому NO_KNOWLEDGE и REJECTED
+-
+  id: 5
+  businessId: 2
+  acceptanceStatus: OK
+  processingStatus: NO_KNOWLEDGE
+  supplierSkuMappingStatus: REJECTED
+  mappingDestination: BLUE
+  shopSku: good-5
+  title: Тесты нотификаций
+  shopCategoryName: Нотификации
+  golden: false
+
+# подойдет, потому NEED_INFO и NONE
+-
+  id: 6
+  businessId: 3
+  acceptanceStatus: OK
+  processingStatus: NEED_INFO
+  supplierSkuMappingStatus: NONE
+  mappingDestination: BLUE
+  shopSku: good-6
+  title: Тесты нотификаций
+  shopCategoryName: Нотификации
+  golden: false
+
+# проверка подсчета (тут время старое, но статус TRASH)
+-
+  id: 7
+  businessId: 3
+  acceptanceStatus: TRASH
+  acceptanceStatusModified: 2018-10-04T23:14:11
+  processingStatus: NEED_INFO
+  processingStatusModified: 2018-10-04T23:14:11
+  supplierSkuMappingStatus: NONE
+  mappingDestination: BLUE
+  shopSku: good-7
+  title: Тесты нотификаций
+  shopCategoryName: Нотификации
+  golden: false
+
+# подойдет, потому NO_CATEGORY и ACCEPTED
+-
+  id: 8
+  businessId: 3
+  acceptanceStatus: OK
+  processingStatus: NO_CATEGORY
+  supplierSkuMappingStatus: ACCEPTED
+  mappingDestination: BLUE
+  shopSku: good-8
+  title: Тесты нотификаций
+  shopCategoryName: Нотификации
+  golden: false
+
+# подойдет, потому NEED_MAPPING и ACCEPTED
+-
+  id: 9
+  businessId: 3
+  acceptanceStatus: OK
+  processingStatus: NEED_MAPPING
+  supplierSkuMappingStatus: ACCEPTED
+  mappingDestination: BLUE
+  shopSku: good-9
+  title: Тесты нотификаций
+  shopCategoryName: Нотификации
+  golden: false
+
+# подойдет, потому NEED_CONTENT и ACCEPTED
+-
+  id: 10
+  businessId: 3
+  acceptanceStatus: OK
+  processingStatus: NEED_CONTENT
+  supplierSkuMappingStatus: ACCEPTED
+  mappingDestination: BLUE
+  shopSku: good-10
+  title: Тесты нотификаций
+  shopCategoryName: Нотификации
+  golden: false
+-
+  id: 11
+  businessId: 2
+  acceptanceStatus: OK
+  processingStatus: AUTO_PROCESSED
+  supplierSkuMappingStatus: ACCEPTED
+  mappingDestination: BLUE
+  shopSku: good-11
+  title: Тесты нотификаций
+  shopCategoryName: Нотификации
+  golden: false
+  categoryId: 99
+  approvedSkuMappingConfidence: CONTENT
+  approvedSkuMapping:
+    mappingId: 101010
+    timestamp: 2017-10-28T10:15:20
+
+#DSBS, не подходит
+-
+  id: 12
+  businessId: 9
+  acceptanceStatus: OK
+  processingStatus: AUTO_PROCESSED
+  supplierSkuMappingStatus: ACCEPTED
+  mappingDestination: DSBS
+  shopSku: dsbs-12
+  title: Тесты нотификаций
+  shopCategoryName: Нотификации
+  golden: false
+  categoryId: 99
+  approvedSkuMappingConfidence: CONTENT
+  approvedSkuMapping:
+    mappingId: 101010
+    timestamp: 2017-10-28T10:15:20

@@ -1,0 +1,102 @@
+<dataset>
+    <partner id="201" status="active" type="DROPSHIP" name="Partner 1"/>
+    <partner id="202" status="active" type="SORTING_CENTER" name="Partner 2"/>
+    <partner id="203" status="active" type="DELIVERY" name="Partner 3"/>
+
+    <partner_relation id = "1" from_partner="201" to_partner="202" handling_time="2" return_partner="201" shipment_type="IMPORT"/>
+
+    <service_code id="1" code="PROCESSING" type="internal" is_optional="true"/>
+    <service_code id="2" code="MOVEMENT" type="internal" is_optional="true"/>
+
+    <address id="1"/>
+    <address id="2"/>
+    <address id="3"/>
+
+    <logistics_point id="302" external_id="1" type="PICKUP_POINT" address_id="1" active="true" partner_id="202"
+                     name="Склад 1"/>
+    <logistics_point id="303" external_id="2" type="WAREHOUSE" address_id="2" active="true" partner_id="202"
+                     name="Склад 2"/>
+    <logistics_point id="304" external_id="3" type="WAREHOUSE" address_id="3" active="true" partner_id="202"
+                     name="Склад 3"/>
+    <logistics_point id="305" external_id="4" type="WAREHOUSE" address_id="3" active="true" partner_id="202"
+                     name="Склад 4"/>
+
+    <logistic_segments
+            id="101"
+            partner_id="203"
+            name="Перемещение, у которого есть активный сервис"
+            type="movement"
+            logistic_point_id="[null]"
+            partner_relation_id="1"
+    />
+
+    <logistic_segments_services id="1" segment_id="101" code="1" status="inactive" duration="30" price="13"/>
+
+    <logistic_segments id="102" partner_id="202" name="Warehouse Before" type="warehouse" logistic_point_id="302"/>
+    <logistic_segments id="103" partner_id="202" name="Warehouse Before 2" type="warehouse" logistic_point_id="303"/>
+    <logistic_segments id="104" partner_id="202" name="Warehouse After" type="warehouse" logistic_point_id="304"/>
+    <logistic_segments id="105" partner_id="202" name="Warehouse After 2" type="warehouse" logistic_point_id="305"/>
+
+    <logistic_segments_services id="302" segment_id="102" code="1" status="active" duration="30" price="13"/>
+
+    <logistic_edges from_segment_id="102" to_segment_id="101"/>
+    <logistic_edges from_segment_id="103" to_segment_id="101"/>
+    <logistic_edges from_segment_id="101" to_segment_id="104"/>
+    <logistic_edges from_segment_id="101" to_segment_id="105"/>
+
+    <logistic_segments
+            id="1"
+            partner_id="203"
+            name="Возвратный сегмент перемещения из Склад 3 в Склад 1"
+            type="backward_movement"
+    />
+    <logistic_edges from_segment_id="104" to_segment_id="1"/>
+    <logistic_edges from_segment_id="1" to_segment_id="102"/>
+
+    <logistic_segments
+            id="2"
+            partner_id="203"
+            name="Возвратный сегмент перемещения из Склад 3 в Склад 2"
+            type="backward_movement"
+    />
+    <logistic_edges from_segment_id="104" to_segment_id="2"/>
+    <logistic_edges from_segment_id="2" to_segment_id="103"/>
+
+    <logistic_segments
+            id="3"
+            partner_id="203"
+            name="Возвратный сегмент перемещения из Склад 4 в Склад 1"
+            type="backward_movement"
+    />
+    <logistic_edges from_segment_id="105" to_segment_id="3"/>
+    <logistic_edges from_segment_id="3" to_segment_id="102"/>
+
+    <logistic_segments
+            id="4"
+            partner_id="203"
+            name="Возвратный сегмент перемещения из Склад 4 в Склад 2"
+            type="backward_movement"
+    />
+    <logistic_edges from_segment_id="105" to_segment_id="4"/>
+    <logistic_edges from_segment_id="4" to_segment_id="103"/>
+
+    <movement_backward_movement_mapping
+        movement_segment_id="101"
+        backward_movement_segment_id="1"
+    />
+
+    <movement_backward_movement_mapping
+            movement_segment_id="101"
+            backward_movement_segment_id="2"
+    />
+
+    <movement_backward_movement_mapping
+            movement_segment_id="101"
+            backward_movement_segment_id="3"
+    />
+
+    <movement_backward_movement_mapping
+            movement_segment_id="101"
+            backward_movement_segment_id="4"
+    />
+</dataset>

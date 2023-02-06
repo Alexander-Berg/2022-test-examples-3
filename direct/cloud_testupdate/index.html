@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{%load attr%}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Табула/Обновление тестового облачного рантайма</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/releaser.css" media="all"/>
+    <link href="{{ MEDIA_URL }}/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 10px; /* to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+        <br>
+        <h1> Обновление тестового облачного рантайма</h1>
+        <br>
+        <br>
+        <a href="/versionica/property?group=cocaine_apps&host=test">Версионика</a>
+        <br>
+        <h2> Обновить версию </h2>
+        <p>
+        <form action="/cloud_testupdate/update" method=get>
+            Рантайм <select name="runtime_port">
+            {% for runtime_port in settings.CLOUD_RUNTIMES %}
+                <option value="{{runtime_port}}">{{runtime_port}}</option>
+            {% endfor %}
+            </select>
+            <br>
+            <br>
+            Приложение <select name="app">
+            {% for app in settings.CLOUD_APPS %}
+                <option value="{{app}}">{{app}}</option>
+            {% endfor %}
+            </select>
+            Версия <input type="text" name="version" style="width: 260px;" value="">
+            <p>
+            <input type=submit value="Обновить" class="btn">
+        </form>
+    </div> <!-- /container -->
+  </body>
+</html>

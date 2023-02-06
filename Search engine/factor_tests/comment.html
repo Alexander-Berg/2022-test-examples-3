@@ -1,0 +1,34 @@
+{%- macro test_task_url(test) -%}
+{%- if test.metainfo.report_url -%}
+(({{test.metainfo.report_url}} Results))
+{%- elif test.metainfo.task_url -%}
+(({{test.metainfo.task_url}} Task))
+{%- endif -%}
+{%- endmacro -%}
+{%- macro test_title(test) %}
+{%- if test.status == "ready" %}
+!!(grey)READY!!
+{%- elif test.status == "done" %}
+{%- if test.result == "passed" %}
+!!(green)SUCCESS!!
+{%- else %}
+!!(red)**FAILED**!!
+{%- endif %}
+{%- else %}
+!!(grey)IN PROGRESS!!
+{%- endif %}
+{%- endmacro %}
+{%- macro test_name(test) -%}
+{%- if test.result == "failed" -%}
+!!(blue)**{{test.name|upper}}**!!
+{%- else -%}
+!!(blue){{test.name|upper}}!!
+{%- endif -%}
+{%- endmacro -%}
+{%- macro test_report(test) %}
+{{test_title(test)}} {{test_name(test)}} {{test_task_url(test)}} ++!!(grey)""{{test.description|trim}}""!!++
+{%- endmacro %}
+{{report.title}}
+{%- for test in report.tests|sort(attribute='name') %}
+{{ test_report(test) }}
+{%- endfor %}

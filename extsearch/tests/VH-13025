@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+[ -z "${KEEP}" ] && set -e
+
+SCRIPTS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd) #"
+. "${SCRIPTS_DIR}"/config.sh
+
+[ -n "$PROD" ] && exit
+
+[ -z "$PROD" ] && . "${SCRIPTS_DIR}"/ugc_pumpkin
+
+${CURL} "http://${HOST}:${UGC_PUMPKIN_HTTP}/statistics/_golovan" | jq --exit-status '.[] | select(.[0]=="_CLIENT-ugc_pumpkin_age_axxx") | .[1]'
+
+# too long, manual only
+if [ -n "$LONG" ]; then
+for i in {1..10}; do
+    sleep 10
+    ${CURL} "http://${HOST}:${UGC_PUMPKIN_HTTP}/statistics/_golovan" | jq --exit-status '.[] | select(.[0]=="_CLIENT-ugc_pumpkin_age_axxx") | .[1]'
+    # TODO: value should change after ~60s
+done
+fi

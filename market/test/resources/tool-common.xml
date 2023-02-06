@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+       default-lazy-init="true" default-autowire="byName">
+
+    <import resource="classpath*:/spring/hitman-main-client.xml"/>
+    <import resource="classpath:market-markup-worker2-yt.xml"/>
+
+    <bean id="dataSourceTemplate" class="ru.yandex.common.util.db.NamedDataSource" abstract="true" destroy-method="close">
+        <property name="maxWait" value="300000"/>
+        <property name="minEvictableIdleTimeMillis" value="3600000"/>
+        <property name="moduleName" value="markup-worker-tool"/>
+    </bean>
+
+    <bean name="markupDataSource" parent="dataSourceTemplate">
+        <property name="driverClassName" value="${market.markup2.jdbc.driverClassName}"/>
+        <property name="url" value="${market.markup2.jdbc.url}"/>
+        <property name="username" value="${market.markup2.username}"/>
+        <property name="password" value="${market.markup2.password}"/>
+        <property name="queryTimeoutSeconds" value="300"/>
+    </bean>
+
+    <bean id="scatDataSource" parent="dataSourceTemplate">
+        <property name="driverClassName" value="${site_catalog.scat.jdbc.driverClassName}"/>
+        <property name="url" value="${site_catalog.scat.jdbc.url}"/>
+        <property name="username" value="${site_catalog.scat.username}"/>
+        <property name="password" value="${site_catalog.scat.password}"/>
+        <property name="validationQuery" value="select 1 from dual"/>
+        <property name="maxActive" value="33"/>
+    </bean>
+
+    <bean id="parameterServiceRemote" class="ru.yandex.market.mbo.export.CategoryParametersServiceStub"
+          parent="serviceClient">
+        <property name="host" value="${mbo.http-exporter.url}/categoryParameters/"/>
+        <property name="triesBeforeFail" value="1"/>
+    </bean>
+
+    <bean id="markupNamedJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="markupDataSource"/>
+    </bean>
+
+    <bean id="markupJdbcTemplate" class="org.springframework.jdbc.core.JdbcOperations"
+          factory-bean="markupNamedJdbcTemplate" factory-method="getJdbcOperations"/>
+
+    <bean id="markupTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="markupTransactionManager"/>
+    </bean>
+
+    <bean id="markupTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="markupDataSource"/>
+    </bean>
+
+    <bean name="abstractPersister" class="ru.yandex.market.markup2.dao.AbstractPersister" abstract="true">
+        <property name="jdbcTemplate" ref="markupJdbcTemplate" />
+        <property name="schema" value="markup2" />
+    </bean>
+
+    <bean name="configGroupPersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.TaskConfigGroupPersister">
+    </bean>
+    <bean name="configGroupStatisticPersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.TaskConfigGroupStatisticPersister">
+    </bean>
+    <bean name="taskGroupMetricsPersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.TaskGroupMetricsPersister">
+    </bean>
+    <bean name="configPersister" parent="abstractPersister" class="ru.yandex.market.markup2.dao.TaskConfigPersister">
+        <property name="configGroupPersister" ref="configGroupPersister"/>
+    </bean>
+    <bean name="taskPersister" parent="abstractPersister" class="ru.yandex.market.markup2.dao.TaskPersister">
+    </bean>
+    <bean name="taskStatisticPersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.TaskStatisticPersister">
+    </bean>
+    <bean name="dataItemPersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.TaskDataItemPersister">
+    </bean>
+    <bean name="configGroupDataUniquePersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.dataUnique.ConfigGroupDataUniquePersister">
+    </bean>
+    <bean name="typeCategoryDataUniquePersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.dataUnique.TypeCategoryDataUniquePersister">
+    </bean>
+    <bean name="executionDataPersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.HitmanExecutionDataPersister">
+    </bean>
+    <bean name="executionToTaskItemsPersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.HitmanExecutionToTaskItemsPersister">
+    </bean>
+    <bean name="taskDataItemOperationStatusPersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.TaskDataItemOperationStatusPersister">
+    </bean>
+
+    <bean name="taskTypesContainers" class="ru.yandex.market.markup2.workflow.TaskTypesContainers">
+        <property name="taskTypeContainers">
+            <map>
+                <entry key="#{T(ru.yandex.market.ir.http.Markup.TaskType).FILL_PARAMETERS_VALUE}"
+                       value-ref="fillParamValuesTypeContainer"/>
+                <entry key="#{T(ru.yandex.market.ir.http.Markup.TaskType).ETALON_PARAMETERS_VALUE}"
+                       value-ref="etalonParamValuesTypeContainer"/>
+                <entry key="#{T(ru.yandex.market.ir.http.Markup.TaskType).FILL_PARAMETERS_METRIC_VALUE}"
+                       value-ref="fillParamValuesMetricTypeContainer"/>
+                <entry key="#{T(ru.yandex.market.markup2.entries.type.ExperimentTaskType).MARKETIR3597.getId()}"
+                       value-ref="fillParamValuesTypeContainerMARKETIR3597"/>
+                <entry key="#{T(ru.yandex.market.markup2.entries.type.ExperimentTaskType).MARKETIR3441.getId()}"
+                       value-ref="etalonParamValuesTypeContainerMARKETIR3441"/>
+                <entry key="#{T(ru.yandex.market.markup2.entries.type.ExperimentTaskType).MARKETIR3562.getId()}"
+                       value-ref="etalonParamValuesTypeContainerMARKETIR3562"/>
+                <entry key="#{T(ru.yandex.market.ir.http.Markup.TaskType).CARD_DUBLICATES_VALUE}">
+                    <bean factory-bean="cardDuplicatesTaskContainerFactory" factory-method="getTaskTypeContainer" />
+                </entry>
+            </map>
+        </property>
+        <property name="devTaskTypes" value="${dev.task.types:#{null}}"/>
+    </bean>
+
+    <bean name="fillParamValuesTypeContainer"
+          class="ru.yandex.market.markup2.tasks.fill_param_values.FillParamValuesTypeContainerFactory"
+          factory-method="createTaskTypeContainer">
+        <constructor-arg>
+            <bean class="ru.yandex.market.markup2.tasks.TaskTypeContainerParams">
+                <property name="dataItemsProcessor">
+                    <bean class="ru.yandex.market.markup2.tasks.fill_param_values.FillParamValuesDataItemsProcessor"/>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean name="etalonParamValuesTypeContainer"
+          class="ru.yandex.market.markup2.tasks.fill_param_values_metric.etalon.EtalonParamValuesTypeContainerFactory"
+          factory-method="createTaskTypeContainer">
+        <constructor-arg>
+            <bean class="ru.yandex.market.markup2.tasks.TaskTypeContainerParams">
+                <property name="dataItemsProcessor">
+                    <bean class="ru.yandex.market.markup2.tasks.fill_param_values_metric.etalon.EtalonParamValuesDataProccessor"/>
+                </property>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <null/>
+        </constructor-arg>
+    </bean>
+
+    <bean name="fillParamValuesMetricTypeContainer"
+          class="ru.yandex.market.markup2.tasks.fill_param_values_metric.metric.FillParamValuesMetricTypeContainerFactory"
+          factory-method="createTaskTypeContainer">
+        <constructor-arg>
+            <bean class="ru.yandex.market.markup2.tasks.TaskTypeContainerParams">
+                <property name="dataItemsProcessor">
+                    <bean class="ru.yandex.market.markup2.tasks.fill_param_values_metric.metric.FillParamValuesMetricDataProccessor"/>
+                </property>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <null/>
+        </constructor-arg>
+    </bean>
+
+    <bean name="fillParamValuesTypeContainerMARKETIR3597"
+          class="ru.yandex.market.markup2.tasks.fill_param_values.FillParamValuesTypeContainerFactory"
+          factory-method="createTaskTypeContainer">
+        <constructor-arg>
+            <bean class="ru.yandex.market.markup2.tasks.TaskTypeContainerParams">
+                <property name="dataItemsProcessor">
+                    <bean class="ru.yandex.market.markup2.tasks.fill_param_values.FillParamValuesDataItemsProcessor"/>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean name="etalonParamValuesTypeContainerMARKETIR3562"
+          class="ru.yandex.market.markup2.tasks.fill_param_values_metric.etalon.EtalonParamValuesTypeContainerFactory"
+          factory-method="createTaskTypeContainer">
+        <constructor-arg>
+            <bean class="ru.yandex.market.markup2.tasks.TaskTypeContainerParams">
+                <property name="dataItemsProcessor">
+                    <bean class="ru.yandex.market.markup2.tasks.fill_param_values_metric.etalon.EtalonParamValuesDataProccessor"/>
+                </property>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <null/>
+        </constructor-arg>
+    </bean>
+
+    <bean name="etalonParamValuesTypeContainerMARKETIR3441"
+          class="ru.yandex.market.markup2.tasks.fill_param_values_metric.etalon.EtalonParamValuesTypeContainerFactory"
+          factory-method="createTaskTypeContainer">
+        <constructor-arg>
+            <bean class="ru.yandex.market.markup2.tasks.TaskTypeContainerParams">
+                <property name="dataItemsProcessor">
+                    <bean class="ru.yandex.market.markup2.tasks.fill_param_values_metric.etalon.EtalonParamValuesDataProccessor"/>
+                </property>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <null/>
+        </constructor-arg>
+    </bean>
+
+    <bean name="siteCatalogJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="scatDataSource"/>
+    </bean>
+
+    <bean id="serviceClient" abstract="true"
+          class="ru.yandex.market.http.ServiceClient">
+        <property name="userAgent" value="#{T(ru.yandex.common.util.application.VersionUtil).getVersion().debian}"/>
+        <property name="connectionTimeoutSeconds" value="10" />
+        <property name="socketTimeoutSeconds" value="300" />
+    </bean>
+
+    <bean id="categoryParametersService" class="ru.yandex.market.markup2.utils.parameter.CategoryParametersService">
+        <property name="remoteService" ref="parameterServiceRemote"/>
+    </bean>
+
+    <bean name="paramUtils" class="ru.yandex.market.markup2.utils.param.ParamUtils">
+        <property name="siteCatalogJdbcTemplate" ref="siteCatalogJdbcTemplate"/>
+        <property name="categoryParametersService" ref="categoryParametersService"/>
+    </bean>
+
+    <bean name="hitmanExecutionPersister" class="ru.yandex.market.markup2.dao.HitmanExecutionPersister">
+        <property name="executionDataPersister" ref="executionDataPersister" />
+        <property name="executionToTaskItemsPersister" ref="executionToTaskItemsPersister" />
+    </bean>
+
+    <bean name="taskProcessManager" class="onetime.mocks.LoggingTaskProcessManager"/>
+
+    <bean name="abstractConfigProcessor"
+          class="ru.yandex.market.markup2.processors.taskConfig.processors.AbstractTaskConfigProcessor" abstract="true">
+        <property name="taskProcessManager" ref="taskProcessManager" />
+    </bean>
+
+    <bean name="abstractTaskProcessor"
+          class="ru.yandex.market.markup2.processors.task.processors.AbstractTaskProcessor" abstract="true">
+        <property name="taskProcessManager" ref="taskProcessManager" />
+    </bean>
+
+    <bean name="activeConfigProcessor" parent="abstractConfigProcessor"
+          class="ru.yandex.market.markup2.processors.taskConfig.processors.ActiveTaskConfigProcessor">
+    </bean>
+
+    <bean name="canceledConfigProcessor" parent="abstractConfigProcessor"
+          class="ru.yandex.market.markup2.processors.taskConfig.processors.CanceledTaskConfigProcessor">
+    </bean>
+
+    <bean name="deactivatedConfigProcessor" parent="abstractConfigProcessor"
+          class="ru.yandex.market.markup2.processors.taskConfig.processors.DeactivatedTaskConfigProcessor">
+    </bean>
+
+    <bean name="disabledConfigProcessor" parent="abstractConfigProcessor"
+          class="ru.yandex.market.markup2.processors.taskConfig.processors.DisabledTaskConfigProcessor">
+    </bean>
+
+    <bean name="finishedConfigProcessor" parent="abstractConfigProcessor"
+          class="ru.yandex.market.markup2.processors.taskConfig.processors.FinishedTaskConfigProcessor">
+    </bean>
+
+    <bean name="forceFinishedConfigProcessor" parent="abstractConfigProcessor"
+          class="ru.yandex.market.markup2.processors.taskConfig.processors.ForceFinishedTaskConfigProcessor">
+    </bean>
+
+    <bean name="forceFinishingConfigProcessor" parent="abstractConfigProcessor"
+          class="ru.yandex.market.markup2.processors.taskConfig.processors.ForceFinishingTaskConfigProcessor">
+    </bean>
+
+    <bean name="newConfigProcessor" parent="abstractConfigProcessor"
+          class="ru.yandex.market.markup2.processors.taskConfig.processors.NewTaskConfigProcessor">
+    </bean>
+
+    <bean name="pausedConfigProcessor" parent="abstractConfigProcessor"
+          class="ru.yandex.market.markup2.processors.taskConfig.processors.PausedTaskConfigProcessor">
+    </bean>
+
+
+    <bean name="canceledTaskProcessor" parent="abstractTaskProcessor"
+          class="ru.yandex.market.markup2.processors.task.processors.CanceledTaskProcessor">
+    </bean>
+
+    <bean name="completedTaskProcessor" parent="abstractTaskProcessor"
+          class="ru.yandex.market.markup2.processors.task.processors.CompletedTaskProcessor">
+    </bean>
+
+    <bean name="forceFinishedTaskProcessor" parent="abstractTaskProcessor"
+          class="ru.yandex.market.markup2.processors.task.processors.ForceFinishedTaskProcessor">
+    </bean>
+
+    <bean name="forceFinishingTaskProcessor" parent="abstractTaskProcessor"
+          class="ru.yandex.market.markup2.processors.task.processors.ForceFinishingTaskProcessor">
+    </bean>
+
+    <bean name="newTaskProcessor" parent="abstractTaskProcessor"
+          class="ru.yandex.market.markup2.processors.task.processors.NewTaskProcessor">
+    </bean>
+
+    <bean name="pausedTaskProcessor" parent="abstractTaskProcessor"
+          class="ru.yandex.market.markup2.processors.task.processors.PausedTaskProcessor">
+    </bean>
+
+    <bean name="runningTaskProcessor" parent="abstractTaskProcessor"
+          class="ru.yandex.market.markup2.processors.task.processors.RunningTaskProcessor">
+    </bean>
+
+    <bean name="markupManager" class="ru.yandex.market.markup2.processors.MarkupManager">
+        <property name="taskConfigProcessors">
+            <map key-type="ru.yandex.market.markup2.entries.config.TaskConfigState">
+                <entry key="NEW" value-ref="newConfigProcessor"/>
+                <entry key="ACTIVE" value-ref="activeConfigProcessor"/>
+                <entry key="PAUSED" value-ref="pausedConfigProcessor"/>
+                <entry key="FORCE_FINISHING" value-ref="forceFinishingConfigProcessor"/>
+                <entry key="FORCE_FINISHED" value-ref="forceFinishedConfigProcessor"/>
+                <entry key="CANCELED" value-ref="canceledConfigProcessor"/>
+                <entry key="DISABLED" value-ref="disabledConfigProcessor"/>
+                <entry key="DEACTIVATED" value-ref="deactivatedConfigProcessor"/>
+                <entry key="FINISHED" value-ref="finishedConfigProcessor"/>
+            </map>
+        </property>
+        <property name="taskProcessors">
+            <map key-type="ru.yandex.market.markup2.entries.task.TaskState">
+                <entry key="NEW" value-ref="newTaskProcessor"/>
+                <entry key="RUNNING" value-ref="runningTaskProcessor"/>
+                <entry key="PAUSED" value-ref="pausedTaskProcessor"/>
+                <entry key="FORCE_FINISHING" value-ref="forceFinishingTaskProcessor"/>
+                <entry key="FORCE_FINISHED" value-ref="forceFinishedTaskProcessor"/>
+                <entry key="COMPLETED" value-ref="completedTaskProcessor"/>
+                <entry key="CANCELED" value-ref="canceledTaskProcessor"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean name="tasksCache" class="ru.yandex.market.markup2.TasksCache">
+    </bean>
+
+    <bean name="hitmanApiHandler" class="ru.yandex.market.markup2.workflow.hitman.HitmanApiHandler">
+        <property name="hitmanApi" ref="hitmanExecutionApiClient"/>
+        <property name="login" value="${market.markup.worker.login}"/>
+    </bean>
+
+    <bean name="markupLoader" class="onetime.mocks.ConfigListLoader">
+        <property name="configIds">
+            <set>
+                <value>491</value>
+            </set>
+        </property>
+        <property name="markupManager" ref="markupManager"/>
+        <property name="tasksCache" ref="tasksCache"/>
+        <property name="taskTypesContainers" ref="taskTypesContainers"/>
+        <property name="configGroupPersister" ref="configGroupPersister"/>
+        <property name="configGroupStatisticPersister" ref="configGroupStatisticPersister"/>
+        <property name="metricsPersister" ref="taskGroupMetricsPersister"/>
+        <property name="dataItemPersister" ref="dataItemPersister"/>
+        <property name="configGroupDataUniquePersister" ref="configGroupDataUniquePersister"/>
+        <property name="typeCategoryDataUniquePersister" ref="typeCategoryDataUniquePersister"/>
+        <property name="hitmanExecutionPersister" ref="hitmanExecutionPersister" />
+        <property name="markupDao" ref="markupDao"/>
+    </bean>
+
+    <bean name="markupDao"
+          class="ru.yandex.market.markup2.dao.MarkupDao">
+        <property name="configPersister" ref="configPersister"/>
+        <property name="taskPersister" ref="taskPersister"/>
+        <property name="dataItemPersister" ref="dataItemPersister"/>
+        <property name="taskStatisticPersister" ref="taskStatisticPersister"/>
+    </bean>
+
+    <bean name="appContext" class="ru.yandex.market.markup2.AppContext">
+        <property name="dataItemPersister" ref="dataItemPersister"/>
+        <property name="taskStatisticPersister" ref="taskStatisticPersister"/>
+        <property name="taskPersister" ref="taskPersister"/>
+        <property name="configPersister" ref="configPersister"/>
+        <property name="configGroupDataUniquePersister" ref="configGroupDataUniquePersister"/>
+        <property name="groupPersister" ref="configGroupPersister"/>
+        <property name="taskGroupMetricsPersister" ref="taskGroupMetricsPersister"/>
+        <property name="groupStatisticPersister" ref="configGroupStatisticPersister"/>
+        <property name="taskTypesContainers" ref="taskTypesContainers"/>
+        <property name="typeCategoryDataUniquePersister" ref="typeCategoryDataUniquePersister"/>
+        <property name="hitmanExecutionPersister" ref="hitmanExecutionPersister"/>
+        <property name="markupTasksProcessor" ref="markupManager"/>
+        <property name="hitmanApiHandler" ref="hitmanApiHandler" />
+        <property name="cache" ref="tasksCache"/>
+    </bean>
+
+    <bean id="modelStorageRemoteService" class="ru.yandex.market.mbo.http.ModelStorageServiceStub"
+          parent="serviceClient">
+        <property name="host" value="${mbo.card.api.model.storage.host}"/>
+        <property name="triesBeforeFail" value="1"/>
+    </bean>
+
+    <bean id="categoryModelsService" class="ru.yandex.market.mbo.export.CategoryModelsServiceStub"
+          parent="serviceClient">
+        <property name="host" value="${mbo.http-exporter.url}/categoryModels/"/>
+        <property name="triesBeforeFail" value="1"/>
+    </bean>
+
+    <bean id="modelStorageService" class="ru.yandex.market.markup2.utils.model.ModelStorageService">
+        <property name="remoteService" ref="modelStorageRemoteService"/>
+        <property name="httpExporterProtoUrl" value="${mbo.http-exporter.url}/category-models-proto"/>
+    </bean>
+
+    <bean name="cardDuplicatesTaskContainerFactory"
+          class="ru.yandex.market.markup2.tasks.card_duplicates.CardDuplicatesTaskContainerFactory">
+    </bean>
+
+
+    <bean name="poolInfoPersister" class="ru.yandex.market.markup2.dao.YangPoolInfoPersister" parent="abstractPersister"/>
+
+    <bean name="poolToTaskItemsPersister" class="ru.yandex.market.markup2.dao.YangPoolToTaskItemsPersister" parent="abstractPersister"/>
+
+    <bean name="assignmentInfoPersister" class="ru.yandex.market.markup2.dao.YangAssignmentPersister" parent="abstractPersister"/>
+
+    <bean name="yangPoolPersister" class="ru.yandex.market.markup2.dao.YangPoolPersister">
+        <property name="poolInfoPersister" ref="poolInfoPersister"/>
+        <property name="poolToTaskItemsPersister" ref="poolToTaskItemsPersister"/>
+        <property name="assignmentInfoPersister" ref="assignmentInfoPersister"/>
+    </bean>
+
+    <bean name="tolokaApiConfiguration" class="ru.yandex.market.toloka.TolokaApiConfiguration">
+        <property name="apiUrl" value="${markup_worker.yang.api.url}"/>
+        <property name="token" value="${markup_worker.yang.api.token}"/>
+        <property name="socketTimeoutMilliseconds" value="${markup_worker.yang.api.timeout_milliseconds}"/>
+        <property name="connectionTimeoutMilliseconds" value="${markup_worker.yang.api.connection_timeout_milliseconds}"/>
+        <property name="maxConnectionsPerRoute" value="${markup_worker.yang.api.max_connections_per_route}"/>
+        <property name="maxConnectionsTotal" value="${markup_worker.yang.api.max_connections_total}"/>
+        <property name="userAgent" value="${markup_worker.yang.api.user_agent}"/>
+    </bean>
+
+    <bean name="tolokaApi" class="ru.yandex.market.toloka.TolokaApi">
+        <constructor-arg index="0" ref="tolokaApiConfiguration"/>
+    </bean>
+
+    <bean id="yangLogStorageService" class="ru.yandex.market.mbo.http.YangLogStorageServiceStub"
+          parent="serviceClient">
+        <property name="host" value="${mbo.http-exporter.url}/yangLogStorage/"/>
+    </bean>
+
+</beans>

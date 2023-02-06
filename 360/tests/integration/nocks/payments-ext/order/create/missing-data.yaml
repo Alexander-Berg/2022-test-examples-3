@@ -1,0 +1,22 @@
+$schema: ../../../_schemas/nock.yaml
+
+scope: 'http://payments'
+method: POST
+path: /ext/order/1234567890
+
+reqheaders:
+  $include: ../../../_samples/reqheaders.yaml
+  content-type: application/json
+
+body: {}
+
+status: 400
+
+response:
+  status: fail
+  code: 400
+  data:
+    message: Bad Request
+    params:
+      caption:
+        - Missing data for required field.

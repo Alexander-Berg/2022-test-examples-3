@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <script src="https://yastatic.net/jquery/1.8.3/jquery.min.js"></script>
+  <script src="../tableau/all/_all.min.js"></script>
+  <script>
+    var getUrlParameter = function getUrlParameter(name) {
+        var params = decodeURIComponent(window.location.search.substring(1)).split('&');
+        for (var i = 0; i < params.length; i++) {
+            var param = params[i].split('=');
+            if (param[0] === name) {
+                return param[1] === undefined ? true : param[1];
+            }
+        }
+    };
+
+    $(function() {
+        var tableau = $.Tableau({
+            host: getUrlParameter('host'),
+            path: getUrlParameter('path'),
+            serviceId: 'lego-dev',
+            device: 'desktop',
+            headerElem: $('#header'),
+            triggerElem: $('#logo')
+        }).setSearchText('search');
+
+        function toggleTableau() {
+            tableau.isOpened() ? tableau.close() : tableau.open();
+        }
+
+        function updateSettings() {
+            tableau.destruct();
+            var headerElem, triggerElem;
+            $('#toggle-tableau').show();
+            if($('#form-wiring').is(':checked')) {
+                headerElem = $('#header');
+                if($('#form-device').val() === 'desktop') {
+                    triggerElem = $('#logo');
+                    $('#toggle-tableau').hide();
+                } else {
+                    triggerElem = $('#toggle-tableau');
+                }
+            }
+            tableau = $.Tableau({
+                host: getUrlParameter('host'),
+                serviceId: $('#form-serviceId').val(),
+                width: $('#form-width').val() ? parseInt($('#form-width').val(), 10) : undefined,
+                height: $('#form-height').val() ? parseInt($('#form-height').val(), 10) : undefined,
+                preset: $('#form-preset').val(),
+                lang: $('#form-lang').val(),
+                domain: $('#form-domain').val(),
+                device: $('#form-device').val(),
+                path: $('#form-path').val() || getUrlParameter('path'),
+                target: $('#form-target').val(),
+                headerElem: headerElem,
+                triggerElem: triggerElem
+            });
+            updatePosition();
+            updateSearchText();
+        }
+
+        function updatePosition() {
+            if($('#form-wiring').is(':checked')) { return; }
+            tableau.setPos({
+                top: $('#form-top').val() ? parseInt($('#form-top').val(), 10) : undefined,
+                left: $('#form-left').val() ? parseInt($('#form-left').val(), 10) : undefined,
+                tail: $('#form-tail').val() ? parseInt($('#form-tail').val(), 10) : undefined
+            });
+        }
+
+        function updateSearchText() {
+            tableau.setSearchText($('#form-searchText').val());
+        }
+
+        $('#toggle-tableau').click(toggleTableau);
+        $('#update-settings').click(updateSettings);
+        $('#update-position').click(updatePosition);
+        $('#update-searchText').click(updateSearchText);
+    });
+  </script>
+</head>
+<body>
+  <div id="header" style="border-bottom: 1px solid black; max-width: 800px; margin: 0 auto;">
+    <a id="logo" href="http://ya.ru" style="display: inline-block; padding: 20px;">ЛОГОТИП</a>
+    <button id="toggle-tableau" style="display: none; margin: 20px; float: right;">Нажми меня</button>
+  </div>
+  <table>
+    <tr>
+      <th colspan="2">Настройки Табло</th>
+    </tr>
+    <tr>
+      <td><label for="form-serviceId">ID сервиса</label></td>
+      <td><input type="text" id="form-serviceId" value="lego-dev" autocomplete="off"></td>
+    </tr>
+    <tr>
+      <td><label for="form-device">Тип устройства:</label></td>
+      <td><select id="form-device">
+        <option value="desktop">desktop</option>
+        <option value="touch-pad">touch-pad</option>
+        <option value="touch-phone">touch-phone</option>
+      </select></td>
+    </tr>
+    <tr>
+      <td><label for="form-width">Ширина попапа (пустое — определять автоматически)</label></td>
+      <td><input type="number" id="form-width" autocomplete="off"></td>
+    </tr>
+    <tr>
+      <td><label for="form-height">Высота попапа (пустое — определять автоматически)</label></td>
+      <td><input type="number" id="form-height" autocomplete="off"></td>
+    </tr>
+    <tr>
+      <td><label for="form-preset">Название набора сервисов</label></td>
+      <td><input type="text" id="form-preset" value="ru" autocomplete="off"></td>
+    </tr>
+    <tr>
+      <td><label for="form-lang">Язык Табло</label></td>
+      <td><input type="text" id="form-lang" value="ru" autocomplete="off"></td>
+    </tr>
+    <tr>
+      <td><label for="form-domain">Домен верхнего уровня в ссылках в Табло</label></td>
+      <td><input type="text" id="form-domain" value="ru" autocomplete="off"></td>
+    </tr>
+    <tr>
+      <td>
+        <label for="form-path">Путь до страницы с Табло; если не передан, строится на основании остальных параметров</label>
+      </td>
+      <td><input type="text" id="form-path" autocomplete="off"></td>
+    </tr>
+    <tr>
+      <td>
+          <label for="form-target">Тип открытия ссылок из Табло (blank — в новом окне)</label>
+      </td>
+      <td><input type="text" id="form-target" autocomplete="off"></td>
+    </tr>
+    <tr>
+      <td>
+          <label for="form-wiring">Привязать к шапке</label>
+      </td>
+      <td><input type="checkbox" id="form-wiring" checked="checked"></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td><td><button id="update-settings" type="button">Обновить настройки</button></td>
+    </tr>
+    <tr>
+      <th colspan="2">Координаты Табло (работают только если табло не привязано к шапке)</th>
+    </tr>
+    <tr>
+      <td><label for="form-top">По вертикали (пустое — не изменять)</label></td>
+      <td><input type="number" id="form-top" value="70" autocomplete="off"></td>
+    </tr>
+    <tr>
+      <td><label for="form-left">По горизонтали (пустое — не изменять)</label></td>
+      <td><input type="number" id="form-left" value="20" autocomplete="off"></td>
+    </tr>
+    <tr>
+      <td><label for="form-tail">Сдвиг хвостика (пустое — не изменять)</label></td>
+      <td><input type="number" id="form-tail" value="32" autocomplete="off"></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td><td><button id="update-position" type="button">Обновить координаты</button></td>
+    </tr>
+    <tr>
+      <td><label for="form-searchText">Поисковый запрос</label></td>
+      <td><input id="form-searchText" value="search" autocomplete="off"></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td><td><button id="update-searchText" type="button">Установить текст запроса</button></td>
+    </tr>
+  </table>
+</body>
+</html>

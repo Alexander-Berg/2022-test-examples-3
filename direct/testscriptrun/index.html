@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+{%load attr%}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>TestScriptRun</title>
+    <meta name="description" content="Страничка для запуска скриптов на бетах">
+    <meta name="author" content="ppalex@yandex-team.ru">
+
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}releaser.css" media="all"/>
+    <link href="//yastatic.net/bootstrap/2.2.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="{{ MEDIA_URL }}bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="//yastatic.net/jquery/1.7.2/jquery.js"></script>
+  </head>
+
+  <body>
+    {% include "index/header.html" %}
+    <h1>Запуск скриптов через TestScriptRun</h1>
+    <br>
+
+    <form class="form-inline" role="form" method="get">
+        <div class="form-group">
+            &emsp;Стенд&nbsp;&nbsp;<input type="text" style="width:300px" name="stage" placeholder="BETA1:8998 или ТС или ТС2 (всё латиницей)" {% if stage %} value="{{ stage }}" {% endif %}>&nbsp;
+            <button type="submit" class="btn btn-default" name="refresh">Обновить список скриптов</button>
+            {% if restart_link %}<div style="float:right"><a href="{{ restart_link }}">Ссылка на параметры запуска</a>&emsp;</div>{% endif %}
+        </div>
+        <div class="form-group">
+            <input id="execute" type="hidden" name="do">
+            &ensp;<button type="submit" class="btn btn-default" onclick="this.disabled=true; $('#execute').val(1); $('#in_progress').toggle(); this.form.submit();">Запустить</button>
+
+            &emsp;Скрипт&nbsp;&nbsp;<select name="script">
+                {% for script in scripts_list %}<option value="{{script}}" {% if choosed_script and script == choosed_script %} selected="selected" {% endif %}>{{script}}</option>{% endfor %}
+            </select>
+            &ensp;с параметрами &nbsp;<input type="text" name="params" style="width:600px" placeholder="--help" {% if params %} value="{{ params }}" {% endif %}>
+            &ensp;--shard-id&nbsp;<input type="text" name="shard" maxlength="3" style="width:23px" {% if shard %} value="{{ shard }}" {% endif %}>
+            &emsp;LOG_TEE&nbsp;<input type="checkbox" name="log_tee" {% if log_tee %} checked="checked" {% endif %}>
+        </div>
+    </form>
+
+    <div id='in_progress' class="alert alert-info" style="display:none">Скрипт выполняется...</div>
+
+    {% if hint_message %}
+        <div class="alert alert-success">
+            {{ hint_message }}
+        </div>
+    {% endif %}
+
+    {% if error_message %}
+        <div class="alert alert-error">
+            {{ error_message }}
+        </div>
+    {% endif %}
+
+    {% if 'result' in script_result and script_result.result.exit_code != 0 %}
+        <div class="alert">Ненулевой код возврата скрипта: {{ script_result.result.exit_code }}. Скорее всего скрипт завершился с ошибкой или не запустился вовсе.</div>
+    {% elif 'result' in script_result and script_result.result.exit_code == 0 %}
+        <div class="alert alert-success">Скрипт успешно выполнился.</div>
+    {% endif %}
+
+    <div style="float:left;width:55%;padding=2px">
+        <span class="label label-success">STDOUT</span>
+        <br>
+        <textarea id="stdout" placeholder="STDOUT (обычный вывод программы)" style="width:97%;height:500px;padding=2px">{% if 'result' in script_result %}{{ script_result.result.stdout }}{% endif %}</textarea>
+    </div>
+    <div style="width:45%;float:left;padding=2px">
+        <span class="label label-warning">STDERR</span>
+        <br>
+        <textarea id="stdout" placeholder="STDERR (вывод предупреждений и ошибок)" style="width:97%;height:500px;padding=2px">{% if 'result' in script_result %}{{ script_result.result.stderr }}{% endif %}</textarea>
+    </div>
+    <div style="clear:left"></div>
+  </body>
+</html>

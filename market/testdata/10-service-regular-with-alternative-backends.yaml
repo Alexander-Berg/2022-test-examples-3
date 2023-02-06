@@ -1,0 +1,29 @@
+context:
+  default:
+    service_name: reg_service_alternative_backs
+    servername_regexp: service-alternative-backs\\.vs\\.market\\.yandex\\.net
+    vs: market
+    cert: market
+    antirobot: true
+    antirobot_service_name: market_other
+    balancing_method: active
+    health_check: '"GET /ping HTTP/1.1\r\nHost: service-alternative-backs.market.yandex.ru\r\n\r\n"'
+    alternative_backends: true
+    alt_headers:
+    - alt_name: google_bot
+      alt_header: 'User-Agent'
+      alt_regexp: 'Google Bot'
+    - alt_name: another_header
+      alt_header: 'Another-Header'
+      alt_regexp: 'Another Data'
+
+servers:
+  default:
+
+    main:
+    - name: N@regular_service
+      timeout: 50s
+
+    alternative:
+    - name: alt.tst.vs.market.yandex.net
+      timeout: 50s

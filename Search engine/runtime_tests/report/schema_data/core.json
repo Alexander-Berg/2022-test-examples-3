@@ -1,0 +1,322 @@
+{
+    "region": {
+        "required": ["__is_plain", "id", "name", "path", "preposition", "tld", "yandex_tld"],
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+            "name": {
+                "required": ["be", "en", "id", "kk", "ru", "tr", "tt", "uk"],
+                "additionalProperties": false,
+                "type": "object",
+                "properties": {
+                    "ru": { "$ref" : "#region_lang" },
+                    "en": { "$ref" : "#region_lang" },
+                    "be": { "$ref" : "#region_lang" },
+                    "kk": { "$ref" : "#region_lang" },
+                    "tt": { "$ref" : "#region_lang" },
+                    "tr": { "$ref" : "#region_lang" },
+                    "uk": { "$ref" : "#region_lang" },
+                    "id": { "$ref" : "#region_lang" },
+                    "uz": { "$ref" : "#region_lang" },
+
+                    "lv": { "$ref" : "#region_lang" },
+                    "et": { "$ref" : "#region_lang" },
+
+                    "el": { "$ref" : "#region_lang" },
+                    "fr": { "$ref" : "#region_lang" },
+                    "bg": { "$ref" : "#region_lang" },
+                    "nl": { "$ref" : "#region_lang" },
+                    "pt": { "$ref" : "#region_lang" },
+                    "no": { "$ref" : "#region_lang" },
+                    "hr": { "$ref" : "#region_lang" },
+                    "sv": { "$ref" : "#region_lang" },
+                    "de": { "$ref" : "#region_lang" },
+                    "it": { "$ref" : "#region_lang" },
+                    "da": { "$ref" : "#region_lang" },
+                    "sk": { "$ref" : "#region_lang" },
+                    "lt": { "$ref" : "#region_lang" },
+                    "pl": { "$ref" : "#region_lang" },
+                    "sl": { "$ref" : "#region_lang" },
+                    "cs": { "$ref" : "#region_lang" },
+                    "fi": { "$ref" : "#region_lang" },
+                    "hu": { "$ref" : "#region_lang" },
+                    "ro": { "$ref" : "#region_lang" },
+                    "es": { "$ref" : "#region_lang" }
+                }
+            },
+            "preposition": {
+                "required": ["be", "en", "id", "kk", "ru", "tr", "tt", "uk"],
+                "additionalProperties": false,
+                "type": "object",
+                "properties": {
+                    "ru": { "type": "string" },
+                    "en": { "type": "string" },
+                    "be": { "type": "string" },
+                    "kk": { "type": "string" },
+                    "tt": { "type": "string" },
+                    "tr": { "type": "string" },
+                    "uk": { "type": "string" },
+                    "id": { "type": "string" },
+                    "uz": { "type": "string" },
+
+                    "lv": { "type": "string" },
+                    "et": { "type": "string" },
+
+                    "el": { "type": "string" },
+                    "fr": { "type": "string" },
+                    "bg": { "type": "string" },
+                    "nl": { "type": "string" },
+                    "pt": { "type": "string" },
+                    "no": { "type": "string" },
+                    "hr": { "type": "string" },
+                    "sv": { "type": "string" },
+                    "de": { "type": "string" },
+                    "it": { "type": "string" },
+                    "da": { "type": "string" },
+                    "sk": { "type": "string" },
+                    "lt": { "type": "string" },
+                    "pl": { "type": "string" },
+                    "sl": { "type": "string" },
+                    "cs": { "type": "string" },
+                    "fi": { "type": "string" },
+                    "hu": { "type": "string" },
+                    "ro": { "type": "string" },
+                    "es": { "type": "string" }
+                }
+            },
+            "__is_plain": {
+                "type": "integer",
+                "enum": [1]
+            },
+            "yandex_tld": {
+                "type": "string",
+                "minLength": 2
+            },
+            "tld": {
+                "type": "string",
+                "minLength": 2
+            },
+            "path": {
+                "items": [
+                    {
+                        "type": "integer",
+                        "minimum": 1
+                    }
+                ],
+                "type": "array"
+            },
+            "__package": {
+                "type": "string",
+                "pattern": "^YxWeb::"
+            },
+            "id": {
+                "type": "integer",
+                "minimum": 1
+            }
+        }
+    },
+    "region_lang": {
+        "required": ["genitive", "locative", "nominative"],
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+            "genitive": {
+                "type": "string",
+                "minLength": 1
+            },
+            "nominative": {
+                "type": "string",
+                "minLength": 1
+            },
+            "locative": {
+                "type": "string",
+                "minLength": 1
+            }
+        }
+    },
+    "language": {
+        "required": ["__is_plain", "code", "name"],
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+            "__is_plain": {
+                "type": "integer",
+                "enum": [1]
+            },
+            "__package": {
+                "type": "string",
+                "pattern": "^YxWeb::"
+            },
+            "code": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 2
+            },
+            "name": {
+                "type": "string",
+                "minLength": 1
+            }
+        }
+    },
+    "time": {
+        "required": ["__is_plain", "epoch", "tz"],
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+            "__is_plain": {
+                "type": "integer",
+                "enum": [1]
+            },
+            "epoch": {
+                "oneOf": [
+                    { "type": "integer", "minimum": 800000000 },
+                    { "type": "string", "pattern": "^1[0-9]{9,}$" },
+                    { "type": "string", "pattern": "^[89][0-9]{8,}$" },
+                    { "type": "string", "pattern": "^[0-9]{4}-?[0-9]{2}-?[0-9]{2}$" },
+                    { "type": "array", "items": { "type": "integer", "minimum": 1 }, "minItems": 3, "maxItems": 3 }
+                ]
+            },
+            "__package": {
+                "type": "string",
+                "pattern": "^YxWeb::"
+            },
+            "tz": {
+                "type": "string",
+                "minLength": 1
+            },
+            "to_iso": {
+                "type": "string",
+                "pattern": "^[1-9][0-9][0-9][0-9]-[01][0-9]-[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9][+-][0-2][0-9][0-5][0-9]"
+            }
+        }
+    },
+    "category": {
+        "required": ["__is_plain", "id", "name", "partial_yaca_link", "short_name"],
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+            "__is_plain": {
+                "type": "integer",
+                "enum": [1]
+            },
+            "partial_yaca_link": {
+                "type": "string",
+                "pattern": "^/cat/"
+            },
+            "__package": {
+                "type": "string",
+                "pattern": "YxWeb::Util::Category"
+            },
+            "id": {
+                "type": "number",
+                "minimum": 1
+            },
+            "name": {
+                "type": "string",
+                "minLength": 1
+            },
+            "short_name": {
+                "type": "string",
+                "minLength": 1
+            }
+        }
+    },
+    "url": {
+        "required": ["__is_plain", "anchor", "canonical",
+            "hostname", "link", "path", "port", "query_string", "scheme"],
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+            "hostname": {
+                "type": "string"
+            },
+            "scheme": {
+                "type": "string",
+                "enum": ["http", "https"]
+            },
+            "cut_www": {
+                "type": "null"
+            },
+            "anchor": {
+                "type": ["null", "string"]
+            },
+            "link": {
+                "type": "string"
+            },
+            "__is_plain": {
+                "type": "integer",
+                "enum": [1]
+            },
+            "query_string": {
+                "type": "string"
+            },
+            "path": {
+                "type": "string"
+            },
+            "__package": {
+                "type": "string",
+                "pattern": "^YxWeb::"
+            },
+            "port": {
+                "type": ["null", "integer", "string"]
+            },
+            "canonical": {
+                "type": "string",
+                "pattern": "https?://[^/]+"
+            }
+        }
+    },
+    "cgi": {
+        "required": ["__is_plain", "data"],
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+            "__is_plain": {
+                "type": "integer",
+                "enum": [1]
+            },
+            "__package": {
+                "type": "string",
+                "pattern": "^YxWeb::"
+            },
+            "data": {
+                "required": ["rawdata", "raw_text", "files", "args", "hostname", "order", "path", "scheme", "text"],
+                "type": "object",
+                "properties": {
+                    "rawdata": {
+                        "type": ["null"]
+                    },
+                    "raw_text": {
+                        "type": ["null"]
+                    },
+                    "files": {
+                        "type": "object"
+                    },
+                    "args": {
+                        "type": "object"
+                    },
+                    "hostname": {
+                        "type": "string"
+                    },
+                    "text": {
+                        "type": "string"
+                    },
+                    "path": {
+                        "type": "string"
+                    },
+                    "scheme": {
+                        "type": "string"
+                    },
+                    "order": {
+                        "items": [
+                            {
+                                "type": "string"
+                            }
+                        ],
+                        "type": "array"
+                    }
+                }
+            }
+        }
+    }
+}

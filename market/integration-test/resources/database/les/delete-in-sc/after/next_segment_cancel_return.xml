@@ -1,0 +1,64 @@
+<dataset>
+    <return_segment
+            id="1"
+            return_id="1"
+            return_box_id="1"
+            unique_id="segment-1"
+            logistic_point_type="PICKUP"
+    />
+
+    <return_segment
+            id="2"
+            return_id="1"
+            return_box_id="1"
+            unique_id="segment-2"
+            logistic_point_type="SORTING_CENTER"
+            status="CANCELLED"
+    />
+
+    <return_event
+            request_id="request-id-test/1"
+            return_id="1"
+            type="RETURN_SEGMENT_STATUS_CHANGED"
+            payload='{
+                "id": 2,
+                "type": "RETURN_SEGMENT_STATUS_CHANGED_PAYLOAD",
+                "status": "CANCELLED",
+                "logisticPointInfo": {
+                    "type": "SORTING_CENTER",
+                    "partnerId": null,
+                    "logisticPointId": null,
+                    "logisticPointExternalId": null
+                },
+                "shipmentFieldsInfo": {
+                    "recipient": null,
+                    "shipmentTime": null,
+                    "destinationInfo": null
+                }
+            }'
+    />
+
+    <return_segment_status_history
+            return_segment_id="2"
+            datetime="2022-05-06 07:08:09 +0000"
+            status="CANCELLED"
+    />
+
+    <return_segment_change
+            return_segment_id="2"
+            status="SUCCESS"
+    />
+
+    <return_segment
+            id="3"
+            return_id="1"
+            return_box_id="1"
+            unique_id="segment-3"
+            logistic_point_type="SORTING_CENTER"
+    />
+
+    <queue_tasks
+            queue_name="UPDATE_RETURN_STATUSES"
+            payload='{"requestId":"request-id-test/2","segmentId":2,"segmentStatus":"CANCELLED"}'
+    />
+</dataset>

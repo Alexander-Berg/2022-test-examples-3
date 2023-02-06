@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="yandexsearch" type="yandexsearchType"/>
+
+  <xs:complexType name="yandexsearchType">
+    <xs:sequence>
+      <xs:element name="request" type="requestType"/>
+      <xs:element name="response" type="responseType"/>
+    </xs:sequence>
+    <xs:attribute name="version" type="xs:float"/>
+  </xs:complexType>
+
+  <xs:complexType name="requestType">
+    <xs:sequence>
+      <xs:element name="query" type="xs:string"/>
+      <xs:element name="page" type="pageType"/>
+      <xs:element name="sortby" type="sortbyType"/>
+      <xs:element name="maxpassages" type="xs:string"/>
+      <xs:element name="groupings" type="groupingsType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="responseType">
+    <xs:sequence>
+      <xs:element name="reqid" type="xs:string"/>
+      <xs:element name="found" type="foundType" maxOccurs="unbounded"/>
+      <xs:element name="found-human" type="xs:string"/>
+      <xs:element name="is-local" type="xs:string"/>
+      <xs:element name="results" type="resultsType"/>
+      <xs:element name="cbir" type="cbirType" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="date" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="resultsType">
+    <xs:sequence>
+      <xs:element name="grouping" type="groupingType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="groupingsType">
+    <xs:sequence>
+      <xs:element name="groupby" type="groupbyType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="groupbyType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="attr" type="xs:string"/>
+        <xs:attribute name="mode" type="xs:string"/>
+        <xs:attribute name="groups-on-page" type="xs:byte"/>
+        <xs:attribute name="docs-in-group" type="xs:byte"/>
+        <xs:attribute name="curcateg" type="xs:byte"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="foundType">
+    <xs:simpleContent>
+      <xs:extension base="xs:int">
+        <xs:attribute name="priority" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="categType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="attr" type="xs:string" use="optional"/>
+        <xs:attribute name="name" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="pageType">
+    <xs:simpleContent>
+      <xs:extension base="xs:int">
+        <xs:attribute name="first" type="xs:int"/>
+        <xs:attribute name="last" type="xs:int"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="sortbyType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="order" type="xs:string"/>
+        <xs:attribute name="priority" type="xs:string"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="groupingType">
+    <xs:sequence>
+      <xs:element name="found" type="foundType" maxOccurs="unbounded"/>
+      <xs:element name="found-docs" type="foundType" maxOccurs="unbounded"/>
+      <xs:element name="found-docs-human" type="xs:string"/>
+      <xs:element name="page" type="pageType"/>
+      <xs:element name="group" type="groupType" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="attr" type="xs:string"/>
+    <xs:attribute name="mode" type="xs:string"/>
+    <xs:attribute name="groups-on-page" type="xs:byte"/>
+    <xs:attribute name="docs-in-group" type="xs:byte"/>
+    <xs:attribute name="curcateg" type="xs:byte"/>
+  </xs:complexType>
+
+  <xs:complexType name="groupType">
+    <xs:sequence>
+      <xs:element name="categ" type="categType"/>
+      <xs:element name="doccount" type="xs:int"/>
+      <xs:element name="relevance" type="xs:string"/>
+      <xs:element name="doc" type="docType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="docType">
+    <xs:sequence>
+      <xs:element name="relevance" type="xs:string"/>
+      <xs:element name="url" type="xs:string"/>
+      <xs:element name="domain" type="xs:string"/>
+      <xs:element name="title" type="xs:string"/>
+      <xs:element name="modtime" type="xs:string" minOccurs="0"/>
+      <xs:element name="size" type="xs:int"/>
+      <xs:element name="charset" type="xs:string"/>
+      <xs:element name="passages" type="passagesType"/>
+      <xs:element name="properties" type="propertiesType"/>
+      <xs:element name="image-properties" type="imagePropertiesType"/>
+      <xs:element name="mime-type" type="MimeType"/>
+      <xs:element name="highlight-cookie" type="xs:string"/>
+      <xs:element name="image-duplicates" type="imageDuplicatesType"/>
+      <xs:element name="image-duplicates-preview" type="imageDuplicatesType" minOccurs="0"/>
+      <xs:element name="image-duplicates-fitsize" type="imageDuplicatesType" minOccurs="0"/>
+      <xs:element name="image-duplicates-resized" type="imageDuplicatesType" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="optional"/>
+    <xs:attribute name="dups_count" type="xs:int" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="propertiesType">
+    <xs:sequence>
+       <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="imageDuplicatesType">
+    <xs:sequence>
+      <xs:element type="imagePropertiesType" name="image-properties" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="passagesType">
+    <xs:sequence>
+      <xs:element name="passage" type="passageType">
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="passageType" mixed="true">
+     <xs:sequence>
+        <xs:element name="hlword" type="xs:string" maxOccurs="unbounded" minOccurs="0"/>
+     </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="imagePropertiesType">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"/>
+      <xs:element name="gid" type="xs:string"/>
+      <xs:element name="shard" type="xs:byte"/>
+      <xs:element name="thumbnail-width" type="xs:int"/>
+      <xs:element name="thumbnail-height" type="xs:int"/>
+      <xs:element name="thumbnail-width-original" type="xs:int"/>
+      <xs:element name="thumbnail-height-original" type="xs:int"/>
+      <xs:element name="thumbnail-link" type="xs:anyURI"/>
+      <xs:element name="original-width" type="xs:int"/>
+      <xs:element name="original-height" type="xs:int"/>
+      <xs:element name="html-link" type="xs:string"/>
+      <xs:element name="image-link" type="xs:string"/>
+      <xs:element name="file-size" type="xs:int"/>
+      <xs:element name="mime-type" type="MimeType"/>
+      <xs:element name="dominated_color" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="cbirType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="id" type="xs:string"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:simpleType name="MimeType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="jpg"/>
+      <xs:enumeration value="png"/>
+      <xs:enumeration value="gif"/>
+      <xs:enumeration value="text/html"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <task_history
+            task_id="1"
+            from_status="NEW"
+            to_status="IN_PROGRESS"
+            comment="Started to process task"/>
+    <task_history
+            task_id="1"
+            from_status="IN_PROGRESS"
+            to_status="ERROR"
+            comment="Task finished with error: Error with request"/>
+    <task_history
+            task_id="2"
+            to_status="NEW"
+            comment="Created task for flow: DS_CANCEL_ORDER_ERROR"/>
+    <client_task
+            root_id="1"
+            flow="DS_CANCEL_ORDER"
+            message="{}"
+            status="ERROR"
+            count_retry="0"
+            delay_seconds="0"
+            request_id="123"/>
+    <client_task
+            parent_id="1"
+            root_id="1"
+            flow="DS_CANCEL_ORDER_ERROR"
+            message='{"error":"Error with request","exceptionClass":"ru.yandex.market.logistic.api.exceptions.RequestStateErrorException","requestState":{"isError":true,"errorCodes":[{"code":9400,"message":""}]}}'
+            status="NEW"
+            count_retry="0"
+            delay_seconds="0"
+            request_id="123"/>
+
+</dataset>

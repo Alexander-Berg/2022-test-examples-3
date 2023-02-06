@@ -1,0 +1,32 @@
+micronaut:
+  security:
+    enabled: true
+  http:
+    services:
+      tvm-tool:
+        url: http://localhost:${tvmtool-port}
+        health-check: true
+        health-check-interval: 1s
+        health-check-uri: http://localhost:${tvmtool-port}/tvm/ping
+        read-idle-timeout: 1s
+        read-timeout: 1s
+        connect-timeout: 1s
+        num-of-threads: 1
+      blackbox:
+        url: https://blackbox-test.yandex.net:443
+        health-check: true
+        health-check-interval: 1s
+        health-check-uri: https://blackbox-test.yandex.net:443/ping
+        read-idle-timeout: 3s
+        read-timeout: 3s
+        connect-timeout: 3s
+        num-of-threads: 1
+blackbox:
+  enabled: true
+  basic: true
+  oauth: true
+tvm2:
+  token: '01234567890123456789012345678901'
+  services:
+    blackbox: 224
+  allowed-clients:

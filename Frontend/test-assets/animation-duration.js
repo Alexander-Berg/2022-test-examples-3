@@ -1,0 +1,1 @@
+window.__ANIMATION_DURATION__ = 1;

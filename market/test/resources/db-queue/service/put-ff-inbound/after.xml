@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <fulfillment_service
+        ID="100"
+        NAME="test"
+        STATUS="1"
+        TYPE="1"
+    />
+
+    <SUPPLIER
+        ID="1"
+        NAME="supplier1"
+    />
+
+    <SUPPLIER
+        ID="2"
+        NAME="supplier1"
+    />
+
+    <LOGISTICS_POINT
+        ID="1"
+        EXTERNAL_ID="a-b2"
+        PARTNER_ID="100"
+        ACTIVE="true"
+        ADDRESS='{"settlement":"Котельники","street":"Яничкин проезд","house":"7","comment":"терминал БД-6"}'
+        FOUND="true"
+    />
+
+    <SHOP_REQUEST ID="10"
+                  SERVICE_ID="100"
+                  STATUS="22"
+                  TYPE="16"
+                  LOGISTICS_POINT_ID="1"
+                  ITEMS_TOTAL_COUNT="5"
+                  SUBTYPE="DEFAULT"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="10"
+        ARTICLE="LTP-553025"
+        COUNT="2"
+        SUPPLIER_ID="1"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="10"
+        ARTICLE="sku"
+        COUNT="3"
+        SUPPLIER_ID="2"
+    />
+
+    <SHOP_REQUEST ID="1"
+                  SERVICE_ID="100"
+                  SUPPLIER_ID="1"
+                  STATUS="22"
+                  TYPE="16"
+                  ITEMS_TOTAL_COUNT="2"
+                  SUBTYPE="DEFAULT"
+                  ONLY_INTERNAL="true"
+                  PARENT_REQUEST_ID="10"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="1"
+        ARTICLE="LTP-553025"
+        COUNT="2"
+        SUPPLIER_ID="1"
+    />
+
+    <SHOP_REQUEST ID="2"
+                  SERVICE_ID="100"
+                  SUPPLIER_ID="2"
+                  STATUS="22"
+                  TYPE="16"
+                  ITEMS_TOTAL_COUNT="3"
+                  SUBTYPE="DEFAULT"
+                  ONLY_INTERNAL="true"
+                  PARENT_REQUEST_ID="10"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="2"
+        ARTICLE="sku"
+        COUNT="3"
+        SUPPLIER_ID="2"
+    />
+
+    <registry id="1"
+              request_id="10"
+              type="0"
+              unit_counts='[{"counts": [{"type": "FIT", "count": 1}], "unitType": 0}, {"counts": [{"type": "FIT", "count": 2}], "unitType": 10}, {"counts": [{"type": "FIT", "count": 5}], "unitType": 20}]'
+              partner_date="2020-01-01 13:10:10.0"
+    />
+
+    <registry_unit id="30"
+                   registry_id="1"
+                   type="20"
+                   identifiers='{"parts": [{"type": "SHOP_SKU", "value": "LTP-553025"}, {"type": "VENDOR_ID", "value": "1"}, {"type": "CONSIGNMENT_ID", "value": "0000260096"}]}'
+                   parents='[{"parts": [{"type": "BOX_ID", "value": "PLT0370274"}]}]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 2, "relatedUnitIds": [{}]}]}'/>
+
+    <registry_unit id="31"
+                   registry_id="1"
+                   type="20"
+                   identifiers='{"parts": [{"type": "SHOP_SKU", "value": "sku"}, {"type": "VENDOR_ID", "value": "2"}, {"type": "CONSIGNMENT_ID", "value": "0000260097"}]}'
+                   parents='[{"parts": [{"type": "BOX_ID", "value": "PLT0370275"}]}]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 3, "relatedUnitIds": [{}]}]}'/>
+
+    <registry_unit id="32"
+                   registry_id="1"
+                   type="10"
+                   identifiers='{"parts": [{"type": "BOX_ID", "value": "PLT0370274"}]}'
+                   parents='[]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 1, "relatedUnitIds": [{}]}]}'/>
+
+    <registry_unit id="33"
+                   registry_id="1"
+                   type="10"
+                   identifiers='{"parts": [{"type": "BOX_ID", "value": "PLT0370275"}]}'
+                   parents='[]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 1, "relatedUnitIds": [{}]}]}'/>
+
+</dataset>

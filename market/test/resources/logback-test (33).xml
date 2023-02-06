@@ -1,0 +1,52 @@
+<configuration debug="true">
+    <if condition='isDefined("OUTPUT_LOGS_TO_FILE") &amp;&amp; property("OUTPUT_LOGS_TO_FILE").contains("1")'>
+        <then>
+            <appender name="STDOUT" class="ch.qos.logback.core.helpers.NOPAppender"/>
+        </then>
+        <else>
+            <if condition='isDefined("OUTPUT_LOGS_TO_FILE") &amp;&amp; property("OUTPUT_LOGS_TO_FILE").contains("2")'>
+                <then>
+                    <appender name="STDOUT" class="ch.qos.logback.core.FileAppender">
+                        <file>checkouter-ftest.log</file>
+                        <encoder>
+                            <pattern>[%d] %-5p [%c{3}] [%X{requestId}][%t] %m%n</pattern>
+                        </encoder>
+                    </appender>
+                </then>
+                <else>
+                    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+                        <encoder>
+                            <pattern>[%d] %-5p [%c{3}] [%X{requestId}][%t] %m%n</pattern>
+                        </encoder>
+                    </appender>
+                </else>
+            </if>
+        </else>
+    </if>
+
+    <logger name="org" level="WARN"/>
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.springframework.test.web.servlet.result" level="DEBUG"/>
+    <logger name="com" level="WARN"/>
+    <logger name="ru.yandex" level="DEBUG"/>
+    <logger name="monitoring" level="INFO"/>
+    <logger name="notification" level="INFO"/>
+    <logger name="ru.yandex.market.notifier.OUTBOUND" level="DEBUG"/>
+    <logger name="ru.yandex.market.notifier.OUTBOUND.MBI" level="DEBUG"/>
+    <logger name="ru.yandex.market.notifier.OUTBOUND.PUSH" level="DEBUG"/>
+    <logger name="ru.yandex.market.notifier.OUTBOUND.RED" level="DEBUG"/>
+    <logger name="ru.yandex.market.notifier.OUTBOUND.MOBILE-PUSH" level="DEBUG"/>
+    <logger name="ru.yandex.market.notifier.INBOUND" level="DEBUG"/>
+    <logger name="ru.yandex.market.notifier.jobs.local.MonitoringJob" level="DEBUG"/>
+    <logger name="ru.yandex.market.notifier.jobs.zk.NotificationEvictionJob" level="DEBUG"/>
+    <logger name="ru.yandex.market.notifier.jobs.db.maintenance.NotifierIndexesHealthLoggerJob" level="DEBUG"/>
+    <logger name="ru.yandex.market.notifier.service.MobilePushService" level="DEBUG"/>
+    <logger name="ru.yandex.market.notifier.storage" level="WARN"/>
+    <logger name="ru.yandex.market.checkout.storage" level="INFO"/>
+    <logger name="requestTrace" level="TRACE"/>
+    <logger name="io.github.mfvanek.pg" level="DEBUG"/>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

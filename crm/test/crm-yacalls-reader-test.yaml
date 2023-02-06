@@ -1,0 +1,191 @@
+labels:
+  tags:
+  - logbroker
+  - unified-agent-reader
+meta:
+  id: crm-yacalls-reader-test
+  account_id: abc:service:200
+  project_id: crm-test
+spec:
+  account_id: "abc:service:200"
+  deploy_unit_settings:
+    unified-agent:
+      environment: "testing"
+  deploy_units:
+    unified-agent:
+      coredump_config:
+        unified-agent:
+          coredump_processor:
+            aggregator: {}
+            cleanup_ttl_seconds: 86400
+            count_limit: 3
+            output: ""
+            probability: 100
+            total_size_limit_megabytes: 1000        
+      network_defaults:
+        network_id: _CRMTEST_DEPLOY_NETS_
+      endpoint_sets:
+        - port: 3457
+          liveness_limit_ratio: 0.35
+          id: solomon
+      logbroker_config:
+        pod_additional_resources_request:
+          vcpu_guarantee: 0
+          vcpu_limit: 0
+      revision: 3
+      multi_cluster_replica_set:
+        replica_set:
+          pod_template_spec:
+            spec:
+              resource_requests:
+                vcpu_guarantee: 100
+                vcpu_limit: 100
+                memory_guarantee: 1073741824
+                memory_limit: 1073741824
+                network_bandwidth_guarantee: 1048576
+              disk_volume_requests:
+                - id: main-disk
+                  labels:
+                    used_by_infra: true
+                  storage_class: hdd
+                  quota_policy:
+                    capacity: 21474836480
+                    bandwidth_guarantee: 1048576
+                    bandwidth_limit: 2097152
+              pod_agent_payload:
+                spec:
+                  resources:
+                    layers:
+                      - id: base
+                        checksum: MD5:f96807d42bc01a5c8bd12a42f7d68a30
+                        url: sbr:2083514813
+                      - id: unified-agent-directory-layout
+                        checksum: MD5:c5a50776d38b5a791dd171faca8939be
+                        url: sbr:2922830017
+                      - id: unified-agent-config
+                        checksum: MD5:aaa57e6aac92d4b67a2e55c369c1b1a8
+                        url: sbr:2923541280
+                    static_resources:
+                      - id: unified-agent-bin
+                        verification:
+                          checksum: MD5:6d5dff49efcacc6faf412e6185387a60
+                          check_period_ms: 180000
+                        url: sbr:3208761595
+                      - id: unified-agent-liveness-check
+                        verification:
+                          checksum: MD5:026d1820780297f083c6a46835f29818
+                          check_period_ms: 180000
+                        url: sbr:2865674739
+                  volumes:
+                    - id: data
+                  workloads:
+                    - id: unified-agent
+                      env:
+                        - name: TVM_CLIENT_ID
+                          value:
+                            literal_env:
+                              value: '2001283'
+                        - name: TVM_DST_ID
+                          value:
+                            literal_env:
+                              value: '2001283'
+                        - name: TVM_SECRET
+                          value:
+                            secret_env:
+                              id: client_secret
+                              alias: tvm.secret
+                        - name: API_HOST
+                          value:
+                            literal_env:
+                              value: crm-test.yandex-team.ru
+                        - name: LOGBROKER_EVENTS_TOPIC
+                          value:
+                            literal_env:
+                              value: /crm/testing/yacalls/events
+                        - name: LOGBROKER_EVENTS_CONSUMER
+                          value:
+                            literal_env:
+                              value: /crm/testing/common-consumer
+                        - name: LOGBROKER_STATUSES_CONSUMER
+                          value:
+                            literal_env:
+                              value: /crm/testing/common-consumer
+                        - name: LOGBROKER_STATUSES_TOPIC
+                          value:
+                            literal_env:
+                              value: /crm/testing/yacalls/statuses
+                      readiness_check:
+                        http_get:
+                          port: 16301
+                          path: /ready
+                          expected_answer: OK
+                      stop_policy:
+                        max_tries: 3
+                        unix_signal:
+                          signal: SIGTERM
+                      box_ref: unified-agent
+                      liveness_check:
+                        container:
+                          command_line: /unified_agent/liveness/ua_liveness_check.sh 5000
+                      start:
+                        command_line: >-
+                          /unified_agent/bin/unified_agent -c
+                          /unified_agent/config/config.yaml --log-priority DEBUG
+                      destroy_policy:
+                        max_tries: 2
+                        container:
+                          command_line: >-
+                            /bin/bash -c "/unified_agent/bin/unified_agent -c
+                            /unified_agent/config/config.yaml & pid=$!; while
+                            true; do unified_agent_idle=$(curl
+                            localhost:16301/check_backlog 2>/dev/null); if [
+                            "$unified_agent_idle" = "IDLE1" ]; then echo
+                            "Unified Agent is idle"; break; else echo "Unified
+                            Agent is busy '$unified_agent_idle', waiting...";
+                            sleep 1; fi; done; kill $pid"
+                      transmit_logs: true
+                  boxes:
+                    - id: unified-agent
+                      rootfs:
+                        layer_refs:
+                          - base
+                          - unified-agent-directory-layout
+                          - unified-agent-config
+                        create_mode: read_only
+                      volumes:
+                        - volume_ref: data
+                          mount_point: /unified_agent/data
+                          mode: read_write
+                      static_resources:
+                        - resource_ref: unified-agent-bin
+                          mount_point: /unified_agent/bin
+                        - resource_ref: unified-agent-liveness-check
+                          mount_point: /unified_agent/liveness
+                      cgroup_fs_mount_mode: ro
+                  mutable_workloads:
+                    - workload_ref: unified-agent
+              secret_refs:
+                tvm.secret:
+                  secret_id: sec-01dq7m10q03ytkzp4z39hzs07w
+                  secret_version: ver-01dq7m10yrrfwh13ng7azs89ge
+          deployment_strategy:
+            max_unavailable: 1
+          clusters:
+            - cluster: sas
+              spec:
+                replica_count: 1
+            - cluster: vla
+              spec:
+                replica_count: 1
+      pod_agent_sandbox_info:
+        revision: 2621390537
+      pod_agent_layer_sandbox_info: {}
+      logbroker_tools_sandbox_info:
+        revision: 2249562029
+      patchers_revision: 11
+      dynamic_resource_updater_sandbox_info:
+        revision: 1985693042
+      infra_components:
+        allow_automatic_updates: true
+      collect_portometrics_from_sidecars: true
+  revision_info: {}

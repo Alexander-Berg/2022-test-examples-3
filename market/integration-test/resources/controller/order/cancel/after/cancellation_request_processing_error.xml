@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <cancellation_order_request
+            id="1"
+            order_id="1"
+            status="SUCCESS"
+    />
+
+    <cancellation_segment_request
+            id="1"
+            cancellation_order_request_id="1"
+            segment_id="1"
+            status="SEGMENT_NOT_STARTED"
+            required="false"
+            sufficient="true"
+    />
+
+    <order_history_event
+            order_id="1"
+            diff="[{
+                'op':'replace',
+                'fromValue':'CREATED',
+                'path':'/cancellationOrderRequests/0/status',
+                'value':'PROCESSING'
+            }]"
+    />
+
+
+    <order_history_event
+            order_id="1"
+            diff='[
+                {
+                    "op": "replace",
+                    "path": "/status",
+                    "value": "CANCELLED",
+                    "fromValue": "PROCESSING_ERROR"
+                },
+                {
+                    "op": "replace",
+                    "path": "/cancellationOrderRequests/0/status",
+                    "value": "SUCCESS",
+                    "fromValue": "PROCESSING"
+                },
+                {
+                    "op": "add",
+                    "path": "/orderStatusHistory/0",
+                    "value": {
+                        "id": 1,
+                        "status": "CANCELLED",
+                        "datetime": "2021-10-01T12:00:00Z"
+                    }
+                }
+            ]'
+    />
+
+</dataset>

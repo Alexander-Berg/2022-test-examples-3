@@ -1,0 +1,23 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+			http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <!-- тестовые магазины -->
+    <changeSet author="antipov93" id="cpa_test_shop" context="tables">
+        <createTable tableName="cpa_test_shop">
+            <column name="shop_id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="cpa_test_shop_data" author="antipov93" context="tables-data" runOnChange="true">
+        <loadUpdateData tableName="cpa_test_shop" primaryKey="shop_id"
+                        file="cpa_test_shop.csv" relativeToChangelogFile="true" quotchar="&quot;">
+            <column name="shop_id" type="NUMERIC"/>
+        </loadUpdateData>
+    </changeSet>
+
+</databaseChangeLog>

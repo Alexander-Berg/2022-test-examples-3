@@ -1,0 +1,87 @@
+name: "market_report_market"
+options {
+  global {
+    update {
+      download_window {
+        node_percent: 33
+      }
+      install_window: {
+        node_percent: 33
+      }
+    }
+    retention {
+      download_count {
+        value: 20
+      }
+      install_count {
+        value: 1
+      }
+    }
+  }
+  resource {
+    key: "lms_dynamic"
+    value {
+      update {
+      }
+      retention {
+      }
+    }
+  }
+  resource {
+    key: "svn_data"
+    value {
+      update {
+        respect_download_window: false
+        respect_install_window: true
+      }
+    }
+  }
+  node {
+    key: "iva1-0466-728-iva-market-test--d79-17050.gencfg-c.yandex.net"
+    value {
+      resource {
+        key: "lms_dynamic"
+        value {
+          update {
+          }
+          retention {
+          }
+        }
+      }
+      resource {
+        key: "market_dynamic"
+        value {
+          update {
+          }
+          retention {
+          }
+        }
+      }
+    }
+  }
+  tagged {
+    tag: "env:testing"
+    tag: "dc:vla"
+    node {
+      resource {
+        key: "market_dynamic"
+        value {
+          update {
+          }
+          retention {
+          }
+        }
+      }
+      update {
+      }
+    }
+  }
+  tagged {
+    tag: "dc:iva"
+    node {
+      update {
+      }
+    }
+  }
+}
+

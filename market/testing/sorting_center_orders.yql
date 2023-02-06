@@ -1,0 +1,304 @@
+--use hahn;
+
+PRAGMA AnsiInForEmptyOrNullableItemsCollections;
+PRAGMA yt.InferSchema = '1';
+
+$format_date = DateTime::Format("%Y-%m-%d");
+$today = $format_date(DateTime::MakeDate(CurrentTzDatetime("Europe/Moscow")));
+$yesterday = $format_date(DateTime::MakeTzDate(CurrentTzDatetime("Europe/Moscow")) - DateTime::IntervalFromDays(1));
+
+$order_movement_type = (
+    SELECT order_id, MIN_BY(partner_type, segment_id) as partner_type
+    FROM RANGE(`//home/market/production/mstat/dwh/detail/link_order__combinator_segment/`, `2021-01-01`)
+    WHERE segment_type = 'movement'
+    GROUP BY order_id
+);
+
+-- тип заборки для заказа
+$taked_orders = ( 
+    SELECT 
+        seg.order_id as order_id,
+        CASE WHEN m.partner_type == 'DELIVERY' THEN 'Заборка' WHEN m.partner_type == 'DROPSHIP' THEN 'Самопривоз' ELSE NULL END as intake_type
+    FROM `//home/market/production/analytics/business/delivery/segment_quality` as seg
+    INNER JOIN $order_movement_type AS m
+        on seg.order_id = m.order_id
+    WHERE 1=1
+        AND seg.segment_partner_analytical_type = 'DROPSHIP'
+        AND seg.creation_datetime >= '2021'
+        AND seg.segment_logistics_point_id IS NOT NULL
+);
+
+-- коробки которые были выбраны в ВМС
+$wms_boxes = (
+    SELECT
+        order_id,
+        SUM(CASE WHEN GREATEST(c.width,c.height,c.`length`) > 120 AND cast(s_c.goods_wght as double) > 20 THEN 1 ELSE 0 END) as order_wms_large_box_count,
+        SUM(CASE WHEN GREATEST(c.width,c.height,c.`length`) <= 120 AND cast(s_c.goods_wght as double) <= 20 THEN 1 ELSE 0 END) as order_wms_small_box_count,
+        SUM(
+            CASE 
+                WHEN (GREATEST(c.width,c.height,c.`length`) <= 120 AND cast(s_c.goods_wght as double) > 10) OR (GREATEST(c.width,c.height,c.`length`) > 120 AND cast(s_c.goods_wght as double) < 20) 
+                    THEN 1 
+                ELSE 0 
+            END
+        ) as order_wms_medium_box_count,
+        SUM(CASE WHEN s_c.selected_cartontype = 'NONPACK' THEN 1 ELSE 0 END) as order_wms_nonpack_box_count
+    FROM RANGE(`home/market/production/mstat/dictionaries/wms/selectedcartons`, '2021-01-01') as s_c
+    LEFT JOIN 
+    (
+        SELECT 
+            * 
+        FROM RANGE(`//home/market/production/mstat/dictionaries/wms/Cartonization`, '2021-01-01') 
+        where 1=1
+            and cartonizationgroup = 'PK'
+    ) as c
+        ON s_c.whs = c.whs
+        AND s_c.selected_cartontype = c.cartontype
+        AND s_c.`date` = c.`date`
+    LEFT JOIN RANGE(`//home/market/production/mstat/dictionaries/wms/wms_orders`, '2021-01-01') as o 
+        ON s_c.orderkey = o.orderkey
+        AND s_c.`date` = o.`date`
+    GROUP BY cast(o.externorderkey as int64) as order_id
+);
+
+$checkouter_orders = (
+    SELECT DISTINCT
+        orders.*,
+        order_items.*,
+        COALESCE(orders.order_wms_large_box_count, order_items.order_wms_large_box_count) as order_wms_large_box_count,
+        COALESCE(orders.order_wms_medium_box_count, order_items.order_wms_medium_box_count) as order_wms_medium_box_count,
+        COALESCE(orders.order_wms_small_box_count, order_items.order_wms_small_box_count) as order_wms_small_box_count,
+        COALESCE(orders.order_wms_nonpack_box_count,0) as order_wms_nonpack_box_count
+    WITHOUT orders.order_wms_large_box_count, order_items.order_wms_large_box_count,orders.order_wms_medium_box_count, order_items.order_wms_medium_box_count,orders.order_wms_small_box_count, order_items.order_wms_small_box_count, orders.order_wms_nonpack_box_count
+    FROM   
+    (
+        SELECT
+            cube_orders.order_id as order_id,
+            cube_orders.delivery_attribute_order_cargo_units_cnt as order_box_count,
+            cube_orders.order_substatus as order_substatus,
+            cube_orders.order_category_teams as order_category_teams,
+            cube_orders.order_category_streams as order_category_streams,
+            cube_orders.order_status as order_status,
+            cube_orders.creation_datetime as creation_datetime,
+            cube_orders.creation_date as creation_date,
+            cube_orders.delivered_datetime as delivered_datetime,
+            cube_orders.delivered_date as delivered_date,
+            COALESCE(cast(cube_orders.order_item_price_rub_numeric as double), 0.0) as order_item_gmv,
+            cube_orders.delivery_attribute_order_logistic_scheme_name as order_logistic_scheme_name,
+            cube_orders.delivery_attribute_delivery_service_id as delivery_service_id,
+            cube_orders.delivery_attribute_delivery_service_name as delivery_service_name,
+            cube_orders.delivery_attribute_delivery_service_subtype_id as delivery_service_subtype_id,
+            cube_orders.delivery_attribute_delivery_service_subtype_name as delivery_service_subtype_name,
+            cube_orders.delivery_attribute_first_delivery_service_id as first_delivery_service_id,
+            first_ds_partner.name as first_delivery_service_name,
+            first_ds_partner.subtype_id  as first_delivery_service_subtype_id,
+            first_ds_partner_subtype.name as first_delivery_service_subtype_name,
+            cube_orders.delivery_attribute_last_delivery_service_id as last_delivery_service_id,
+            last_ds_partner.name as last_delivery_service_name,
+            last_ds_partner.subtype_id  as last_delivery_service_subtype_id,
+            last_ds_partner_subtype.name as last_delivery_service_subtype_name,
+            cube_orders.delivery_attribute_delivery_type as delivery_type,
+            cube_orders.delivery_attribute_first_shipment_warehouse_type as first_shipment_warehouse_type,
+            cube_orders.delivery_attribute_first_shipment_warehouse_id as first_shipment_warehouse_id,
+            cube_orders.delivery_attribute_first_shipment_warehouse_name as first_shipment_warehouse_name,
+            Geo::RoundRegionById(Geo::RegionByLocation(CAST(first_wh_address.latitude as double), CAST(first_wh_address.longitude as double)).id, "region").name as first_shipment_warehouse_region,
+            Geo::RoundRegionById(Geo::RegionByLocation(CAST(first_wh_address.latitude as double), CAST(first_wh_address.longitude as double)).id, "district").name as first_shipment_warehouse_district,
+            Geo::RoundRegionById(Geo::RegionByLocation(CAST(first_wh_address.latitude as double), CAST(first_wh_address.longitude as double)).id, "city").name as first_shipment_warehouse_settlement,
+            Geo::RoundRegionById(Geo::RegionByLocation(CAST(first_wh_address.latitude as double), CAST(first_wh_address.longitude as double)).id, "town").name as first_shipment_warehouse_area,
+            Geo::RoundRegionByLocation(CAST(first_wh_address.latitude as double), CAST(first_wh_address.longitude as double), "region").id as first_shipment_warehouse_region_id,
+            Geo::RoundRegionByLocation(CAST(first_wh_address.latitude as double), CAST(first_wh_address.longitude as double), "district").id as first_shipment_warehouse_district_id,
+            Geo::RoundRegionByLocation(CAST(first_wh_address.latitude as double), CAST(first_wh_address.longitude as double), "city").id as first_shipment_warehouse_settlement_id,
+            Geo::RoundRegionByLocation(CAST(first_wh_address.latitude as double), CAST(first_wh_address.longitude as double), "town").id as first_shipment_warehouse_area_id,
+            cube_orders.delivery_attribute_first_shipment_datetime as first_shipment_warehouse_datetime,
+            substring(cube_orders.delivery_attribute_first_shipment_datetime, 0, 10) as first_shipment_warehouse_date,
+            cube_orders.multiorder_id as multiorder_id,
+            cube_orders.delivery_attribute_delivery_latitude_numeric as delivery_latitude,
+            cube_orders.delivery_attribute_delivery_longitude_numeric as delivery_longitude,
+            COALESCE(cube_orders.order_item_count, 0) as order_item_count,
+            Geo::RoundRegionById(Geo::RegionByLocation(CAST(cube_orders.delivery_attribute_delivery_latitude_numeric as double), CAST(cube_orders.delivery_attribute_delivery_longitude_numeric as double)).id, "region").name as delivery_region,
+            Geo::RoundRegionById(Geo::RegionByLocation(CAST(cube_orders.delivery_attribute_delivery_latitude_numeric as double), CAST(cube_orders.delivery_attribute_delivery_longitude_numeric as double)).id, "district").name as delivery_district,
+            Geo::RoundRegionById(Geo::RegionByLocation(CAST(cube_orders.delivery_attribute_delivery_latitude_numeric as double), CAST(cube_orders.delivery_attribute_delivery_longitude_numeric as double)).id, "city").name as delivery_settlement,
+            Geo::RoundRegionById(Geo::RegionByLocation(CAST(cube_orders.delivery_attribute_delivery_latitude_numeric as double), CAST(cube_orders.delivery_attribute_delivery_longitude_numeric as double)).id, "town").name as delivery_area,
+            Geo::RoundRegionByLocation(CAST(cube_orders.delivery_attribute_delivery_latitude_numeric as double), CAST(cube_orders.delivery_attribute_delivery_longitude_numeric as double), "region").id as delivery_region_id,
+            Geo::RoundRegionByLocation(CAST(cube_orders.delivery_attribute_delivery_latitude_numeric as double), CAST(cube_orders.delivery_attribute_delivery_longitude_numeric as double), "district").id as delivery_district_id,
+            Geo::RoundRegionByLocation(CAST(cube_orders.delivery_attribute_delivery_latitude_numeric as double), CAST(cube_orders.delivery_attribute_delivery_longitude_numeric as double), "city").id as delivery_settlement_id,
+            Geo::RoundRegionByLocation(CAST(cube_orders.delivery_attribute_delivery_latitude_numeric as double), CAST(cube_orders.delivery_attribute_delivery_longitude_numeric as double), "town").id as delivery_area_id,
+            CASE WHEN cube_orders.delivery_attribute_order_logistic_scheme_name in ("ДШ-СЦ-СД", "ДШ-СД", "ДШ-ДО-СЦ-СД") THEN intake_type ELSE NULL END as dropship_intake_type,
+            wms_boxes.*
+        WITHOUT wms_boxes.order_id
+        FROM 
+        (
+            SELECT cube_orders.*, id as order_id FROM `//home/market/production/mstat/analyst/regular/cubes_vertica/cube_new_order_dict` as cube_orders
+            WHERE cube_orders.`creation_date` >= '2021-01-01'
+        ) as cube_orders
+        LEFT JOIN `//home/market/production/mstat/dictionaries/logistics-management-service/logistics_point/latest` as first_wh_lp
+            ON cube_orders.delivery_attribute_first_shipment_warehouse_logistic_point_id = first_wh_lp.partner_id
+        LEFT JOIN `//home/market/production/mstat/dictionaries/logistics-management-service/address/latest` as first_wh_address
+            ON first_wh_address.id = first_wh_lp.address_id
+        LEFT JOIN `//home/market/production/mstat/dictionaries/logistics-management-service/partner/latest` as first_ds_partner
+            ON cube_orders.`delivery_attribute_first_delivery_service_id` = first_ds_partner.`id`
+        LEFT JOIN `//home/market/production/mstat/dictionaries/logistics-management-service/partner_subtype/latest` as first_ds_partner_subtype
+            ON first_ds_partner.`subtype_id` = first_ds_partner_subtype.`id`
+        LEFT JOIN `//home/market/production/mstat/dictionaries/logistics-management-service/partner/latest` as last_ds_partner
+            ON cube_orders.`delivery_attribute_last_delivery_service_id` = last_ds_partner.`id`
+        LEFT JOIN `//home/market/production/mstat/dictionaries/logistics-management-service/partner_subtype/latest` as last_ds_partner_subtype
+            ON last_ds_partner.`subtype_id` = last_ds_partner_subtype.`id`
+        LEFT JOIN $taked_orders as to 
+            ON cube_orders.order_id = to.order_id
+        LEFT JOIN $wms_boxes as wms_boxes
+            ON cube_orders.order_id = wms_boxes.order_id
+    ) as orders
+    LEFT JOIN
+    (
+        SELECT 
+            order_id,
+            supplier_id,
+            supplier_name,
+            SUM(CASE WHEN items.supplier_type = 1 THEN items.item_count ELSE 0 END) as order_items_1p_count,
+            SUM(CASE WHEN items.supplier_type = 3 THEN items.item_count ELSE 0 END) as order_items_3p_count,
+            SUM(CASE WHEN items.supplier_type = 1 THEN cast(items.item_price_rub_numeric as double) ELSE 0.0 END) as order_item_1p_gmv,
+            SUM(CASE WHEN items.supplier_type = 3 THEN cast(items.item_price_rub_numeric as double) ELSE 0.0 END) as order_item_3p_gmv,
+            SUM(CASE WHEN items.supplier_type = 1 THEN cast(items.item_price_rub_numeric as Double) - cast(items.vat_amount_numeric as double) ELSE 0.0 END) as order_item_1p_nmv,
+            SUM(CASE WHEN items.supplier_type = 3 THEN cast(items.item_price_rub_numeric as Double) - cast(items.vat_amount_numeric as double) ELSE 0.0 END) as order_item_3p_nmv,
+            COUNT(distinct items.supplier_name) as day_supplier_count,
+            SUM(CASE WHEN items.ssku_wgh_is_kgt = TRUE THEN items.item_count ELSE 0 END) as order_items_kgt_count,
+            SUM(CASE WHEN items.ssku_wgh_is_kgt = FALSE THEN items.item_count ELSE 0 END) as order_items_mgt_count,
+            SUM(CASE WHEN wgh_classes.class = 'small' THEN items.item_count ELSE 0 END) as order_small_items_count,
+            SUM(CASE WHEN wgh_classes.class = 'medium' THEN items.item_count ELSE 0 END) as order_medium_items_count,
+            SUM(CASE WHEN wgh_classes.class = 'large' THEN items.item_count ELSE 0 END) as order_large_items_count,
+            -- коробки по воспроизведенному алгоритму из ВМС
+            COUNT(distinct ds_boxes.item_id) as order_wms_box_count,
+            COUNT(distinct CASE WHEN GREATEST(ds_boxes.box_height_cm, ds_boxes.box_length_cm, ds_boxes.box_width_cm) > 120 AND mdm_weight_gross_kg > 20 THEN item_id ELSE null END) as order_wms_large_box_count,
+            COUNT(distinct CASE WHEN GREATEST(ds_boxes.box_height_cm, ds_boxes.box_length_cm, ds_boxes.box_width_cm) <= 120 AND mdm_weight_gross_kg <= 20 THEN item_id ELSE null END) as order_wms_small_box_count,
+            COUNT(distinct 
+                CASE 
+                    WHEN 
+                    (GREATEST(ds_boxes.box_height_cm, ds_boxes.box_length_cm, ds_boxes.box_width_cm) <= 120 AND mdm_weight_gross_kg > 10) 
+                    OR (GREATEST(ds_boxes.box_height_cm, ds_boxes.box_length_cm, ds_boxes.box_width_cm) > 120 AND mdm_weight_gross_kg < 20) 
+                        THEN item_id 
+                    ELSE null 
+                END
+            ) as order_wms_medium_box_count,
+            SUM(cast(mdm_wgh.gross_mg_value as double)*0.000001) as mdm_weight_gross_kg,
+            SUM(
+                cast(mdm_wgh.height_micrometer_value as double) * 0.000001 * 
+                cast(mdm_wgh.length_micrometer_value as double) * 0.000001 * 
+                cast(mdm_wgh.width_micrometer_value as double) * 0.000001
+            ) as mdm_volume_m3,
+            String::JoinFromList(CAST(AGGREGATE_LIST(category_name) AS List<String>), ";") as order_category_name
+        FROM RANGE(`//home/market/production/mstat/analyst/regular/cubes_vertica/cube_order_item_dict`, '2021-01') as items
+        LEFT JOIN `//home/market/production/mdm/dictionaries/misc/classes_by_shipping_units_mckinsey_MMDM-11018` as wgh_classes
+            ON items.ssku_ssku = wgh_classes.shop_sku
+            AND items.supplier_id = wgh_classes.supplier_id
+        LEFT JOIN `//home/market/production/mdm/dictionaries/reference_item/1d/latest` as mdm_wgh
+            ON items.ssku_ssku = mdm_wgh.shop_sku
+            AND items.supplier_id = mdm_wgh.supplier_id
+		LEFT JOIN `//home/market/production/analytics/business/delivery/order_item_boxes` as ds_boxes 
+			ON items.id = ds_boxes.item_id
+        GROUP BY items.order_id as order_id
+            , CASE WHEN order_delivery_attribute_order_logistic_scheme_name ilike 'ДШ%' THEN items.supplier_id ELSE NULL END as supplier_id
+            , CASE WHEN order_delivery_attribute_order_logistic_scheme_name ilike 'ДШ%' THEN items.supplier_name ELSE NULL END as supplier_name
+    ) as order_items
+    ON order_items.order_id = orders.order_id
+);
+
+$order_segments = (
+    SELECT 
+    DISTINCT
+        tracker_checkpoints.*,
+        checkouter_orders.*,
+        sc_info.*,
+        po_sc_orders.*,
+        CASE WHEN sc_metrics.key = 'PackageFromAnotherSc' THEN 1 ELSE 0 END as is_package_from_another_sc_flag, 
+        CASE WHEN tracker_checkpoints.fact_sc_170_datetime is not null or tracker_checkpoints.fact_sc_180_datetime is not null THEN true ELSE false END as is_return_order_flag
+    WITHOUT po_sc_orders.order_id
+    FROM 
+    (
+        SELECT    
+            tracks.order_id AS order_id,
+            tracks.partner_id AS sorting_center_partner_id,
+            min(IF(raw_status_code == 110, checkpoint_datetime, NULL)) AS fact_sc_110_datetime,
+            min(IF(raw_status_code == 130, checkpoint_datetime, NULL)) AS fact_sc_130_datetime,
+            min(IF(raw_status_code == 170, checkpoint_datetime, NULL)) AS fact_sc_170_datetime, -- возвратный заказ принят на СЦ
+            min(IF(raw_status_code == 180, checkpoint_datetime, NULL)) AS fact_sc_180_datetime -- возвратный заказ отгружен с СЦ
+        FROM      
+        (
+            SELECT 
+                cast(tracker.entity_id AS Int64) AS order_id,
+                tracker.id as track_id,
+                delivery_service_id as partner_id
+            FROM `//home/market/production/mstat/dwh/detail/link_logistics_entity_track` AS tracker
+            INNER JOIN (SELECT DISTINCT sorting_center_partner_id FROM `//home/market/production/analytics/business/delivery/logistic_points_info/sorting_center_info`) AS sc_partner
+                ON tracker.delivery_service_id = sc_partner.sorting_center_partner_id
+            WHERE tracker.entity_type in (0,7) 
+        ) as tracks
+        LEFT JOIN `//home/market/production/mstat/dwh/detail/fact_order_checkpoint` AS checkpoints
+            ON tracks.track_id = checkpoints.track_id
+        GROUP BY tracks.order_id,
+            tracks.partner_id
+    ) as tracker_checkpoints
+    INNER JOIN $checkouter_orders as checkouter_orders
+        ON tracker_checkpoints.order_id = checkouter_orders.order_id
+    LEFT JOIN `//home/market/production/analytics/business/delivery/logistic_points_info/sorting_center_info` AS sc_info
+        ON tracker_checkpoints.sorting_center_partner_id = sc_info.sorting_center_partner_id
+        AND substring(tracker_checkpoints.fact_sc_110_datetime,0 ,10) = sc_info.report_date
+    LEFT JOIN 
+    (
+        SELECT 
+            o.order_id as order_id,
+            AVG(height*length*width*0.000001) as po_sc_volume_m3,
+            AVG(weight_gross) as po_sc_weight_gross_kg,
+            AVG(weight_net) as po_sc_weight_net_kg,
+            AVG(weight_tare) as po_sc_weight_tare_kg,
+            AVG(place_count) as po_sc_box_count
+        FROM
+        (
+            SELECT DISTINCT
+                external_id as order_id,
+                measurements_id,
+                place_count
+            FROM `//home/market/production/tpl/sc/cdc/orders`
+        ) as o
+        INNER JOIN `//home/market/production/tpl/sc/cdc/measurements` as m
+        ON o.measurements_id = m.id
+        GROUP BY o.order_id
+    ) as po_sc_orders
+        ON cast(tracker_checkpoints.order_id as string) = po_sc_orders.order_id
+    LEFT JOIN `//home/market/production/tpl/sc/chdb_sorting_center_metrics` as sc_metrics
+        ON cast(tracker_checkpoints.order_id as string) = sc_metrics.subkey
+        AND cast(tracker_checkpoints.sorting_center_partner_id as string) = sc_metrics.scId
+    WHERE tracker_checkpoints.fact_sc_110_datetime is not null 
+        OR tracker_checkpoints.fact_sc_130_datetime is not null 
+        OR tracker_checkpoints.fact_sc_170_datetime is not null 
+        OR tracker_checkpoints.fact_sc_180_datetime is not null
+);
+
+INSERT INTO `//home/market/production/analytics/business/delivery/logistic_points_info/debug/sorting_center_orders` WITH TRUNCATE 
+SELECT 
+DISTINCT
+	order_segments.*,
+    ROW_NUMBER() OVER w AS order_sorting_center_number,
+    CASE 
+        WHEN COUNT(order_segments.sorting_center_partner_id) OVER w1 > 1 
+            AND ROW_NUMBER() OVER w < COUNT(order_segments.sorting_center_partner_id) OVER w1 
+            THEN true 
+        ELSE false 
+    END as is_transit_order_flag
+FROM $order_segments as order_segments
+WHERE order_segments.fact_sc_130_datetime is not null
+WINDOW w AS (
+    PARTITION BY order_segments.order_id
+    ORDER BY order_segments.fact_sc_130_datetime
+        ),
+    w1 AS (
+    PARTITION BY order_segments.order_id
+        )
+
+UNION ALL
+
+SELECT 
+DISTINCT
+    order_segments.*,
+    null as order_sorting_center_number,
+    null as is_transit_order_flag
+FROM $order_segments as order_segments
+WHERE order_segments.fact_sc_130_datetime is null;

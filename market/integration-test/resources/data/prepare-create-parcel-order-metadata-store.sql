@@ -1,0 +1,4 @@
+INSERT INTO create_parcel_order_metadata_store
+(METADATA_KEY, METADATA_VALUE, REGION)
+VALUES
+('33', '123123123', 'DEFAULT');

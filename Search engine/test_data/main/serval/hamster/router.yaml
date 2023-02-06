@@ -1,0 +1,96 @@
+quota: default
+headers:
+  bass-quota: x-basshamsterquota
+  h-quota: x-yandex-rps-limiter-quota
+cgi:
+  stoker-quota: stoker-quota
+  pipe: pipe
+  info: info
+  rps-limiter-quota: rps-limiter-quota
+cookies:
+  tag_user: yandex_login
+export: tag_user
+
+urls: urls
+
+router:
+  # - not-empty: tag_user
+  # quota: internal
+
+  - map: pipe
+    data:
+      - key: prs
+        quota: ban
+
+  - map: info
+    data:
+      - key: getstatus
+        quota: healthcheck
+
+  - map: bass-quota
+    data:
+      - key: [bass-hamster, bass-localhost]
+        quota: bass
+
+  - map: stoker-quota
+    data:
+      - key: ab_experiments
+        quota: ab_experiments
+
+  - map: stoker-quota
+    data:
+      - key: begemot
+        quota: begemot
+      - key: fml-pool
+        quota: fml_pool
+      - key: findurl
+        quota: findurl
+      - key: frontend-test
+        quota: frontend-test
+      - key: flags_testing
+        quota: flags_testing
+
+  #HAMSTER-124
+  - map: rps-limiter-quota
+    data:
+      - key: soy
+        quota: soy
+      - key: scraper
+        quota: scraper
+      - key: alisa
+        quota: hamster_alisa
+      - key: video-prom
+        quota: video-prom
+
+  - map: urls
+    data:
+      - key: /awacs-balancer-health-check
+        quota: healthcheck
+      - key: /collections
+        quota: collections
+      #HAMSTER-88
+      - key: /uslugi/douber
+        quota: uslugi_douber
+      #HAMSTER-104
+      - key: /uslugi
+        quota: uslugi
+      #HAMSTER-89
+      - key: /messenger/api
+        quota: messenger_api
+      #HAMSTER-87
+      - key: /images-xml
+        quota: images
+      - key: /images-apphost
+        quota: images
+      - key: /images
+        quota: images
+      - key: /gorsel
+        quota: images
+
+  #HAMSTER-124
+  - map: h-quota
+    data:
+      - key: rr-templates
+        quota: rr_templates
+      - key: rr_templates_betas
+        quota: rr_templates_betas

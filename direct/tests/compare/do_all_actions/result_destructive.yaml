@@ -1,0 +1,28 @@
+instructions_users_add: 
+  - 'CREATE USER "kek"@"106.98.53.0" IDENTIFIED BY PASSWORD "";'
+  - 'CREATE USER "new"@"::1" IDENTIFIED BY PASSWORD "*9876543243d23456789cabd";'
+  - 'SET PASSWORD FOR "@k"@"106.98.53.0" = "*576788";'
+  - 'CREATE USER "root"@"1.1.1.1" IDENTIFIED BY PASSWORD "";'
+instructions_users_remove:
+  - 'DROP USER "kek"@"::1";'
+  - 'DROP USER "kill"@"127.0.0.1";'
+instructions_remove:
+  - 'REVOKE CREATE VIEW ON TABLE qdb.* FROM "kek"@"::1";'
+  - 'REVOKE GRANT OPTION ON TABLE * FROM "kek"@"::1";'
+  - 'REVOKE GRANT OPTION ON TABLE *.* FROM "kill"@"127.0.0.1";'
+  - 'REVOKE INSERT, UPDATE, SELECT, CREATE USER ON TABLE * FROM "kek"@"::1";'
+instructions_add:
+  - 'GRANT ALL ON TABLE *.* TO "@k"@"106.98.53.0";'
+  - 'GRANT ALL ON TABLE *.* TO "kek"@"106.98.53.0";'
+  - 'GRANT ALTER ROUTINE ON PROCEDURE db.myp TO "new"@"::1";'
+  - 'GRANT ALL ON TABLE *.* TO "root"@"1.1.1.1";'
+  - 'GRANT USAGE ON TABLE *.* TO "root"@"1.1.1.1" WITH GRANT OPTION;'
+add_for_human: 
+  - ['kek', '106.98.53.0']
+  - ['root', '1.1.1.1']
+  - ['new', '::1']
+rem_for_human:
+  - ['kek', '::1']
+  - ['kill', '127.0.0.1']
+users_changed: True
+grants_changed: True

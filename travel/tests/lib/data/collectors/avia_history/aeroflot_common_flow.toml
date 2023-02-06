@@ -1,0 +1,57 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "aeroflot_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 1026
+    confirm_dt = ""
+    created_at = "2020-01-31 00:00:00"
+    currency = ""
+    from = "SVO"
+    marker = "YA0DWETR97"
+    order_id = "EBYTHO"
+    partner = "aeroflot"
+    partner_id = 111
+    price = ""
+    source = "aeroflot"
+    status = "booking"
+    ticket_number = ""
+    to = "SIP"
+    trip_type = "roundtrip"
+    unixtime = 1580419116
+
+[lb]
+    topic = "topic-aeroflot_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "updated_at"]
+
+[[lb.expected]]
+    status = "pending"
+    category = "avia"
+    partner_id = 111
+    created_at = 1580428800
+    origin = "SVO"
+    partner_order_id = "EBYTHO"
+    label = "YA0DWETR97"
+    source = "history"
+    destination = "SIP"
+    partner_name = "aeroflot"
+    trip_type = "roundtrip"
+    billing_order_id = 1026
+    order_amount = 0.0
+    travel_order_id = "aeroflot:EBYTHO"
+    currency_code = "RUB"

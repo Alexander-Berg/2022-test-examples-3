@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="NOW" value="getutcdate()" dbms="mssql"/>
+    <property name="NOW" value="CURRENT_TIMESTAMP()" dbms="h2"/>
+
+    <property name="USER_NAME" value="user_name()" dbms="mssql"/>
+    <property name="USER_NAME" value="USER()" dbms="h2"/>
+
+    <changeSet id="MARKETWMS-17190" author="j-sverhnova">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="RECEIPT_SERVICES" schemaName="wmwhse1"/>
+            </not>
+        </preConditions>
+        <createTable tableName="RECEIPT_SERVICES" schemaName="wmwhse1">
+            <column name="RECEIPTKEY" type="nvarchar(50)" remarks="Ключ поставки">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SERVICECODE" type="nvarchar(256)" remarks="Код сервиса">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDDATE" type="datetime" defaultValueComputed="${NOW}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDWHO" type="nvarchar(256)" defaultValueComputed="${USER_NAME}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITDATE" type="datetime" defaultValueComputed="${NOW}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITWHO" type="nvarchar(256)" defaultValueComputed="${USER_NAME}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey
+            columnNames="RECEIPTKEY, SERVICECODE"
+            constraintName="PK_RECEIPT_SERVICES"
+            schemaName="wmwhse1"
+            tableName="RECEIPT_SERVICES"
+        />
+        <rollback>
+            <dropTable schemaName="wmwhse1" tableName="RECEIPT_SERVICES"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,200 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый cocon-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dcocon-testing
+
+juggler:
+  checks:
+
+  # Check cocon-checks
+  # https://juggler.yandex-team.ru/check_details/?host=cocon-testing&service=cocon-checks&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    children:
+    - cocon-testing:4xx-percent
+    - cocon-testing:5xx-percent
+    - cocon-testing:timing-99
+    - EVENTS%host=cocon-testing & (tag=cocon-cabinet-4xx | tag=cocon-cabinet-5xx |
+      tag=cocon-cabinet-timings ):all:all
+    notifications: []
+    service: cocon-checks
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=cocon-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: '0'
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: skip
+    children:
+    - NANNY%testing_market_cocon_sas
+    - NANNY%testing_market_cocon_vla
+    notifications:
+    - template_kwargs:
+        login: mbi-release-tg
+        method: telegram
+        status:
+        - from: OK
+          to: CRIT
+        - from: CRIT
+          to: OK
+        - from: CRIT
+          to: WARN
+        - from: WARN
+          to: CRIT
+        - from: OK
+          to: WARN
+        - from: WARN
+          to: OK
+      template_name: on_status_change
+    service: disk_free_space
+
+  # Check fresh-hprof-files
+  # https://juggler.yandex-team.ru/check_details/?host=cocon-testing&service=fresh-hprof-files&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_cocon_sas
+    - NANNY%testing_market_cocon_vla
+    notifications: []
+    service: fresh-hprof-files
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=cocon-testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_cocon_sas
+    - NANNY%testing_market_cocon_vla
+    notifications: []
+    service: logrotate
+
+  # Check monitoring
+  # https://juggler.yandex-team.ru/check_details/?host=cocon-testing&service=monitoring&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_cocon_sas
+    - NANNY%testing_market_cocon_vla
+    notifications: []
+    service: monitoring
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=cocon-testing&service=ping&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_cocon_sas
+    - NANNY%testing_market_cocon_vla
+    notifications: []
+    service: ping
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=cocon-testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_cocon_sas
+    - NANNY%testing_market_cocon_vla
+    notifications: []
+    service: push-client-status
+  default:
+    check_options: {}
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: cocon-testing
+    namespace: market.mbi_shops
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - marketcocon
+    - testing
+    - market_mbi
+    - market
+    - _market_
+    ttl: 900

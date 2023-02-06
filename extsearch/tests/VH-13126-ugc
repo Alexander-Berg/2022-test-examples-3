@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+[ -z "${KEEP}" ] && set -e
+
+SCRIPTS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd) #"
+. "${SCRIPTS_DIR}"/config.sh
+PLAYLIST_SERVICE_SCHEMA=ugc
+[ -z "$PROD" ] && . "${SCRIPTS_DIR}"/playlist_service
+
+if [ -n "$PG_PROD" ] || [ -n "$PROD" ]; then
+
+echo "должен быть ответ"
+! \
+${CURL} -X POST "https://internal.vh.yandex.net/stream_by_uuid?${URL_ADD}${SRCRWR}" -d '{
+  "abc_id": 1558,
+  "from": "ya-video",
+  "service_flag": "ya-video",
+  "streams": [
+    {
+      "uuid": "vAZFtvicwcmM", "stream_type": "mss", "ott_session_id": "123", "vsid": "234"
+    }
+  ]
+}' \
+    | jq --exit-status '.stream_info[] | .streams[] | select(.stream_type!="mss")'
+
+fi

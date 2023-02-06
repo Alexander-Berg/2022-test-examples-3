@@ -1,0 +1,48 @@
+{
+    "rules" = [
+        {
+            "min_level" = "info";
+            "writers" = [
+                "info";
+                "stderr";
+            ];
+        };
+        {
+            "min_level" = "debug";
+            "writers" = [
+                "debug";
+            ];
+        };
+        {
+            "min_level" = "debug";
+            "include_categories" = [
+                "ctrl-core";
+                "deploy-ctrl";
+                "instance-syncer";
+                "replicactl";
+                "target-watcher";
+                "yt-utils";
+            ];
+            "writers" = [
+                "debug-filtered";
+            ];
+        };
+    ];
+    "writers" = {
+        "stderr" = {
+            "type" = "stderr";
+        };
+        "info" = {
+            "file_name" = "{{ dir }}/replicactl/info.log";
+            "type" = "file";
+        };
+        "debug" = {
+            "file_name" = "{{ dir }}/replicactl/all.debug.log";
+            "type" = "file";
+        };
+        "debug-filtered" = {
+            "file_name" = "{{ dir }}/replicactl/debug.log";
+            "type" = "file";
+        };
+    };
+}

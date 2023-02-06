@@ -1,0 +1,26 @@
+name: Success tms tasks v2 by 1h (testing)
+description: ''
+windowSecs: 3600
+delaySecs: 0
+type:
+  expression:
+    program: |
+      let unsuccess = drop_empty_lines(drop_above(moving_sum({sensor="taskV2SuccessCount", cluster="testing", service="market-checkouter", project="market-checkout", period="five_min", isPaymentTask="false"}, 1h), 1));
+
+      let description = "Часть ТМС задач перестала запускаться успешно, смотри на графике список незапускающихся задач: https://monitoring.yandex-team.ru/projects/market-checkout/explorer/queries?q.0.text=drop_empty_lines%28drop_above%28moving_sum%28%7Bsensor%3D%22taskV2SuccessCount%22%2C%20cluster%3D%22testing%22%2C%20service%3D%22market-checkouter%22%2C%20project%3D%22market-checkout%22%2C%20period%3D%22five_min%22%7D%2C%201h%29%2C%201%29%29&from=now-1h&to=now&utm_source=solomon_graph_view&refresh=60000&normz=off&colors=auto&type=area&interpolation=linear&dsp_method=auto&dsp_aggr=default&dsp_fill=default&vis_labels=off&vis_aggr=avg%22%3B";
+      let unsuccess_count = size(unsuccess);
+      alarm_if(unsuccess_count > 0);
+
+      let description = 'Всё хорошо с {{taskName}}';
+    checkExpression: 'false'
+annotations:
+  description: '{{expression.description}}'
+  environment: production
+  totalTaskRuns: '{{expression.totalTaskRuns}}'
+  trafficLight.color: '{{expression.trafficColor}}'
+channels:
+- id: solomon-bot-testing-notifications
+  config:
+    notifyAboutStatuses:
+    - ALARM
+    repeatDelaySecs: 3600

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-autowire="no"
+       default-lazy-init="false">
+    
+    <import resource="classpath:WEB-INF/push-api-class-mappings.xml" />
+
+    <!-- json serializers -->
+    
+    <bean id="pushApiJsonSerializers" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <entry key="ru.yandex.market.checkout.checkouter.delivery.Address"
+                       value-ref="addressJsonSerializer" />
+                <entry key="ru.yandex.market.checkout.checkouter.order.OrderItem"
+                       value-ref="orderItemJsonSerializer" />
+                <entry key="ru.yandex.market.checkout.pushapi.client.entity.order.DeliveryWithRegion"
+                       value-ref="deliveryWithRegionJsonSerializer" />
+                <entry key="ru.yandex.market.checkout.pushapi.shop.entity.ExternalCart"
+                       value-ref="externalCartJsonSerializer" />
+                <entry key="ru.yandex.market.checkout.pushapi.shop.entity.ShopOrder"
+                       value-ref="shopOrderJsonSerializer" />
+            </map>
+        </constructor-arg>
+    </bean>
+    
+    <!-- json deserializers -->
+    
+    <bean id="pushApiJsonDeserializers" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <entry key="java.lang.Void">
+                    <bean class="ru.yandex.market.checkout.common.json.old.DummyJsonDeserializer" />
+                </entry>
+                <entry key="ru.yandex.market.checkout.checkouter.order.OrderItem"
+                       value-ref="orderItemJsonDeserializer" />
+                <entry key="ru.yandex.market.checkout.pushapi.client.entity.CartResponse"
+                       value-ref="cartResponseJsonDeserializer" />
+                <entry key="ru.yandex.market.checkout.pushapi.client.entity.DeliveryResponse"
+                       value-ref="deliveryResponseJsonDeserializer"/>
+                <entry key="ru.yandex.market.checkout.pushapi.client.entity.OrderResponse"
+                       value-ref="orderResponseJsonDeserializer"/>
+            </map>
+        </constructor-arg>
+    </bean>
+    
+    <!-- shop xml serializers -->
+
+    <bean id="pushApiFullXmlSerializers"
+          class="ru.yandex.market.checkout.common.common.ClassMapping"
+          parent="pushApiXmlSerializers">
+        <property name="mapping">
+            <map>
+                <entry key="ru.yandex.market.checkout.pushapi.client.entity.order.DeliveryWithRegion"
+                       value-ref="deliveryWithRegionXmlSerializer" />
+                <entry key="ru.yandex.market.checkout.pushapi.shop.entity.ExternalCart"
+                       value-ref="externalCartXmlSerializer" />
+                <entry key="ru.yandex.market.checkout.pushapi.shop.entity.ShopOrder"
+                       value-ref="shopOrderXmlSerializer" />
+                <entry key="ru.yandex.market.checkout.pushapi.client.entity.CartResponse"
+                       value-ref="cartResponseXmlSerializer" />
+                <entry key="ru.yandex.market.checkout.pushapi.client.entity.OrderResponse"
+                       value-ref="orderResponseXmlSerializer" />
+                <entry key="ru.yandex.market.checkout.pushapi.client.entity.shop.Settings"
+                       value-ref="settingsXmlSerializer" />
+                <entry key="ru.yandex.market.checkout.common.rest.ErrorCodeException">
+                    <bean class="ru.yandex.market.checkout.common.xml.ErrorCodeExceptionXmlSerializer" />
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <!-- message converters -->
+    
+    <bean id="classMappingJsonMessageConverter"
+          class="ru.yandex.market.checkout.common.json.jackson.JacksonMessageConverter">
+        <constructor-arg>
+            <bean class="com.fasterxml.jackson.databind.ObjectMapper" />
+        </constructor-arg>
+        <property name="stringConverter" ref="stringConverter" />
+        <property name="deserializers">
+            <bean class="ru.yandex.market.checkout.common.common.ClassMapping">
+                <property name="mapping" ref="pushApiJsonDeserializers" />
+            </bean>
+        </property>
+        <property name="serializers">
+            <bean class="ru.yandex.market.checkout.common.common.ClassMapping">
+                <property name="mapping" ref="pushApiJsonSerializers" />
+            </bean>
+        </property>
+    </bean>
+    
+    <bean id="classMappingXmlMessageConverter"
+          class="ru.yandex.market.checkout.common.xml.NewClassMappingXmlMessageConverter">
+        <property name="deserializers" ref="pushApiXmlDeserializers" />
+        <property name="serializers" ref="pushApiFullXmlSerializers" />
+    </bean>
+    
+</beans>

@@ -1,0 +1,84 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+# vim: set expandtab:tabstop=4:softtabstop=4:shiftwidth=4:nowrap
+# $Id$
+
+import argparse
+import os
+import subprocess
+import sys
+import time
+
+from datetime import datetime
+
+def ssh_cmd(h):
+    # если есть мастер соединение
+    env_name = "SSH_MASTER_CONN_%s" % h.replace("-", "_").replace(".", "_").upper()
+    ssh_opts = ['-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null']
+    if os.environ.get(env_name, ""):
+        ssh_opts += ['-S', os.environ.get(env_name)]
+    return ['ssh'] + ssh_opts + [h] + ['sudo', '/usr/local/bin/ts-update.pl', '--conf=/etc/ts-updater/direct.conf']
+
+def arg_parse():
+    parser = argparse.ArgumentParser(description=u'Запустить команды ts-updater на нескольких хостах параллельно и, возможно, дождаться выполнения.')
+    parser.add_argument('cmd_arg', nargs='+', help=u'команда, передаваемая ts-updater')
+    parser.add_argument('--hosts', help=u'список хостов через запятую: например, --hosts ppcdev1,ppcdev2')
+    parser.add_argument('--wait', action='store_true', required=False, help=u'дождаться выполнения команды')
+    args = parser.parse_args()
+    return args
+
+def run(args):
+    hosts = args.hosts.split(',')
+    job_id = {}
+    error = {}
+    if not hosts:
+        sys.exit('no host list given')
+    for h in sorted(hosts):
+        try:
+            to_run = ssh_cmd(h) + ['ASYNC'] + args.cmd_arg
+            sys.stderr.write('### starting task on %s:\n%s\n' % (h, " ".join(to_run)))
+            job_id[h] = subprocess.check_output(to_run).rstrip()
+        except subprocess.CalledProcessError as e:
+            error[h] = 'could not start task'
+    for h in sorted(job_id.keys()):
+        print '%s %s' % (h, job_id[h])
+    if args.wait:
+        devnull = open('/dev/null', 'w')
+        now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        while job_id.keys():
+            for h in sorted(job_id.keys()):
+                status_str = ''
+                try:
+                    status_str = subprocess.check_output(ssh_cmd(h) + ['direct-async-run', 'get-status', job_id[h]], stderr=devnull).rstrip()
+                except subprocess.CalledProcessError as e:
+                    status_str = 'unknown'    # обрабатывается далее
+                sys.stderr.write('### %s: %s\n' % (h, status_str))
+                state = status_str.split(' ')[0]
+                state = state.replace(',', '')
+                if state != 'running':
+                    if state == 'exited':
+                        exit_code = status_str.split(' ')[-1]
+                        if int(exit_code) != 0:
+                            error[h] = 'command exited with error code %s' % exit_code
+                    else:
+                        error[h] = 'unknown state'
+                    if h in error:
+                        for s in ['out', 'err']:
+                            fname = '/tmp/temp-ttl/ttl_7d/async_run_%s_%s_%s' % (h, now, s)
+                            f = open(fname, 'w+')
+                            subprocess.call(ssh_cmd(h) + ['direct-async-run', 'show-' + s, job_id[h]], stdout=f, stderr=devnull)
+                            if os.stat(fname).st_size > 0:
+                                error[h] += '\n  std%s in file %s' % (s, fname)
+                    del job_id[h]
+            if job_id.keys():
+                time.sleep(10)
+    sys.stderr.write('\n')
+    for h in sorted(error.keys()):
+        sys.stderr.write('### %s error: %s\n' % (h, error[h]))
+    if len(error.keys()) == 0:
+        print '\nOK\n'
+    sys.exit(len(error.keys()))
+
+if __name__ == '__main__':
+    run(arg_parse())
+

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="auctionResultBoundary"
+          class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.MigrationBoundaryDefinition">
+        <constructor-arg name="oracleLifeTime" value="#{T(java.time.Duration).ofHours(3L)}"/>
+        <constructor-arg name="dateTimeAccuracy" value="HOURS"/>
+        <constructor-arg name="partitionsInterval" value="#{T(java.time.Duration).ofHours(1)}"/>
+        <property name="partitionKeyFormatter"
+                  value="#{T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd[-HH]')}"/>
+    </bean>
+
+    <beans profile="migration">
+        <bean id="auctionHistoryMigrationProcess"
+              class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.MigrationProcessDefinition">
+            <constructor-arg name="oracleArchiverOperations" ref="auctionRuleRepository"/>
+            <constructor-arg name="samplesCount" value="10"/>
+            <constructor-arg name="boundaryDefinition" ref="auctionResultBoundary"/>
+            <property name="yqlTablePath" value="auction_result"/>
+        </bean>
+
+        <bean id="auctionHistoryMigrationJob"
+              class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.MigrationJobDefinition">
+            <constructor-arg name="jobName" value="migrateAuctionResultExecutor"/>
+            <constructor-arg name="boundaryDefinition" ref="auctionResultBoundary"/>
+            <property name="yqlEntityName" value="AUCTION_RESULT"/>
+        </bean>
+    </beans>
+</beans>

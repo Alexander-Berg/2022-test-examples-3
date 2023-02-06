@@ -1,0 +1,42 @@
+- name: iva-iwrkc6395e1fmyt5.db.yandex.net
+  cluster_id: 7700d323-cdde-4fc2-9666-4d49ac7d63a9
+  zone_id: iva
+  resources:
+    resource_preset_id: db1.nano
+    disk_size: "10737418240"
+    disk_type_id: local-ssd
+  health: DEAD
+  services:
+  - type: POSTGRESQL
+  - type: POOLER
+    health: ALIVE
+- name: sas-7v5c4lk3cniv0v5r.db.yandex.net
+  cluster_id: 7700d323-cdde-4fc2-9666-4d49ac7d63a9
+  zone_id: sas
+  resources:
+    resource_preset_id: db1.nano
+    disk_size: "10737418240"
+    disk_type_id: local-ssd
+  role: REPLICA
+  health: ALIVE
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+    health: ALIVE
+  replica_type: ASYNC
+- name: vla-4wtdopk1ayhm7i7e.db.yandex.net
+  cluster_id: 7700d323-cdde-4fc2-9666-4d49ac7d63a9
+  zone_id: vla
+  resources:
+    resource_preset_id: db1.nano
+    disk_size: "10737418240"
+    disk_type_id: local-ssd
+  role: MASTER
+  health: ALIVE
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+    health: ALIVE
+

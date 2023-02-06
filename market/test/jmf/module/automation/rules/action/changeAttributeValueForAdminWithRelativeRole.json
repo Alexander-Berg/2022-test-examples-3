@@ -1,0 +1,56 @@
+{
+  "rules": [
+    {
+      "conditions": [
+        {
+          "predicate": {
+            "type": "and",
+            "predicates": [
+              {
+                "type": "attribute",
+                "parameter": "obj",
+                "filter": {
+                  "type": "eq",
+                  "attribute": "simple1@ruleResult",
+                  "value": [
+                    "%s"
+                  ]
+                }
+              },
+              {
+                "type": "securityProfile",
+                "profiles": [
+                  "@admin",
+                  "activeEmployee"
+                ],
+                "junctionBy": "AND",
+                "parameter": "obj"
+              }
+            ]
+          },
+          "positiveBranch": {
+            "rules": [
+              {
+                "actions": [
+                  {
+                    "type": "edit",
+                    "parameter": "obj",
+                    "properties": [
+                      {
+                        "code": "simple1@ruleResult",
+                        "value": {
+                          "type": "raw",
+                          "value": "%s"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

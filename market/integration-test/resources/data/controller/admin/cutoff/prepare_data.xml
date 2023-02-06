@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <platform_client id="1" name="Beru" />
+    <platform_client id="2" name="Bringly" />
+
+    <partner_subtype id="1" name="Фулфилменты" partner_type="FULFILLMENT" />
+    <partner_subtype id="2" name="Маркет Склады" partner_type="FULFILLMENT" />
+    <partner_subtype id="3" name="СЦ для МК" partner_type="SORTING_CENTER" />
+
+    <partner id="1" status="active" type="FULFILLMENT" billing_client_id="123" rating="1" name="Fulfillment service 1" tracking_type="tt1" location_id="255" stock_sync_enabled="false" auto_switch_stock_sync_enabled="false" />
+    <partner id="2" status="active" type="DELIVERY" billing_client_id="123" rating="1" name="Delivery service 1" tracking_type="tt2" location_id="255" stock_sync_enabled="false" auto_switch_stock_sync_enabled="false" />
+    <partner id="3" status="active" type="FULFILLMENT" billing_client_id="1234" rating="12" name="Fulfillment service 2" tracking_type="tt3" location_id="255" stock_sync_enabled="false" auto_switch_stock_sync_enabled="false" subtype_id="1" />
+    <partner id="4" status="active" type="DELIVERY" billing_client_id="1234" rating="12"  name="Delivery service 2" tracking_type="tt4" location_id="255" stock_sync_enabled="false" auto_switch_stock_sync_enabled="false" />
+
+    <schedule id="1000"/>
+    <schedule id="2000"/>
+
+    <regions id="213" name="Алматы"/>
+    <regions id="225" name="Астана"/>
+    <regions id="1" name="Караганда"/>
+    <regions id="2" name="Москва"/>
+    <regions id="255" name="Питер"/>
+
+    <address id="1" location_id="213" latitude="56.948048" longitude="24.107018" street="Уриекстес" house="14а" comment="SIA “ILIOR”" address_string="1005, Рига, Уриекстес, 14а" short_address_string="Уриекстес, 14а" post_code="1005" region="Москва и Московская область" />
+
+    <logistics_point id="1" external_id="1" type="WAREHOUSE" address_id="1" active="true" frozen="false" partner_id="1" />
+    <logistics_point id="2" external_id="2" type="WAREHOUSE" address_id="1" active="true" frozen="false" partner_id="2" />
+    <logistics_point id="3" external_id="3" type="WAREHOUSE" address_id="1" active="true" frozen="false" partner_id="2" />
+    <logistics_point id="4" external_id="4" type="WAREHOUSE" address_id="1" active="true" frozen="false" partner_id="2" />
+
+    <partner_relation from_partner="1" to_partner="2" created="2019-02-14 18:09:53.202612" updated="2019-02-14 19:09:53.202612" handling_time="10" enabled="true" intake_schedule="2000" register_schedule="1000" to_partner_logistics_point="2" return_partner="1" shipment_type="IMPORT" />
+    <partner_relation from_partner="3" to_partner="4" created="2019-02-14 18:09:53.202612" updated="2019-02-14 19:09:53.202612" handling_time="2" enabled="true" return_partner="3" shipment_type="WITHDRAW" />
+    <partner_relation from_partner="3" to_partner="2" created="2019-02-14 18:09:53.202612" updated="2019-02-14 19:09:53.202612" handling_time="2" enabled="false" transfer_time="1800000000000" inbound_time="5400000000000" return_partner="1" shipment_type="WITHDRAW" />
+
+    <platform_client_partners partner_id="1" platform_client_id="1" id="1" status="ACTIVE" />
+    <platform_client_partners partner_id="2" platform_client_id="1" id="2" status="ACTIVE" />
+    <platform_client_partners partner_id="3" platform_client_id="1" id="3" status="ACTIVE" />
+    <platform_client_partners partner_id="4" platform_client_id="1" id="4" status="ACTIVE" />
+
+    <partner_relation_product_rating partner_relation_id="1" location_id="225" rating="20" />
+    <partner_relation_product_rating partner_relation_id="1" location_id="213" rating="10" />
+    <partner_relation_product_rating partner_relation_id="1" location_id="1" rating="15" />
+
+    <partner_relation_cutoff partner_relation_id="1" location_id="1" cutoff_time="14:09:00" packaging_duration="117000000000000" />
+    <partner_relation_cutoff partner_relation_id="2" location_id="1" cutoff_time="15:09:00" packaging_duration="45000000000000" />
+    <partner_relation_cutoff partner_relation_id="2" location_id="2" cutoff_time="16:09:00" packaging_duration="45000000000000" />
+
+    <schedule_day schedule_id="1000" day="1" time_from="12:00:00" time_to="13:00:00" />
+    <schedule_day schedule_id="1000" day="2" time_from="13:00:00" time_to="14:00:00" />
+    <schedule_day schedule_id="2000" day="3" time_from="12:00:00" time_to="15:00:00" />
+    <schedule_day schedule_id="2000" day="4" time_from="13:00:00" time_to="16:00:00" />
+
+    <user_role login="dev.1" project="lms" role="SUPERUSER" />
+    <user_role login="dev.1" project="tarifficator" role="ADMIN" />
+    <user_role login="lms" project="lms" role="VIEWER" />
+    <user_role login="lmsAdmin" project="lms" role="SUPERUSER" />
+    <user_role login="tracker" project="tracker" role="VIEWER" />
+
+    <dynamic_log id="1" status="FAILED" platform_client_id="1" />
+    <dynamic_log id="2" status="FAILED" platform_client_id="2" />
+    <dynamic_log id="3" status="FAILED" platform_client_id="2" />
+    <dynamic_log id="4" status="OK" platform_client_id="1" />
+
+    <dynamic_fault id="1" dynamic_log_id="1" entity_type="PARTNER_RELATION" entity_id="1" status="FAILED" reason="failed platform 1, relation 1" />
+    <dynamic_fault id="2" dynamic_log_id="2" entity_type="PARTNER_RELATION" entity_id="3" status="FAILED" reason="failed platform 2, relation 3" />
+    <dynamic_fault id="3" dynamic_log_id="3" entity_type="PARTNER_RELATION" entity_id="3" status="WARN" reason="warn platform 2, relation 3" />
+    <dynamic_fault id="4" dynamic_log_id="3" entity_type="PARTNER_RELATION" entity_id="2" status="FAILED" reason="failed platform 2, relation 2" />
+</dataset>

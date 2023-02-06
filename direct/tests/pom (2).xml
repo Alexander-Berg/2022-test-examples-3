@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.yandex.autotests.direct</groupId>
+        <artifactId>direct-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>ru.yandex.autotests.direct</groupId>
+    <artifactId>direct-java-intapi-tests</artifactId>
+    <name>direct-java-intapi-tests</name>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <gson.version>2.7</gson.version>
+        <allure.version>1.4.24.RC3</allure.version>
+    </properties>
+
+    <scm>
+        <url>https://github.yandex-team.ru/direct-qa/direct-java-intapi</url>
+        <connection>scm:git:github.yandex-team.ru:direct-qa/direct-java-intapi.git</connection>
+    </scm>
+
+    <issueManagement>
+        <system>Startrek</system>
+        <url>https://st.yandex-team.ru/TESTIRT</url>
+    </issueManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ru.yandex.autotests.direct</groupId>
+            <artifactId>direct-utils</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jersey-logging</artifactId>
+                    <groupId>ru.yandex.autotests.irt</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>gson</artifactId>
+                    <groupId>com.google.code.gson</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>ru.yandex.autotests.direct</groupId>
+            <artifactId>direct-java-intapi-steps</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jersey-guava</artifactId>
+                    <groupId>org.glassfish.jersey.bundles.repackaged</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jersey-common</artifactId>
+                    <groupId>org.glassfish.jersey.core</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.yandex.autotests.direct</groupId>
+            <artifactId>direct-cmd-steps</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ru.yandex.autotests.irt</groupId>
+            <artifactId>jersey-logging</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.yandex.autotests.plugins.testpers</groupId>
+            <artifactId>rest-assured-logger</artifactId>
+            <version>1.4-SNAPSHOT</version>
+            <exclusions>
+                <!-- from ru.yandex.autotests.plugins.testpers:testpers-api-report-utils -->
+                <exclusion>
+                    <groupId>org.apache.maven</groupId>
+                    <artifactId>maven-plugin-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.maven.reporting</groupId>
+                    <artifactId>maven-reporting-impl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.maven.plugin-tools</groupId>
+                    <artifactId>maven-plugin-annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+
+                <!-- from others -->
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-all</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.googlecode.lambdaj</groupId>
+                    <artifactId>lambdaj</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ru.yandex.qatools.elliptics</groupId>
+                    <artifactId>elliptics-fluent</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ru.yandex.aqua</groupId>
+                    <artifactId>aqua-annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ru.yandex.autotests</groupId>
+                    <artifactId>aspectj-weaver-only-ru</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ru.yandex.aqua</groupId>
+                    <artifactId>aqua-project-generator-plugin</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ru.yandex.qatools</groupId>
+                    <artifactId>phantom-aspects</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ru.yandex.qatools</groupId>
+                    <artifactId>driver-aspects</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-server</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+</project>

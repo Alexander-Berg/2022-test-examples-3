@@ -1,0 +1,8 @@
+#!/bin/bash
+
+salt_id=${1:?Usage: $0 <salt_id> <salt_state>}
+shift
+salt_state=${1:?Usage: $0 <salt_id> <salt_state>}
+shift
+
+exec salt-call state.sls_id ${salt_id} ${salt_state} -l error --state-output=changes queue=True saltenv=stable $@

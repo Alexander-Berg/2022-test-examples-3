@@ -1,0 +1,43 @@
+console: {enabled: false, package: yandextank.plugins.Console}
+telegraf: {enabled: false, package: yandextank.plugins.Telegraf}
+phantom: {enabled: false, package: yandextank.plugins.Phantom}
+neuploader:
+  api_address: http://test-back.luna.yandex-team.ru
+  db_name: luna_test
+  enabled: true
+  meta:
+    use_tank: man3-1632-c35-all-rcloud-tanks-30169.gencfg-c.yandex.net
+    use_tank_port: 30169
+    operator: szypulka
+    task: LUNA-1033
+  package: yandextank.plugins.NeUploader
+  test_name: test firestarter, config 03
+pandora:
+    enabled: true
+    expvar: false
+    config_content:
+        pools:
+          - id: HTTP pool
+            gun:
+                type: http
+                target: 'mocks-1.mocks.testing-acceptance.yandextank.load.prestable.qloud-d.yandex.net:80'
+            ammo:
+                type: uri
+                file: https://s3.mds.yandex.net/luna/ammo/szypulka/pandora_1.ammo/8f97d3edd5eb3d4952baec83ba1643b5a8a8eb9a
+            result:
+                type: phout
+                destination: ./phout.log
+            rps: {duration: 30s, type: line, from: 1, to: 1500}
+            startup:
+                type: once
+                times: 1000
+        log:
+            level: error
+        monitoring:
+            expvar:
+                enabled: true
+                port: 1234
+            cpuprofile:
+                enabled: false
+            memprofile:
+                enabled: false

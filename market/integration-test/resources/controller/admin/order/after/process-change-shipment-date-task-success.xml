@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <orders barcode="1001" platform_client_id="1" sender_id="1" status="PROCESSING"/>
+    <waybill_segment order_id="1" waybill_segment_index="0" segment_type="SORTING_CENTER" shipment_date="2020-11-11"/>
+    <waybill_segment order_id="1" waybill_segment_index="1" segment_type="MOVEMENT" shipment_date="2020-10-01"/>
+    <waybill_segment order_id="1" waybill_segment_index="2" segment_type="COURIER"/>
+
+    <orders barcode="1002" platform_client_id="1" sender_id="1" status="PROCESSING"/>
+    <waybill_segment order_id="2" waybill_segment_index="0" segment_type="COURIER" shipment_date="2020-10-02"/>
+
+    <orders barcode="1003" platform_client_id="1" sender_id="1" status="PROCESSING_ERROR"/>
+    <waybill_segment order_id="3" waybill_segment_index="0" segment_type="COURIER" shipment_date="2020-10-03"/>
+
+    <order_history_event
+            order_id="1"
+            abc_service_id="1010"
+            yandex_uid="10"
+            diff='[
+              {
+                "op": "replace",
+                "path": "/status",
+                "value": "PROCESSING",
+                "fromValue": "PROCESSING_ERROR"
+              },
+              {
+                "op": "replace",
+                "path": "/waybill/0/waybillShipment/date",
+                "value": "2020-11-11",
+                "fromValue": "2020-10-01"
+              },
+              {
+                "op": "add",
+                "path": "/orderStatusHistory/0",
+                "value": {
+                  "id": 1,
+                  "status": "PROCESSING",
+                  "datetime": "2019-06-12T00:00:00Z"
+                }
+              }
+            ]'
+    />
+</dataset>

@@ -1,0 +1,20 @@
+ident: market-front
+#include "/etc/yandex/statbox-push-client/include/market-logbroker-testing.yaml"
+
+logger:
+  mode: [file]
+  file: /var/log/yandex/push-client/market_front-marketstat-to-testing.log
+  level: 5
+  remote: 0
+
+files:
+  - name: /var/log/nginx/access-tskv.log
+    log_type: tskv-access-log
+    send-delay: 8
+    max_chunk_size: 10485760
+
+watcher-state: "/var/lib/push-client/market_front-marketstat-to-testing"
+
+seqno:
+  backend: tokyo
+  start_value: 10000000000

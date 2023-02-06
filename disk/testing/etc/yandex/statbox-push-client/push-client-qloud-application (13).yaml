@@ -1,0 +1,20 @@
+---
+ident: disk
+
+logger-mode: file
+logger-file: /var/log/statbox/watcher.log
+logger-level: 5
+
+watcher-method: inotify
+watcher-state: "/var/spool/push-client"
+watcher-drop_on_error: 1
+
+network-master-addr: "logbroker-pre.yandex.net"
+network-proto: rt
+
+files:
+  - name: /var/log/mpfs/event-history.log
+    log_type: ydisk-event-history-log
+  - name: /var/log/mpfs/storage-cleaner-worker.log.tskv
+    ident: disk-mworker
+    log_type: disk-mulca-clean-log

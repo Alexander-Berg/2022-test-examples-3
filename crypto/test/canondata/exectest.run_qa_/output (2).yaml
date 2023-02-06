@@ -1,0 +1,55 @@
+
+
+resources: {}
+
+file_client:
+  root: /resources
+
+http:
+  port: 80
+  timeout_sec: 10
+
+master_kv_client:
+  proxy: localhost:8888
+  path: //master
+
+replica_kv_clients:
+  dcs: {'DC': 'localhost:9999'}
+  path: //replica
+  retry_timeout_ms: 100
+
+
+report_ttl_sec: 3600
+instance_ttl_sec: 300
+
+solomon_port: 4242
+
+cluster_envs:
+  testing_cluster: rtmr-dev-man-2
+  clusters:
+  - rtmr-vla
+  - rtmr-sas
+  tracked_operation: rtcrypta_graph:pqout_fingerprint_matching
+
+releaser:
+  version_thresholds:
+    prestable: 200
+    testing: 7
+  ok_rate_thresholds:
+    prestable: 0.9
+    testing: 0.9
+  sequence:
+  - testing
+  - prestable
+  - stable
+  juggler_dry_run: False
+
+retry_opts:
+  tries: 5
+  delay: 1
+
+rt_retry_opts:
+  tries: 3
+  delay: 0.1
+
+report_timeout_ms: 500

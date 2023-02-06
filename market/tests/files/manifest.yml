@@ -1,0 +1,33 @@
+- name: application
+  templater:
+    source: test_templates
+    destination: output_dir/test
+  dirs:
+    - name: output_dir/test1
+    - name: output_dir/test2
+  links:
+    - name: output_dir/test3
+      target: output_dir/test1
+  files:
+    - name: output_dir/test4
+    - name: output_dir/test5
+  split_secrets:
+    - name: output_dir/secret.json
+
+- name: additional
+  templater:
+    source: test_templates2
+    destination: output_dir2/test
+  dirs:
+    - name: output_dir2/test1
+    - name: output_dir2/test2
+  links:
+    - name: output_dir2/test3
+      target: output_dir2/test1
+  files:
+    - name: output_dir2/test4
+    - name: output_dir2/test5
+
+- include:
+    - manifest: inc1_manifest.yml
+    - manifest: inc2_manifest.yml

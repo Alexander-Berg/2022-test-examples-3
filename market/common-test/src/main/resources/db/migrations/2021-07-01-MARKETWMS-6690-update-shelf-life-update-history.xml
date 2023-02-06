@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1" author="alexchet1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="wmwhse1" tableName="SHELF_LIFE_UPDATE_HISTORY" columnName="PREV_VAL"/>
+            </not>
+        </preConditions>
+        <addColumn schemaName="wmwhse1" tableName="SHELF_LIFE_UPDATE_HISTORY">
+            <column name="PREV_VAL" type="NVARCHAR(255)" remarks="Предыдущее значение"/>
+        </addColumn>
+        <rollback>
+            <dropColumn schemaName="wmwhse1" tableName="SHELF_LIFE_UPDATE_HISTORY" columnName="PREV_VAL"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="2" author="alexchet1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="wmwhse1" tableName="SHELF_LIFE_UPDATE_HISTORY" columnName="CUR_VAL"/>
+            </not>
+        </preConditions>
+        <addColumn schemaName="wmwhse1" tableName="SHELF_LIFE_UPDATE_HISTORY">
+            <column name="CUR_VAL" type="NVARCHAR(255)" remarks="Установленное значение"/>
+        </addColumn>
+        <rollback>
+            <dropColumn schemaName="wmwhse1" tableName="SHELF_LIFE_UPDATE_HISTORY" columnName="CUR_VAL"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

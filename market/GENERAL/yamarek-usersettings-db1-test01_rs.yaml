@@ -1,0 +1,45 @@
+- name: yamarek-usersettings-db1-test01f.db.yandex.net
+  cluster_id: a66262c1-cd99-439a-844c-091b92aaea13
+  zone_id: myt
+  resources:
+    resource_preset_id: db1.nano
+    disk_size: "10737418240"
+    disk_type_id: local-ssd
+  role: REPLICA
+  health: ALIVE
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+    health: ALIVE
+  replica_type: SYNC
+- name: yamarek-usersettings-db1-test01h.db.yandex.net
+  cluster_id: a66262c1-cd99-439a-844c-091b92aaea13
+  zone_id: sas
+  resources:
+    resource_preset_id: db1.nano
+    disk_size: "10737418240"
+    disk_type_id: local-ssd
+  role: MASTER
+  health: ALIVE
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+    health: ALIVE
+- name: yamarek-usersettings-db1-test01i.db.yandex.net
+  cluster_id: a66262c1-cd99-439a-844c-091b92aaea13
+  zone_id: man
+  resources:
+    resource_preset_id: db1.nano
+    disk_size: "10737418240"
+    disk_type_id: local-ssd
+  role: REPLICA
+  health: ALIVE
+  services:
+  - type: POSTGRESQL
+    health: ALIVE
+  - type: POOLER
+    health: ALIVE
+  replica_type: ASYNC
+

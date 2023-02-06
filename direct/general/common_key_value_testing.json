@@ -1,0 +1,31 @@
+{
+  "tableName": "common_kv_testing",
+  "splits": {
+    "module": "module",
+    "key": "key",
+    "host": "host",
+    "subkey": "subkey"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "key-value.${module}.testing.${key}.${subkey}",
+        "key-value.${module}.testing.HOST.${host}.${key}.${subkey}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "anyLast(value)",
+      "filter": "notEmpty(subkey)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "key-value.${module}.testing.${key}",
+        "key-value.${module}.testing.HOST.${host}.${key}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "anyLast(value)",
+      "filter": "empty(subkey)",
+      "type": "SIMPLE"
+    }
+  ]
+}

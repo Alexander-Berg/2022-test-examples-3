@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d] %-5p [%t] %c{1}: %m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="ASYNC_LOGFILE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="CONSOLE"/>
+    </appender>
+
+    <appender name="ACCESS" class="ch.qos.logback.core.helpers.NOPAppender"/>
+
+    <appender name="REPLICA_LAGS_LOG" class="ch.qos.logback.core.helpers.NOPAppender"/>
+
+    <logger name="ACCESS_LOG" additivity="false">
+        <level value="TRACE"/>
+        <appender-ref ref="ACCESS"/>
+    </logger>
+
+    <logger name="ru.yandex.market.crm" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="ASYNC_LOGFILE"/>
+    </logger>
+
+    <logger name="ru.yandex" additivity="false">
+        <level value="WARN"/>
+        <appender-ref ref="ASYNC_LOGFILE"/>
+    </logger>
+
+    <logger name="REPLICA_LAGS_LOG" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="REPLICA_LAGS_LOG"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="ASYNC_LOGFILE"/>
+    </root>
+
+</configuration>

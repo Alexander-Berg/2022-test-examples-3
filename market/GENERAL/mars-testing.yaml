@@ -1,0 +1,55 @@
+juggler:
+  checks:
+
+  - service: deploy_logs
+    aggregator: logic_or
+    children: 
+    - host: market-recommender@stage=testing_market_mars
+      service: deploy_logs_unified_agent_lag
+      type: DEPLOY
+    - host: market-recommender@stage=testing_market_mars
+      service: deploy_logs_unified_agent_errors
+      type: DEPLOY
+    - host: market-recommender@stage=testing_market_mars
+      service: deploy_logs_unified_agent_process
+      type: DEPLOY
+    - host: market-recommender@stage=testing_market_mars
+      service: deploy_logs_disk_usage
+      type: DEPLOY
+  
+  - service: balancer-http-ping
+    aggregator: logic_and
+    active: http
+    active_kwargs:
+        ok_codes: 200
+        path: /ping
+        port: 80
+    children:
+    - host: mars.tst.vs.market.yandex.net
+      service: http
+      type: HOST
+
+  - service: http-ping
+    aggregator: logic_and
+    active: http
+    active_kwargs:
+        ok_codes: 200
+        path: /ping
+        port: 80
+    children:
+    - host: market-recommender@stage=testing_market_mars
+      service: http-ping
+      type: DEPLOY
+  
+  - service: ssh-ping
+    aggregator: logic_and
+    active: ssh
+    children:
+    - host: market-recommender@stage=testing_market_mars
+      service: ssh-ping
+      type: DEPLOY
+  default:
+    namespace: market-mars
+    host: mars-testing
+    refresh_time: 90
+    ttl: 900

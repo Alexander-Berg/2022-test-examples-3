@@ -1,0 +1,84 @@
+{% set table = table|default("statistics_absolute_cpa_cart_items") %}
+
+{% macro cart_addition(pp, show_uid) %}
+    [
+        1508752281000,
+        {
+            "puid": "99934355",
+            "yandexuid": "0038347431518121200",
+            "uuid": null
+        },
+        "add_to_cart",
+        "offer",
+        "Am5Xm_e3CgDFSxw52HWJ3g",
+        {
+            "model_id": "14255414",
+            "category_id": "91491",
+            "shop_id": "324423",
+            "geo_id": "123",
+            "price": "50",
+            "sku_id": "100246276948",
+            "rgb": "BLUE",
+            "show_uid": "{{ show_uid }}",
+            "pp": "{{ pp }}"
+        },
+        "{{ day }}"
+    ]
+{% endmacro %}
+
+{% if table == "statistics_absolute_cpa_cart_items" %}
+    {% table "statistics" %}
+        {% for place in places_with_parents %}
+        {% if place != "Market" %}
+        ["{{ place }}", "Total", "total", 1.0, "{{ day }}"],
+        {% endif %}
+        {% endfor %}
+        ["Market", "Total", "total", 4.0, "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_cart_additions" %}
+    {% table "events" %}
+        {{ cart_addition("1900", "1") }},
+        {{ cart_addition("1607", "2") }},
+        {{ cart_addition("1860", "3") }},
+        {{ cart_addition("1760", "4") }}
+    {% endtable %}
+{% elif table == "mstat_dictionaries_pp" %}
+    {
+        "schema": [
+            {
+                "name": "pp_id",
+                "type": "Int64?"
+            },
+            {
+                "name": "path_level_0",
+                "type": "String?"
+            },
+            {
+                "name": "market_type",
+                "type": "String?"
+            }
+        ],
+        "records": [
+           [
+              1900,
+              "desktop",
+              "blue"
+           ],
+           [
+              1607,
+              "touch",
+              "blue"
+           ],
+           [
+              1860,
+              "mobile_hybrid_ios",
+              "blue"
+           ],
+           [
+              1760,
+              "mobile_hybrid_android",
+              "blue"
+           ]
+        ]
+    }
+{% endif %}

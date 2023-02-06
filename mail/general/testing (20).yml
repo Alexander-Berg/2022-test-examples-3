@@ -1,0 +1,23 @@
+base: etc/rcache/base.yml
+config:
+    modules:
+        module:
+        -   _name: web_server
+            configuration:
+                ssl:
+                    cert_file: etc/rcache/ssl/rcache-tst.stable.qloud-b.yandex.net.pem
+                    key_file: etc/rcache/ssl/rcache-tst.stable.qloud-b.yandex.net.pem
+                endpoints:
+                    listen:
+                    -   { _addr: '::', _port: 80, ssl: off }
+                    -   { _addr: '::', _port: &port 443, ssl: on }
+        -   _name: rcache
+            configuration:
+                port: *port
+                nodes:
+                -   host: rcache-1.rcache.testing.rcache.mail.stable.qloud-d.yandex.net
+                    port: *port
+                    ssl: on
+                -   host: rcache-2.rcache.testing.rcache.mail.stable.qloud-d.yandex.net
+                    port: *port
+                    ssl: on

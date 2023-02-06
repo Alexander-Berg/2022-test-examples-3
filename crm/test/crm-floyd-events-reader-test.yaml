@@ -1,0 +1,163 @@
+labels:
+  tags:
+  - unified-agent-reader
+meta:
+  id: crm-floyd-events-reader-test
+  project_id: crm-test
+spec:
+  account_id: "abc:service:200"
+  deploy_unit_settings:
+    unified-agent:
+      environment: "testing"
+  deploy_units:
+    unified-agent:
+      collect_portometrics_from_sidecars: true
+      coredump_config:
+        unified-agent:
+          coredump_processor:
+            aggregator: {}
+            cleanup_ttl_seconds: 86400
+            count_limit: 3
+            output: ""
+            probability: 100
+            total_size_limit_megabytes: 1000
+      endpoint_sets:
+      - id: solomon
+        liveness_limit_ratio: 0.35
+        port: 3457
+      infra_components:
+        allow_automatic_updates: true
+      multi_cluster_replica_set:
+        replica_set:
+          clusters:
+          - cluster: sas
+            spec:
+              replica_count: 1
+          - cluster: vla
+            spec:
+              replica_count: 1
+          deployment_strategy:
+            max_unavailable: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+              - id: main-disk
+                labels:
+                  used_by_infra: true
+                quota_policy:
+                  bandwidth_guarantee: 1048576
+                  bandwidth_limit: 2097152
+                  capacity: 21474836480
+                storage_class: hdd
+              pod_agent_payload:
+                spec:
+                  boxes:
+                  - cgroup_fs_mount_mode: ro
+                    id: unified-agent
+                    rootfs:
+                      layer_refs:
+                      - base
+                      - unified-agent-directory-layout
+                      - unified-agent-config
+                    static_resources:
+                    - mount_point: /unified_agent/bin
+                      resource_ref: unified-agent-bin
+                    volumes:
+                    - mode: read_write
+                      mount_point: /unified_agent/data
+                      volume_ref: data
+                  mutable_workloads:
+                  - workload_ref: unified-agent
+                  resources:
+                    layers:
+                    - checksum: MD5:f96807d42bc01a5c8bd12a42f7d68a30
+                      id: base
+                      url: sbr:2083514813
+                    - checksum: MD5:c5a50776d38b5a791dd171faca8939be
+                      id: unified-agent-directory-layout
+                      url: sbr:2670656501
+                    - checksum: MD5:b3a9db1002aef96abe58f1a74f30142d
+                      id: unified-agent-config
+                      url: sbr:3190523116
+                    static_resources:
+                    - id: unified-agent-bin
+                      url: sbr:3208761595
+                      verification:
+                        check_period_ms: 180000
+                        checksum: MD5:6d5dff49efcacc6faf412e6185387a60
+                  volumes:
+                  - id: data
+                  workloads:
+                  - box_ref: unified-agent
+                    destroy_policy:
+                      container:
+                        command_line: /bin/bash -c "/unified_agent/bin/unified_agent
+                          -c /unified_agent/config/config.yaml & pid=$!; while true;
+                          do unified_agent_idle=$(curl localhost:16301/check_backlog
+                          2>/dev/null); if [ "$unified_agent_idle" = "IDLE1" ]; then
+                          echo "Unified Agent is idle"; break; else echo "Unified
+                          Agent is busy '$unified_agent_idle', waiting..."; sleep
+                          1; fi; done; kill $pid"
+                      max_tries: 2
+                    env:
+                    - name: TVM_CLIENT_ID
+                      value:
+                        literal_env:
+                          value: '2001283'
+                    - name: TVM_SECRET
+                      value:
+                        secret_env:
+                          alias: tvm.secret.2001283
+                          id: client_secret
+                    - name: LOGBROKER_TOPIC
+                      value:
+                        literal_env:
+                          value: /chatswithbusinesses/crm-integration/floyd-alpha-centauri
+                    - name: LOGBROKER_CONSUMER
+                      value:
+                        literal_env:
+                          value: /chatswithbusinesses/consumers/crm/floyd-alpha-centauri
+                    - name: TVM_DST_ID
+                      value:
+                        literal_env:
+                          value: '2001283'
+                    - name: API_HOST
+                      value:
+                        literal_env:
+                          value: crm-test.yandex-team.ru
+                    id: unified-agent
+                    liveness_check:
+                      http_get:
+                        any: true
+                        path: /status
+                        port: 16301
+                    readiness_check:
+                      http_get:
+                        expected_answer: OK
+                        path: /ready
+                        port: 16301
+                    start:
+                      command_line: /unified_agent/bin/unified_agent -c /unified_agent/config/config.yaml --log-priority DEBUG
+                    stop_policy:
+                      max_tries: 3
+                      unix_signal:
+                        signal: SIGTERM
+                    transmit_logs: true
+              resource_requests:
+                memory_guarantee: 1073741824
+                memory_limit: 1073741824
+                network_bandwidth_guarantee: 1048576
+                vcpu_guarantee: 1000
+                vcpu_limit: 1000
+              secret_refs:
+                tvm.secret.2001283:
+                  secret_id: sec-01dq7m10q03ytkzp4z39hzs07w
+                  secret_version: ver-01dq7m10yrrfwh13ng7azs89ge
+      network_defaults:
+        network_id: _CRMTEST_DEPLOY_NETS_
+      patchers_revision: 11
+      pod_agent_layer_sandbox_info: {}
+      pod_agent_sandbox_info: {}
+  revision_info:
+    description:
+

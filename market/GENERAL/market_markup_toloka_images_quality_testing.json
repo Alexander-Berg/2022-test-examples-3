@@ -1,0 +1,56 @@
+{
+  "owner": "marketir",
+  "statfaceReports": [
+    {
+      "title": "Качество изображений, собранных в Толоке (Тестинг)",
+      "report": "Market/Content/Markup/TolokaImagesQualityTesting",
+      "tableName": "markup_worker_toloka_images_quality_testing",
+      "periodArray": [
+        "DAY"
+      ],
+      "splits": [
+        {
+          "name": "category",
+          "title": "Категория",
+          "splitField": "dictGetString('category', 'full_name', arrayJoin(dictGetHierarchy('category', toUInt64(category_id))))",
+          "tree": true
+        }
+      ],
+      "fields": [
+        {
+          "name": "total",
+          "title": "Кол-во картинок в выборке",
+          "metricField": "anyLast(total_count)"
+        }, {
+          "name": "main",
+          "title": "Доля главных картинок в выборке",
+          "metricField": "anyLast(main_count)"
+        }, {
+          "name": "problems",
+          "title": "Не размеченные картинки из выборки",
+          "metricField": "anyLast(problems_count)"
+        }, {
+          "name": "watermark_ratio",
+          "title": "Процент изображений с watermark",
+          "metricField": "anyLast(watermark_ratio)*100",
+          "viewType": "Percent"
+        }, {
+          "name": "low_quality_ratio",
+          "title": "Процент искаженных изображений",
+          "metricField": "anyLast(low_quality_ratio)*100",
+          "viewType": "Percent"
+        }, {
+          "name": "cropped_ratio",
+          "title": "Процент обрезанных главных картинок",
+          "metricField": "anyLast(cropped_ratio)*100",
+          "viewType": "Percent"
+        }, {
+          "name": "bad_background_ratio",
+          "title": "Процент картинок с неравномерным фоном",
+          "metricField": "anyLast(bad_background_ratio)*100",
+          "viewType": "Percent"
+        }
+      ]
+    }
+  ]
+}

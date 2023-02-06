@@ -1,0 +1,18 @@
+only_env: testing
+_service_add: -{{labels.host}}-{{labels.TopicPath}}
+groupByLabels:
+  - host
+  - TopicPath
+annotations:
+  description: 'Personalization Testing consumer read topic messages lag alert
+  https://solomon.yandex-team.ru/?cluster=lbk&project=kikimr&service=pqtabletAggregatedCounters&l.Account=rasp-front%7Cavia%7Ctravel&l.OriginDC=Iva%7CMan%7CMyt%7CSas%7CVla&l.host=Iva%7CMan%7CMyt%7CSas%7CVla&l.sensor=TotalMessageLagByLastRead&l.ConsumerPath=avia%2Ftesting%2Fpersonalization%2Fconsumer&l.partition=-&l.user_counters=PersQueue&graph=auto&checks=&b=1d&e='
+description: 'Personalization Testing consumer read topic messages lag alert
+https://solomon.yandex-team.ru/?cluster=lbk&project=kikimr&service=pqtabletAggregatedCounters&l.Account=rasp-front%7Cavia%7Ctravel&l.OriginDC=Iva%7CMan%7CMyt%7CSas%7CVla&l.host=Iva%7CMan%7CMyt%7CSas%7CVla&l.sensor=TotalMessageLagByLastRead&l.ConsumerPath=avia%2Ftesting%2Fpersonalization%2Fconsumer&l.partition=-&l.user_counters=PersQueue&graph=auto&checks=&b=1d&e='
+
+type:
+  expression:
+    checkExpression: max(avia_users_search_log) > 8192 || max(avia_wizard_query_log) > 8192 || max(travel_hotels_offercache_log) > 32768
+    program: |
+      let avia_users_search_log = { ConsumerPath="avia/testing/personalization/consumer", TopicPath="rasp-front/avia-users-search-log", cluster="lbk", project="kikimr", service="pqtabletAggregatedCounters", Account="rasp-front|avia|travel", OriginDC="Iva|Man|Myt|Sas|Vla", host="Iva|Man|Myt|Sas|Vla", sensor="TotalMessageLagByLastRead", partition="-", user_counters="PersQueue" };
+      let avia_wizard_query_log = { ConsumerPath="avia/testing/personalization/consumer", TopicPath="rasp-front/avia-wizard-query-log", cluster="lbk", project="kikimr", service="pqtabletAggregatedCounters", Account="rasp-front|avia|travel", OriginDC="Iva|Man|Myt|Sas|Vla", host="Iva|Man|Myt|Sas|Vla", sensor="TotalMessageLagByLastRead", partition="-", user_counters="PersQueue" };
+      let travel_hotels_offercache_log = { ConsumerPath="avia/testing/personalization/consumer", TopicPath="travel/travel-hotels-offercache-log", cluster="lbk", project="kikimr", service="pqtabletAggregatedCounters", Account="rasp-front|avia|travel", OriginDC="Iva|Man|Myt|Sas|Vla", host="Iva|Man|Myt|Sas|Vla", sensor="TotalMessageLagByLastRead", partition="-", user_counters="PersQueue" };

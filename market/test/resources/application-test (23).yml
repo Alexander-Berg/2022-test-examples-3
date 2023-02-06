@@ -1,0 +1,122 @@
+warehouse-timezone: Europe/Moscow
+spring.datasource-scprd:
+  url: jdbc:h2:mem:SCPRD;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1
+  separator: ^^^ END OF SCRIPT ^^^
+spring.datasource-archive:
+  url: jdbc:h2:mem:SCPRDARC;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1
+  separator: ^^^ END OF SCRIPT ^^^
+spring.datasource-scheduler:
+  url: jdbc:h2:mem:Scheduler;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS DBO\;SET SCHEMA DBO
+  separator: ^^^ END OF SCRIPT ^^^
+spring.datasource-scprdi1:
+  url: jdbc:h2:mem:SCPRDI1;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS DBO\;SET SCHEMA DBO
+  separator: ^^^ END OF SCRIPT ^^^
+spring.datasource-scprdd1:
+  url: jdbc:h2:mem:SCPRDD1;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS DBO\;SET SCHEMA DBO
+  separator: ^^^ END OF SCRIPT ^^^
+AppServer: localhost
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms.receiving: debug
+    org.springframework.jdbc.core: debug
+    root: info
+
+spring:
+  datasource-click-house:
+    url: jdbc:h2:mem:CLICKHOUSE;INIT=CREATE SCHEMA IF NOT EXISTS WMS\;SET SCHEMA WMS
+    ddl-auto: none
+  main:
+    allow-bean-definition-overriding: true
+  transaction.default-timeout: 30s
+  liquibase:
+    enabled: true
+  config:
+    import:
+      - application-fragment-common-test.yml
+      - application-fragment-mq-test.yml
+  jackson:
+    deserialization:
+      wrap-exceptions: false
+  jpa:
+    hibernate:
+      ddl-auto: none
+cte:
+  url: http://host.ru:123
+  tvm:
+    serviceId: 0
+
+print:
+  server:
+    host: localhost
+    port: 631
+    mock: true
+
+oltp:
+  url: http://localhost:8383
+
+wms:
+  api:
+    host: 'http://wms.local'
+    username: 'wmsuser'
+    password: 'wmspass'
+  auth:
+    host: "http://wms.local"
+    tvm:
+      serviceId: 0
+  scheduler:
+    host: ${SchedulerServer}
+    tvm:
+      serviceId: ${SchedulerTvmServiceId}
+  inbound-management:
+    host: "http://localhost:8300"
+    tvm:
+      serviceId: 0
+  ordermanagement:
+    host: "http://localhost:8765"
+    tvm:
+      serviceId: 0
+  transportation:
+    host: "http://localhost:8989"
+    tvm:
+      serviceId: 0
+
+check:
+  authentication: 'no'
+
+servicebus:
+  api:
+    host: http://localhost:8382
+
+core:
+  api:
+    host: http://localhost:8333
+  tvm:
+    serviceId: 0
+
+inventorization:
+  tvm:
+    serviceId: 0
+  api:
+    host: http://localhost:8377/inventorization
+    readTimeoutInMillis: 180000
+
+taskRouter:
+  api:
+    host: http://localhost:8399/taskrouter
+  tvm:
+    serviceId: 0
+
+scheduler:
+  tvm:
+    serviceId: 0
+    secret: 'secret'
+    cache:
+      dir: ''
+
+identity:
+  cis:
+    gs: "#GS#"
+
+s3.use: false

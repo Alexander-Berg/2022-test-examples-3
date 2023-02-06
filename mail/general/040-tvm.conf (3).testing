@@ -1,0 +1,48 @@
+import os
+
+TVM_CLIENT = 'payments-backend-test'
+TVM_HOST = 'localhost'
+TVM_PORT = 1
+
+# Deploy config
+if os.environ.get('DEPLOY_PROJECT_ID') is not None:
+    TVM_PORT = 2
+
+TVM_ADMIN_API_ALLOWED_CLIENTS = (
+    2002162, # Front Node.js
+)
+
+TVM_ALLOWED_CLIENTS = (
+    (2002162, {'acl': ['common', 'front']}), # Front Node.js (development / testing)
+    (2002168, {'acl': ['common', 'front']}), # Front Node.js (production)
+    2000779,                                 # Chats
+    2002641,                                 # Alice
+    2002010,                                 # Landing
+    2011240,                                 # Turbo
+    2000286,                                 # Turbo (Webmaster)
+    2001083,                                 # Turbo (Forms)
+    2014034,                                 # paytest
+    2012282,                                 # yabay
+    2020559,                                 # maps-adv-payments-int, SWATSUP-737
+    (2018139, {'acl': ['sdk']}),             # mobile-payment-sdk-backend
+    (2021378, {'acl': ['arbiter']}),         # arbiter-testing
+    (2021181, {'acl': ['history']}),         # yandex-order-history-frontend-testing, SWATSUP-802
+    2017063,                                 # lservice, praktikum SWATSUP-811
+    2002672,                                 # yandex-game-store, SWATSUP-810
+    2020445, 2020447,                        # yandex-sections, SWATSUP-819
+    2021560,                                 # Service for manual testing
+    2022976,                                 # maps-auto-navi-carwashes, SWATSUP-865
+    2023596,                                 # maps-auto-navi-tollroads, SWATSUP-938
+    2002414,                                 # uslugi, SWATSUP-1072
+    2029869,                                 # praktikum-service-math, SWATSUP-1127
+    2031132,                                 # praktikum-service-math-testing, SWATSUP-1127
+    2031322,                                 # praktikum-service-math-prestable, SWATSUP-1127
+
+    2029600,                                 # yandex-pay-admin-front-dev, YANDEXPAY-1889
+    2030301,                                 # yandex-pay-admin-front-testing, YANDEXPAY-2014
+)
+
+TVM_CHECK_SERVICE_TICKET = True
+TVM_DEBUG_USER_TICKET = True
+TVM_IDM_CLIENT_ID = 2001600
+TVM_BLACKBOX_CLIENT_ID = None

@@ -1,0 +1,219 @@
+juggler:
+  checks:
+
+  # Check UNREACHABLE
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-health-testing&service=UNREACHABLE&last=1DAY&mode=edit
+  - active: icmpping
+    active_kwargs:
+      disable_ipv4: yes
+      use_all_dc: 'false'
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - CGROUP%market_health-workers-testing
+    service: UNREACHABLE
+    tags:
+    - market_testing
+    - market_testing_db
+    - market-infra-testing
+    - market-infra
+    - market-health-testing
+    - market
+    - _market_
+
+  # Check clickphite-solomon-quota_market-tst
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-health-testing&service=clickphite-solomon-quota_market-tst&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 23
+        time_start: 0
+        warn: 0
+      nodata_mode: force_crit
+    children:
+    - EVENTS%(host=market-tst_solomon_quota):all:all
+    service: clickphite-solomon-quota_market-tst
+    tags:
+    - market_testing
+    - market_testing_db
+    - market-infra-testing
+    - market-infra
+    - market-health-testing
+    - market
+    - _market_
+
+  # Check logshatter-double-read
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-health-testing&service=logshatter-double-read&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - EVENTS%(host=solomon-alert-logshatter_testing_double_read):all:all
+    service: logshatter-double-read
+    tags:
+    - market_testing
+    - market_testing_db
+    - market-infra-testing
+    - market-infra
+    - market-health-testing
+    - market
+    - _market_
+
+  # Check logshatter_logbroker_testing_read
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-health-testing&service=logshatter_logbroker_testing_read&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - EVENTS%(service=logshatter_testing_last_read_ms_*):all:all
+    - EVENTS%(service=logshatter_testing_time_since_last_read_ms_*):all:all
+    service: logshatter_logbroker_testing_read
+    tags:
+    - market_testing
+    - market_testing_db
+    - market-infra-testing
+    - market-infra
+    - market-health-testing
+    - market
+    - _market_
+
+  # Check ssh
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-health-testing&service=ssh&last=1DAY&mode=edit
+  - active: ssh
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: :UNREACHABLE
+    children:
+    - CGROUP%market_health-workers-testing
+    service: ssh
+    tags:
+    - market_testing
+    - market_testing_db
+    - market-infra-testing
+    - market-infra
+    - market-health-testing
+    - market
+    - _market_
+
+  # Check tsum-agent
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-health-testing&service=tsum-agent&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: :UNREACHABLE
+    children:
+    - CGROUP%market_health-workers-testing
+    service: tsum-agent
+    tags:
+    - market_testing
+    - market_testing_db
+    - market-infra-testing
+    - market-infra
+    - market-health-testing
+    - market
+    - _market_
+
+  # Check unispace
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-health-testing&service=unispace&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: :UNREACHABLE
+    children:
+    - CGROUP%market_health-workers-testing
+    service: unispace
+    tags:
+    - market_testing
+    - market_testing_db
+    - market-infra-testing
+    - market-infra
+    - market-health-testing
+    - market
+    - _market_
+
+  # Check graph-db_test_write_wait_millisec_avg
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-health&service=graph-db_test_write_wait_millisec_avg&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_warn
+    children:
+    - EVENTS%(service=graph-db_test_WriteWaitMillisecAvg_*):all:all
+    notifications: []
+    service: graph-db_test_write_wait_millisec_avg
+    tags:
+    - market_testing
+    - market_testing_db
+    - market-infra-testing
+    - market-infra
+    - market-health-testing
+    - market
+    - _market_
+
+  # Check zookeeper
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-health-testing&service=zookeeper&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: :UNREACHABLE
+    children:
+    - CGROUP%market_health-workers-testing
+    service: zookeeper
+    tags:
+    - market_testing
+    - market_testing_db
+    - market-infra-testing
+    - market-infra
+    - market-health-testing
+    - market
+    - _market_
+    - market_testing_zookeeper
+  default:
+    check_options: {}
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market-infra-health-testing
+    namespace: market.infra
+    notifications: []
+    refresh_time: 60
+    ttl: 900

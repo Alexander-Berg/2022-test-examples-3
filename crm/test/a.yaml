@@ -1,0 +1,182 @@
+service: crm
+title: Update Test Stages Project
+ci:
+  secret: sec-01cxw3nmmnrxk2b76anqyysyhz
+  runtime:
+    sandbox-owner: CRM
+
+  actions:
+    update-crm-yacalls-queue-test-action:
+      title: Create or update crm-yacalls-queue-test
+      flow: update-test-stage-flow
+      triggers:
+        - on: commit
+          filters:
+          - sub-paths: [ 'crm-yacalls-queue-test.yaml' ]
+      flow-vars:
+        stage_name: crm-yacalls-queue-test
+
+    update-crm-message-gate-test-action:
+      title: Create or update crm-message-gate-test
+      flow: update-test-stage-flow
+      triggers:
+        - on: commit
+          filters:
+          - sub-paths: [ 'crm-message-gate-test.yaml' ]
+      flow-vars:
+        stage_name: crm-message-gate-test
+
+    update-crm-async-core-test-action:
+      title: Create or update crm-async-core-test
+      flow: update-test-stage-flow
+      triggers:
+        - on: commit
+          filters:
+          - sub-paths: [ 'crm-async-core-test.yaml' ]
+      flow-vars:
+        stage_name: crm-async-core-test
+
+    update-crm-queue-manager-test-action:
+      title: Create or update crm-queue-manager-test
+      flow: update-test-stage-flow
+      triggers:
+        - on: commit
+          filters:
+          - sub-paths: [ 'crm-queue-manager-test.yaml' ]
+      flow-vars:
+        stage_name: crm-queue-manager-test
+
+    update-crm-floyd-connector-test-action:
+      title: Update crm-floyd-connector-test
+      flow: update-test-stage-flow
+      triggers:
+        - on: commit
+          filters:
+          - sub-paths: [ 'crm-floyd-connector-test.yaml' ]
+      flow-vars:
+        stage_name: crm-floyd-connector-test
+
+    update-crm-frontend-build-agents-action:
+      title: Update crm-frontend-build-agents
+      flow: update-test-stage-flow
+      flow-vars:
+        stage_name: crm-frontend-build-agents
+
+    update-crm-frontend-test-action:
+      title: Update crm-frontend-test
+      flow: update-test-stage-flow
+      triggers:
+        - on: commit
+          filters:
+          - sub-paths: [ 'crm-frontend-test.yaml' ]
+      flow-vars:
+        stage_name: crm-frontend-test
+
+    update-crm-integration-tests-action:
+      title: Update crm-integration-tests
+      flow: update-test-stage-flow
+      triggers:
+        - on: commit
+          filters:
+          - sub-paths: [ 'crm-integration-tests.yaml' ]
+      flow-vars:
+        stage_name: crm-integration-tests
+
+    update-crm-issue-events-test-action:
+      title: Update crm-issue-events-test
+      flow: update-test-stage-flow
+      triggers:
+        - on: commit
+          filters:
+          - sub-paths: [ 'crm-issue-events-test.yaml' ]
+      flow-vars:
+        stage_name: crm-issue-events-test
+
+    update-crm-logbroker-consumer-test-action:
+      title: Update crm-logbroker-consumer-test
+      flow: update-test-stage-flow
+      triggers:
+        - on: commit
+          filters:
+          - sub-paths: [ 'crm-logbroker-consumer-test.yaml' ]
+      flow-vars:
+        stage_name: crm-logbroker-consumer-test
+
+    update-crm-logbroker-proxy-test-action:
+      title: Update crm-logbroker-proxy-test
+      flow: update-test-stage-flow
+      triggers:
+        - on: commit
+          filters:
+          - sub-paths: [ 'crm-logbroker-proxy-test.yaml' ]
+      flow-vars:
+        stage_name: crm-logbroker-proxy-test
+
+    update-crm-saaspush-test-action:
+      title: Update crm-saaspush-test
+      flow: update-test-stage-flow
+      triggers:
+        - on: commit
+          filters:
+          - sub-paths: [ 'crm-saaspush-test.yaml' ]
+      flow-vars:
+        stage_name: crm-saaspush-test
+
+    update-crm-yacalls-reader-test-action:
+      title: Update crm-yacalls-reader-test
+      flow: update-test-stage-flow
+      triggers:
+        - on: commit
+          filters:
+          - sub-paths: [ 'crm-yacalls-reader-test.yaml' ]
+      flow-vars:
+        stage_name: crm-yacalls-reader-test
+
+    update-direct-events-reader-test-action:
+      title: Update direct-events-reader-test
+      flow: update-test-stage-flow
+      triggers:
+        - on: commit
+          filters:
+          - sub-paths: [ 'direct-events-reader-test.yaml' ]
+      flow-vars:
+        stage_name: direct-events-reader-test
+
+    update-crm-floyd-events-reader-test-action:
+      title: Update crm-floyd-events-reader-test
+      flow: update-test-stage-flow
+      triggers:
+        - on: commit
+          filters:
+          - sub-paths: [ 'crm-floyd-events-reader-test.yaml' ]
+      flow-vars:
+        stage_name: crm-floyd-events-reader-test
+
+    update-crm-connection-lost-test-action:
+      title: Update crm-connection-lost-test
+      flow: update-test-stage-flow
+      triggers:
+        - on: commit
+          filters:
+          - sub-paths: [ 'crm-connection-lost-test.yaml' ]
+      flow-vars:
+        stage_name: crm-connection-lost-test
+        
+  flows:
+    update-test-stage-flow:
+      title: Update Test Stage
+      jobs:
+        update-test-stage:
+          title: Update Test Stage
+          task: common/misc/run_command
+          input:
+            config:
+              cmd_line: "./ya tool dctl put stage crm/infra/ydeploy/test/${flow-vars.stage_name}.yaml"
+              arc_mount_config:
+                enabled: true
+                arc_token:
+                  key: arc-token
+              secret_environment_variables:
+              - key: DCTL_YP_TOKEN
+                secret_spec:
+                  key: dctl-yp-token

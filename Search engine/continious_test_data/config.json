@@ -1,0 +1,376 @@
+{
+  "scheduler": "random",
+  "config": [
+    {
+      "name": "hamster_eda_wizard",
+      "path": "https://hamster.yandex.ru/search",
+      "box": "eda_top_20.csv",
+      "flags": "json_dump=1&pron=iznanka178-monitoring",
+      "map": [
+        {
+          "path": "methods.py",
+          "name": "get_average_by_tree",
+          "args": {
+            "root_path": "tmpl_data/wizplaces/carousel/0/data/payload",
+            "leaf_path": "rating"
+          },
+          "output": "avg_rating"
+        },
+        {
+          "path": "methods.py",
+          "name": "get_avg_len_by_tree",
+          "args": {
+            "root_path": "tmpl_data/wizplaces/carousel/0/data/payload",
+            "leaf_path": "tags"
+          },
+          "output": "avg_tags_count"
+        }
+      ],
+      "reduce": [
+        {
+          "path": "methods.py",
+          "name": "get_average",
+          "args": {
+            "field": "avg_rating",
+            "none_value": 0
+          },
+          "sensor_name": "hamster_eda_avg_rating"
+        },
+        {
+          "path": "methods.py",
+          "name": "get_average",
+          "args": {
+            "field": "avg_tags_count",
+            "none_value": 0
+          },
+          "sensor_name": "hamster_eda_avg_tags_count"
+        }
+      ]
+    },
+    {
+      "name": "hamster_iznanka_video",
+      "path": "https://hamster.yandex.ru/iznanka/touch",
+      "box": "iznanka_video_full_requests",
+      "flags": "export=json&client=iznanka&ver=1&view=json&req_type=videoplay&waitall=da&timeout=10000000&pron=iznanka178-monitoring",
+      "map": [
+        {
+          "path": "methods.py",
+          "name": "get_average_by_tree",
+          "args": {
+            "root_path": "app_host/result/docs/0/construct/0/clips",
+            "leaf_path": "dur"
+          },
+          "output": "avg_duration"
+        }
+      ],
+      "reduce": [
+        {
+          "path": "methods.py",
+          "name": "get_median",
+          "args": {
+            "field": "avg_duration"
+          },
+          "sensor_name": "hamster_iznanka_video_dur_median"
+        }
+      ]
+    },
+    {
+      "name": "hamster_market_wizard",
+      "path": "https://hamster.yandex.ru/search",
+      "box": "market_top_20.csv",
+      "flags": "json_dump=searchdata.docs_right&pron=iznanka178-monitoring",
+      "map": [
+        {
+          "path": "methods.py",
+          "name": "get_prices",
+          "output": "prices"
+        },
+        {
+          "path": "methods.py",
+          "name": "check_contains",
+          "args": {
+            "path": "searchdata.docs_right/0/construct/0/counter/path"
+          },
+          "output": "is_market_wizard"
+        }
+      ],
+      "reduce": [
+        {
+          "path": "methods.py",
+          "name": "get_average_list_field",
+          "args": {
+            "field": "prices"
+          },
+          "sensor_name": "hamster_average_market_price_20"
+        },
+        {
+          "path": "methods.py",
+          "name": "get_sum",
+          "args": {
+            "field": "is_market_wizard"
+          },
+          "sensor_name": "hamster_market_wizards_count"
+        }
+      ]
+    },
+    {
+      "name": "hamster_company_wizard",
+      "path": "https://hamster.yandex.ru/search",
+      "box": "company_top_20.csv",
+      "flags": "json_dump=searchdata.docs_right&pron=iznanka178-monitoring",
+      "map": [
+        {
+          "path": "methods.py",
+          "name": "check_contains",
+          "args": {
+            "path": "searchdata.docs_right/0/snippets/full/counter_prefix/path"
+          },
+          "output": "is_company_wizard"
+        }
+      ],
+      "reduce": [
+        {
+          "path": "methods.py",
+          "name": "get_sum",
+          "type": "reduce",
+          "args": {
+            "field": "is_company_wizard"
+          },
+          "sensor_name": "hamster_company_wizards_count"
+        }
+      ]
+    },
+    {
+      "name": "hamster_iznanka_smoke",
+      "path": "https://hamster.yandex.ru/iznanka/touch",
+      "box": "iznanka_smoke.tsv",
+      "flags": "export=json&client=iznanka&req_type=pageload&waitall=da&timeout=1000000&pron=iznanka178-monitoring",
+      "map": [
+        {
+          "path": "methods.py",
+          "name": "photo_count",
+          "output": "photo_count"
+        }
+      ],
+      "reduce": [
+        {
+          "path": "methods.py",
+          "name": "get_sum",
+          "args": {
+            "field": "photo_count"
+          },
+          "sensor_name": "hamster_iznanka_smoke_1"
+        }
+      ]
+    },
+    {
+      "name": "hamster_iznanka_geo",
+      "path": "https://hamster.yandex.ru/iznanka/touch",
+      "box": "iznanka_geo.csv",
+      "flags": "export=json&client=iznanka&req_type=pageload&waitall=da&timeout=1000000&pron=iznanka178-monitoring",
+      "map": [
+        {
+          "path": "methods.py",
+          "name": "avg_len_address_street",
+          "output": "len_street"
+        }
+      ],
+      "reduce": [
+        {
+          "path": "methods.py",
+          "name": "get_average",
+          "args": {
+            "field": "len_street"
+          },
+          "sensor_name": "hamster_iznanka_geo_avg_len_street"
+        }
+      ]
+    },
+    {
+      "name": "prod_eda_wizard",
+      "path": "https://yandex.ru/search",
+      "box": "eda_top_20.csv",
+      "flags": "json_dump=1&pron=iznanka178-monitoring",
+      "map": [
+        {
+          "path": "methods.py",
+          "name": "get_average_by_tree",
+          "args": {
+            "root_path": "tmpl_data/wizplaces/carousel/0/data/payload",
+            "leaf_path": "rating"
+          },
+          "output": "avg_rating"
+        },
+        {
+          "path": "methods.py",
+          "name": "get_avg_len_by_tree",
+          "args": {
+            "root_path": "tmpl_data/wizplaces/carousel/0/data/payload",
+            "leaf_path": "tags"
+          },
+          "output": "avg_tags_count"
+        }
+      ],
+      "reduce": [
+        {
+          "path": "methods.py",
+          "name": "get_average",
+          "args": {
+            "field": "avg_rating",
+            "none_value": 0
+          },
+          "sensor_name": "prod_eda_avg_rating"
+        },
+        {
+          "path": "methods.py",
+          "name": "get_average",
+          "args": {
+            "field": "avg_tags_count",
+            "none_value": 0
+          },
+          "sensor_name": "prod_eda_avg_tags_count"
+        }
+      ]
+    },
+    {
+      "name": "prod_iznanka_video",
+      "path": "https://yandex.ru/iznanka/touch",
+      "box": "iznanka_video_full_requests",
+      "flags": "export=json&client=iznanka&ver=1&view=json&req_type=videoplay&waitall=da&timeout=10000000&pron=iznanka178-monitoring",
+      "map": [
+        {
+          "path": "methods.py",
+          "name": "get_average_by_tree",
+          "args": {
+            "root_path": "app_host/result/docs/0/construct/0/clips",
+            "leaf_path": "dur"
+          },
+          "output": "avg_duration"
+        }
+      ],
+      "reduce": [
+        {
+          "path": "methods.py",
+          "name": "get_median",
+          "args": {
+            "field": "avg_duration"
+          },
+          "sensor_name": "prod_iznanka_video_dur_median"
+        }
+      ]
+    },
+    {
+      "name": "prod_market_wizard",
+      "path": "https://yandex.ru/search",
+      "box": "market_top_20.csv",
+      "flags": "json_dump=searchdata.docs_right&pron=iznanka178-monitoring",
+      "map": [
+        {
+          "path": "methods.py",
+          "name": "get_prices",
+          "output": "prices"
+        },
+        {
+          "path": "methods.py",
+          "name": "check_contains",
+          "args": {
+            "path": "searchdata.docs_right/0/construct/0/counter/path"
+          },
+          "output": "is_market_wizard"
+        }
+      ],
+      "reduce": [
+        {
+          "path": "methods.py",
+          "name": "get_average_list_field",
+          "args": {
+            "field": "prices"
+          },
+          "sensor_name": "prod_average_market_price_20"
+        },
+        {
+          "path": "methods.py",
+          "name": "get_sum",
+          "args": {
+            "field": "is_market_wizard"
+          },
+          "sensor_name": "prod_market_wizards_count"
+        }
+      ]
+    },
+    {
+      "name": "prod_company_wizard",
+      "path": "https://yandex.ru/search",
+      "box": "company_top_20.csv",
+      "flags": "json_dump=searchdata.docs_right&pron=iznanka178-monitoring",
+      "map": [
+        {
+          "path": "methods.py",
+          "name": "check_contains",
+          "args": {
+            "path": "searchdata.docs_right/0/snippets/full/counter_prefix/path"
+          },
+          "output": "is_company_wizard"
+        }
+      ],
+      "reduce": [
+        {
+          "path": "methods.py",
+          "name": "get_sum",
+          "type": "reduce",
+          "args": {
+            "field": "is_company_wizard"
+          },
+          "sensor_name": "prod_company_wizards_count"
+        }
+      ]
+    },
+    {
+      "name": "prod_iznanka_smoke",
+      "path": "https://yandex.ru/iznanka/touch",
+      "box": "iznanka_smoke.tsv",
+      "flags": "export=json&client=iznanka&req_type=pageload&waitall=da&timeout=1000000&pron=iznanka178-monitoring",
+      "map": [
+        {
+          "path": "methods.py",
+          "name": "photo_count",
+          "output": "photo_count"
+        }
+      ],
+      "reduce": [
+        {
+          "path": "methods.py",
+          "name": "get_sum",
+          "args": {
+            "field": "photo_count"
+          },
+          "sensor_name": "prod_iznanka_smoke_1"
+        }
+      ]
+    },
+    {
+      "name": "prod_iznanka_geo",
+      "path": "https://yandex.ru/iznanka/touch",
+      "box": "iznanka_geo.csv",
+      "flags": "export=json&client=iznanka&req_type=pageload&waitall=da&timeout=1000000&pron=iznanka178-monitoring",
+      "map": [
+        {
+          "path": "methods.py",
+          "name": "avg_len_address_street",
+          "output": "len_street"
+        }
+      ],
+      "reduce": [
+        {
+          "path": "methods.py",
+          "name": "get_average",
+          "args": {
+            "field": "len_street"
+          },
+          "sensor_name": "prod_iznanka_geo_avg_len_street"
+        }
+      ]
+    }
+  ]
+}
+

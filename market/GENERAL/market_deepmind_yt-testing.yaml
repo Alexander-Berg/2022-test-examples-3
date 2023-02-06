@@ -1,0 +1,130 @@
+juggler:
+  default:
+    namespace: market-deepmind
+    host: market_deepmind_yt_testing
+    children: [ ]
+    tags:
+      - market_production
+      - market_rtc
+      - marketdeepmind
+      - production
+      - market
+      - _market_
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    check_options: { }
+    refresh_time: 30 # кол-во секунд, как часто проверки будут выполняться (но ручка дергатся будет чаще, так как запросы идут от нескольких ДЦ)
+    ttl: 900 # кол-во секунд, когда проверка считается актуальной (по истечении времени мониторинг загорится в NO_DATA)
+    flaps:
+      stable_time: 60 # кол-во секунд с начала флапа, когда мы ждем, что он закончится
+      critical_time: 0 # отключено
+    notifications:
+      - template_kwargs:
+          login: deepmind_testing_chat # https://t.me/joinchat/GQwSt1s_hh-CSYin
+          method: telegram
+          status:
+            - CRIT
+            - WARN
+            - OK
+          min_interval: 3600 # 60 минут, число секунд, чаще которых не будут отправляться оповещения.
+        template_name: on_status_change
+  checks:
+    # События идут из соломона https://solomon.yandex-team.ru/admin/projects/market-deepmind/alerts?text=deepmind_account&templateServiceProviderId=ALL
+    # Через канал https://solomon.yandex-team.ru/admin/projects/market-deepmind/channels/juggler_channel_for_yt_testing
+    - service: deepmind_yt_hahn
+      children:
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_chunk_count_hahn
+          type: EVENTS
+          instance: all
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_disk_space_hdd_hahn
+          type: EVENTS
+          instance: all
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_disk_space_ssd_blobs_hahn
+          type: EVENTS
+          instance: all
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_disk_space_ssd_journals_hahn
+          type: EVENTS
+          instance: all
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_node_count_hahn
+          type: EVENTS
+          instance: all
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_tablet_count_hahn
+          type: EVENTS
+          instance: all
+    - service: deepmind_yt_arnold
+      children:
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_chunk_count_arnold
+          type: EVENTS
+          instance: all
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_disk_space_hdd_arnold
+          type: EVENTS
+          instance: all
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_disk_space_ssd_blobs_arnold
+          type: EVENTS
+          instance: all
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_disk_space_ssd_journals_arnold
+          type: EVENTS
+          instance: all
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_node_count_arnold
+          type: EVENTS
+          instance: all
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_tablet_count_arnold
+          type: EVENTS
+          instance: all
+    - service: deepmind_yt_markov
+      children:
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_chunk_count_markov
+          type: EVENTS
+          instance: all
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_disk_space_hdd_markov
+          type: EVENTS
+          instance: all
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_disk_space_ssd_blobs_markov
+          type: EVENTS
+          instance: all
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_disk_space_ssd_journals_markov
+          type: EVENTS
+          instance: all
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_node_count_markov
+          type: EVENTS
+          instance: all
+        -
+          host: host=market_deepmind_yt_testing
+          service: deepmind_account_tablet_count_markov
+          type: EVENTS
+          instance: all

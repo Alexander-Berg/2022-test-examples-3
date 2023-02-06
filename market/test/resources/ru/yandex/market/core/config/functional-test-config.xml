@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mockito="http://www.mockito.org/spring/mockito"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.mockito.org/spring/mockito http://www.mockito.org/spring/mockito.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <util:constant id="sourceModule" static-field="ru.yandex.market.request.trace.Module.MBI_PARTNER"/>
+    <bean id="dbTestConfig" class="ru.yandex.market.core.database.EmbeddedPostgresConfig"/>
+    <bean id="DataConfig" class="ru.yandex.market.mbi.data.DataConfig"/>
+    <bean id="functionalTestConfig" class="ru.yandex.market.core.config.FunctionalTestConfig"/>
+
+    <!--Executorы, которые для стабильности тестов должны выполняться в том же потоке-->
+    <bean id="syncExecutor"
+          name="asyncCheckouterServiceExecutor,
+          supplierFeedTaskExecutor,
+          promoObsoleteAssortmentClearingExecutor,
+          refreshExecutor"
+          class="ru.yandex.misc.thread.executor.SyncExecutor"/>
+
+    <mockito:spy beanName="regionService"/>
+    <mockito:spy beanName="avatarsClient"/>
+    <mockito:spy beanName="feedCategoryService"/>
+    <mockito:spy beanName="currencyConverterService"/>
+    <mockito:spy beanName="paramService"/>
+    <mockito:spy beanName="billingService"/>
+    <mockito:spy beanName="messageService"/>
+    <mockito:spy beanName="feedValidationDao"/>
+    <mockito:spy beanName="dataCampService"/>
+    <mockito:spy beanName="featureCutoffInternalService"/>
+
+    <mockito:mock id="checkouterClient" class="ru.yandex.market.checkout.checkouter.client.CheckouterClient"/>
+    <mockito:mock id="checkouterShopApi" class="ru.yandex.market.checkout.checkouter.client.CheckouterShopApi"/>
+
+    <mockito:spy beanName="cpaDataPusher"/>
+
+    <mockito:mock id="dataCampCreateUpdateFeedEventListener"
+                  class="ru.yandex.market.core.feed.event.DataCampCreateUpdateFeedEventListener"/>
+
+    <mockito:mock id="aboPublicRestClient" class="ru.yandex.market.abo.api.client.AboPublicRestClient"/>
+
+    <mockito:mock id="samovarLogbrokerService" class="ru.yandex.market.logbroker.LogbrokerService"/>
+    <mockito:mock id="qParserLogBrokerService" class="ru.yandex.market.logbroker.LogbrokerService"/>
+
+    <mockito:mock id="tvmApiSettings" class="ru.yandex.passport.tvmauth.TvmApiSettings"/>
+    <mockito:mock id="ticketParserTvmClient" class="ru.yandex.passport.tvmauth.TvmClient"/>
+    <mockito:mock id="promoOfferLogbrokerService" class="ru.yandex.market.logbroker.LogbrokerServiceImpl"/>
+    <mockito:mock id="loyaltyRestClientImpl" class="ru.yandex.market.core.supplier.promo.service.loyalty.LoyaltyRestClientImpl"/>
+    <mockito:mock id="marketReportService" class="ru.yandex.market.common.report.DefaultAsyncMarketReportService"/>
+
+    <mockito:spy beanName="fulfillmentTariffDao"/>
+    <mockito:spy beanName="dbSupplierCategoryFeeDao"/>
+    <mockito:spy beanName="sortingOrdersTariffDao"/>
+    <mockito:spy beanName="sortingDailyTariffDao"/>
+    <mockito:mock id="partnerNotificationClient" class="ru.market.partner.notification.client.PartnerNotificationClient"/>
+
+    <bean class="ru.yandex.market.core.test.context.EarlyDelegatingSpy">
+        <constructor-arg>
+            <set>
+                <value>campaignService</value>
+                <value>notificationService</value>
+            </set>
+        </constructor-arg>
+    </bean>
+</beans>

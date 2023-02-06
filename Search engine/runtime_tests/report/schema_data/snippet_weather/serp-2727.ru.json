@@ -1,0 +1,508 @@
+{
+    "description": "https://testpalm.yandex-team.ru/testcase/serp-2727",
+    "properties": {
+        "applicable": {
+            "enum": [
+                1
+            ],
+            "type": "integer"
+        },
+        "city": {
+            "$ref": "../core.json#region"
+        },
+        "city_disambiguation": {
+            "items": [
+                {
+                    "type": "object"
+                }
+            ],
+            "type": "array"
+        },
+        "city_id": {
+            "type": "integer"
+        },
+        "cityid": {
+            "type": "string"
+        },
+        "counter_prefix": {
+            "pattern": "^/",
+            "type": "string"
+        },
+        "current": {
+            "properties": {
+                "humidity": {
+                    "type": "number"
+                },
+                "image-v2": {
+                    "properties": {
+                        "content": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "content"
+                    ],
+                    "type": "object"
+                },
+                "image-v3": {
+                    "properties": {
+                        "content": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "content"
+                    ],
+                    "type": "object"
+                },
+                "pressure": {
+                    "properties": {
+                        "content": {
+                            "maximum": 999,
+                            "minimum": 500,
+                            "type": "integer"
+                        },
+                        "units": {
+                            "pattern": "^mm$",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "content",
+                        "units"
+                    ],
+                    "type": "object"
+                },
+                "temperature": {
+                    "maximum": 100,
+                    "minimum": -273.15,
+                    "type": "number"
+                },
+                "temperature-data": {
+                    "properties": {
+                        "avg": {
+                            "properties": {
+                                "bgcolor": {
+                                    "pattern": "^[0-9a-f]{6}$",
+                                    "type": "string"
+                                },
+                                "content": {
+                                    "type": "integer"
+                                }
+                            },
+                            "required": [
+                                "bgcolor",
+                                "content"
+                            ],
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "avg"
+                    ],
+                    "type": "object"
+                },
+                "uptime": {
+                    "pattern": "^[0-9]{4}\\-[0-9]{2}\\-[0-9]{2}T[0-9]{2}\\:[0-9]{2}\\:[0-9]{2}$",
+                    "type": "string"
+                },
+                "weather_condition": {
+                    "properties": {
+                        "code": {
+                            "minLength": 1,
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "code"
+                    ],
+                    "type": "object"
+                },
+                "weather_type": {
+                    "minLength": 1,
+                    "type": "string"
+                },
+                "wind_direction": {
+                    "maxLength": 2,
+                    "minLength": 1,
+                    "type": "string"
+                },
+                "wind_speed": {
+                    "minimum": 0,
+                    "type": "number"
+                }
+            },
+            "required": [
+                "humidity",
+                "image-v2",
+                "image-v3",
+                "pressure",
+                "temperature",
+                "temperature-data",
+                "uptime",
+                "weather_condition",
+                "weather_type",
+                "wind_direction",
+                "wind_speed"
+            ],
+            "type": "object"
+        },
+        "current_hour": {
+            "maximum": 23,
+            "minimum": 0,
+            "type": "integer"
+        },
+        "data": {
+            "properties": {},
+            "type": "object"
+        },
+        "forecast": {
+            "items": [
+                {
+                    "properties": {
+                        "current_part": {
+                            "type": "integer"
+                        },
+                        "date": {
+                            "$ref": "../core.json#time"
+                        },
+                        "hours": {
+                            "items": [
+                                {
+                                    "properties": {
+                                        "_fallback_prec": {
+                                            "type": "boolean"
+                                        },
+                                        "_fallback_temp": {
+                                            "type": "boolean"
+                                        },
+                                        "_nowcast": {
+                                            "type": "boolean"
+                                        },
+                                        "condition": {
+                                            "minLength": 1,
+                                            "type": "string"
+                                        },
+                                        "feels_like": {
+                                            "type": "integer"
+                                        },
+                                        "feels_like_color": {
+                                            "type": "string"
+                                        },
+                                        "hour": {
+                                            "type": "string"
+                                        },
+                                        "hour_ts": {
+                                            "type": "integer"
+                                        },
+                                        "humidity": {
+                                            "type": "integer"
+                                        },
+                                        "icon": {
+                                            "type": "string"
+                                        },
+                                        "prec_mm": {
+                                            "type": "number"
+                                        },
+                                        "prec_period": {
+                                            "type": "integer"
+                                        },
+                                        "pressure_mm": {
+                                            "type": "integer"
+                                        },
+                                        "pressure_pa": {
+                                            "type": "integer"
+                                        },
+                                        "temp": {
+                                            "type": "integer"
+                                        },
+                                        "temp_color": {
+                                            "type": "string"
+                                        },
+                                        "temp_water": {
+                                            "type": "integer"
+                                        },
+                                        "wind_dir": {
+                                            "type": "string"
+                                        },
+                                        "wind_gust": {
+                                            "type": "number"
+                                        },
+                                        "wind_speed": {
+                                            "type": "number"
+                                        }
+                                    },
+                                    "required": [
+                                        "_fallback_prec",
+                                        "_fallback_temp",
+                                        "condition",
+                                        "feels_like",
+                                        "feels_like_color",
+                                        "hour",
+                                        "hour_ts",
+                                        "humidity",
+                                        "icon",
+                                        "prec_mm",
+                                        "prec_period",
+                                        "pressure_mm",
+                                        "pressure_pa",
+                                        "temp",
+                                        "temp_color",
+                                        "wind_dir",
+                                        "wind_speed"
+                                    ],
+                                    "type": "object"
+                                }
+                            ],
+                            "maxItems": 24,
+                            "minItems": 24,
+                            "type": "array"
+                        },
+                        "parts": {
+                            "items": [
+                                {
+                                    "properties": {
+                                        "humidity": {
+                                            "type": "integer"
+                                        },
+                                        "image-v2": {
+                                            "properties": {
+                                                "content": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "content"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        "image-v3": {
+                                            "properties": {
+                                                "content": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "content"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        "pressure": {
+                                            "properties": {
+                                                "content": {
+                                                    "type": "integer"
+                                                },
+                                                "units": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "content",
+                                                "units"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        "temp_avg": {
+                                            "type": "integer"
+                                        },
+                                        "temperature": {
+                                            "type": "integer"
+                                        },
+                                        "temperature-data": {
+                                            "properties": {
+                                                "avg": {
+                                                    "properties": {
+                                                        "bgcolor": {
+                                                            "type": "string"
+                                                        },
+                                                        "content": {
+                                                            "type": "integer"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "bgcolor",
+                                                        "content"
+                                                    ],
+                                                    "type": "object"
+                                                },
+                                                "from": {
+                                                    "type": "integer"
+                                                },
+                                                "to": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "temperature_from": {
+                                            "type": "integer"
+                                        },
+                                        "temperature_max": {
+                                            "type": "integer"
+                                        },
+                                        "temperature_min": {
+                                            "type": "integer"
+                                        },
+                                        "temperature_to": {
+                                            "type": "integer"
+                                        },
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "weather_condition": {
+                                            "properties": {
+                                                "code": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "code"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        "weather_type": {
+                                            "type": "string"
+                                        },
+                                        "wind_speed": {
+                                            "type": "number"
+                                        }
+                                    },
+                                    "required": [
+                                        "humidity",
+                                        "image-v3",
+                                        "pressure",
+                                        "temperature-data",
+                                        "type",
+                                        "weather_condition",
+                                        "weather_type",
+                                        "wind_speed"
+                                    ],
+                                    "type": "object"
+                                }
+                            ],
+                            "maxItems": 6,
+                            "minItems": 6,
+                            "type": "array"
+                        },
+                        "type": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "date",
+                        "hours",
+                        "parts"
+                    ],
+                    "type": "object"
+                }
+            ],
+            "maxItems": 9,
+            "minItems": 9,
+            "type": "array"
+        },
+        "get_wind_type": {
+            "type": "null"
+        },
+        "link": {
+            "pattern": "^https?://yandex\\..+",
+            "type": "string"
+        },
+        "serp_info": {
+            "properties": {
+                "flat": {
+                    "$comment": "WTF FIXME",
+                    "enum": [
+                        1,
+                        "1",
+                        true
+                    ],
+                    "type": [
+                        "integer",
+                        "string",
+                        "boolean"
+                    ]
+                }
+            },
+            "required": [
+                "flat"
+            ],
+            "type": "object"
+        },
+        "slot": {
+            "type": "string"
+        },
+        "template": {
+            "enum": [
+                "weather"
+            ],
+            "type": "string"
+        },
+        "type": {
+            "enum": [
+                "weather"
+            ],
+            "type": "string"
+        },
+        "types": {
+            "properties": {
+                "all": {
+                    "items": [
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "type": "array"
+                },
+                "kind": {
+                    "type": "string"
+                },
+                "main": {
+                    "enum": [
+                        "weather"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "all",
+                "kind",
+                "main"
+            ],
+            "type": "object"
+        },
+        "voiceInfo": {
+            "properties": {
+                "ru": {
+                    "items": [
+                        {
+                            "properties": {
+                                "lang": {
+                                    "type": "string"
+                                },
+                                "text": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "lang",
+                                "text"
+                            ],
+                            "type": "object"
+                        }
+                    ],
+                    "type": "array"
+                }
+            },
+            "required": [
+                "ru"
+            ],
+            "type": "object"
+        },
+        "weather_link": {
+            "pattern": "^https?://yandex\\..+",
+            "type": "string"
+        }
+    },
+    "title": "Погода - Погода по запросу в падежной форме",
+    "type": "object"
+}

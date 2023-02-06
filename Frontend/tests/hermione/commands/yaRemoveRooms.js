@@ -1,0 +1,17 @@
+const { Api } = require('../helpers/api');
+
+/**
+ * Удаление всех комнат с аккаунта
+ * @return {Promise<void>}
+ */
+module.exports = async function yaRemoveRooms() {
+    await this.onRecord(async() => {
+        const api = Api(this);
+        const response = await api.iot.rooms.getRooms();
+
+        if (response.rooms) {
+            const promises = response.rooms.map(room => api.iot.rooms.removeRoom(room.id));
+            await Promise.all(promises);
+        }
+    });
+};

@@ -1,0 +1,112 @@
+latency:
+  signals: quant(hmerge(accesslog-humans_yandsearch-reply_time_hgram, accesslog-humans_searchapp-reply_time_hgram, accesslog-humans_jsonproxy-reply_time_hgram, accesslog-humans_touch-reply_time_hgram, accesslog-humans_searchplugin-reply_time_hgram),{quant})
+  tags: itype=upper; ctype=prestable, prod; prj=web-main; geo={}
+  quants:
+    - 50
+    - 95
+    - 99
+
+gunicorn:
+  host: '[::]'
+  port: 8080
+  keep_job_result: True
+  encryption: False
+  workers_count: 20
+  access_log: access.log
+  error_log: error.log
+
+logging:
+  stdout:
+    enabled: true
+    json_formatted: true
+  file:
+    enabled: true
+    path: uchenki.log
+    rotation_rule: "500 MB"
+    retention_count: 5
+
+db:
+  host: sas-fdfvrpfsmndk3q22.db.yandex.net,vla-4s34bh37ahylmxh7.db.yandex.net,man-m20meqpzhnwx98ix.db.yandex.net
+  port: 6432
+  target_session_attrs: read-write
+  sslmode: verify-full
+
+calendar:
+  url: https://calendar-api.tools.yandex.net/internal/
+  maintenance_calendar:  285081
+  marty_calendar: 22975
+
+watcher:
+  url: https://abc-back.yandex-team.ru/api/watcher/v1
+  tvm_client_id: 2027882
+
+environment: testing
+
+stat_url: https://upload.stat-beta.yandex-team.ru/_api/report/data/
+
+its_url: https://dev-its.yandex-team.ru/v2/
+bot_url: https://yaincbot.yandex-team.ru/api/
+
+
+enable_screenshots: False
+
+# дефолтные параметры для создаия событий из schedule
+infra:
+  url: https://infra-api.yandex-team.ru/v1/
+  create_infra_events: True # создавать ли события в инфре или просто находить нужные дни и писать их в лог
+  service_id: 1122 # если не указано в конфиге отдельное, то события будут создаваться в этом сервисe и окружении
+  environment_id: 1543
+
+juggler:
+  url: https://juggler-api.search.yandex.net/v2/
+
+sync_events:
+  enable: True
+  source_services_ids:
+    drills: 154 # prod 154
+  destination_services:
+    training:
+      service: 1122
+      environment: 1543
+
+
+load_chart_url:
+  training: https://yasm.yandex-team.ru/template/panel/search_load
+  alice_training: https://yasm.yandex-team.ru/template/panel/alice_load_template/locations=sas,man,vla;components=uniproxy,megamind,asr-quasar,asr-dialog,tts-shitova;target_tts_shitova=1000;target_asr_quasar=7800;target_asr_dialog=30000;target_megamind=5400;target_uniproxy=75000/
+  closing: https://yasm.yandex-team.ru/template/panel/search_load
+  pumpkin: https://yasm.yandex-team.ru/panel/ivaxer.pumpkin_rkub
+
+yt:
+  training:
+    table_path: //home/searchmon/drills/testing/capacity_new
+    proxy: hahn
+  closing:
+    table_path: //home/searchmon/drills/testing/closing
+  lunapark:
+    table_path: //home/searchmon/drills/testing/lunapark_test
+  pumpkin:
+    table_path: //home/searchmon/drills/testing/pumpkin
+  degradation:
+    table_path: //home/searchmon/drills/testing/degradation
+  drills:
+    table_path: //home/searchmon/drills/testing/drills
+  common:
+    parent_component_table: //home/searchmon/drills/prestable/parent_components
+    component_table: //home/searchmon/drills/prestable/components
+    fullname_table: //home/searchmon/drills/prestable/fullname_components
+    degradataion_types_table: //home/searchmon/drills/prestable/degradataion_types
+
+blackbox_url: http://blackbox.yandex-team.ru/blackbox
+
+tvm_default_src: uchenki
+
+oauth_client_id: f01a9c6f5b3145489690eb1153fa7e98
+
+enable_pumpkin: True
+
+drills:
+  enable: True
+  main_ticket: TESTUCHENKI-267
+  unsorted_ticket: TESTUCHENKI-268
+  parsed_queues: MAILPG, PAYSYS, TESTUCHENKI # в которых ищем теги на учения
+  send_comment: True

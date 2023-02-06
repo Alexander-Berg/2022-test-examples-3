@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <orders
+            id="1"
+            barcode="LOinttest-1"
+            platform_client_id="1"
+            return_sorting_center_id="1"
+            sender_id="1"
+            status="PROCESSING"
+            created="2021-02-10 00:00:00 +0000"
+    />
+
+    <waybill_segment
+            id="1"
+            order_id="1"
+            partner_id="2"
+            external_id="test-external-id-1"
+            waybill_segment_index="0"
+            segment_type="COURIER"
+    />
+
+    <waybill_segment
+            id="2"
+            order_id="1"
+            partner_id="1"
+            external_id="[null]"
+            waybill_segment_index="1"
+            segment_type="COURIER"
+    />
+
+    <order_history_event
+            id="1"
+            order_id="1"
+            diff='[
+              {
+                "op": "replace",
+                "path": "/waybill/0/externalId",
+                "value": "test-external-id-1",
+                "fromValue": null
+              },
+              {
+                "op": "replace",
+                "path": "/waybill/0/segmentStatus",
+                "value": "TRACK_RECEIVED",
+                "fromValue": null
+              },
+              {
+                "op": "add",
+                "path": "/waybill/0/segmentStatusHistory/0",
+                "value": {
+                  "id": 1,
+                  "status": "TRACK_RECEIVED",
+                  "statusDate": "2019-06-12T00:00:00Z",
+                  "partnerStatusDate": "2019-06-12T00:00:00Z"
+                }
+              }
+            ]'
+    />
+
+    <business_process_state
+            queue_type="CREATE_ORDER_EXTERNAL"
+            status="SUCCESS_RESPONSE_PROCESSING_SUCCEEDED"
+            parent_id="[null]"
+    />
+
+    <business_process_state
+            queue_type="REGISTER_DELIVERY_TRACK"
+            status="ENQUEUED"
+            parent_id="-1"
+    />
+
+    <orders
+            id="2"
+            barcode="LOinttest-2"
+            platform_client_id="1"
+            return_sorting_center_id="1"
+            sender_id="1"
+            status="PROCESSING"
+            created="2021-02-10 00:00:00 +0000"
+    />
+
+    <waybill_segment
+            id="3"
+            order_id="2"
+            partner_id="2"
+            external_id="test-external-id-1"
+            waybill_segment_index="0"
+            segment_type="COURIER"
+    />
+
+</dataset>

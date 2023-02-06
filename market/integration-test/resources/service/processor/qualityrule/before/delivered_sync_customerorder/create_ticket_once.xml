@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lom_order
+            id="100111"
+            barcode="777"
+            platform_client_id="3"
+            sender_id="1"
+            status="DELIVERED"
+            created="2022-01-10 12:00:00 +0000"
+            items='[{"name": "item"}]'
+    />
+
+    <lom_order
+            id="100222"
+            barcode="888"
+            platform_client_id="3"
+            sender_id="1"
+            status="DELIVERED"
+            created="2022-01-10 13:00:00 +0000"
+            items='[{"name": "item"}]'
+    />
+
+    <lom_order
+            id="100333"
+            barcode="999"
+            platform_client_id="3"
+            sender_id="1"
+            status="DELIVERED"
+            created="2022-01-10 13:10:00 +0000"
+            items='[{"name": "item"}]'
+    />
+
+    <lom_waybill_segment
+            id="1"
+            external_id="101"
+            order_id="100111"
+            partner_id="172"
+            partner_type="FULFILLMENT"
+            segment_type="FULFILLMENT"
+            waybill_segment_index="0"
+            partner_name="Софьино"
+    />
+
+    <lom_waybill_segment
+            id="2"
+            external_id="102"
+            order_id="100111"
+            partner_id="12345"
+            partner_type="DELIVERY"
+            segment_type="COURIER"
+            waybill_segment_index="1"
+            partner_name="Какая-то Курьерка"
+    />
+
+    <lom_waybill_segment
+            id="3"
+            external_id="103"
+            order_id="100222"
+            partner_id="172"
+            partner_type="FULFILLMENT"
+            segment_type="FULFILLMENT"
+            waybill_segment_index="0"
+            partner_name="Софьино"
+    />
+
+    <lom_waybill_segment
+            id="4"
+            external_id="104"
+            order_id="100222"
+            partner_id="23456"
+            partner_type="DELIVERY"
+            segment_type="COURIER"
+            waybill_segment_index="1"
+            partner_name="Какая-то Курьерка 2"
+    />
+
+    <lom_waybill_segment
+            id="5"
+            external_id="105"
+            order_id="100333"
+            partner_id="172"
+            partner_type="FULFILLMENT"
+            segment_type="FULFILLMENT"
+            waybill_segment_index="0"
+            partner_name="Софьино"
+    />
+
+    <lom_waybill_segment
+            id="6"
+            external_id="106"
+            order_id="100333"
+            partner_id="23456"
+            partner_type="DELIVERY"
+            segment_type="COURIER"
+            waybill_segment_index="1"
+            partner_name="Какая-то Курьерка 3"
+    />
+
+    <lom_waybill_segment_status_history
+            waybill_segment_id="2"
+            status="OUT"
+            date="2022-01-11 06:00:00 +0300"
+            created="2021-01-11 06:00:00 +0300"
+    />
+
+    <lom_waybill_segment_status_history
+            waybill_segment_id="4"
+            status="OUT"
+            date="2022-01-11 06:30:00 +0300"
+            created="2021-01-11 06:30:00 +0300"
+    />
+
+    <lom_waybill_segment_status_history
+            waybill_segment_id="6"
+            status="OUT"
+            date="2022-01-11 11:00:00 +0300"
+            created="2021-01-11 11:00:00 +0300"
+    />
+
+    <plan_fact
+            id="1"
+            entity_type="CUSTOMER_ORDER"
+            entity_id="777"
+            expected_status="UNKNOWN"
+            producer_name="DeliveredSyncCustomerOrderPlanFactProcessor"
+            processing_status="ENQUEUED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2022-01-12 06:00:00 +0300"
+            schedule_time="2022-01-12 06:00:00 +0300"
+            created="2022-01-11 06:01:00 +0300"
+            data='{
+                "DeliveredSyncCustomerOrderPlanFactAdditionalData": {
+                    "_type": ".DeliveredSyncCustomerOrderPlanFactAdditionalData",
+                    "lomOrderId": "100111",
+                    "deliveredDateTime": "2022-01-11T09:00:00.000000"
+                }
+            }'
+    />
+
+    <plan_fact
+            id="2"
+            entity_type="CUSTOMER_ORDER"
+            entity_id="888"
+            expected_status="UNKNOWN"
+            producer_name="DeliveredSyncCustomerOrderPlanFactProcessor"
+            processing_status="ENQUEUED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2022-01-12 06:30:00 +0300"
+            schedule_time="2022-01-12 06:30:00 +0300"
+            created="2022-01-11 06:31:00 +0300"
+            data='{
+                "DeliveredSyncCustomerOrderPlanFactAdditionalData": {
+                    "_type": ".DeliveredSyncCustomerOrderPlanFactAdditionalData",
+                    "lomOrderId": "100222",
+                    "deliveredDateTime": "2022-01-11T09:30:00.000000"
+                }
+            }'
+    />
+
+    <plan_fact
+            id="3"
+            entity_type="CUSTOMER_ORDER"
+            entity_id="999"
+            expected_status="UNKNOWN"
+            producer_name="DeliveredSyncCustomerOrderPlanFactProcessor"
+            processing_status="ENQUEUED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2022-01-12 11:00:00 +0300"
+            schedule_time="2022-01-12 11:00:00 +0300"
+            created="2022-01-11 11:01:00 +0300"
+            data='{
+                "DeliveredSyncCustomerOrderPlanFactAdditionalData": {
+                    "_type": ".DeliveredSyncCustomerOrderPlanFactAdditionalData",
+                    "lomOrderId": "100333",
+                    "deliveredDateTime": "2022-01-11T14:00:00.000000"
+                }
+            }'
+    />
+
+    <plan_fact_group
+            id="1"
+            aggregation_key="date:2022-01-12;"
+            aggregation_type="CUSTOMER_ORDER_DATE"
+            processing_status="ENQUEUED"
+            expected_status="UNKNOWN"
+            schedule_time="2022-01-11 09:00:00 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2022, 1, 12]
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group
+            id="2"
+            aggregation_key="date:2022-01-13;"
+            aggregation_type="CUSTOMER_ORDER_DATE"
+            processing_status="ENQUEUED"
+            expected_status="UNKNOWN"
+            schedule_time="2022-01-11 11:00:00 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2022, 1, 13]
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="1"
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="2"
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="2"
+            plan_fact_id="3"
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="UNKNOWN"
+            aggregation_type="CUSTOMER_ORDER_DATE"
+            rule_processor="STARTREK"
+            rule='{ "queue": "MONITORINGSNDBX", "_type": ".DeliveredSyncCustomerOrderPayload" }'
+    />
+
+</dataset>

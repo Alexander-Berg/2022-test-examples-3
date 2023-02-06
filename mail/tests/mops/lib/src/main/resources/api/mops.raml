@@ -1,0 +1,306 @@
+#%RAML 0.8
+title: mops
+baseUri: https://{host}:8814
+baseUriParameters:
+  host:
+    default: localhost
+traits:
+- baseResource:
+    queryParameters:
+      uid:
+        type: string
+        description: uid пользователя
+        required: true
+      suid:
+        type: string
+        description: suid пользователя в blackbox
+        required: true
+      mdb:
+        type: string
+        description: mdb пользователя в blackbox
+        required: true
+  operationResource:
+    queryParameters:
+      ip:
+        type: string
+        description: Заголовок X-Real-Ip
+      login:
+        type: string
+        description:  Поле login из ручки http://meta.mail.yandex.net:9090/auth
+      karma:
+        type: string
+      karmaStatus:
+        type: string
+      source:
+        type: string
+        description: Клиент (wmi/imap/...)
+      country:
+        type: string
+        description: Поле country из ручки http://meta.mail.yandex.net:9090/auth
+      ora_ip:
+        type: string
+      ora_connection_id:
+        type: string
+        description: Аргумент из верстки connection_id (чтобы пуши из ксивы в текущую сессию не прилетали)
+      session_info:
+        type: string
+      yandexuid:
+        type: string
+        description: Значение куки yandexuid
+      icookie:
+        type: string
+        description: Значение куки i
+      ua:
+        type: string
+        description: UserAgent изначального запроса
+      mids:
+        type: string
+        description: Список mid'ов, перечисленных через запятую
+      tab:
+        type: string
+        description: tab
+      tids:
+        type: string
+        description: Список tid'ов, перечисленных через запятую
+      fid:
+        type: string
+        description: fid папки
+      subject:
+        type: string
+        description: Фильтр сообщений по теме (используется только если задан параметр fid)
+      from:
+        type: string
+        description: Фильтр сообщений по отправителю (используется только если задан параметр fid)
+      age:
+        type: integer
+        description: фильтр по возрасту письма в днях (используется только если задан параметр fid)
+  sentAwareOperation:
+    queryParameters:
+      with_sent:
+        enum: ["0", "1"]
+        description: Если значение аргумента 1 или аргумент отсутствует, то письма из папки "Отправленные" будут обработаны
+/ping:
+  get:
+    description: Проверяет работоспособность демона
+    responses:
+      200:
+        description: Возвращаем строку "ok"
+/stat:
+  get:
+    description: Возвращает статистику асинхронных операций юзера
+    queryParameters:
+      uid:
+        type: string
+        description: uid пользователя
+        required: true
+/spam:
+  post:
+    is: [baseResource, operationResource, sentAwareOperation]
+    description: Отправляет репорт в СО и постмастер, перемещает письма в папку спам
+    queryParameters:
+      nomove:
+        type: string
+        description: Если значение аргумента не пусто, то перемещать письма в папку спам не будем
+/unspam:
+  post:
+    is: [baseResource, operationResource]
+    description: Отправляет репорт в СО и постмастер, перемещает письма в папку dest_fid
+    queryParameters:
+      dest_fid:
+        type: string
+        description: fid папки, куда перемещать письма. Если пустой - перемещаем в инбокс
+      nomove:
+        type: string
+        description: Если значение аргумента не пусто, то перемещать письма никуда не будем
+/purge:
+  post:
+    is: [baseResource, operationResource]
+    description: Удаляет письма (насовсем, минуя корзину)
+/remove:
+  post:
+    is: [baseResource, operationResource, sentAwareOperation]
+    description: Смотрит на каждое письмо, если оно лежит в корзине - удаляет его, если нет - перемещает в корзину, отправляя репорт в постмастер
+    queryParameters:
+      nopurge:
+        type: string
+        description: Если значение аргумента непусто, то уже лежащие в корзине письма мопс не тронет; если пусто - удалит навсегда
+/complex_move:
+  post:
+    is: [baseResource, operationResource, sentAwareOperation]
+    description: Перемещение письма
+    queryParameters:
+      dest_fid:
+        type: string
+        description: fid папки в которую перемещаются сообщения
+        required: true
+/mark:
+  post:
+    is: [baseResource, operationResource]
+    description: Помечает письма переданным статусом
+    queryParameters:
+      status:
+        enum: ["read", "not_read", "replied", "forwarded"]
+        description: Статус, которым нужно пометить письмо
+        required: true
+      postmaster:
+        type: string
+        description: Если значение этого аргумента непусто, то отправляет запрос в постмастер
+/label:
+  post:
+    is: [baseResource, operationResource]
+    description: Помечает письма пользовательскими метками
+    queryParameters:
+      lids:
+        type: string
+        description: Список идентификаторов меток через запятую
+        required: true
+/unlabel:
+  post:
+    is: [baseResource, operationResource]
+    description: Снимает пользовательские метки с писем
+    queryParameters:
+      lids:
+        type: string
+        description: Список идентификаторов меток через запятую
+        required: true
+/folders:
+  /create:
+    post:
+      is: [baseResource]
+      description: Создает папку
+      queryParameters:
+        name:
+          type: string
+          description: Имя папки
+          required: true
+        parent_fid:
+          type: string
+          description: fid родительской папки
+        symbol:
+          type: string
+          description: Тип папки
+        strict:
+          enum: ["0", "1"]
+          description: Режим создания папки
+  /update:
+    post:
+      is: [baseResource]
+      description: Редактирует папку
+      queryParameters:
+        fid:
+          type: string
+          description: fid папки
+          required: true
+        name:
+          type: string
+          description: Новое имя папки
+        parent_fid:
+          type: string
+          description: Переносит папку внутрь другой папки; может быть пустым - тогда папка перемещается на верхний уровень
+  /update_symbol:
+    post:
+      is: [baseResource]
+      description: Cтавит или снимает символ на папке
+      queryParameters:
+        fid:
+          type: string
+          description: fid папки
+          required: true
+        symbol:
+          type: string
+          description: Ставит символ на папку; если пустой - тогда с папки снимаются символы
+  /update_position:
+    post:
+      is: [baseResource]
+      description: Устанавливает позицию папки для сортировки
+      queryParameters:
+        fid:
+          type: string
+          description: fid папки
+          required: true
+        prev_fid:
+          type: string
+          description: после папки с prev_fid будет стоять папка с fid; может быть пустым - тогда папка станет первой
+  /delete:
+    post:
+      is: [baseResource]
+      description: Удаляет папку и ее содержимое
+      queryParameters:
+        fid:
+          type: string
+          description: fid папки
+          required: true
+  /update_pop3:
+    post:
+      is: [baseResource]
+      description: Ручка выключить/включить pop3
+      queryParameters:
+        fids:
+          type: string
+          description: Списков фидов папок
+          required: true
+      responses:
+        200:
+          description: Возвращаем 200 OK
+/labels:
+  /create:
+    post:
+      is: [baseResource]
+      description: Создает метку
+      queryParameters:
+        symbol:
+          type: string
+          description: Заголовок символа для метки
+        name:
+          type: string
+          description: Название метки
+        color:
+          type: string
+          description: Цвет метки
+        type:
+          type: string
+          description: Тип метки
+        strict:
+          enum: ["0", "1"]
+          description: Режим создания метки
+  /update:
+    post:
+      is: [baseResource]
+      description: Редактирует метку
+      queryParameters:
+        lid:
+          type: string
+          description: lid метки
+          required: true
+        name:
+          type: string
+          description: Переименовывает метку
+        color:
+          type: string
+          description: Изменяет цвет; не может быть пустым
+  /delete:
+    post:
+      is: [baseResource]
+      description: Удаляет метку
+      queryParameters:
+        lid:
+          type: string
+          description: lid метки
+          required: true
+/unsubscribe:
+  post:
+    is: [baseResource]
+    description: Отправляет репорт в СО и перемещает письмо в корзину
+    queryParameters:
+      mids:
+        type: string
+        description: Список mid'ов, перечисленных через запятую
+/change_tab:
+  post:
+    is: [baseResource, operationResource]
+    description: Меняет таб письма
+    queryParameters:
+      tab:
+        type: string
+        description: имя нового таба
+        required: true

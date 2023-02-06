@@ -1,0 +1,525 @@
+{
+  "items": [
+    {
+      "id": "intro",
+      "action_type": "tree",
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "welcome_text",
+          "text": "Добро пожаловать в службу поддержки!"
+        },
+        {
+          "type": "plaintext",
+          "text": "\\U0001F6A8 [b]В экстренной ситуации[/b]\nЗвоните в колл-центр:\n[url=tel://+74997040941]+7 499 704-09-41[/url] (Москва),\n[url=tel://+74997040941]+7 499 704-09-41[/url] (Санкт-Петербург),\n[url=tel://+74997040941]+7 499 704-09-41[/url] (Казань)"
+        },
+        {
+          "type": "plaintext",
+          "text": "\\U0001F4A1 [b]Страница помощи по сервису здесь:[/b]\n [url=https://yandex.ru/support/drive]yandex.ru/support/drive[/url]"
+        }
+      ],
+      "schema": {
+        "type": "options",
+        "options": [
+          {
+            "text": "Проблема в поездке",
+            "type": "options",
+            "options": [
+              {
+                "text": "В машине чего-то не хватает",
+                "type": "options",
+                "options": [
+                  {
+                    "text": "Нет ковриков",
+                    "type": "message",
+                    "message_text": "!no_carpets_noriding",
+                    "node": "something_is_missing|feedback_another_damage|no_carpets_marked"
+                  },
+                  {
+                    "text": "Нет СТС",
+                    "type": "message",
+                    "message_text": "!no_sts_noriding",
+                    "node": "something_is_missing|feedback_no_sts|no_sts_marked"
+                  },
+                  {
+                    "text": "Нет омывающей жидкости",
+                    "type": "message",
+                    "message_text": "!no_washer_fluid_noriding",
+                    "node": "something_is_missing|feedback_no_wiper_fluid|no_washer_fluid_marked"
+                  }
+                ]
+              },
+              {
+                "text": "Другое",
+                "history_text": "У меня другая проблема в поездке",
+                "type": "message",
+                "message_text": "!other_problem_in_riding",
+                "node": "generic_ride_problem"
+              }
+            ]
+          },
+          {
+            "text": "Устройте мне трэш со статусами моих документов",
+            "type": "message",
+            "message_text": "!photos_test",
+            "node": "photos_test"
+          },
+          {
+            "text": "Скажите как меня зовут",
+            "type": "message",
+            "message_text": "!macroses_test",
+            "node": "macroses_test"
+          },
+          {
+            "text": "Хочу ввести email",
+            "type": "message",
+            "message_text": "!default_emails_test",
+            "node": "default_emails_test"
+          },
+          {
+            "message_text": "!no_sts_noriding_past",
+            "history_text": "В одной из прошлых поездок не было СТС",
+            "node": "select_session|no_sts_noriding_past",
+            "type": "message",
+            "text": "Не было СТС"
+          },
+          {
+            "message_text": "!remove_tag_action",
+            "node": "remove_tag_action",
+            "type": "message",
+            "text": "Хочу удалить тег"
+          },
+          {
+            "message_text": "!remove_tag_action_path",
+            "node": "remove_tag_action_path",
+            "type": "message",
+            "text": "Хочу удалить тег"
+          },
+          {
+            "message_text": "!tag_add",
+            "node": "tag_add",
+            "type": "message",
+            "text": "Хочу добавить тег"
+          },
+          {
+            "message_text": "!tag_update",
+            "node": "tag_update",
+            "type": "message",
+            "text": "Хочу изменить тег"
+          },
+          {
+            "message_text": "!tag_evolve",
+            "node": "tag_evolve",
+            "type": "message",
+            "text": "Хочу эвалюционировать тег"
+          },
+          {
+            "message_text": "!tag_remove",
+            "node": "tag_remove",
+            "type": "message",
+            "text": "Хочу удалить тег"
+          },
+          {
+            "message_text": "!tag_propose",
+            "node": "tag_propose",
+            "type": "message",
+            "text": "Хочу предложить тег"
+          },
+          {
+            "message_text": "!localization",
+            "node": "localization",
+            "type": "message",
+            "text": "Test Localization"
+          }
+        ]
+      },
+      "next_step": null
+    },
+    {
+      "id": "something_is_missing",
+      "action_type": "button",
+      "action_button_text": "Хорошо",
+      "on_entry_actions": [
+        {
+          "type": "propose_tag",
+          "object": "!current_car",
+          "tag": "%1"
+        }
+      ],
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Спасибо, мы сохранили данные о пропаже!"
+        }
+      ],
+      "next_step": "%2"
+    },
+    {
+      "id": "no_carpets_marked",
+      "action_type": "chat_closed",
+      "action_button_text": "В этом чате давно ничего не происходило и написать сюда не получится",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "We will find this carpet!"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "no_sts_marked",
+      "action_type": "chat_closed",
+      "action_button_text": "В этом чате давно ничего не происходило и написать сюда не получится",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "We will find this STS!"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "no_washer_fluid_marked",
+      "action_type": "chat_closed",
+      "action_button_text": "В этом чате давно ничего не происходило и написать сюда не получится",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "We will find this washer fluid!"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "generic_ride_problem",
+      "action_type": "user_message",
+      "support_line_tag": "support_chat_riding",
+      "action_button_text": "В этом чате давно ничего не происходило и написать сюда не получится",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Расскажите нам, что случилоcь"
+        }
+      ],
+      "next_step": "generic_ride_problem"
+    },
+    {
+      "id": "photos_test",
+      "on_entry_actions": [
+        {
+          "type": "set_document_statuses",
+          "statuses": "iufne"
+        }
+      ],
+      "action_type": "chat_closed",
+      "action_button_text": "В этом чате давно ничего не происходило и написать сюда не получится",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Готово"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "macroses_test",
+      "action_type": "chat_closed",
+      "action_button_text": "В этом чате давно ничего не происходило и написать сюда не получится",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "$name"
+        },
+        {
+          "type": "plaintext",
+          "text": "$phone"
+        },
+        {
+          "type": "plaintext",
+          "text": "$email"
+        },
+        {
+          "type": "plaintext",
+          "text": "Готово"
+        }
+      ],
+      "on_entry_actions": [
+        {
+          "type": "add_tag",
+          "data": {
+            "comment": "[[[!current_time+7h]]][[[[!current_time+7d]]] [[[!current_time]]]"
+          },
+          "object": "!current_user",
+          "tag": "user_simple1"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "tag_add",
+      "action_type": "chat_closed",
+      "action_button_text": "В этом чате давно ничего не происходило и написать сюда не получится",
+      "pre_action_messages": [
+      ],
+      "on_entry_actions": [
+        {
+          "type": "modify_tag",
+          "object": "[[[!current_user]]]",
+          "entity": "user",
+          "modifications": [
+            {
+              "tag_name": "user_simple1",
+              "tag_data": "{\"comment\": \"[[[!current_time+7h]]][[[[!current_time+7d]]] [[[!current_time]]]\",\"tag\": \"user_simple1\"}",
+              "action": "add"
+            }
+          ]
+        }],
+      "next_step": null
+    },
+    {
+      "id": "tag_update",
+      "action_type": "chat_closed",
+      "action_button_text": "В этом чате давно ничего не происходило и написать сюда не получится",
+      "pre_action_messages": [
+      ],
+      "on_entry_actions": [
+        {
+          "type": "modify_tag",
+          "object": "[[[!current_user]]]",
+          "entity": "user",
+          "modifications": [
+            {
+              "tag_name": "user_simple1",
+              "tag_data": "{\"comment\": \"new comment\"}",
+              "action": "update_data"
+            }
+          ]
+        }],
+      "next_step": null
+    },
+    {
+      "id": "tag_evolve",
+      "action_type": "chat_closed",
+      "action_button_text": "В этом чате давно ничего не происходило и написать сюда не получится",
+      "pre_action_messages": [
+      ],
+      "on_entry_actions": [
+        {
+          "type": "modify_tag",
+          "object": "[[[!current_user]]]",
+          "entity": "user",
+          "modifications": [
+            {
+              "tag_name": "user_simple1",
+              "tag_data": "{\"comment\": \"user_simple2\", \"priority\": 1000,\"tag\": \"user_simple2\"}",
+              "action": "evolve"
+            }
+          ]
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "tag_remove",
+      "action_type": "chat_closed",
+      "action_button_text": "В этом чате давно ничего не происходило и написать сюда не получится",
+      "pre_action_messages": [
+      ],
+      "on_entry_actions": [
+        {
+          "type": "modify_tag",
+          "object": "[[[!current_user]]]",
+          "entity": "user",
+          "modifications": [
+            {
+              "tag_name": "user_simple2",
+              "action": "remove"
+            }
+          ]
+        }],
+      "next_step": null
+    },
+    {
+      "id": "tag_propose",
+      "action_type": "chat_closed",
+      "action_button_text": "В этом чате давно ничего не происходило и написать сюда не получится",
+      "pre_action_messages": [
+      ],
+      "on_entry_actions": [
+		{
+          "type": "modify_tag",
+          "object": "[[[!current_car]]]",
+          "entity": "car",
+          "modifications": [
+          {
+            "tag_name": "feedback_no_sts",
+            "action": "propose"
+          }]
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "default_emails_test",
+      "action_type": "context_buttons",
+      "schema": {
+        "options": [
+          {
+            "node": null,
+            "type": "message",
+            "text": "$default_email"
+          },
+          {
+            "node": null,
+            "type": "message",
+            "text": "Нет"
+          }
+        ],
+        "type": "default_emails"
+      },
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Выберете email"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "remove_tag_action",
+      "action_type": "skip_action",
+      "on_entry_actions": [
+        {
+          "env": "test_local",
+          "cgi": "tag_names=simple_user_tag",
+          "actor_user_id": "[[[!current_user]]]",
+          "type": "endpoint_call",
+          "route": "api/staff/user_tags/remove",
+          "post": "{\"object_ids\": \"[[[!current_user]]]\"}"
+        }
+      ],
+      "next_step": {
+        "conditions": [
+          {
+            "node": "no_permissions",
+            "condition": {
+              "type": "hardler_code",
+              "code": "403"
+            }
+          }
+        ],
+        "default": "default"
+      },
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Удаляю.."
+        }
+      ]
+    },
+    {
+      "id": "remove_tag_action_path",
+      "action_type": "skip_action",
+      "on_entry_actions": [
+        {
+          "env": "test_local",
+          "cgi": "tag_names=simple_user_tag",
+          "actor_user_id": "[[[!current_user]]]",
+          "type": "endpoint_call",
+          "route": "api/staff/user_tags/remove",
+          "post": "{\"object_ids\": \"[[[!current_user]]]\"}"
+        }
+      ],
+      "next_step": {
+        "conditions": [
+          {
+            "node": "no_permissions",
+            "condition": {
+              "type": "hardler_answer",
+              "path": "error_details.debug_message",
+              "value":  "no_permissions_remove_tag:simple_user_tag"
+            }
+          }
+        ],
+        "default": "default"
+      },
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Удаляю.."
+        }
+      ]
+    },
+    {
+      "id": "no_permissions",
+      "action_type": "user_message",
+      "action_button_text": null,
+      "next_step": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "no permissions"
+        }
+      ]
+    },
+    {
+      "id": "default",
+      "action_type": "user_message",
+      "action_button_text": null,
+      "next_step": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Default"
+        }
+      ]
+    },
+    {
+      "id": "select_session",
+      "suppress_support_call": true,
+      "action_type": "user_message",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Нажмите на скрепку и прикрепите поездку, в которой это случилось."
+        }
+      ],
+      "next_step": "%1"
+    },
+    {
+      "put_tag_on_entry": true,
+      "action_button_text": "Этот чат завершен и написать сюда не получится",
+      "support_line_tag": "support_chat_lowpriority",
+      "action_type": "chat_closed",
+      "next_step": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Спасибо, что сообщили. Пропавший документ непременно отыщем. Извините за то, что вам попался автомобиль без СТС. Надеюсь, это не сильно помешало вашим планам."
+        }
+      ],
+      "id": "no_sts_noriding_past"
+    },
+    {
+      "id": "human_talk",
+      "action_button_text": null,
+      "action_type": "user_message",
+      "pre_action_messages": [
+      ],
+      "next_step": "human_talk"
+    },
+    {
+      "id": "localization",
+      "action_button_text": null,
+      "action_type": "user_message",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "foo $(resource:chat.localization_test), bar $(resource:chat.localization_test)"
+        }
+      ],
+      "next_step": null
+    }
+  ],
+  "missing_nodes_redirect": "human_talk"
+}

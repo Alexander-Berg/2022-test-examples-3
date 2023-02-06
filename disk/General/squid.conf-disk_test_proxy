@@ -1,0 +1,74 @@
+
+acl diskintnets src 37.140.130.160/28 37.140.165.192/28 213.180.206.240/28 2a02:6b8:0:f2a::/64 2a02:6b8:0:1a53::/64 2a02:6b8:0:2527::/64
+
+acl disknets src 5.45.195.128/25 5.255.243.0/24 84.201.190.0/25 141.8.153.128/25 141.8.159.128/25 2a02:6b8:0:251a::/64 2a02:6b8:0:1a4f::/64 2a02:6b8:0:f19::/64 2a02:6b8:0:1427::/64 2a02:6b8:0:1607::/64
+
+acl sandboxnets src 141.8.133.37 2a02:6b8:0:1a16::666 93.158.130.207 2a02:6b8:0:280::35 93.158.130.209 2a02:6b8:0:280::77:12b
+
+acl manager proto cache_object
+acl localhost src 127.0.0.1/32 ::1
+acl to_local dst 127.0.0.0/8 0.0.0.0/32 ::1 fc00::/7 fe80::/10
+
+acl ssl_ports port 443
+acl safe_ports port 80		# http
+acl safe_ports port 443		# https
+acl CONNECT method CONNECT
+
+http_access allow manager localhost
+http_access deny manager
+
+http_access deny !safe_ports
+http_access deny CONNECT !ssl_ports
+http_access deny to_local
+
+http_access allow localhost
+#http_access allow sandboxnets
+http_access allow all
+http_access deny all
+
+http_port 3128
+
+cache_mem 2 GB
+maximum_object_size_in_memory 128 MB
+maximum_object_size 1 GB
+memory_replacement_policy lru
+cache_replacement_policy lru
+
+cache_dir ufs /var/spool/squid3 1611 16 256
+store_dir_select_algorithm least-load
+max_open_disk_fds 0
+
+
+logformat squid %{%Y-%m-%d %H:%M:%S}tl,%03tu %6tr %>a %Ss/%03>Hs %<st %rm %ru %un %Sh/%<A %mt
+access_log /var/log/squid3/access.log squid
+
+pid_filename /var/run/squid3.pid
+
+log_fqdn off
+buffered_logs on
+cache_log /var/log/squid3/cache.log
+
+coredump_dir /var/spool/squid3
+
+# Add any of your own refresh_pattern entries above these.
+refresh_pattern -i (/cgi-bin/|\?) 0	0%	0
+refresh_pattern .		0	20%	4320
+
+#client_request_buffer_max_size 512 KB
+#chunked_request_body_max_size 64 KB
+#reply_body_max_size ?
+
+connect_timeout 15 seconds
+read_timeout 1 minute
+request_timeout 1 minute
+
+shutdown_lifetime 30 seconds
+cache_effective_user proxy
+cache_effective_group proxy
+
+umask 027
+
+client_db on
+retry_on_error off
+
+quick_abort_pct 70%

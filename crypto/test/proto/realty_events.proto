@@ -1,0 +1,43 @@
+package NRealty;
+
+message OfferInfo {
+    required string offer_category_field = 16;
+    required string offer_type_field = 17;
+}
+
+message SiteInfo {
+    required string site_id = 1;
+}
+
+message VillageInfo {
+    required string village_id = 1;
+}
+
+message ObjectInfo {
+    required OfferInfo offerInfo = 1;
+    oneof commercial_segment_entity {
+        SiteInfo site_info = 3;
+        VillageInfo village_info = 4;
+    }
+}
+
+message WebUserInfo {
+    required string user_yandex_uid = 1;
+}
+
+message AppUserInfo {
+    required string mobile_uuid = 1;
+}
+
+message UserInfo {
+    oneof ext_client_info {
+        WebUserInfo web_user_info = 7;
+        AppUserInfo app_user_info = 8;
+    }
+}
+
+message Event {
+    required string event_type = 5;
+    required ObjectInfo object_info = 8;
+    required UserInfo user_info = 11;
+}

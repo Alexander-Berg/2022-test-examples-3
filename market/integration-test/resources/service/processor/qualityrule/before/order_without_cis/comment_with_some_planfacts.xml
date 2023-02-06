@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lom_order
+        id="100111"
+        barcode="777"
+        platform_client_id="3"
+        sender_id="1"
+        sender_emails='{test@mail.com, test1@mail.com}'
+        cost_total="123.123"
+        status="PROCESSING"
+        created="2020-11-01 12:00:00 +0000"
+    />
+
+    <lom_waybill_segment
+        id="1"
+        external_id="101"
+        order_id="100111"
+        partner_id="987654321"
+        partner_type="DROPSHIP"
+        segment_type="FULFILLMENT"
+        waybill_segment_index="0"
+        partner_name="Тестовый склад"
+    />
+
+    <plan_fact
+        id="1"
+        entity_type="LOM_ORDER"
+        entity_id="100111"
+        expected_status="UNKNOWN"
+        processing_status="PROCESSED"
+        plan_fact_status="EXPIRED"
+        expected_status_datetime="2020-11-07 09:11:50 +0300"
+        schedule_time="2020-11-07 09:11:50 +0300"
+        created="2020-11-07 09:11:50 +0300"
+    />
+
+    <lom_order
+        id="100112"
+        barcode="778"
+        platform_client_id="3"
+        sender_id="1"
+        cost_total="123.123"
+        status="PROCESSING"
+        created="2020-11-01 12:00:00 +0000"
+    />
+
+    <lom_waybill_segment
+        id="2"
+        external_id="102"
+        order_id="100112"
+        partner_id="987654321"
+        partner_type="DROPSHIP"
+        segment_type="FULFILLMENT"
+        waybill_segment_index="0"
+        partner_name="Тестовый склад"
+    />
+
+    <plan_fact
+        id="2"
+        entity_type="LOM_ORDER"
+        entity_id="100112"
+        expected_status="UNKNOWN"
+        processing_status="PROCESSED"
+        plan_fact_status="EXPIRED"
+        expected_status_datetime="2020-11-07 09:11:50 +0300"
+        schedule_time="2020-11-07 09:11:50 +0300"
+        created="2020-11-07 09:11:50 +0300"
+    />
+
+    <lom_order
+        id="100113"
+        barcode="779"
+        platform_client_id="3"
+        sender_id="1"
+        cost_total="123.123"
+        status="PROCESSING"
+        created="2020-11-01 12:00:00 +0000"
+    />
+
+    <lom_waybill_segment
+        id="3"
+        external_id="103"
+        order_id="100113"
+        partner_id="987654321"
+        partner_type="DROPSHIP"
+        segment_type="FULFILLMENT"
+        waybill_segment_index="0"
+        partner_name="Тестовый склад"
+    />
+
+    <plan_fact
+        id="3"
+        entity_type="LOM_ORDER"
+        entity_id="100113"
+        expected_status="UNKNOWN"
+        processing_status="PROCESSED"
+        plan_fact_status="EXPIRED"
+        expected_status_datetime="2020-11-07 09:11:50 +0300"
+        schedule_time="2020-11-07 09:11:50 +0300"
+        created="2020-11-07 09:11:50 +0300"
+    />
+
+    <plan_fact_group
+        id="1"
+        aggregation_key="date:2020-11-07;partner:987654322;"
+        aggregation_type="DATE_ORDER_PARTNER"
+        processing_status="ENQUEUED"
+        expected_status="UNKNOWN"
+        schedule_time="2021-03-01 18:59:50 +0000"
+        data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 7],
+                        "partner": {
+                            "id": 987654321,
+                            "name": "Партнер"
+                        }
+                    }
+                },
+                "OrderWithoutRequiredCISAdditionalData": {
+                    "_type": ".OrderWithoutRequiredCISAdditionalData",
+                    "issueKey": "MONITORINGSNDBX-1",
+                    "issueClosed": false,
+                    "issueCreatedAt": [2020, 11, 7, 14, 15, 30],
+                    "orderIds": ["777", "778"],
+                    "affectedOrderIds": ["777", "778"]
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+        plan_fact_group_id="1"
+        plan_fact_id="2"
+    />
+
+    <plan_fact_group_relations
+        plan_fact_group_id="1"
+        plan_fact_id="3"
+    />
+
+    <quality_rule
+        id="1"
+        enabled="true"
+        expected_status="UNKNOWN"
+        aggregation_type="DATE_ORDER_PARTNER"
+        rule_processor="STARTREK"
+        rule='{ "queue": "MONITORINGSNDBX", "_type": ".OrderWithoutRequiredCISPayload", "components": [116833] }'
+    />
+
+</dataset>

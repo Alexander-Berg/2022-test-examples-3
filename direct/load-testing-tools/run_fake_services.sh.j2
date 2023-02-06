@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+exec 2>&1
+export FAKE_BSRANK_DELAY={{ bsrank_delay | default(0) }}
+export PYTHONPATH={{ py_module_path }}
+exec uwsgi --strict --plugins python,http --http {{ uwsgi_socket }} --module {{ py_module }}:app --master --workers {{ workers | default(10) }} --die-on-term --buffer-size 32768

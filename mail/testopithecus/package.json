@@ -1,0 +1,34 @@
+{
+  "name": "testopithecus",
+  "version": "1.0.0",
+  "description": "Testopithecus",
+  "author": "amosov-f@yandex-team.ru",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@types/mocha": "latest",
+    "@types/node": "^12.12.14",
+    "mocha": "^6.2.2",
+    "mocha-teamcity-reporter": "latest",
+    "sync-request": "latest",
+    "ts-node": "^8.5.4",
+    "tslint": "^5.16.0",
+    "typescript": "^3.7.3",
+    "typedoc": "latest",
+    "typescript-formatter": "^7.2.2",
+    "uglify-js": "latest"
+  },
+  "dependencies": {
+    "fs-extra": "^8.0.1",
+    "node-gyp": "^4.0.0",
+    "yarn": "^1.19.1"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build-logs": "tsc common/code/mail/logging/**/*.ts --outDir build-logs",
+    "doc-logs": "typedoc --out doc-logs common/code/mail/logging",
+    "test": "mocha -r ts-node/register common/__tests__/*.ts --timeout 0 --reporter mocha-teamcity-reporter --reporter-options flowId=gobbledygook --exit",
+    "test-local": "mocha -r ts-node/register common/__tests__/*.ts --timeout 0 --exit",
+    "test-local-logs": "find common/__tests__/logging-tests -name '*.ts' | xargs mocha -r ts-node/register -R spec --timeout 0 --exit"
+  }
+}

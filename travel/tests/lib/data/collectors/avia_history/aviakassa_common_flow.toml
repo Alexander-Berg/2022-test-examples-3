@@ -1,0 +1,57 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "aviakassa_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 468
+    confirm_dt = ""
+    created_at = "2020-01-31 18:24:02"
+    currency = "RUB"
+    from = "PRG"
+    marker = "0d7d1f0a-a5e969-c4b3-42b1-8a52-c008fe8dfef91"
+    order_id = "WRQJ1C"
+    partner = "aviakass"
+    partner_id = 30
+    price = 9070.0
+    source = "aviakass"
+    status = "booking"
+    ticket_number = ""
+    to = "SVO"
+    trip_type = "oneway"
+    unixtime = 1580484758
+
+[lb]
+    topic = "topic-aviakassa_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "updated_at"]
+
+[[lb.expected]]
+    status = "pending"
+    category = "avia"
+    partner_id = 30
+    created_at = 1580495042
+    origin = "PRG"
+    partner_order_id = "WRQJ1C"
+    label = "0d7d1f0a-a5e969-c4b3-42b1-8a52-c008fe8dfef91"
+    source = "history"
+    destination = "SVO"
+    partner_name = "aviakassa"
+    trip_type = "oneway"
+    billing_order_id = 468
+    order_amount = 9070.0
+    travel_order_id = "aviakassa:WRQJ1C"
+    currency_code = "RUB"

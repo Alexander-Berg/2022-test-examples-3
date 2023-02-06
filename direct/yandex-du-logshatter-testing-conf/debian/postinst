@@ -1,0 +1,27 @@
+#!/bin/sh
+
+set -e
+
+function get {
+    if [ -f "$1" ]; then
+	VALUE=$(cat "$1");
+    else
+	VALUE="none";
+    fi
+    echo $VALUE | awk '{$1=$1};1';
+}
+
+ENV=$(cat /etc/yandex/environment.type) || "none"
+
+[ "$ENV" != "testing" ] && exit 0
+
+HOST_DC=$(get /etc/ppcinv/localhost.root_dc | tr '[:upper:]' '[:lower:]');
+[ $HOST_DC == "SAS" ] && HOST_DC="MYT"
+YAV_MONGOPASS=$(get /etc/direct-tokens/mongo_loguser-test); 
+YAV_CLICKPASS=$(get /etc/direct-tokens/clickhouse_direct_writer-test);
+TVMSECRET=$(get /etc/direct-tokens/tvm2_logbroker-prestable-consumer-direct-logshatter);
+
+sed -i "s/DC/$HOST_DC/g" /etc/yandex/logshatter/logshatter-testing.properties ||:
+sed -i "s/MONGOPASS/$YAV_MONGOPASS/g" /etc/yandex/logshatter/logshatter-testing.properties ||:
+sed -i "s/CLICKPASS/$YAV_CLICKPASS/g" /etc/yandex/logshatter/logshatter-testing.properties ||:
+sed -i "s/TVMSECRET/$TVMSECRET/g" /etc/yandex/logshatter/logshatter-testing.properties ||:

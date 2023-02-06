@@ -1,0 +1,49 @@
+{
+    "config": {
+        "core": {
+            "artifacts_base_dir": "logs",
+            "lock_dir": "/var/lock"
+        },
+        "neuploader": {
+            "api_address": "http://back.luna.yandex-team.ru",
+            "db_name": "luna",
+            "enabled": true,
+            "meta": {
+                "use_tank": "nanny:production_yandex_tank",
+                "use_tank_port": 8083,
+                "operator": "szypulka",
+                "some_key": 42
+            },
+            "package": "yandextank.plugins.NeUploader",
+            "test_name": "init from firestarter"
+        },
+        "phantom": {
+            "address": "nanny:production_yandex_tank",
+            "autocases": 1,
+            "enabled": true,
+            "load_profile": {
+                "load_type": "rps",
+                "schedule": "line(1,10, 30s)"
+            },
+            "package": "yandextank.plugins.Phantom",
+            "ssl": true,
+            "uris": [
+                "/status",
+                "/start"
+            ]
+        },
+        "telegraf": {
+            "enabled": false,
+            "package": "yandextank.plugins.Telegraf"
+        },
+        "uploader": {
+            "enabled": true,
+            "job_name": "from firestarter",
+            "meta": {
+                "metafield": "from data_uploader"
+            },
+            "package": "yandextank.plugins.DataUploader",
+            "task": "LOAD-318"
+        }
+    }
+}

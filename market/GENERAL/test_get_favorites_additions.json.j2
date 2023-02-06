@@ -1,0 +1,274 @@
+{% if table == "events_favorites_additions" %}
+    {# Result data #}
+    {% table "events" %}
+        [
+            1506940337000,
+            {
+                "yandexuid": null,
+                "uuid": null,
+                "puid": "24934323"
+            },
+            "add_to_favorites",
+            "sku",
+            "100235854748",
+            {
+                "model_id": "1721463495",
+                "category_id": "16044387"
+            },
+            "{{ day }}"
+        ],
+        [
+            1506977421000,
+            {
+                "yandexuid": null,
+                "uuid": "ff03c0d683d94d0eab3b3a3014fddb21",
+                "puid": null
+            },
+            "add_to_favorites",
+            "sku",
+            "1708596369",
+            {
+                "model_id": "1234567",
+                "category_id": "7654321"
+            },
+            "{{ day }}"
+        ],
+        [
+            1506897011000,
+            {
+                "yandexuid": null,
+                "uuid": null,
+                "puid": "70965022"
+            },
+            "add_to_favorites",
+            "model",
+            "4841996",
+            {
+                "model_id": "4841996",
+                "category_id": "16044387"
+            },
+            "{{ day }}"
+        ],
+        [
+            1506966517000,
+            {
+                "yandexuid": "3682527851553778658",
+                "uuid": null,
+                "puid": null
+            },
+            "add_to_favorites",
+            "model",
+            "649573108",
+            {
+                "model_id": "649573108",
+                "category_id": "16044387"
+            },
+            "{{ day }}"
+        ],
+        [
+            1506926439000,
+            {
+                "yandexuid": null,
+                "uuid": null,
+                "puid": "971473951"
+            },
+            "add_to_favorites",
+            "offer",
+            "ndG7Am6QITMFrKLxgsbRcA",
+            {
+                "model_id": "1929856952",
+                "category_id": "16044387"
+            },
+            "{{ day }}"
+        ],
+        [
+            1506972744000,
+            {
+                "yandexuid": null,
+                "uuid": null,
+                "puid": "566508465"
+            },
+            "add_to_favorites",
+            "offer",
+            "f9WaXwhdE_4NBAKpHtcoSw",
+            {
+                "model_id": "670614000",
+                "category_id": "16044387"
+            },
+            "{{ day }}"
+        ]
+    {% endtable %}
+{% elif table == "pers_basket_basket_items" %}
+    {
+        "schema": [
+            {
+                "name": "owner_id",
+                "type": "Int64?"
+            },
+            {
+                "name": "reference_id",
+                "type": "Utf8?"
+            },
+            {
+                "name": "added_at",
+                "type": "Utf8?"
+            },
+            {
+                "name": "reference_type",
+                "type": "Int32?"
+            }
+        ],
+        "records": [
+            {# ok #}
+            [
+                2896944,
+                "100235854748",
+                "2017-10-02T13:32:17.860651+03:00",
+                0
+            ],
+            {# ok #}
+            [
+                39292585,
+                "1708596369",
+                "2017-10-02T23:50:21.603422+03:00",
+                0
+            ],
+            {# ok #}
+            [
+                2273339,
+                "4841996",
+                "2017-10-02T01:30:11.348217+03:00",
+                2
+            ],
+            {# ok #}
+            [
+                862603,
+                "649573108",
+                "2017-10-02T20:48:37.171646+03:00",
+                2
+            ],
+            {# ok #}
+            [
+                39867317,
+                "ndG7Am6QITMFrKLxgsbRcA",
+                "2017-10-02T09:40:39.568538+03:00",
+                3
+            ],
+            {# ok #}
+            [
+                39538173,
+                "f9WaXwhdE_4NBAKpHtcoSw",
+                "2017-10-02T22:32:24.781889+03:00",
+                3
+            ],
+            {# wrong date #}
+            [
+                1756848,
+                "YnA5mBtvmTvTqJZKhNeBuA",
+                "2017-10-03T00:00:12.701943+03:00",
+                3
+            ],
+            {# this reference_type should not be added to the resulting table #}
+            [
+                39526172,
+                "100801889900",
+                "2017-10-02T16:53:00.956794+03:00",
+                1
+            ]
+        ]
+    }
+{% elif table == "pers_basket_users" %}
+    {
+        "schema": [
+            {
+                "name": "id",
+                "type": "Int64?"
+            },
+            {
+                "name": "p_uid",
+                "type": "Int64?"
+            },
+            {
+                "name": "uuid",
+                "type": "Utf8?"
+            },
+            {
+                "name": "yandexuid",
+                "type": "Utf8?"
+            }
+        ],
+        "records": [
+            [
+                2896944,
+                24934323,
+                null,
+                null
+            ],
+            [
+                39292585,
+                null,
+                "ff03c0d683d94d0eab3b3a3014fddb21",
+                null
+            ],
+            [
+                2273339,
+                70965022,
+                null,
+                null
+            ],
+            [
+                862603,
+                null,
+                null,
+                "3682527851553778658"
+            ],
+            [
+                39867317,
+                971473951,
+                null,
+                null
+            ],
+            [
+                39538173,
+                566508465,
+                null,
+                null
+            ],
+            [
+                1756848,
+                224697152,
+                null,
+                null
+            ],
+            [
+                39526172,
+                1061007255,
+                null,
+                null
+            ]
+        ]
+    }
+{% elif table == "items_sku_model_id" %}
+    {% table "items_sku_model_id" %}
+        ["100235854748", "1721463495", "sku", "{{ day }}"],
+        ["159402900", "159402900", "sku", "{{ day }}"],
+        ["1646551242", "7654321", "sku", "{{ day }}"],
+        ["1708596369", "1234567", "sku", "{{ day }}"]
+    {% endtable %}
+{% elif table == "items_offer_model_id" %}
+    {% table "items_offer_model_id" %}
+        ["YnA5mBtvmTvTqJZKhNeBuA", "159403776", "offer", "{{ day }}"],
+        ["ndG7Am6QITMFrKLxgsbRcA", "1929856952", "offer", "{{ day }}"],
+        ["f9WaXwhdE_4NBAKpHtcoSw", "670614000", "offer", "{{ day }}"]
+    {% endtable %}
+{% elif table == "items_model_category_id" %}
+    {% table "items_model_category_id" %}
+        ["159403776", "16044387", "model", "{{ day }}"],
+        ["1929856952", "16044387", "model", "{{ day }}"],
+        ["670614000", "16044387", "model", "{{ day }}"],
+        ["649573108", "16044387", "model", "{{ day }}"],
+        ["4841996", "16044387", "model", "{{ day }}"],
+        ["1721463495", "16044387", "model", "{{ day }}"],
+        ["1234567", "7654321", "model", "{{ day }}"]
+    {% endtable %}
+{% endif %}

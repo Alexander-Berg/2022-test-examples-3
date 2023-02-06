@@ -1,0 +1,21 @@
+$schema: ../../../_schemas/nock.yaml
+
+scope: 'http://payments'
+method: PUT
+path: /v1/order/1234567890/1
+
+reqheaders:
+  $include: ../../../_samples/reqheaders.yaml
+  content-type: application/json
+
+body:
+  active: true
+
+status: 200
+
+response:
+  code: 200
+  status: success
+  data:
+    $include: ../../../_samples/order.yaml
+    active: true

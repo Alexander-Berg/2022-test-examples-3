@@ -1,0 +1,182 @@
+{
+  "content": {
+    "category": "\/market\/front\/desktop\/",
+    "component_path": "market-front.desktop.testing",
+    "ui_settings": {
+      "set_snapshot_as_current_on_activate": "True"
+    },
+    "balancers_integration": {
+      "auto_update_services_balancers": false
+    },
+    "recipes": {
+      "content": [
+        {
+          "context": [
+            {
+              "value": "0.1",
+              "key": "operating_degrade_level"
+            },
+            {
+              "value": "0.1",
+              "key": "stop_degrade_level"
+            }
+          ],
+          "labels": [],
+          "id": "default",
+          "name": "_activate_only_service_configuration.yaml",
+          "desc": "Activate"
+        }
+      ],
+      "prepare_recipes": [
+        {
+          "context": [],
+          "labels": [],
+          "id": "default",
+          "name": "_prepare_service_configuration.yaml",
+          "desc": "Prepare"
+        }
+      ]
+    },
+    "labels": [
+      {
+        "key": "geo"
+      },
+      {
+        "key": "ctype"
+      },
+      {
+        "key": "itype"
+      },
+      {
+        "key": "prj"
+      }
+    ],
+    "tickets_integration": {
+      "gencfg_release_rule": {
+        "filter_params": {
+          "expression": "False"
+        },
+        "responsibles": []
+      },
+      "service_release_rules": [
+        {
+          "sandbox_resource_type": "GEODATA4BIN_STABLE",
+          "ticket_priority": "NORMAL",
+          "desc": "Geobase 4",
+          "queue_id": "MARKET",
+          "filter_params": {
+            "expression": "sandbox_release.release_type in (\"stable\",)"
+          },
+          "sandbox_task_type": "HTTP_UPLOAD",
+          "auto_commit_settings": {
+            "mark_as_disposable": true,
+            "scheduling_priority": "NORMAL",
+            "enabled": true
+          },
+          "responsibles": []
+        },
+        {
+          "sandbox_resource_type": "MARKET_FRONT_DESKTOP_CONFIG",
+          "ticket_priority": "NORMAL",
+          "desc": "Config",
+          "queue_id": "MARKET",
+          "filter_params": {
+            "expression": "sandbox_release.release_type in (\"testing\",)"
+          },
+          "sandbox_task_type": "MARKET_YA_PACKAGE",
+          "auto_commit_settings": {
+            "scheduling_priority": "NONE",
+            "enabled": true
+          },
+          "responsibles": []
+        },
+        {
+          "sandbox_resource_type": "MARKET_DESKTOP_FRONT",
+          "ticket_priority": "NORMAL",
+          "desc": "Application",
+          "queue_id": "MARKET",
+          "filter_params": {
+            "expression": "sandbox_release.release_type in (\"testing\",)"
+          },
+          "sandbox_task_type": "MARKET_FRONT_BUILD_DESKTOP_NODE",
+          "auto_commit_settings": {
+            "scheduling_priority": "NONE",
+            "enabled": true
+          },
+          "responsibles": []
+        },
+        {
+          "sandbox_resource_type": "MARKET_COMMON_CONFIG",
+          "ticket_priority": "NORMAL",
+          "desc": "Common config",
+          "queue_id": "MARKET",
+          "filter_params": {
+            "expression": "sandbox_release.release_type in (\"testing\",)"
+          },
+          "sandbox_task_type": "MARKET_YA_PACKAGE",
+          "auto_commit_settings": {
+            "scheduling_priority": "NONE"
+          },
+          "responsibles": []
+        },
+        {
+          "sandbox_resource_type": "MARKET_JUGGLER_RTC_CHECKS_BUNDLE",
+          "ticket_priority": "NORMAL",
+          "desc": "juggler checks",
+          "filter_params": {
+            "expression": "sandbox_release.release_type in (\"testing\",)"
+          },
+          "sandbox_task_type": "BUILD_JUGGLER_CHECKS_BUNDLE",
+          "auto_commit_settings": {
+            "scheduling_priority": "NONE",
+            "enabled": true
+          },
+          "responsibles": []
+        },
+        {
+          "sandbox_resource_type": "MARKET_DATA_SITEMAP",
+          "ticket_priority": "NORMAL",
+          "desc": "Sitemaps from data pusher",
+          "queue_id": "MARKET",
+          "filter_params": {
+            "expression": "sandbox_release.release_type in (\"testing\",)"
+          },
+          "sandbox_task_type": "MARKET_COPY_RESOURCE",
+          "auto_commit_settings": {
+            "mark_as_disposable": true,
+            "scheduling_priority": "NORMAL",
+            "enabled": true
+          },
+          "responsibles": []
+        }
+      ],
+      "service_release_tickets_enabled": true,
+      "instancectl_release_rule": {
+        "queue_id": "INSTANCECTL",
+        "match_release_type": "-",
+        "responsibles": []
+      }
+    },
+    "monitoring_settings": {},
+    "queue_id": "MARKET",
+    "cms_settings": {
+      "cms_stub_policy": "SKIP_ON_FAILURE",
+      "require_cms_stub": false
+    },
+    "scheduling_policy": {
+      "type": "BASED_ON_SNAPSHOT_PRIORITY",
+      "based_on_snapshot_priority": {
+        "prepare_recipe": "default",
+        "activate_recipe": "default"
+      }
+    },
+    "desc": "Market Front Desktop"
+  },
+  "parent_id": "111d0cdd4c76f154191dc022f4ed7e7a3af1e344",
+  "_id": "b01ac53d770febb9bffad6a27b413e7c5a3abc58",
+  "change_info": {
+    "comment": "CSADMIN-19994-TI",
+    "ctime": 1509531721805,
+    "author": "d3rp"
+  }
+}

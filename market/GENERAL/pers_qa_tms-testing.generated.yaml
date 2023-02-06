@@ -1,0 +1,376 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый pers_qa_tms-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dpers_qa_tms-testing
+
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=pers_qa_tms-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_pers_qa_tms_vla
+    - NANNY%testing_market_pers_qa_tms_sas
+    - NANNY%testing_market_pers_qa_tms_man
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: disk_free_space
+    tags:
+    - market_testing
+    - market_rtc
+    - marketpersqatms
+    - testing
+    - market
+    - _market_
+    - market_pers_toplevel
+    - market_pers_ugc_testing
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=pers_qa_tms-testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_pers_qa_tms_vla
+    - NANNY%testing_market_pers_qa_tms_sas
+    - NANNY%testing_market_pers_qa_tms_man
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: logrotate
+    tags:
+    - market_testing
+    - market_rtc
+    - marketpersqatms
+    - testing
+    - market
+    - _market_
+    - market_pers_toplevel
+    - market_pers_ugc_testing
+
+  # Check pers-qa-tms-monitoring
+  # https://juggler.yandex-team.ru/check_details/?host=pers_qa_tms-testing&service=pers-qa-tms-monitoring&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - pers_qa_tms-testing:pers-qa-tms-monitoring_warn
+    - pers_qa_tms-testing:pers-qa-tms-monitoring_crit
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: pers-qa-tms-monitoring
+    tags:
+    - market_testing
+    - market_rtc
+    - marketpersqatms
+    - testing
+    - market
+    - _market_
+    - pers-qa-tms-monitoring
+    - market_pers_ugc_testing
+    - market_pers_toplevel
+
+  # Check pers-qa-tms-monitoring_crit
+  # https://juggler.yandex-team.ru/check_details/?host=pers_qa_tms-testing&service=pers-qa-tms-monitoring_crit&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /monitor
+      regexp: ^(0|1);.*
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_pers_qa_tms_vla:pers-qa-tms-monitoring_crit:all
+    - NANNY%testing_market_pers_qa_tms_sas:pers-qa-tms-monitoring_crit:all
+    - NANNY%testing_market_pers_qa_tms_man:pers-qa-tms-monitoring_crit:all
+    service: pers-qa-tms-monitoring_crit
+    tags:
+    - market_testing
+    - market_rtc
+    - marketpersqatms
+    - testing
+    - market
+    - _market_
+
+  # Check pers-qa-tms-monitoring_warn
+  # https://juggler.yandex-team.ru/check_details/?host=pers_qa_tms-testing&service=pers-qa-tms-monitoring_warn&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /monitor
+      regexp: ^(0|2);.*
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_pers_qa_tms_vla:pers-qa-tms-monitoring_warn:all
+    - NANNY%testing_market_pers_qa_tms_sas:pers-qa-tms-monitoring_warn:all
+    - NANNY%testing_market_pers_qa_tms_man:pers-qa-tms-monitoring_warn:all
+    service: pers-qa-tms-monitoring_warn
+    tags:
+    - market_testing
+    - market_rtc
+    - marketpersqatms
+    - testing
+    - market
+    - _market_
+
+  # Check pers-qa-tms-saas-4xx
+  # https://juggler.yandex-team.ru/check_details/?host=pers_qa_tms-testing&service=pers-qa-tms-saas-4xx&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - yasm_alert:market-pers-qa_saas_4xx
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: pers-qa-tms-saas-4xx
+    tags:
+    - market_testing
+    - market_rtc
+    - marketpersqatms
+    - testing
+    - market
+    - _market_
+    - market_pers_toplevel
+    - market_pers_ugc_testing
+
+  # Check pers-qa-tms-saas-push-running
+  # https://juggler.yandex-team.ru/check_details/?host=pers_qa_tms-testing&service=pers-qa-tms-saas-push-running&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - yasm_alert:saas_push_incorrest_state_testing
+    - pers_qa_tms-testing:saas-push-daemon-status
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: pers-qa-tms-saas-push-running
+    tags:
+    - market_testing
+    - market_rtc
+    - marketpersqatms
+    - testing
+    - market
+    - _market_
+    - market_pers_toplevel
+    - market_pers_ugc_testing
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=pers_qa_tms-testing&service=ping&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_pers_qa_tms_vla
+    - NANNY%testing_market_pers_qa_tms_sas
+    - NANNY%testing_market_pers_qa_tms_man
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: ping
+    tags:
+    - market_testing
+    - market_rtc
+    - marketpersqatms
+    - testing
+    - market
+    - _market_
+    - market_pers_toplevel
+    - market_pers_ugc_testing
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=pers_qa_tms-testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_pers_qa_tms_vla
+    - NANNY%testing_market_pers_qa_tms_sas
+    - NANNY%testing_market_pers_qa_tms_man
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: push-client-status
+    tags:
+    - market_testing
+    - market_rtc
+    - marketpersqatms
+    - testing
+    - market
+    - _market_
+    - market_pers_toplevel
+    - market_pers_ugc_testing
+
+  # Check saas-push-daemon-status
+  # https://juggler.yandex-team.ru/check_details/?host=pers_qa_tms-testing&service=saas-push-daemon-status&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /get-status
+      port_delta: 4
+      regexp: ''
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_pers_qa_tms_vla:saas-push-daemon-status:all
+    - NANNY%testing_market_pers_qa_tms_sas:saas-push-daemon-status:all
+    - NANNY%testing_market_pers_qa_tms_man:saas-push-daemon-status:all
+    service: saas-push-daemon-status
+    tags:
+    - market_testing
+    - market_rtc
+    - marketpersqatms
+    - testing
+    - market
+    - _market_
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    check_options: {}
+    host: pers_qa_tms-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    ttl: 900

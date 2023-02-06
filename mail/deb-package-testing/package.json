@@ -1,0 +1,44 @@
+{
+    "meta": {
+        "name": "deb-package-testing",
+        "maintainer": "Petr Burmistrov <pierre@yandex-team.ru>",
+        "description": "MxTests",
+        "version": "{revision}"
+    },
+    "data": [
+        {
+            "source": {
+                "type": "ARCADIA",
+                "path": "mail/mxtests/docker/deb-package-testing",
+                "files": [
+                    "Dockerfile"
+                ]
+            },
+            "destination": {
+                "path": "/"
+            }
+        },
+        {
+            "source": {
+                "type": "RELATIVE",
+                 "path": "deploy",
+                 "files": [
+                     "*"
+                 ]
+            },
+            "destination" : {
+                "path" : "/deploy/"
+             }
+        },
+        {
+            "source": {
+                "type": "SYMLINK"
+            },
+            "destination" : {
+                "path": "/deploy/var/yamail-dkim/opendkim-keylist",
+                "target" : "/etc/opendkim/opendkim-keylist"
+             }
+        }
+
+    ]
+}

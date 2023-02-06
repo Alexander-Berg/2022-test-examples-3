@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d] %-5p [%t] %mdc %c{5}:%L %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <includeCallerData>true</includeCallerData>
+        <appender-ref ref="CONSOLE"/>
+    </appender>
+
+    <logger name="ACCESS_LOG">
+        <level value="INFO"/>
+    </logger>
+
+    <logger name="requestTrace">
+        <level value="INFO"/>
+    </logger>
+
+    <logger name="METRICS_LOG">
+        <level value="INFO"/>
+    </logger>
+
+    <logger name="ru.yandex.market.crm">
+        <level value="DEBUG"/>
+    </logger>
+
+    <logger name="org.springframework">
+        <level value="INFO"/>
+    </logger>
+
+    <logger name="org.springframework.security.web">
+        <level value="WARN"/>
+    </logger>
+
+    <logger name="ru.yandex">
+        <level value="INFO"/>
+    </logger>
+
+    <logger name="bcp">
+        <level value="WARN"/>
+    </logger>
+
+    <logger name="org.quartz">
+        <level value="WARN"/>
+    </logger>
+
+    <logger name="com.atomikos.datasource.pool.ConnectionPoolWithConcurrentValidation">
+        <level value="WARN"/>
+    </logger>
+
+    <logger name="org.hibernate.engine.internal.StatisticalLoggingSessionEventListener">
+        <level value="WARN"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="ASYNC"/>
+    </root>
+
+</configuration>

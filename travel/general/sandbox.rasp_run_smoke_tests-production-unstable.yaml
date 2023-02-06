@@ -1,0 +1,28 @@
+- gather_facts: false
+  hosts: localhost
+  roles:
+  - checks:
+    - rasp_run_smoke_tests.api_public.unstable
+    - rasp_run_smoke_tests.blablacar.unstable
+    - rasp_run_smoke_tests.export.unstable
+    - rasp_run_smoke_tests.infocenter.unstable
+    - rasp_run_smoke_tests.morda_backend.unstable
+    - rasp_run_smoke_tests.morda_front.unstable
+    - rasp_run_smoke_tests.pathfinder_core.unstable
+    - rasp_run_smoke_tests.suburban_selling.unstable
+    - rasp_run_smoke_tests.suburban_widget.unstable
+    limits: '{{ crit_0_warn_0 }}'
+    flap: '{{ stable3h_critical6h }}'
+    role: chat_only
+    nodata_mode: force_ok
+    rtime: 60
+    ttl: 4800
+  vars:
+    children:
+      - rasp_sandbox_production
+    host: rasp_sandbox_production
+    telegram_chats:
+      - 'rasp-achtung'
+  vars_files:
+  - ../vars/common.yml
+  - vars/rasp.yml

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="false" default-autowire="byName">
+    <bean id="mockFactory" class="ru.yandex.market.pers.notify.mock.MockFactory"/>
+
+    <bean id="marketPusherService" factory-bean="mockFactory" factory-method="getPusherServiceMock"/>
+    <bean id="pokupkiPusherService" factory-bean="mockFactory" factory-method="getPusherServiceMock"/>
+    <bean id="lotalotPusherService" factory-bean="mockFactory" factory-method="getPusherServiceMock"/>
+    <bean id="shopInfoService" factory-bean="mockFactory" factory-method="getShopInfoServiceMock"/>
+    <bean id="supplierInfoService" factory-bean="mockFactory" factory-method="getSupplierInfoServiceMock"/>
+    <bean id="memCachedAgent" factory-bean="mockFactory" factory-method="getMemCachedAgentMock"/>
+    <bean id="memCachingService" class="ru.yandex.common.cache.memcached.impl.DefaultMemCachingService"/>
+    <bean id="persBasketClient" factory-bean="mockFactory" factory-method="getPersBasketClientMock"/>
+    <bean id="blackBoxPassportService" class="ru.yandex.market.pers.notify.mock.MockedBlackBoxPassportService"/>
+    <bean id="userInfoService" factory-bean="mockFactory" factory-method="getUserInfoServiceMock"/>
+    <!-- Мокируем, иначе в некоторых тестах подтягивается MemCachedPassportService, и тесты падают -->
+    <bean id="passportService" class="ru.yandex.market.pers.notify.passport.CompositePassportService">
+        <constructor-arg name="blackBoxPassportService" ref="blackBoxPassportService"/>
+        <constructor-arg name="resolveUidService" ref="resolveUidService"/>
+        <constructor-arg name="jsonPassportService" ref="jsonPassportService"/>
+        <constructor-arg name="userInfoService" ref="userInfoService"/>
+    </bean>
+    <bean id="avatarService" class="ru.yandex.market.pers.notify.mock.MockedAvatarService"/>
+    <bean id="jsonPassportService" class="ru.yandex.market.pers.notify.mock.MockedFullPassportService"/>
+    <bean id="marketLoyaltyClient" factory-bean="mockFactory" factory-method="getMarketLoyaltyClientMock"/>
+    <bean id="monitoring" factory-bean="mockFactory" factory-method="getComplicatedMonitoring"/>
+    <bean id="qaHttpClient" factory-bean="mockFactory" factory-method="getQaHttpClientMock"/>
+    <bean id="reportService" factory-bean="mockFactory" factory-method="getReportService"/>
+    <bean id="tvmClient" factory-bean="mockFactory" factory-method="getMockTvmClient"/>
+    <bean id="tvmService" class="ru.yandex.market.pers.notify.http.tvm.TvmServiceMockImpl"/>
+</beans>

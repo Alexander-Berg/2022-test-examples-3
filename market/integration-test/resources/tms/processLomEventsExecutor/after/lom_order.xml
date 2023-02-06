@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lom_order
+            id="11"
+            barcode="orderId"
+            platform_client_id="1"
+            delivery_type="COURIER"
+            status="CANCELLED"
+            recipient_uid="[null]"
+            fake="false"
+            delivery_date_min="2021-05-18"
+            delivery_date_max="2021-05-18"
+            delivery_start_time="[null]"
+            delivery_end_time="[null]"
+            return_sorting_center_id="123"
+            recipient_address_geo_id="213"
+    />
+
+    <lom_waybill_segment
+            id="12"
+            external_id="part1"
+            segment_status="CANCELLED"
+            segment_type="MOVEMENT"
+            partner_id="123"
+            partner_type="DELIVERY"
+            partner_address="Какой-то адрес"
+            partner_email="test@test.ru"
+            order_id="11"
+            tags='["DIRECT"]'
+            call_courier_time="2021-05-29 01:12:21.580534 +0000"
+    />
+
+    <lom_waybill_segment
+            id="122"
+            external_id="part2"
+            segment_status="CANCELLED"
+            segment_type="MOVEMENT"
+            partner_id="124"
+            partner_type="DELIVERY"
+            order_id="11"
+            tags='["DIRECT"]'
+    />
+
+    <lom_cancellation_order_request
+            id="2345678"
+            order_id="11"
+            status="REQUIRED_SEGMENT_SUCCESS"
+            cancellation_error_message="[null]"
+            cancellation_order_reason="DELIVERY_SERVICE_UNDELIVERED"
+    />
+
+    <lom_waybill_segment_status_history
+            id="123456"
+            waybill_segment_id="12"
+            status="PENDING"
+            tracker_status="SENDER_SENT"
+    />
+
+    <lom_waybill_segment_status_history
+            id="1234561"
+            waybill_segment_id="122"
+            status="PENDING"
+            tracker_status="SENDER_SENT"
+    />
+
+    <queue_tasks
+            queue_name="LOM_WAYBILL_SEGMENT_STATUS_ADDED"
+            payload='{"waybillSegmentId":122,"waybillSegmentStatuses":[{"id":356584917,"status":"OUT","date":"2021-05-19T03:40:51.055461Z"}]}'
+            attempt="0"
+            reenqueue_attempt="0"
+            total_attempt="0"
+    />
+
+    <queue_tasks
+            queue_name="LOM_ORDER_STATUS_CHANGED"
+            payload='{"lomOrderId":11,"orderStatus":"CANCELLED"}'
+            attempt="0"
+            reenqueue_attempt="0"
+            total_attempt="0"
+    />
+
+    <queue_tasks
+            queue_name="RETRIEVE_LOM_ORDER_COMBINATOR_ROUTE"
+            payload='{"lomOrderId":11,"barcode":"orderId"}'
+            attempt="0"
+            reenqueue_attempt="0"
+            total_attempt="0"
+    />
+
+    <queue_tasks
+            queue_name="LOM_CANCELLATIO_REQUEST_CREATED"
+            payload='{"lomOrderId":11}'
+            attempt="0"
+            reenqueue_attempt="0"
+            total_attempt="0"
+    />
+
+    <queue_tasks
+            queue_name="UPDATE_LOM_ORDER_COMBINATOR_ROUTE"
+            payload='{"lomOrderId":11,"combinatorRouteId":"95731fa5-244f-477e-97ff-e64f3f9fd303"}'
+            attempt="0"
+            reenqueue_attempt="0"
+            total_attempt="0"
+    />
+
+    <lom_order_events
+            id="2"
+            logbroker_id="2"
+            order_id="2"
+            diff="[]"
+            snapshot='{
+              "id": 2,
+              "barcode": "orderId2",
+              "platformClientId": 1,
+              "deliveryType": "COURIER",
+              "deliveryInterval": {
+                "deliveryDateMin": "2021-05-18",
+                "deliveryDateMax": "2021-05-18",
+                "fromTime": null,
+                "toTime": null
+              },
+              "status": "PROCESSING",
+              "recipient": {
+                "uid": null
+              },
+              "fake": false,
+              "waybill": [
+                {
+                  "id": 22,
+                  "externalId": "part2",
+                  "segmentStatus": "CANCELLED",
+                  "segmentType": "MOVEMENT",
+                  "partnerId": 123,
+                  "partnerType": "DELIVERY",
+                  "waybillSegmentTags": [
+                    "DIRECT"
+                  ],
+                  "waybillSegmentStatusHistory": [
+                    {
+                      "id": 12345,
+                      "date": "2021-05-28T12:13:21.580534Z",
+                      "status": "PENDING",
+                      "trackerStatus": "SENDER_SENT",
+                      "created": "2021-05-28T12:13:21.580535Z"
+                    }
+                  ]
+                }
+              ],
+              "cancellationOrderRequests": [
+                {
+                  "id": 234567,
+                  "status": "REQUIRED_SEGMENT_SUCCESS",
+                  "created": "2021-06-03T03:41:44.161122Z",
+                  "updated": "2021-06-03T03:41:44.552487Z",
+                  "cancellationOrderReason": "DELIVERY_SERVICE_UNDELIVERED",
+                  "cancellationErrorMessage": null,
+                  "cancellationSegmentRequests": [
+                    {
+                      "status": "PROCESSING",
+                      "required": false,
+                      "partnerId": 123,
+                      "sufficient": false
+                    }
+                  ],
+                  "cancellationOrderRequestReasonDetails": null
+                }
+              ],
+              "created": null,
+              "updated": null
+            }'
+    />
+
+</dataset>

@@ -1,0 +1,205 @@
+service: marketpartnerfront
+title: Component tests library
+
+arcanum:
+    review:
+        required: true
+        auto_assign: true
+        skip_review_for: 'robots'
+        groups:
+            - name: marketpartnerfront
+              roles: ['marketpartnerfront:developer']
+            - name: admin_component_tests
+              roles: ['marketpartnerfront:admin_component_tests']
+
+        rules:
+            - reviewers:
+                  - name: marketpartnerfront
+                    ship: 1
+                    assign: 1
+                    ignore_self_ship: false
+
+    auto_merge:
+        requirements:
+            - system: arcanum
+              type: approved
+              disabling_policy: need_reason
+              data:
+                  min_approvers_count: 1
+                  ignore_self_ship: false
+            - system: arcanum
+              type: st_issue_linked
+              disabling_policy: denied
+            - system: CI
+              type: 'market/front/libs/component_tests: Build check'
+              disabling_policy: denied
+
+shared:
+    settings:
+        requirements: &requirements
+            cores: 1
+            sandbox:
+                client_tags: MULTISLOT | GENERIC
+                container_resource: 2864846541
+                dns: dns64
+                priority:
+                    class: SERVICE
+                    subclass: NORMAL
+                semaphores:
+                    acquires:
+                        - name: market_front_ci_semaphore
+
+        logs_config: &logs_config
+            redirect_stderr_to_stdout: true
+            stdout_ci_badge: true
+
+        txt_result_resources: &txt_result_resource
+            - path: txt_reports
+              description: txt result
+              type: OTHER_RESOURCE
+              compression_type: none
+              optional: false
+              ci_badge: true
+              ci_badge_path: report.txt
+
+        html_result_resources: &html_result_resource
+            - path: html_reports
+              description: html result
+              type: OTHER_RESOURCE
+              compression_type: none
+              optional: false
+              ci_badge: true
+              ci_badge_path: index.html
+
+        metatron-env:
+            secret_environment_variables: &metatron-env-vars
+                - key: AWS_ACCESS_KEY_ID
+                  secret_spec:
+                      key: 'robot-metatron-s3-keyid'
+                - key: AWS_SECRET_ACCESS_KEY
+                  secret_spec:
+                      key: 'robot-metatron-s3-secretkey'
+                - key: ST_OAUTH_TOKEN
+                  secret_spec:
+                      key: 'robot-metatron-st-token'
+                - key: NPM_OAUTH_TOKEN
+                  secret_spec:
+                      key: 'robot-metatron-npm-auth'
+
+        common-run-command-config: &common-run-command-config
+            arc_mount_config:
+                enabled: true
+            logs_config: *logs_config
+            secret_environment_variables: *metatron-env-vars
+
+    jobs:
+        check-typescript: &check-typescript
+            title: TS Typechecking
+            task: common/misc/run_command
+            needs: check-version
+            requirements: *requirements
+            input:
+                config:
+                    <<: *common-run-command-config
+                    cmd_line: |
+                        export PATH=$PATH:/opt/nodejs/16/bin && cd ${context.config_info.dir}
+                        npm ci && npm run build:ci
+                        statusCode=$?
+
+                        mv txt_reports $RESULT_RESOURCES_PATH
+                        exit $statusCode
+                    result_resources: *txt_result_resource
+        check-eslint: &check-eslint
+            title: Eslint
+            needs: check-version
+            task: common/misc/run_command
+            requirements: *requirements
+            input:
+                config:
+                    <<: *common-run-command-config
+                    cmd_line: |
+                        export PATH=$PATH:/opt/nodejs/16/bin && cd ${context.config_info.dir}
+                        npm ci && npm run lint:ci
+                        statusCode=$?
+
+                        mv txt_reports $RESULT_RESOURCES_PATH
+                        exit $statusCode
+                    result_resources: *txt_result_resource
+        check-version: &check-version
+            title: Check Version
+            task: common/misc/run_command
+            requirements: *requirements
+            input:
+                config:
+                    <<: *common-run-command-config
+                    cmd_line: |
+                        export PATH=$PATH:/opt/nodejs/16/bin && cd ${context.config_info.dir}
+                        npm run versionCheck:ci
+                        statusCode=$?
+
+                        mv txt_reports $RESULT_RESOURCES_PATH
+                        exit $statusCode
+                    result_resources: *txt_result_resource
+
+        publication-job: &publication-job
+            title: Publish new version
+            task: common/misc/run_command
+            requirements: *requirements
+            input:
+                config:
+                    <<: *common-run-command-config
+                    cmd_line: |
+                        export PATH=$PATH:/opt/nodejs/16/bin
+                        cd ${context.config_info.dir}
+                        echo "$NPM_OAUTH_TOKEN" > ./.npmrc
+
+                        set -ex
+
+                        npm ci
+
+                        echo 'Publish a new version'
+                        mkdir -p txt_reports
+                        npm publish > txt_reports/report.txt
+
+                        statusCode=$?
+
+                        mv txt_reports $RESULT_RESOURCES_PATH
+                        exit $statusCode
+                    result_resources: *txt_result_resource
+
+ci:
+    release-title-source: flow
+    secret: sec-01cv39yy683mvszy5yt550amgq
+    runtime:
+        sandbox-owner: MARKET
+
+    releases:
+        publish-release:
+            title: Publication into NPM
+            flow: publication-flow
+            auto: true
+            filters:
+                - discovery: dir
+                  sub-paths: ['package.json']
+
+    actions:
+        build-action:
+            title: Build check
+            flow: build-flow
+            triggers:
+                - on: pr
+                  into: trunk
+                  required: true
+
+    flows:
+        build-flow:
+            title: Build check
+            jobs:
+                check-version: *check-version
+                check-typescript: *check-typescript
+                check-eslint: *check-eslint
+
+        publication-flow:
+            title: Publication into NPM
+            jobs:
+                publication-job: *publication-job

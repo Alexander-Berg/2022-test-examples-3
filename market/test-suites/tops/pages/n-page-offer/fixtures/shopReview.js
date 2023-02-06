@@ -1,0 +1,91 @@
+const shopReview = {
+    entity: 'opinion',
+    id: '59843045',
+    type: 0,
+    created: 1537945353000,
+    anonymous: 0,
+    user: {
+        entity: 'user',
+        uid: 100500,
+    },
+    averageGrade: 5,
+    photos: [],
+    grade: {
+        1: null,
+        2: null,
+        3: null,
+        main: 2,
+    },
+    pro: 'Lorem ipsum.',
+    contra: 'Lorem ipsum.',
+    comment: 'Lorem ipsum.',
+    recommend: true,
+    cpa: true,
+    votes: {
+        agree: 0,
+        reject: 0,
+        total: 0,
+    },
+    region: {
+        entity: 'region',
+        id: 213,
+    },
+    factors: [
+        {
+            factorId: 6,
+            value: 5,
+            title: 'Расположение',
+            count: 1,
+        },
+        {
+            factorId: 7,
+            value: 5,
+            title: 'Соответствие товара описанию',
+            count: 1,
+        },
+        {
+            factorId: 2,
+            value: 5,
+            title: 'Общение',
+            count: 1,
+        },
+        {
+            factorId: 5,
+            value: 5,
+            title: 'Ассортимент',
+            count: 1,
+        },
+    ],
+    shop: {
+        entity: 'shop',
+        id: 774,
+    },
+    problem: 'false',
+    resolved: 1,
+    orderId: null,
+    delivery: 2,
+    groupId: null,
+};
+
+const user = {
+    id: '100500',
+    uid: {
+        value: '100500',
+    },
+    display_name: {
+        name: 'someDisplayName',
+        display_name_empty: true,
+        public_name: 'someDisplay N.',
+    },
+    login: '',
+    regname: 'uid-100500',
+    dbfields: {
+        'userinfo.firstname.uid': 'Vasily',
+        'userinfo.lastname.uid': 'Pupkin',
+    },
+};
+
+export {
+    shopReview,
+    user,
+};

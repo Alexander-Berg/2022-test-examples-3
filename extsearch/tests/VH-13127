@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+SCRIPTS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd) #"
+. "${SCRIPTS_DIR}"/config.sh
+
+SRCSETUP_PROVIDE="${SRCSETUP_PROVIDE} COMPOSE_SIGN"
+[ -z "$PROD" ] && . "${SCRIPTS_DIR}"/src_setup
+
+set +e
+
+# https://horizon.z.yandex-team.ru/graphs/svg/VIDEO_HOSTING/video-hosting-signature/_/trunk
+
+#${CURL} 'https://internal.vh.yandex.net/get_signed_url' -X POST -d '{"id": "vT2jWVRveIKM", "skipModerationCheck": "true", "ttl": "1234"}'
+echo ok
+${CURL} "https://internal.vh.yandex.net/get_signed_url?${URL_ADD}${SRCRWR}" -X POST -d '{"id": "vT2jWVRveIKM", "skipModerationCheck": "true"}' \
+    | jq --exit-status '.url'
+echo bad
+! ${CURL} "https://internal.vh.yandex.net/get_signed_url?${URL_ADD}${SRCRWR}" -X POST -d '{"id": "vT2jWVRveIKM", "skipModerationCheck": "true", "ttl":"ooops"}'
+echo big
+! ${CURL} "https://internal.vh.yandex.net/get_signed_url?${URL_ADD}${SRCRWR}" -X POST -d '{"id": "vT2jWVRveIKM", "skipModerationCheck": "true", "ttl":"9999887765"}'
+echo ok
+${CURL} "https://internal.vh.yandex.net/get_signed_url?${URL_ADD}${SRCRWR}" -X POST -d '{"id": "vT2jWVRveIKM", "skipModerationCheck": "true", "ttl":"1234"}' \
+    | jq --exit-status '.url'
+echo bad no sign
+! ${CURL} "https://internal.vh.yandex.net/get_signed_url?${URL_ADD}${SRCRWR}" -X POST -d '{"id": "vT2jWVRveIKM", "skipModerationCheck": "true", "ttl":"5184000"}'
+
+if [ -z "$PROD" ]; then
+echo ok sign
+${CURL} "https://internal.vh.yandex.net/get_signed_url?${URL_ADD}${SRCRWR}" -X POST -d '{"id": "vT2jWVRveIKM", "skipModerationCheck": "true", "ttl":"5184000", "token":"sometesttoken"}'
+fi

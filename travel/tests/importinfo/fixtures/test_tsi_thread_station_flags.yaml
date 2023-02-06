@@ -1,0 +1,62 @@
+www.supplier:
+  ?1:
+    title: Test
+    code: test
+    lmt: '2015-01-01 00:00:00'
+
+importinfo.twostageimportpackage:
+  ?1:
+    title: Test Package
+    supplier: ?1
+
+importinfo.tsithreadstationflag:
+  ?1:
+    package: ?1
+    path_key: Начало$#$g1_vendor_1-->Середина$#$g1_vendor_3-->Конец$#$g1_vendor_2
+    station_key: Середина$#$g1_vendor_3
+    is_fuzzy: true
+    in_station_schedule: false
+  ?2:
+    package: ?1
+    path_key: Начало$#$g1_vendor_1-->Середина$#$g1_vendor_3-->Конец$#$g1_vendor_2
+    station_key: Конец$#$g1_vendor_2
+    is_fuzzy: false
+    is_searchable_from: true
+
+www.station:
+  ?1:
+    t_type: 2
+    title: Начало
+    majority: 2
+    time_zone: Europe/Moscow
+    is_searchable_to: false
+  ?2:
+    t_type: 3
+    title: Конец
+    majority: 2
+    time_zone: UTC
+    is_fuzzy: true
+    is_searchable_from: false
+  ?3:
+    t_type: 3
+    title: Середина
+    majority: 2
+    time_zone: UTC
+
+importinfo.stationmapping:
+  ?1:
+    station: ?1
+    code: g1_vendor_1
+    title: Начало
+    supplier: ?1
+  ?2:
+    station: ?2
+    code: g1_vendor_2
+    title: Конец
+    supplier: ?1
+  ?3:
+    code: g1_vendor_3
+    title: Середина
+    supplier: ?1
+    station: ?3
+

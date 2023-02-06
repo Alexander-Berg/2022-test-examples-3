@@ -1,0 +1,29 @@
+<configuration debug="true">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d] %-5p [%c{3}] [%X{requestId}][%t] %m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="STDOUT" />
+    </appender>
+    <logger name="access.log" level="INFO">
+        <appender-ref ref="ASYNC"/>
+    </logger>
+    <logger name="org" additivity="false" level="INFO">
+        <appender-ref ref="ASYNC"/>
+    </logger>
+    <logger name="org.springframework.test.web.servlet.result" additivity="false" level="DEBUG">
+        <appender-ref ref="ASYNC"/>
+    </logger>
+    <logger name="com" additivity="false" level="INFO">
+        <appender-ref ref="ASYNC"/>
+    </logger>
+    <logger name="payload.log" additivity="false" level="DEBUG">
+        <appender-ref ref="ASYNC"/>
+    </logger>
+    <logger name="ru.yandex" additivity="false" level="DEBUG">
+        <appender-ref ref="ASYNC"/>
+    </logger>
+    <root level="OFF"/>
+</configuration>

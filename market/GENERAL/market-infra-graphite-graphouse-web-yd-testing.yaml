@@ -1,0 +1,140 @@
+juggler:
+  default:
+    check_options: { }
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market-infra-graphite-graphouse-web-testing
+    namespace: market.infra
+    notifications: [ ]
+    refresh_time: 60
+    tags:
+      - market_testing
+      - market-infra-testing
+      - market-infra
+      - market-graphite-testing
+      - market
+    ttl: 900
+    children:
+    - DEPLOY%market-infra@stage=market-infra_market-graphite_testing;deploy_unit=graphite-web
+
+
+  checks:
+
+  # Check UNREACHABLE
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-graphite-graphouse-web-testing&service=UNREACHABLE&last=1DAY&mode=edit
+  - active: icmpping
+    active_kwargs:
+      disable_ipv4: yes
+      use_all_dc: 'false'
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    service: UNREACHABLE
+
+  # Check graphite-web-ping
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-graphite-graphouse-web-testing&service=graphite-web-ping&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /render?target=test_by_juggler
+      warn_codes: []
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+        - crit: 25%
+          day_end: 7
+          day_start: 1
+          time_end: 23
+          time_start: 0
+          warn: 1%
+      nodata_mode: force_crit
+    service: graphite-web-ping
+
+  # Check haproxy-ping
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-graphite-graphouse-web-testing&service=haproxy-ping&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      port: 8081
+      path: /haproxy?stats
+      warn_codes: []
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+        - crit: 25%
+          day_end: 7
+          day_start: 1
+          time_end: 23
+          time_start: 0
+          warn: 1%
+      nodata_mode: force_crit
+    service: haproxy-ping
+
+  # Check graphouse-web-ping
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-graphite-graphouse-web-testing&service=graphouse-web-ping&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      port: 2005
+      path: /ping
+      regexp: ^0;OK
+      warn_codes: []
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+        - crit: 25%
+          day_end: 7
+          day_start: 1
+          time_end: 23
+          time_start: 0
+          warn: 1%
+      nodata_mode: force_crit
+    service: graphouse-web-ping
+
+  # Check graphouse-web-monitoring
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-graphite-graphouse-web-testing&service=graphouse-web-monitoring&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      port: 2005
+      path: /monitoring
+      regexp: ^(0|1);
+      warn_codes: []
+      always_show_body: true
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+        - crit: 25%
+          day_end: 7
+          day_start: 1
+          time_end: 23
+          time_start: 0
+          warn: 1%
+      nodata_mode: force_crit
+    service: graphouse-web-monitoring
+
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    service: fresh-hprof-files
+    check_options:
+      args: ['-log-dir', '/var/log/graphouse', '-glob-pattern', '*.hprof']

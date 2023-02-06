@@ -1,0 +1,45 @@
+uploader:
+  enabled: true
+  package: yandextank.plugins.DataUploader
+  job_name: '[pandora][tst][custom]'
+  job_dsc: ival83
+  ver: sdd
+  api_address: loadtesting.api.cloud.yandex.net:443
+pandora:
+  enabled: true
+  package: yandextank.plugins.Pandora
+  pandora_cmd: #s3 link to binary
+  resources:
+    - src: #s3 link to ammo file
+      dst: ./ammo.json
+  config_content:
+    pools:
+      - id: HTTP
+        gun:
+          type: example
+          target: 172.17.0.5:80
+          ips:
+            - 172.17.0.11
+        ammo:
+          type: example_provider
+          source:
+            type: file
+            path: ./ammo.json
+        result:
+          type: phout
+          destination: ./phout.log
+        startup:
+          type: once
+          times: 1000
+        rps:
+          - duration: 120s
+            type: line
+            from: 1
+            to: 1000
+    log:
+      level: error
+    monitoring:
+      expvar:
+        enabled: true
+        port: 1234
+core: {}

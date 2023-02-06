@@ -1,0 +1,221 @@
+{#
+    Categories:
+        Ca - main category
+        Cb, Cc - forbidden accessory categories
+        Cd - allowed accessory category
+
+    Shops: SI, SII, SIII.
+#}
+{% macro offer(offer_id, model_id, category_id, shop_id, pricing_model="cpa") %}
+    {% if table == "items_offer_category_id" %}
+        ["{{ offer_id }}", "{{ category_id }}", "offer", "{{ day }}"]
+    {% elif table == "items_offer_model_id" %}
+        {% if model_id %}
+            ["{{ offer_id }}", "{{ model_id }}", "offer", "{{ day }}"]
+        {% else %}
+            {#  `model_id` can't be null, but we also can't skip the row (we'll get broken
+                commas). Thus let's just make some trash data which is ignored for sure. #}
+            ["{{ offer_id }}_but_not_really", "whatever", "offer", "{{ day }}"]
+        {% endif %}
+    {% elif table == "items_offer_pricing_model" %}
+        ["{{ offer_id }}", "{{ pricing_model }}", "offer", "{{ day }}"]
+    {% elif table == "items_offer_shop_id" %}
+        ["{{ offer_id }}", "{{ shop_id }}", "offer", "{{ day }}"]
+    {% endif %}
+{% endmacro %}
+
+{% macro recipe(recipe_id, category_id, item_type, item_ids) %}
+    {% if table == "items_recipe_category_id" %}
+        ["{{ recipe_id }}", "{{ category_id }}", "recipe", "{{ day }}"]
+    {% elif table == "features_item_pair_recipe_item_conformity" %}
+        {% for item_id in item_ids %}
+            [
+                "{{ recipe_id }}",
+                "{{ item_id }}",
+                1.0,
+                "recipe",
+                "{{ item_type }}",
+                "{{ day }}"
+            ]
+            {% if not loop.last %},{% endif %}
+        {% endfor %}
+    {% endif %}
+{% endmacro %}
+
+{% macro rule(rule_id, category_id, item_type, item_ids, linked_category_id, linked_item_type, linked_item_ids) %}
+    {% set main_recipe_id = rule_id + "M" %}
+    {% set linked_recipe_id = rule_id + "L" %}
+    {% if table == "items_rule_recipes" %}
+        ["{{ rule_id }}", "{{ main_recipe_id }}", "{{ linked_recipe_id }}", "rule", "{{ day }}"]
+    {% elif table.startswith("items_recipe") or table == "features_item_pair_recipe_item_conformity" %}
+        {{ recipe(main_recipe_id, category_id, item_type, item_ids) }},
+        {{ recipe(linked_recipe_id, linked_category_id, linked_item_type, linked_item_ids) }}
+    {% endif %}
+{% endmacro %}
+
+{% macro offer_view(offer_id) -%}
+    [1503225532000, {}, "view", "offer", "{{ offer_id }}", {}, "{{ day }}"]
+{%- endmacro %}
+
+{% macro clickout(offer_id) -%}
+    [1503225532000, {}, "view", "offer", "{{ offer_id }}", {}, "{{ day }}"]
+{%- endmacro %}
+
+{% macro external_order(offer_id) -%}
+    [1503225532000, {}, "order", "offer", "{{ offer_id }}", {}, "{{ day }}"]
+{%- endmacro %}
+
+{% if table == "sets_offer_accessories_candidates" %}
+    {# Result data. #}
+    {% table "sets_offer_accessories_candidates" %}
+        ["O1Ia",  "M1a", "Ca", "O1Ib",  "M1b", "Cb", "offer", "offer", "{{ day }}"],
+        {% for i in range(max_candidates_per_offer // 8) %}
+            ["O1Ia", "M1a", "Ca", "X{{ i }}Id", null, "Cd", "offer", "offer", "{{ day }}"],
+            ["O1Ia", "M1a", "Ca", "X{{ i + (max_candidates_per_offer // 8) * 2 }}Id", null, "Cd", "offer", "offer", "{{ day }}"],
+            ["O1Ia", "M1a", "Ca", "Y{{ i }}Id", null, "Cd", "offer", "offer", "{{ day }}"],
+            ["O1Ia", "M1a", "Ca", "Y{{ i + (max_candidates_per_offer // 4) * 2 }}Id", null, "Cd", "offer", "offer", "{{ day }}"],
+        {% endfor %}
+        ["O2Ia",  "M2a", "Ca", "O4Ib",  null,  "Cb", "offer", "offer", "{{ day }}"],
+        ["O2Ia",  "M2a", "Ca", "O5Ib",  "M4b", "Cb", "offer", "offer", "{{ day }}"],
+        {% for i in range(max_candidates_per_offer // 8) %}
+            ["O2Ia", "M2a", "Ca", "X{{ i }}Id", null, "Cd", "offer", "offer", "{{ day }}"],
+            ["O2Ia", "M2a", "Ca", "X{{ i + (max_candidates_per_offer // 8) * 2 }}Id", null, "Cd", "offer", "offer", "{{ day }}"],
+        {% endfor %}
+        ["O3IIb", "M1b", "Cb", "O7IIc", "M5c", "Cc", "offer", "offer", "{{ day }}"],
+        ["O3IIb", "M1b", "Cb", "O8IIc", null,  "Cc", "offer", "offer", "{{ day }}"]
+    {% endtable %}
+{% elif table.startswith("items_offer") %}
+    {% table table %}
+        {#  This offer should be ignored completely - it is not CPA. #}
+        {{ offer("O1Ia_cpc", "M1a", "Ca", "SI", "cpc") }},
+        {#  This offer should be ignored - it is not from allowed
+            category and doesn't match any rule. #}
+        {{ offer("O1Ib_from_forbidden_category", None, "Cb", "SI") }},
+        {#  O1Ia and O1Ib match as compatible, but O1Ia and
+            O3IIb don't - they are from different shops. #}
+        {{ offer("O1Ia", "M1a", "Ca", "SI") }},
+        {{ offer("O2Ia", "M2a", "Ca", "SI") }},
+        {{ offer("O1Ib", "M1b", "Cb", "SI") }},
+        {{ offer("O3IIb", "M1b", "Cb", "SII") }},
+        {#  Next offer should match to O2Ia via manual rule offer-offer,
+            but not to O1Ia - it already has compatible accessories from Cb. #}
+        {{ offer("O4Ib", None, "Cb", "SI") }},
+        {#  Next offer should match to O2Ia via manual rule offer-model
+            (but not to O1Ia - it already has compatible accessories from Cb),
+            but the one after it shoudln't - it is from different shop. #}
+        {{ offer("O5Ib", "M4b", "Cb", "SI") }},
+        {{ offer("O6IIb", "M4b", "Cb", "SII") }},
+        {#  Next two offers should match to O3IIb via manual rule offer-category,
+            but the one after them shoudln't - it is from different shop. #}
+        {{ offer("O7IIc", "M5c", "Cc", "SII") }},
+        {{ offer("O8IIc", None, "Cc", "SII") }},
+        {{ offer("O9IIIc", "M5c", "Cc", "SIII") }},
+        {#  These offers from Cd should match to O1Ia and O2Ia. First 1/3 will have external
+            orders, next 1/3 will have views, and the last 1/3 will have clickouts. This the
+            second 1/3 will be filtered out by candidates limit due to smaller sum of actions. #}
+        {% for i in range((max_candidates_per_offer // 8) * 3) %}
+            {{ offer("X%dId" % i, None, "Cd", "SI") }},
+        {% endfor %}
+        {#  Next offer should match to neither O2Ia nor O1Ia (should be
+            filtered out by candidates limit due to zero sum of events). #}
+        {{ offer("O1Id", "M1d", "Cd", "SI") }},
+        {#  These offers from Cd should match O1Ia (but not O2Ia for it will have no pair
+            statistics). First 1/6 will have common external orderer, next 1/6 will have nothing
+            in common, next 1/3 will have common viewer, and the last 1/3 will have common
+            clickouter. This 2/3 of offers will be filtered out by candidates limit due to
+            smaller PMI. #}
+        {% for i in range((max_candidates_per_offer // 4) * 3) %}
+            {{ offer("Y%dId" % i, None, "Cd", "SI") }}
+            {% if not loop.last %},{% endif %}
+        {% endfor %}
+    {% endtable %}
+{% elif table == "items_recipe_filter" %}
+    {% table table %}
+        ["R1M", "some_filter", "recipe", "{{ day }}"],
+        ["R1L", "some_filter", "recipe", "{{ day }}"],
+        ["R2M", "some_filter", "recipe", "{{ day }}"],
+        ["R2L", "some_filter", "recipe", "{{ day }}"],
+        ["R3M", "some_filter", "recipe", "{{ day }}"]
+    {% endtable %}
+{% elif table.startswith("items_r") or table == "features_item_pair_recipe_item_conformity" %}
+    {% table table %}
+        {{ rule("R1", "Ca", "offer", ["O1Ia", "O2Ia"], "Cb", "offer", ["O3IIb", "O4Ib"]) }},
+        {{ rule("R2", "Ca", "offer", ["O1Ia", "O2Ia"], "Cb", "model", ["M4b"]) }},
+        {{ rule("R3", "Cb", "offer", ["O3IIb"], "Cc", "category", ["Cc"]) }}
+    {% endtable %}
+{% elif table == "features_item_pair_offer_offer_average_clickout_pmi" %}
+    {% table "features_item_pair_offer_offer_average_clickout_pmi" %}
+        {% for i in range(max_candidates_per_offer // 4) %}
+            [
+                "O1Ia",
+                "Y{{ i + (max_candidates_per_offer // 4) * 2 }}Id",
+                {{ (-i)|float }},
+                {{ i|float }},
+                "offer",
+                "offer",
+                "{{ day }}"
+            ]
+            {% if not loop.last %},{% endif %}
+        {% endfor %}
+    {% endtable %}
+{% elif table == "features_item_pair_offer_offer_average_external_order_pmi" %}
+    {% table "features_item_pair_offer_offer_average_external_order_pmi" %}
+        {% for i in range(max_candidates_per_offer // 8) %}
+            ["O1Ia", "Y{{ i }}Id", {{ (-i)|float }}, {{ i|float }}, "offer", "offer", "{{ day }}"]
+            {% if not loop.last %},{% endif %}
+        {% endfor %}
+    {% endtable %}
+{% elif table == "features_item_pair_offer_offer_average_view_pmi" %}
+    {% table "features_item_pair_offer_offer_average_view_pmi" %}
+        {% for i in range(max_candidates_per_offer // 4) %}
+            [
+                "O1Ia",
+                "Y{{ i + max_candidates_per_offer // 4 }}Id",
+                {{ (-i)|float }},
+                {{ i|float }},
+                "offer",
+                "offer",
+                "{{ day }}"
+            ]
+            {% if not loop.last %},{% endif %}
+        {% endfor %}
+    {% endtable %}
+{% elif table == "sets_accessory_category_scores" %}
+    {% table "sets_accessory_category_scores" %}
+        ["Ca", "Cd", 1.0, "{{ day }}"]
+    {% endtable %}
+{% elif table == "sets_hardcoded_accessories_hardcoded_accessories" %}
+    {% table "sets_hardcoded_accessories_hardcoded_accessories" %}
+        ["M1a", "Ca but whatever", "M1b", "Cb but whatever", "model but whatever", "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_clickouts" %}
+    {% table "events" %}
+        {% if shift == 0 %}
+            {% for i in range(max_candidates_per_offer // 8) %}
+                {{ clickout("X%dId" % (i + (max_candidates_per_offer // 8) * 2)) }},
+                {{ clickout("X%dId" % (i + (max_candidates_per_offer // 8) * 2)) }}
+                {% if not loop.last %},{% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endtable %}
+{% elif table == "events_external_orders" %}
+    {% table "events" %}
+        {% if shift == 0 %}
+            {% for i in range(max_candidates_per_offer // 8) %}
+                {{ external_order("X%dId" % i) }},
+                {{ external_order("X%dId" % i) }}
+                {% if not loop.last %},{% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endtable %}
+{% elif table == "events_offer_views" %}
+    {% table "events" %}
+        {% if shift == 0 %}
+            {% for i in range(max_candidates_per_offer // 8) %}
+                {{ offer_view("X%dId" % (i + max_candidates_per_offer // 8)) }},
+                {{ offer_view("X%dId" % (i + max_candidates_per_offer // 8)) }}
+                {% if not loop.last %},{% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endtable %}
+{% endif %}

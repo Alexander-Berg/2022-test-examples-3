@@ -1,0 +1,34 @@
+{#
+    What are we testing:
+    * view statistics are accumulated over history (>= 2 days);
+    * models with too few views are ignored.
+#}
+{% if table == "sets_reasons_to_buy_viewed_n_times" %}
+    {# Result data. #}
+    {% table "sets_reasons_to_buy" %}
+        ["M1", "model", "viewed_n_times", "statFactor", 105.0, {}, "{{ day }}"],
+        ["M23_NEW", "model", "viewed_n_times", "statFactor", 101.0, {}, "{{ day }}"],
+        ["M5_NEW1", "model", "viewed_n_times", "statFactor", 102.0, {}, "{{ day }}"],
+        ["M5_NEW2", "model", "viewed_n_times", "statFactor", 102.0, {}, "{{ day }}"]
+    {% endtable %}
+{% elif table == "features_item_model_view_statistics" %}
+    {% table table %}
+        {% if shift == 0 %}
+            ["M1", 500.0, 55.0, "model", "{{ day }}"],
+            ["M2", 800.0, 99.0, "model", "{{ day }}"],
+            ["665187030", 800.0, 69.0, "model", "{{ day }}"],
+            ["M3", 800.0, 2.0, "model", "{{ day }}"],
+            ["M4", 800.0, 8.0, "model", "{{ day }}"]
+        {% elif shift == 1 %}
+            ["M1", 700.0, 50.0, "model", "{{ day }}"],
+            ["M5", 800.0, 102.0, "model", "{{ day }}"]
+        {% endif %}
+    {% endtable %}
+{% elif table == "outlet_model_transitions" %}
+    {% table table %}
+        ["M2", "M23_NEW", "{{ day }}"],
+        ["M3", "M23_NEW", "{{ day }}"],
+        ["M5", "M5_NEW1", "{{ day }}"],
+        ["M5", "M5_NEW2", "{{ day }}"]
+    {% endtable %}
+{% endif %}

@@ -1,0 +1,106 @@
+{% macro article(article_id, type, semantic_id) %}
+    [
+        "{{ semantic_id }}",
+        "text",
+        "{{ type }}",
+        "title",
+        1,
+        "{{ article_id }}",
+        ["nc01"],
+        ["c01"],
+        ["picture"],
+        1506963677001,
+        ["m01"]
+    ]
+{% endmacro %}
+
+{% macro view(timestamp, yandexuid, puid, article_id, type, semantic_id, host, request_id, referer) %}
+    [
+        {{ timestamp }},
+        {
+            "yandexuid": "{{ yandexuid }}",
+            "puid": {% if puid %}"{{ puid }}"{% else %}null{% endif %}
+        },
+        "view",
+        "article",
+        "{{ article_id }}",
+        {
+            "host": "{{ host }}",
+            "referer": {% if referer %}"{{ referer }}"{% else %}null{% endif %},
+            "request_id": "{{ request_id }}",
+            "semantic_id": "{{ semantic_id }}",
+            "type": "{{ type }}"
+        },
+        "{{ day }}"
+    ]
+{% endmacro %}
+
+{% if table == "events_article_views" %}
+    {# Result data. #}
+    {% table "events" %}
+        {{ view(1506963677000, "y1", 1, "1756786", "article", "semantic-id-article", "market.yandex.ru", "50fb99f08444952ac4f4c80ce1b64932", "https://market.yandex.ru/product/13314242") }},
+        {{ view(1506963677000, "y2", null, "2756786", "knowledge", "semantic-id-knowledge", "market.yandex.ru", "50fb99f08444952ac4f4c80ce1b64933", null) }},
+        {{ view(1506963677000, "y3", null, "1756786", "article", "semantic-id-article", "m.market.yandex.ru", "3a78353ec4193654888b6d58d207ac9a", null) }},
+        {{ view(1506963677000, "y4", 4, "2756786", "knowledge", "semantic-id-knowledge", "m.market.yandex.ru", "3a78353ec4193654888b6d58d207ac92", "https://m.market.yandex.ru/product/13314242") }}
+    {% endtable %}
+{% elif table == "mstat_analyst_market_access_log" %}
+    {
+        "schema": [
+            {
+                "name": "timestamp",
+                "type": "String?"
+            },
+            {
+                "name": "timezone",
+                "type": "String?"
+            },
+            {
+                "name": "status",
+                "type": "String?"
+            },
+            {
+                "name": "request",
+                "type": "String?"
+            },
+            {
+                "name": "canonized_vhost",
+                "type": "String?"
+            },
+            {
+                "name": "page_id",
+                "type": "String?"
+            },
+            {
+                "name": "req_id",
+                "type": "String?"
+            },
+            {
+                "name": "yandexuid",
+                "type": "String?"
+            },
+            {
+                "name": "puid",
+                "type": "Uint64?"
+            },
+            {
+                "name": "referer",
+                "type": "String?"
+            }
+        ],
+        "records": [
+            ["2017-10-02T20:01:17", "+0300", "200", "/journal/knowledge/semantic-id-knowledge", "m.market.yandex.ru", "touch:journal-article", "3a78353ec4193654888b6d58d207ac92", "y4", 4, "https://m.market.yandex.ru/product/13314242"],
+            ["2017-10-02T20:01:17", "+0300", "200", "/journal/articles/semantic-id-article", "m.market.yandex.ru", "touch:journal-article", "3a78353ec4193654888b6d58d207ac9a", "y3", null, null],
+            ["2017-10-02T20:01:17", "+0300", "200", "/journal/knowledge/semantic-id-knowledge?page=1", "market.yandex.ru", "market:journal-article", "50fb99f08444952ac4f4c80ce1b64933", "y2", null, null],
+            ["2017-10-02T20:01:17", "+0300", "200", "/journal/articles/semantic-id-article?page=1", "market.yandex.ru", "market:journal-article", "50fb99f08444952ac4f4c80ce1b64932", "y1", 1, "https://market.yandex.ru/product/13314242"],
+            
+            {# filtered out #}
+            ["2017-10-02T20:01:17", "+0300", "200", "/product--braslet-samsung-galaxy-fit/475729020/questions?track=tabs", "m.market.yandex.ru", "touch:product-questions", "2a08b5d961bd482afa932b0395c5c704", "y1", 1, null]
+        ]
+    }
+{% elif table == "dj_article" %}
+    {% table table %}
+        {{ article("1756786", "article", "semantic-id-article") }},
+        {{ article("2756786", "knowledge", "semantic-id-knowledge") }},
+        {{ article("fake", "fake", "fake") }}
+    {% endtable %}
+{% endif %}

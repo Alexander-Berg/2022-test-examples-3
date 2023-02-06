@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+# Usage:
+# ./test
+# PROD=1 ./test
+# NO_BUILD=1 ./test
+# YA_MAKE_ADD=--sanitize=address ./test
+
+
+CUR_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd) #"
+
+failed=0
+
+for file in `find ${CUR_DIR}/tests/ -type f -executable -print | sort`; do
+    echo -n "$file: "
+    if [ -z "$VERBOSE" ]; then
+        $file > /dev/null 2>&1
+    else
+        $file
+    fi
+    code=$?
+    if [ $code -ne 0 ]; then
+        echo FAIL $code
+        failed=$(($failed + 1))
+    else
+        echo OK
+    fi
+done
+
+if [ $failed -ne 0 ]; then
+        echo FAIL $failed
+else
+        echo OK
+fi
+
+exit $failed

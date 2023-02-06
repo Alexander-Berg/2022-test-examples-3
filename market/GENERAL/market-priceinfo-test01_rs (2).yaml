@@ -1,0 +1,42 @@
+- name: market-priceinfo-test01f.db.yandex.net
+  cluster_id: b685155c-7443-4278-92c8-da344c368f66
+  zone_id: myt
+  resources:
+    resource_preset_id: db1.nano
+    disk_size: "37580963840"
+    disk_type_id: local-ssd
+  role: MASTER
+  health: ALIVE
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+    health: ALIVE
+- name: market-priceinfo-test01h.db.yandex.net
+  cluster_id: b685155c-7443-4278-92c8-da344c368f66
+  zone_id: sas
+  resources:
+    resource_preset_id: db1.nano
+    disk_size: "37580963840"
+    disk_type_id: local-ssd
+  health: DEAD
+  services:
+  - type: POSTGRESQL
+  - type: POOLER
+    health: ALIVE
+- name: market-priceinfo-test01i.db.yandex.net
+  cluster_id: b685155c-7443-4278-92c8-da344c368f66
+  zone_id: man
+  resources:
+    resource_preset_id: db1.nano
+    disk_size: "37580963840"
+    disk_type_id: local-ssd
+  role: REPLICA
+  health: ALIVE
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+    health: ALIVE
+  replica_type: ASYNC
+

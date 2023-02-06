@@ -1,0 +1,29 @@
+#pragma once
+
+constexpr char ThumbsMetaInfo[] = R"(
+50x50
+55x70
+60x80
+74x100
+75x75
+90x120
+100x100
+120x160
+150x150
+180x240
+190x250
+200x200
+240x320
+300x300
+300x400
+600x600
+600x800
+900x1200
+1x1
+)";
+
+
+constexpr unsigned TH_50x50 = 1 << 0;
+constexpr unsigned TH_100x100 = 1 << 6;
+constexpr unsigned TH_300x300 = 1 << 13;
+constexpr unsigned TH_1x1 = 1 << 18;

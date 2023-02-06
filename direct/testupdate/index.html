@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+{%load attr%}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Табула/Обновление тестовых контейнеров</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/releaser.css" media="all"/>
+    <link href="{{ MEDIA_URL }}/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 10px; /* to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+        {% include "index/header.html" %}    
+        <br>
+        <h1> Обновление ТС</h1>
+        <br>
+        <br>
+        <a href="/versionica/property?group=packages&host_group=test">Версионика</a>
+        <br>
+        <a href="/testupdate/logindex">Логи обновлений</a>
+        <br>
+        <br>
+        {% if may_register_versions %}
+        <h2> Зарегистрировать версию </h2>
+        <p>
+        <form action="/testupdate/aready" method=get>
+            Версия <input type="text" name="version" style="width: 260px;" value="">
+            <p>
+            <input type=submit value="Зарегистрировать" class="btn">
+        </form>
+        {% endif %} 
+        <form action="/testupdate/steady">
+        <div class="row" style="font-size:150%">
+            <div class="span6">
+                <h2>Контейнеры:</h2>
+                <br>
+                {% for t in testservers %}
+                <label class="checkbox">
+                    <input type="checkbox" name="testserver" value="{{t.alias}}" 
+                    {% for t2 in testservers_to_update %}  {% ifequal t.alias t2 %} checked {% endifequal %} {% endfor %} >
+                    &nbsp;{{t.alias}} / {{ t.description }} ({{t.version}})
+                </label>
+                {% endfor %}
+                <br>
+                <br>
+                <br>
+                <button type="submit" class="btn btn-large btn-primary">Обновляем...</button>
+            </div>
+            <div class="span4">
+            <h2>Версии:</h2>
+            <br>
+            {% for v in ready_versions %}
+            <label class="radio">
+                <input type="radio" name="version" value="{{ v }}" {% ifequal v version_to_install %} checked {% endifequal %} > {{ v }}
+            </label>
+            {% endfor %}
+            </div>
+        </div>
+        </form>
+    </div> <!-- /container -->
+  </body>
+</html>

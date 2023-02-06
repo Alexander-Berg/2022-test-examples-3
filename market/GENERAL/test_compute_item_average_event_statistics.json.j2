@@ -1,0 +1,42 @@
+{% if "_average_" in table %}
+    {# Result data. #}
+    {% table table %}
+        [
+            "I",
+            {{ (history - 1.0) }},
+            {{ 2.0 * (history - 1.0) }},
+            "{{ item_type }}",
+            "{{ day }}"
+        ]
+    {% endtable %}
+{% else %}
+    {% set user_type = (event_type[:-1] if event_type.endswith("e") else event_type) + "er" -%}
+    {
+        "schema": [
+            {
+                "name": "item_id",
+                "type": "String",
+                "ordering": "ascending"
+            },
+            {
+                "name": "{{ event_type }}_count",
+                "type": "Float"
+            },
+            {
+                "name": "{{ user_type }}_count",
+                "type": "Float"
+            },
+            {
+                "name": "item_type",
+                "type": "String"
+            },
+            {
+                "name": "day",
+                "type": "String"
+            }
+        ],
+        "records": [
+            ["I", {{ 2.0 * shift }}, {{ 4.0 * shift }}, "{{ item_type }}", "{{ day }}"]
+        ]
+    }
+{% endif %}

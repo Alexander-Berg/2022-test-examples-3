@@ -1,0 +1,780 @@
+{
+    "type": "object",
+    "properties": {
+        "url_event_name": {
+            "type": "string",
+            "enum": ["SubSourceRequest"]
+        },
+        "features": {
+            "type": ["object", "null"],
+            "properties": {}
+        },
+        "navi": {
+            "type": "object"
+        },
+        "restrictionsUrlParams": {
+            "type": "string"
+        },
+        "related": {
+            "type": "null"
+        },
+        "i18n": {
+            "required": ["domain", "language", "project"],
+            "type": "object",
+            "properties": {
+                "project": {
+                    "enum": ["serp"],
+                    "type": "string"
+                },
+                "domain": {
+                    "enum": ["web"],
+                    "type": "string"
+                },
+                "language": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 2
+                }
+            }
+        },
+        "logo": {
+            "type": ["object", "null"],
+            "properties": {}
+        },
+        "reqparam": {
+            "additionalProperties": false,
+            "type": "object",
+            "properties": {
+                "rearr": {
+                    "items": [
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "type": "array"
+                },
+                "uil": {
+                    "items": [
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "type": "array"
+                },
+                "relev": {
+                    "items": [
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "type": "array"
+                },
+                "text": {
+                    "items": [
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "type": "array"
+                }
+            }
+        },
+        "voicedata": {
+            "type": "null"
+        },
+        "localization": {
+            "additionalProperties": false,
+            "required": ["applicable", "is_normal", "region", "session_lr", "top", "unlocalized"],
+            "type": "object",
+            "properties": {
+                "yandex_tld": {
+                    "type": "string",
+                    "minLength": 2
+                },
+                "region": {
+                    "$ref": "core.json#region"
+                },
+                "applicable": {
+                    "type": "integer"
+                },
+                "unlocalized": {
+                    "type": "integer"
+                },
+                "session_lr": {
+                    "type": "string"
+                },
+                "top": {
+                    "type": "integer"
+                },
+                "is_normal": {
+                    "type": "integer"
+                }
+            }
+        },
+        "cgidata": {
+            "required": ["args", "hostname", "order", "path", "scheme", "text"],
+            "type": "object",
+            "properties": {
+                "hostname": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
+                },
+                "args": {
+                    "type": "object"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "scheme": {
+                    "type": "string"
+                },
+                "order": {
+                    "items": [
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "type": "array"
+                }
+            }
+        },
+        "search_props": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "REPORT": {
+                    "items": [
+                        {
+                            "required": ["properties"],
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "properties": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "is_nav_request": {
+                                            "type": "number"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "type": "array"
+                },
+                "WEB": {
+                    "items": [
+                        {
+                            "required": ["properties"],
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "properties": {
+                                    "type": "object",
+                                    "properties": {}
+                                }
+                            }
+                        }
+                    ],
+                    "type": "array"
+                },
+                "WEB_MISSPELL": {
+                    "items": [
+                        {
+                            "required": ["properties"],
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "properties": {
+                                    "type": "object",
+                                    "properties": {}
+                                }
+                            }
+                        }
+                    ],
+                    "type": "array"
+                },
+                "UPPER": {
+                    "items": [
+                        {
+                            "required": ["properties"],
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "properties": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "DirectOff": {
+                                            "type": "number"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "type": "array"
+                }
+            }
+        },
+        "blackbox": {
+            "type": ["object", "null"],
+            "properties": {
+                "type": { "type": "string", "enum": ["blackbox"] },
+                "phones": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": ["phone"],
+                        "properties": {
+                            "phone": {
+                                "type": "array",
+                                "minItems": 1,
+                                "items": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "_has_mailbox": {
+                    "type": "integer",
+                    "enum": [0, 1]
+                },
+                "dbfield": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": ["content", "id"],
+                        "additionalProperties": false,
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "minLength": 1
+                            },
+                            "content": {
+                                "type": "string",
+                                "minLength": 1
+                            }
+                        }
+                    }
+                },
+                "sids": { "type": "array" },
+                "display_name": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "array",
+                                "minItems": 1,
+                                "items": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "required": ["content"],
+                                    "properties": {
+                                        "content": {
+                                            "type": "string",
+                                            "minLength": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "nahodki": {
+            "required": ["present", "reqtime", "text"],
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": ["null", "string"]
+                },
+                "reqtime": {
+                    "type": "integer"
+                },
+                "present": {
+                    "type": "integer"
+                }
+            }
+        },
+        "newRestrictions": {
+            "items": [
+                {
+                    "required": ["type"],
+                    "type": "object",
+                    "properties": {
+                        "region": { "$ref": "core.json#region" },
+                        "type": {
+                            "type": "string"
+                        },
+                        "rstr": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ],
+            "type": "array"
+        },
+        "sorter": {
+            "required": ["links", "mode"],
+            "type": ["null", "object"],
+            "properties": {
+                "mode": {
+                    "type": "string"
+                },
+                "links": {
+                    "required": ["date", "relev"],
+                    "type": "object",
+                    "properties": {
+                        "date": {
+                            "type": "string"
+                        },
+                        "relev": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "ajax": {
+            "type": "null"
+        },
+        "promofooter_mobile": {
+            "type": ["object", "null"],
+            "properties": {}
+        },
+        "promofooter": {
+            "type": ["object", "null"],
+            "properties": {}
+        },
+        "report": {
+            "type": "string"
+        },
+        "actual_data": {
+            "required": ["inline_distribution_settings"],
+            "type": "object",
+            "properties": {
+                "inline_distribution_settings": {
+                    "required": ["VB", "alt", "home", "set", "set_home"],
+                    "type": "object",
+                    "properties": {
+                        "home": {
+                            "required": ["height", "text"],
+                            "type": "object",
+                            "properties": {
+                                "text": {
+                                    "type": "string"
+                                },
+                                "height": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "VB": {
+                            "required": ["height", "text"],
+                            "type": "object",
+                            "properties": {
+                                "text": {
+                                    "type": "string"
+                                },
+                                "height": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "set": {
+                            "required": ["height", "text"],
+                            "type": "object",
+                            "properties": {
+                                "text": {
+                                    "type": "string"
+                                },
+                                "height": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "set_home": {
+                            "required": ["height", "text"],
+                            "type": "object",
+                            "properties": {
+                                "text": {
+                                    "type": "string"
+                                },
+                                "height": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "alt": {
+                            "required": ["height", "text"],
+                            "type": "object",
+                            "properties": {
+                                "text": {
+                                    "type": "string"
+                                },
+                                "height": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "banner": {
+            "type": "object"
+        },
+        "wizard_text": {
+            "type": "string"
+        },
+        "restrictions": {
+            "items": [
+                {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "op": {
+                            "type": "string",
+                            "enum": ["<<"]
+                        },
+                        "no_area_text": {
+                            "type": "integer"
+                        },
+                        "text": {
+                            "type": "string"
+                        },
+                        "type": {
+                            "type": "string"
+                        },
+                        "need_text": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            ],
+            "type": "array"
+        },
+        "search": {
+            "required": ["__is_plain", "is_porno_query", "request_wizards", "text"],
+            "type": "object",
+            "properties": {
+                "is_porno_query": {
+                    "type": "integer"
+                },
+                "request_wizards": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "SubquerySearch": {
+                            "required": ["name", "props", "result"],
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "result": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "props": {
+                                    "required": ["Output"],
+                                    "type": "object",
+                                    "properties": {
+                                        "Output": {
+                                            "required": ["name", "vals"],
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "vals": {
+                                                    "items": [
+                                                        {
+                                                            "type": "string"
+                                                        }
+                                                    ],
+                                                    "type": "array"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "NavigateSource": {
+                            "required": ["name", "props", "result"],
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "result": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "props": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "Output": {
+                                            "required": ["name", "vals"],
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "vals": {
+                                                    "items": [
+                                                        {
+                                                            "type": "string"
+                                                        }
+                                                    ],
+                                                    "type": "array"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "NavigateSource": {
+                                            "required": ["name", "vals"],
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "vals": {
+                                                    "items": [
+                                                        {
+                                                            "type": "string"
+                                                        }
+                                                    ],
+                                                    "type": "array"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "__is_plain": {
+                    "type": "integer",
+                    "enum": [1]
+                },
+                "__package": {
+                    "type": "string",
+                    "pattern": "^YxWeb::"
+                },
+                "text": {
+                    "required": ["__is_plain", "filter", "forms_list", "language", "restrictions_by_name",
+                        "text", "word_count"],
+                    "type": "object",
+                    "properties": {
+                        "forms_list": {
+                            "items": [
+                                {
+                                    "type": "string"
+                                }
+                            ],
+                            "type": "array"
+                        },
+                        "language": {
+                            "type": "string"
+                        },
+                        "text": {
+                            "type": "string"
+                        },
+                        "restrictions_by_name": {
+                            "type": "object",
+                            "properties": {}
+                        },
+                        "word_count": {
+                            "type": "integer"
+                        },
+                        "filter": {
+                            "required": ["text"],
+                            "type": "object",
+                            "properties": {
+                                "text": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "__is_plain": {
+                            "type": "integer",
+                            "enum": [1]
+                        },
+                        "__package": {
+                            "type": "string",
+                            "pattern": "^YxWeb::"
+                        }
+                    }
+                }
+            }
+        },
+        "__paths": {
+            "required": ["YxWeb::Search::Text"],
+            "type": "object",
+            "properties": {
+                "YxWeb::Util::Region": {
+                    "items": [
+                        {
+                            "items": [
+                                {
+                                    "type": ["integer", "string"]
+                                }
+                            ],
+                            "type": "array"
+                        }
+                    ],
+                    "type": "array"
+                },
+                "YxWeb::Search::Reask": {
+                    "items": [
+                        {
+                            "items": [
+                                {
+                                    "type": ["integer", "string"]
+                                }
+                            ],
+                            "type": "array"
+                        }
+                    ],
+                    "type": "array"
+                },
+                "YxWeb::Search::Text": {
+                    "items": [
+                        {
+                            "items": [
+                                {
+                                    "type": ["integer", "string"]
+                                }
+                            ],
+                            "type": "array"
+                        }
+                    ],
+                    "type": "array"
+                },
+                "YxWeb::Search": {
+                    "items": [
+                        {
+                            "type": ["integer", "string"]
+                        }
+                    ],
+                    "type": "array"
+                }
+            }
+        },
+        "reqdata": { "$ref": "types.json#reqdata" },
+        "langSwitcher": {
+            "anyOf": [
+                {"type": "null"},
+                {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["current", "list"],
+                    "properties": {
+                        "current": {"$ref": "core.json#language"},
+                        "list": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {"$ref": "core.json#language"}
+                        }
+                    }
+                }
+            ]
+        },
+        "filter": {
+            "required": ["enabled", "links"],
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "integer"
+                },
+                "links": {
+                    "required": ["clean", "dirty"],
+                    "type": "object",
+                    "properties": {
+                        "dirty": {
+                            "type": "string"
+                        },
+                        "clean": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "restrictionsByName": {
+            "type": ["object", "null"],
+            "properties": {}
+        },
+        "searchdata": {
+            "required": ["docs", "docs_right", "highlight_qtree", "highlight_text",
+                "numdocs", "numitems", "reask", "abuse_link"],
+            "type": "object",
+            "properties": {
+                "abuse_link": {
+                    "type": ["null", "string"],
+                    "pattern": "^https?://[^/]+/search/abuse?"
+                },
+                "docs_right": {
+                    "items": { "$ref": "types.json#doc_common" },
+                    "type": "array"
+                },
+                "docs": {
+                    "items": { "$ref": "types.json#doc_common" },
+                    "type": "array"
+                },
+                "highlight_text": {
+                    "type": "string"
+                },
+                "highlight_qtree": {
+                    "type": "string"
+                },
+                "numitems": {
+                    "type": "integer"
+                },
+                "err_text": {
+                    "type": "string"
+                },
+                "numdocs": {
+                    "type": "integer"
+                },
+                "reask": {
+                    "oneOf" : [
+                        { "type": "null" },
+                        { "type": "object", "properties": {}, "additionalProperties": false },
+                        { "$ref": "types.json#reask" }
+                    ]
+                },
+                "err_code": {
+                    "oneOf": [
+                        { "type": "integer" },
+                        { "type": "string" }
+                    ]
+                }
+            }
+        },
+        "entry": {
+            "type": "string"
+        },
+        "distribution": {
+            "type": ["object", "null"],
+            "properties": {}
+        },
+        "wizplaces": {
+            "type": "object"
+        }
+    }
+}

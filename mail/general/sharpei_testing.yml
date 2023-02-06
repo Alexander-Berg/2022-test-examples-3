@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  gather_facts: false
+  vars:
+    host: 'mailsharpei.mail-sharpei-testing-nanny'
+    prj: 'mail'
+    app: 'sharpei'
+    env: 'testing'
+    component: 'sharpei'
+    children:
+      - 'NANNY%{{ prj }}_{{ app }}_{{ env }}'
+  tasks:
+    - include_vars: templates/common_vars
+    - juggler_facts: jserver_api=http://juggler.search.yandex.net:8998/api
+    - include: templates/sharpei_check
+    - juggler_cleanup: jcheck_mark={{ host }}

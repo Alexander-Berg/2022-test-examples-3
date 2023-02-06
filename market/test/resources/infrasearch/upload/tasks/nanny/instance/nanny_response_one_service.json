@@ -1,0 +1,277 @@
+{
+  "result": [
+    {
+      "runtime_attrs": {
+        "content": {
+          "instance_spec": {},
+          "instances": {
+            "iss_settings": {
+              "instance_cls": "ru.yandex.iss.Instance",
+              "hooks_resource_limits": {
+                "iss_hook_validate": {
+                  "io_policy": "normal",
+                  "cpu_policy": "normal"
+                },
+                "iss_hook_notify": {
+                  "io_policy": "normal",
+                  "cpu_policy": "normal"
+                },
+                "iss_hook_reopenlogs": {
+                  "io_policy": "normal",
+                  "cpu_policy": "normal"
+                },
+                "iss_hook_install": {
+                  "io_policy": "normal",
+                  "cpu_policy": "normal"
+                },
+                "iss_hook_uninstall": {
+                  "io_policy": "normal",
+                  "cpu_policy": "normal"
+                },
+                "iss_hook_stop": {
+                  "io_policy": "normal",
+                  "cpu_policy": "normal"
+                },
+                "iss_hook_status": {
+                  "io_policy": "normal",
+                  "cpu_policy": "normal"
+                }
+              }
+            },
+            "instance_list": [],
+            "gencfg_groups": [],
+            "chosen_type": "EXTENDED_GENCFG_GROUPS",
+            "extended_gencfg_groups": {
+              "groups": [
+                {
+                  "release": "trunk",
+                  "name": "MAN_SQR3",
+                  "limits": {
+                    "io_policy": "normal",
+                    "cpu_policy": "normal"
+                  },
+                  "tags": []
+                }
+              ],
+              "tags": []
+            }
+          },
+          "resources": {
+            "services_balancer_config_files": [],
+            "url_files": [
+              {
+                "is_dynamic": false,
+                "url": "https://proxy.sandbox.yandex-team.ru/183644562",
+                "local_path": "sqrt3"
+              }
+            ],
+            "sandbox_files": [
+              {
+                "is_dynamic": false,
+                "resource_type": "INSTANCECTL",
+                "local_path": "instancectl",
+                "task_type": "BUILD_INSTANCE_CTL",
+                "task_id": "42778912"
+              },
+              {
+                "is_dynamic": false,
+                "resource_type": "ISS_HOOK_START",
+                "local_path": "iss_hook_start",
+                "task_type": "BUILD_INSTANCE_CTL",
+                "task_id": "42778912"
+              },
+              {
+                "is_dynamic": false,
+                "resource_type": "ISS_HOOK_STATUS",
+                "local_path": "iss_hook_status",
+                "task_type": "BUILD_INSTANCE_CTL",
+                "task_id": "42778912"
+              }
+            ],
+            "static_files": [
+              {
+                "is_dynamic": false,
+                "content": "[defaults]\nenv_match = ^ENV_(.*)$\nopt_match = ^OPT_(.*)$\n\n[sqrt3]\nbinary = sqrt3\narguments = \":%(BSCONFIG_IPORT)s\"\t\nstatus_script = curl -s -f -o /dev/null -m 1 \"http://localhost:%(BSCONFIG_IPORT)s/sqrt3/64\"",
+                "local_path": "instancectl.conf"
+              }
+            ],
+            "template_set_files": [],
+            "l7_fast_balancer_config_files": []
+          },
+          "engines": {
+            "engine_type": "ISS"
+          }
+        },
+        "parent_id": "aa676d67e6ee3af73c68c7bdc37d9b01ec48c158",
+        "_id": "5854342d9dadb772674964f513f6956c1c8ccc98",
+        "change_info": {
+          "comment": "",
+          "ctime": 1479908702766,
+          "author": "belmatter"
+        },
+        "meta_info": {
+          "startrek_tickets": [],
+          "scheduling_config": {
+            "scheduling_priority": "NONE"
+          },
+          "is_disposable": false,
+          "annotations": {}
+        }
+      },
+      "auth_attrs": {
+        "content": {
+          "observers": {
+            "logins": [],
+            "groups": []
+          },
+          "owners": {
+            "logins": [
+              "belmatter"
+            ],
+            "groups": []
+          },
+          "conf_managers": {
+            "logins": [
+              "belmatter"
+            ],
+            "groups": []
+          },
+          "ops_managers": {
+            "logins": [
+              "belmatter"
+            ],
+            "groups": []
+          }
+        },
+        "_id": "a065eee6f71f046526aec980deb26b6647f5a383",
+        "change_info": {
+          "comment": "Initial commit",
+          "ctime": 1479906179012,
+          "author": "belmatter"
+        }
+      },
+      "current_state": {
+        "content": {
+          "is_paused": {
+            "info": {
+              "comment": "Resume actions.",
+              "ctime": 1479907935439,
+              "author": "belmatter"
+            },
+            "value": false
+          },
+          "rollback_snapshot": {},
+          "active_snapshots": [
+            {
+              "taskgroup_id": "search-0003533244",
+              "state": "ACTIVE",
+              "entered": 1479908793755,
+              "conf_id": "belmatter_testing_service-1479908702766",
+              "snapshot_id": "5854342d9dadb772674964f513f6956c1c8ccc98"
+            }
+          ],
+          "summary": {
+            "entered": 1479908793779,
+            "value": "ONLINE"
+          }
+        },
+        "entered": 1479908793837,
+        "_id": "1031fbe11836771a17e2a05816820967a45a7720"
+      },
+      "info_attrs": {
+        "content": {
+          "category": "/market/test/belmatter/",
+          "ui_settings": {},
+          "balancers_integration": {
+            "auto_update_services_balancers": false
+          },
+          "recipes": {
+            "content": [
+              {
+                "context": [],
+                "labels": [],
+                "id": "default",
+                "name": "_activate_only_service_configuration.yaml",
+                "desc": "Activate"
+              }
+            ],
+            "prepare_recipes": [
+              {
+                "context": [],
+                "labels": [],
+                "id": "default",
+                "name": "_prepare_service_configuration.yaml",
+                "desc": "Prepare"
+              }
+            ]
+          },
+          "labels": [
+            {
+              "value": "man",
+              "key": "geo"
+            }
+          ],
+          "tickets_integration": {
+            "service_release_rules": [],
+            "service_release_tickets_enabled": false
+          },
+          "monitoring_settings": {},
+          "cms_settings": {
+            "cms_stub_policy": "SKIP"
+          },
+          "scheduling_policy": {
+            "type": "NONE"
+          },
+          "desc": "belmatter testing service"
+        },
+        "parent_id": "8af3776776713676e57b95299a3745a3e8454903",
+        "_id": "4264ecddb8d79877cbe46f91520f9a9eb51e8391",
+        "change_info": {
+          "comment": "RUNTIMECLOUD-4428: set cms_stub_policy: SKIP",
+          "ctime": 1513185415922,
+          "author": "alonger"
+        }
+      },
+      "target_state": {
+        "info": {
+          "comment": "-",
+          "ctime": 1479908736393,
+          "author": "belmatter"
+        },
+        "content": {
+          "is_enabled": true,
+          "info": {
+            "comment": "-",
+            "ctime": 1479908719944,
+            "author": "belmatter"
+          },
+          "recipe_parameters": [],
+          "snapshot_meta_info": {
+            "startrek_tickets": [],
+            "scheduling_config": {
+              "scheduling_priority": "NONE"
+            },
+            "is_disposable": false,
+            "annotations": {}
+          },
+          "labels": [],
+          "recipe": "default",
+          "snapshot_info": {
+            "comment": "",
+            "ctime": 1479908702766,
+            "author": "belmatter"
+          },
+          "prepare_recipe": "default",
+          "snapshots": [],
+          "snapshot_id": "5854342d9dadb772674964f513f6956c1c8ccc98",
+          "tracked_tickets": {
+            "tickets": [],
+            "startrek_tickets": []
+          }
+        },
+        "_id": "765d063504444e6f4e630671d1a255e539422060"
+      },
+      "_id": "belmatter_testing_service"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+type: ydeploy
+beta:
+  ydeploy:
+    templateStageId: sitesearch-serp-test_testing-beta
+    stage:
+      meta:
+        id: sitesearch-serp-test_testing-beta-${BETA_SLUG}
+      spec:
+        deploy_units:
+          DeployUnit1:
+            images_for_boxes:
+              box_docker:
+                tag: ${DOCKER_IMAGE_TAG}
+  awacs:
+    namespace: webmaster-balancer.test.yandex.ru
+    backends:
+      - meta:
+          auth:
+            type: STAFF
+            staff:
+              owners:
+                logins:
+                  - borisovdenis
+                  - robot-frontend
+                groupIds: []
+          namespaceId: webmaster-balancer.test.yandex.ru
+          id: ${BETA_SLUG}
+        spec:
+          selector:
+            balancers: []
+            gencfgGroups: []
+            ypEndpointSets:
+              - cluster: sas
+                endpointSetId: sitesearch-serp-test_testing-beta-${BETA_SLUG}.DeployUnit1
+            nannySnapshots: []
+            type: YP_ENDPOINT_SETS
+            allowEmptyYpEndpointSets: false
+    upstreams:
+      - meta:
+          auth:
+            type: STAFF
+            staff:
+              owners:
+                logins:
+                  - borisovdenis
+                  - robot-frontend
+                groupIds: []
+          namespaceId: webmaster-balancer.test.yandex.ru
+          id: ${BETA_SLUG}
+        spec:
+          labels:
+            order: "10000000"
+          type: YANDEX_BALANCER
+          yandex_balancer:
+            mode: EASY_MODE2
+            config:
+              l7_upstream_macro:
+                version: 0.0.1
+                id: ${BETA_SLUG}
+                matcher:
+                  host_re: ${BETA_SLUG}.sst.pr.yandex.ru
+                flat_scheme:
+                  balancer:
+                    attempts: 2
+                    fast_attempts: 2
+                    max_reattempts_share: 0.15
+                    max_pessimized_endpoints_share: 0.2
+                    retry_http_responses:
+                      codes:
+                        - 5xx
+                    backend_timeout: 10s
+                    connect_timeout: 70ms
+                  backend_ids:
+                    - ${BETA_SLUG}
+                  on_error:
+                    static:
+                      status: 504
+                      content: "Service unavailable"

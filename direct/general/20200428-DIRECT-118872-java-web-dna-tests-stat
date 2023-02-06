@@ -1,0 +1,50 @@
+#/usr/bin/perl
+# https://st.yandex-team.ru/DIRECT-118872#5ea2ca006e37d316b4bd1731
+
+use JSON;
+use strict;
+use warnings;
+
+my $jenkins_url = "https://jenkins-direct.qart.yandex-team.ru/job/direct-test-ci/job/run_dna_tests";
+my $current_job = 576;
+my $jobs_left = 40;
+my $attempts_left = 200;
+
+sub get_children {
+    my ($data)=@_;
+    if (!$data->{children}) {
+        return ([$data->{suitePath}, $data->{status}])
+    } else {
+        my @children = @{$data->{children}};
+        return map {get_children($_)} @children  
+    };
+}
+
+while ($jobs_left > 0 && $attempts_left > 0) {
+    my $job_info = from_json(`curl -s "$jenkins_url/$current_job/api/json"`);
+    my @actions = @{ $job_info->{actions} };
+    my $is_launched_from_java_release = 0;
+    for my $action (@actions) {
+        my @causes = @{ $action->{causes} // [] };
+        $is_launched_from_java_release = grep { $_->{shortDescription} // '' =~ /Started by.*run_java_release_tests/ } @causes;
+        last if $is_launched_from_java_release;
+    }
+    next unless $is_launched_from_java_release;
+    my $report_json = `curl -s $jenkins_url/$current_job/HTML_20Report/data.js | sed -e 's/^var data = //'  -e '/^try/d' -e 's/;\$//'`;
+    my $report = eval { from_json($report_json) };
+    if (!$report) {
+        warn "extracting data for $current_job failed: $@";
+        next;
+    }
+    my @suites = @{ $report->{suites} };
+    for my $suite (@suites) {
+        my @results = get_children($suite);
+        for my $result (@results) {
+            print join("\t", $current_job, to_json($result->[0]), $result->[1]) . "\n";
+        }
+    }
+    $jobs_left--;
+} continue {
+    $current_job--;
+    $attempts_left--;
+}

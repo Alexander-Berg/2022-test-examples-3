@@ -1,0 +1,31 @@
+yt:
+  proxy: localhost
+  pool: crypta_lookalike
+
+lals_table: //home/crypta/qa/lookalike/scopes/test_scope/lals
+versions_dir: //home/crypta/qa/lookalike/scopes/test_scope/versions
+errors_dir: //home/crypta/qa/lookalike/scopes/test_scope/errors/segment_dssm_applier
+errors_ttl_days: 3
+
+mapper:
+  mode: ALL
+  writer:
+    pqlib:
+      worker_threads: 1
+      compression_threads: 1
+      grpc_threads: 1
+
+    credentials:
+      use_secure_tvm: False
+
+    producer:
+      server: localhost
+      port: 8080
+      topic: default-topic
+      source_id_prefix: yt
+      log_name: pqlib
+      max_bytes_in_flight: 104857600
+      max_chunk_size_bytes: 10240
+      max_flush_interval_seconds: 1
+      producers_count: 1
+      bind_producers_to_partitions: false

@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+[ -z "${KEEP}" ] && set -e
+
+SCRIPTS_DIR=$(ya dump root)/extsearch/video/vh/scripts/
+. "${SCRIPTS_DIR}"/config.sh
+[ -z "$PROD" ] && . "${SCRIPTS_DIR}"/redis_service
+SRCSETUP_PROVIDE="${SRCSETUP_PROVIDE} MERGE"
+[ -z "$PROD" ] && . "${SCRIPTS_DIR}"/src_setup
+[ -z "$PROD" ] && . "${SCRIPTS_DIR}"/apphost
+. "${SCRIPTS_DIR}"/util
+
+. "${SCRIPTS_DIR}"/redis_service_tracks_fill
+
+redis-cli -h "${REDIS_HOST}" -a "${REDIS_PASSWORD}" dbsize ||:
+
+#export SRCRWR="${SRCRWR}&srcrwr=DOWNLOADS_TRACKS:music-web-ext.music.qa.yandex.net:80:10000000"
+
+set -x
+
+# ab -r -c300 -n5000 "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/tracks_meta?${URL_ADD}${SRCRWR}&TrackIds=2" ||:
+
+# prod debug:
+#${ARCADIA_ROOT}/apphost/tools/grpc_client/grpc_client --proto-to-json -a "${HOST}:${REDIS_SERVICE_GRPC}/tracks_meta" -c '{ "answers": [  {"binary":"CgSv5JUX","type":"tracks_meta_request","__content_type":"protobuf"} ] }'
+#${ARCADIA_ROOT}/apphost/tools/grpc_client/grpc_client -a "${HOST}:${REDIS_SERVICE_GRPC}/tracks_meta" -c '{ "answers": [  {"binary":"CgSv5JUX","type":"tracks_meta_request","__content_type":"protobuf"} ] }'
+
+# valid:
+${ARCADIA_ROOT}/apphost/tools/grpc_client/grpc_client --proto-to-json -a "${HOST}:${REDIS_SERVICE_GRPC}/tracks_meta" -c '{ "answers": [  {  "source": "FAKE_NODE",  "codec": "lz4",  "type": "http_request", "__content_type": "json", "binary": {    "TrackIds": [1, 3, 42], "tracks_request":"test1"  }  }  ] }'
+${ARCADIA_ROOT}/apphost/tools/grpc_client/grpc_client --proto-to-json -a "${HOST}:${REDIS_SERVICE_GRPC}/tracks_meta" -c '{ "answers": [  {  "source": "FAKE_NODE",  "type": "http_request", "__content_type": "json", "binary": { "TrackIds": [1]  }  }  ] }'
+${ARCADIA_ROOT}/apphost/tools/grpc_client/grpc_client --proto-to-json -a "${HOST}:${REDIS_SERVICE_GRPC}/tracks_meta" -c '{ "answers": [  {  "source": "FAKE_NODE",  "type": "http_request", "__content_type": "json", "binary": { "content" : "{ \"TrackIds\": [1] }" }  }  ] }'
+# unexistent:
+
+if [ -z "$NO_BROKEN" ]; then
+
+# unexistent:
+! ${ARCADIA_ROOT}/apphost/tools/grpc_client/grpc_client --proto-to-json -a "${HOST}:${REDIS_SERVICE_GRPC}/tracks_meta" -c '{ "answers": [  {  "source": "FAKE_NODE",  "codec": "lz4",  "type": "request", "__content_type": "json", "binary": { "TrackIds": [1939482749]  }  }  ] }'
+# broken:
+! ${ARCADIA_ROOT}/apphost/tools/grpc_client/grpc_client --proto-to-json -a "${HOST}:${REDIS_SERVICE_GRPC}/tracks_meta" -c '{ "answers": [  {  "source": "FAKE_NODE",  "codec": "lz4",  "type": "content", "__content_type": "json", "binary": {  "TrackIds": 1, "tracks_request":"test1"  }  }  ] }'
+
+#${CURL} -v -H 'X-Test-Mode: True' --request POST "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/tracks_meta?${URL_ADD}${SRCRWR}" --data-raw ''
+#${CURL} -v -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/tracks_meta?${URL_ADD}${SRCRWR}"
+#${CURL} -v -H 'X-Test-Mode: True' --request POST "http://${APPHOST_HOST}:${APPHOST_BASE}/${APPHOST_URL_ADD}video-hosting-tracks-meta"
+#${CURL} -v -H 'X-Test-Mode: True' --request POST "http://${APPHOST_HOST}:${APPHOST_HTTP}/?${URL_ADD}${SRCRWR}&graph=video-hosting-tracks-meta"
+
+! ${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/tracks_meta?${URL_ADD}${SRCRWR}&otherparam=lol"
+! ${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/tracks_meta?${URL_ADD}${SRCRWR}&TrackIds="
+! ${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/tracks_meta?${URL_ADD}${SRCRWR}&TrackIds=1sometrash"
+
+! ${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/tracks_meta?${URL_ADD}${SRCRWR}" --data-raw '{ "TrackIds" : [ "1string" ] }'
+! ${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/tracks_meta?${URL_ADD}${SRCRWR}" --data-raw '{ "TrackIds" : { "babax":1 } }'
+! ${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/tracks_meta?${URL_ADD}${SRCRWR}" --data-raw '{ "somekey":123 }'
+! ${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/tracks_meta?${URL_ADD}${SRCRWR}" --data-raw '{ "TrackIds" : [ {"sometrash":123 }, 72020573 ] }'
+! ${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/tracks_meta?${URL_ADD}${SRCRWR}" --data-raw 'не очень жсонка'
+fi
+
+
+${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/tracks_meta?${URL_ADD}${SRCRWR}&TrackIds=2" \
+    | jq --exit-status '.Tracks[0].Title == "Poor Old Man (Mono version)" and .Tracks[0].CoverPath'
+${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/tracks_meta?${URL_ADD}${SRCRWR}" --data-raw '{ "TrackIds" : [ 1 ] }' \
+    | jq --exit-status '.Tracks[0].Title'
+
+if [ -n "$TEST" ]; then
+${CURL} "https://vh.test.yandex.ru/tracks_meta?${URL_ADD}${SRCRWR}&TrackIds=3" \
+    | jq --exit-status '.Tracks[0].Title and .Tracks[0].TrackId == 3'
+${CURL} "https://vh.test.yandex.ru/tracks_meta?${URL_ADD}${SRCRWR}&TrackIds=4,5,87570651,72020553" \
+    | jq --exit-status '.Tracks[0].Title and .Tracks[0].TrackId == 4 and .Tracks[2].TrackId == 87570651'
+${CURL} "https://vh.test.yandex.ru/tracks_meta?${URL_ADD}${SRCRWR}" --header 'Content-Type: application/json' --data-raw '{ "TrackIds" : [ 6, 7, 87570651, 49902186 ] }' \
+    | jq --exit-status '.Tracks[3].Title and .Tracks[3].TrackId == 49902186'
+fi
+
+${CURL} "https://internal.vh.yandex.net/tracks_meta?${URL_ADD}${SRCRWR}&TrackIds=3" \
+    | jq --exit-status '.Tracks[0].Title and .Tracks[0].TrackId == 3'
+${CURL} "https://internal.vh.yandex.net/tracks_meta?${URL_ADD}${SRCRWR}&TrackIds=4,5,87570651,72020553" \
+    | jq --exit-status '.Tracks[0].Title and .Tracks[0].TrackId == 4 and .Tracks[2].TrackId == 87570651'
+${CURL} "https://internal.vh.yandex.net/tracks_meta?${URL_ADD}${SRCRWR}" --header 'Content-Type: application/json' --data-raw '{ "TrackIds" : [ 6, 7, 87570651, 49902186 ] }' \
+    | jq --exit-status '.Tracks[3].Title and .Tracks[3].TrackId == 49902186'
+
+
+# combined handler
+${CURL} "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/music_url_tracks_meta?${URL_ADD}${SRCRWR}&TrackIds=72020574" \
+    | jq --exit-status '.Tracks[0].Title and .Tracks[0].TrackId == 72020574 and .Tracks[0].CoverPath and .Tracks[0].Url'
+
+${CURL} "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/music_url_tracks_meta?${URL_ADD}${SRCRWR}" --data-raw '{ "TrackIds" : [ 72020575 ] }' \
+    | jq --exit-status '.Tracks[0].Title and .Tracks[0].TrackId == 72020575  and .Tracks[0].CoverPath and .Tracks[0].Url'
+
+${CURL} "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/music_url_tracks_meta?${URL_ADD}${SRCRWR}&TrackIds=2" \
+    | jq --exit-status '.Tracks[0].Title and .Tracks[0].TrackId == 2 and .Tracks[0].CoverPath'
+
+# 100% removed
+# https://yt.yandex-team.ru/hahn/navigation?path=//home/music-data/music-metadata-v2/urgently-removed-tracks/last
+${CURL} "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/music_url_tracks_meta?${URL_ADD}${SRCRWR}&TrackIds=116560" \
+    | jq --exit-status '.Tracks[0].Title | not'
+
+${CURL} "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/music_url_tracks_meta?${URL_ADD}${SRCRWR}&TrackIds=72020574,72020575" \
+    | jq --exit-status '.Tracks[0].Title and .Tracks[0].TrackId == 72020574 and .Tracks[0].CoverPath and .Tracks[0].Url'
+
+
+if [ -n "$TEST" ]; then
+${CURL} "https://vh.test.yandex.ru/music_url_tracks_meta?${URL_ADD}${SRCRWR}&TrackIds=72020574" \
+    | jq --exit-status '.Tracks[0].Title and .Tracks[0].TrackId == 72020574 and .Tracks[0].CoverPath and .Tracks[0].Url'
+fi
+
+${CURL} "https://internal.vh.yandex.net/music_url_tracks_meta?${URL_ADD}${SRCRWR}&TrackIds=72020574" \
+    | jq --exit-status '.Tracks[0].Title and .Tracks[0].TrackId == 72020574 and .Tracks[0].CoverPath and .Tracks[0].Url'
+
+
+# cache works?:
+${CURL} "https://internal.vh.yandex.net/tracks_meta?${URL_ADD}${SRCRWR}&TrackIds=4,5,87570651,72020553"
+${CURL} "https://internal.vh.yandex.net/tracks_meta?${URL_ADD}${SRCRWR}&TrackIds=4,5,87570651,72020553" \
+    | jq --exit-status '.Tracks[0].Title and .Tracks[0].TrackId == 4'
+${CURL} "https://internal.vh.yandex.net/tracks_meta?${URL_ADD}${SRCRWR}&TrackIds=4,7,8,87570651,72020553" \
+    | jq --exit-status '.Tracks[4].Title and .Tracks[4].TrackId == 72020553'

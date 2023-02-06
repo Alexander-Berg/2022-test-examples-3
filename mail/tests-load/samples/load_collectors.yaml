@@ -1,0 +1,68 @@
+console: {enabled: true, package: yandextank.plugins.Console}
+telegraf: {enabled: false, package: yandextank.plugins.Telegraf}
+phantom: {enabled: false, package: yandextank.plugins.Phantom}
+uploader:
+  task: 'LOAD-264'
+  job_name: '[ya collectors][test]'
+  operator: f2nd
+pandora:
+  enabled: true
+  pandora_cmd: ./new_collectors
+  report_file: joined.log
+  config_content:
+    pools:
+      - gun:
+          type: "collector_http_gun"
+          target: "collectors.loadtest.collectors.mail.stable.qloud-d.yandex.net:3048"
+        ammo:
+          type: "collector_http_provider"
+          source: # You may just write file path here. Or stdin.
+            type: file
+            path: ping.ammo
+        result:
+          type: phout
+          destination: ./phout_ping.log
+        rps:
+          - {duration: 40s, type: const,  ops: 2}
+        startup:
+          type: once
+          times: 5
+      - gun:
+          type: "collector_http_gun"
+          target: "collectors.loadtest.collectors.mail.stable.qloud-d.yandex.net:3048"
+        ammo:
+          type: "collector_http_provider"
+          source: # You may just write file path here. Or stdin.
+            type: file
+            path: create.ammo
+        result:
+          type: phout
+          destination: ./phout_create.log
+        rps:
+          - {duration: 10s, type: const,  ops: 2}
+        startup:
+          type: once
+          times: 5
+
+      - gun:
+          type: "collector_pg_gun"
+          host: "pgload03e.mail.yandex.net"
+          port: 6432
+          database: "maildb"
+          user: "mxfront"
+        ammo:
+          type: "collector_pg_provider"
+          source: # You may just write file path here. Or stdin.
+            type: file
+            path: pg.ammo
+        result:
+          type: phout
+          destination: ./phout_pg.log
+        rps:
+          - {duration: 30s, type: line, from: 5, to: 5}
+        startup:
+          - {duration: 10s, type: const, ops: 0}
+          - {type: once, times: 5}
+shellexec:
+  prepare: 'tail -q -F ./phout_create.log ./phout_ping.log ./phout_pg.log > joined.log &'
+  post_process: 'kill $(pgrep tail); rm phout*log'

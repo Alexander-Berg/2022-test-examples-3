@@ -1,0 +1,137 @@
+-   kind: array
+    items:
+        kind: string
+        extendProps: {}
+    extendProps: {}
+    id: [extDef, A]
+-   kind: array
+    items:
+        kind: reference
+        to: [extDef, A]
+        extendProps: {}
+    extendProps: {uniqueItems: true}
+    id: [extDef, B]
+-   kind: record
+    fields:
+    -   name: a
+        value:
+            kind: array
+            items:
+                kind: reference
+                to: [extDef, A]
+                extendProps: {}
+            extendProps:
+                additionalItems:
+                    a: {a: string}
+                maxItems: 10
+                minItems: 1
+                uniqueItems: false
+        required: true
+    -   name: b
+        value:
+            kind: reference
+            to: [extDef, B]
+            extendProps: {}
+        required: true
+    -   name: c
+        value:
+            kind: string
+            extendProps: {maxLength: 1, minLength: 1, pattern: '/[a-z]+/i', format: email}
+        required: true
+    -   name: d
+        value:
+            kind: number
+            repr: f64
+            extendProps: {multipleOf: 1, maximum: 10, exclusiveMaximum: 10, minimum: 1, exclusiveMinimum: 1}
+        required: true
+    -   name: e
+        value:
+            kind: array
+            items:
+                kind: string
+                extendProps: {}
+            extendProps: {minProperties: 1, maxProperties: 2}
+        required: true
+    -   name: f
+        value:
+            kind: array
+            items:
+                kind: record
+                fields:
+                -   name: a
+                    value:
+                        kind: literal
+                        value: string
+                        extendProps: {}
+                    required: true
+                extendProps: {maxProperties: 1}
+            extendProps: {uniqueItems: false}
+        required: true
+    -   name: g
+        value:
+            kind: literal
+            value: g
+            extendProps: {title: lol, description: kek, lol: kek}
+        required: true
+    -   name: h
+        value:
+            kind: union
+            variants:
+            -   kind: literal
+                value: h
+                extendProps: {title: lol, description: kek}
+            -   kind: literal
+                value: kek
+                extendProps: {}
+            extendProps: {}
+        required: true
+    -   name: i
+        value:
+            kind: union
+            variants:
+            -   kind: literal
+                value: i
+                extendProps: {}
+            -   kind: literal
+                value: I
+                extendProps: {}
+            extendProps: {title: i}
+        required: true
+    -   name: j
+        value:
+            kind: intersection
+            parts:
+            -   kind: literal
+                value: j
+                extendProps: {}
+            -   kind: literal
+                value: J
+                extendProps: {}
+            extendProps: {title: j}
+        required: true
+    -   name: k
+        value:
+            kind: union
+            variants:
+            -   kind: literal
+                value: k1
+                extendProps: {}
+            -   kind: literal
+                value: k2
+                extendProps: {}
+            extendProps: {title: k}
+        required: true
+    -   name: l
+        value:
+            kind: intersection
+            parts:
+            -   kind: literal
+                value: l1
+                extendProps: {}
+            -   kind: literal
+                value: l2
+                extendProps: {}
+            extendProps: {title: l}
+        required: true
+    extendProps: {}
+    id: [extDef, X]

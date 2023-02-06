@@ -1,0 +1,21 @@
+context:
+  default:
+    service_name: b2b_fapi
+    servername_regexp: 'b2b-fapi\\.tst\\.(vs\\.)?market\\.yandex\\.(net|ru)'
+    vs: b2b_fapi
+    health_check: '"GET /ping HTTP/1.1\r\nHost: b2b-fapi.tst.vs.market.yandex.net\r\n\r\n"'
+    attempts: 1
+    antirobot: True
+    antirobot_service_name: market_other
+    balancing_method: "active"
+    cert: b2b-fapi.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+
+servers:
+  default:
+    main:
+      - name: "GREY%b2b-fapi.tst.vs.market.yandex.net"
+        timeout: "35s"
+        port: 80
+        plain_http_backend: True

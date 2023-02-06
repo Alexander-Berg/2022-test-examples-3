@@ -1,0 +1,322 @@
+PRAGMA AnsiInForEmptyOrNullableItemsCollections;
+
+$white_info = (
+SELECT DISTINCT
+    sc.shop_id AS partner_id,
+    String::Strip(String::ReplaceAll(sc.domain, 'www.', '')) AS domain,
+    p.client_id AS client_id,
+    nvl(oi.ogrn, oi.registration_number) AS ogrn,
+    sc.region AS region
+FROM :partnerInfoTable AS p
+    JOIN :shopCRMTable AS sc
+        ON CAST (p.partner_id AS Int64) = sc.shop_id
+    JOIN :organizationInfoTable AS oi
+        ON sc.shop_id = oi.datasource_id
+WHERE p.service_id = 'SHOP' AND sc.is_alive = 1
+);
+
+$blue_info = (
+SELECT DISTINCT
+    shop_id,
+    String::Strip(String::ReplaceAll(s.domain, 'www.', '')) AS domain,
+    client_id,
+    hi.ogrn AS ogrn
+FROM :suppliersFullTable AS s
+    JOIN :extendedRequestHistoryTable AS hi
+        ON CAST (hi.datasource_id AS Int64) = s.shop_id
+where s.is_enabled = true
+);
+
+$regions = (
+SELECT id, ru_name, type, country_ru_name, parent_id
+FROM :regionsTable
+);
+
+$fed0 = (
+SELECT id, ru_name
+FROM $regions
+WHERE type = 4 AND country_ru_name = "Россия"
+);
+
+$fed1 = (
+SELECT ch.id AS id, p.ru_name AS ru_name
+FROM $fed0 AS p JOIN $regions AS ch
+    ON p.id = ch.parent_id);
+
+$fed2 = (
+SELECT ch.id AS id, p.ru_name AS ru_name
+FROM $fed1 AS p JOIN $regions AS ch
+    ON p.id = ch.parent_id
+);
+
+$fed3 = (
+SELECT ch.id AS id, p.ru_name AS ru_name
+FROM $fed2 AS p JOIN $regions AS ch
+    ON p.id = ch.parent_id
+);
+
+$fed4 = (
+SELECT ch.id AS id, p.ru_name AS ru_name
+FROM $fed3 AS p JOIN $regions AS ch
+    ON p.id = ch.parent_id
+);
+
+$fed5 = (
+SELECT ch.id AS id, p.ru_name AS ru_name
+FROM $fed4 AS p JOIN $regions AS ch
+    on p.id = ch.parent_id
+);
+
+$fed6 = (
+SELECT ch.id AS id, p.ru_name AS ru_name
+FROM $fed5 AS p JOIN $regions AS ch
+    ON p.id = ch.parent_id
+);
+
+$fed7 = (
+SELECT ch.id AS id, p.ru_name AS ru_name
+FROM $fed6 AS p JOIN $regions AS ch
+    ON p.id = ch.parent_id
+);
+
+-- Определяем федеральный округ для регионов
+$fed = (
+SELECT * FROM $fed1
+UNION ALL
+SELECT * FROM $fed2
+UNION ALL
+SELECT * FROM $fed3
+UNION ALL
+SELECT * FROM $fed4
+UNION ALL
+SELECT * FROM $fed5
+UNION ALL
+SELECT * FROM $fed6
+UNION ALL
+SELECT * FROM $fed7
+);
+
+-- убираем магазины у которых есть синие с тем же client_id, domain или ogrn
+-- пока ограничиваем тремя федеральными округами
+$shops_fed = (
+SELECT DISTINCT w.partner_id AS shop_id, f.ru_name AS region
+FROM (
+    SELECT w.*
+    FROM (
+        SELECT w.*
+        FROM $white_info AS w
+            LEFT JOIN $blue_info AS b
+                ON w.client_id = b.client_id
+        WHERE b.shop_id IS NULL) AS w
+        LEFT JOIN $blue_info AS b
+            ON w.domain = b.domain
+    WHERE b.shop_id IS NULL) AS w
+    LEFT JOIN $blue_info AS b
+        ON w.ogrn = b.ogrn
+    LEFT JOIN $fed AS f
+        ON w.region = f.id
+WHERE b.shop_id IS NULL AND f.ru_name IN
+("Центральный федеральный округ", "Северо-Западный федеральный округ", "Южный федеральный округ")
+);
+
+$shops_without_excluded = (
+SELECT DISTINCT sf.shop_id as shop_id
+FROM $shops_fed AS sf LEFT JOIN :shopsExcludedTable AS se
+    ON sf.shop_id = se.shop_id
+WHERE se.shop_id IS NULL
+);
+
+-- это рабочий код, который пока неактивен по причине ребрендинга - требуется отмашка от юристов
+-- $replace = Re2::Replace('(?:www\\.)?((?:[А-Яа-яA-Za-z0-9-]+\\.)*[А-Яа-яA-Za-z0-9-]+)\\.[А-Яа-яA-Za-z0-9-]+$');
+-- $domains = (
+--     SELECT domain FROM (
+--             SELECT $replace(domain, '\\1') as domain FROM  :mstatDatasources
+--         )
+--         WHERE domain is not null and domain != ''
+--         GROUP BY domain
+--         having count(domain) <= 10
+-- );
+-- $blue_white_domain_link = (
+-- SELECT body.shop_id, body.supplier_id FROM
+--     (SELECT blue_shops.id AS supplier_id, white_shops.id AS shop_id,
+--             (CASE WHEN blue_param.num_value IS NOT NULL AND blue_param.num_value = white_param.num_value THEN 1
+--                      WHEN  blue_param.num_value IS NULL AND white_param.num_value = 213 THEN 1
+--                      ELSE 0 END) AS can_stop_blue_price
+--             FROM (SELECT white_datasource.id AS id, $replace(white_datasource.domain, '\\1') AS domain
+--                     FROM :mstatShops AS white_shop
+--                     JOIN :mstatDatasources AS white_datasource
+--                         ON white_shop.shop_id = white_datasource.id
+--                     WHERE  white_datasource.domain is not null and white_datasource.domain != '' and $replace(white_datasource.domain, '\\1') in $domains
+--                     GROUP BY white_datasource.id, white_datasource.domain
+--                     HAVING COUNT(*) = 1) AS white_shops
+--             JOIN (SELECT blue_datasource.id AS id, $replace(blue_datasource.domain, '\\1')  AS domain
+--                     FROM :mstatDatasources AS blue_datasource
+--                     JOIN :mstatSuppliers AS blue_shop
+--                         ON blue_datasource.id = cast(blue_shop.id  AS int64)
+--                     WHERE blue_datasource.domain is not null and blue_datasource.domain != '' and $replace(blue_datasource.domain, '\\1') in $domains
+--                     GROUP BY blue_datasource.id, blue_datasource.domain
+--                     HAVING COUNT(*) = 1) AS blue_shops
+--                 ON white_shops.domain = blue_shops.domain
+--             JOIN :mstatParams AS white_param
+--                 ON white_shops.id = white_param.entity_id
+--             JOIN :mstatParams AS blue_param
+--                 ON blue_shops.id = blue_param.entity_id
+--             WHERE white_shops.domain != '' and blue_shops.domain != ''
+--                 and white_param.param_type_id = 21 AND blue_param.param_type_id = 21) AS body
+--     WHERE body.can_stop_blue_price = 1
+--     GROUP BY shop_id, supplier_id
+--);
+
+
+$blue_white_ogrn_link = (
+    SELECT blue_white_link.datasource_id AS shop_id, blue_white_link.supplier_id AS supplier_id
+     FROM :mappingTable as blue_white_link
+    WHERE can_stop_blue_price = 1
+    GROUP BY blue_white_link.datasource_id, blue_white_link.supplier_id
+    UNION ALL
+    SELECT shop_id, null AS supplier_id
+    FROM $shops_without_excluded
+);
+
+$blue_white_shops = (
+    SELECT shop_id, supplier_id
+    FROM (--SELECT shop_id, supplier_id FROM $blue_white_domain_link
+            --UNION ALL
+            SELECT shop_id, supplier_id FROM $blue_white_ogrn_link) AS blue_white_shops
+    GROUP BY blue_white_shops.shop_id, blue_white_shops.supplier_id
+);
+
+-- проверяем, что среди выбираемых белых оферов нет тех, по которым есть синие офыера с этим же msku и с supllier_id синего кабинета
+$blue_offers_market_sku = (
+    SELECT supplier_id, market_sku
+        FROM :offersTable
+        WHERE is_blue_offer = true AND market_sku IS NOT NULL
+);
+
+$white_offers = (
+    SELECT *
+        FROM :offersTable
+        WHERE is_blue_offer = false
+);
+
+-- проверяем, что msku белого офера находится в статусе PROCESSED и по нему есть синие офера на любом кабинете
+$blue_msku_with_processed_offers = (SELECT data_id AS msku FROM (
+    SELECT ms.data.id AS data_id FROM :mboSkuTable AS ms
+        JOIN :mbocOffersTable AS mo
+            ON ms.data.id = mo.approved_market_sku_id
+        WHERE ms.blue_published = true
+            AND mo.processing_satus = 'PROCESSED'
+    ) GROUP BY data_id
+);
+
+$categories = (
+    select ce.* from :categoriesTable as ce
+);
+
+INSERT INTO :resultTable WITH TRUNCATE
+SELECT *
+    FROM (SELECT * FROM (
+    SELECT
+        cast(nvl(sorted_shops.supplier_id, sorted_shops.shop_id) AS int64) as supplier_id,
+        cast(white_offer.feed_id AS int64) AS feed_id,
+        white_offer.offer_id as offer_id,
+        NULL as disabled,
+        white_offer.shop_sku AS shop_sku,
+        white_offer.market_sku AS market_sku,
+        white_offer.title AS name,
+        NULL AS availability,
+        shop_categories.name AS category,
+        white_offer.barcode AS barcode,
+        white_offer.price AS price,
+        NULL AS vat,
+        white_offer.oldprice AS old_price,
+        white_offer.vendor_string AS vendor,
+        white_offer.vendor_code AS vendor_code,
+        white_offer.description AS description,
+        NULL AS manufacturer,
+        NULL AS country_of_origin,
+        NULL AS period_of_validity_days,
+        NULL AS comment_validity_days,
+        NULL AS service_life_days,
+        NULL AS comment_life_days,
+        NULL AS warranty_days,
+        NULL AS comment_warranty,
+        NULL AS transport_unit,
+        cast(white_offer.min_quantity AS int64) AS min_delivery_pieces,
+        NULL AS quantum,
+        NULL AS delivery_weekdays,
+        NULL AS leadtime,
+        white_offer.url AS url,
+        NULL AS box_count,
+        (case when coalesce(white_offer.width, 0) > 0 and coalesce(white_offer.height, 0) > 0  and coalesce(white_offer.length, 0) > 0
+            then cast(white_offer.length as string) || '/' || cast(white_offer.width as string) || '/' || cast(white_offer.height as string)
+            else null
+            end)  AS dimensions,
+        (case when coalesce(white_offer.weight,0) > 0
+            then white_offer.weight
+            else null
+            end) AS weight,
+        NULL AS tn_ved_code,
+        blue_offer.market_sku AS msku_existence
+    FROM $white_offers AS white_offer
+        JOIN $blue_white_shops AS sorted_shops
+            ON sorted_shops.shop_id = white_offer.shop_id
+        JOIN $blue_msku_with_processed_offers AS bmwpo
+            ON white_offer.market_sku = bmwpo.msku
+        LEFT JOIN $blue_offers_market_sku AS blue_offer
+            ON sorted_shops.supplier_id = blue_offer.supplier_id AND white_offer.market_sku = blue_offer.market_sku
+        LEFT JOIN $categories AS shop_categories
+            ON cast(white_offer.shop_category_id as Uint64) = shop_categories.hid
+        WHERE white_offer.market_sku IS NOT NULL
+    UNION ALL
+    SELECT
+        cast(nvl(sorted_shops.supplier_id, sorted_shops.shop_id) AS int64) as supplier_id,
+        cast(white_offer.feed_id AS int64) AS feed_id,
+        white_offer.offer_id as offer_id,
+        NULL as disabled,
+        white_offer.shop_sku AS shop_sku,
+        white_offer.market_sku AS market_sku,
+        white_offer.title AS name,
+        NULL AS availability,
+        shop_categories.name AS category,
+        white_offer.barcode AS barcode,
+        white_offer.price AS price,
+        NULL AS vat,
+        white_offer.oldprice AS old_price,
+        white_offer.vendor_string AS vendor,
+        white_offer.vendor_code AS vendor_code,
+        white_offer.description AS description,
+        NULL AS manufacturer,
+        NULL AS country_of_origin,
+        NULL AS period_of_validity_days,
+        NULL AS comment_validity_days,
+        NULL AS service_life_days,
+        NULL AS comment_life_days,
+        NULL AS warranty_days,
+        NULL AS comment_warranty,
+        NULL AS transport_unit,
+        cast(white_offer.min_quantity AS int64) AS min_delivery_pieces,
+        NULL AS quantum,
+        NULL AS delivery_weekdays,
+        NULL AS leadtime,
+        white_offer.url AS url,
+        NULL AS box_count,
+        (case when coalesce(white_offer.width, 0) > 0 and coalesce(white_offer.height, 0) > 0  and coalesce(white_offer.length, 0) > 0
+            then cast(white_offer.length as string) || '/' || cast(white_offer.width as string) || '/' || cast(white_offer.height as string)
+            else null
+            end)  AS dimensions,
+        (case when coalesce(white_offer.weight,0) > 0
+            then white_offer.weight
+            else null
+            end) AS weight,
+        NULL AS tn_ved_code,
+        NULL AS msku_existence
+        FROM $white_offers AS white_offer
+        JOIN $blue_white_shops AS sorted_shops
+            ON sorted_shops.shop_id = white_offer.shop_id
+        JOIN $categories AS shop_categories
+            ON white_offer.category_id = shop_categories.hid
+        WHERE shop_categories.data.accept_good_content = true
+                and shop_categories.data.not_used = false) AS s WHERE s.msku_existence IS NULL)
+        GROUP BY supplier_id, feed_id, offer_id, disabled, shop_sku, market_sku, name, availability, category, barcode, price, vat, old_price, vendor, vendor_code, description, manufacturer, country_of_origin, period_of_validity_days, comment_validity_days, service_life_days, comment_life_days, warranty_days, comment_warranty, transport_unit, min_delivery_pieces, quantum, delivery_weekdays, leadtime, url, box_count, dimensions, weight, tn_ved_code, msku_existence
+        ORDER BY supplier_id;

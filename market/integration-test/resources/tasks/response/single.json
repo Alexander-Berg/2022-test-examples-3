@@ -1,0 +1,130 @@
+{
+  "meta": {
+    "fields": [
+      {
+        "name": "queueName",
+        "title": "Очередь",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "payload",
+        "title": "Параметры",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "createTime",
+        "title": "Время создания",
+        "type": "DATE_TIME",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "processTime",
+        "title": "Запланированное время обработки",
+        "type": "DATE_TIME",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "attempt",
+        "title": "Попытка",
+        "type": "NUMBER",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "maxAttempt",
+        "title": "Максимум попыток",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "retryCompleted",
+        "title": "Попытки исчерпаны",
+        "type": "BOOLEAN",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      }
+    ],
+    "actions": [
+      {
+        "title": "Перевыставить",
+        "description": "Перевыставить задачу прямо сейчас",
+        "slug": "reenqueue/single",
+        "identifiedBy": [],
+        "type": "ROW_ACTION",
+        "method": "POST_BODY",
+        "icon": null,
+        "authorities": [
+          "ROLE_DB_QUEUE_RUN"
+        ]
+      },
+      {
+        "title": "Удалить",
+        "description": "Удалить задачу. Не прервёт выполнение, если задача уже запущена на одном из хостов",
+        "slug": "remove/single",
+        "identifiedBy": [],
+        "type": "ROW_ACTION",
+        "method": "POST_BODY",
+        "icon": null,
+        "authorities": [
+          "ROLE_DB_QUEUE_REMOVE"
+        ]
+      }
+    ],
+    "mode": "VIEW",
+    "deletable": false,
+    "children": [
+      {
+        "slug": "dbqueue/log",
+        "idFieldName": "id",
+        "isCrossPluginSlug": false,
+        "pageSize": 10,
+        "title": "Доп. информация о запусках",
+        "type": "GRID",
+        "parentColumn": "taskId",
+        "parentSlug": ""
+      }
+    ],
+    "tabs": []
+  },
+  "item": {
+    "id": 1,
+    "values": {
+      "queueName": "test.queue.1",
+      "payload": "{\"a\":1, \"b\":2}",
+      "createTime": "2020-01-01T07:00:00Z",
+      "processTime": "2020-01-03T08:00:00Z",
+      "attempt": 2,
+      "maxAttempt": "2",
+      "retryCompleted": true
+    },
+    "title": "Задача DB Queue"
+  }
+}

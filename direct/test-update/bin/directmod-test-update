@@ -1,0 +1,17 @@
+#!/bin/bash -e
+
+case "$1" in
+test1)
+ssh updater@direct-mod-test.yandex.ru ${*:2}
+;;
+test2)
+ssh updater@direct-mod-test2.yandex.ru ${*:2}
+;;
+ppcmoddev-all)
+ssh updater@ppcmoddev1.yandex.ru ${*:2} && ssh updater@ppcmoddev2.yandex.ru ${*:2}
+;;
+*)
+echo "unknown alias $1"
+echo "available aliases: test1|test2|ppcmoddev-all"
+;;
+esac

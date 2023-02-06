@@ -1,0 +1,45 @@
+- name: man-3oxlipp0w781qghj.db.yandex.net
+  cluster_id: mdb445oddbcqdk5mu9n6
+  zone_id: man
+  resources:
+    resource_preset_id: s2.nano
+    disk_size: "10737418240"
+    disk_type_id: local-ssd
+  role: MASTER
+  health: ALIVE
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+    health: ALIVE
+  priority: "0"
+- name: sas-dhw2bw6qkmuskal5.db.yandex.net
+  cluster_id: mdb445oddbcqdk5mu9n6
+  zone_id: sas
+  resources:
+    resource_preset_id: s2.nano
+    disk_size: "10737418240"
+    disk_type_id: local-ssd
+  role: REPLICA
+  health: ALIVE
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+    health: ALIVE
+  priority: "0"
+  replica_type: ASYNC
+- name: vla-1su0wwmaq8pnlmii.db.yandex.net
+  cluster_id: mdb445oddbcqdk5mu9n6
+  zone_id: vla
+  resources:
+    resource_preset_id: s2.nano
+    disk_size: "10737418240"
+    disk_type_id: local-ssd
+  health: DEAD
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+  priority: "5"
+

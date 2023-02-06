@@ -1,0 +1,110 @@
+package ru.yandex.market.logshatter.parser.checkout.difflogs;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.Test;
+import ru.yandex.market.logshatter.parser.LogParserChecker;
+
+import java.io.File;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+
+/**
+ * @author Nicolai Iusiumbeli <mailto:armor@yandex-team.ru>
+ *         date: 23/03/2017
+ */
+public class CheckoutDiffLogParserTest {
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS");
+
+    @Test
+    public void parse() throws Exception {
+        LogParserChecker checker = new LogParserChecker(new CheckoutDiffLogParser());
+        URL resource = getClass().getClassLoader().getResource("market-checkouter-cart-diff-json.log");
+        String line = FileUtils.readLines(new File(resource.toURI())).get(0);
+        checker.check(
+                line,
+                dateFormat.parse("2017-03-23 08:57:09,633"),
+                "hostname.test",
+                "CART_DIFF",
+                "ITEM_PRICE",
+                "CHECK_ORDER",
+                1390D,
+                250D,
+                1,
+                -1,
+                false,
+                10214454L,
+                "",
+                1
+        );
+    }
+
+
+    @Test
+    public void parse2() throws Exception {
+        LogParserChecker checker = new LogParserChecker(new CheckoutDiffLogParser());
+        URL resource = getClass().getClassLoader().getResource("market-checkouter-cart-diff-json.log");
+        String line = FileUtils.readLines(new File(resource.toURI())).get(7);
+        checker.check(
+                line,
+                dateFormat.parse("2017-03-23 11:22:09,482"),
+                "hostname.test",
+                "CART_DIFF",
+                "ITEM_COUNT",
+                "MARKET",
+                7490D,
+                -1D,
+                2,
+                1,
+                false,
+                10204985L,
+                "",
+                1
+        );
+    }
+
+    @Test
+    public void parseRgb() throws Exception {
+        LogParserChecker checker = new LogParserChecker(new CheckoutDiffLogParser());
+        URL resource = getClass().getClassLoader().getResource("market-checkouter-cart-diff-json-rgb.log");
+        String line = FileUtils.readLines(new File(resource.toURI())).get(0);
+        checker.check(
+            line,
+            dateFormat.parse("2018-02-16 10:33:25,549"),
+            "hostname.test",
+            "CART_DIFF",
+            "ITEM_PRICE",
+            "MARKET",
+            420.0,
+            600.0,
+            1,
+            -1,
+            false,
+            10247981L,
+            "GREEN",
+            1
+        );
+    }
+
+    @Test
+    public void parseWarehouse() throws Exception {
+        LogParserChecker checker = new LogParserChecker(new CheckoutDiffLogParser());
+        URL resource = getClass().getClassLoader().getResource("market-checkouter-cart-diff-json-warehouse.log");
+        String line = FileUtils.readLines(new File(resource.toURI())).get(0);
+        checker.check(
+            line,
+            dateFormat.parse("2018-02-16 10:33:25,549"),
+            "hostname.test",
+            "CART_DIFF",
+            "ITEM_PRICE",
+            "MARKET",
+            420.0,
+            600.0,
+            1,
+            -1,
+            false,
+            10247981L,
+            "BLUE",
+            147
+        );
+    }
+}

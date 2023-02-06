@@ -1,0 +1,62 @@
+config:
+    system:
+        daemon: 0
+        verbose: 44
+        dir: ./
+        pid: var/run/stress-client.pid
+        libpath: [ ./lib/modules, ./lib64/modules ]
+        reactor:
+        # -   { _io_threads: 1, _pool_count: 4, _name: global }
+        -   { _io_threads: 1, _pool_count: 20, _name: global }
+    log:
+        global:
+            level: info
+            queue_size: 1048576
+            sinks:
+            -   type: reopenable_file
+                path: var/log/httpclient/stress.log
+            -   type: stdout
+    modules:
+        module:
+        # -   _name: stat_server
+        #     system:
+        #         name: stat_server
+        #         type: service_object
+        #         factory: ymod_stat_server::impl
+        #     configuration:
+        #         reactor: global
+        #         endpoints:
+        #             listen:
+        #             -   _addr: '::'
+        #                 _port: 8191
+        #                 read_timeout: 120000
+        #                 write_timeout: 120000
+        #                 keep_alive: { enable: 0 }
+        #         trace_reactors: 1
+        -   system:
+                name: http_client
+                type: service_object
+                factory: yhttp::call_impl
+            configuration:
+                reactor: global
+                dns:
+                    cache_ttl: 60.0
+                user_agent: stress-http-client
+                connect_attempt_timeout: 3.0
+                enable_logging: no
+                post_args_logging: off
+                reuse_connection: on
+                preferred_pool_size: 100000
+                default_request_timeout: 1.3
+        -   system:
+                name: stress_client
+                type: service_object
+                factory: ymod_httpclient_test::stress_client
+            configuration:
+                reactor: global
+                concurrency: 400
+                count: 800000
+                url: 127.0.0.1:80
+                post-size: 32
+                use_future: off
+                debug: 0

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Действия с пользователями в монге</title>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/x-icon" href="../resources/images/favicon.png"/>
+    <link rel="shortcut icon" type="image/x-icon" href="../resources/images/favicon.png"/>
+    <link rel="stylesheet" href="../resources/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../resources/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="../resources/css/style.css"/>
+    <script type="text/javascript" src="../resources/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../resources/js/requestHelper.js"></script>
+    <script type="text/javascript" src="../resources/js/constants.js"></script>
+    <script type="text/javascript" src="../resources/js/viewHelper.js"></script>
+    <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        var serviceName = "mongo-user";
+        $(document).ready(function () {
+            generateHeaderFooter();
+            $("#footer").html("");
+            if (parseGetParams()["login"] != undefined && parseGetParams()["login"].length > 0) {
+                loadByLogin(parseGetParams()["login"]);
+            }
+            ;
+        });
+        function save() {
+            var expectedShard = $('#expectedShard').val();
+            if (expectedShard != 5 && expectedShard != 6) {
+                $('#expectedShard').val(5);
+            }
+            serviceName = 'mongo-user/' + $('#login').val();
+            result = sendPutRequest(serviceName, {  
+                       login: $('#login').val(),
+                       password: $('#password').val(),
+                       token: $('#token').val(),
+                       financeToken: $('#financeToken').val(),
+                       sandboxToken: $('#sandboxToken').val(),
+                       paymentToken: $('#paymentToken').val(),
+                       expectedShard: $('#expectedShard').val()
+                   }, appendResult);
+        }
+        ;
+        function load() {
+            serviceName = "mongo-user/" + $('#login').val();
+            result = sendGetRequest(serviceName, appendResult, true, false);
+        }
+        ;
+        function loadByLogin(login) {
+            serviceName = "mongo-user/load?login=" + login;
+            result = sendGetRequest(serviceName, appendResult, true, false);
+        }
+        ;
+        function removeUser() {
+            serviceName = "mongo-user/remove";
+            if (confirm("Удалить из монги " + $('#login').val() + "?")) {
+                result = sendPostRequest(serviceName,
+                        {  login: $('#login').val(), password: "", token: "", financeToken: "", sandboxToken: "", paymentToken: ""
+                        }, appendRemoveResult);
+            }
+        }
+        ;
+
+        function appendResult(result) {
+            if (result) {
+                $('#login').val(result.login);
+                $('#password').val(result.password);
+                $('#token').val(result.token);
+                $('#financeToken').val(result.financeToken);
+                $('#sandboxToken').val(result.sandboxToken);
+                $('#paymentToken').val(result.paymentToken);
+                $('#expectedShard').val(result.expectedShard);
+            } else{
+                $('#password').val("");
+                $('#token').val("");
+                $('#financeToken').val("");
+                $('#sandboxToken').val("");
+                $('#paymentToken').val("");
+                $('#expectedShard').val("");
+                return "Пользователь не найден!"
+            }
+        }
+        ;
+        function appendRemoveResult(result) {
+            $('#login').val("");
+            $('#password').val("");
+            $('#token').val("");
+            $('#financeToken').val("");
+            $('#sandboxToken').val("");
+            $('#paymentToken').val("");
+            $('#expectedShard').val("");
+        }
+        ;
+    </script>
+</head>
+<body>
+<div id="spinner">
+    <img src="../resources/images/spinner.gif" id="spinner_img">
+</div>
+<div id="menu"></div>
+<div id="content">
+    <h1>
+        <small>Пользователи</small>
+    </h1>
+    <div class="alert alert-dismissable alert-danger" id="alert" style="display:none">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <span id="error"></span>
+    </div>
+    <form id="mainForm" class="form-horizontal">
+        <div class="form-group">
+            <label for="login" class="col-lg-2 control-label">Логин</label>
+
+            <div class="col-lg-2">
+                <input type="text" id="login" placeholder="Логин" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password" class="col-lg-2 control-label">Пароль</label>
+
+            <div class="col-lg-2">
+                <input type="text" id="password" placeholder="Пароль" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="token" class="col-lg-2 control-label">Токен</label>
+
+            <div class="col-lg-2">
+                <input type="text" id="token" placeholder="Токен" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="financeToken" class="col-lg-2 control-label">Финансовый токен</label>
+
+            <div class="col-lg-2">
+                <input type="text" id="financeToken" placeholder="Финансовый токен" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sandboxToken" class="col-lg-2 control-label">Токен песочницы</label>
+
+            <div class="col-lg-2">
+                <input type="text" id="sandboxToken" placeholder="Токен песочницы" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="paymentToken" class="col-lg-2 control-label">Платежный токен</label>
+
+            <div class="col-lg-2">
+                <input type="text" id="paymentToken" placeholder="Платежный токен" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="expectedShard" class="col-lg-2 control-label">Должен быть в шарде</label>
+
+            <div class="col-lg-2">
+                <input type="text" id="expectedShard" placeholder="Должен быть в шарде" class="form-control"/>
+            </div>
+        </div>
+        <input type="button" onclick="load()" class="btn btn-primary" value="Прочитать"/>
+        <input type="button" onclick="save()" class="btn btn-success" value="Сохранить"/>
+        <input type="button" onclick="removeUser()" class="btn btn-danger" value="Удалить"/>
+        <input type="button" onclick="appendRemoveResult(null)" class="btn btn-warning" value="Очистить"/>
+    </form>
+    <div id="results" class="well"></div>
+</div>
+<div id="footer"></div>
+</body>
+</html>

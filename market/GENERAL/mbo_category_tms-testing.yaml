@@ -1,0 +1,317 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmbo_category_tms-testing
+
+vars:
+  - &monitoring_check_options
+    args:
+      - --kwargs
+      - '[{"service": "tmsMonitoring", "path": "/tmsMonitoring"},
+        {"service": "ticketTmsMonitoring", "path": "/ticketTmsMonitoring"},
+        {"service": "criticalTmsMonitoring", "path": "/criticalTmsMonitoring"}]'
+
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=mbo_category_tms-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 0%
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 49%
+      nodata_mode: skip
+    check_options: {}
+    service: disk_free_space
+
+  # Check fresh-hprof-files
+  # https://juggler.yandex-team.ru/check_details/?host=mbo_category_tms-testing&service=fresh-hprof-files&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 0%
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 49%
+      nodata_mode: skip
+    check_options: {}
+    service: fresh-hprof-files
+
+  # Check fresh-core-dumps
+  - aggregator_kwargs:
+      limits:
+        - crit: 0%
+          day_end: 7
+          day_start: 1
+          time_end: 20
+          time_start: 12
+          warn: 0%
+        - crit: 0%
+          day_end: 7
+          day_start: 1
+          time_end: 11
+          time_start: 21
+          warn: 49%
+      nodata_mode: skip
+    check_options: {}
+    service: fresh-core-dumps
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=mbo_category_tms-testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 49%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 0%
+      - crit: 49%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 49%
+      nodata_mode: skip
+    check_options: {}
+    service: logrotate
+
+  # Check monitoring
+  # https://juggler.yandex-team.ru/check_details/?host=mbo_category_tms-testing&service=monitoring&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 49%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 49%
+      - crit: 49%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 49%
+      nodata_mode: skip
+      unreach_mode: skip
+      unreach_service:
+      - check: :ping
+    check_options: *monitoring_check_options
+    service: monitoring
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=mbo_category_tms-testing&service=ping&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 49%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 0%
+      - crit: 49%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 49%
+      nodata_mode: force_crit
+    check_options: *monitoring_check_options
+    service: ping
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=mbo_category_tms-testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 49%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 0%
+      - crit: 49%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 49%
+      nodata_mode: skip
+    check_options: {}
+    service: push-client-status
+
+  # Check tmsMonitoring
+  # https://juggler.yandex-team.ru/check_details/?host=mbo_category_tms-testing&service=tmsMonitoring&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 49%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 49%
+      - crit: 49%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 49%
+      nodata_mode: skip
+      unreach_mode: skip
+      unreach_service:
+      - check: :ping
+    check_options: *monitoring_check_options
+    service: tmsMonitoring
+
+  # Check ticketTmsMonitoring
+  # https://juggler.yandex-team.ru/check_details/?host=mbo_category_tms-testing&service=ticketTmsMonitoring&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+        - crit: 49%
+          day_end: 7
+          day_start: 1
+          time_end: 20
+          time_start: 12
+          warn: 49%
+        - crit: 49%
+          day_end: 7
+          day_start: 1
+          time_end: 11
+          time_start: 21
+          warn: 49%
+      nodata_mode: skip
+      unreach_mode: skip
+      unreach_service:
+        - check: :ping
+    check_options: *monitoring_check_options
+    service: ticketTmsMonitoring
+
+  # Check criticalTmsMonitoring
+  # https://juggler.yandex-team.ru/check_details/?host=mbo_category_tms-testing&service=criticalTmsMonitoring&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+        - crit: 49%
+          day_end: 7
+          day_start: 1
+          time_end: 20
+          time_start: 12
+          warn: 49%
+        - crit: 49%
+          day_end: 7
+          day_start: 1
+          time_end: 11
+          time_start: 21
+          warn: 49%
+      nodata_mode: skip
+      unreach_mode: skip
+      unreach_service:
+        - check: :ping
+    check_options: *monitoring_check_options
+    service: criticalTmsMonitoring
+
+    # Check offers-over-sla-in-ag-export-queue
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_category_tms-testing&service=offers-over-sla-in-ag-export-queue&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    check_options: {}
+    children: []
+    service: offers-over-sla-in-ag-export-queue
+
+    # Check offers-that-should-be-added-to-ag-export-queue
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_category_tms-testing&service=offers-that-should-be-added-to-ag-export-queue&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    check_options: {}
+    children: []
+    service: offers-that-should-be-added-to-ag-export-queue
+
+    # Check offers-over-sla-in-ag-response-queue
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_category_tms-testing&service=offers-over-sla-in-ag-response-queue&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    check_options: {}
+    children: []
+    service: offers-over-sla-in-ag-response-queue
+
+    # Check unread-datacamp-offers-to-mboc
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_category_tms-testing&service=unread-datacamp-offers-to-mboc&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    check_options: {}
+    children: []
+    service: unread-datacamp-offers-to-mboc
+
+    # Check unread-datacamp-offers-to-mboc-regular
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_category_tms-testing&service=unread-datacamp-offers-to-mboc-regular&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    check_options: {}
+    children: []
+    service: unread-datacamp-offers-to-mboc-regular
+
+    # Check read-lag-datacamp-offers-to-mboc
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_category_tms-testing&service=read-lag-datacamp-offers-to-mboc&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    check_options: {}
+    children: []
+    service: read-lag-datacamp-offers-to-mboc
+
+    # Check read-lag-datacamp-offers-to-mboc-regular
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_category_tms-testing&service=read-lag-datacamp-offers-to-mboc-regular&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    check_options: {}
+    children: []
+    service: read-lag-datacamp-offers-to-mboc-regular
+
+    # Check read-lag-offer-state-updates
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_category_tms-testing&service=read-lag-offer-state-updates&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    check_options: {}
+    children: []
+    service: read-lag-offer-state-updates
+
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    children:
+    - NANNY%testing_market_mbo_category_tms_sas
+    - NANNY%testing_market_mbo_category_tms_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: mbo_category_tms-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - marketmboctms
+    - testing
+    - market
+    - _market_
+    ttl: 900

@@ -1,0 +1,37 @@
+annotations: {}
+labels: {}
+meta:
+  acl:
+  - action: allow
+    permissions:
+    - read
+    - write
+    subjects:
+    - k-zaitsev
+  - action: allow
+    permissions:
+    - read
+    - write
+    - create
+    - ssh_access
+    - root_ssh_access
+    - read_secrets
+    subjects:
+    - k-zaitsev
+  id: crypta-rtsklejka-michurin-test-rule
+  inherit_acl: true
+  stage_id: crypta-rtsklejka-michurin-test
+spec:
+  auto_commit_policy:
+    type: maintain_active_trunk
+  docker:
+    image_name: crypta/rtsklejka-michurin
+    release_types:
+    - testing
+  patches:
+    patch-docker:
+      docker:
+        docker_image_ref:
+          box_id: docker
+          deploy_unit_id: docker
+

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="false" default-autowire="byName">
+
+    <bean id="mapTypeToTaskListHandler" class="org.springframework.beans.factory.config.MapFactoryBean">
+        <property name="sourceMap">
+            <map key-type="ru.yandex.market.mbo.tt.model.TaskType"
+                 value-type="ru.yandex.market.mbo.tt.status.listeners.handlers.TaskListHandler">
+                <entry key="FIX_ERROR" value-ref="defaultTaskListHandler"/>
+                <entry key="CHECK_CLUSTER" value-ref="defaultTaskListHandler"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="statusManager" class="ru.yandex.market.mbo.tt.status.StatusManagerImpl">
+        <property name="jdbcTemplate" ref="siteCatalogJdbcTemplate"/>
+        <property name="transactionTemplate" ref="scatTransactionTemplate"/>
+        <property name="statusValidators">
+            <list>
+                <bean class="ru.yandex.market.mbo.tt.status.validators.SameStatusValidator"/>
+            </list>
+        </property>
+    </bean>
+</beans>

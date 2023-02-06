@@ -1,0 +1,77 @@
+---
+definitions:
+  client_host:
+    directmod_ppcmoddev: 
+      # ppcmoddev1
+      - 37.140.140.155
+      - 2a02:6b8:0:2504::17
+      # ppcmoddev2
+      - 5.255.228.77
+      - 2a02:6b8:0:1a78:28d9:eaf2:d03f:61a4
+    directmod_ts_front: []
+  db_host:
+    directmod_ts_db:
+      - ppcmoddb-test01h
+      - ppcmoddb-test01h.yandex.ru
+    directmod_dev_db:
+      - ppcmoddev-mysql
+      - ppcmoddev-mysql.ppc.yandex.ru
+      - ppcmoddev1
+      - ppcmoddev1.yandex.ru
+  instance: 
+    directmod_main:
+      - moddb
+      - modlog
+  grant:
+    directmod_everything:
+      - SELECT 
+      - INSERT 
+      - UPDATE 
+      - DELETE 
+      - CREATE 
+      - DROP 
+      - REFERENCES 
+      - INDEX 
+      - ALTER 
+      - SHOW DATABASES 
+      - SUPER 
+      - CREATE TEMPORARY TABLES 
+      - LOCK TABLES 
+      - REPLICATION CLIENT 
+      - CREATE VIEW 
+      - SHOW VIEW 
+      - CREATE ROUTINE 
+      - ALTER ROUTINE
+      - TRIGGER 
+    directmod_autotester:
+      - SELECT 
+      - INSERT 
+      - UPDATE 
+      - DELETE 
+rules:
+  - name: adiuser
+    db_host: 
+      - set/directmod_ts_db
+      - set/directmod_dev_db
+    instance: set/directmod_main
+    grant: set/directmod_everything
+    on: '*.*'
+    user: adiuser
+    client_host: 
+      - set/directmod_ppcmoddev
+    #password: '*61B8CBFAC6E1397C405D8AB745E3262EF58BE8EE'
+    password: '1b3375602eaa521e'
+  - name: ts,dev autotester
+    db_host: 
+      - set/directmod_ts_db
+      - set/directmod_dev_db
+    instance: set/directmod_main
+    grant: set/directmod_autotester
+    on: '*.*'
+    user: autotester
+    client_host: 
+      # новый рукояточник ppctest-handles.ppc.yandex.ru
+      - 5.255.228.84
+      - 2a02:6b8:0:1a78:236e:a31c:8ffe:5e3e
+    password: '*F9A8E96790775D196D12F53BCC88B8048FF62ED5'
+

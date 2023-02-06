@@ -1,0 +1,99 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый market_loyalty_quiz-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_loyalty_quiz-testing
+
+juggler:
+  checks:
+
+  # Check http-monitor
+  # https://juggler.yandex-team.ru/check_details/?host=market_loyalty_quiz-testing&service=http-monitor&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      headers:
+        Host: monitoring431.market.yandex.net
+      ok_codes:
+      - 200
+      path: /monitor
+      regexp: ^0;
+    children:
+    - NANNY%testing_market_market_loyalty_quiz_sas:http-monitor:all
+    service: http-monitor
+    tags:
+    - market_testing
+    - market_rtc
+    - loyalty-quiz
+    - market
+    - _market_
+
+  # Check market_loyalty_quiz.TESTING.5xx-percent
+  # https://juggler.yandex-team.ru/check_details/?host=market_loyalty_quiz-testing&service=market_loyalty_quiz.TESTING.5xx-percent&last=1DAY&mode=edit
+  - children:
+    - clickphite-monitoring
+    service: market_loyalty_quiz.TESTING.5xx-percent
+    tags:
+    - market_testing
+    - market_rtc
+    - loyalty-quiz
+    - market
+    - _market_
+
+  # Check monitoring
+  # https://juggler.yandex-team.ru/check_details/?host=market_loyalty_quiz-testing&service=monitoring&last=1DAY&mode=edit
+  - children:
+    - market_loyalty_quiz-testing:ping
+    - market_loyalty_quiz-testing:http-monitor
+    - market_loyalty_quiz-testing:market_loyalty_quiz.TESTING.5xx-percent
+    service: monitoring
+    tags:
+    - market_testing
+    - market_rtc
+    - loyalty-quiz
+    - market
+    - _market_
+    - market_loyalty_toplevel
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=market_loyalty_quiz-testing&service=ping&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /ping
+      regexp: ^0;
+    children:
+    - NANNY%testing_market_market_loyalty_quiz_sas:ping:all
+    service: ping
+    tags:
+    - market_testing
+    - market_rtc
+    - loyalty-quiz
+    - market
+    - _market_
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: '3'
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: '3'
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options: {}
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_loyalty_quiz-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    ttl: 900

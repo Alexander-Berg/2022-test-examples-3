@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <plan_fact
+            id="1"
+            entity_id="10"
+            entity_type="CLIENT_RETURN"
+            waybill_segment_type="PICKUP"
+            expected_status="UNKNOWN"
+            processing_status="ENQUEUED"
+            plan_fact_status="CREATED"
+            expected_status_datetime="2020-11-06 11:11:50 +0300"
+            fact_status_datetime="[null]"
+            schedule_time="2020-11-07 14:00:01 +0300"
+            created="2020-11-01 12:00:00 +0000"
+            data='{
+                "ReturnClientPlanFactAdditionalData": {
+                    "_type": ".ReturnClientPlanFactAdditionalData",
+                    "barcode": "VOZVRAT_1",
+                    "courierName": "Имя курьера",
+                    "failComment": "Wrong size",
+                    "partnerName": "Some sorting center",
+                    "clientReturnId": 10,
+                    "pickupPointType": "PVZ",
+                    "sortingCenterId": 10203,
+                    "returnId": 10,
+                    "lockerWithdrawDatetime": "2020-11-05T13:06:53.764278"
+                }
+            }'
+    />
+
+    <plan_fact
+            id="2"
+            entity_id="20"
+            entity_type="CLIENT_RETURN"
+            waybill_segment_type="PICKUP"
+            expected_status="UNKNOWN"
+            processing_status="ENQUEUED"
+            plan_fact_status="CREATED"
+            expected_status_datetime="2020-11-06 11:11:50 +0300"
+            fact_status_datetime="[null]"
+            schedule_time="2020-11-07 14:00:01 +0300"
+            created="2020-11-01 12:00:00 +0000"
+            data='{
+                "ReturnClientPlanFactAdditionalData": {
+                    "_type": ".ReturnClientPlanFactAdditionalData",
+                    "barcode": "VOZVRAT_3",
+                    "courierName": "Имя курьера",
+                    "partnerName": "Some sorting center",
+                    "clientReturnId": 20,
+                    "pickupPointType": "LOCKER",
+                    "returnId": 20,
+                    "sortingCenterId": 10203,
+                    "lockerWithdrawDatetime": "2020-11-05T13:06:53.764278"
+                }
+            }'
+    />
+
+    <plan_fact_group
+            id="1"
+            aggregation_key="date:2020-11-06;partnerTo:10203;"
+            aggregation_type="CLIENT_RETURN_SORTING_CENTER_INTAKE"
+            processing_status="ENQUEUED"
+            expected_status="UNKNOWN"
+            schedule_time="2020-11-08 14:00:00 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 6],
+                        "partnerTo": {
+                            "id": 10203
+                        }
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="1"
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="2"
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="UNKNOWN"
+            aggregation_type="CLIENT_RETURN_SORTING_CENTER_INTAKE"
+            rule_processor="STARTREK"
+            rule='{ "queue": "MONITORINGSNDBX", "_type": ".LockerScIntakePayload", "components": [94920] }'
+    />
+
+</dataset>

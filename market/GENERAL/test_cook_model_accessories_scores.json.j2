@@ -1,0 +1,100 @@
+{% from "include/model_accessories_features.j2" import
+        pair_model_features,
+        single_model_features,
+        pair_category_features,
+        single_category_features,
+        crypta_features
+    with context %}
+{% from "include/utility.j2" import skip_features %}
+
+{% macro skip_auto_features() %}
+    {{ skip_features(pair_model_features) }},
+    {{ skip_features(single_model_features) }},
+    {{ skip_features(single_model_features) }},
+    {{ skip_features(pair_category_features) }},
+    {{ skip_features(single_category_features) }},
+    {{ skip_features(single_category_features) }}
+{% endmacro %}
+
+{% macro skip_crypta_features() %}
+    {% for feature in crypta_features %}
+        0.0, 0.0, 0.0
+        {% if not loop.last %},{% endif %}
+    {% endfor %}
+{% endmacro %}
+
+{% if table == "sets_model_accessories_scores" %}
+    {% table table %}
+        {% if formula_id == 260231 %}
+        ["M1", "M2", "C1", "C2", [0, 1], 0.0, 0.0, 0.24567174911499023, "{{ day }}"],
+        ["M1", "M3", "C1", "C3", [0, 1], 0.0, 0.0, 0.15938663482666016, "{{ day }}"],
+        ["M1", "M4", "C1", "C4", [0, 1], 1.0, 0.0, 0.16693878173828125, "{{ day }}"],
+        ["M1", "M5", "C1", "C5", [0, 1], 0.0, 1.0, 0.1753222942352295, "{{ day }}"]
+        {% elif formula_id == 260327 %}
+        ["M1", "M2", "C1", "C2", [0, 1], 0.0, 0.0, 3.261638641357422, "{{ day }}"],
+        ["M1", "M3", "C1", "C3", [0, 1], 0.0, 0.0, 2.6448974609375, "{{ day }}"],
+        ["M1", "M4", "C1", "C4", [0, 1], 1.0, 0.0, 2.6448974609375, "{{ day }}"],
+        ["M1", "M5", "C1", "C5", [0, 1], 0.0, 1.0, 2.6441612243652344, "{{ day }}"]
+        {% elif formula_id == 263499 %}
+        ["M1", "M2", "C1", "C2", [0, 1], 0.0, 0.0, 0.24303126335144043, "{{ day }}"],
+        ["M1", "M3", "C1", "C3", [0, 1], 0.0, 0.0, 0.16514229774475098, "{{ day }}"],
+        ["M1", "M4", "C1", "C4", [0, 1], 1.0, 0.0, 0.0651407241821289, "{{ day }}"],
+        ["M1", "M5", "C1", "C5", [0, 1], 0.0, 1.0, 0.05062258243560791, "{{ day }}"]
+        {% elif formula_id == 263506 %}
+        ["M1", "M2", "C1", "C2", [0, 1], 0.0, 0.0, 0.1126413345336914, "{{ day }}"],
+        ["M1", "M3", "C1", "C3", [0, 1], 0.0, 0.0, 0.06811702251434326, "{{ day }}"],
+        ["M1", "M4", "C1", "C4", [0, 1], 1.0, 0.0, 0.02088552713394165, "{{ day }}"],
+        ["M1", "M5", "C1", "C5", [0, 1], 0.0, 1.0, 0.019066989421844482, "{{ day }}"]
+        {% elif formula_id == 284429 %}
+        ["M1", "M2", "C1", "C2", [0, 1], 0.0, 0.0, 0.28338623046875, "{{ day }}"],
+        ["M1", "M3", "C1", "C3", [0, 1], 0.0, 0.0, 0.19994425773620605, "{{ day }}"],
+        ["M1", "M4", "C1", "C4", [0, 1], 1.0, 0.0, 0.19994425773620605, "{{ day }}"],
+        ["M1", "M5", "C1", "C5", [0, 1], 0.0, 1.0, 0.1993105411529541, "{{ day }}"]
+        {% elif formula_id == "accessories_session_based1" %}
+        ["M1", "M2", "C1", "C2", [0, 1], 0.0, 0.0, -2.2863845825195312, "{{ day }}"],
+        ["M1", "M3", "C1", "C3", [0, 1], 0.0, 0.0, -2.4980430603027344, "{{ day }}"],
+        ["M1", "M4", "C1", "C4", [0, 1], 1.0, 0.0, -2.675537109375, "{{ day }}"],
+        ["M1", "M5", "C1", "C5", [0, 1], 0.0, 1.0, -2.505115509033203, "{{ day }}"]
+        {% elif formula_id == "accessories_directed_session_model1" %}
+        ["M1", "M2", "C1", "C2", [0, 1], 0.0, 0.0, -1.3853378295898438, "{{ day }}"],
+        ["M1", "M3", "C1", "C3", [0, 1], 0.0, 0.0, -1.3141860961914062, "{{ day }}"],
+        ["M1", "M4", "C1", "C4", [0, 1], 1.0, 0.0, -1.2238140106201172, "{{ day }}"],
+        ["M1", "M5", "C1", "C5", [0, 1], 0.0, 1.0, -1.2430267333984375, "{{ day }}"]
+        {% elif formula_id == "accessories_undirected_session_model1" %}
+        ["M1", "M2", "C1", "C2", [0, 1], 0.0, 0.0, -0.6900444030761719, "{{ day }}"],
+        ["M1", "M3", "C1", "C3", [0, 1], 0.0, 0.0, -0.6390066146850586, "{{ day }}"],
+        ["M1", "M4", "C1", "C4", [0, 1], 1.0, 0.0, -0.58673095703125, "{{ day }}"],
+        ["M1", "M5", "C1", "C5", [0, 1], 0.0, 1.0, -0.6104736328125, "{{ day }}"]
+        {% elif formula_id == "accessories_order_model1" %}
+        ["M1", "M2", "C1", "C2", [0, 1], 0.0, 0.0, -10.82293701171875, "{{ day }}"],
+        ["M1", "M3", "C1", "C3", [0, 1], 0.0, 0.0, -11.150955200195312, "{{ day }}"],
+        ["M1", "M4", "C1", "C4", [0, 1], 1.0, 0.0, -11.253494262695312, "{{ day }}"],
+        ["M1", "M5", "C1", "C5", [0, 1], 0.0, 1.0, -10.952178955078125, "{{ day }}"]
+        {% elif formula_id == "analogs_session_based1" %}
+        ["M1", "M2", "C1", "C2", [0, 1], 0.0, 0.0, -2.02496337890625, "{{ day }}"],
+        ["M1", "M3", "C1", "C3", [0, 1], 0.0, 0.0, -1.8438835144042969, "{{ day }}"],
+        ["M1", "M4", "C1", "C4", [0, 1], 1.0, 0.0, -1.8438835144042969, "{{ day }}"],
+        ["M1", "M5", "C1", "C5", [0, 1], 0.0, 1.0, -1.8479347229003906, "{{ day }}"]
+        {% elif formula_id == "cbtest" %}
+        ["M1", "M2", "C1", "C2", [0, 1], 0.0, 0.0, -0.00038004404632374644, "{{ day }}"],
+        ["M1", "M3", "C1", "C3", [0, 1], 0.0, 0.0, -0.001007033628411591, "{{ day }}"],
+        ["M1", "M4", "C1", "C4", [0, 1], 1.0, 0.0, -0.001007033628411591, "{{ day }}"],
+        ["M1", "M5", "C1", "C5", [0, 1], 0.0, 1.0, -0.001007033628411591, "{{ day }}"]
+        {% endif %}
+    {% endtable %}
+{% elif table == "sets_model_accessories_features" %}
+    {% table table %}
+        ["M1", "M2", "C1", "C2", [0, 1], "V1", "V2", 0.0, 1.0, {{ skip_auto_features() }}, 1.0, 0.0, 0.0, 0.0, 0.0, {{ skip_crypta_features() }}, "{{ day }}"],
+        ["M1", "M3", "C1", "C3", [0, 1], "V1", "V3", 0.0, 1.0, {{ skip_auto_features() }}, 0.0, 0.0, 0.0, 0.0, 0.0, {{ skip_crypta_features() }}, "{{ day }}"],
+        ["M1", "M4", "C1", "C4", [0, 1], "V1", "V4", 0.0, 2.0, {{ skip_auto_features() }}, 0.0, 0.0, 0.0, 1.0, 0.0, {{ skip_crypta_features() }}, "{{ day }}"],
+        ["M1", "M5", "C1", "C5", [0, 1], "V1", "V5", 1.0, 2.0, {{ skip_auto_features() }}, 0.0, 0.0, 0.0, 0.0, 1.0, {{ skip_crypta_features() }}, "{{ day }}"]
+    {% endtable %}
+{% elif table == "sets_model_accessories_selection" %}
+    {% table table %}
+        {# NB We don't have scores with selection with blue_featureset_1 currently. No data is prepared for this case. #}
+        ["M1", "M2", "C1", "C2", [0, 1], 0.0, {% if coviews %}1.0, {% endif %}0.0, 0.0, 1.0, {% for _ in range(108) %}0.0, {% endfor %}1.0, "{{ day }}"],
+        ["M1", "M3", "C1", "C3", [0, 1], 0.0, {% if coviews %}1.0, {% endif %}0.0, 0.0, 0.0, {% for _ in range(108) %}0.0, {% endfor %}1.0, "{{ day }}"],
+        ["M1", "M4", "C1", "C4", [0, 1], 0.0, {% if coviews %}2.0, {% endif %}1.0, 0.0, 0.0, {% for _ in range(108) %}0.0, {% endfor %}1.0, "{{ day }}"],
+        ["M1", "M5", "C1", "C5", [0, 1], 1.0, {% if coviews %}2.0, {% endif %}0.0, 1.0, 0.0, {% for _ in range(108) %}0.0, {% endfor %}1.0, "{{ day }}"]
+    {% endtable %}
+{% endif %}

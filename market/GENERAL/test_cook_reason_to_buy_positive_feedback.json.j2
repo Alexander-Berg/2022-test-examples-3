@@ -1,0 +1,87 @@
+{% macro feedback(id, model, up=0, down=0, anonymous=False, rating=4, pro="IOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKO") %}
+    [
+        "{{ id }}",
+        {{ anonymous|string|lower }},
+        "12345",
+        "{{ model }}",
+        {{ rating }},
+        null,
+        null,
+        "{{ pro }}",
+        {{ up }},
+        {{ down }},
+        "feedback",
+        "{{ day }}"
+    ]
+{% endmacro %}
+
+{% if table == "sets_reasons_to_buy_positive_feedback" %}
+    {% table "sets_reasons_to_buy" %}
+        [
+            "G",
+            "model",
+            "positive_feedback",
+            "consumerFactor",
+            4,
+            {
+                "feedback_id": "F21",
+                "author_puid": "12345",
+                "text": "IOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKO",
+                "value_threshold": "4",
+                "anonymous": "false"
+            },
+            "{{ day }}"
+        ],
+        [
+            "M1",
+            "model",
+            "positive_feedback",
+            "consumerFactor",
+            5,
+            {
+                "feedback_id": "F15",
+                "author_puid": "12345",
+                "text": "IOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKO",
+                "value_threshold": "4",
+                "anonymous": "false"
+            },
+            "{{ day }}"
+        ],
+        [
+            "M2",
+            "model",
+            "positive_feedback",
+            "consumerFactor",
+            4,
+            {
+                "feedback_id": "F21",
+                "author_puid": "12345",
+                "text": "IOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKO",
+                "value_threshold": "4",
+                "anonymous": "false"
+            },
+            "{{ day }}"
+        ]
+    {% endtable %}
+{% elif table == "items_feedback_content" %}
+    {% table table %}
+        {{ feedback("F11", "M1", anonymous=True) }},
+        {{ feedback("F12", "M1", rating=3) }},
+        {{ feedback("F13", "M1", pro="cool") }},
+        {{ feedback("F14", "M1", up=5, down=3) }},
+        {{ feedback("F15", "M1", up=10, down=7, rating=5) }},
+        {{ feedback("F16", "M1", up=100500, down=0, pro="pros:\\n -first\\n -second)") }},
+        {{ feedback("F17", "M1", up=100500, down=0, pro="pros:\\n +first\\n +second)") }},
+        {{ feedback("F18", "M1", up=100500, down=0, pro="pros:\\n * first\\n * second)") }},
+        {{ feedback("F19", "M1", up=100500, down=0, pro="pros:\\n 1. first\\n 2. second)") }},
+        {{ feedback("F110", "M1", up=100500, down=0, pro="pros:\\n I. first\\n II. second)") }},
+        {{ feedback("F111", "M1", up=100500, down=0, pro="pros:\\n I) first\\n II) second)") }},
+        {{ feedback("F21", "M2", up=100500, down=0) }},
+        {{ feedback("FG", "G") }}
+    {% endtable %}
+{% elif table == "items_model_group" %}
+    {% table table %}
+        ["M1", "G", "model", "{{ day }}"],
+        ["M2", "G", "model", "{{ day }}"]
+    {% endtable %}
+{% endif %}

@@ -1,0 +1,69 @@
+#default: ADMIN_PORT 9000
+#default: PORT 80
+
+bind:
+  - http://[::]:{{ PORT }} # http & h2c
+admin:
+  - http://[::1]:{{ ADMIN_PORT }}
+workers: 3
+actions:
+  - main:
+      - match: :path
+        /quota.acquire:
+          - match: :method
+            GET: router
+            POST: [unpack, router]
+        /quota.unistat:
+          - quota-unistat: default
+        /state.print: printer
+        /state.sync: sync
+        /ping: ping
+      - router
+
+  - router:
+      - rpslimiter-router:
+          limiter: limiter
+          router:
+            - next:
+                #include: ./router.yaml
+        export: quota
+      - 404
+
+  - limiter:
+      - count-codes
+      - rpslimiter: default
+        no-quota: 429
+        invalid-index: 429
+        limited: 429
+      - const: "ok\n"
+
+  - printer:
+      - quota-print: default
+        host: {{ HOSTNAME }}
+
+  - sync:
+      - quota-sync: default
+        host: {{ HOSTNAME }}
+        path: /state.sync
+        remote:
+          #include: ./remote.yaml
+        interval: 50000ms
+        streams: 1
+        full: false
+
+  - 404:
+      - const: "not found\n"
+        :code: 404
+
+  - 429:
+      - const: "too many requests\n"
+        :code: 429
+        x-forwardtouser-y: 1
+
+  - ping:
+      - const: "pong"
+        :code: 200
+
+  - const-data:
+      - quotas: default
+        #include: ./quotas.yaml

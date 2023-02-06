@@ -1,0 +1,252 @@
+environment: "qa"
+installation: "mother-russia"
+
+http:
+  port: 8080
+  worker_threads: 5
+  max_requests_per_connection: 1000
+  max_in_flight_requests: 75
+  log_body: true
+  asio_server_threads: 2
+
+ping:
+  ping_id: "foo:ping"
+
+yt:
+  main_table:
+    cluster_url: "http://replica.yt.yandex.net"
+    proxy_role: "default"
+    table_path: //replica/table/path
+    operation_timeout_ms: 10000
+
+  retry_tables:
+    - cluster_url: "http://replica.yt.yandex.net"
+      proxy_role: "default"
+      table_path: //replica/table/path
+      operation_timeout_ms: 10000
+
+  retry_timeout_ms: 3
+
+  logger:
+    file_name: "/tmp/yt-api"
+
+
+stats:
+  hist:
+    min: 0
+    max: 10
+    bin_count: 10
+
+  percentile:
+    max: 100000000
+    precision: 3
+    percentiles:
+      - 100
+      - 99.9
+      - 99
+      - 98
+      - 95
+      - 90
+
+tvm:
+  self_client_id: 1000501
+  log: tvm
+  destinations:
+
+juggler:
+  endpoint_options:
+    url_prefix: "http://juggler-push.search.yandex.net"
+    timeout_sec: 10
+
+upload:
+  log_only_types:
+    - adobedmp
+    - appnexus
+    - ditmsk
+    - dmp.*
+    - mediascope
+    - omi
+    - rakuten
+
+touch_timeout_sec: 86400
+
+logbroker:
+  pqlib:
+    worker_threads: 1
+    compression_threads: 1
+    grpc_threads: 1
+
+  use_tvm: False
+
+  access_log_producer:
+    server: logbroker.yandex.net
+    port: 2135
+    topic: access-log
+    source_id_prefix: localhost
+    log_name: pqlib
+    drop_log_name: access_dropped
+    max_bytes_in_flight: 536870912
+
+  change_log_producer:
+    server: localhost
+    port: 2134
+    topic: change-log
+    source_id_prefix: localhost
+    log_name: pqlib
+    drop_log_name: change_dropped
+    max_bytes_in_flight: 536870912
+    producers_count: 1
+    bind_producers_to_partitions: True
+
+quoter:
+  enabled: True
+  host_port: "localhost:12345"
+  timeout_sec: 10
+  request_interval_sec: 60
+  environment_type: "qa"
+
+logs:
+  main:
+    level: debug
+    targets:
+      - type: stdout
+      - type: rotating
+        file: "/tmp/main.log"
+        max_file_size: 419430400
+        max_files: 1
+
+  worker:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/worker.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  identify:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/identify.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  upload:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/upload.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  delete:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/delete.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  expire:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/expire.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  ping:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/ping.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  version:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/version.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  server:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/server.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  pqlib:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/pqlib.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  quoter:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/quoter.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  tvm:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/tvm.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  touch:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/touch.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  access_dropped:
+    level: info
+    format: "%v"
+    targets:
+    - type: rotating
+      file: "/tmp/access_dropped.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  change_dropped:
+    level: info
+    format: "%v"
+    targets:
+    - type: rotating
+      file: "/tmp/change_dropped.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  yt:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/yt.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  graphite:
+    targets:
+    - type: rotating
+      file: "/tmp/graphite.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  solomon:
+    targets:
+    - type: rotating
+      file: "/tmp/solomon.log"
+      max_file_size: 419430400
+      max_files: 1

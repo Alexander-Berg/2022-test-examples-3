@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-autowire="byName">
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:ru/yandex/market/checkout/pushapi/client/http/PushApiHttpComponentsClientHttpRequestFactoryTest.properties</value>
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+    <bean id="spyBeanPostProcessor"
+          class="ru.yandex.market.checkout.pushapi.client.http.SpyBeanPostProcessor">
+        <constructor-arg index="0" value="pushApiHttpRequestRetryHandler"/>
+    </bean>
+</beans>

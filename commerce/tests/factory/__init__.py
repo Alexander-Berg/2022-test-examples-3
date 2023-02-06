@@ -1,0 +1,11 @@
+from .city import CityFactory  # noqa
+from .company import CompanyFactory  # noqa
+from .company_certificate import CompanyCertificateFactory  # noqa
+from .company_office import CompanyOfficeFactory  # noqa
+from .company_representative import CompanyRepresentativeFactory  # noqa
+from .country import CountryFactory  # noqa
+from .external_user import ExternalUserFactory  # noqa
+from .region import RegionFactory  # noqa
+from .tld import TldFactory  # noqa
+from .user import UserFactory  # noqa
+from .userrole import UserRoleFactory  # noqa

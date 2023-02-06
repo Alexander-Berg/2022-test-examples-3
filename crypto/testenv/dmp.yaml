@@ -1,0 +1,135 @@
+BUILD_DOCS:
+    multiple_jobs:
+        BUILD_CRYPTA_DMP_COOKIE_MATCHING_DOCS:
+            observed_paths:
+              - ^arcadia/crypta/dmp/yandex/docs/cookie_matching.md
+              - ^arcadia/sandbox/projects/MarkdownToPdf/github-pandoc.css
+
+            input_files:
+              - crypta/dmp/yandex/docs/cookie_matching.md
+            document_type: cookie_matching
+
+        BUILD_CRYPTA_DMP_MAC_HASHING_DOCS:
+            observed_paths:
+              - ^arcadia/crypta/dmp/yandex/docs/mac_hashing.md
+              - ^arcadia/sandbox/projects/MarkdownToPdf/github-pandoc.css
+            input_files:
+              - crypta/dmp/yandex/docs/mac_hashing.md
+            document_type: mac_hashing
+
+        BUILD_CRYPTA_DMP_YANDEX_SEGMENTS_FORMAT_DOCS:
+            observed_paths:
+              - ^arcadia/crypta/dmp/yandex/docs/resources
+              - ^arcadia/crypta/dmp/yandex/docs/segments_format.md
+              - ^arcadia/sandbox/projects/MarkdownToPdf/github-pandoc.css
+            input_files:
+              - crypta/dmp/yandex/docs/segments_format.md
+            resource_dir: crypta/dmp/yandex/docs/resources
+            document_type: segments_format
+
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        commit_path_prefixes:
+          - /trunk/arcadia/crypta/
+        observed_paths: gen:observed_paths
+    check_task:
+        name: MARKDOWN_TO_PDF
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            custom_fields:
+                input_files: gen:input_files
+                css: sandbox/projects/MarkdownToPdf/github-pandoc.css
+                document_type: gen:document_type
+                resource_dir: gen:resource_dir
+            ctx:
+                kill_timeout: 600
+        output_resources:
+            PDF_RESOURCE: inf
+
+BUILD_DOCKER:
+    multiple_jobs:
+        BUILD_CRYPTA_ADOBE_CHECK_S3_BUCKET_DOCKER:
+            observed_paths:
+              - ^arcadia/crypta/dmp/adobe/config/index.yaml
+              - ^arcadia/crypta/dmp/adobe/monitorings/check_s3_bucket/config
+              - ^arcadia/crypta/dmp/adobe/monitorings/check_s3_bucket/docker/Dockerfile
+              - ^arcadia/crypta/dmp/adobe/monitorings/check_s3_bucket/docker/crypta-adobe-check-s3-bucket.json
+              - ^arcadia/crypta/dmp/adobe/monitorings/check_s3_bucket/docker/entrypoint.sh
+              - ^arcadia/crypta/dmp/adobe/monitorings/check_s3_bucket/docker/supervisor
+            targets:
+              - crypta/dmp/adobe/monitorings/check_s3_bucket
+              - crypta/utils/run_periodic_task/bin
+              - crypta/utils/templater
+              - yt/python/yt/tools/bin/lock_make
+            packages: crypta/dmp/adobe/monitorings/check_s3_bucket/docker/crypta-adobe-check-s3-bucket.json
+            auto_release: true
+            auto_release_env: stable
+            release_to_ya_deploy: true
+
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        commit_path_prefixes:
+          - /trunk/arcadia/crypta/
+        observed_paths: gen:observed_paths
+        targets: gen:targets
+    check_task:
+        name: CRYPTA_BUILD_AND_RELEASE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                sandbox_container: 773239891
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_DOCKER
+                strip_binaries: false
+                compress_package_archive: true
+                package_type: docker
+                packages: gen:packages
+                docker_registry: registry.yandex.net
+                docker_image_repository: crypta
+                docker_user: robot-crypta
+                docker_token_vault_name: CRYPTA_DOCKER_REGISTRY_TOKEN
+                docker_push_image: true
+                run_tests: false
+                run_long_tests: false
+                ignore_fail_tests: false
+                ya_yt_store: true
+                auto_release: gen:auto_release
+                auto_release_env: gen:auto_release_env
+                auto_release_author: '{commit_author}'
+                release_to_ya_deploy: gen:release_to_ya_deploy
+                yp_token_vault: yp_token

@@ -1,0 +1,32 @@
+base: '${BSCONFIG_IDIR}/template_master/base.yml'
+config:
+  log:
+    template_master:
+      async: false
+      sinks:
+        type: reopenable_file
+        path: /logs/template_master.log
+        force_flush: true
+    template_master_debug:
+      async: false
+      sinks:
+        type: reopenable_file
+        path: /logs/template_master_debug.log
+        force_flush: true
+  modules:
+    module:
+      - _name: database
+        configuration:
+          pg:
+            sharpei:
+              client:
+                address:
+                  host: sharpei-testing.templatemaster.so.yandex.net
+                  port: 80
+            query_conf: '${BSCONFIG_IDIR}/template_master/queries.sql'
+      -   _name: router
+          configuration:
+            nanny_dump_path: ${BSCONFIG_IDIR}/dump.json
+      -   _name: nanny_watcher
+          configuration:
+            url: /v2/services/${NANNY_SERVICE_ID}/current_state/instances/

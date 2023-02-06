@@ -1,0 +1,5 @@
+MAILTO=ppc@localhost
+
+# make application thread dumps
+* * * * * root /usr/bin/sv quit /etc/sv/direct-test-steps
+* * * * * ppc /usr/bin/flock --nonblock --exclusive /run/lock/direct-test-steps-alive-checker.lock /usr/local/bin/alive-checker --url http://localhost:10189/alive --timeout 5 --max-age 20 --file /var/www/direct-test-steps/htdocs/alive --log-file /var/log/yandex/direct-test-steps-alive-checker.log

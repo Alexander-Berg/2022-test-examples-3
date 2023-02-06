@@ -1,0 +1,97 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "aeroflot_boy",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+    "--date-from", "2019-08-13",
+    "--limit", "1",
+]
+
+checkers = [
+    "lb",
+    "partner",
+    "yt",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "application/json"
+
+[[partner.responses]]
+    args = {"updated_at_from_utc"="2019-08-13T00:00:00"}
+    data_file = "cpa_export_response_0.json"
+
+[[partner.responses]]
+    args = {"updated_at_from_utc"="2019-08-13T07:39:52"}
+    data_file = "cpa_export_response_1.json"
+
+[yt.input.partner_table]
+    path = "//home/rasp/reference/partner"
+
+[[yt.input.partner_table.data]]
+    billing_order_id = 1026
+    code = "aeroflot"
+    partner_id = 111
+
+[yt.input.station_table]
+    path = "//home/rasp/reference/station"
+
+[[yt.input.station_table.data]]
+    city_id = "x1001"
+    iata = "SVO"
+    sirena = ""
+
+[[yt.input.station_table.data]]
+    city_id = "x1002"
+    iata = "LED"
+    sirena = ""
+
+[lb]
+    topic = "topic-aeroflot-boy-v2"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+[[lb.expected]]
+    partner_name = "aeroflot"
+    travel_order_id = "aeroflot:YA-6649-0453-4391"
+    partner_order_id = "YA-6649-0453-4391"
+    created_at = 1565681904
+    status = "confirmed"
+    label = "8734e00d-a5e969-129e-4ec4-9d2e-e4e6a7578ad31"
+    currency_code = "RUB"
+    order_amount = 7193
+    category = "avia"
+    source = "boy"
+    partner_id = 111
+    billing_order_id = 1026
+    origin = "SVO"
+    destination = "LED"
+    trip_type = "oneway"
+    date_forward = "2020-02-28"
+    date_backward = ""
+    profit_amount = 215
+
+[[lb.expected]]
+    partner_name = "aeroflot"
+    travel_order_id = "aeroflot:YA-6649-0453-4392"
+    partner_order_id = "YA-6649-0453-4392"
+    pnr = "ABC-DEF"
+    created_at = 1565681904
+    status = "confirmed"
+    label = "8734e00d-a5e969-129e-4ec4-9d2e-e4e6a7578ad31"
+    currency_code = "RUB"
+    order_amount = 7193
+    category = "avia"
+    source = "boy"
+    partner_id = 111
+    billing_order_id = 1026
+    origin = "SVO"
+    destination = "LED"
+    trip_type = "oneway"
+    profit_amount = 215
+    date_forward = "2020-02-28"
+    date_backward = ""

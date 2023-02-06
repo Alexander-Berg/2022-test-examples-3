@@ -1,0 +1,166 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "leveltravel",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--api-key", "api-key",
+    "--date-from", "2019-01-01",
+    "--date-to", "2019-02-01",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+]
+
+checkers = [
+    "lb",
+    "partner",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "apllication/text"
+
+[[partner.responses]]
+    args = {"start_date"="2019-01-01", "end_date"="2019-01-31"}
+    data_file = "partner_response_2019_01_01.tsv"
+
+[[partner.responses]]
+    args = {"start_date"="2019-02-01", "end_date"="2019-02-28"}
+    data_file = "partner_response_2019_02_01.tsv"
+
+[lb]
+    topic = "topic-leveltravel"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+[[lb.expected]]
+    partner_name = "leveltravel"
+    travel_order_id = "leveltravel:0"
+    partner_order_id = "0"
+    created_at = 1546282800
+    status = "pending"
+    partner_status = "created"
+    label = "label_0"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-01-01"
+    check_out = "2019-01-02"
+    order_amount = 1000.0
+    profit_amount = 90.5
+    hotel_name = "hotel_0"
+    hotel_country = "C0"
+    hotel_city = "city_0"
+    deferred_payment_eligibility = "unknown"
+    post_pay_eligible = false
+    post_pay_used = false
+
+[[lb.expected]]
+    partner_name = "leveltravel"
+    travel_order_id = "leveltravel:1"
+    partner_order_id = "1"
+    created_at = 1546369200
+    status = "pending"
+    partner_status = "booked"
+    label = "label_1"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-01-02"
+    check_out = "2019-01-03"
+    order_amount = 1000.0
+    profit_amount = 90.5
+    hotel_name = "hotel_1"
+    hotel_country = "C1"
+    hotel_city = "city_1"
+    deferred_payment_eligibility = "unknown"
+    post_pay_eligible = false
+    post_pay_used = false
+
+[[lb.expected]]
+    partner_name = "leveltravel"
+    travel_order_id = "leveltravel:2"
+    partner_order_id = "2"
+    created_at = 1546455600
+    status = "pending"
+    partner_status = "approved"
+    label = "label_2"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-01-03"
+    check_out = "2019-01-04"
+    order_amount = 1000.0
+    profit_amount = 90.5
+    hotel_name = "hotel_2"
+    hotel_country = "C2"
+    hotel_city = "city_2"
+    deferred_payment_eligibility = "unknown"
+    post_pay_eligible = false
+    post_pay_used = false
+
+[[lb.expected]]
+    partner_name = "leveltravel"
+    travel_order_id = "leveltravel:3"
+    partner_order_id = "3"
+    created_at = 1548961200
+    status = "cancelled"
+    partner_status = "canceled"
+    label = "label_3"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-02-01"
+    check_out = "2019-02-02"
+    order_amount = 1000.0
+    profit_amount = 90.5
+    hotel_name = "hotel_3"
+    hotel_country = "C3"
+    hotel_city = "city_3"
+    deferred_payment_eligibility = "unknown"
+    post_pay_eligible = false
+    post_pay_used = false
+
+[[lb.expected]]
+    partner_name = "leveltravel"
+    travel_order_id = "leveltravel:4"
+    partner_order_id = "4"
+    created_at = 1549047600
+    status = "cancelled"
+    partner_status = "cancelled"
+    label = "label_4"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-02-02"
+    check_out = "2019-02-03"
+    order_amount = 1000.0
+    profit_amount = 90.5
+    hotel_name = "hotel_4"
+    hotel_country = "C4"
+    hotel_city = "city_4"
+    deferred_payment_eligibility = "unknown"
+    post_pay_eligible = false
+    post_pay_used = false
+
+[[lb.expected]]
+    partner_name = "leveltravel"
+    travel_order_id = "leveltravel:5"
+    partner_order_id = "5"
+    created_at = 1549134000
+    status = "cancelled"
+    partner_status = "not_confirmed"
+    label = "label_5"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-02-03"
+    check_out = "2019-02-04"
+    order_amount = 1000.0
+    profit_amount = 90.5
+    hotel_name = "hotel_5"
+    hotel_country = "C5"
+    hotel_city = "city_5"
+    deferred_payment_eligibility = "unknown"
+    post_pay_eligible = false
+    post_pay_used = false

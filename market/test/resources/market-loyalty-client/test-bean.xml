@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="false">
+
+    <import resource="classpath:/market-loyalty-client/market-loyalty-client.xml"/>
+
+    <!-- Properties -->
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          lazy-init="false">
+        <property name="locations">
+            <list>
+                <value>market-loyalty-client/test-application.properties</value>
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+    <bean id="podamFactory" class="ru.yandex.market.loyalty.client.test.Utils" factory-method="createPodamFactory"/>
+
+    <bean id="server"
+          class="org.springframework.test.web.client.MockRestServiceServer"
+          factory-method="createServer"
+          scope="prototype">
+        <constructor-arg name="restTemplate">
+            <bean factory-bean="restTemplateHolder" factory-method="get"/>
+        </constructor-arg>
+    </bean>
+
+</beans>

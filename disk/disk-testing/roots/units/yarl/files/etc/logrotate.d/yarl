@@ -1,0 +1,31 @@
+/var/log/yarl/yarl.log {
+    daily
+    maxsize 1G
+    rotate 5
+    nocompress
+    missingok
+    notifempty
+    dateext
+    dateformat -%Y%m%d-%s
+    nocreate
+    sharedscripts
+    postrotate
+        /usr/bin/killall -HUP yarl
+    endscript
+}
+
+/var/log/yarl/nginx.log {
+    daily
+    maxsize 1G
+    rotate 5
+    nocompress
+    missingok
+    notifempty
+    dateext
+    dateformat -%Y%m%d-%s
+    nocreate
+    sharedscripts
+    postrotate
+        kill -USR1 `cat /var/run/nginx.pid` && sleep 2
+    endscript
+}

@@ -1,0 +1,85 @@
+{
+    "items": [
+      {
+        "id": "intro",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "welcome_text",
+            "text": "Добро пожаловать в службу поддержки!"
+          },
+          {
+            "type": "plaintext",
+            "text": "\\U0001F699 [b]Вопрос про автомобиль?[/b]\nУкажите его гос. номер, чтобы мы разобрались быстрее."
+          },
+          {
+            "type": "plaintext",
+            "text": "\\U0001F6A8 [b]В экстренной ситуации[/b]\nЗвоните в колл-центр:\n[url=tel://+74997040941]+7 499 704-09-41[/url] (Москва),\n[url=tel://+74997040941]+7 499 704-09-41[/url] (Санкт-Петербург),\n[url=tel://+74997040941]+7 499 704-09-41[/url] (Казань)"
+          },
+          {
+            "type": "plaintext",
+            "text": "\\U0001F4A1 [b]Страница помощи по сервису здесь:[/b]\n [url=https://yandex.ru/support/drive]yandex.ru/support/drive[/url]"
+          }
+        ],
+        "next_step": {
+          "conditions": [
+            {
+              "node": "entered_intro_onboarding",
+              "condition": {
+                "type": "user_in_status",
+                "status": "onboarding"
+              }
+            },
+            {
+              "node": "entered_intro_active",
+              "condition": {
+                "type": "user_in_status",
+                "status": "active"
+              }
+            }
+          ],
+          "default": "entered_intro_other"
+        }
+      },
+      {
+        "id": "entered_intro_onboarding",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "You are onboarding"
+          }
+        ],
+        "next_step": "entered_intro_onboarding"
+      },
+      {
+        "id": "entered_intro_active",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "You are active"
+          }
+        ],
+        "next_step": "entered_intro_active"
+      },
+      {
+        "id": "entered_intro_other",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "You are neither onboarding nor active"
+          }          
+        ],
+        "next_step": "entered_intro_other"
+      }
+    ],
+    "faq_url": null,
+    "support_url": null
+  }
+  

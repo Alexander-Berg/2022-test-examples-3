@@ -1,0 +1,40 @@
+{% if table == "features_item_pair_model_model_external_order_statistics" %}
+    {# Result data. #}
+    {% table "features_item_pair_model_model_external_order_statistics" %}
+        ["M1", "M2", 2.0, 4.0, "model", "model", "{{ day }}"],
+        ["M2", "M1", 1.0, 3.0, "model", "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_external_orders" %}
+    {% macro external_order(timestamp, yandexuid, model_id) -%}
+        [
+            {{ timestamp }},
+            {
+                "yandexuid": "{{ yandexuid }}"
+            },
+            "order",
+            "offer",
+            "whatever",
+            {
+                {% if model_id %}
+                    "model_id": "{{ model_id }}"
+                {% elif model_id != "" %}
+                    "model_id": null
+                {% endif %}
+            },
+            "{{ day }}"
+        ]
+    {%- endmacro %}
+    {% table "events" %}
+        {% if shift == 0 %}
+            {{ external_order(1503225532000, "19276", "M2") }},
+            {{ external_order(1503225532001, "19274", "M1") }},
+            {{ external_order(1503225532002, "19276", "M1") }},
+            {{ external_order(1503225532003, "19276", "M2") }},
+            {{ external_order(1503225532004, "19274", "M2") }},
+            {{ external_order(1503225532005, "19276", "M1") }},
+            {{ external_order(1503225532006, "19276", "M2") }},
+            {{ external_order(1503225532007, "19277", None) }},
+            {{ external_order(1503225532008, "19278", "") }}
+        {% endif %}
+    {% endtable %}
+{% endif %}

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package crm.agency_cabinet.common.client.tests.proto.common;
+
+message Empty {
+}
+
+message TestPayload {
+    uint64 value_1 = 1;
+    string value_2 = 2;
+    bool value_3 = 3;
+}
+
+message TestOutput {
+    oneof response {
+        TestPayload payload = 1;
+        Empty empty = 2;
+    }
+}
+
+message RpcRequest {
+    oneof procedure {
+        Empty make_call = 1; // -> TestOutput
+    }
+}

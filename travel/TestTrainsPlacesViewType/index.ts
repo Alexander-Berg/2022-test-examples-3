@@ -1,0 +1,1 @@
+export {TestTrainsPlacesViewType} from './TestTrainsPlacesViewType';

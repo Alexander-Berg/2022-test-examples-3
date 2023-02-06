@@ -1,0 +1,42 @@
+{
+  "payload": {
+    "revision": 12345,
+    "t": "datasync_database_changed",
+    "database_id": "alias@id",
+    "context": "ctx"
+  },
+  "tags": ["one", "two"],
+  "repack": {
+    "apns": {
+      "repack_payload": [
+        "t",
+        "revision",
+        "database_id",
+        "context",
+        {"r": "::xiva::push_token"},
+        {"transit_id": "::xiva::transit_id"}
+      ]
+    },
+    "gcm": {
+      "collapse_key": "collapse@key",
+      "repack_payload": [
+        "t",
+        "revision",
+        "database_id",
+        "context",
+        {"r": "::xiva::push_token"},
+        {"transit_id": "::xiva::transit_id"}
+      ]
+    },
+    "other": {
+      "repack_payload": [
+        "t",
+        "revision",
+        "database_id",
+        "context",
+        {"r": "::xiva::push_token"},
+        {"transit_id": "::xiva::transit_id"}
+      ]
+    }
+  }
+}

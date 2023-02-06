@@ -1,0 +1,39 @@
+# The number of milliseconds of each tick
+tickTime=2000
+# The number of ticks that the initial
+# synchronization phase can take
+initLimit=10
+# The number of ticks that can pass between
+# sending a request and getting an acknowledgement
+syncLimit=5
+# the directory where the snapshot is stored.
+dataDir=/var/lib/yandex/zookeeper-video
+# the port at which the clients will connect
+clientPort=2181
+
+authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider
+quorum.auth.enableSasl=true
+quorum.auth.learnerRequireSasl=true
+quorum.auth.serverRequireSasl=true
+quorum.auth.learner.loginContext=QuorumLearner
+quorum.auth.server.loginContext=QuorumServer
+quorum.cnxn.threads.size=20
+
+java.network.ipv6=true
+yandex.user=video
+#yandex.servers.development=csv:moose.video.dev.yandex.net
+#yandex.servers.development=%video-dev-zk
+yandex.servers.testing=%video-test-zk
+yandex.servers.production=%video-zk
+
+yandex.syslog-ng.production.hosts=csv:stat01d.video.yandex.net,stat01f.video.yandex.net
+yandex.syslog-ng.production.port=31337
+yandex.syslog-ng.testing.hosts=csv:stat.vd.yandex.net
+yandex.syslog-ng.testing.port=31337
+# Parsed/retrieved hosts at package build time:
+server.1=zk01.vd.yandex.net:2182:2183
+server.2=zk02.vd.yandex.net:2182:2183
+server.3=zk03.vd.yandex.net:2182:2183
+
+# monitoring
+4lw.commands.whitelist=mntr, stat, ruok, conf, isro

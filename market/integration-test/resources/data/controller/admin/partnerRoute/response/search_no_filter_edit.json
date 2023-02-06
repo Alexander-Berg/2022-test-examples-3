@@ -1,0 +1,291 @@
+{
+  "meta": {
+    "columns": [
+      {
+        "name": "partner",
+        "title": "Партнер",
+        "type": "REFERENCE",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": {
+          "optionsSlug": "lms/partner",
+          "multiple": false,
+          "authorities": [
+            "ROLE_PARTNER"
+          ],
+          "titleFieldName": "name",
+          "idFieldName": "id",
+          "hint": "Имя/идентификатор партнера",
+          "pageSize": 20,
+          "queryParamName": "searchQuery"
+        },
+        "secret": null
+      },
+      {
+        "name": "locationFromId",
+        "title": "Id Откуда",
+        "type": "NUMBER",
+        "sortable": false,
+        "editable": false,
+        "filtrable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "locationFrom",
+        "title": "Откуда",
+        "type": "STRING",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": {
+          "optionsSlug": "lms/geobase/regions",
+          "multiple": true,
+          "authorities": [],
+          "titleFieldName": "name",
+          "idFieldName": "id",
+          "hint": "Локация",
+          "pageSize": 20,
+          "queryParamName": "searchQuery"
+        },
+        "secret": null
+      },
+      {
+        "name": "locationToId",
+        "title": "Id Куда",
+        "type": "NUMBER",
+        "sortable": false,
+        "editable": false,
+        "filtrable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "locationTo",
+        "title": "Куда",
+        "type": "STRING",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": {
+          "optionsSlug": "lms/geobase/regions",
+          "multiple": true,
+          "authorities": [],
+          "titleFieldName": "name",
+          "idFieldName": "id",
+          "hint": "Локация",
+          "pageSize": 20,
+          "queryParamName": "searchQuery"
+        },
+        "secret": null
+      },
+      {
+        "name": "scheduleDays",
+        "title": "По каким дням",
+        "type": "STRING",
+        "sortable": false,
+        "editable": false,
+        "filtrable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "korobyteRestriction",
+        "title": "Ограничения ВГХ",
+        "type": "REFERENCE",
+        "sortable": false,
+        "editable": false,
+        "filtrable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": {
+          "optionsSlug": "lms/korobyte-restrictions",
+          "multiple": false,
+          "authorities": [
+            "ROLE_KOROBYTE_RESTRICTIONS"
+          ],
+          "titleFieldName": "key",
+          "idFieldName": "id",
+          "hint": "Ключ/id ограничений ВГХ",
+          "pageSize": 20,
+          "queryParamName": "searchQuery"
+        },
+        "secret": null
+      }
+    ],
+    "mode": "EDIT",
+    "actions": [
+      {
+        "title": "Удалить",
+        "description": "Удалить выбранные",
+        "slug": "delete",
+        "identifiedBy": [],
+        "type": "ROW_ACTION",
+        "method": "POST_BODY",
+        "icon": "delete",
+        "authorities": [
+          "ROLE_PARTNER_ROUTE_EDIT"
+        ]
+      },
+      {
+        "title": "Скачать магистрали",
+        "description": "Скачать магистрали",
+        "slug": "download/all",
+        "identifiedBy": [],
+        "type": "GRID_ACTION",
+        "method": "GET_BLANK",
+        "icon": "cloud_download",
+        "authorities": [
+          "ROLE_PARTNER_ROUTE_EDIT"
+        ]
+      },
+      {
+        "title": "Скачать шаблон",
+        "description": "Скачать шаблон csv-файла для заполнения и последующей загрузки",
+        "slug": "download/template",
+        "identifiedBy": [],
+        "type": "GRID_ACTION",
+        "method": "GET_BLANK",
+        "icon": "cloud_download",
+        "authorities": [
+          "ROLE_PARTNER_ROUTE_EDIT"
+        ]
+      },
+      {
+        "title": "Обновить существующие и добавить новые",
+        "description": "Данные из файла заменят магистрали с id указанном в поле partnerRouteId. Если поле пустое - то будет создана новая магистраль",
+        "slug": "upload/upsert",
+        "identifiedBy": [],
+        "type": "GRID_ACTION",
+        "method": "POST_MULTIPART",
+        "icon": "cloud_upload",
+        "authorities": [
+          "ROLE_PARTNER_ROUTE_EDIT"
+        ]
+      }
+    ],
+    "newButtonTitle": "Создать",
+    "defaultSort": null,
+    "searchString": null
+  },
+  "totalCount": 5,
+  "items": [
+    {
+      "id": 4000,
+      "values": {
+        "scheduleDays": "пн, вт, ср, чт, пт, сб, вс",
+        "partner": {
+          "id": "3000",
+          "displayName": "partner-3000",
+          "slug": "lms/partner",
+          "openNewTab": false
+        },
+        "locationTo": "Астана",
+        "locationToId": 163,
+        "locationFrom": "Алматы",
+        "locationFromId": 162
+      }
+    },
+    {
+      "id": 4001,
+      "values": {
+        "scheduleDays": "пн, ср, пт",
+        "partner": {
+          "id": "3000",
+          "displayName": "partner-3000",
+          "slug": "lms/partner",
+          "openNewTab": false
+        },
+        "locationTo": "Караганда",
+        "locationToId": 164,
+        "locationFrom": "Алматы",
+        "locationFromId": 162,
+        "korobyteRestriction": {
+          "id": "1",
+          "displayName": "MGT",
+          "slug": "lms/korobyte-restrictions",
+          "openNewTab": false
+        }
+      }
+    },
+    {
+      "id": 4002,
+      "values": {
+        "scheduleDays": "вт, чт, сб",
+        "partner": {
+          "id": "3000",
+          "displayName": "partner-3000",
+          "slug": "lms/partner",
+          "openNewTab": false
+        },
+        "locationTo": "Караганда",
+        "locationToId": 164,
+        "locationFrom": "Астана",
+        "locationFromId": 163,
+        "korobyteRestriction": {
+          "id": "2",
+          "displayName": "SGT",
+          "slug": "lms/korobyte-restrictions",
+          "openNewTab": false
+        }
+      }
+    },
+    {
+      "id": 4003,
+      "values": {
+        "scheduleDays": "пн",
+        "partner": {
+          "id": "3001",
+          "displayName": "partner-3001",
+          "slug": "lms/partner",
+          "openNewTab": false
+        },
+        "locationTo": "Астана",
+        "locationToId": 163,
+        "locationFrom": "Алматы",
+        "locationFromId": 162,
+        "korobyteRestriction": {
+          "id": "3",
+          "displayName": "KGT",
+          "slug": "lms/korobyte-restrictions",
+          "openNewTab": false
+        }
+      }
+    },
+    {
+      "id": 4004,
+      "values": {
+        "scheduleDays": "вс",
+        "partner": {
+          "id": "3001",
+          "displayName": "partner-3001",
+          "slug": "lms/partner",
+          "openNewTab": false
+        },
+        "locationTo": "Караганда",
+        "locationToId": 164,
+        "locationFrom": "Алматы",
+        "locationFromId": 162,
+        "korobyteRestriction": {
+          "id": "1",
+          "displayName": "MGT",
+          "slug": "lms/korobyte-restrictions",
+          "openNewTab": false
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+version: '3'
+services:
+    ytbackend:
+        image: registry.yandex.net/yt/yt:stable
+        ports:
+            - 8000:80
+            - 8002:8002
+        command: --proxy-config "{address_resolver={enable_ipv4=%true;enable_ipv6=%false;};coordinator={public_fqdn=\"localhost:8000\"}}" --rpc-proxy-count 1 --rpc-proxy-port 8002

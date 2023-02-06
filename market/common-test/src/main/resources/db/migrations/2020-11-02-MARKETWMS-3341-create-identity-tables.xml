@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <property name="TIMESTAMP_WITH_TIME_ZONE" value="datetimeoffset" dbms="mssql"/>
+    <property name="TIMESTAMP_WITH_TIME_ZONE" value="TIMESTAMP WITH TIME ZONE" dbms="h2"/>
+
+    <property name="NOW" value="getutcdate()" dbms="mssql"/>
+    <property name="NOW" value="CURRENT_TIMESTAMP()" dbms="h2"/>
+
+    <property name="USER_NAME" value="user_name()" dbms="mssql"/>
+    <property name="USER_NAME" value="USER()" dbms="h2"/>
+
+    <changeSet id="1" author="dkomrakov">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists
+                        schemaName="wmwhse1"
+                        tableName="IDENTITY_TYPE"
+                />
+            </not>
+        </preConditions>
+        <createTable tableName="IDENTITY_TYPE" schemaName="wmwhse1">
+            <column name="SERIALKEY" type="int" autoIncrement="true" startWith="1" incrementBy="1"
+                    remarks="Ключ строки">
+                <constraints
+                        unique="true"
+                        uniqueConstraintName="IDENTITY_TYPE_SERIALKEY_UNIQUE"
+                        nullable="false"
+                />
+            </column>
+            <column name="TYPE" type="nvarchar(255)" remarks="Тип identity (IMEI/SN)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="REGEX" type="nvarchar(255)" remarks="Регулярное выражение для валидации">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="nvarchar(255)" remarks="Описание"/>
+            <column name="ADDDATE" type="datetime" defaultValueComputed="${NOW}"
+                    remarks="Дата добавления">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDWHO" type="nvarchar(255)" defaultValueComputed="${USER_NAME}"
+                    remarks="Пользователь, создавший строку">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITDATE" type="datetime" defaultValueComputed="${NOW}"
+                    remarks="Дата последнего редактирования строки">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITWHO" type="nvarchar(255)" defaultValueComputed="${USER_NAME}"
+                    remarks="Кем изменено">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable schemaName="wmwhse1" tableName="IDENTITY_TYPE"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="2" author="dkomrakov">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists
+                        schemaName="wmwhse1"
+                        tableName="SKU_IDENTITY"
+                />
+            </not>
+        </preConditions>
+        <createTable tableName="SKU_IDENTITY" schemaName="wmwhse1">
+            <column name="SERIALKEY" type="int" autoIncrement="true" startWith="1" incrementBy="1"
+                    remarks="Ключ строки">
+                <constraints
+                        unique="true"
+                        uniqueConstraintName="SKU_IDENTITY_SERIALKEY_UNIQUE"
+                        nullable="false"
+                />
+            </column>
+            <column name="STORER" type="nvarchar(15)" remarks="ID поставщика">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SKU" type="nvarchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TYPE" type="nvarchar(255)" remarks="Тип identity (IMEI/SN)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="REQUIREMENT" type="int" remarks="Требуемое количество Identity данного типа">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDDATE" type="datetime" defaultValueComputed="${NOW}"
+                    remarks="Дата добавления">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDWHO" type="nvarchar(255)" defaultValueComputed="${USER_NAME}"
+                    remarks="Пользователь, создавший строку">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITDATE" type="datetime" defaultValueComputed="${NOW}"
+                    remarks="Дата последнего редактирования строки">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITWHO" type="nvarchar(255)" defaultValueComputed="${USER_NAME}"
+                    remarks="Кем изменено">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey
+                columnNames="SKU, STORER, TYPE"
+                constraintName="PK_SKU_IDENTITY"
+                schemaName="wmwhse1"
+                tableName="SKU_IDENTITY"/>
+
+        <addForeignKeyConstraint
+                baseColumnNames="TYPE"
+                baseTableName="SKU_IDENTITY"
+                baseTableSchemaName="wmwhse1"
+                constraintName="FK_SKU_IDENTITY_IDENTITY_TYPE"
+                referencedColumnNames="TYPE"
+                referencedTableName="IDENTITY_TYPE"
+                referencedTableSchemaName="wmwhse1"
+                onDelete="CASCADE"
+        />
+        <rollback>
+            <dropTable schemaName="wmwhse1" tableName="SKU_IDENTITY"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

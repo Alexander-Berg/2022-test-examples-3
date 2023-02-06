@@ -1,0 +1,137 @@
+{% set table = table|default("statistics_unique_users") %}
+
+{% macro hit_app(uuid, platform) -%}
+    [
+        "{{ uuid }}",
+        "{{ platform }}",
+        "1389598",
+        "{{ day }}",
+        "ru.yandex.blue.market",
+        "4"
+    ]
+{%- endmacro %}
+
+{% if table == "statistics_unique_users" %}
+    {% table "statistics" %}
+        ["Market", "Total", "total", 6.0, "{{ day }}"],
+        ["Desktop", "Total", "total", 2.0, "{{ day }}"],
+        ["DesktopMainPage", "Total", "total", 2.0, "{{ day }}"],
+        ["DesktopModelCard", "Total", "total", 2.0, "{{ day }}"],
+        ["Touch", "Total", "total", 1.0, "{{ day }}"],
+        ["TouchMainPage", "Total", "total", 1.0, "{{ day }}"],
+        ["TouchModelCard", "Total", "total", 1.0, "{{ day }}"],
+        ["BlueMarket", "Total", "total", 2.0, "{{ day }}"],
+        ["BlueDesktop", "Total", "total", 1.0, "{{ day }}"],
+        ["BlueMainPage", "Total", "total", 1.0, "{{ day }}"],
+        ["BlueModelCard", "Total", "total", 1.0, "{{ day }}"],
+        ["BlueTouch", "Total", "total", 1.0, "{{ day }}"],
+        ["BlueTouchMainPage", "Total", "total", 1.0, "{{ day }}"],
+        ["BlueTouchModelCard", "Total", "total", 1.0, "{{ day }}"],
+        ["IOS", "Total", "total", 2.0, "{{ day }}"],
+        ["IOSMainPage", "Total", "total", 2.0, "{{ day }}"],
+        ["IOSModelCard", "Total", "total", 2.0, "{{ day }}"],
+        ["Android", "Total", "total", 1.0, "{{ day }}"],
+        ["AndroidMainPage", "Total", "total", 1.0, "{{ day }}"],
+        ["AndroidModelCard", "Total", "total", 1.0, "{{ day }}"]
+    {% endtable %}
+{% elif table == "access_log" %}
+    {
+        "schema": [
+            {
+                "name": "canonized_vhost",
+                "type": "String?"
+            },
+            {
+                "name": "yandexuid",
+                "type": "String?"
+            },
+            {
+                "name": "analyst_filter",
+                "type": "Int64?"
+            }
+        ],
+        "records": [
+           [
+              "market.yandex.ru",
+              "1",
+              0
+           ],
+           [
+              "market.yandex.ru",
+              "1",
+              0
+           ],
+           [
+              "m.market.yandex.ru",
+              "2",
+              0
+           ],
+           [
+              "pokupki.market.yandex.ru",
+              "3",
+              0
+           ],
+           [
+              "m.pokupki.market.yandex.ru",
+              "4",
+              0
+           ],
+           [
+              "market.yandex.ru",
+              "5",
+              0
+           ],
+           {# should be filtered #}
+           [
+              "m.pokupki.market.yandex.ru",
+              "6",
+              1
+           ],
+           [
+              "market.yandex.ru",
+              null,
+              0
+           ],
+           [
+              "dummy.ru",
+              "7",
+              0
+           ]
+        ]
+    }
+{% elif table == "app_metrika" %}
+    {
+        "schema": [
+            {
+                "name": "UUID",
+                "type": "String?"
+            },
+            {
+                "name": "AppPlatform",
+                "type": "String?"
+            },
+            {
+                "name": "APIKey",
+                "type": "String?"
+            },
+            {
+                "name": "StartDate",
+                "type": "String?"
+            },
+            {
+                "name": "AppID",
+                "type": "String?"
+            },
+            {
+                "name": "EventType",
+                "type": "String?"
+            }
+        ],
+        "records": [
+            {{ hit_app("1", "iOS") }},
+            {{ hit_app("2", "iOS") }},
+            {{ hit_app("3", "android") }},
+            {{ hit_app("3", "android") }}
+        ]
+    }
+{% endif %}

@@ -1,0 +1,341 @@
+{
+    "info": {
+        "contact": {
+            "url": "https://wiki.yandex-team.ru/crypta/"
+        },
+        "description": "Provides ways to interact with Crypta",
+        "version": "8833718",
+        "title": "Crypta API"
+    },
+    "swagger": "2.0",
+    "basePath": "/",
+    "definitions": {
+        "ru.yandex.crypta.common.ws.jersey.exception.mapper.ErrorMessage": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "requestId": {
+                    "type": "string"
+                }
+            }
+        },
+        "ru.yandex.crypta.lab.proto.Segment": {
+            "type": "object",
+            "properties": {
+                "exports": {
+                    "$ref": "#/definitions/ru.yandex.crypta.lab.proto.Segment.Exports"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "parentId": {
+                    "type": "string"
+                },
+                "tankerDescriptionKey": {
+                    "type": "string"
+                },
+                "tankerNameKey": {
+                    "type": "string"
+                }
+            }
+        },
+        "ru.yandex.crypta.lab.proto.Segment.Export": {
+            "type": "object",
+            "properties": {
+                "keywordId": {
+                    "format": "int64",
+                    "type": "integer"
+                },
+                "segmentId": {
+                    "format": "int64",
+                    "type": "integer"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            }
+        },
+        "ru.yandex.crypta.lab.proto.Segment.Exports": {
+            "type": "object",
+            "properties": {
+                "exports": {
+                    "items": {
+                        "$ref": "#/definitions/ru.yandex.crypta.lab.proto.Segment.Export"
+                    },
+                    "type": "array"
+                }
+            }
+        },
+        "ru.yandex.crypta.lab.proto.Translation": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "ru.yandex.crypta.lab.proto.Translations": {
+            "type": "object",
+            "properties": {
+                "en": {
+                    "$ref": "#/definitions/ru.yandex.crypta.lab.proto.Translation"
+                },
+                "ru": {
+                    "$ref": "#/definitions/ru.yandex.crypta.lab.proto.Translation"
+                },
+                "tankerKey": {
+                    "type": "string"
+                }
+            }
+        },
+        "ru.yandex.crypta.lab.utils.SegmentNode": {
+            "type": "object",
+            "properties": {
+                "children": {
+                    "items": {
+                        "$ref": "#/definitions/ru.yandex.crypta.lab.utils.SegmentNode"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "paths": {
+        "/lab/segment": {
+            "get": {
+                "consumes": [
+                    "application/json; charset=utf-8"
+                ],
+                "description": "",
+                "operationId": "getAllSegments",
+                "parameters": [
+                    {
+                        "name": "lang",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json; charset=utf-8"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "headers": {
+                            "X-Crypta-Host": {
+                                "description": "Host to be reported",
+                                "type": "string"
+                            },
+                            "X-Crypta-Instance-ID": {
+                                "description": "Instance ID to be reported",
+                                "type": "string"
+                            },
+                            "X-Crypta-Request-ID": {
+                                "description": "Request ID to be reported",
+                                "type": "string"
+                            }
+                        },
+                        "schema": {
+                            "items": {
+                                "$ref": "#/definitions/ru.yandex.crypta.lab.proto.Segment"
+                            },
+                            "type": "array"
+                        }
+                    }
+                },
+                "summary": "Get all segments",
+                "tags": [
+                    "lab"
+                ]
+            }
+        },
+        "/lab/segment/groups_tree": {
+            "get": {
+                "consumes": [
+                    "application/json; charset=utf-8"
+                ],
+                "description": "",
+                "operationId": "getSegmentGroupsTree",
+                "parameters": [
+                    {
+                        "name": "lang",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json; charset=utf-8"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "headers": {
+                            "X-Crypta-Host": {
+                                "description": "Host to be reported",
+                                "type": "string"
+                            },
+                            "X-Crypta-Instance-ID": {
+                                "description": "Instance ID to be reported",
+                                "type": "string"
+                            },
+                            "X-Crypta-Request-ID": {
+                                "description": "Request ID to be reported",
+                                "type": "string"
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ru.yandex.crypta.lab.utils.SegmentNode"
+                        }
+                    }
+                },
+                "summary": "Get segment groups as tree",
+                "tags": [
+                    "lab"
+                ]
+            }
+        },
+        "/lab/segment/parents": {
+            "get": {
+                "consumes": [
+                    "application/json; charset=utf-8"
+                ],
+                "description": "",
+                "operationId": "getParentsPerSegment",
+                "parameters": [
+                    {
+                        "name": "lang",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json; charset=utf-8"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "headers": {
+                            "X-Crypta-Host": {
+                                "description": "Host to be reported",
+                                "type": "string"
+                            },
+                            "X-Crypta-Instance-ID": {
+                                "description": "Instance ID to be reported",
+                                "type": "string"
+                            },
+                            "X-Crypta-Request-ID": {
+                                "description": "Request ID to be reported",
+                                "type": "string"
+                            }
+                        },
+                        "schema": {
+                            "additionalProperties": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "summary": "Get transitive parents of segments",
+                "tags": [
+                    "lab"
+                ]
+            }
+        },
+        "/lab/segment/tanker/{key}": {
+            "get": {
+                "consumes": [
+                    "application/json; charset=utf-8"
+                ],
+                "description": "",
+                "operationId": "getTranslationsByKey",
+                "parameters": [
+                    {
+                        "name": "lang",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "key",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json; charset=utf-8"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "headers": {
+                            "X-Crypta-Host": {
+                                "description": "Host to be reported",
+                                "type": "string"
+                            },
+                            "X-Crypta-Instance-ID": {
+                                "description": "Instance ID to be reported",
+                                "type": "string"
+                            },
+                            "X-Crypta-Request-ID": {
+                                "description": "Request ID to be reported",
+                                "type": "string"
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ru.yandex.crypta.lab.proto.Translations"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found. Likely caused by the application itself.",
+                        "headers": {
+                            "X-Crypta-Host": {
+                                "description": "Host to be reported",
+                                "type": "string"
+                            },
+                            "X-Crypta-Instance-ID": {
+                                "description": "Instance ID to be reported",
+                                "type": "string"
+                            },
+                            "X-Crypta-Request-ID": {
+                                "description": "Request ID to be reported",
+                                "type": "string"
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/ru.yandex.crypta.common.ws.jersey.exception.mapper.ErrorMessage"
+                        }
+                    }
+                },
+                "summary": "Get translations from Tanker by key",
+                "tags": [
+                    "lab"
+                ]
+            }
+        }
+    }
+}

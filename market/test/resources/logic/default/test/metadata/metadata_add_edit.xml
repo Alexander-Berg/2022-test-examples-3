@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<m:config xmlns:c="urn:jmf:common:1.0"
+          xmlns:m="urn:jmf:metaclass:config:1.0"
+          xmlns:a="urn:jmf:attribute:type:default:config:1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+    <m:metaclass>
+        <m:fqn>parentlessEntity</m:fqn>
+        <m:title>
+            <c:value>Метакласс без предка</c:value>
+        </m:title>
+
+        <m:attributes>
+            <m:attribute>
+                <m:code>attrParentless</m:code>
+                <m:title>
+                    <c:value>Attribute parentless</c:value>
+                </m:title>
+                <m:type xsi:type="a:string"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>attrPresentation</m:code>
+                <m:title>
+                    <c:value>attrPresentation</c:value>
+                </m:title>
+                <m:type xsi:type="a:string"/>
+                <m:presentation view="testViewPresentation" edit="testEditPresentation"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>objectAttr</m:code>
+                <m:title>
+                    <c:value>Очереди</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="parentlessEntity"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+    <m:metaclass typed="true">
+        <m:fqn>rootEntity</m:fqn>
+        <m:title>
+            <c:value>Корневой метакласс</c:value>
+        </m:title>
+
+        <m:attributes>
+            <m:attribute>
+                <m:code>attrRoot</m:code>
+                <m:title>
+                    <c:value>Attribute root</c:value>
+                </m:title>
+                <m:type xsi:type="a:string"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>attrRoot1</m:code>
+                <m:title>
+                    <c:value>Attribute root One</c:value>
+                </m:title>
+                <m:type xsi:type="a:string"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>attrRoot2</m:code>
+                <m:title>
+                    <c:value>Attribute root Two</c:value>
+                </m:title>
+                <m:type xsi:type="a:string"/>
+            </m:attribute>
+        </m:attributes>
+
+        <m:attributeGroups>
+            <m:group code="rootGroup">
+                <m:attribute>attrRoot1</m:attribute>
+                <m:attribute>attrRoot2</m:attribute>
+            </m:group>
+        </m:attributeGroups>
+    </m:metaclass>
+
+    <m:metaclass>
+        <m:fqn>rootEntity$child</m:fqn>
+        <m:parent>rootEntity</m:parent>
+        <m:title>
+            <c:value>Потомок Корневого метакласса</c:value>
+        </m:title>
+
+        <m:attributes>
+            <m:attribute>
+                <m:code>attrChild</m:code>
+                <m:title>
+                    <c:value>Attribute child</c:value>
+                </m:title>
+                <m:type xsi:type="a:string"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+</m:config>

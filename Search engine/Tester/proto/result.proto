@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package NResonanceTester.NProto;
+
+message TEventPayload {
+    message TLoadgenStart {
+        string Id = 1;
+        int32 Threads = 2;
+        int32 Connections = 3;
+        int32 Rps = 4;
+        string Host = 5;
+        repeated string Path = 6;
+        repeated string Header = 7;
+    }
+
+    message TLoadgenStop {
+        string Id = 1;
+    }
+
+    message TMetric {
+        string Name = 1;
+        double Value = 2;
+    }
+
+    message TCheck {
+        string Name = 1;
+        bool Passed = 2;
+    }
+
+    message TBackendsGroup {
+        string Group = 1;
+        repeated string Backends = 2;
+    }
+
+    oneof payload {
+        string Type = 1;
+
+        string Info = 2;
+        string Error = 3;
+
+        TLoadgenStart LoadgenStart = 4;
+        TLoadgenStop LoadgenStop = 5;
+        TMetric Metric = 6;
+        TCheck Check = 7;
+        TBackendsGroup BackendsGroup = 8;
+    }
+}
+
+message TEvent {
+    double Begin = 1;
+    double End = 2;
+    repeated TEvent Scope = 3;
+    TEventPayload Payload = 4;
+}
+
+// Unistat 1s stat
+message TUnistatItem {
+    double Time = 1;
+
+    double Requests = 2;
+    double Responses = 3;
+    double ConnectionReset = 4;
+    double Failures = 5;
+    double Timeouts = 6;
+    double TooManyRequests = 7;
+    double ResponseTimeMean = 8;
+}
+
+message TUnistatItemList {
+    repeated TUnistatItem Items = 1;
+}
+
+message TResult {
+    string Test = 1;
+    TEvent RootEvent = 2;
+    map<string, TUnistatItemList> BackendUnistat = 3;
+}

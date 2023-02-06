@@ -1,0 +1,46 @@
+{
+    {# It is a config Jinja template. It is used for example if you want to run this demo and for tests #}
+    "HttpServer": {
+        "Port": {{port}}
+    },
+    "Logs": {"Rules": [
+        {
+            "FilePath": "{{global_log}}",
+            "IncludeCategories": ["BigRT", "Main"],
+            "MinLevel": "Debug"
+        },
+        {
+            "FilePath": "{{global_log}}",
+            "ExcludeCategories": ["BigRT", "Main"],
+            "MinLevel": "Info"
+        }
+    ]},
+    "Suppliers": [
+        {
+            "Alias": "resharded_yt_log",
+            "YtSupplier": {
+                "QueueConsumer": "{{consumer}}",
+                "QueuePath": "{{input_queue}}",
+                "Cluster": "{{yt_cluster}}",
+                "MaxOutChunkSize": 10 {# demo test specific. NEVER use it with real YT clusters #}
+            }
+        }
+    ],
+    "ConsumingSystem": {
+        "Cluster": "{{yt_cluster}}",
+        "MainPath": "{{consuming_system_main_path}}",
+        "MaxShards": {{max_shards}},
+        "MaxShardsToCheck": {{max_shards}},
+        "WorkerMinorName": "{{worker_minor_name}}"
+    },
+    "StatefulShardProcessorConfig": {
+        "ParsingThreads": 2 {# demo test specific #}
+    },
+    "StateConfig": {
+        "ContentOfferStateTable": "{{content_offers_state_table_path}}",
+        "ServiceOfferStateTable": "{{service_offers_state_table_path}}"
+    },
+    "MaxInflightBytes": {{max_inflight_bytes}},
+    "Codec": "zstd_6",
+    "ProcessingThreads": 2
+}

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <orders
+            id="1"
+            status="VALIDATION_ERROR"
+            validation_error="[FieldError(propertyPath=, message=waybill with FULFILLMENT or SORTING_CENTER segment MUST contain DELIVERY segment), FieldError(propertyPath=waybill[0].waybillShipment, message=warehouseTo must be not null when shipment type is IMPORT), FieldError(propertyPath=waybill[0].waybillShipment.locationTo, message=must not be null)]"
+    />
+
+    <order_history_event
+            order_id="1"
+            diff='[
+            {
+              "op": "replace",
+              "path": "/status",
+              "value": "VALIDATION_ERROR",
+              "fromValue": "DRAFT"
+            },
+            {
+              "op": "add",
+              "path": "/orderStatusHistory/0",
+              "value": {
+                "id": 1,
+                "status": "VALIDATION_ERROR",
+                "datetime": "2019-06-12T00:00:00Z"
+              }
+            }
+        ]'
+    />
+
+    <order_history_event
+            order_id="1"
+            diff='[
+            {
+              "op": "replace",
+              "path": "/validationError",
+              "value": "[FieldError(propertyPath=, message=waybill with FULFILLMENT or SORTING_CENTER segment MUST contain DELIVERY segment), FieldError(propertyPath=waybill[0].waybillShipment, message=warehouseTo must be not null when shipment type is IMPORT), FieldError(propertyPath=waybill[0].waybillShipment.locationTo, message=must not be null)]",
+              "fromValue": null
+            }
+        ]'
+    />
+
+    <business_process_state
+            queue_type="NOTIFY_ORDER_VALIDATION_ERROR"
+            status="ENQUEUED"
+            author="[null]"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1","errorProcessSequenceId":1,"orderId":1,"created":"2021-01-01T00:00:00Z","sequenceId":1}'
+            comment="[null]"
+            sequence_id="1"
+    />
+
+    <business_process_state_entity_id
+            business_process_state_id="1"
+            entity_type="ORDER"
+            entity_id="1"
+    />
+</dataset>

@@ -1,0 +1,48 @@
+- name: man-oinl4bd80c6bit8v.db.yandex.net
+  cluster_id: mdbidpdjrrqht2bi3v9o
+  zone_id: man
+  resources:
+    resource_preset_id: db1.micro
+    disk_size: "32212254720"
+    disk_type_id: local-ssd
+  role: REPLICA
+  health: ALIVE
+  services:
+  - type: POSTGRESQL
+    health: ALIVE
+  - type: POOLER
+    health: ALIVE
+  priority: "0"
+  replica_type: SYNC
+- name: sas-1u95bf4an84bkxd0.db.yandex.net
+  cluster_id: mdbidpdjrrqht2bi3v9o
+  zone_id: sas
+  resources:
+    resource_preset_id: db1.micro
+    disk_size: "32212254720"
+    disk_type_id: local-ssd
+  role: REPLICA
+  health: ALIVE
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+    health: ALIVE
+  replication_source: man-oinl4bd80c6bit8v.db.yandex.net
+  priority: "0"
+- name: vla-7c4y09l2vqwl7vx3.db.yandex.net
+  cluster_id: mdbidpdjrrqht2bi3v9o
+  zone_id: vla
+  resources:
+    resource_preset_id: db1.micro
+    disk_size: "32212254720"
+    disk_type_id: local-ssd
+  role: MASTER
+  health: ALIVE
+  services:
+  - type: POSTGRESQL
+    health: ALIVE
+  - type: POOLER
+    health: ALIVE
+  priority: "5"
+

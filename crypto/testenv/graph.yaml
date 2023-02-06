@@ -1,0 +1,1189 @@
+BUILD_CRYPTA_GRAPH_EXPORT:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/export
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_GRAPH_EXPORT_BUNDLE
+                package_type: tarball
+                packages: crypta/graph/export/crypta-graph-export.json
+                publish_package: false
+        output_resources:
+            CRYPTA_GRAPH_EXPORT_BUNDLE: 30
+
+BUILD_CRYPTA_GRAPH_FPC:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/fpc
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_GRAPH_FPC_BUNDLE
+                package_type: tarball
+                packages: crypta/graph/fpc/crypta-graph-fpc.json
+                publish_package: false
+                strip_binaries: false
+        output_resources:
+            CRYPTA_GRAPH_FPC_BUNDLE: 30
+
+BUILD_CRYPTA_GRAPH_LOGIN_METRICS:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/metrics/login_metrics
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_BINARY_LOGIN_METRICS_BUNDLE
+                package_type: tarball
+                packages: crypta/graph/metrics/login_metrics/crypta-graph-login-metrics.json
+                publish_package: false
+        output_resources:
+            CRYPTA_BINARY_LOGIN_METRICS_BUNDLE: 30
+
+BUILD_CRYPTA_GRAPH_MATCHING_HUMAN:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/matching
+          - ^arcadia/crypta/graph/lib/java
+          - ^arcadia/crypta/graph/soup/config
+          - ^arcadia/crypta/graph/soup/model
+          - ^arcadia/crypta/graph/soup/prepare
+          - ^arcadia/crypta/graph/engine/score
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_GRAPH_HUMAN_MATCHING_BUILD
+                package_type: tarball
+                packages: crypta/graph/matching/human/package.json
+                publish_package: false
+        output_resources:
+            CRYPTA_GRAPH_HUMAN_MATCHING_BUILD: 30
+
+BUILD_CRYPTA_GRAPH_MATCHING_HUMAN_BACKUP:
+  owners:
+    - g:crypta
+  type: CHECK
+  filter:
+      observed_paths:
+        - ^arcadia/crypta/graph/archivator
+  check_task:
+      name: YA_PACKAGE
+      priority: SERVICE:LOW
+      params:
+          apiargs:
+              requirements:
+                  platform: linux
+              notifications:
+                - recipients:
+                    - '{commit_author}'
+                    - crypta-ci
+                  statuses:
+                    - SUCCESS
+                    - FAILURE
+                    - EXCEPTION
+                  transport: email
+          ctx:
+              kill_timeout: 6300
+              build_type: relwithdebinfo
+              build_system: semi_distbuild
+              checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+              use_aapi_fuse: true
+              use_arc_instead_of_aapi: true
+              aapi_fallback: true
+              checkout: false
+              resource_type: CRYPTA_GRAPH_HUMAN_MATCHING_BACKUP_BUILD
+              package_type: tarball
+              packages: crypta/graph/archivator/package.json
+              publish_package: false
+      output_resources:
+          CRYPTA_GRAPH_HUMAN_MATCHING_BACKUP_BUILD: 30
+
+BUILD_CRYPTA_GRAPH_MATCHING_PUBLISH:
+  owners:
+    - g:crypta
+  type: CHECK
+  filter:
+      observed_paths:
+        - ^arcadia/crypta/graph/matching/publish
+  check_task:
+      name: YA_PACKAGE
+      priority: SERVICE:LOW
+      params:
+          apiargs:
+              requirements:
+                  platform: linux
+              notifications:
+                - recipients:
+                    - '{commit_author}'
+                    - crypta-ci
+                  statuses:
+                    - SUCCESS
+                    - FAILURE
+                    - EXCEPTION
+                  transport: email
+          ctx:
+              kill_timeout: 6300
+              build_type: relwithdebinfo
+              build_system: semi_distbuild
+              checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+              use_aapi_fuse: true
+              use_arc_instead_of_aapi: true
+              aapi_fallback: true
+              checkout: false
+              resource_type: CRYPTA_GRAPH_HUMAN_MATCHING_PUBLISH_BUILD
+              package_type: tarball
+              packages: crypta/graph/matching/publish/package.json
+              publish_package: false
+      output_resources:
+          CRYPTA_GRAPH_HUMAN_MATCHING_PUBLISH_BUILD: 30
+
+BUILD_CRYPTA_GRAPH_METRICS_STATS:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/metrics/stats_exporter
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_STATS_EXPORTER_BUNDLE
+                package_type: tarball
+                packages: crypta/graph/metrics/stats_exporter/crypta-stats-exporter.json
+                publish_package: false
+        output_resources:
+            CRYPTA_STATS_EXPORTER_BUNDLE: 30
+
+BUILD_CRYPTA_METRICS_BINARY_FINGERPRINT_BUNDLE:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/metrics/fingerprint
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_BINARY_FINGERPRINT_BUNDLE
+                package_type: tarball
+                packages: crypta/graph/metrics/fingerprint/package.json
+                publish_package: false
+        output_resources:
+            CRYPTA_BINARY_FINGERPRINT_BUNDLE: 30
+
+
+BUILD_CRYPTA_METRICS_BINARY_HOUSEHOLDS_BUNDLE:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/metrics/household
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_BINARY_HOUSEHOLDS_BUNDLE
+                package_type: tarball
+                packages: crypta/graph/metrics/household/package.json
+                publish_package: false
+        output_resources:
+            CRYPTA_BINARY_HOUSEHOLDS_BUNDLE: 30
+
+BUILD_CRYPTA_GRAPH_METRICS_STATS_BASE:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/metrics/stats_base
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_STATS_BASE_METRICS_BUNDLE
+                package_type: tarball
+                packages: crypta/graph/metrics/stats_base/crypta-stats-base.json
+                publish_package: false
+        output_resources:
+            CRYPTA_STATS_BASE_METRICS_BUNDLE: 30
+
+BUILD_CRYPTA_GRAPH_METRICS_TELEGRAM_NOTIFY:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/metrics/telegram
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_STATS_TELEGRAM_NOTIFY_BUNDLE
+                package_type: tarball
+                packages: crypta/graph/metrics/telegram/crypta-stats-telegram-notify.json
+                publish_package: false
+        output_resources:
+            CRYPTA_STATS_TELEGRAM_NOTIFY_BUNDLE: 10
+
+BUILD_CRYPTA_STAFF_EXPORTER_BUNDLE:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^crypta/graph/staff
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_STAFF_EXPORTER_BUNDLE
+                package_type: tarball
+                packages: crypta/graph/staff/package.json
+                publish_package: false
+        output_resources:
+            CRYPTA_STAFF_EXPORTER_BUNDLE: 30
+
+BUILD_CRYPTA_GRAPH_MRCC_COMPONENTS:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/mrcc_opt
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_GRAPH_SOUP_COMPONENTS_BUNDLE
+                package_type: tarball
+                packages: crypta/graph/mrcc_opt/soup/package.json
+                publish_package: false
+        output_resources:
+            CRYPTA_GRAPH_SOUP_COMPONENTS_BUNDLE: 30
+
+BUILD_CRYPTA_GRAPH_PROBABILISTIC:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/fuzzy
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_GRAPH_PROBABILISTIC_BUNDLE
+                package_type: tarball
+                packages: crypta/graph/fuzzy/crypta-graph-probabilistic.json
+                publish_package: false
+                strip_binaries: false
+        output_resources:
+            CRYPTA_GRAPH_PROBABILISTIC_BUNDLE: 30
+
+BUILD_CRYPTA_GRAPH_SOUP_PREPARE:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/soup
+          - ^arcadia/crypta/graph/lib/java
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_GRAPH_PREPARE_SOUP_BUILD
+                package_type: tarball
+                packages: crypta/graph/soup/prepare/package.json
+                publish_package: false
+        output_resources:
+            CRYPTA_GRAPH_PREPARE_SOUP_BUILD: 30
+
+BUILD_CRYPTA_GRAPH_SOUP_PREPARE_DYNAMIC:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/soup
+          - ^arcadia/crypta/graph/lib/java
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_GRAPH_PREPARE_SOUP_DYNAMIC_BUILD
+                package_type: tarball
+                packages: crypta/graph/soup/prepare_dynamic/package.json
+                publish_package: false
+        output_resources:
+            CRYPTA_GRAPH_PREPARE_SOUP_DYNAMIC_BUILD: 30
+
+BUILD_CRYPTA_GRAPH_SOUP_SAMPLE:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/sampling
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_GRAPH_SAMPLE_SOUP_BUILD
+                package_type: tarball
+                packages: crypta/graph/sampling/package.json
+                publish_package: false
+        output_resources:
+            CRYPTA_GRAPH_SAMPLE_SOUP_BUILD: 30
+
+BUILD_CRYPTA_GRAPH_SOUP_EDGE_WEIGHTS_HISTOGRAMS:
+    owners:
+        - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+            - ^arcadia/crypta/graph/soup/edge_weights
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                    - recipients:
+                        - "{commit_author}"
+                        - crypta-ci
+                      statuses:
+                        - SUCCESS
+                        - FAILURE
+                        - EXCEPTION
+                      transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: release
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                checkout: false
+                resource_type: CRYPTA_GRAPH_SOUP_EDGE_WEIGHTS_HISTOGRAMS_BUNDLE
+                package_type: tarball
+                packages: crypta/graph/soup/edge_weights/package.json
+                publish_package: false
+        output_resources:
+            CRYPTA_GRAPH_SOUP_EDGE_WEIGHTS_HISTOGRAMS_BUNDLE: 30
+
+BUILD_CRYPTA_GRAPH_TASK_RUNNER:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/task_runner
+          - ^arcadia/crypta/graph/matching/direct
+          - ^arcadia/crypta/graph/publish
+          - ^arcadia/crypta/graph/acl
+          - ^arcadia/crypta/lib/native/identifiers/lib
+          - ^arcadia/crypta/graph/soup/config
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_GRAPH_TASK_RUNNER_BUNDLE
+                package_type: tarball
+                packages: crypta/graph/task_runner/task_runner.json
+                publish_package: false
+                strip_binaries: false
+        output_resources:
+            CRYPTA_GRAPH_TASK_RUNNER_BUNDLE: 30
+
+BUILD_CRYPTA_GRAPH_V1_TEST:
+    owners:
+      - g:crypta
+    type: CHECK
+    tags:
+      - FULL_PRECOMMIT
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/v1
+          - ^arcadia/crypta/graph/data_import
+          - ^arcadia/crypta/lib/native/identifiers
+          - ^arcadia/crypta/graph/soup/config
+          - ^arcadia/crypta/graph/yuid_apps
+    check_task:
+        name: YA_MAKE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                    disk_space: 107374182400  # 100 Gb
+                    ram: 61203283968
+            ctx:
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                targets: crypta/graph/v1/tests/test-graph-all
+                test: true
+                check_return_code: true
+                ya_timeout: 108000
+                disable_test_timeout: true
+                kill_timeout: 108000
+                ram_drive_size: 32768
+                allure_report: true
+
+BUILD_CRYPTA_GRAPH_V1_TEST_SOUP:
+    owners:
+      - g:crypta
+    type: CHECK
+    tags:
+      - FULL_PRECOMMIT
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/v1
+          - ^arcadia/crypta/graph/data_import
+          - ^arcadia/crypta/lib/native/identifiers
+          - ^arcadia/crypta/graph/soup/config
+          - ^arcadia/crypta/graph/yuid_apps
+    check_task:
+        name: YA_MAKE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                    disk_space: 107374182400  # 100 Gb
+                    ram: 61203283968
+            ctx:
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                targets: crypta/graph/v1/tests/test-graph-soup
+                test: true
+                check_return_code: true
+                ya_timeout: 108000
+                disable_test_timeout: true
+                kill_timeout: 108000
+                ram_drive_size: 32768
+                allure_report: true
+
+BUILD_CRYPTA_GRAPH_V1_YQL_CHECK:
+    owners:
+      - g:crypta
+    type: CHECK
+    tags:
+      - FULL_PRECOMMIT
+    filter:
+        observed_paths:
+          - ^arcadia/yql
+    check_task:
+        name: YA_MAKE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                    disk_space: 107374182400  # 100 Gb
+                    ram: 61203283968
+            ctx:
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                targets: crypta/graph/v1/tests/test-graph-all
+                test: true
+                check_return_code: true
+                ya_timeout: 108000
+                disable_test_timeout: true
+                kill_timeout: 108000
+                ram_drive_size: 32768
+                allure_report: true
+
+
+BUILD_CRYPTA_GRAPH_V1_PACKAGE:
+    parent_tests:
+      - BUILD_CRYPTA_GRAPH_V1_TEST
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/graph/v1
+          - ^arcadia/crypta/graph/data_import
+          - ^arcadia/crypta/lib/native/identifiers
+          - ^arcadia/crypta/graph/soup/config
+          - ^arcadia/crypta/graph/yuid_apps
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                package_type: debian
+                packages: >
+                    crypta/graph/v1/packages/crypta-graph-v1/crypta-graph-v1.json;
+                    crypta/graph/v1/packages/rtcrypta-config/rtcrypta-config.json;
+                    crypta/lib/python/yql_runner/yql-common.json
+                publish_package: true
+                publish_to: crypta-precise
+                key_user: robot-secretary
+
+
+BUILD_BUNDLES:
+  multiple_jobs:
+    BUILD_CRYPTA_GRAPH_V1_SANDBOX_PACKAGE:
+      parent_tests:
+      - BUILD_CRYPTA_GRAPH_V1_TEST
+      filter:
+        observed_paths:
+        - ^arcadia/crypta/graph/v1
+        - ^arcadia/crypta/graph/data_import
+        - ^arcadia/crypta/lib/native/identifiers
+        - ^arcadia/crypta/graph/soup/config
+        - ^arcadia/crypta/graph/yuid_apps
+      resource_type: CRYPTA_GRAPH_V_1_BUNDLE
+      packages: crypta/graph/v1/packages/sandbox/package.json
+
+    BUILD_CRYPTA_PARSE_BS_WEBVISOR_LOG_BUNDLE:
+      filter:
+        observed_paths:
+        - ^crypta/graph/data_import/webvisor/v1
+      resource_type: CRYPTA_PARSE_BS_WEBVISOR_LOG_BUNDLE
+      packages: crypta/graph/data_import/webvisor/v1/crypta-parse-bs-webvisor-log.json
+
+    BUILD_CRYPTA_GRAPH_BOCHKA_BUNDLE:
+      filter:
+        observed_paths:
+        - ^arcadia/crypta/graph/bochka
+      resource_type: CRYPTA_GRAPH_BOCHKA_BUNDLE
+      packages: crypta/graph/bochka/package.json
+
+    BUILD_CRYPTA_BINARY_SOUP_ATTRIBUTES_BUNDLE:
+      filter:
+        observed_paths:
+        - ^arcadia/crypta/graph/soup/soup_attributes
+      resource_type: CRYPTA_BINARY_SOUP_ATTRIBUTES_BUNDLE
+      packages: crypta/graph/soup/soup_attributes/package.json
+
+    BUILD_CRYPTA_SOUP_BINARY_ICOOKIE_DICT_BUNDLE:
+      filter:
+        observed_paths:
+        - ^arcadia/crypta/graph/soup/dicts/yuid_icookie
+      resource_type: CRYPTA_BINARY_ICOOKIE_DICT_BUNDLE
+      packages: crypta/graph/soup/dicts/yuid_icookie/package.json
+
+    BUILD_CRYPTA_BINARY_SOUPOSTAT_BUNDLE:
+      filter:
+        observed_paths:
+        - ^arcadia/crypta/graph/soup/soupostat
+      resource_type: CRYPTA_BINARY_SOUPOSTAT_BUNDLE
+      packages: crypta/graph/soup/soupostat/package.json
+
+    BUILD_CRYPTA_BINARY_SOUPOSTAT_METRICS_BUNDLE:
+      filter:
+        observed_paths:
+        - ^arcadia/crypta/graph/metrics/soupostat_metrics
+      resource_type: CRYPTA_BINARY_SOUPOSTAT_METRICS_BUNDLE
+      packages: crypta/graph/metrics/soupostat_metrics/package.json
+
+    BUILD_CRYPTA_SOUPY_INDEVICE:
+      filter:
+        observed_paths:
+        - ^arcadia/crypta/graph/soupy_indevice
+        - ^arcadia/crypta/graph/soup/config
+      resource_type: CRYPTA_SOUPY_INDEVICE_BUNDLE
+      packages: crypta/graph/soupy_indevice/soupy-indevice.json
+      strip_binaries: true
+      test: true
+
+    BUILD_CRYPTA_SOUPY_INDEVICE_METRICS:
+      filter:
+        observed_paths:
+        - ^arcadia/crypta/graph/soupy_indevice/statface
+        - ^arcadia/crypta/graph/metrics/lib
+      resource_type: CRYPTA_SOUPY_INDEVICE_METRICS_BUNDLE
+      packages: crypta/graph/soupy_indevice/soupy-indevice-metrics.json
+      strip_binaries: false
+      test: true
+
+    BUILD_CRYPTA_HOUSEHOLDS_BUNDLE:
+      filter:
+        observed_paths:
+        - ^arcadia/crypta/graph/households
+      resource_type: CRYPTA_HOUSEHOLDS_BUNDLE
+      packages: crypta/graph/households/package.json
+
+    BUILD_CRYPTA_FINGERPRINT_BUNDLE:
+      filter:
+        observed_paths:
+        - ^arcadia/crypta/graph/fingerprint
+      resource_type: CRYPTA_FINGERPRINT_BUNDLE
+      packages: crypta/graph/fingerprint/package.json
+
+    BUILD_CRYPTA_GRAPH_DATA_IMPORT_STREAM_BUNDLE:
+      filter:
+        observed_paths:
+        - ^arcadia/crypta/graph/data_import
+      resource_type: CRYPTA_GRAPH_DATA_IMPORT_STREAM_BUNDLE
+      packages: crypta/graph/data_import/stream/package.json
+
+    BUILD_CRYPTA_GRAPH_VAVILOV_BUNDLE:
+      filter:
+        observed_paths:
+        - ^arcadia/crypta/graph/vavilov
+      resource_type: CRYPTA_GRAPH_VAVILOV_BUNDLE
+      packages: crypta/graph/vavilov/package.json
+
+    BUILD_CRYPTA_GRAPH_RTSKLEJKA_BUNDLE:
+      filter:
+        observed_paths:
+        - ^arcadia/crypta/graph/rt/sklejka
+      resource_type: CRYPTA_GRAPH_RTSKLEJKA_BUNDLE
+      packages: crypta/graph/rt/sklejka/adhoc/package.json
+
+    BUILD_CRYPTA_GRAPH_RTMR_TASK_CONFIG:
+      filter:
+        commit_path_prefixes:
+        - /trunk/arcadia/crypta/
+        observed_paths:
+        - ^arcadia/crypta/graph/rtmr/config/config.yaml
+        - ^arcadia/crypta/graph/rtmr/config/crypta-graph-rtmr-task-config.json
+      resource_type: CRYPTA_GRAPH_RTMR_TASK_CONFIG
+      packages: crypta/graph/rtmr/config/crypta-graph-rtmr-task-config.json
+      package_resource_attrs:
+        released: testing
+
+    BUILD_CRYPTA_GRAPH_PREPARE_EXP_SOUP_BUILD:
+      filter:
+        observed_paths:
+        - ^arcadia/crypta/graph/soup/prepare_exp
+      resource_type: CRYPTA_GRAPH_PREPARE_EXP_SOUP_BUILD
+      packages: crypta/graph/soup/prepare_exp/package.json
+
+  parent_tests: gen:parent_tests
+  owners:
+  - g:crypta
+  type: CHECK
+  filter: gen:filter
+  check_task:
+    name: YA_PACKAGE
+    priority: SERVICE:LOW
+    params:
+      apiargs:
+        requirements:
+          platform: linux
+        notifications:
+          - recipients:
+              - '{commit_author}'
+              - crypta-ci
+            statuses:
+              - SUCCESS
+              - FAILURE
+              - EXCEPTION
+            transport: email
+      ctx:
+        kill_timeout: 9000
+        build_type: relwithdebinfo
+        build_system: semi_distbuild
+        checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+        use_aapi_fuse: true
+        use_arc_instead_of_aapi: true
+        aapi_fallback: true
+        checkout: false
+        resource_type: gen:resource_type
+        package_type: tarball
+        packages: gen:packages
+        publish_package: false
+        strip_binaries: gen:strip_binaries
+        test: gen:test
+        package_resource_attrs: gen:package_resource_attrs
+    output_resources:
+      gen:resource_type: 10
+
+BUILD_DOCKER:
+    multiple_jobs:
+        # ok autorelease
+        BUILD_CRYPTA_PEREVAL_DOCKER:
+            packages: crypta/graph/pereval/package.json
+            observed_paths:
+                - ^arcadia/crypta/graph/pereval
+            auto_release: true
+            auto_release_env: testing
+            release_to_ya_deploy: true
+
+        BUILD_CRYPTA_PROXY_EXP_STATS_DOCKER:
+            packages: crypta/graph/proxy_exp_stats/docker/package.json
+            observed_paths:
+                - ^arcadia/crypta/graph/proxy_exp_stats
+            auto_release: true
+            auto_release_env: testing
+            release_to_ya_deploy: true
+
+        BUILD_CRYPTA_RTFP_DOCKER:
+            packages: >
+              crypta/graph/rt/fp/resharder/docker/package.json ;
+              crypta/graph/rt/fp/herschel/docker/package.json
+            observed_paths:
+                - ^arcadia/crypta/graph/rt/fp
+            auto_release: true
+            auto_release_env: testing
+            release_to_ya_deploy: true
+
+        BUILD_CRYPTA_RTSKLEJKA_DOCKER:
+            packages: >
+              crypta/graph/rt/sklejka/resharder/docker/package.json ;
+              crypta/graph/rt/sklejka/michurin/docker/package.json
+            observed_paths:
+                - ^arcadia/crypta/graph/rt/sklejka
+            auto_release: true
+            auto_release_env: testing
+            release_to_ya_deploy: true
+
+        BUILD_CRYPTA_GRAPH_LUIGID_DOCKER:
+            packages: crypta/graph/orchestration/luigid/crypta-graph-luigid.json
+            observed_paths:
+                - ^arcadia/contrib/python/luigi/luigi/static
+                - ^arcadia/contrib/python/luigi/luigi/templates
+                - ^arcadia/crypta/graph/orchestration/luigid/Dockerfile
+                - ^arcadia/crypta/graph/orchestration/luigid/crypta-graph-luigid.json
+                - ^arcadia/crypta/graph/orchestration/luigid/entrypoint.sh
+                - ^arcadia/crypta/graph/orchestration/luigid/luigi-client.cfg
+            targets:
+                - crypta/utils/luigid
+            auto_release: false
+            auto_release_env: null
+            release_to_ya_deploy: true
+
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        commit_path_prefixes:
+          - /trunk/arcadia/crypta/
+        observed_paths: gen:observed_paths
+        targets: gen:targets
+    check_task:
+        name: CRYPTA_BUILD_AND_RELEASE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                # build docker params
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                sandbox_container: 773239891
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: CRYPTA_DOCKER
+                strip_binaries: false
+                compress_package_archive: true
+                package_type: docker
+                packages: gen:packages
+                docker_registry: registry.yandex.net
+                docker_image_repository: crypta
+                docker_user: robot-crypta
+                docker_token_vault_name: CRYPTA_DOCKER_REGISTRY_TOKEN
+                docker_push_image: true
+                run_tests: true
+                run_long_tests: true
+                ignore_fail_tests: false
+                ya_yt_store: true
+                # autorelease params
+                auto_release: gen:auto_release
+                auto_release_env: gen:auto_release_env
+                auto_release_author: '{commit_author}'
+                release_to_ya_deploy: gen:release_to_ya_deploy
+                yp_token_vault: yp_token

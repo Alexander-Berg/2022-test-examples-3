@@ -1,0 +1,33 @@
+# Параметры обработки
+params:
+  default:
+    resolve: yes
+    templates:
+      - user_mslb_http.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          "check observe layer7"
+      on_error:       fastinter
+    globals:
+      service_name:   saas-hub.tst.vs.market.yandex.net
+      listen_port:    80
+      service_port:   443
+      ping_expect:    "status 200"
+    meta:
+      monrun_ignore:  yes
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+      - name: YP@testing-market-saas-hub-sas
+        port_offset: 2
+        dns_resolvers: yandex-ns
+        resolve: false
+      - name: YP@testing-market-saas-hub-vla
+        port_offset: 2
+        dns_resolvers: yandex-ns
+        resolve: false

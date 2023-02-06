@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <sku id="1"
+         sku="sku0"
+         vendor_id="12"
+         warehouse_id="1"
+         height="0"
+         length="0"
+         width="0"
+         weight_gross="0"
+         enabled="true"/>
+
+    <sku id="51"
+         sku="sku1"
+         vendor_id="12"
+         warehouse_id="1"
+         height="0"
+         length="0"
+         width="0"
+         weight_gross="0"
+         enabled="true"/>
+
+    <stock id="1"
+           sku_id="1"
+           type="FIT"
+           amount="0"
+           freeze_amount="50"
+    />
+
+    <stock id="2"
+           sku_id="51"
+           type="FIT"
+           amount="0"
+           freeze_amount="100"/>
+
+    <stock_freeze reason_id="123" reason_type="ORDER" stock_id="1" deleted="false" amount="50" backorder="true"
+                  freeze_version="0"/>
+
+    <stock_freeze reason_id="123" reason_type="ORDER" stock_id="2" deleted="false" amount="100" backorder="true"
+                  freeze_version="0"/>
+
+    <event_audit target_type="SKU" type="SKU_CREATED" created="2018-01-01 00:00:00"/>
+    <event_audit target_type="SKU" type="SKU_CREATED" created="2018-01-01 00:00:00"/>
+    <event_audit target_type="SKU" type="STOCK_FREEZE_APPLIED" created="2018-01-01 00:00:00"/>
+    <event_audit target_type="SKU" type="STOCK_FREEZE_APPLIED" created="2018-01-01 00:00:00"/>
+    <event_audit target_type="FREEZE" type="FREEZE_SUCCESSFUL" created="2018-01-01 00:00:00"/>
+
+    <warehouse_property
+            warehouse_id="1"
+            property="BackorderAllowed"
+            value="1"
+    />
+
+    <execution_queue
+            type="CHANGED_STOCKS_AMOUNT_EVENT"
+            created="2018-01-01 00:00:00.0"
+            execute_after="2018-01-01 00:00:00.00"
+            uuid="939986e414af12607ff5ae78f29660a03f2c86ae83caed3a598537243f0c4861"
+            payload='{"unitIds": [
+                {"sku": "sku0", "vendorId": 12, "warehouseId": 1},
+                {"sku": "sku1", "vendorId": 12, "warehouseId": 1}
+            ]}'/>
+
+    <execution_queue
+            type="CHANGED_ANY_TYPE_OF_STOCKS_AMOUNT_EVENT"
+            created="2018-01-01 00:00:00.0"
+            execute_after="2018-01-01 00:00:00.00"
+            uuid="939986e414af12607ff5ae78f29660a03f2c86ae83caed3a598537243f0c4861"
+            payload='{"unitIds": [
+                {"sku": "sku0", "vendorId": 12, "warehouseId": 1},
+                {"sku": "sku1", "vendorId": 12, "warehouseId": 1}
+            ]}'/>
+
+</dataset>

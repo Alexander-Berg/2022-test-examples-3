@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<dataset>
+    <ORDER_FLOW_TYPE
+        SERIALKEY="1"
+        mini_batch="1"
+        item_sorter="0"
+        non_customer="0"
+        non_sortable="0"
+        is_fashion="0"
+    />
+
+    <PACK PACKKEY="STD" PACKDESCR="PACKDESCR" />
+    <PUTAWAYZONE PUTAWAYZONE="RACK" />
+
+    <LOC LOC="LOC-001" PUTAWAYZONE="RACK" LOCATIONHANDLING="2" LOCATIONTYPE="PICK" />
+    <LOC LOC="LOC-002" PUTAWAYZONE="RACK" LOCATIONHANDLING="2" LOCATIONTYPE="OTHER" />
+
+    <SKU SKU="SKU-001" STORERKEY="STORER-001" PACKKEY="STD" PUTAWAYLOC="LOC-001" SHELFLIFEINDICATOR="N" />
+
+    <!--
+                    LOT1 (OK)    LOT2 (DAMAGE)
+    LOC1 (PICKING)   1            0
+    -->
+
+    <LOTxLOCxID SKU="SKU-001" STORERKEY="STORER-001" QTYALLOCATED="1" QTYPICKED="0"
+                QTY="1" LOT="LOT-001" LOC="LOC-001" />
+
+    <SKUxLOC LOC="LOC-001" QTY="1" QTYEXPECTED="0" QTYALLOCATED="1" SKU="SKU-001" STORERKEY="STORER-001"/>
+
+    <LOT LOT="LOT-001" SKU="SKU-001" STORERKEY="STORER-001" QTY="1" QTYALLOCATED="1" />
+    <LOT LOT="LOT-002" SKU="SKU-001" STORERKEY="STORER-001" QTY="0" QTYALLOCATED="0" />
+
+    <LOTATTRIBUTE SKU="SKU-001" STORERKEY="STORER-001" LOTTABLE08="1" LOT="LOT-001" />
+    <LOTATTRIBUTE SKU="SKU-001" STORERKEY="STORER-001" LOTTABLE08="1" LOT="LOT-002" />
+
+    <INVENTORYHOLD STATUS="DAMAGE"  LOT="LOT-002" LOC=""  ID="" HOLD="1"/>
+
+    <AREA AREAKEY="AREA51" />
+    <AREADETAIL AREAKEY="AREA51" PUTAWAYZONE="RACK" />
+
+    <ORDERS
+        ORDERKEY="ORDER-001"
+        EXTERNORDERKEY="1"
+        TYPE="14"
+    />
+
+    <ORDERDETAIL
+        ORDERKEY="ORDER-001"
+        ORDERLINENUMBER="7"
+        originalqty="12"
+        ShippedQty="0"
+        OpenQty="12"
+        QtyPicked="0"
+        QtyAllocated="1"
+        QtyPreAllocated="0"
+        ISMASTER="1"
+        SKU="SKU-001"
+        STORERKEY="STORER-001"
+        ORDER_FLOW_ID="1"
+    />
+
+    <WAVE
+        WAVEKEY="WAVE-001"
+        SORTATIONSTATIONKEY="S01"
+        STATUS="3"
+        INPROCESS="12"
+        ADDWHO="test_user_1"
+        DESCR="test_description_1"
+        WAVE_TYPE="BIG_WITHDRAWAL"
+    />
+
+    <WAVEDETAIL
+        WAVEKEY="WAVE-001"
+        ORDERKEY="ORDER-001"
+        WAVEDETAILKEY="WD-001"
+    />
+
+    <PICKDETAIL
+        ORDERKEY="ORDER-001"
+        WAVEKEY="WAVE-001"
+        STATUS="0"
+        STORERKEY="STORER-001"
+        SKU="SKU-001"
+        LOC="LOC-001"
+        ID=""
+        ADDWHO="TEST"
+        EDITWHO="TEST"
+        ADDDATE="2020-04-01 12:34:56.79"
+        EDITDATE="2020-04-01 12:34:56.79"
+        PICKHEADERKEY=" "
+        ORDERLINENUMBER="7"
+        LOT="LOT-001"
+        FROMLOC="LOC-001"
+        TOLOC="PICKTO"
+    />
+
+</dataset>

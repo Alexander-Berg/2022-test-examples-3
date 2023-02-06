@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Форма</title>
+    <script>
+        function rebuild() {
+            var params = document.getElementById('form-params').value,
+                width = document.getElementById('form-width').value,
+                query = '?params=' + encodeURIComponent(params) + '&width=' + encodeURIComponent(width) + '&rnd=' + Math.random();
+
+            document.getElementById('form-v2').src = 'form_v2.0.html' + query;
+            document.getElementById('form-v1').src = 'form_v1.0.html' + query;
+        }
+
+        window.onload = rebuild;
+    </script>
+    <style type="text/css">
+        #form-params
+        {
+            width: 300px;
+            height : 260px;
+            vertical-align: top;
+        }
+        #form-v1, #form-v2
+        {
+            width : 100%;
+            height : 400px;
+            margin-top: 10px;
+            border-width: 0;
+        }
+        label
+        {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <label for="form-params">Параметры формы:</label>
+    <br>
+    <textarea id="form-params">
+{
+    'searchid': '80594',
+    'action': 'results.html',
+    'target': '_self',
+    'bg': '#99ffff',
+    'language': 'ru',
+    'encoding': '',
+    'suggest': true,
+    'tld': 'ru',
+    'site_suggest': true,
+    'webopt': true,
+    'fontsize': 16,
+    'arrow': true,
+    'fg': '#000000',
+    'logo': 'rb',
+    'websearch': false,
+    'type': 0
+}
+    </textarea>
+    <br><br>
+    <label for="form-width">Ширина контейнера с формой:</label>
+    <br>
+    <input id="form-width" type="text" value="300"/>
+    <br><br>
+    <input type="button" value="перестроить" onclick="rebuild()">
+    <hr>
+
+    <h3>Версия 2.0</h3>
+    <iframe frameBorder="0" id="form-v2" src="javascript:void(0)"></iframe>
+
+    <h3>Версия 1.0</h3>
+    <iframe frameBorder="0" id="form-v1" src="javascript:void(0)"></iframe>
+</body>

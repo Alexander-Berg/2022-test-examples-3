@@ -1,0 +1,59 @@
+location /web-api/ {
+    add_header x-dns-prefetch-control "off";
+    add_header Cache-Control "private,no-cache,no-store,must-revalidate,max-age=0";
+    add_header X-Request-Id $request_id always;
+    include sites-enabled/security-headers.include;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $x_real_ip;
+    proxy_set_header X-Real-Port $x_real_port;
+    proxy_set_header X-Original-Uri $request_uri;
+    proxy_set_header X-Original-Host $host;
+    proxy_set_header X-Request-Id $request_id;
+    proxy_set_header X-Forwarded-For $x_real_ip;
+    proxy_set_header X-Https-Request yes;
+    proxy_set_header SSL-Cipher $ssl_cipher;
+
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_next_upstream error timeout http_502 http_503 non_idempotent;
+    proxy_next_upstream_tries 2;
+
+    proxy_ssl_session_reuse on;
+    proxy_pass https://web-api-backend$uri$is_args$args;
+
+    location ~* /web-api/message-source/[^/]*/\d+/\d+/yandex_email.eml {
+        rewrite ^/web-api/message-source/([^/]*)/(\d+)/(\d+)/yandex_email.eml /web-api/message-source/$1?mid=$3&_uid=$2;
+    }
+}
+
+#DARIA-24737
+location ~* ^/re.jsx$ {
+    rewrite ^/(.*) /web-api/safe-redirect/v0;
+}
+
+location ~* ^/for/[^/]+/re.jsx {
+    rewrite ^/(.*) /web-api/safe-redirect/v0;
+}
+
+#QUINN-6382
+location ~ ^/touch/api/models {
+    rewrite ^/touch/api/models /web-api/models/touch1?_service=TOUCH;
+}
+
+location ~ ^/touch/api/upload-attachment {
+    rewrite ^/touch/api/upload-attachment /web-api/upload-attachment/touch1?_service=TOUCH;
+}
+
+location ~ ^/touch/api/do-send {
+    rewrite ^/touch/api/do-send /web-api/do-send/touch1?_service=TOUCH;
+}
+
+# DARIA-11555
+location ~* ^/message_part/ {
+    rewrite ^/message_part/.* /web-api/message-part/$1 last;
+}
+
+location ~* ^/for/([^/]+)/message_part/ {
+    rewrite ^/for/([^/]+)/message_part/(.*) /web-api/message-part/$1 last;
+}

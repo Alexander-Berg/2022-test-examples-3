@@ -1,0 +1,58 @@
+{
+    "HttpServer": {
+        "Port": {{port}}
+    },
+    "Logs": {"Rules": [
+        {
+            "FilePath": "{{global_log}}",
+            "IncludeCategories": ["BigRT", "Main"],
+            "MinLevel": "Debug"
+        },
+        {
+            "FilePath": "{{global_log}}",
+            "ExcludeCategories": ["BigRT", "Main"],
+            "MinLevel": "Info"
+        }
+    ]},
+    "Suppliers": [
+        {
+            "Alias": "resharded_yt_log",
+            "YtSupplier": {
+                "QueueConsumer": "{{consumer}}",
+                "QueuePath": "{{input_queue}}",
+                "Cluster": "{{yt_cluster}}",
+                "MaxOutChunkSize": 2
+            }
+        }
+    ],
+    "ConsumingSystem": {
+        "Cluster": "{{yt_cluster}}",
+        "MainPath": "{{consuming_system_main_path}}",
+        "MaxShards": {{max_shards}},
+        "MaxShardsToCheck": 2,
+        "WorkerMinorName": "{{worker_minor_name}}"
+    },
+    "StatefulShardProcessorConfig": {
+        "ParsingThreads": 2,
+        "MaxGroupingTasks": 3
+    },
+    "ProtoStateProfileManagerConfig": {
+        "StateManagerConfig": {
+            "StateCacheConfig": {
+                "PinnedEpochsCount": 1
+            }
+        },
+        "StateTable": "{{images_request_profile}}"
+    },
+    "ImagesNotificationConfig": {
+        "ProfileConfig": {
+            "YtCluster": "{{yt_cluster}}"
+        },
+        "OutputQueue": "{{queue_output_notification}}",
+        "ShardsCount": {{output_shards_count_notification}},
+        "CompressionCodec": "zstd_9"
+    },
+    "ProtoProfileKeyColumns": {
+        "ColumnNames": ["UserID", "RequestID"]
+    }
+}

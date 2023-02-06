@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>RTA - FAQ</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/rta.css"/>
+        <link rel="shortcut icon" href="/static/png/favicon.png" type="image/png"/>
+    </head>
+    <body>
+        <div class="faq-title">FAQ</div>
+        <dl>
+            <dt>Where am I?</dt>
+            <dd>
+                This is a report testing assistance service. It's intended to help testers to run multiple isolated report instances.
+            </dd>
+            <dt>How do I launch new report instances?</dt>
+            <dd>
+                Enter the name of a Startrek ticket and click the Launch button (you'll be asked to introduce yourself the first time).
+                <br/>
+                The service will check out the ticket, find the last comment of the form <tt>Report binaries stored at: <i>full:path/to/the/report/binary</i></tt>, download the binary, find free ports, generate all necessary configuration files, and launch a market-parallel-report servant.
+            </dd>
+            <dt>What does the status column say?</dt>
+            <dd>
+                <span class="active">Active</span> means that the servant's alive and is listening on the specified port.
+                <br/>
+                <span class="inactive">Inactive</span> means that although the servant's alive it is not listening on the port.
+                <br/>
+                <span class="dead">Dead</span> means that the servant's dead and will be removed from the table once you click the Purge button.
+            </dd>
+            <dt>How do I terminate an instance?</dt>
+            <dd>
+                Select instances to be terminated and click the Terminate button (or the Kill button, as a last resort).
+            </dd>
+            <dt>What is the Purge button for?</dt>
+            <dd>
+                The Purge button removes dead instances from the table along with their binaries and logs.
+                <br/>
+                Be careful with it.
+            </dd>
+            <dt>Where can I find the source code?</dt>
+            <dd>
+                <a href="https://arcadia.yandex.ru/arc/trunk/arcadia/market/tools/report-testing-assistant">Here</a> is the package source.
+            </dd>
+            <dt>How do I install the service?</dt>
+            <dd>
+                <tt>report-testing-assistant$ sudo make install</tt>
+            </dd>
+            <dt>How do I configure the service?</dt>
+            <dd>
+                <tt>/etc/yandex/report-testing-assistant.cfg</tt>
+                <br/>
+                The configuration file consists of option-value pairs separated by <tt>=</tt>. It can also contain comment lines that start with <tt>#</tt>.
+                <br/>
+                See the <tt>rta.settings</tt> module for the list of available options.
+            </dd>
+            <dt>How do I control the service?</dt>
+            <dd>
+                <tt>$ sudo service report-testing-assistant (start|stop|restart)</tt>
+            </dd>
+            <dt>Where is the service log?</dt>
+            <dd>
+                <tt>/var/log/report-testing-assistant.log</tt>
+            </dd>
+            <dt>What if I think this service sucks?</dt>
+            <dd>
+                <tt>report-testing-assistant$ sudo make uninstall</tt>
+            </dd>
+        </dl>
+    </body>
+</html>

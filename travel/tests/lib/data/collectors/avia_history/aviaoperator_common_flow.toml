@@ -1,0 +1,57 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "aviaoperator_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 203
+    confirm_dt = ""
+    created_at = "2020-01-31 11:37:09"
+    currency = "RUB"
+    from = "VOZ"
+    marker = "1a5eb600-a5e969-74e4-4d70-ad2c-3280f625fb361"
+    order_id = "200520_2"
+    partner = "aviaoperator"
+    partner_id = 33
+    price = 14450.0
+    source = "aviaoperator"
+    status = "paid"
+    ticket_number = ""
+    to = "AYT"
+    trip_type = "roundtrip"
+    unixtime = 1580477475
+
+[lb]
+    topic = "topic-aviaoperator_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "updated_at"]
+
+[[lb.expected]]
+    status = "confirmed"
+    category = "avia"
+    partner_id = 33
+    created_at = 1580470629
+    origin = "VOZ"
+    partner_order_id = "200520_2"
+    label = "1a5eb600-a5e969-74e4-4d70-ad2c-3280f625fb361"
+    source = "history"
+    destination = "AYT"
+    partner_name = "aviaoperator"
+    trip_type = "roundtrip"
+    billing_order_id = 203
+    order_amount = 14450.0
+    travel_order_id = "aviaoperator:200520_2"
+    currency_code = "RUB"

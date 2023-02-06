@@ -1,0 +1,29 @@
+params:
+  default:
+    templates:
+      - get_localhost.tpl
+
+values:
+  default:
+    defaults:
+      mcrouter_port: 11244
+      memcached_port: 21244
+      env: production
+      cache_name: dmock
+      memory: 5000
+  testing:
+    defaults:
+      env: testing
+      memory: 10000
+  
+servers:
+  default:
+    main:
+      - name: "%market_cache-stable@local"
+    global:
+      - name: "%market_cache-stable"
+  testing:
+    main:
+      - name: "%market_cache-testing@local"
+    global:
+      - name: "%market_cache-testing"

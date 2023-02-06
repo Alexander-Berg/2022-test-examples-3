@@ -1,0 +1,97 @@
+{
+    "GlobalLog": "./brusilov.log",
+    "HttpServer": {
+        "Port": 80
+    },
+    "Logs": {
+        "Rules": [
+            {
+                "FilePath": "/dev/stdout",
+                "MinLevel": "Info"
+            },
+            {
+                "FilePath": "./brusilov.log",
+                "ExcludeCategories": ["BigRT", "Main"],
+                "MinLevel": "Info"
+            }
+        ]
+    },
+    "YtRpc": {
+        "EnableRetries": true
+    },
+
+    "ProcessingSystems": [
+        {
+            "Suppliers": [
+                {
+                    "Alias": "default_vulture_log",
+                    "YtSupplier": {
+                        "QueueConsumer": "brusilov_def",
+                        "QueuePath": "//home/crypta/testing/rtsklejka/qyt/vulture_events",
+                        "Cluster": "hahn"
+                    }
+                }
+            ],
+            "ConsumingSystem": {
+                "Cluster": "hahn",
+                "MainPath": "//home/crypta/testing/rtsklejka/consuming_systems/brusilov/vulture_default",
+                "Shards": {
+                    "AutoResolve": {}
+                },
+                "MaxShardsAutoResolveRatio": 0.3,
+                "WorkerMinorName": "w_brusilov_vult_default"
+            },
+            "StatefulShardProcessorConfig": {
+                "MaxGroupingTasks": 10
+            },
+            "StateProcessorConfig": {
+                "Table": "//home/crypta/testing/rtsklejka/state/vulture_state",
+                "Location": 0,
+                "DebounceCfg": {
+                    "Lifetime": 900
+                }
+            },
+            "StateManagerConfig": {
+                "EpochStatesSizeQuota": 10000000,
+                "StateSizeDummy": 1000
+            },
+            "MaxInflightBytes": 50000000
+        },
+        {
+            "Suppliers": [
+                {
+                    "Alias": "exp_vulture_log",
+                    "YtSupplier": {
+                        "QueueConsumer": "brusilov_exp",
+                        "QueuePath": "//home/crypta/testing/rtsklejka/qyt/vulture_events",
+                        "Cluster": "hahn"
+                    }
+                }
+            ],
+            "ConsumingSystem": {
+                "Cluster": "hahn",
+                "MainPath": "//home/crypta/testing/rtsklejka/consuming_systems/brusilov/vulture_exp",
+                "Shards": {
+                    "AutoResolve": {}
+                },
+                "MaxShardsAutoResolveRatio": 0.3,
+                "WorkerMinorName": "w_brusilov_vult_exp"
+            },
+            "StatefulShardProcessorConfig": {
+                "MaxGroupingTasks": 10
+            },
+            "StateProcessorConfig": {
+                "Table": "//home/crypta/testing/rtsklejka/state/vulture_state",
+                "Location": 1,
+                "DebounceCfg": {
+                    "Lifetime": 900
+                }
+            },
+            "StateManagerConfig": {
+                "EpochStatesSizeQuota": 10000000,
+                "StateSizeDummy": 1000
+            },
+            "MaxInflightBytes": 50000000
+        }
+    ]
+}

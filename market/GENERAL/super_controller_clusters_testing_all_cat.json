@@ -1,0 +1,297 @@
+{
+  "owner": "marketir",
+  "statfaceReports": [
+    {
+      "title": "Статистика по кластерам и переклатчингам (Тестинг, все категории)",
+      "report": "Market/IR/models-clusterizer/ClustersStat/PersistenceTestAllCat",
+      "tableName": "super_controller_clusters_statistic_testing",
+      "period": "ONE_MIN",
+      "splits": [
+        {
+          "name": "category",
+          "title": "Категория",
+          "splitField": "dictGetString('category', 'full_name', arrayJoin(dictGetHierarchy('category', toUInt64(category))))",
+          "tree": true
+        }, {
+          "name": "host",
+          "title": "Хост",
+          "splitField": "host",
+          "viewType": "Selector"
+        }
+      ],
+      "fields": [
+        {
+          "name": "reclutched_overall_percent",
+          "title": "Общий переклатчинг",
+          "metricField": "clusterized_offers_cnt = 0 ? 0 : (reclutched_overall_cnt / clusterized_offers_cnt * 100)",
+          "viewType": "Percent"
+        }, {
+          "name": "reclutched_contrib_percent",
+          "title": "Вклад в общий переклатчинг",
+          "metricField": "clusterized_offers_cnt = 0 ? 0 : (reclutched_overall_cnt / anyLast(clusterized_offers_total_count) * 100)",
+          "viewType": "Percent"
+        }, {
+          "name": "reclutched_in_category_percent",
+          "title": "Переклатчинг внутри категории",
+          "metricField": "clusterized_offers_cnt > 0 ? reclutched_in_category_cnt / clusterized_offers_cnt * 100 : 0",
+          "viewType": "Percent"
+        }, {
+          "name": "reclutched_moved_percent",
+          "title": "Переклатчинг переехавших оферов",
+          "metricField": "clusterized_offers_cnt > 0 ? reclutched_moved_cnt / clusterized_offers_cnt * 100 : 0 ",
+          "viewType": "Percent"
+        }, {
+          "name": "reclutched_vendor_change_prc",
+          "title": "Переклатчинг сменивших вендор оферов",
+          "metricField": "clusterized_offers_cnt > 0 ? reclutched_vendor_change_cnt / clusterized_offers_cnt * 100 : 0 ",
+          "viewType": "Percent"
+        }, {
+          "name": "reclutched_overall_cnt",
+          "title": "Общий переклатчинг",
+          "metricField": "reclutched_in_category_cnt + reclutched_moved_cnt + reclutched_vendor_change_cnt"
+        }, {
+          "name": "reclutched_in_category_cnt",
+          "title": "Переклатчинг внутри категории",
+          "metricField": "sum(reclutched_overall)"
+        }, {
+          "name": "reclutched_old_to_old_cluster",
+          "title": "Переклатчинг из старого кластера в старый",
+          "metricField": "sum(reclutched_old_to_old_cluster)"
+        }, {
+          "name": "reclutched_old_to_new_cluster",
+          "title": "Переклатчинг из старого кластера в новый",
+          "metricField": "sum(reclutched_old_to_new_cluster)"
+        }, {
+          "name": "reclutched_overall_alias_to_id",
+          "title": "Общий переклатчинг с alias на id",
+          "metricField": "sum(reclutched_overall_alias_to_id)"
+        }, {
+          "name": "recl_same_cluster_alias_to_id",
+          "title": "Переклатчинг с alias на id в тот же кластер",
+          "metricField": "sum(reclutched_same_cluster_alias_to_id)"
+        }, {
+          "name": "reclutched_overall_id_to_alias",
+          "title": "Общий переклатчинг с id на alias",
+          "metricField": "sum(reclutched_overall_id_to_alias)"
+        }, {
+          "name": "recl_same_cluster_id_to_alias",
+          "title": "Переклатчинг с id на alias в тот же кластер",
+          "metricField": "sum(reclutched_same_cluster_id_to_alias)"
+        }, {
+          "name": "reclutched_alias_to_alias",
+          "title": "Переклатчинг с alias на alias",
+          "metricField": "sum(reclutched_alias_to_alias)"
+        }, {
+          "name": "reclutched_id_to_id",
+          "title": "Переклатчинг с id на id",
+          "metricField": "sum(reclutched_id_to_id)"
+        }, {
+          "name": "init_clutch_overall",
+          "title": "Первоначальный клатчинг",
+          "metricField": "sum(initially_clutched_old_offer_same_category) + sum(initially_clutched_new_offer_to_new_cluster) + sum(initially_clutched_new_offer_to_old_cluster) + sum(initially_clutched_old_offer_moved)"
+        }, {
+          "name": "init_clutch_old_of_same_cat",
+          "title": "Первоначальный клатчинг старого офера в той же категории",
+          "metricField": "sum(initially_clutched_old_offer_same_category)"
+        }, {
+          "name": "init_clutch_old_same_cat_al",
+          "title": "Первоначальный клатчинг старого офера в той же категории (по алису)",
+          "metricField": "sum(initially_clutched_old_offer_same_category_by_alias)"
+        }, {
+          "name": "init_clutch_old_same_cat_id",
+          "title": "Первоначальный клатчинг старого офера в той же категории (по id)",
+          "metricField": "sum(initially_clutched_old_offer_same_category_by_id)"
+        }, {
+          "name": "init_clutch_new_of_to_new_cl",
+          "title": "Первоначальный клатчинг нового офера в новый кластер",
+          "metricField": "sum(initially_clutched_new_offer_to_new_cluster)"
+        }, {
+          "name": "init_clutch_new_to_new_cl_al",
+          "title": "Первоначальный клатчинг нового офера в новый кластер (по алиасу)",
+          "metricField": "sum(initially_clutched_new_offer_to_new_cluster_by_alias)"
+        }, {
+          "name": "init_clutch_new_to_new_cl_id",
+          "title": "Первоначальный клатчинг нового офера в новый кластер (по id)",
+          "metricField": "sum(initially_clutched_new_offer_to_new_cluster_by_id)"
+        }, {
+          "name": "init_clutch_new_of_to_old_cl",
+          "title": "Первоначальный клатчинг нового офера в старый кластер",
+          "metricField": "sum(initially_clutched_new_offer_to_old_cluster)"
+        }, {
+          "name": "init_clutch_new_to_old_cl_al",
+          "title": "Первоначальный клатчинг нового офера в старый кластер (по алиасу)",
+          "metricField": "sum(initially_clutched_new_offer_to_old_cluster_by_alias)"
+        }, {
+          "name": "init_clutch_new_to_old_cl_id",
+          "title": "Первоначальный клатчинг нового офера в старый кластер (по id)",
+          "metricField": "sum(initially_clutched_new_offer_to_old_cluster_by_id)"
+        }, {
+          "name": "init_clutch_old_of_moved",
+          "title": "Первоначальный клатчинг старого, перемещенного из другой категории офера",
+          "metricField": "sum(initially_clutched_old_offer_moved)"
+        }, {
+          "name": "init_clutch_old_moved_al",
+          "title": "Первоначальный клатчинг старого, перемещенного из другой категории офера (по алиасу)",
+          "metricField": "sum(initially_clutched_old_offer_moved_by_alias)"
+        }, {
+          "name": "init_clutch_old_moved_id",
+          "title": "Первоначальный клатчинг старого, перемещенного из другой категории офера (по id)",
+          "metricField": "sum(initially_clutched_old_offer_moved_by_id)"
+        }, {
+          "name": "unclutched_overall",
+          "title": "Расклатченные оферы",
+          "metricField": "sum(unclutched_disappeared_offer) + sum(unclutched_old_moved) + sum(unclutched_old_same_category)"
+        }, {
+          "name": "unclutched_disappeared_off_cnt",
+          "title": "Ушедшие приклатченные оферы",
+          "metricField": "sum(unclutched_disappeared_offer)"
+        }, {
+          "name": "unclutched_old_moved_cnt",
+          "title": "Расклатченные, перемещенные в другую категорию оферы",
+          "metricField": "sum(unclutched_old_moved)"
+        }, {
+          "name": "unclutched_old_same_cat_cnt",
+          "title": "Расклатченные существующие оферы с сохранением категории",
+          "metricField": "sum(unclutched_old_same_category)"
+        }, {
+          "name": "unclutched_old_same_cat_al",
+          "title": "Расклатченные существующие оферы с сохранением категории (по алиасу)",
+          "metricField": "sum(unclutched_old_same_category_by_alias)"
+        }, {
+          "name": "unclutched_old_same_cat_id",
+          "title": "Расклатченные существующие оферы с сохранением категории (по id)",
+          "metricField": "sum(unclutched_old_same_category_by_id)"
+        }, {
+          "name": "reclutched_moved_cnt",
+          "title": "Переклатчинг с переездом в другую категорию",
+          "metricField": "sum(reclutched_moved_category_count)"
+        }, {
+          "name": "reclutched_vendor_change_cnt",
+          "title": "Переклатчинг внутри категории из-за смены вендора",
+          "metricField": "sum(reclutched_moved_vendor_count)"
+        }, {
+          "name": "clusterized_offers_cnt",
+          "title": "Число кластеризуемых оферов в категории",
+          "metricField": "sum(clusterized_offers_count)"
+        }, {
+          "name": "clusterized_offers_total_cnt",
+          "title": "Общее число кластеризуемых оферов",
+          "metricField": "anyLast(clusterized_offers_total_count)"
+        }, {
+          "name": "clusters_count",
+          "title": "Число кластеров",
+          "metricField": "sum(clusters_count)"
+        }, {
+          "name": "clusters_multi_offers_count",
+          "title": "Число кластеров, в которых более одного офера",
+          "metricField": "sum(clusters_multi_offers_count)"
+        }, {
+          "name": "clusters_multi_shops_count",
+          "title": "Число кластеров, в которых более одного магазина",
+          "metricField": "sum(clusters_multi_shops_count)"
+        }
+      ],
+      "graphs": [
+        {
+          "title": "Переклатчинг в %",
+          "fields": [
+            "reclutched_overall_percent",
+            "reclutched_in_category_percent",
+            "reclutched_moved_percent",
+            "reclutched_vendor_change_prc"
+          ]
+        }, {
+          "fields": [
+            "reclutched_contrib_percent"
+          ]
+        }, {
+          "title": "Общие показатели переклатчинга",
+          "fields": [
+            "reclutched_overall_cnt",
+            "reclutched_in_category_cnt",
+            "reclutched_moved_cnt",
+            "reclutched_vendor_change_cnt",
+            "unclutched_overall",
+            "init_clutch_overall"
+          ]
+        }, {
+          "title": "Переклатчинг по кластерам",
+          "fields": [
+            "reclutched_in_category_cnt", "reclutched_old_to_old_cluster", "reclutched_old_to_new_cluster"
+          ]
+        }, {
+          "title": "Первоначальный клатчинг",
+          "fields": [
+            "init_clutch_overall",
+            "init_clutch_old_of_same_cat",
+            "init_clutch_new_of_to_new_cl",
+            "init_clutch_new_of_to_old_cl",
+            "init_clutch_old_of_moved"
+          ]
+        }, { "title": "Первоначальный клатчинг новых оферов (детаилзация по типу)",
+          "fields": [
+            "init_clutch_overall",
+            "init_clutch_new_of_to_new_cl",
+            "init_clutch_new_to_new_cl_al",
+            "init_clutch_new_to_new_cl_id",
+            "init_clutch_new_of_to_old_cl",
+            "init_clutch_new_to_old_cl_al",
+            "init_clutch_new_to_old_cl_id"
+          ]
+        }, {
+          "title": "Первоначальный клатчинг старых оферов (детализация по типу)",
+          "fields": [
+            "init_clutch_overall",
+            "init_clutch_old_of_same_cat",
+            "init_clutch_old_same_cat_al",
+            "init_clutch_old_same_cat_id",
+            "init_clutch_old_of_moved",
+            "init_clutch_old_moved_al",
+            "init_clutch_old_moved_id"
+          ]
+        }, {
+          "title": "Расклатчинг",
+          "fields": [
+            "unclutched_overall",
+            "unclutched_disappeared_off_cnt",
+            "unclutched_old_moved_cnt",
+            "unclutched_old_same_cat_cnt"
+          ]
+        }, {
+          "title": "Расклатчинг (детализация по типу)",
+          "fields": [
+            "unclutched_overall",
+            "unclutched_old_same_cat_cnt",
+            "unclutched_old_same_cat_al",
+            "unclutched_old_same_cat_id"
+          ]
+        }, {
+          "title": "Переклатчинг с сохранением типа",
+          "fields": [
+            "reclutched_id_to_id", "reclutched_alias_to_alias"
+          ]
+        }, {
+          "title": "Переклатчинг alias -> id",
+          "fields": [
+            "reclutched_overall_alias_to_id", "recl_same_cluster_alias_to_id"
+          ]
+        }, {
+          "title": "Переклатчинг id -> alias",
+          "fields": [
+            "reclutched_overall_id_to_alias", "recl_same_cluster_id_to_alias"
+          ]
+        }, {
+          "title": "Число кластеризуемых оферов",
+          "fields": [
+            "clusterized_offers_cnt", "clusterized_offers_total_cnt"
+          ]
+        }, {
+          "title": "Показатели кластеризации",
+          "fields": [
+            "clusters_count", "clusters_multi_offers_count", "clusters_multi_shops_count"
+          ]
+        }
+      ]
+    }
+  ]
+}

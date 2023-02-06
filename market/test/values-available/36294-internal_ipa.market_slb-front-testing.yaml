@@ -1,0 +1,20 @@
+context:
+  default:
+    service_name: internal_ipa
+    servername_regexp: 'internal-ipa\\.tst\\.vs\\.market\\.yandex\\.net(:\\d+)?'
+    vs: internal_ipa
+    health_check: '"GET /ping HTTP/1.1\r\nHost: internal-ipa.tst.vs.market.yandex.net\r\n\r\n"'
+    attempts: 1
+    antirobot: False
+    balancing_method: "active"
+    cert: internal-ipa.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+
+servers:
+  default:
+    main:
+      - name: "GREY%internal-ipa.tst.vs.market.yandex.net"
+        timeout: "35s"
+        port: 80
+        plain_http_backend: True

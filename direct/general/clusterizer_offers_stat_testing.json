@@ -1,0 +1,27 @@
+{
+  "logHosts": "*",
+  "logPath": "**/yandex/clusterizer-worker/clusterizer-worker-offers-stat.log",
+  "clickhouseTable": "clusterizer_offers_stat_testing",
+  "parser": {
+    "dateFormat": "yyyy-MM-dd'T'HH:mm:ssZ",
+    "separator": "\t",
+    "tskvMatch": {},
+    "columns": {
+      "session_id": {
+        "type": "String"
+      },
+      "category_id": {
+        "type": "UInt32"
+      },
+      "new_clusterized_offers_cnt": {
+        "type": "UInt32"
+      },
+      "old_clusterized_offers_cnt": {
+        "type": "UInt32"
+      }
+    }
+  },
+  "sources": [
+    "logbroker://market-health-testing--other"
+  ]
+}

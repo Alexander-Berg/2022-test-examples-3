@@ -1,0 +1,10 @@
+USE hahn;
+
+INSERT INTO `{{ pre_processing_out }}`
+    WITH TRUNCATE
+
+SELECT
+    health_export.*
+FROM `{{ model_table }}` as model
+INNER JOIN `{{ health_export_table }}` as health_export
+ON model.id == "drug-yandex-" || CAST(health_export.id As String)

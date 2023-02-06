@@ -1,0 +1,45 @@
+- name: marketstat-afyql-test01e.db.yandex.net
+  cluster_id: efab217f-bae9-4192-821c-bf0905703d7e
+  zone_id: iva
+  resources:
+    resource_preset_id: db1.nano
+    disk_size: "10737418240"
+    disk_type_id: local-ssd
+  role: REPLICA
+  health: ALIVE
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+    health: ALIVE
+  replica_type: SYNC
+- name: marketstat-afyql-test01f.db.yandex.net
+  cluster_id: efab217f-bae9-4192-821c-bf0905703d7e
+  zone_id: myt
+  resources:
+    resource_preset_id: db1.nano
+    disk_size: "10737418240"
+    disk_type_id: local-ssd
+  role: MASTER
+  health: ALIVE
+  services:
+  - type: POSTGRESQL
+    health: ALIVE
+  - type: POOLER
+    health: ALIVE
+- name: marketstat-afyql-test01i.db.yandex.net
+  cluster_id: efab217f-bae9-4192-821c-bf0905703d7e
+  zone_id: man
+  resources:
+    resource_preset_id: db1.nano
+    disk_size: "10737418240"
+    disk_type_id: local-ssd
+  role: REPLICA
+  health: ALIVE
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+    health: ALIVE
+  replica_type: ASYNC
+

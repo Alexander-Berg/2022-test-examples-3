@@ -1,0 +1,32 @@
+syntax = "proto3";
+import "mapreduce/yt/interface/protos/extension.proto";
+
+package proto_test;
+
+message TRowHeavyPlace {
+  optional double FullElapsed = 1 [(NYT.column_name) = "full_elapsed"];
+  optional string HeavyPlace = 2 [(NYT.column_name) = "heavy_place"];
+}
+
+message TRowLightPlace {
+  optional double FullElapsed = 1 [(NYT.column_name) = "full_elapsed"];
+  optional string LightPlace = 2 [(NYT.column_name) = "light_place"];
+}
+
+message TRowPlaceStat {
+  optional string Place = 1 [(NYT.column_name) = "place"];
+  optional double MinElapsed = 2 [(NYT.column_name) = "min_elapsed"];
+  optional double MaxElapsed = 3 [(NYT.column_name) = "max_elapsed"];
+  optional double P50 = 4 [(NYT.column_name) = "p50"];
+  optional double P70 = 5 [(NYT.column_name) = "p70"];
+}
+message TLightTable {
+  repeated TRowLightPlace LightPlaces = 1;
+}
+
+message THeavyTable {
+  repeated TRowHeavyPlace HeavyPlaces = 1;
+}
+  message TPlaceStatTable {
+    repeated TRowPlaceStat Places = 1;
+  }

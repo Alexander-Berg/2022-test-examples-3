@@ -1,0 +1,52 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:WMS;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS pick_by_light\;SET SCHEMA pick_by_light
+    username: pick-by-light
+    separator: ^^^ END OF SCRIPT ^^^
+  config:
+    import:
+      - application-fragment-common-test.yml
+  main:
+    allow-bean-definition-overriding: true
+  liquibase:
+    enabled: true
+
+AppServer: localhost
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms: debug
+    org.springframework.jdbc.core: debug
+    root: info
+
+check:
+  authentication: 'no'
+
+servicebus:
+  api:
+    host: http://localhost:8440
+
+wiremock.server.port: 9999
+
+wms:
+  pick-by-light:
+    host: localhost/pick-by-light
+    websocket: ws://localhost:%s/pick-by-light/ws
+    tvm:
+      serviceId: 0
+      secret: xxxxxx
+      log-only-mode: false
+      check-user-ticket: false
+      cache:
+        dir: /var/cache/tvm
+  packing:
+    tvm:
+      serviceId: 1
+      secret: packing
+
+s3.use: false
+
+pick-by-light:
+  api:
+    host: http://pick-by-light.local

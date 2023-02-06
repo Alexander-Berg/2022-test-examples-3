@@ -1,0 +1,28 @@
+juggler:
+  default:
+    host: market_sentry_mdb-testing 
+    namespace: market.sre
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    refresh_time: 90
+    ttl: 3600
+    tags:
+      - market
+      - _market_
+    children:
+      - market_sentry_mdb_testing
+    notifications:
+      - template_name: startrek
+        template_kwargs:
+          queue: CSADMIN
+          status:
+            - WARN
+            - CRIT
+        description: Ticket to CSADMIN
+  checks:
+    - service: market_sentry_mdb_disk_space_usage_vla-kmdr3jmnzkq5y5ki.db.yandex.net

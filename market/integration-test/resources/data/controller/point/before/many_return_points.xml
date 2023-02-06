@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <partner
+            id="6"
+            name="SC1"
+            status="active"
+            type="SORTING_CENTER"
+    />
+    <partner
+            id="7"
+            name="SC2"
+            status="active"
+            type="SORTING_CENTER"
+    />
+
+    <logistics_point
+            id="10"
+            external_id="10"
+            address_id="1"
+            partner_id="6"
+            type="WAREHOUSE"
+            active="TRUE"
+    />
+    <!-- DROPSHIP  -->
+    <logistic_segments
+            id="2"
+            partner_id="4"
+            type="warehouse"
+            logistic_point_id="6"
+    />
+
+    <!-- BACKWARD_MOVEMENT-->
+    <logistic_edges
+            id="1"
+            to_segment_id="2"
+            from_segment_id="3"
+    />
+    <logistic_segments
+            id="3"
+            partner_id="4"
+            type="backward_movement"
+    />
+
+    <!-- 1st RETURN POINT -->
+    <logistic_edges
+            id="2"
+            to_segment_id="3"
+            from_segment_id="4"
+    />
+    <logistic_segments
+            id="4"
+            type="warehouse"
+            partner_id="6"
+            logistic_point_id="10"
+    />
+    <logistic_segments_services
+            id="1"
+            status="active"
+            segment_id="4"
+            code="1"
+            duration="10"
+            price="10"
+    />
+
+    <!-- 2nd RETURN POINT -->
+    <logistic_edges
+            id="3"
+            to_segment_id="3"
+            from_segment_id="5"
+    />
+    <logistics_point
+            id="11"
+            external_id="11"
+            address_id="1"
+            partner_id="7"
+            type="PICKUP_POINT"
+            active="TRUE"
+    />
+    <logistic_segments
+            id="5"
+            type="warehouse"
+            partner_id="7"
+            logistic_point_id="11"
+    />
+    <logistic_segments_services
+            id="2"
+            status="active"
+            segment_id="5"
+            code="1"
+            duration="10"
+            price="10"
+    />
+</dataset>

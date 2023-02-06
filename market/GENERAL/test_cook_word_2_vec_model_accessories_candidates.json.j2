@@ -1,0 +1,18 @@
+{%macro sku_item(id, name, model_id, category_id, vendor_id, published_on_blue_market) -%}
+    [
+        {{ id }},
+        "{{ name }}",
+        {{ model_id }},
+        {{ category_id }},
+        {{ vendor_id }},
+        "",
+        {{ published_on_blue_market|lower }}
+    ]
+{%- endmacro %}
+
+{% if table == "mstat_dictionaries_sku" %}
+    {% table table %}
+        {{ sku_item(1, "IPhone X", 1, 1, 1, True) }},
+        {{ sku_item(2, "IPhone Xs", 2, 1, 1, False) }}
+    {% endtable %}
+{% endif %}

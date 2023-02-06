@@ -1,0 +1,59 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый clickphite-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dclickphite-testing
+
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=clickphite-testing&service=disk_free_space&last=1DAY&mode=edit
+  - service: disk_free_space
+
+  # Check fresh-hprof-files
+  # https://juggler.yandex-team.ru/check_details/?host=clickphite-testing&service=fresh-hprof-files&last=1DAY&mode=edit
+  - service: fresh-hprof-files
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=clickphite-testing&service=logrotate&last=1DAY&mode=edit
+  - service: logrotate
+
+  # Check monitoring
+  # https://juggler.yandex-team.ru/check_details/?host=clickphite-testing&service=monitoring&last=1DAY&mode=edit
+  - service: monitoring
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=clickphite-testing&service=ping&last=1DAY&mode=edit
+  - service: ping
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=clickphite-testing&service=push-client-status&last=1DAY&mode=edit
+  - service: push-client-status
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    check_options: {}
+    children:
+    - NANNY%testing_market_clickphite_vla
+    - NANNY%testing_market_clickphite_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: clickphite-testing
+    namespace: market.infra
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - marketclickphite
+    - testing
+    - market-infra
+    - market-health
+    - market-infra-testing
+    - market-health-testing
+    - market
+    - _market_
+    ttl: 900

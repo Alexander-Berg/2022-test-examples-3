@@ -1,0 +1,220 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dnesu-testing
+
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=nesu-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_nesu_vla
+    - NANNY%testing_market_nesu_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: disk_free_space
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=nesu-testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_nesu_vla
+    - NANNY%testing_market_nesu_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: logrotate
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=nesu-testing&service=ping&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --kwargs
+      - '[{"service": "tms_failed_jobs", "path": "/health/failedJobs"}, {"service": "tms_hanging_jobs", "path": "/health/hangingJobs"}]'
+    children:
+    - NANNY%testing_market_nesu_vla
+    - NANNY%testing_market_nesu_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: ping
+
+  # Check ping_balancer_nesu_testing
+  # https://juggler.yandex-team.ru/check_details/?host=nesu-testing&service=ping_balancer_nesu_testing&last=1DAY&mode=edit
+  - active: https
+    active_kwargs:
+      host: nesu.tst.vs.market.yandex.net
+      ok_codes:
+      - '200'
+      path: /ping
+      regexp: ^0;
+    aggregator_kwargs:
+      limits:
+      - crit: 0
+        day_end: 5
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 5
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 6
+        time_end: 23
+        time_start: 0
+        warn: 0
+      nodata_mode: force_crit
+    check_options: {}
+    children: []
+    service: ping_balancer_nesu_testing
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=nesu-testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_nesu_vla
+    - NANNY%testing_market_nesu_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: push-client-status
+
+  # Check tms_failed_jobs
+  # https://juggler.yandex-team.ru/check_details/?host=nesu-testing&service=tms_failed_jobs&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --kwargs
+      - '[{"service": "tms_failed_jobs", "path": "/health/failedJobs"}, {"service": "tms_hanging_jobs", "path": "/health/hangingJobs"}]'
+    children:
+    - NANNY%testing_market_nesu_vla
+    - NANNY%testing_market_nesu_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: tms_failed_jobs
+
+  # Check tms_hanging_jobs
+  # https://juggler.yandex-team.ru/check_details/?host=nesu-testing&service=tms_hanging_jobs&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --kwargs
+      - '[{"service": "tms_failed_jobs", "path": "/health/failedJobs"}, {"service": "tms_hanging_jobs", "path": "/health/hangingJobs"}]'
+    children:
+    - NANNY%testing_market_nesu_vla
+    - NANNY%testing_market_nesu_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: tms_hanging_jobs
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    host: nesu-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - marketlogisticsnesu
+    - testing
+    - market
+    - _market_
+    ttl: 900

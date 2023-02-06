@@ -1,0 +1,362 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`store/actions/content => updateNoteContent should call \`content_with_meta\` API method and update note 1`] = `
+Array [
+  Array [
+    Object {
+      "payload": Object {
+        "note": Object {
+          "content": Object {
+            "length": 11,
+          },
+          "id": "test-note",
+          "saving": true,
+        },
+      },
+      "type": "UPDATE_NOTE",
+    },
+  ],
+  Array [
+    Object {
+      "payload": Object {
+        "note": Object {
+          "content": Object {
+            "data": Object {
+              "children": Array [
+                Object {
+                  "children": Array [
+                    Object {
+                      "data": "new content",
+                    },
+                  ],
+                  "name": "paragraph",
+                },
+              ],
+              "name": "$root",
+            },
+            "revision": 123,
+          },
+          "id": "test-note",
+          "saving": false,
+          "snippet": "new content",
+        },
+      },
+      "type": "UPDATE_NOTE",
+    },
+  ],
+]
+`;
+
+exports[`store/actions/content => updateNoteContent should call \`content_with_meta\` API method and update note 2`] = `
+Array [
+  Array [
+    "https://cloud-api.yandex.ru/yadisk_web/v1/notes/notes/test-note/content_with_meta",
+    Object {
+      "body": "{\\"snippet\\":\\"new content\\",\\"content\\":\\"{\\\\\\"name\\\\\\":\\\\\\"$root\\\\\\",\\\\\\"children\\\\\\":[{\\\\\\"name\\\\\\":\\\\\\"paragraph\\\\\\",\\\\\\"children\\\\\\":[{\\\\\\"data\\\\\\":\\\\\\"new content\\\\\\"}]}]}\\"}",
+      "credentials": "include",
+      "headers": Object {
+        "Content-Type": "application/json",
+        "If-Match": 122,
+        "X-Mtime": "2019-05-14T13:34:59.167Z",
+        "X-Uid": "001",
+      },
+      "method": "PUT",
+    },
+  ],
+]
+`;
+
+exports[`store/actions/content => updateNoteContent should create duplicate on conflict 1`] = `
+Array [
+  Array [
+    "https://cloud-api.yandex.ru/yadisk_web/v1/notes/notes/test-note/content_with_meta",
+    Object {
+      "body": "{\\"snippet\\":\\"new content\\",\\"content\\":\\"{\\\\\\"name\\\\\\":\\\\\\"$root\\\\\\",\\\\\\"children\\\\\\":[{\\\\\\"name\\\\\\":\\\\\\"paragraph\\\\\\",\\\\\\"children\\\\\\":[{\\\\\\"data\\\\\\":\\\\\\"new content\\\\\\"}]}]}\\"}",
+      "credentials": "include",
+      "headers": Object {
+        "Content-Type": "application/json",
+        "If-Match": 122,
+        "X-Mtime": "2019-05-14T13:34:59.167Z",
+        "X-Uid": "001",
+      },
+      "method": "PUT",
+    },
+  ],
+  Array [
+    "https://cloud-api.yandex.ru/yadisk_web/v1/notes/notes/test-note/clone_with_new_content",
+    Object {
+      "body": "{\\"title\\":\\"нотатка — копия\\",\\"snippet\\":\\"new content\\",\\"content\\":\\"{\\\\\\"name\\\\\\":\\\\\\"$root\\\\\\",\\\\\\"children\\\\\\":[{\\\\\\"name\\\\\\":\\\\\\"paragraph\\\\\\",\\\\\\"children\\\\\\":[{\\\\\\"data\\\\\\":\\\\\\"new content\\\\\\"}]}]}\\"}",
+      "credentials": "include",
+      "headers": Object {
+        "Content-Type": "application/json",
+        "X-Uid": "001",
+      },
+      "method": "PUT",
+    },
+  ],
+]
+`;
+
+exports[`store/actions/content => updateNoteContent should create duplicate on conflict 2`] = `
+Array [
+  Array [
+    Object {
+      "payload": Object {
+        "note": Object {
+          "content": Object {
+            "length": 11,
+          },
+          "id": "test-note",
+          "saving": true,
+        },
+      },
+      "type": "UPDATE_NOTE",
+    },
+  ],
+  Array [
+    Object {
+      "payload": Object {
+        "note": Object {
+          "conflict": true,
+          "content": Object {
+            "length": 7,
+          },
+          "id": "test-note",
+        },
+      },
+      "type": "UPDATE_NOTE",
+    },
+  ],
+  Array [
+    Object {
+      "payload": Object {
+        "note": Object {
+          "conflict": false,
+          "id": "test-note",
+          "saving": false,
+        },
+      },
+      "type": "UPDATE_NOTE",
+    },
+  ],
+]
+`;
+
+exports[`store/actions/content => updateNoteContent should create duplicate on conflict 3`] = `
+Object {
+  "note": Object {
+    "attachmentOrder": Array [
+      "first-attach-copy-id",
+      "second-attach-copy-id",
+    ],
+    "attachments": Object {
+      "first-attach-copy-id": Object {
+        "resourceId": "first-attach-copy-id",
+        "state": "initial",
+      },
+      "second-attach-copy-id": Object {
+        "resourceId": "second-attach-copy-id",
+        "state": "initial",
+      },
+    },
+    "content": Object {
+      "data": Object {
+        "children": Array [
+          Object {
+            "children": Array [
+              Object {
+                "data": "new content",
+              },
+            ],
+            "name": "paragraph",
+          },
+        ],
+        "name": "$root",
+      },
+      "length": 11,
+      "revision": 0,
+      "state": "loaded",
+    },
+    "ctime": "2019-05-15T14:51:06.180Z",
+    "id": "duplicate-note",
+    "mtime": "2019-05-15T14:51:06.180Z",
+    "snippet": "new content",
+    "tags": Object {
+      "pin": true,
+    },
+    "title": "нотатка — копия",
+  },
+}
+`;
+
+exports[`store/actions/content => updateNoteContent should push update to queue if note content already updating 1`] = `
+Array [
+  Array [
+    "https://cloud-api.yandex.ru/yadisk_web/v1/notes/notes/test-note/content_with_meta",
+    Object {
+      "body": "{\\"snippet\\":\\"new content\\",\\"content\\":\\"{\\\\\\"name\\\\\\":\\\\\\"$root\\\\\\",\\\\\\"children\\\\\\":[{\\\\\\"name\\\\\\":\\\\\\"paragraph\\\\\\",\\\\\\"children\\\\\\":[{\\\\\\"data\\\\\\":\\\\\\"new content\\\\\\"}]}]}\\"}",
+      "credentials": "include",
+      "headers": Object {
+        "Content-Type": "application/json",
+        "If-Match": 122,
+        "X-Mtime": "2019-05-14T13:34:59.167Z",
+        "X-Uid": "001",
+      },
+      "method": "PUT",
+    },
+  ],
+  Array [
+    "https://cloud-api.yandex.ru/yadisk_web/v1/notes/notes/test-note/content_with_meta",
+    Object {
+      "body": "{\\"snippet\\":\\"new content123\\",\\"content\\":\\"{\\\\\\"name\\\\\\":\\\\\\"$root\\\\\\",\\\\\\"children\\\\\\":[{\\\\\\"name\\\\\\":\\\\\\"paragraph\\\\\\",\\\\\\"children\\\\\\":[{\\\\\\"data\\\\\\":\\\\\\"new content123\\\\\\"}]}]}\\"}",
+      "credentials": "include",
+      "headers": Object {
+        "Content-Type": "application/json",
+        "If-Match": 122,
+        "X-Mtime": "2019-05-14T13:34:59.167Z",
+        "X-Uid": "001",
+      },
+      "method": "PUT",
+    },
+  ],
+]
+`;
+
+exports[`store/actions/content => updateNoteContent should push update to queue if note content already updating 2`] = `
+Array [
+  Array [
+    Object {
+      "payload": Object {
+        "note": Object {
+          "content": Object {
+            "length": 11,
+          },
+          "id": "test-note",
+          "saving": true,
+        },
+      },
+      "type": "UPDATE_NOTE",
+    },
+  ],
+  Array [
+    Object {
+      "payload": Object {
+        "note": Object {
+          "content": Object {
+            "data": Object {
+              "children": Array [
+                Object {
+                  "children": Array [
+                    Object {
+                      "data": "new content",
+                    },
+                  ],
+                  "name": "paragraph",
+                },
+              ],
+              "name": "$root",
+            },
+            "revision": 123,
+          },
+          "id": "test-note",
+          "saving": false,
+          "snippet": "new content",
+        },
+      },
+      "type": "UPDATE_NOTE",
+    },
+  ],
+  Array [
+    Object {
+      "payload": Object {
+        "note": Object {
+          "content": Object {
+            "length": 14,
+          },
+          "id": "test-note",
+          "saving": true,
+        },
+      },
+      "type": "UPDATE_NOTE",
+    },
+  ],
+  Array [
+    Object {
+      "payload": Object {
+        "note": Object {
+          "content": Object {
+            "data": Object {
+              "children": Array [
+                Object {
+                  "children": Array [
+                    Object {
+                      "data": "new content123",
+                    },
+                  ],
+                  "name": "paragraph",
+                },
+              ],
+              "name": "$root",
+            },
+            "revision": 123,
+          },
+          "id": "test-note",
+          "saving": false,
+          "snippet": "new content123",
+        },
+      },
+      "type": "UPDATE_NOTE",
+    },
+  ],
+]
+`;
+
+exports[`store/actions/content => updateNoteContent should set error to note on API request fail 1`] = `
+Array [
+  Array [
+    Object {
+      "payload": Object {
+        "note": Object {
+          "content": Object {
+            "length": 0,
+          },
+          "id": "test-note",
+          "saving": true,
+        },
+      },
+      "type": "UPDATE_NOTE",
+    },
+  ],
+  Array [
+    Object {
+      "payload": Object {
+        "note": Object {
+          "error": "!!error!!",
+          "id": "test-note",
+          "saving": false,
+        },
+      },
+      "type": "UPDATE_NOTE",
+    },
+  ],
+]
+`;
+
+exports[`store/actions/content => updateNoteContent should update note and count error if note length exceed maximum 1`] = `
+Array [
+  Array [
+    Object {
+      "payload": Object {
+        "note": Object {
+          "content": Object {
+            "length": 50001,
+          },
+          "id": "test-note",
+          "saving": false,
+        },
+      },
+      "type": "UPDATE_NOTE",
+    },
+  ],
+]
+`;

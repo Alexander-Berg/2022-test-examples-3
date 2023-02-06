@@ -1,0 +1,174 @@
+juggler:
+  checks:
+
+  # Check prepare_chyt_data_tasks_status
+  # https://juggler.yandex-team.ru/check_details/?host=market_campaign_management&service=prepare_chyt_data_tasks_status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --kwargs
+      - '[{"service": "export_status", "path": "/api/health/export-status"}, {"service":
+        "cluster_tasks_status", "path": "/api/health/cluster-tasks-status"}, {"service":
+        "tms_status", "path": "/api/health/tms-status"}, {"service": "prepare_chyt_data_tasks_status", "path": "/api/health/chyt_data-status"}]'
+    service: prepare_chyt_data_tasks_status
+    ttl: 900
+
+  # Check cluster_tasks_status
+  # https://juggler.yandex-team.ru/check_details/?host=market_campaign_management&service=cluster_tasks_status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --kwargs
+      - '[{"service": "export_status", "path": "/api/health/export-status"}, {"service":
+        "cluster_tasks_status", "path": "/api/health/cluster-tasks-status"}, {"service":
+        "tms_status", "path": "/api/health/tms-status"}, {"service": "prepare_chyt_data_tasks_status", "path": "/api/health/chyt_data-status"}]'
+    service: cluster_tasks_status
+    ttl: 900
+
+  # Check export_status
+  # https://juggler.yandex-team.ru/check_details/?host=market_campaign_management&service=export_status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --kwargs
+      - '[{"service": "export_status", "path": "/api/health/export-status"}, {"service":
+        "cluster_tasks_status", "path": "/api/health/cluster-tasks-status"}, {"service":
+        "tms_status", "path": "/api/health/tms-status"}, {"service": "prepare_chyt_data_tasks_status", "path": "/api/health/chyt_data-status"}]'
+    service: export_status
+    ttl: 900
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=market_campaign_management&service=ping&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --kwargs
+      - '[{"service": "export_status", "path": "/api/health/export-status"}, {"service":
+        "cluster_tasks_status", "path": "/api/health/cluster-tasks-status"}, {"service":
+        "tms_status", "path": "/api/health/tms-status"}, {"service": "prepare_chyt_data_tasks_status", "path": "/api/health/chyt_data-status"}]'
+    service: ping
+    ttl: 900
+
+  # Check tms_status
+  # https://juggler.yandex-team.ru/check_details/?host=market_campaign_management&service=tms_status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --kwargs
+      - '[{"service": "export_status", "path": "/api/health/export-status"}, {"service":
+        "cluster_tasks_status", "path": "/api/health/cluster-tasks-status"}, {"service":
+        "tms_status", "path": "/api/health/tms-status"}, {"service": "prepare_chyt_data_tasks_status", "path": "/api/health/chyt_data-status"}]'
+    service: tms_status
+    ttl: 900
+
+  - service: disk_free_space
+    nodata_mode: force_ok
+
+  - service: push-client-status
+    nodata_mode: force_ok
+
+  - service: logrotate
+    nodata_mode: force_ok
+
+  - service: fresh-core-dumps
+    nodata_mode: force_ok
+
+  - service: memory_anon_usage
+    check_options:
+      args: [ "-crit-anon-usage", "90", "-warn-anon-usage", "80" ]
+
+  - service: fresh-hprof-files
+    nodata_mode: force_ok
+
+  - service: nginx
+
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    check_options: {}
+    children:
+    - NANNY%testing_market_lilucrm_sas
+    - NANNY%testing_market_lilucrm_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_campaign_management-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_campaign_management_test
+    - market_campaign_management
+    - market_lilucrm
+    - market
+    - _market_

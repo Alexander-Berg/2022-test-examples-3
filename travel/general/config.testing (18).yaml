@@ -1,0 +1,65 @@
+yenv_type: "testing"
+grpc:
+  addr: "[::]:9001"
+  allowreflection: true
+http:
+  addr: "[::]:80"
+tvm:
+  enabled: true
+  whitelist:
+    - 2002548 # travel-api
+    - 2032083 # travel-trips-api own id (for readiness && debugging purposes)
+  self_app_id: 2032083
+dicts:
+  resources_path: "/dynamic_resources/symlinks/dicts"
+  use_dynamic_resources: true
+logging:
+  level: "Info"
+  sentrydsn: "http://57b842a2a1124144973c6c261501f5c2@sentry.testing.avia.yandex.net/340"
+  sentrylevel: "Error"
+orders_client:
+  travel_api_host: "https://api.travel-balancer-test.yandex.net"
+  travel_api_tvm_id: 2002548
+  request_timeout: "5s"
+  elapsed_request_timeout: "15s"
+unprocessed_orders:
+  topic: "/avia/testing/trips/unprocessed-orders"
+  mock: false
+testing:
+  enabled: true
+database:
+  hosts:
+    - sas-0k1lfn2nrbt80sru.db.yandex.net
+    - vla-d4tczsf41r9mtn2o.db.yandex.net
+    - vlx-six4y8k0omwrg7pg.db.yandex.net
+  password: "" # https://yav.yandex-team.ru/secret/sec-01fq1cra3mf0p3hw6hg540bmvj/explore/versions
+rasp_media_url: "https://yastat.net/s3/rasp/media"
+geobase:
+  path: /geobase/geodata6.bin
+  mode: "bin"
+
+content_admin:
+  host: testing.content-backend.rasp.yandex.net:9001
+  tvmid: 2025762
+
+afisha_client:
+  travel_api_host: https://api.travel-balancer-test.yandex.net
+  travel_api_tvm_id: 2002548
+
+izi_travel_client:
+  travel_api_host: https://api.travel-balancer-test.yandex.net
+  travel_api_tvm_id: 2002548
+
+weather_client:
+  travel_api_host: https://api.travel-balancer-test.yandex.net
+  travel_api_tvm_id: 2002548
+
+notifier:
+  enabled: true
+  request_timeout: 3s
+  tvm_id: 2025412
+  y_planner_id: "travel-notifier-testing.api"
+  connections_per_host: 3
+
+shared_flights:
+  base_url: http://shared-flights.testing.avia.yandex.net

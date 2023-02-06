@@ -1,0 +1,12 @@
+'use strict';
+
+module.exports = {
+    applicationName: 'Яндекс.Советник',
+    affId: 1400,
+    mbrApplication: true,
+    clid: 2210590,
+    offerEnabled: false,
+    optOutAccepted: null,
+    offerAccepted: null,
+    pricebarShown: true
+};

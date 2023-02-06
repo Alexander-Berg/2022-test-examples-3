@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "handlers": {
+    "fileHandler": {
+      "class": "logging.handlers.TimedRotatingFileHandler",
+      "formatter": "myFormatter",
+      "filename": "/var/logs/yandex/solomon-pusher/app.log",
+      "when": "midnight",
+      "backupCount": 7
+    },
+    "consoleHandler": {
+      "class": "logging.StreamHandler",
+      "formatter": "myFormatter"
+    },
+    "schedulerHandler": {
+      "class": "logging.handlers.TimedRotatingFileHandler",
+      "formatter": "myFormatter",
+      "filename": "/var/logs/yandex/solomon-pusher/scheduler.log",
+      "when": "midnight",
+      "backupCount": 7
+    },
+    "kazooHandler": {
+      "class": "logging.handlers.TimedRotatingFileHandler",
+      "formatter": "myFormatter",
+      "filename": "/var/logs/yandex/solomon-pusher/zookeeper.log",
+      "when": "midnight",
+      "backupCount": 7
+    },
+    "default": {
+      "class": "ylog.WatchedFileHandler",
+      "filename": "/var/logs/yandex/solomon-pusher/app.log",
+      "formatter": "default",
+      "level": "INFO"
+    },
+    "exception": {
+      "class": "ylog.SysLogExceptionHandler",
+      "projectname": "solomon-pusher"
+    }
+  },
+  "loggers": {
+    "": {
+      "handlers": [
+        "default"
+      ]
+    },
+    "apscheduler": {
+      "handlers": [
+        "schedulerHandler"
+      ],
+      "level": "INFO",
+      "propagate": false
+    },
+    "kazoo": {
+      "handlers": [
+        "kazooHandler"
+      ],
+      "level": "DEBUG",
+      "propagate": false
+    }
+  },
+  "formatters": {
+    "default": {
+      "()": "ylog.FileFormatter"
+    },
+    "myFormatter": {
+      "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    }
+  },
+  "root": {
+    "level": "DEBUG",
+    "handlers": [
+      "default"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+from django_pgaas import HostManager
+from fan.utils.pgaas import get_pgaas_spec
+
+
+DB_NAME = "fandb"
+DB_USER = "fandb-user"
+DB_PASSWORD = None
+DB_HOSTS = [
+    ("vla-lrslt0vuenyoskik.db.yandex.net", "vla"),
+    ("man-5llpfel3czfhiwfi.db.yandex.net", "man"),
+    ("sas-z20eb3tdq7fxzsh6.db.yandex.net", "sas"),
+]
+
+
+host_manager = HostManager(DB_HOSTS)
+
+
+DATABASES = {
+    "default": get_pgaas_spec(
+        host=host_manager.host_string, name=DB_NAME, user=DB_USER, password=DB_PASSWORD
+    ),
+    "replica": get_pgaas_spec(
+        host=host_manager.host_string,
+        name=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        read_write=False,
+    ),
+}

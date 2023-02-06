@@ -1,0 +1,32 @@
+# Параметры обработки
+params:
+  default:
+    templates:
+      - user_mslb_http.tpl
+    generate: no
+    resolve: yes
+  "%market_slb_search-testing":
+    generate: yes
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          "check observe layer7"
+      maxconn:        10
+      inter:          1s
+      downinter:      2s
+      slowstart:      60s
+      fall:           2
+      on_error:       mark-down
+    globals:
+      service_name:   mbi-back.tst.vs.market.yandex.net
+      service_port:   34820
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+      - name: "YP@testing_market_mbi-api.mbi-api"
+        resolve: no
+        dns_resolvers: "yandex-ns"

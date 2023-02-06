@@ -1,0 +1,33 @@
+# Параметры обработки
+params:
+  default:
+    resolve: yes
+    templates:
+      - user_mslb_http.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          "check observe layer7"
+      maxconn:        10
+      inter:          1s
+      downinter:      2s
+      slowstart:      60s
+      fall:           2
+      on_error:       fastinter
+    globals:
+      balance:        leastconn
+      service_name:   mbi-partner.tst.vs.market.yandex.net
+      service_port:   38271
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+    - name: YP@testing-market-mbi-partner-vla
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing-market-mbi-partner-sas
+      dns_resolvers: yandex-ns
+      resolve: false

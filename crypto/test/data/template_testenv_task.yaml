@@ -1,0 +1,59 @@
+DEPLOY:
+  multiple_jobs:
+    DEPLOY_CRYPTA_GRAPHITE_MONITOR:
+      filter:
+        commit_path_prefixes:
+          - /trunk/arcadia/crypta/
+        targets:
+          - crypta/cookie_matching/monitorings/graphite/bin
+          - crypta/dmp/adobe/monitorings/graphite/bin
+          - crypta/dmp/yandex/monitorings/graphite/bin
+          - crypta/utils/graphite_monitor/bin
+          - crypta/utils/providers_index_builder/bin
+          - crypta/utils/run_periodic_task/bin
+        observed_paths:
+          - ^arcadia/crypta/deprecated/idserv/monitorings/graphite
+          - ^arcadia/crypta/dit/monitorings/graphite
+          - ^arcadia/crypta/idserv/monitorings/graphite
+          - ^arcadia/crypta/mac_md5_matching/monitorings/graphite
+          - ^arcadia/crypta/salt/server/monitorings/graphite
+          - ^arcadia/crypta/utils/graphite_monitor
+          - ^arcadia/crypta/utils/yt_latencies/monitorings/graphite
+          - ^arcadia/crypta/utils/yt_sizes/monitorings/graphite
+          - ^arcadia/crypta/utils/yt_stats/monitorings/graphite
+    DEPLOY_COUCHBASE:
+      filter:
+        commit_path_prefixes:
+          - /trunk/arcadia/crypta/
+        targets:
+          - crypta/couchbase/bin
+        observed_paths:
+          - ^arcadia/crypta/lib/native/couchbase
+
+  owners:
+    - g:crypta
+  type: CHECK
+  filter: gen:filter
+  check_task:
+    name: CRYPTA_DEPLOY_PLATFORM
+    priority: SERVICE:LOW
+    params:
+      apiargs:
+        notifications:
+          - recipients:
+              - "{commit_author}"
+              - crypta-ci
+            statuses:
+              - SUCCESS
+              - FAILURE
+              - EXCEPTION
+            transport: email
+      custom_fields:
+        kill_timeout: 120
+        docker_url: registry.yandex.net/crypta/graphite-monitor:{revision}-trunk
+        docker_vault_name: ROBOT_CRYPTA_DOCKER_TOKEN
+        platform_service_name: crypta
+        platform_project_name: graphite-monitor
+        platform_environment_name: production
+        platform_component_name: graphite-monitor
+        platform_vault_name: ROBOT_CRYPTA_PLATFORM_TOKEN

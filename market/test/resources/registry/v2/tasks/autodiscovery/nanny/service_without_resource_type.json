@@ -1,0 +1,50 @@
+{
+  "result": [
+    {
+      "info_attrs": {
+        "content": {
+          "category": "/not_multitesting"
+        }
+      },
+      "runtime_attrs": {
+        "content": {
+          "resources": {
+            "services_balancer_config_files": [],
+            "url_files": [],
+            "sandbox_files": [
+              {
+                "task_type": "MARKET_YA_PACKAGE",
+                "task_id": "1041937156",
+                "resource_id": "2341043634",
+                "is_dynamic": false,
+                "local_path": "market-common-config.tar.gz",
+                "resource_type": "MARKET_COMMON_CONFIG"
+              },
+              {
+                "task_type": "HTTP_UPLOAD_2",
+                "task_id": "289084172",
+                "resource_id": "650792147",
+                "is_dynamic": false,
+                "local_path": "java",
+                "resource_type": "YANDEX_JDK_SET"
+              }
+            ],
+            "static_files": [
+              {
+                "is_dynamic": false,
+                "content": "{%- set environment = env.BSCONFIG_ITAGS.split(\"a_ctype_\")[1].split()[0] -%}\n{%- set location = env.BSCONFIG_ITAGS.split(\"a_dc_\")[1].split()[0] -%}\n{%- set nginx_log_prefix = \"marketpromo-ciface-promo\" -%}\n{%- set log_files = [\n                        \"nginx/\" + nginx_log_prefix + \"-access-tskv.log\",\n                    ]-%}\n{%- set nginx_includes = [\n                            \"include/logging\",\n                        ]-%}\n{%- for l in read_plain_text_file(\"external/push-client.conf\") -%}\n{{ log_files.append(nginx_log_prefix + \"/\" + l) }}\n{%- endfor -%} ",
+                "local_path": "variables.tmpl.static"
+              }
+            ],
+            "template_set_files": [],
+            "l7_fast_balancer_config_files": []
+          }
+        },
+        "parent_id": "5e9d3c654c6d4b295e005c28325366b52cdf6292",
+        "_id": "355760439732c5c7567a4af0984bdcc2b2ef1210"
+      },
+      "unique_id_index": "production-market-marketpromo-ciface-promo-man",
+      "_id": "production_market_marketpromo_ciface_promo_man"
+    }
+  ]
+}

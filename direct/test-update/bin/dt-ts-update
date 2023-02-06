@@ -1,0 +1,118 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+Примеры
+dt-ts-update ppcdev1 yandex-direct-dna=0.380.0-1-g6d92661251
+direct-test-update ppcdev1 yandex-direct-dna=123
+"""
+
+import sys
+import os 
+import argparse
+import subprocess
+import re
+import logging
+from kazoo.client import KazooClient 
+from kazoo import exceptions as kazoo_exceptions
+
+#direct-test-update test1 yandex-direct-dna=$VERSION
+ARGV = sys.argv
+ROBOT_USER = 'updater'
+PRIVKEY = '/etc/direct-tokens/ssh-rsa_robot-direct-updater'
+PERL_APPS = ['perl-api','perl-intapi','direct-web']
+DEFAULT_ZK_SERVERS = ','.join([
+    'ppc-zk-1.da.yandex.ru:2181',
+    'ppc-zk-2.da.yandex.ru:2181',
+    'ppc-zk-3.da.yandex.ru:2181',
+])
+
+comm = ARGV[1]
+
+zk = KazooClient(hosts=DEFAULT_ZK_SERVERS)
+zk.start()
+
+
+def get_hosts_from_zk(apps, zkc):
+    hosts_from_zk = {}
+    for app in apps:
+        zk_node = '/direct/np/test/hosts/%s' % app
+        try:
+            hosts_from_zk[app] = zkc.get(zk_node)[0].split()
+        except kazoo_exceptions.NoNodeError as e:
+            print("Error read node: '%s'. Not found" % zk_node)
+    all_hosts = [] 
+    for host in hosts_from_zk.values():
+        all_hosts.extend(host)
+    return all_hosts
+
+
+def set_version_to_zk(app, version, zkc):
+    zk_node = '/direct/np/test/versions/%s' % app
+    try:
+        zkc.set(zk_node, version)
+    except kazoo_exceptions.NoNodeError as e:
+        print("Error write: node '%s' not found" % zk_node)
+    else:
+        print('Version %s for %s write to zk.' % (version, app))
+
+
+def determ_app(app_ver):
+    app, _, version = app_ver.partition("=")
+    if re.match(r'\d\.\d+-1', app):
+        version = app
+        app = 'direct'
+    elif app == 'yandex-direct-dna':
+        app = 'dna'
+    return (app, version)
+
+
+test_hosts = {'test-cloud': ['ppctest-cloud-front.yandex.ru'],
+ 'test-cloud2': ['ppctest-cloud2-front.yandex.ru'],
+ 'test-load': ['ppctest-load-front.yandex.ru'], 
+ 'test-sand': ['ppctest-sandbox1-front.ppc.yandex.ru'],
+ 'test-sand2': ['ppctest-sandbox2-front.ppc.yandex.ru'],
+ 'test1': [] + get_hosts_from_zk(PERL_APPS, zk),    
+ 'test2': ['ppctest-ts2-front.ppc.yandex.ru'],
+ 'ts1-mysql': ['ppctest-ts1-mysql.ppc.yandex.ru'],
+ 'ts1-scripts-rtc': [] + get_hosts_from_zk(['perl-scripts'], zk),
+ 'ts1-api-rtc': ['vla1-5093-8609.vm.search.yandex.net'],
+ 'ts1-web-rtc': ['vla1-5083-8609.vm.search.yandex.net'],
+ 'ts1-sand-rtc': ['vla1-5102-8609.vm.search.yandex.net'],
+ }
+test_hosts['test-all'] = test_hosts['test1'] + test_hosts['ts1-scripts-rtc'] + test_hosts['test-sand']
+test_hosts['ppcdev-all'] =  ['ppcdev' + str(x) + '.yandex.ru' for x in [1, 2, 4, 5, 6]]
+for i in [1, 2, 4, 5, 6]:
+    test_hosts[ 'ppcdev' + str(i) ] = ['ppcdev' + str(i) + '.yandex.ru']
+
+
+def run_main():
+    hosts = ",".join(test_hosts.get(comm))
+    if ARGV[2].startswith('/var/www/ppc.yandex.ru'):    # Подразумеваем, что так только запускаются скрипты
+        hosts = get_hosts_from_zk(['perl-intapi'], zk)[0] # Запускаемся только на одном хосте
+    if not hosts:
+        print('No hosts avialable for running, please check zk')
+        sys.exit(1)
+    ssh_cmd = ""
+    if comm.endswith('all') or ',' in hosts:     # Для  *-all или нескольких хостов запускаемся параллельно
+        cmd = 'parallel-test-update --wait --hosts %s %s' % (hosts, ' '.join(ARGV[2:]))
+    else:
+        cmd = 'ssh -o StrictHostKeyChecking=no %s' % hosts
+        ssh_cmd = "sudo /usr/local/bin/ts-update.pl --conf=/etc/ts-updater/direct.conf %s" % ' '.join(ARGV[2:])
+
+    app, ver = determ_app(ARGV[2])
+    if ver != '':
+        print('set version in zk: app = %s, ver = %s' % (app, ver))
+        if zk.exists('/direct/np/test/versions/%s' % app):
+            set_version_to_zk(app, ver, zk)
+
+    print('to run: ' + " ".join([cmd, ssh_cmd]))
+    p = subprocess.Popen(cmd.split() + [ssh_cmd], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    result = p.communicate()[0].rstrip()
+    print result
+    if p.returncode != 0:
+        sys.exit(1)
+
+if __name__ == '__main__':
+    run_main()
+

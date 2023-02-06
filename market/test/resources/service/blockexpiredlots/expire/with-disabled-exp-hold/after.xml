@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<dataset>
+    <!--
+    * статус LOT и LOTXLOCXID меняется на HOLD
+    * у LOT и LOTXLOCXID QTYONHOLD=QTY
+    * создается запись в INVENTORYHOLD (он должен включаться, но общая логика CASE 1 их удаляет)
+    * создается запись в HOLDTRN
+    -->
+    <LOT STORERKEY="0" SKU="0"
+        LOT="LOT5"
+        QTY="10"
+        QTYONHOLD="10"
+        STATUS="HOLD" />
+    <LOTXLOCXID STORERKEY="0" SKU="0"
+        LOC="LOC5"
+        LOT="LOT5"
+        QTY="10"
+        QTYPICKED="0"
+        QTYALLOCATED="0"
+        STATUS="HOLD" />
+    <INVENTORYHOLD
+        INVENTORYHOLDKEY="0000001001"
+        LOT="LOT5"
+        LOC=""
+        HOLD="1"
+        STATUS="EXPIRED"
+        COMMENTS=""
+        WHOON="HOLD_JOB" DATEON="2020-04-01 12:34:56.789"
+        WHOOFF="HOLD_JOB" DATEOFF="2020-04-01 12:34:56.789"
+        ADDWHO="HOLD_JOB" ADDDATE="2020-04-01 12:34:56.789"
+        EDITWHO="HOLD_JOB" EDITDATE="2020-04-01 12:34:56.789" />
+    <HOLDTRN STORERKEY="0" SKU="0" ORIGIN="LotHold" RANK="50" COMMENTS="" LOC="" ID=" "
+        HOLDTRNKEY="0000001001"
+        HOLDTRNGROUP="0000001001"
+        LOT="LOT5"
+        HOLDCODE="EXPIRED"
+        QTY="10"
+        BEFOREAFTERINDICATOR="A"
+        ADDWHO="HOLD_JOB"
+        EDITWHO="HOLD_JOB" />
+</dataset>

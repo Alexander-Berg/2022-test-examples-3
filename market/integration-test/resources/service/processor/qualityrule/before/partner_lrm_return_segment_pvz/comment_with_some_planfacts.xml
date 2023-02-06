@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <lrm_return
+            lrm_return_id="1"
+            source="CLIENT"
+            order_external_id="NOT_VALID"
+            logistic_point_from_id="1"
+    />
+    <lrm_return
+            lrm_return_id="3"
+            source="CLIENT"
+            order_external_id="NOT_VALID"
+            logistic_point_from_id="3"
+    />
+    <lrm_return_segment
+        id="1"
+        lrm_return_id="1"
+        lrm_segment_id="1"
+        status="IN"
+        shipment_destination="[null]"
+        shipment_recipient="[null]"
+        external_box_id="ORDER1"
+        logistic_point_partner_id="172"
+        logistic_point_external_id="13"
+        logistic_point_id="200"
+        logistic_point_type="PICKUP"
+    />
+
+    <lrm_return_segment
+        id="2"
+        lrm_return_id="2"
+        lrm_segment_id="2"
+        status="IN"
+        external_box_id="ORDER2"
+        shipment_destination="[null]"
+        shipment_recipient="[null]"
+        logistic_point_partner_id="172"
+        logistic_point_external_id="13"
+        logistic_point_id="200"
+        logistic_point_type="PICKUP"
+    />
+
+    <lrm_return_segment
+        id="3"
+        lrm_return_id="3"
+        lrm_segment_id="3"
+        status="IN"
+        external_box_id="ORDER3"
+        shipment_destination="[null]"
+        shipment_recipient="[null]"
+        logistic_point_partner_id="172"
+        logistic_point_external_id="13"
+        logistic_point_id="200"
+        logistic_point_type="PICKUP"
+    />
+
+    <plan_fact
+        id="1"
+        entity_type="LRM_RETURN_SEGMENT"
+        entity_id="1"
+        expected_status="OUT"
+        processing_status="ENQUEUED"
+        plan_fact_status="ACTIVE"
+        expected_status_datetime="2020-11-01 12:00:00 +0000"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        created="2020-11-01 12:00:00 +0000"
+    />
+
+    <plan_fact
+        id="2"
+        entity_type="LRM_RETURN_SEGMENT"
+        entity_id="2"
+        expected_status="OUT"
+        processing_status="ENQUEUED"
+        plan_fact_status="ACTIVE"
+        expected_status_datetime="2020-11-01 12:00:00 +0000"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        created="2020-11-01 12:00:00 +0000"
+    />
+
+    <plan_fact
+        id="3"
+        entity_type="LRM_RETURN_SEGMENT"
+        entity_id="3"
+        expected_status="OUT"
+        processing_status="ENQUEUED"
+        plan_fact_status="ACTIVE"
+        expected_status_datetime="2020-11-01 12:00:00 +0000"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        created="2020-11-01 12:00:00 +0000"
+    />
+
+    <plan_fact_group
+        id="1"
+        aggregation_key="date:2020-11-01;lrmPartnerFrom:172;"
+        aggregation_type="PARTNER_RETURN_SEGMENT_PVZ"
+        processing_status="ENQUEUED"
+        expected_status="OUT"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                     "aggregationEntity": {
+                        "date": [2020, 11, 1],
+                         "lrmPartnerFrom": {
+                            "id": 172,
+                            "name": "172"
+                         }
+                     }
+                },
+                "PartnerLrmReturnSegmentPvzAdditionalData": {
+                     "_type": ".PartnerLrmReturnSegmentPvzAdditionalData",
+                     "issueKey": "MQMTESTRETURN-1",
+                     "issueClosed": false,
+                     "issueCreatedAt": [2020, 11, 2, 12, 30],
+                     "orderIds": ["ORDER1", "ORDER2"],
+                     "affectedOrderIds": ["ORDER1", "ORDER2"]
+                }
+                }'
+    />
+
+    <plan_fact_group_relations
+        plan_fact_group_id="1"
+        plan_fact_id="1"
+    />
+
+    <plan_fact_group_relations
+        plan_fact_group_id="1"
+        plan_fact_id="3"
+    />
+
+    <quality_rule
+        id="1"
+        enabled="true"
+        expected_status="OUT"
+        aggregation_type="PARTNER_RETURN_SEGMENT_PVZ"
+        rule_processor="STARTREK"
+        rule='{
+                "queue": "MQMTESTRETURN",
+                "_type": ".PartnerLrmReturnSegmentPvzPayload",
+                "allowedToCloseAssigned": false
+            }'
+    />
+
+</dataset>

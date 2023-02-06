@@ -1,0 +1,89 @@
+{
+  "tableName": "clickphite_testing",
+  "splits": {
+    "table": "table"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "clickphite.testing.unique-rebuilds.period.ONE_SEC.TOTAL",
+        "clickphite.testing.unique-rebuilds.period.ONE_SEC.table.${table}"
+      ],
+      "periodArray": ["HOUR", "DAY"],
+      "metricField": "uniq(metric_ids, addSeconds(start_date, arrayJoin(range(toUInt32(dateDiff('second', start_date, end_date))))))",
+      "filter": "period='ONE_SEC'"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.unique-rebuilds.period.FIVE_SEC.TOTAL",
+        "clickphite.testing.unique-rebuilds.period.FIVE_SEC.table.${table}"
+      ],
+      "periodArray": ["HOUR", "DAY"],
+      "metricField": "uniq(metric_ids, addSeconds(start_date, 5*arrayJoin(range(toUInt32(dateDiff('second', start_date, end_date)/5)))))",
+      "filter": "period='FIVE_SEC'"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.unique-rebuilds.period.ONE_MIN.TOTAL",
+        "clickphite.testing.unique-rebuilds.period.ONE_MIN.table.${table}"
+      ],
+      "periodArray": ["HOUR", "DAY"],
+      "metricField": "uniq(metric_ids, addMinutes(start_date, arrayJoin(range(toUInt32(dateDiff('minute', start_date, end_date))))))",
+      "filter": "period='ONE_MIN'"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.unique-rebuilds.period.FIVE_MIN.TOTAL",
+        "clickphite.testing.unique-rebuilds.period.FIVE_MIN.table.${table}"
+      ],
+      "periodArray": ["HOUR", "DAY"],
+      "metricField": "uniq(metric_ids, addMinutes(start_date, 5*arrayJoin(range(toUInt32(dateDiff('minute', start_date, end_date)/5)))))",
+      "filter": "period='FIVE_MIN'"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.unique-rebuilds.period.HOUR.TOTAL",
+        "clickphite.testing.unique-rebuilds.period.HOUR.table.${table}"
+      ],
+      "periodArray": ["HOUR", "DAY"],
+      "metricField": "uniq(metric_ids, addHours(start_date, arrayJoin(range(toUInt32(dateDiff('hour', start_date, end_date))))))",
+      "filter": "period='HOUR'"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.unique-rebuilds.period.DAY.TOTAL",
+        "clickphite.testing.unique-rebuilds.period.DAY.table.${table}"
+      ],
+      "periodArray": ["HOUR", "DAY"],
+      "metricField": "uniq(metric_ids, addDays(start_date, arrayJoin(range(toUInt32(dateDiff('day', start_date, end_date))))))",
+      "filter": "period='DAY'"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.unique-rebuilds.period.WEEK.TOTAL",
+        "clickphite.testing.unique-rebuilds.period.WEEK.table.${table}"
+      ],
+      "periodArray": ["HOUR", "DAY"],
+      "metricField": "uniq(metric_ids, addWeeks(start_date, arrayJoin(range(toUInt32(dateDiff('week', start_date, end_date))))))",
+      "filter": "period='WEEK'"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.unique-rebuilds.period.MONTH.TOTAL",
+        "clickphite.testing.unique-rebuilds.period.MONTH.table.${table}"
+      ],
+      "periodArray": ["HOUR", "DAY"],
+      "metricField": "uniq(metric_ids, addMonths(start_date, arrayJoin(range(toUInt32(dateDiff('month', start_date, end_date))))))",
+      "filter": "period='MONTH'"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.unique-rebuilds.period.QUARTER.TOTAL",
+        "clickphite.testing.unique-rebuilds.period.QUARTER.table.${table}"
+      ],
+      "periodArray": ["HOUR", "DAY"],
+      "metricField": "uniq(metric_ids, addQuarters(start_date, arrayJoin(range(toUInt32(dateDiff('quarter', start_date, end_date))))))",
+      "filter": "period='QUARTER'"
+    }
+  ]
+}

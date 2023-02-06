@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <ID ID="PLT00001" />
+    <ID ID="PLT00002" />
+    <RECEIPT
+            RECEIPTKEY="0000000016"
+            STATUS="0"
+    />
+    <!-- старый таск с этим же контейнером, не должен меняться-->
+    <TASKDETAIL
+            TASKDETAILKEY="1"
+            STATUS="9"
+            TASKTYPE = "ACNS"
+            FROMID = "PLT00001"
+            RECEIPTKEY = "0000000011"
+    />
+    <!-- должен быть отменен -->
+    <TASKDETAIL
+            TASKDETAILKEY="2"
+            STATUS="3"
+            TASKTYPE = "ACNS"
+            FROMID = "PLT00001"
+            RECEIPTKEY = "0000000016"
+    />
+    <!-- не связанный с этим контейнером таск, не должен меняться-->
+    <TASKDETAIL
+            TASKDETAILKEY="3"
+            STATUS="3"
+            TASKTYPE = "ACNS"
+            FROMID = "PLT00002"
+            RECEIPTKEY="0000000015"
+    />
+    <!-- находится в заданном контейнере, должен быть удален-->
+    <ANOMALYLOT
+            ANOMALYLOTKEY="1"
+            TRANSPORTUNITID="PLT00001"
+            RECEIPTKEY="0000000016"
+            STORERKEY="12"
+            DESCRIPTION="Некоторый товар 1"
+            TYPE="DAMAGED"
+            AMOUNT="1"
+            ADDWHO="TEST"
+            EDITWHO="TEST"
+            LOC="DAMAGE01"
+    />
+    <!-- находится в заданном контейнере, должен быть удален-->
+    <ANOMALYLOT
+            ANOMALYLOTKEY="2"
+            TRANSPORTUNITID="PLT00001"
+            RECEIPTKEY="0000000016"
+            STORERKEY="13"
+            MANUFACTURERSKU="SKU27"
+            TYPE="EXPIRED"
+            AMOUNT="12"
+            ADDWHO="TEST"
+            EDITWHO="TEST"
+            LOC="DAMAGE01"
+    />
+    <!-- находится в другом контейнере, не должен быть удален-->
+    <ANOMALYLOT
+            ANOMALYLOTKEY="3"
+            TRANSPORTUNITID="PLT00002"
+            RECEIPTKEY="0000000015"
+            STORERKEY="12"
+            DESCRIPTION="Некоторый товар 1"
+            TYPE="EXPIRED"
+            AMOUNT="5"
+            ADDWHO="TEST"
+            EDITWHO="TEST"
+            LOC="DAMAGE01"
+    />
+
+</dataset>

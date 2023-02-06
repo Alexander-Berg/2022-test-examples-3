@@ -1,0 +1,85 @@
+{
+  "users": [
+    {
+      "id": "{{ user.uid }}",
+      "address-list": [
+        {
+          "default": true,
+          "address": "{{ user.email }}"
+        }
+      ],
+      "status": {
+        "value": "VALID",
+        "id": 0
+      },
+      "error": "OK",
+      {% if user.is_hosted %}
+      "uid": {
+        "hosted": true,
+        "lite" : false,
+        "value": "{{ user.uid }}",
+        "domid": "{{ user.domid }}",
+        "domain": "{{ user.domain }}",
+        "mx": "1",
+        "domain_ena": "1",
+        "catch_all": false
+      },
+      {% else %}
+      "uid":
+      {
+        "hosted": false,
+        "lite" : false,
+        "value": "{{ user.uid }}"
+      },
+      {% endif %}
+      "login": "{{ user.login }}",
+      "have_password": true,
+      "have_hint": true,
+      "karma": {
+        {% if user.is_bad_karma %}
+        "value": 100
+        {% else %}
+        {% if user.is_threshold_karma %}
+        "value": 85
+        {% else %}
+        "value": 0
+        {% endif %}
+        {% endif %},
+        "allow-until": {% if user.is_temp_bad_karma %}2114380800{% else %}0{% endif %}
+      },
+      "karma_status": {
+        "value": 0
+      },
+      "dbfields": {
+        "account_info.country.uid": "ru",
+        "subscription.born_date.2": "2017-12-11 18:55:31",
+        "account_info.reg_date.uid": "2017-12-11 18:55:31",
+        "subscription.login.-": "{{ user.login }}",
+        "subscription.suid.-": "{{ user.suid }}",
+        {% if user.is_email_blocked %}
+        "subscription.login_rule.2": "0",
+        {% else %}
+        "subscription.login_rule.2": "1",
+        {% endif %}
+        {% if user.is_corp and not user.is_empty_1000_suid %}
+        "subscription.suid.1000": "1",
+        {% endif %}
+        {% if user.is_phone_confirmed %}
+        "userphones.confirmed.uid": "2017-12-11 18:55:31"
+        {% else %}
+        "userphones.confirmed.uid": ""
+        {% endif %}
+      },
+      "attributes": {
+        {% if user.is_ml %}
+        "13": "1",
+        {% endif %}
+        {% if user.has_org_id %}
+        "1031": "1234567"
+        {% else %}
+        "1031": ""
+        {% endif %}
+      }
+    }
+  ]
+}

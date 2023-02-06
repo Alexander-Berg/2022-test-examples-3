@@ -1,0 +1,37 @@
+<dataset>
+    <logistic_segments
+            id="101"
+            partner_id="203"
+            name="Перемещение, у которого есть активный сервис"
+            type="movement"
+            logistic_point_id="[null]"
+            partner_relation_id="1"
+    />
+
+    <logistic_segments_services id="1" segment_id="101" code="1" status="active" duration="30" price="13"/>
+
+    <logistic_segments id="102" partner_id="202" name="Warehouse Before" type="warehouse" logistic_point_id="302"/>
+    <logistic_segments id="104" partner_id="202" name="Warehouse After" type="warehouse" logistic_point_id="304"/>
+
+    <logistic_edges from_segment_id="102" to_segment_id="101"/>
+    <logistic_edges from_segment_id="101" to_segment_id="104"/>
+
+    <logistic_segments_services id="302" segment_id="102" code="1" status="active" duration="30" price="13"/>
+
+    <logistic_segments
+            id="1"
+            partner_id="203"
+            name="Возвратный сегмент перемещения из Склад 3 в Склад 1"
+            type="backward_movement"
+            partner_relation_id="1"
+    />
+    <logistic_edges from_segment_id="104" to_segment_id="1"/>
+    <logistic_edges from_segment_id="1" to_segment_id="102"/>
+    <logistic_edges from_segment_id="102" to_segment_id="1"/>
+    <logistic_edges from_segment_id="1" to_segment_id="104"/>
+
+    <movement_backward_movement_mapping
+            movement_segment_id="101"
+            backward_movement_segment_id="1"
+    />
+</dataset>

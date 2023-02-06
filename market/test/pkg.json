@@ -1,0 +1,179 @@
+{
+    "meta": {
+        "name": "config-market-fslb-test",
+        "maintainer": "Pavel Yelkin <pashayelkin@yandex-team.ru>",
+        "description": "Market configuration for L7 balancer",
+        "version": "1.0-{revision}",
+        "homepage": "https://a.yandex-team.ru/arc/trunk/arcadia/market/conf/fslb",
+        "noconffiles_all": false,
+        "depends": [
+            "yandex-balancer",
+            "python-lxml",
+            "yandex-yasmagent",
+            "yandex-market-balancer-regenerate",
+            "market-demobalancer-api"
+        ],
+        "conflicts": [
+            "config-market-fslb"
+        ]
+    },
+    "data": [
+        {
+            "source": {
+                "type": "DIRECTORY"
+            },
+            "destination": {
+                "path": "/etc/yandex/balancer/values-enabled"
+            }
+        },
+        {
+            "source": {
+                "type": "DIRECTORY"
+            },
+            "destination": {
+                "path": "/etc/yandex/balancer/conf-generated"
+            }
+        },
+        {
+            "source": {
+                "type": "DIRECTORY"
+            },
+            "destination": {
+                "path": "/var/cache/yandex/balancer"
+            }
+        },
+        {
+            "source": {
+                "type": "DIRECTORY"
+            },
+            "destination": {
+                "attributes": {
+                    "mode": {
+                        "value": 777
+                    }
+                },
+                "path": "/var/cache/yandex/balancer/sd"
+            }
+        },
+        {
+            "source": {
+                "type": "DIRECTORY"
+            },
+            "destination": {
+                "path": "/var/log/yandex/balancer"
+            }
+        },
+        {
+            "source": {
+                "type": "DIRECTORY"
+            },
+            "destination": {
+                "path": "/var/log/yandex/balancer/archive"
+            }
+        },
+        {
+            "source": {
+                "type": "ARCADIA",
+                "path": "market/sre/conf/fslb/common/src/balancer/default"
+            },
+            "destination": {
+                "path": "/etc/yandex/balancer/default"
+            }
+        },
+        {
+            "source": {
+                "type": "ARCADIA",
+                "path": "market/sre/conf/fslb/test/values-available",
+                "files": ["*"]
+            },
+            "destination": {
+                "path": "/etc/yandex/balancer/values-available/"
+            }
+        },
+        {
+            "source": {
+                "type": "ARCADIA",
+                "path": "market/sre/conf/fslb/common/src/balancer/values-available",
+                "files": ["*"]
+            },
+            "destination": {
+                "path": "/etc/yandex/balancer/values-available/"
+            }
+        },
+        {
+            "source": {
+                "type": "ARCADIA",
+                "path": "market/sre/conf/fslb/test/values-static",
+                "files": ["*"]
+            },
+            "destination": {
+                "path": "/etc/yandex/balancer/values-static/"
+            }
+        },
+        {
+            "source": {
+                "type": "ARCADIA",
+                "path": "market/sre/conf/fslb/common/src/balancer/values-static",
+                "files": ["*"]
+            },
+            "destination": {
+                "path": "/etc/yandex/balancer/values-static/"
+            }
+        },
+        {
+            "source": {
+                "type": "ARCADIA",
+                "path": "market/sre/conf/fslb/test/etc",
+                "files": ["*"]
+            },
+            "destination": {
+                "path": "/etc/"
+            }
+        },
+        {
+            "source": {
+                "type": "ARCADIA",
+                "path": "market/sre/conf/fslb/common/src/balancer/balancer_golovan_conf.sh"
+            },
+            "destination": {
+                "path": "/etc/yandex/balancer/balancer_golovan_conf.sh"
+            }
+        },
+        {
+            "source": {
+                "type": "ARCADIA",
+                "path": "market/sre/conf/fslb/common/src/monrun"
+            },
+            "destination": {
+                "path": "/etc/monrun/conf.d"
+            }
+        },
+        {
+            "source": {
+                "type": "ARCADIA",
+                "path": "market/sre/conf/fslb/common/src/push-client"
+            },
+            "destination": {
+                "path": "/etc/yandex/statbox-push-client/conf-sources/units"
+            }
+        },
+        {
+            "source": {
+                "type": "ARCADIA",
+                "path": "market/sre/conf/fslb/common/src/usr/sbin"
+            },
+            "destination": {
+                "path": "/usr/sbin"
+            }
+        },
+        {
+            "source": {
+                "type": "SYMLINK"
+            },
+            "destination": {
+                "path": "/etc/yandex/balancer/balancer.conf",
+                "target": "conf-generated/balancer.conf"
+            }
+        }
+    ]
+}

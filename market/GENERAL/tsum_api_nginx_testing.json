@@ -1,0 +1,133 @@
+{
+  "owner": "marketinfra",
+  "tableName": "tsum_nginx_testing",
+  "splits": {
+    "host": "host"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "tsum.testing.api.nginx.rps.host.${host}",
+        "tsum.testing.api.nginx.rps.ALL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "countIf(vhost IN ('tsum-api-testing.market.yandex.net:4203', 'tsum-api.tst.vs.market.yandex.net', 'tsum-api-testing.market.yandex.net') AND url != '/ping') / 60",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "tsum.testing.api.nginx.timings.host.${host}",
+        "tsum.testing.api.nginx.timings.ALL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "resptime_ms",
+      "filter": "vhost IN ('tsum-api-testing.market.yandex.net:4203', 'tsum-api.tst.vs.market.yandex.net', 'tsum-api-testing.market.yandex.net') AND http_code >= 200 AND http_code <= 299 AND url != '/ping'",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "tsum.testing.api.nginx.errors-percent.5xx.host.${host}",
+        "tsum.testing.api.nginx.errors-percent.5xx.ALL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "countIf(vhost IN ('tsum-api-testing.market.yandex.net:4203', 'tsum-api.tst.vs.market.yandex.net', 'tsum-api-testing.market.yandex.net') AND http_code >= 500 AND http_code <= 599 AND url != '/ping') / countIf(url != '/ping') * 100",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "tsum.testing.api.nginx.response.2xx.host.${host}",
+        "tsum.testing.api.nginx.response.2xx.ALL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "countIf(vhost IN ('tsum-api-testing.market.yandex.net:4203', 'tsum-api.tst.vs.market.yandex.net', 'tsum-api-testing.market.yandex.net') AND http_code >= 200 AND http_code <= 299 AND url != '/ping')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "tsum.testing.api.nginx.response.3xx.host.${host}",
+        "tsum.testing.api.nginx.response.3xx.ALL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "countIf(vhost IN ('tsum-api-testing.market.yandex.net:4203', 'tsum-api.tst.vs.market.yandex.net', 'tsum-api-testing.market.yandex.net') AND http_code >= 300 AND http_code <= 399 AND url != '/ping')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "tsum.testing.api.nginx.response.4xx.host.${host}",
+        "tsum.testing.api.nginx.response.4xx.ALL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "countIf(vhost IN ('tsum-api-testing.market.yandex.net:4203', 'tsum-api.tst.vs.market.yandex.net', 'tsum-api-testing.market.yandex.net') AND http_code >= 400 AND http_code <= 499 AND url != '/ping')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "tsum.testing.api.nginx.response.5xx.host.${host}",
+        "tsum.testing.api.nginx.response.5xx.ALL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "countIf(vhost IN ('tsum-api-testing.market.yandex.net:4203', 'tsum-api.tst.vs.market.yandex.net', 'tsum-api-testing.market.yandex.net') AND http_code >= 500 AND http_code <= 599 AND url != '/ping')",
+      "type": "SIMPLE"
+    }
+  ],
+
+  "commonSolomonLabels": {
+    "project": "market-infra",
+    "service": "tsum-api",
+    "cluster": "testing"
+  },
+  "solomonSensors": [
+    {
+      "labelsArray": [
+        {
+          "sensor": "RPS"
+        },
+        {
+          "sensor": "RPS",
+          "host": "${host}"
+        }
+      ],
+      "period": "ONE_MIN",
+      "metricField": "countIf(vhost IN ('tsum-api-testing.market.yandex.net:4203', 'tsum-api.tst.vs.market.yandex.net', 'tsum-api-testing.market.yandex.net') AND url != '/ping') / 60",
+      "type": "SIMPLE"
+    },
+    {
+      "labels": {
+        "sensor": "RPS_nanny_hook"
+      },
+      "period": "ONE_MIN",
+      "metricField": "countIf(vhost='tsum-api-testing.yandex.net:4203' AND url = '/events/nannyHook') / 3600",
+      "type": "SIMPLE"
+    },
+    {
+      "labelsArray": [
+        {
+          "sensor": "response_time"
+        },
+        {
+          "sensor": "response_time",
+          "host": "${host}"
+        }
+      ],
+      "period": "ONE_MIN",
+      "metricField": "resptime_ms",
+      "filter": "vhost IN ('tsum-api-testing.market.yandex.net:4203', 'tsum-api.tst.vs.market.yandex.net', 'tsum-api-testing.market.yandex.net') AND http_code >= 200 AND http_code <= 299 AND url != '/ping'",
+      "type": "QUANTILE_TIMING",
+      "valueOnNan": 0
+    },
+    {
+      "labelsArray": [
+        {
+          "sensor": "5xx_count"
+        },
+        {
+          "sensor": "5xx_count",
+          "host": "${host}"
+        }
+      ],
+      "period": "ONE_MIN",
+      "metricField": "countIf(vhost IN ('tsum-api-testing.market.yandex.net:4203', 'tsum-api.tst.vs.market.yandex.net', 'tsum-api-testing.market.yandex.net') AND http_code >= 500 AND http_code <= 599 AND url != '/ping') / countIf(url != '/ping') * 100",
+      "type": "SIMPLE"
+    }
+  ]
+}

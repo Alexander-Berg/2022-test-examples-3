@@ -1,0 +1,22 @@
+
+$ozon_checkout = "%ozon.ru/gocheckout%";
+$wb_checkout = "%wildberries.ru/lk/basket%";
+
+$raw_counts = (
+    SELECT
+        yandexuid,
+        TableName() AS `date`,
+        IF(url LIKE $ozon_checkout, 1, 0) AS ozon,
+        IF(url LIKE $wb_checkout, 1, 0) AS wildberries
+    FROM `//input`
+    WHERE url LIKE $ozon_checkout OR url LIKE $wb_checkout
+);
+
+INSERT INTO `//output` WITH TRUNCATE
+SELECT
+    yandexuid,
+    `date`,
+    MAX(ozon) AS ozon,
+    MAX(wildberries) AS wildberries
+FROM $raw_counts
+GROUP BY yandexuid, `date`;

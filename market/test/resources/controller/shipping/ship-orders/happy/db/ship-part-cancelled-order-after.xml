@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<dataset>
+
+    <NSQLCONFIG CONFIGKEY="ENABLE_PUSH_OUTBOUND_STATE" NSQLVALUE="1" />
+
+    <PUTAWAYZONE PUTAWAYZONE="RACK"/>
+
+    <LOC SERIALKEY="1" LOC="UNKNOWN" STATUS="OK" PUTAWAYZONE="RACK"/>
+    <LOC SERIALKEY="2" LOC="PACK"    STATUS="OK" PUTAWAYZONE="RACK"/>
+
+    <PACK PACKKEY="STD" PACKDESCR="STD"/>
+
+    <SKU SKU="ROV0001" STORERKEY="1234"/>
+    <SKU SKU="ROV0002" STORERKEY="1234"/>
+    <SKU SKU="ROV0003" STORERKEY="1234"/>
+    <SKU SKU="ROV0004" STORERKEY="1234"/>
+    <SKU SKU="ROV0005" STORERKEY="1234"/>
+
+    <STORER STORERKEY="CARRIER-01" COMPANY="Test carrier 1" TYPE="3"/>
+    <STORER STORERKEY="1234" COMPANY="Test storer 1" TYPE="1"/>
+
+    <ORDERS
+        ORDERKEY="ORD0001"
+        CARRIERCODE="CARRIER-01"
+        EXTERNORDERKEY="EXT-ORD1"
+        TYPE="0"
+        STATUS="95"
+        SCHEDULEDSHIPDATE="2020-03-30 21:00:00.000"
+        ROWVERSION="2"
+        ADDWHO="SETUP"
+        EDITWHO="TEST"
+        ADDDATE="2020-03-29 12:34:56.789"
+        EDITDATE="2020-04-01 12:34:56.789"
+    />
+
+
+    <ORDERDETAIL
+        ORDERKEY="ORD0001"
+        ORDERLINENUMBER="0001"
+        STORERKEY="1234"
+        SKU="ROV0001"
+        STATUS="95"
+        OPENQTY="0"
+        ORIGINALQTY="9"
+        QTYPICKED="0"
+        SHIPPEDQTY="9"
+        ADJUSTEDQTY="0"
+        PROCESSEDQTY="-9"
+        ISMASTER="1"
+        ADDWHO="SETUP"
+        EDITWHO="TEST"
+        ADDDATE="2020-01-01 00:00:01"
+        EDITDATE="2020-04-01 12:34:56.789"
+    />
+
+<!--  Несколько отменённых деталей в разных статусах и с разным значением adjustedqty  -->
+    <ORDERDETAIL
+        ORDERKEY="ORD0001"
+        ORDERLINENUMBER="0002"
+        STORERKEY="1234"
+        SKU="ROV0002"
+        STATUS="98"
+        ORIGINALQTY="10"
+        OPENQTY="0"
+        QTYPICKED="0"
+        SHIPPEDQTY="0"
+        ADJUSTEDQTY="0"
+        PROCESSEDQTY="0"
+        ISMASTER="1"
+        ADDWHO="SETUP"
+        EDITWHO="SETUP"
+        ADDDATE="2020-01-01 00:00:01"
+        EDITDATE="2020-01-01 00:00:01"
+    />
+    <ORDERDETAIL
+        ORDERKEY="ORD0001"
+        ORDERLINENUMBER="0003"
+        STORERKEY="1234"
+        SKU="ROV0002"
+        STATUS="99"
+        ORIGINALQTY="5"
+        OPENQTY="0"
+        QTYPICKED="0"
+        SHIPPEDQTY="0"
+        ADJUSTEDQTY="-5"
+        PROCESSEDQTY="0"
+        ISMASTER="1"
+        ADDWHO="SETUP"
+        EDITWHO="SETUP"
+        ADDDATE="2020-01-01 00:00:01"
+        EDITDATE="2020-01-01 00:00:01"
+    />
+
+    <DROPID DROPID="P0001"   STATUS="9"/>
+    <DROPID DROPID="P0003"   STATUS="0"/>
+
+    <PICKDETAIL
+        PICKDETAILKEY="0001"
+        DROPID="P0001"
+        ID=""
+        TRACKINGID="P0001"
+        LOT="0001"
+        LOC="PACK"
+        SKU="ROV0001"
+        STORERKEY="1234"
+        QTY="9"
+        ORDERKEY="ORD0001"
+        ORDERLINENUMBER="0001"
+        STATUS="9"
+        PICKHEADERKEY=" "
+        ADDWHO="SETUP"
+        EDITWHO="TEST"
+        EDITDATE="2020-04-01 12:34:56.789"
+    />
+
+<!--  Одна деталь отбора для скорректированных деталей заказа присутствует в 9 статусе, другая удалена  -->
+    <PICKDETAIL
+        PICKDETAILKEY="0003"
+        DROPID="P0003"
+        ID="P0003"
+        LOT="0002"
+        LOC="PACK"
+        SKU="ROV0002"
+        STORERKEY="1234"
+        QTY="5"
+        ORDERKEY="ORD0001"
+        ORDERLINENUMBER="0003"
+        STATUS="9"
+        PICKHEADERKEY=" "
+        ADDWHO="SETUP"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:01"
+    />
+
+    <SKUXLOC SKU="ROV0001" STORERKEY="1234" LOC="PACK"   QTY="0"  QTYPICKED="0"  QTYALLOCATED="0" QTYEXPECTED="0" />
+
+    <LOT LOT="0001" SKU="ROV0001" STORERKEY="1234" QTY="3"  QTYPICKED="0"  QTYONHOLD="3" STATUS="OK" />
+
+    <LOTXIDDETAIL LOTXIDKEY="1"  LOTXIDLINENUMBER="1"  ID="P0001" IOFLAG="O" LOT="0001" OOTHER1="10001"  PICKDETAILKEY="0001" />
+    <LOTXIDDETAIL LOTXIDKEY="3"  LOTXIDLINENUMBER="3"  ID="P0003" IOFLAG="O" LOT="0002" OOTHER1="10003"  PICKDETAILKEY="0003" />
+
+
+    <ITRN
+        ITRNKEY="0000000301"
+        TRANTYPE="WD"
+        LOT="0001"
+        STORERKEY="1234"
+        SKU="ROV0001"
+        FROMLOC=""
+        FROMID=""
+        QTY="-9"
+        SOURCETYPE="shipping_order"
+        TOLOC="PACK"
+        TOID="P0001"
+        SOURCEKEY="ORD00010001"
+        STATUS=""
+        UOM="EA"
+        UOMCALC="0"
+        ADDWHO="TEST"
+        EDITWHO="TEST"
+        ADDDATE="2020-04-01 12:34:56.789"
+        EDITDATE="2020-04-01 12:34:56.789"
+    />
+
+    <ITRNSERIAL
+        ITRNSERIALKEY="0000000401"
+        ITRNKEY="0000000301"
+        STORERKEY="1234"
+        SKU="ROV0001"
+        LOT="0001"
+        ID="P0001"
+        LOC="PACK"
+        SERIALNUMBER="10001"
+        QTY="-9"
+        SERIALNUMBERLONG="10001"
+        TRANTYPE="WD"
+        ADDWHO="TEST"
+        EDITWHO="TEST"
+        ADDDATE="2020-04-01 12:34:56.789"
+        EDITDATE="2020-04-01 12:34:56.789"
+    />
+</dataset>

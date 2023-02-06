@@ -1,0 +1,50 @@
+{
+  "definitions": {
+    "lids": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      },
+      "uniqueItems": true
+    },
+    "tid": {
+      "oneOf": [
+        { "type": "integer" },
+        { "type": "null" }
+      ]
+    },
+    "tab": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "null" }
+      ]
+    }
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "mid":            { "type": "integer" },
+      "fid":            { "type": "integer" },
+      "tid":            { "$ref": "#/definitions/tid" },
+      "lids":           { "$ref": "#/definitions/lids" },
+      "seen":           { "type": "boolean" },
+      "recent":         { "type": "boolean" },
+      "deleted":        { "type": "boolean" },
+      "hdr_message_id": { "type": "string"  },
+      "tab":            { "$ref": "#/definitions/tab" }
+    },
+    "additionalProperties": false,
+    "required": ["mid",
+                 "fid",
+                 "tid",
+                 "lids",
+                 "seen",
+                 "recent",
+                 "deleted",
+                 "hdr_message_id",
+                 "tab"]
+  },
+  "uniqueItems": true,
+  "minLength": 1
+}

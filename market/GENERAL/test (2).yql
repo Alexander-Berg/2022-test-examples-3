@@ -1,0 +1,29 @@
+USE hahn;
+
+PRAGMA yt.TmpFolder = "//home/market/production/oklo/tmp";
+
+$result_table ="//home/market/production/oklo/users/andrewmironov/test";
+insert into $result_table
+
+SELECT 
+CurrentUtcDatetime() as Transaction_datetime,
+
+--Тут комментим нужный статус
+--"01 Поиск заказа" as Status,
+--"02 Заказ утерян - Получена компенсация от СД" as Status,
+--"03 Заказ утерян - Вина маркета" as Status,
+--"04 Заказ возвращен" as Status,
+--"05 Заказ доставлен" as Status,
+--"06 Выплата партнеру" as Status,
+"07 Отказ в выплате партнеру" as Status,
+Order_ID
+FROM (
+SELECT [
+--Тут добавляем список заказов
+--33308683,
+--33391324,
+--63473584,
+73971771
+] as Order_ID
+)
+FLATTEN LIST BY Order_ID

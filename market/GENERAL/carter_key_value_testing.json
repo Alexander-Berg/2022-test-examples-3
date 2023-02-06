@@ -1,0 +1,22 @@
+{
+  "owner": "checkout",
+  "tableName": "common_kv_testing",
+  "splits": {
+    "module": "module",
+    "key": "key",
+    "host": "host",
+    "subkey": "subkey"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "key-value.${module}.testing.${key}.${subkey}",
+        "key-value.${module}.testing.HOST.${host}.${key}.${subkey}"
+      ],
+      "period": "ONE_SEC",
+      "metricField": "anyLast(value)",
+      "filter": "module in ('market-carter', 'market-checkouter') and ((key in ('datasource.master', 'datasource.slave') and subkey in ('idle', 'active')) or ((key = 'thread_pool') and subkey in ('idle', 'busy', 'queue')))",
+      "type": "SIMPLE"
+    }
+  ]
+}

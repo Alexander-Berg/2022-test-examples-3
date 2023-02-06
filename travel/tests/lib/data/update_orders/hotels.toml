@@ -1,0 +1,391 @@
+bin_path = "travel/cpa/data_processing/update_orders/update_orders"
+
+args = [
+    "--category", "hotels",
+    "--yt-proxy", "%(yt_proxy)s",
+    "--skip-set-media-attribute",
+    "--stocks-url", "%(stocks_server_url)s",
+    "--src-dir", "//home/tests/update_orders",
+    "--dst-dir", "//home/tests/update_orders",
+]
+
+checkers = [
+    "stocks",
+    "yt",
+]
+
+
+[stocks]
+    check_type = "http"
+    mime_type = "apllication/json"
+
+[[stocks.responses]]
+    path = "/graph_23.json"
+    data_file = "stocks_EUR.json"
+
+[[stocks.responses]]
+    path = "/graph_1.json"
+    data_file = "stocks_USD.json"
+
+[[stocks.responses]]
+    path = "/graph_10009.json"
+    data_file = "stocks_KZT.json"
+
+[[stocks.responses]]
+    path = "/graph_10011.json"
+    data_file = "stocks_TRY.json"
+
+[[stocks.responses]]
+    path = "/graph_10018.json"
+    data_file = "stocks_CNY.json"
+
+[[stocks.responses]]
+    path = "/graph_10022.json"
+    data_file = "stocks_AZN.json"
+
+[[stocks.responses]]
+    path = "/graph_10006.json"
+    data_file = "stocks_UAH.json"
+
+[[stocks.responses]]
+    path = "/graph_10007.json"
+    data_file = "stocks_CHF.json"
+
+
+[[stocks.responses]]
+    path = "/23.xml"
+    data_file = "meta_EUR.xml"
+
+[[stocks.responses]]
+    path = "/1.xml"
+    data_file = "meta_USD.xml"
+
+[[stocks.responses]]
+    path = "/10009.xml"
+    data_file = "meta_KZT.xml"
+
+[[stocks.responses]]
+    path = "/10011.xml"
+    data_file = "meta_TRY.xml"
+
+[[stocks.responses]]
+    path = "/10018.xml"
+    data_file = "meta_CNY.xml"
+
+[[stocks.responses]]
+    path = "/10022.xml"
+    data_file = "meta_AZN.xml"
+
+[[stocks.responses]]
+    path = "/10006.xml"
+    data_file = "meta_UAH.xml"
+
+[[stocks.responses]]
+    path = "/10007.xml"
+    data_file = "meta_CHF.xml"
+
+[yt.input.snapshots]
+    path = "//home/tests/update_orders/order_snapshots"
+    sort_by = ["partner_name", "partner_order_id"]
+
+[[yt.input.snapshots.data]]
+    category = "hotels"
+    partner_name = "ostrovok"
+    partner_order_id = "0"
+    travel_order_id = "ostrovok:0"
+    status = "pending"
+    label = "ostrovok_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    profit_amount = 1.0
+    created_at = 1500000000
+    updated_at = 1500010000
+    check_in = "2019-01-01"
+    check_out = "2019-01-02"
+
+# same order id and status
+[[yt.input.snapshots.data]]
+    category = "hotels"
+    partner_name = "ostrovok"
+    partner_order_id = "0"
+    travel_order_id = "ostrovok:0"
+    status = "pending"
+    label = "ostrovok_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    profit_amount = 1.0
+    created_at = 1500000000
+    updated_at = 1500020000
+    check_in = "2019-01-01"
+    check_out = "2019-01-02"
+    hotel_name = "hotel_name"
+
+# status change
+[[yt.input.snapshots.data]]
+    category = "hotels"
+    partner_name = "ostrovok"
+    partner_order_id = "0"
+    travel_order_id = "ostrovok:0"
+    status = "confirmed"
+    label = "ostrovok_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    profit_amount = 1.0
+    created_at = 1500000000
+    updated_at = 1500030000
+    check_in = "2019-01-01"
+    check_out = "2019-01-02"
+    hotel_name = "hotel_name_0"
+
+# another order
+[[yt.input.snapshots.data]]
+    category = "hotels"
+    partner_name = "ostrovok"
+    partner_order_id = "1"
+    travel_order_id = "ostrovok:1"
+    status = "cancelled"
+    label = "ostrovok_1"
+    currency_code = "RUB"
+    order_amount = 5.0
+    profit_amount = 0.0
+    created_at = 1500050000
+    updated_at = 1500070000
+    check_in = "2019-01-01"
+    check_out = "2019-01-02"
+    hotel_name = "hotel_name_1"
+
+# order without label
+[[yt.input.snapshots.data]]
+    category = "hotels"
+    partner_name = "ostrovok"
+    partner_order_id = "2"
+    travel_order_id = "ostrovok:2"
+    status = "cancelled"
+    label = "ostrovok_2"
+    currency_code = "RUB"
+    order_amount = 5.0
+    profit_amount = 0.0
+    created_at = 1500050000
+    updated_at = 1500070000
+    check_in = "2019-01-01"
+    check_out = "2019-01-02"
+    hotel_name = "hotel_name_2"
+
+# two tvil orders, based the data from tvil/common_flow.toml
+[[yt.input.snapshots.data]]
+    partner_name = "tvil"
+    travel_order_id = "tvil:2360531"
+    partner_order_id = "2360531"
+    created_at = 1590647780
+    updated_at = 1590647781
+    status = "refunded"
+    partner_status = "CANCELLED"
+    currency_code = "RUB"
+    category = "hotels"
+    check_in = "2020-06-01"
+    check_out = "2020-06-07"
+    order_amount = 7200.0
+    profit_amount = 0.0
+    hotel_name = ""
+    label = "20200528001"
+
+[[yt.input.snapshots.data]]
+    partner_name = "tvil"
+    travel_order_id = "tvil:2408004"
+    partner_order_id = "2408004"
+    created_at = 1593134115
+    updated_at = 1593134116
+    status = "confirmed"
+    partner_status = "FINISHED"
+    currency_code = "RUB"
+    category = "hotels"
+    check_in = "2020-07-27"
+    check_out = "2020-08-04"
+    order_amount = 56201.17
+    profit_amount = 8430.18
+    hotel_name = ""
+    label = "sGm4uH3JxSl0KOaIGex8qTt22r3ClmYWQlEG9Bw"
+
+[yt.input.labels]
+    path = "//home/tests/update_orders/hotels/labels"
+    sort_by = ["label"]
+
+[[yt.input.labels.data]]
+    label = "ostrovok_0"
+    label_source = "label_source_0_0"
+
+[[yt.input.labels.data]]
+    label = "ostrovok_1"
+    label_source = "label_source_0_1"
+
+[[yt.input.labels.data]]
+    label = "sGm4uH3JxSl0KOaIGex8qTt22r3ClmYWQlEG9Bw"
+    label_source = "label_source_0_2"
+
+[yt.output.orders]
+    path = "//home/tests/update_orders/hotels/orders"
+    ignore_unknown_fields = true
+    fields_to_skip = [
+        "status_explanation",
+        "label_campaign",
+        "label_permalink",
+        "label_request_id",
+        "label_yandex_uid",
+        "label_medium",
+        "label_query",
+        "label_content",
+        "label_req_id",
+        "label_cache_timestamp",
+        "label_price",
+        "label_offer_source",
+        "label_operator_id",
+        "label_term",
+        "label_offer_campaign",
+        "label_original_hotel_id",
+        "label_offer_id",
+        "label_passport_uid",
+        "label_uuid",
+        "label_partner_id",
+        "label_check_in_date",
+        "label_nights",
+        "label_occupancy",
+        "label_int_test_ids",
+        "label_int_test_buckets",
+        "label_request_region",
+        "label_user_region",
+        "label_icookie",
+        "label_geo_client_id",
+        "label_geo_origin",
+        "label_redir_destination",
+        "label_surface",
+        "label_user_device",
+        "label_gclid",
+        "label_ya_travel_req_id",
+        "label_serp_req_id",
+        "label_searcher_req_id",
+        "label_ytp_referer",
+    ]
+
+[[yt.output.orders.data]]
+    category = "hotels"
+    partner_name = "ostrovok"
+    partner_order_id = "0"
+    travel_order_id = "ostrovok:0"
+    status = "confirmed"
+    label = "ostrovok_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    order_amount_rub = 10.0
+    profit_amount = 1.1400000000000001
+    profit_amount_rub = 1.1400000000000001
+    profit_amount_ex_tax = 0.95
+    created_at = 1499989200
+    updated_at = 1500030000
+    check_in = "2019-01-01"
+    check_out = "2019-01-02"
+    first_seen_at = 1500010000
+    suspicious_explanation = []
+    hotel_name = "hotel_name_0"
+    is_suspicious = false
+    has_label = true
+    label_source = "label_source_0_0"
+
+[[yt.output.orders.data]]
+    category = "hotels"
+    partner_name = "ostrovok"
+    partner_order_id = "1"
+    travel_order_id = "ostrovok:1"
+    status = "cancelled"
+    label = "ostrovok_1"
+    currency_code = "RUB"
+    order_amount = 5.0
+    order_amount_rub = 5.0
+    profit_amount = 0.5700000000000001
+    profit_amount_rub = 0.5700000000000001
+    profit_amount_ex_tax = 0.475
+    created_at = 1500039200
+    updated_at = 1500070000
+    first_seen_at = 1500070000
+    check_in = "2019-01-01"
+    check_out = "2019-01-02"
+    suspicious_explanation = []
+    hotel_name = "hotel_name_1"
+    is_suspicious = false
+    has_label = true
+    label_source = "label_source_0_1"
+
+[[yt.output.orders.data]]
+    category = "hotels"
+    partner_name = "ostrovok"
+    partner_order_id = "2"
+    travel_order_id = "ostrovok:2"
+    status = "cancelled"
+    label = "ostrovok_2"
+    currency_code = "RUB"
+    order_amount = 5.0
+    order_amount_rub = 5.0
+    profit_amount = 0.5700000000000001
+    profit_amount_rub = 0.5700000000000001
+    profit_amount_ex_tax = 0.475
+    created_at = 1500039200
+    updated_at = 1500070000
+    first_seen_at = 1500070000
+    check_in = "2019-01-01"
+    check_out = "2019-01-02"
+    suspicious_explanation = []
+    hotel_name = "hotel_name_2"
+    is_suspicious = false
+    has_label = false
+    label_source = ""
+
+[[yt.output.orders.data]]
+    partner_name = "tvil"
+    travel_order_id = "tvil:2360531"
+    partner_order_id = "2360531"
+    created_at = 1590636980
+    updated_at = 1590647781
+    status = "refunded"
+    partner_status = "CANCELLED"
+    currency_code = "RUB"
+    category = "hotels"
+    check_in = "2020-06-01"
+    check_out = "2020-06-07"
+    order_amount = 7200
+    hotel_name = ""
+    label = "20200528001"
+    # enriched / changed data
+    order_amount_rub = 7200
+    profit_amount = 0
+    profit_amount_rub = 0
+    profit_amount_ex_tax = 0
+    first_seen_at = 1590647781
+    suspicious_explanation = []
+    is_suspicious = false
+    has_label = false
+    label_source = ""
+
+[[yt.output.orders.data]]
+    partner_name = "tvil"
+    travel_order_id = "tvil:2408004"
+    partner_order_id = "2408004"
+    created_at = 1593123315
+    updated_at = 1593134116
+    status = "confirmed"
+    partner_status = "FINISHED"
+    currency_code = "RUB"
+    category = "hotels"
+    check_in = "2020-07-27"
+    check_out = "2020-08-04"
+    order_amount = 56201.17
+    hotel_name = ""
+    label = "sGm4uH3JxSl0KOaIGex8qTt22r3ClmYWQlEG9Bw"
+    # enriched / changed data
+    order_amount_rub = 56201.17
+    profit_amount = 5058.11
+    profit_amount_rub = 5058.11
+    profit_amount_ex_tax = 5058.11
+    first_seen_at = 1593134116
+    suspicious_explanation = []
+    is_suspicious = false
+    has_label = true
+    label_source = "label_source_0_2"

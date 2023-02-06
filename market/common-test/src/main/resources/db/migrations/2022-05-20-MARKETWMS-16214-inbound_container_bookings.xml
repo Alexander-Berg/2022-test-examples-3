@@ -1,0 +1,78 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+
+    <property name="TIMESTAMP_WITH_TIME_ZONE" value="dateTimeOffset" dbms="mssql"/>
+    <property name="TIMESTAMP_WITH_TIME_ZONE" value="TIMESTAMP WITH TIME ZONE" dbms="h2"/>
+
+    <property name="NOW" value="getUtcDate()" dbms="mssql"/>
+    <property name="NOW" value="CURRENT_TIMESTAMP()" dbms="h2"/>
+
+    <property name="USER_NAME" value="user_name()" dbms="mssql"/>
+    <property name="USER_NAME" value="USER()" dbms="h2"/>
+
+    <changeSet id="MARKETWMS-16214" author="al-iz">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="wmwhse1" tableName="INBOUND_CONTAINER_BOOKINGS"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="wmwhse1" tableName="INBOUND_CONTAINER_BOOKINGS">
+            <column name="SERIALKEY" type="int" autoIncrement="true" startWith="1" incrementBy="1" remarks="Row key">
+                <constraints unique="true"
+                             uniqueConstraintName="INBOUND_CONTAINER_BOOKINGS_UNIQUE"
+                             nullable="false"/>
+            </column>
+            <column name="CONTAINER" type="nvarchar(50)" remarks="Container id">
+                <constraints primaryKey="true"
+                             primaryKeyName="INBOUND_CONTAINER_BOOKINGS_PK"
+                             nullable="false"/>
+            </column>
+            <column name="STATUS" type="smallint" remarks="Booking status">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LOCATION" type="nvarchar(10)" remarks="Location id">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RECEIPTKEY" type="nvarchar(10)" remarks="Receipt key">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDDATE" type="${TIMESTAMP_WITH_TIME_ZONE}" defaultValueComputed="${NOW}"
+                    remarks="Insertion date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDWHO" type="nvarchar(256)" defaultValueComputed="${USER_NAME}" remarks="Who added">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITDATE" type="${TIMESTAMP_WITH_TIME_ZONE}" defaultValueComputed="${NOW}"
+                    remarks="Last update date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITWHO" type="nvarchar(256)" defaultValueComputed="${USER_NAME}" remarks="Who edited">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex schemaName="wmwhse1"
+                     tableName="INBOUND_CONTAINER_BOOKINGS"
+                     indexName="INBOUND_CONTAINER_BOOKINGS_RECEIPT_IDX"
+                     unique="false">
+            <column name="RECEIPTKEY"/>
+        </createIndex>
+
+        <createIndex schemaName="wmwhse1"
+                     tableName="INBOUND_CONTAINER_BOOKINGS"
+                     indexName="INBOUND_CONTAINER_BOOKINGS_LOCATION_IDX"
+                     unique="false">
+            <column name="LOCATION"/>
+        </createIndex>
+
+        <rollback>
+            <dropTable schemaName="wmwhse1" tableName="INBOUND_CONTAINER_BOOKINGS"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

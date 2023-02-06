@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <change_order_segment_request
+            change_order_request_id="1100"
+            segment_id="4"
+            required="true"
+            status="PROCESSING"
+    />
+
+    <queue_tasks
+            queue_name="PROCESS_WAYBILL_SEGMENT_UPDATE_TRANSFER_CODES"
+            task='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1","changeOrderSegmentRequestId":1,"sequenceId":1}'
+            attempt="0"
+    />
+
+    <business_process_state
+            id="1"
+            status="ENQUEUED"
+            queue_type="PROCESS_WAYBILL_SEGMENT_UPDATE_TRANSFER_CODES"
+    />
+
+    <business_process_state
+            id="1001"
+            status="SYNC_PROCESS_SUCCEEDED"
+            queue_type="CHANGE_ORDER_REQUEST"
+            save_to_yt_only="true"
+    />
+
+    <business_process_state
+            id="1004"
+            status="ENQUEUED"
+            queue_type="CHANGE_ORDER_REQUEST"
+    />
+    <waybill_segment
+            id="1"
+    />
+    <waybill_segment
+            id="2"
+            transfer_codes='{
+                "inbound": {
+                    "verification": null,
+                    "electronicAcceptanceCertificate": "qwe456"
+                },
+                "outbound": {
+                    "verification": "12345",
+                    "electronicAcceptanceCertificate": "asd123"
+                },
+                "returnOutbound": null
+            }'
+    />
+    <waybill_segment
+            id="3"
+            transfer_codes='{
+                "inbound": {
+                    "verification": "12345",
+                    "electronicAcceptanceCertificate": "asd123"
+                },
+                "outbound": {
+                    "verification": null,
+                    "electronicAcceptanceCertificate": "qwe456"
+                },
+                "returnOutbound": null
+            }'
+    />
+    <waybill_segment
+            id="4"
+            transfer_codes='{
+                "inbound": null,
+                "outbound": {
+                    "verification": "54321",
+                    "electronicAcceptanceCertificate": null
+                },
+                "returnOutbound": null
+            }'
+    />
+    <orders
+            id="1110"
+            recipient_verification_code="54321"
+    />
+</dataset>

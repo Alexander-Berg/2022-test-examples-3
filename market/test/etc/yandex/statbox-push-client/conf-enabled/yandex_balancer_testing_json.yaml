@@ -1,0 +1,20 @@
+---
+topic: market_sre/yandex_balancer/json_testing
+network:
+    master-addr: logbroker.yandex.net
+    proto: pq
+    tvm-client-id: 2014380
+    tvm-server-id: 2001059
+    tvm-secret-file: /etc/datasources/push-client-tvm-secret-slb
+    
+logger:
+    mode: file
+    file: /var/log/statbox/watcher.log
+
+watcher:
+    state: /var/lib/push-client/yandex_balancer_testing_json
+    drop_on_error: 1
+
+files:
+    - name: /var/log/yandex/balancer/access.log
+      pipe: /usr/sbin/fslb_log_parser

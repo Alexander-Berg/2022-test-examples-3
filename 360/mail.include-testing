@@ -1,0 +1,58 @@
+
+proxy_intercept_errors on;
+fastcgi_intercept_errors on;
+
+access_log off;
+tskv_log /var/log/nginx/mail/access.tskv mail-nginx-access-log;
+error_log /var/log/nginx/mail/error.log info;
+
+location ^~ /lite/api/ {
+    proxy_pass http://lite-backend$uri$is_args$args;
+}
+
+location ~ ^/lite(?<script_name>[^.]*(\.xml)?)$ {
+
+    root /var/wwwroot/mail;
+
+    set $filename $document_root/lite/index.xml;
+
+    if (-f $document_root$fastcgi_script_name) {
+        set $filename $document_root$fastcgi_script_name;
+    }
+
+    fastcgi_pass            xscript;
+    fastcgi_param           REMOTE_ADDR $x_real_ip;
+    fastcgi_param           REMOTE_PORT $remote_port;
+    fastcgi_param           QUERY_STRING $query_string;
+    fastcgi_param           REQUEST_METHOD $request_method;
+    fastcgi_param           OUTPUT_ENCODING "utf-8";
+    fastcgi_param           SCRIPT_NAME $script_name;
+    fastcgi_param           REQUEST_URI $request_uri;
+    fastcgi_param           SCRIPT_FILENAME $filename;
+    fastcgi_param           HTTP_X-Real-IP $x_real_ip;
+    fastcgi_param           HTTP_X-Real-Host $host;
+    fastcgi_param           HTTPS $HTTPS;
+    fastcgi_param           XSCRIPT_SSL_Cipher $ssl_cipher;
+
+    add_header      X-Frame-Options SAMEORIGIN;
+    add_header      x-dns-prefetch-control "off";
+    add_header      Strict-Transport-Security max-age=315360000;
+    add_header      X-Request-Id $request_id;
+    add_header      X-XSS-Protection "1; mode=block";
+
+    log_by_lua_block {
+        if ngx.var.arg_everybodybecoolthisis ~= 'molly' and ngx.var.arg_everybodybecoolthisis ~= 'crasher' then
+            increment_metric("nginx_request_" .. ngx.status .. "_count_deee", 1)
+            increment_metric("nginx_request_total_count_deee", 1)
+            add_to_histogram("nginx_request_total_time_hgram", tonumber(ngx.var.request_time))
+        end
+    }
+}
+
+location /ping {
+    proxy_connect_timeout 500ms;
+    proxy_read_timeout 1;
+    proxy_send_timeout 1;
+    proxy_pass http://unix:/var/run/duffman/ping.sock;
+    tskv_log /var/log/nginx/access.tskv mail-nginx-access-log;
+}

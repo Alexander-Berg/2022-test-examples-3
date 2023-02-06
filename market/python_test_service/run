@@ -1,0 +1,10 @@
+#!/bin/bash
+
+ARCADIA_ROOT=../../..
+YA=${ARCADIA_ROOT}/ya
+test -e ${YA} || { echo "error: no ${YA}"; exit 1; }
+BIN=./bin/python_app
+
+test -e ${BIN} || ${YA} make -r $(dirname $BIN)
+export Y_PYTHON_SOURCE_ROOT=${ARCADIA_ROOT}
+exec ${BIN} $@

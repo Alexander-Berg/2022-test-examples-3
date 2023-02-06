@@ -1,0 +1,23 @@
+environment_type: "production"
+
+bundle: "crypta-cm"
+tablets: 50
+sync: true
+enable_tablet_balancer: true
+sync_replica_count: 1
+enable_replicated_table_tracker: true
+
+master:
+  cluster: "markov"
+  path: "//home/crypta/production/cookie_matching/rt/db/master"
+
+replica:
+  pool: "crypta_cm"
+  clusters:
+    "seneca-sas": {}
+    "seneca-vla":
+      replica_attrs:
+        enable_dynamic_store_read: true
+    "seneca-man": {}
+  path: "//home/crypta/production/cookie_matching/rt/db/replica"
+  tmp_dir: "//home/crypta/production/tmp"

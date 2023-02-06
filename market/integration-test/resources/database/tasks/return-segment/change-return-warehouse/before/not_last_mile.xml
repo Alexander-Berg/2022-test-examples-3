@@ -1,0 +1,52 @@
+<dataset>
+    <return
+            id="2"
+            source="COURIER"
+            order_external_id="order-external-id-2"
+            status="IN_TRANSIT"
+    />
+
+    <!-- Первая коробка -->
+    <!-- PICKUP->PICKUP->...->(*SHOP) -->
+
+    <!-- id=[returnId, boxId, 0] -->
+    <return_box
+            id="210"
+            return_id="2"
+            external_id="box-external-id-210"
+            status="IN_TRANSIT"
+            destination_logistic_point_id="2120"
+    />
+
+    <!-- id=[returnId, boxId, segmentId] -->
+    <return_segment
+            id="211"
+            return_id="2"
+            return_box_id="210"
+            logistic_point_id="2110"
+            logistic_point_partner_id="75735"
+            logistic_point_external_id="logistics-point-external-id-2110"
+            logistic_point_name="pvz-2110"
+            logistic_point_type="PICKUP"
+            shipment_destination='{
+                "returnSegmentId": 212,
+                "name": "pvz-2120",
+                "type": "PICKUP",
+                "partnerId": 75735,
+                "logisticPointId": 2120
+            }'
+            status="OUT"
+    />
+
+    <return_segment
+            id="212"
+            return_id="2"
+            return_box_id="210"
+            logistic_point_id="2120"
+            logistic_point_partner_id="75735"
+            logistic_point_external_id="logistics-point-external-id-2120"
+            logistic_point_name="pvz-2120"
+            logistic_point_type="PICKUP"
+            status="CREATED"
+    />
+</dataset>

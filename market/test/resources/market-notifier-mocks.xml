@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="false"
+       default-autowire="no">
+
+    <bean id="mockFactory" class="ru.yandex.market.notifier.mock.NotifierTestMockFactory"/>
+
+    <bean id="shopMetaService" factory-bean="mockFactory" factory-method="getShopMetaService"/>
+    <bean id="checkouterClient" factory-bean="mockFactory" factory-method="getCheckouterClient"/>
+    <bean id="checkoutRefereeClient" factory-bean="mockFactory" factory-method="getCheckoutRefereeClient"/>
+    <bean id="mbiApiClient" factory-bean="mockFactory" factory-method="getMbiApiClient"/>
+    <bean id="partnerNotificationClient" factory-bean="mockFactory" factory-method="getPartnerNotificationClient"/>
+    <bean id="checkoutRefereeJsonClient" factory-bean="mockFactory" factory-method="getCheckoutRefereeClient"/>
+    <bean id="marketNotifierClient" factory-bean="mockFactory" factory-method="getMarketNotifierClient"/>
+    <bean id="zooClient" factory-bean="mockFactory" factory-method="getZooClient"/>
+    <bean id="persNotifyRestTemplate" factory-bean="mockFactory" factory-method="getPersNotifyRestTemplate"/>
+    <bean id="mbiRestTemplate" factory-bean="mockFactory" factory-method="getMbiRestTemplate"/>
+    <bean id="redRestTemplate" factory-bean="mockFactory" factory-method="getRedRestTemplate"/>
+    <bean id="persNotifyClient" factory-bean="mockFactory" factory-method="getPersNotifyClient"/>
+    <bean id="regionService" factory-bean="mockFactory" factory-method="getRegionService"/>
+    <bean id="tvm2" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg name="classToMock" value="ru.yandex.inside.passport.tvm2.Tvm2"/>
+    </bean>
+    <bean id="tvmClient" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg name="classToMock" value="ru.yandex.passport.tvmauth.TvmClient"/>
+    </bean>
+    <bean id="ff4ShopsClient" factory-bean="mockFactory" factory-method="getFF4ShopsClient"/>
+
+</beans>

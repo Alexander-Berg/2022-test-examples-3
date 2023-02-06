@@ -1,0 +1,51 @@
+base: etc/xivahub/local1_tests.yml
+config:
+    modules:
+        module:
+        -   _name: old_shards_xtable
+            system:
+                factory: yxiva::shard_config::static_storage
+            configuration:
+                include: { _file: etc/xivahub/shards/xtable/local_resharding_old.yml }
+        -   _name: new_shards_xtable
+            system:
+                factory: yxiva::shard_config::static_storage
+            configuration:
+                include: { _file: etc/xivahub/shards/xtable/local_resharding_new.yml }
+        -   _name: migrations_xtable
+            system:
+                factory: yxiva::hub::migrations
+            configuration:
+                pq: pq_shards
+                conninfo:
+                    host=localhost
+                    port=8432
+                    dbname=xivadb
+                    user=xiva_user
+                    password=xiva_password
+                    target_session_attrs=read-write
+                update_interval: 10.0
+        -   _name: shards_xtable
+            system:
+                factory: yxiva::hub::merged_shards
+            configuration:
+                resharding:
+                    migrations: migrations_xtable
+                    shards_from: old_shards_xtable
+                    shards_to: new_shards_xtable
+        -   _name: direct_xtable
+            system:
+                factory: yxiva::hub::xtable_impl
+            configuration:
+        -   _name: xtable
+            system:
+                factory: yxiva::hub::xtable::resharding::impl
+            configuration:
+                migration_timeout: 2.0
+                queue:
+                    timeout: 1.0
+                    max_size: 1000000
+                redirect:
+                    timeout: 8.0 # includes both master queue timeout and db timeout
+                    path: /resharding/xtable/execute_query
+                    port: 16080

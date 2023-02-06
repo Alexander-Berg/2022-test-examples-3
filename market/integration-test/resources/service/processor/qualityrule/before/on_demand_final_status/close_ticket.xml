@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <lom_order
+            id="100111"
+            barcode="777"
+            platform_client_id="3"
+            sender_id="1"
+            status="ENQUEUED"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="100111"
+            external_id="101"
+            partner_id="987654321"
+            partner_type="DELIVERY"
+            segment_type="MOVEMENT"
+            waybill_segment_index="0"
+            partner_name="Маркет курьерка"
+            tags='["ON_DEMAND"]'
+    />
+
+    <lom_waybill_segment
+            id="2"
+            order_id="100111"
+            external_id="102"
+            partner_id="987654322"
+            partner_type="DELIVERY"
+            partner_subtype="TAXI_LAVKA"
+            segment_type="COURIER"
+            waybill_segment_index="1"
+            partner_name="Лавка"
+    />
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="2"
+            waybill_segment_type="COURIER"
+            expected_status="OUT"
+            processing_status="ENQUEUED"
+            plan_fact_status="CREATED"
+            expected_status_datetime="2020-11-01 12:00:00 +0000"
+            fact_status_datetime="2020-11-02 10:11:50 +0000"
+            schedule_time="2020-11-01 12:00:00 +0000"
+            producer_name="OnDemandFinalStatusPlanFactProcessor"
+            data='{
+                "OnDemandFinalStatusAdditionalData": {
+                    "_type": ".OnDemandFinalStatusAdditionalData",
+                    "issueKey": "MONITORINGSNDBX-1",
+                    "issueClosed": false
+                }
+            }'
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="OUT"
+            aggregation_type="NONE"
+            rule_processor="STARTREK"
+            rule='{
+                "queue": "MQMONDEMAND",
+                "_type": ".OnDemandFinalStatusPayload",
+                "components": [123]
+            }'
+    />
+</dataset>

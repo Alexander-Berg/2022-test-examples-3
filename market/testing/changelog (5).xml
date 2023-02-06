@@ -1,0 +1,39 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet id="MBI-14640" author="kudrale" runAlways="true" context="!user_only">
+        <sql>
+            alter session set DDL_LOCK_TIMEOUT = 120;
+        </sql>
+    </changeSet>
+    <include file="wuser/changelog.xml" />
+    <include file="market_billing/changelog.xml" />
+    <include file="shops_web/changelog.xml" />
+    <include file="mb_stat_report/changelog.xml" />
+
+    <include file="2015/changelog.xml" />
+    <include file="2016/changelog.xml" />
+    <include file="2017/changelog.xml" />
+    <include file="2018/changelog.xml" />
+    <include file="2019/changelog.xml" />
+    <include file="2020/changelog.xml" />
+
+    <changeSet id="check_sysdev" author="kudrale" runOnChange="true" runAlways="true" context="!user_only">
+        <sql splitStatements="false">
+            <![CDATA[
+declare
+i int;
+begin
+select count(0) into i
+from dba_objects where owner = 'SYSDEV' ;
+if i <> 0
+then
+  raise_application_error( -20001, 'SYSDEV should not have any objects' );
+end if;
+end;
+            ]]>
+        </sql>
+    </changeSet>
+</databaseChangeLog>

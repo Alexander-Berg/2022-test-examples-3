@@ -1,0 +1,45 @@
+
+INSERT INTO `//output/table`
+SELECT
+    DISTINCT
+    yandexuid,
+    0 AS rule_id
+FROM `//input/table`
+PREWHERE host IN (
+    'eda.yandex.ru',
+    'delivery.club'
+)
+AND is_yandex_referer
+WHERE multiMatchAny(url, [
+    'delivery\.club/order.*',
+    'eda\.yandex\.ru/action.*'
+])
+UNION ALL
+SELECT
+    DISTINCT
+    yandexuid,
+    1 AS rule_id
+FROM `//input/table`
+PREWHERE host IN (
+    'eda.yandex.ru'
+)
+AND is_yandex_referer
+WHERE multiMatchAny(url, [
+    'eda\.yandex\.ru/action.*'
+])
+UNION ALL
+SELECT
+    DISTINCT
+    yandexuid,
+    2 AS rule_id
+FROM `//input/table`
+PREWHERE host IN (
+    'some_site.com',
+    'example.com'
+)
+AND is_yandex_referer
+WHERE multiMatchAny(url, [
+    'some_site.com/.+',
+    'example\.com/.*'
+])
+;

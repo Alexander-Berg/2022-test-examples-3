@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search key="{{ key }}">
+    <summarizer>includedBaggage</summarizer>
+    <summarizer>fares</summarizer>
+    <inputs fareOutput="BrandedFares" cabinType="{{ cabinType }}" language="{{ language }}">
+        <pax adults="{{ adults }}" children="{{ children }}" infantsInLap="{{ infantsInLap }}"/>
+        <slice date="{{ forward_date }}" destination="{{ iata_to }}" origin="{{ iata_from }}"/>
+        {% if return_date %}
+        <slice date="{{ return_date }}" destination="{{ iata_from }}" origin="{{ iata_to }}"/>
+        {% endif %}
+    </inputs>
+</search>

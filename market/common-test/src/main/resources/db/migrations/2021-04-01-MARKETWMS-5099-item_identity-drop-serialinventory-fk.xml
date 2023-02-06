@@ -1,0 +1,21 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="MARKETWMS-5218" author="al-iz">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists
+                    schemaName="wmwhse1"
+                    foreignKeyName="FK_ITEM_IDENTITY_SERIALINVENTORY"
+            />
+        </preConditions>
+        <dropForeignKeyConstraint
+                baseTableSchemaName="wmwhse1"
+                baseTableName="ITEM_IDENTITY"
+                constraintName="FK_ITEM_IDENTITY_SERIALINVENTORY"
+        />
+    </changeSet>
+</databaseChangeLog>

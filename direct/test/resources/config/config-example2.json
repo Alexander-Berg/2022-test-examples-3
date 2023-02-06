@@ -1,0 +1,24 @@
+{
+  "ytPath": "//home/market/production/mstat/dictionaries/market_offers_ch/",
+  "ytCluster": "hahn",
+  "clickHouseTmCluster": "${dealer.market-clickhouse.tm-cluster}",
+  "clickHouseUser": "${dealer.market-clickhouse.user}",
+  "clickHousePassword": "${dealer.market-clickhouse.password}",
+  "clickHouseTable": "db.table",
+  "shardingKey": "field2",
+  "ytPartitionNameColumn": "date",
+  "partitionBy": "toYYYYMM(date)",
+  "orderBy": [
+    "field1",
+    "intHash32(field2)"
+  ],
+  "sampleBy": "intHash32(field2)",
+  "columns": {
+    "field1": {
+      "type": "Int32",
+      "defaultExpr": "-1"
+    },
+    "field2": "String",
+    "date": "Date"
+  }
+}

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lom_order
+            id="1"
+            barcode="777"
+            platform_client_id="1"
+            sender_id="1"
+            status="DRAFT"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="1"
+            external_id="101"
+            partner_id="987654321"
+            partner_type="DELIVERY"
+            segment_type="PICKUP"
+            waybill_segment_index="0"
+            partner_subtype="PARTNER_PICKUP_POINT_IP"
+            shipment_date="2020-11-02"
+            tags='["ON_DEMAND"]'
+    />
+
+    <lom_waybill_segment
+            id="2"
+            order_id="1"
+            external_id="102"
+            partner_id="9929"
+            partner_type="DELIVERY"
+            segment_type="COURIER"
+            waybill_segment_index="1"
+            shipment_date="2020-11-02"
+            partner_name="Рога и Копыта"
+    />
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="2"
+            waybill_segment_type="COURIER"
+            expected_status="TRANSIT_TRANSMITTED_TO_RECIPIENT"
+            processing_status="ENQUEUED"
+            plan_fact_status="CREATED"
+            expected_status_datetime="2020-11-01 12:00:00 +0000"
+            schedule_time="2002-11-01 12:00:00 +0000"
+            producer_name="OnDemandRecipientTransmitPlanFactProcessor"
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="TRANSIT_TRANSMITTED_TO_RECIPIENT"
+            waybill_segment_type="COURIER"
+            aggregation_type="NONE"
+            rule_processor="STARTREK"
+            rule='{
+                "_type": ".OnDemandRecipientTransmitPayload",
+                "queue": "MONITORINGSNDBX",
+                "components": ["1234"]
+            }'
+    />
+
+</dataset>

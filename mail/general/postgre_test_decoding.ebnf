@@ -1,0 +1,37 @@
+@@grammar::POSTGRE_TEST_DECODING
+
+start = statement $ ;
+
+statement = begin | commit | dml ;
+
+begin = 'BEGIN' xid ;
+
+commit = 'COMMIT' xid ;
+
+xid = /\d+/ ;
+
+dml = 'table' @:table_name ':' @:dml_command ':' @:tuple_data;
+
+table_name = /\w+\.\w+/;
+
+dml_command = 'INSERT' | 'UPDATE' | 'DELETE' ;
+
+no_tuple_data = '(no-tuple-data)';
+
+tuple_data = no_tuple_data | @:{ attribute };
+
+attribute = @:attribute_name '[' @:attribute_type ']:' @:attribute_value ;
+
+attribute_name = /\w+/ | /"[^"]+"/;
+
+attribute_type = /"?[\w.]+( [\w.]+)*"?(\[\])?/;
+
+int_value = /\d+/ ;
+
+boolean_value = "true" | "false" | "yes" | "no" ;
+
+quoted_value = /'[^']*'/;
+
+null_value = "null";
+
+attribute_value = int_value | boolean_value | quoted_value | null_value;

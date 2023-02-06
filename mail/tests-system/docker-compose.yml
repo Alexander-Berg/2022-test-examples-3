@@ -1,0 +1,64 @@
+version: '3.6'
+services:
+    xstore_01:
+        container_name: xiva_xstore_hub_tests_system_01
+        image: xstore_hub_tests_system
+        network_mode: host
+        environment:
+            - DB_PORT=6432
+            - DB_NAME=xivadb
+            - DB_USER=xiva_user
+            - DB_PASSWORD=xiva_password
+            - DB_MIGRATION=latest
+        build:
+            context: $ARCADIA_SOURCE_ROOT/mail/xiva/db/xstore/
+            dockerfile: ./Dockerfile
+            network: host
+    xstore_02:
+        container_name: xiva_xstore_hub_tests_system_02
+        image: xstore_hub_tests_system
+        network_mode: host
+        environment:
+            - DB_PORT=6433
+            - DB_NAME=xivadb
+            - DB_USER=xiva_user
+            - DB_PASSWORD=xiva_password
+            - DB_MIGRATION=latest
+    xtable_01:
+        container_name: xiva_xtable_hub_tests_system_01
+        image: xtable_hub_tests_system
+        network_mode: host
+        environment:
+            - DB_PORT=7432
+            - DB_NAME=xivadb
+            - DB_USER=xiva_user
+            - DB_PASSWORD=xiva_password
+            - DB_MIGRATION=latest
+        build:
+            context: $ARCADIA_SOURCE_ROOT/mail/xiva/db/xtable/
+            dockerfile: ./Dockerfile
+            network: host
+    xtable_02:
+        container_name: xiva_xtable_hub_tests_system_02
+        image: xtable_hub_tests_system
+        network_mode: host
+        environment:
+            - DB_PORT=7433
+            - DB_NAME=xivadb
+            - DB_USER=xiva_user
+            - DB_PASSWORD=xiva_password
+            - DB_MIGRATION=latest
+    resharddb:
+        container_name: xiva_resharddb_hub_tests_system
+        image: resharddb_hub_tests_system
+        network_mode: host
+        environment:
+            - DB_PORT=8432
+            - DB_NAME=xivadb
+            - DB_USER=xiva_user
+            - DB_PASSWORD=xiva_password
+            - DB_MIGRATION=latest
+        build:
+            context: $ARCADIA_SOURCE_ROOT/mail/xiva/db/resharddb/
+            dockerfile: ./Dockerfile
+            network: host

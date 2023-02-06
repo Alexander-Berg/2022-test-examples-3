@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <business_process_state
+            id="1001"
+            status="SUCCESS_RESPONSE_PROCESSING_SUCCEEDED"
+            queue_type="PROCESS_GET_COURIER"
+    />
+    <business_process_state
+            id="1"
+            status="ENQUEUED"
+            queue_type="CHANGE_ORDER_REQUEST"
+    />
+    <change_order_request
+            id="1"
+            order_id="1110"
+            status="PROCESSING"
+            request_type="UPDATE_COURIER"
+            waybill_segment_id="4"
+    />
+    <business_process_state_entity_id
+            business_process_state_id="1"
+            entity_type="CHANGE_ORDER_REQUEST"
+            entity_id="1"
+    />
+    <waybill_segment
+            id="1"
+    />
+    <waybill_segment
+            id="2"
+    />
+    <waybill_segment
+            id="3"
+    />
+    <waybill_segment
+            id="4"
+            courier='{
+                "person": {
+                    "firstName": "Иван",
+                    "lastName": "Иванович",
+                    "middleName": "Иванович"
+                },
+                "phone": {
+                    "phoneNumber": "+88005553535",
+                    "additionalNumber": "123"
+                },
+                "vehicle": {
+                    "number": "AA111AA",
+                    "description": "Семиместная тойота",
+                    "color": null,
+                    "model": null
+                },
+                "url": "https://go.yandex/route/6ea161f870ba6574d3bd9bdd19e1e9d8?lang=ru"
+            }'
+            transfer_codes='{
+                "inbound": {
+                    "verification": "12345",
+                    "electronicAcceptanceCertificate": "asd123"
+                },
+                "outbound": {
+                    "verification": "54321",
+                    "electronicAcceptanceCertificate": "321dsa"
+                },
+                "returnOutbound": {
+                    "verification": "66666",
+                    "electronicAcceptanceCertificate": "111aaa"
+                }
+            }'
+    />
+
+    <order_history_event
+            order_id="1110"
+            diff='[
+                    {
+                        "op": "replace",
+                        "path": "/waybill/3/courier",
+                        "value": {
+                            "person": {
+                                "lastName": "Иванович",
+                                "firstName": "Иван",
+                                "middleName": "Иванович"
+                            },
+                            "vehicle": {
+                                "number": "AA111AA",
+                                "description": "Семиместная тойота",
+                                "color": null,
+                                "model": null
+                            },
+                            "phone": {
+                                "phoneNumber": "+88005553535",
+                                "additionalNumber": "123"
+                            },
+                            "url": "https://go.yandex/route/6ea161f870ba6574d3bd9bdd19e1e9d8?lang=ru"
+                        },
+                        "fromValue": null
+                    }
+                ]'
+    />
+</dataset>

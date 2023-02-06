@@ -1,0 +1,48 @@
+{
+  "logHosts": "*",
+  "logPath": "**/market-notifier-monitoring.log",
+  "parser": {
+    "dateFormat": "dd/MMM/yyyy:HH:mm:ss Z",
+    "separator": "\t",
+    "fields": [
+      "date", "key", "subkey", "channel_type", "status", "count", "duration", "request_id"
+    ],
+    "columns": {
+      "key": {
+        "type": "String"
+      },
+      "subkey": {
+        "type": "String",
+        "default": ""
+      },
+      "channel_type": {
+        "type": "String",
+        "default": ""
+      },
+      "status": {
+        "type": "String",
+        "default": ""
+      },
+      "count": {
+        "type": "Int64",
+        "default": "0"
+      },
+      "duration": {
+        "type": "Float64",
+        "default": "0"
+      },
+      "host": {
+        "type": "String",
+        "default": ""
+      },
+      "request_id": {
+        "type": "String",
+        "default": ""
+      }
+    }
+  },
+  "clickhouseTable": "notifier_testing",
+  "sources": [
+    "logbroker://market-health-testing--other"
+  ]
+}

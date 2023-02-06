@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="false" default-autowire="byName">
+
+    <bean id="marketUtilsMockFactory" class="ru.yandex.market.pers.notify.mock.MarketUtilsMockFactory"/>
+
+    <bean id="persComparisonClient" factory-bean="marketUtilsMockFactory" factory-method="getPersComparisonClientMock"/>
+
+    <bean id="mockMvc" factory-bean="marketUtilsMockFactory" factory-method="getMockMvc"/>
+
+    <bean id="persNotifyHttpRequestFactory" class="org.springframework.test.web.client.MockMvcClientHttpRequestFactory">
+        <constructor-arg index="0" ref="mockMvc"/>
+    </bean>
+
+    <bean id="comparisonItemLogRecordConsumer" class="ru.yandex.market.pers.notify.logging.TransactionalLogEventTestConsumer">
+        <constructor-arg name="entityClass" value="#{T(ru.yandex.market.pers.notify.comparison.model.ComparisonItemsLogEntity)}" />
+    </bean>
+
+    <bean id="tvmService" class="ru.yandex.market.pers.notify.http.tvm.TvmServiceMockImpl"/>
+</beans>	

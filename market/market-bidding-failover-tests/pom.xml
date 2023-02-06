@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>market-bidding</artifactId>
+        <groupId>ru.yandex.autotests.market</groupId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>market-bidding-failover-tests</artifactId>
+    <name>Market Bidding Failover Tests</name>
+
+    <dependencies>
+        <!--Фиксит java.lang.AbstractMethodError: javax.ws.rs.core.Response.getStatusInfo()Ljavax/ws/rs/core/Response$StatusType-->
+        <!--http://stackoverflow.com/questions/20616351/-->
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-bundle</artifactId>
+            <version>1.18.1</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>ru.yandex.autotests.market</groupId>
+            <artifactId>market-bidding-steps</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.yandex.qatools</groupId>
+            <artifactId>hazelcast-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.yandex.autotests.lib.listeners</groupId>
+            <artifactId>allure-elliptics-comments</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>allure-java-annotations</artifactId>
+                    <groupId>ru.yandex.qatools.allure</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+</project>

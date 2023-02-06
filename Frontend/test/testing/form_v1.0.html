@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Форма</title>
+    <script>
+        var match = document.location.search.match(/params=([^&]*)/),
+            params = match ? eval('(' + decodeURIComponent(match[1]) + ')') : {},
+            width;
+
+        match = document.location.search.match(/width=([^&]*)/);
+        width = match ? match[1] : '300';
+        window.onload = function() {
+            document.getElementById('container').style.width = width + 'px';
+        };
+    </script>
+    <style type="text/css">
+        body
+        {
+            background-color: #FFF;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div class="yandexform" onclick="return params">
+            <form action="http://yandex.ru/sitesearch" method="get">
+                <input type="hidden" name="searchid" value="1124524"/>
+                <input name="text"/><input type="submit" value="Найти"/>
+            </form>
+        </div>
+        <script type="text/javascript" src="http://site.yandex.net/load/form/1/form.js" charset="utf-8"></script>
+    </div>
+</body>

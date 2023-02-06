@@ -1,0 +1,72 @@
+location = ^/lite {
+    rewrite ^/lite /lite/ break;
+}
+
+location = ^/lite/index.xml {
+    rewrite ^/lite/index.xml /lite/ break;
+}
+
+location ~* ^/light {
+    rewrite ^/light(/.*)?$ /lite$1;
+}
+
+location ~* ^/pda {
+    rewrite ^/pda2?(/.*)?$ /lite$1;
+}
+
+location ~ ^/lite/(configs|server|package.json$) {
+    return 404;
+}
+
+# DARIA-62334
+location ~ ^/lite/.*message_part/ {
+    rewrite ^/lite/.*(message_part/.*) /$1;
+}
+
+location ^~ /lite/api/ {
+    add_header X-Content-Type-Options nosniff;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $x_real_ip;
+    proxy_set_header X-Real-Port $x_real_port;
+    proxy_set_header X-Original-Uri $request_uri;
+    proxy_set_header X-Original-Host $host;
+    proxy_set_header X-Request-Id $request_id;
+    proxy_set_header X-Forwarded-For $x_real_ip;
+    proxy_set_header X-Https-Request yes;
+    proxy_set_header SSL-Cipher $ssl_cipher;
+
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_next_upstream error timeout http_502;
+    proxy_next_upstream_tries 3;
+
+    proxy_ssl_session_reuse on;
+    proxy_pass https://lite-backend$uri$is_args$args;
+}
+
+location ~ ^/lite(?<script_name>[^.]*(\.xml)?)$ {
+    add_header X-Content-Type-Options nosniff;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $x_real_ip;
+    proxy_set_header X-Real-Port $x_real_port;
+    proxy_set_header X-Original-Uri $request_uri;
+    proxy_set_header X-Original-Host $host;
+    proxy_set_header X-Request-Id $request_id;
+    proxy_set_header X-Forwarded-For $x_real_ip;
+    proxy_set_header X-Https-Request yes;
+    proxy_set_header SSL-Cipher $ssl_cipher;
+
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_next_upstream error timeout http_502;
+    proxy_next_upstream_tries 3;
+
+    proxy_ssl_session_reuse on;
+    proxy_pass https://lite-backend$uri$is_args$args;
+}
+
+location ~* ^/lite/handlers/handlers.jsx$ {
+    return 404;
+}

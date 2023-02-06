@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="urn:jmf:dataimport:config:1.0"
+        xmlns:c="urn:jmf:dataimport:converter:1.0"
+        xmlns:d="urn:jmf:dataimport:datasource:1.0"
+        xmlns:m="urn:jmf:metaclass:config:1.0"
+        xmlns:r="urn:jmf:dataimport:resolver:1.0"
+        xmlns:v="urn:jmf:common:1.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <attribute>
+        <m:code>titleText</m:code>
+        <m:title>
+            <v:value>Название тикета</v:value>
+        </m:title>
+        <m:type code="string"/>
+    </attribute>
+    <attribute>
+        <m:code>commentText</m:code>
+        <m:title>
+            <v:value>Текст комментария</v:value>
+        </m:title>
+        <m:type code="string"/>
+        <m:presentation view="text" edit="text"/>
+    </attribute>
+
+    <process name="ticket">
+        <mode>CREATE</mode>
+        <mode>UPDATE</mode>
+
+        <parameter name="fqn">ticket$extra</parameter>
+
+        <dataSource xsi:type="d:CSV" url="classpath:/ticket-utf-8-bom.csv" delimeter=";">
+            <d:column name="title" key="Название"/>
+            <d:column name="marketOrderId" key="ID заказа в Маркете"/>
+            <d:column name="orderId" key="ID заказа в магазине"/>
+            <d:column name="orderStatus" key="Статус заказа"/>
+            <d:column name="amountWithDelivery" key="Сумма заказа с доставкой"/>
+            <d:column name="deliveryCost" key="Стоимость доставки"/>
+            <d:column name="issueDate" key="Дата оформления"/>
+            <d:column name="deliveryDate" key="Дата перевода в доставку"/>
+            <d:column name="paymentType" key="Тип оплаты"/>
+            <d:column name="attributeMustBeOk" key="Все ли хорошо"/>
+        </dataSource>
+
+        <idColumn>marketOrderId</idColumn>
+
+        <metaclass xsi:type="r:constant" fqn="ticket$extra"/>
+
+        <searcher xsi:type="c:entity" fqn="${fqn}" attr="marketOrderId"/>
+
+        <attr name="title" column="title"/>
+        <attr name="marketOrderId" column="marketOrderId"/>
+        <attr name="orderId" column="orderId"/>
+        <attr name="orderStatus" column="orderStatus"/>
+        <attr name="amountWithDelivery" column="amountWithDelivery"/>
+        <attr name="deliveryCost" column="deliveryCost"/>
+        <attr name="issueDate" column="issueDate"/>
+        <attr name="deliveryDate" column="deliveryDate"/>
+        <attr name="paymentType" column="paymentType"/>
+
+        <customizer xsi:type="scriptCustomizer">
+            <beforeItem>
+                <![CDATA[
+                        if (row.attributeMustBeOk != 'ok') {
+                           throw new RuntimeException("required attribute is wrong")
+                        }
+                ]]>
+            </beforeItem>
+        </customizer>
+    </process>
+
+</config>

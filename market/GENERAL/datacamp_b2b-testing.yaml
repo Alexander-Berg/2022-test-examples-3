@@ -1,0 +1,96 @@
+#!include marketdatacamp.yaml
+juggler:
+  checks:
+    - service: datacamp-mdm-offer-version-lag
+      meta:
+        urls:
+          - title: Превышен лимит отставания версии MDM
+            url: https://st.yandex-team.ru/MARKETINDEXER-45213
+      children:
+        - market_datacamp_b2b_testing:datacamp-mdm-offer-version-lag-6h-24h
+        - market_datacamp_b2b_testing:datacamp-mdm-offer-version-lag-1d-1w
+        - market_datacamp_b2b_testing:datacamp-mdm-offer-version-lag-over-1w
+
+    - service: datacamp-mbo-offer-version-lag
+      meta:
+        urls:
+          - title: Превышен лимит отставания версии MBO
+            url: https://st.yandex-team.ru/MARKETINDEXER-46935
+      children:
+        - market_datacamp_b2b_testing:datacamp-mbo-offer-version-lag-6h-24h
+        - market_datacamp_b2b_testing:datacamp-mbo-offer-version-lag-1d-1w
+        - market_datacamp_b2b_testing:datacamp-mbo-offer-version-lag-over-1w
+
+    - service: datacamp-partner-pictures-processing
+      meta:
+        urls:
+          - title: Проблемы с обработкой партнерских картинок
+            url: https://st.yandex-team.ru/MARKETINDEXER-45298
+      children:
+        - market_datacamp_b2b_testing:datacamp-failed-partner-pictures-count
+        - market_datacamp_b2b_testing:datacamp-processed-longer-1d-partner-pictures-count
+        - market_datacamp_b2b_testing:datacamp-not-processed-over-2d-partner-pictures-count
+
+    - service: catalog-saas-diff-size
+    - service: catalog-saas-lostie-size
+    - service: catalog-saas-integral-status-diff
+
+    - service: check_unique_verdict_hashes
+      meta:
+          urls:
+            - title: Среди ошибок появилась приводящая к конфикту - одинаковый хеш в вердиктах.
+              url: https://st.yandex-team.ru/MARKETINDEXER-47512
+      children:
+        -
+          host: market_datacamp_b2b_testing
+          service: check_unique_verdict_hashes_hahn
+          type: HOST
+        -
+          host: market_datacamp_b2b_testing
+          service: check_unique_verdict_hashes_arnold
+          type: HOST
+
+    - service: check_unique_verdict_hashes_hahn
+      <<: *active-routines-check-testing
+      active_kwargs:
+        <<: *active-routines-check-kwargs-testing
+        path: monitoring?check=check_unique_verdict_hashes&yt_proxy=hahn
+      tags:
+      - market_datacamp_b2b
+      - market_indexer_datacamp
+      - market_testing
+      - testing
+      - market
+      - _market_
+      - a_geo_sas
+
+    - service: check_unique_verdict_hashes_arnold
+      <<: *active-routines-check-testing
+      active_kwargs:
+        <<: *active-routines-check-kwargs-testing
+        path: monitoring?check=check_unique_verdict_hashes&yt_proxy=arnold
+      tags:
+      - market_datacamp_b2b
+      - market_indexer_datacamp
+      - market_testing
+      - testing
+      - market
+      - _market_
+      - a_geo_vla
+
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    check_options: {}
+    host: market_datacamp_b2b_testing
+    namespace: market.datacamp
+    notifications: []
+    tags:
+    - market_datacamp_b2b
+    - market_indexer_datacamp
+    - market_testing
+    - testing
+    - market
+    - _market_
+    ttl: 900

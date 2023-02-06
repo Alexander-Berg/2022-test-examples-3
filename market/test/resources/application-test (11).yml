@@ -1,0 +1,103 @@
+warehouse-timezone: Europe/Moscow
+spring.datasource.url: jdbc:h2:mem:SCPRD;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1
+
+AppServer: localhost
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms.receiving: debug
+    org.springframework.jdbc.core: debug
+    root: info
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  transaction.default-timeout: 30s
+  liquibase:
+    enabled: true
+  config:
+    import:
+      - application-fragment-common-test.yml
+      - application-fragment-mq-test.yml
+  jackson:
+    deserialization:
+      wrap-exceptions: false
+
+cte:
+  url: http://host.ru:123
+
+print:
+  server:
+    host: localhost
+    port: 631
+    mock: true
+
+oltp:
+  url: http://localhost:8383
+
+wms:
+  api:
+    host: 'http://wms.local'
+    username: 'wmsuser'
+    password: 'wmspass'
+  transportation:
+    host: 'http://localhost:${wiremock.server.port}/transportation'
+    tvm:
+      serviceId: 0
+  inventorization:
+    tvm:
+      serviceId: 0
+      secret: xxxxxx
+      log-only-mode: false
+      check-user-ticket: false
+      cache:
+        dir: /var/cache/tvm
+
+check:
+  authentication: 'no'
+
+servicebus:
+  api:
+    host: http://localhost:8382
+
+identity:
+  cis:
+    gs: "#GS#"
+
+receiving:
+  tvm:
+    serviceId: 0
+    secret: "secret"
+    cache:
+      dir: ""
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /monitoring
+      exposure.include: [health, metrics, loggers, prometheus, info]
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    metrics.enabled: true
+    loggers.enabled: true
+    prometheus.enabled: true
+    info:
+      enabled: true
+      build:
+        mode: full
+
+s3.use: false
+
+yt:
+  cluster_proxy: ${InventoryYtCluster:}
+  token: ${InventoryYtToken:}
+  n_retries: 5
+  heavy_command_timeout_min: 15
+  write_chunk_size_mb: 100
+  heavy_proxy_refresh_min: 10
+  ping_interval_sec: 30
+  db_page_size: 1000

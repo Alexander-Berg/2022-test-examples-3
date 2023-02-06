@@ -1,0 +1,31 @@
+{
+  "logHosts": "*",
+  "logPath": "**/market-api-warnings.log",
+  "clickhouseTable": "marketapi_warn_test",
+  "dataRotationDays": 367,
+  "jsonParser": {
+    "timestampField": "timestamp",
+    "columns": {
+      "host": {
+        "type": "String",
+        "field": "context:host"
+      },
+      "type": {
+        "type": "String",
+        "field": "type"
+      },
+      "requestId": {
+        "type": "String",
+        "field": "requestId",
+        "defaultValue": "-"
+      },
+      "message": {
+        "type": "String",
+        "field": "message"
+      }
+    }
+  },
+  "sources": [
+    "logbroker://market-content-api-testing--market-api-warnings-log"
+  ]
+}

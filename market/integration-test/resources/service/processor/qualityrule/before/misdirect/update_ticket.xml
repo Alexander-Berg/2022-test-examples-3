@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lom_order
+            id="1"
+            barcode="111"
+            platform_client_id="1"
+            status="PROCESSING"
+            cost_assessed_value="123"
+    />
+
+    <lom_order
+            id="2"
+            barcode="222"
+            platform_client_id="2"
+            status="PROCESSING"
+            cost_assessed_value="123"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="1"
+            partner_id="987654321"
+            partner_type="DELIVERY"
+            segment_type="COURIER"
+            waybill_segment_index="0"
+            shipment_date="2020-11-02"
+            partner_name="Почта"
+    />
+
+    <lom_waybill_segment
+            id="2"
+            order_id="2"
+            partner_id="987654321"
+            partner_type="DELIVERY"
+            segment_type="COURIER"
+            waybill_segment_index="0"
+            shipment_date="2020-11-02"
+            partner_name="Не почта"
+    />
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_ORDER"
+            entity_id="1"
+            expected_status="UNKNOWN"
+            processing_status="ENQUEUED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2020-11-07 11:11:50 +0300"
+            schedule_time="2020-11-07 11:11:50 +0300"
+            fact_status_datetime="[null]"
+            data='{
+                "MisdirectAdditionalData": {
+                    "_type": ".MisdirectAdditionalData",
+                    "sortingCenterName": "СЦ на тестовой улице",
+                    "senderSegmentId": 1,
+                    "orderStatus": "PROCESSING",
+                    "user": {
+                        "id": "1",
+                        "role": "test_role_1",
+                        "email": "test_email_1",
+                        "sortingCenterId": 1
+                    }
+                }
+            }'
+    />
+
+    <plan_fact
+            id="2"
+            entity_type="LOM_ORDER"
+            entity_id="2"
+            expected_status="UNKNOWN"
+            processing_status="ENQUEUED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2020-11-07 11:11:50 +0300"
+            schedule_time="2020-11-07 11:11:50 +0300"
+            fact_status_datetime="[null]"
+            data='{
+                "MisdirectAdditionalData": {
+                    "_type": ".MisdirectAdditionalData",
+                    "sortingCenterName": "СЦ на тестовой улице",
+                    "senderSegmentId": 1,
+                    "orderStatus": "PROCESSING",
+                    "user": {
+                        "id": "2",
+                        "role": "test_role_2",
+                        "email": "test_email_2",
+                        "sortingCenterId": 2
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group
+            id="1"
+            aggregation_key="date:2021-09-08;address:-123;orderFlow=True;"
+            aggregation_type="MISDIRECT"
+            processing_status="ENQUEUED"
+            expected_status="UNKNOWN"
+            schedule_time="2020-11-07 11:11:50 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2021, 9, 8],
+                        "locationTo": {
+                            "address": "Адрес CЦ, в который по ошибке прислали заказ"
+                        },
+                        "order": {
+                            "directFlow": true
+                        }
+                    }
+                },
+                "MisdirectGroupAdditionalData": {
+                    "_type": ".MisdirectGroupAdditionalData",
+                    "issueKey": "MONITORINGSNDBX-1",
+                    "orderIds": ["111"],
+                    "issueClosed": false,
+                    "issueCreatedAt": [2021, 9, 8, 15, 0, 1],
+                    "affectedOrderIds": ["111"]
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="1"
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="2"
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="UNKNOWN"
+            aggregation_type="MISDIRECT"
+            rule_processor="STARTREK"
+            rule='{
+                "_type": ".MisdirectStartrekPayload",
+                "queue": "MONITORINGSNDBX",
+                "closeTransition": "close",
+                "closeResolution": "fixed"
+            }'
+    />
+
+</dataset>

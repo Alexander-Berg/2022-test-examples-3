@@ -1,0 +1,46 @@
+abc: marketito
+command: '/root/bin/litmus --host=:: --port=81 --log-path=/var/log/yandex/aristarkh/litmus.log
+  --dc=sas --env=testing --root-path=/root --listen-threads=2'
+dc:
+  sas:
+    max_unavailable: 1
+    pod_count: 1
+environment: testing
+itype: marketaristarkh
+name: aristarkh
+network_id: _MARKET_TEST_NETS_
+quota:
+  cpu:
+    guarantee: 100
+    limit: 100
+  disk:
+  - bandwidth_guarantee: 15728640
+    bandwidth_limit: 31457280
+    capacity: 10737418240
+    class: hdd
+  memory:
+    guarantee: 1073741824
+    limit: 1073741824
+  network:
+    guarantee: 10485760
+    limit: 0
+template:
+  modifiers:
+  - box/base_app.jsonnet
+  - box/infra.jsonnet
+#  - sox_service.jsonnet
+  - remove_duplicates.jsonnet
+  - update_boxes.jsonnet
+  - update_layers.jsonnet
+  root: base.jsonnet
+  tools:
+  - tools.libjsonnet
+
+params:
+  boxes:
+    infra_box:
+      env:
+        - name: "foo"
+          value:
+            literal_env:
+              value: "bar"

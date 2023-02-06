@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package martylib.test;
+
+import "search/horadric2/proto/extensions/api.proto";
+import "search/horadric2/proto/extensions/yt.proto";
+
+import "google/protobuf/wrappers.proto";
+
+
+message TestProtobufUtils {
+    enum Type {
+        UNDEFINED = 0;
+        BASE = 1;
+        CUSTOM = 2;
+    }
+    message Container {
+        string key = 1;
+        string value = 2 [(h.api.disallowed) = true];
+    }
+
+    Type type = 1;
+    Type disallowed_type = 2 [(h.api.disallowed) = true];
+    string id = 3;
+    string disallowed_id = 4 [(h.api.disallowed) = true];
+    Container container = 5;
+    Container disallowed_container = 6 [(h.api.disallowed) = true];
+    repeated Container repeated_container = 7;
+    repeated Container disallowed_repeated_container = 8 [(h.api.disallowed) = true];
+    map<string, Container> map = 9;
+    map<string, Container> disallowed_map = 10 [(h.api.disallowed) = true];
+}
+
+enum TopLevelEnum {
+    NULL = 0;
+    ONE = 1;
+}
+
+message Alpha {
+    enum AlphaNestedEnum {
+        N_NULL = 0;
+        N_ONE = 1;
+    }
+
+    message AlphaNestedMessage {
+        enum AlphaNestedMessageNestedEnum {
+            NN_NULL = 0;
+            NN_ONE = 1;
+        }
+    }
+}
+
+enum TestDeepMergeEnum {
+    DEFAULT = 0;
+    NOT_DEFAULT = 1;
+}
+
+message TestDeepMerge {
+    google.protobuf.StringValue s_wrapper = 1;
+    google.protobuf.BoolValue b_wrapper = 2;
+
+    string s_plain = 3;
+    bool b_plain = 4;
+
+    repeated string rs = 5;
+    repeated TestDeepMerge rm = 6;
+    repeated google.protobuf.StringValue rw = 7;
+
+    TestDeepMerge nested = 8;
+
+    map<string, TestDeepMerge> m_nested = 9;
+    map<string, google.protobuf.StringValue> m_wrapper = 10;
+
+    TestDeepMergeEnum enum_field = 11;
+}
+
+message TestMessageHash {
+    google.protobuf.BoolValue field_1 = 1;
+    google.protobuf.BytesValue field_2 = 2;
+    google.protobuf.DoubleValue field_3 = 3;
+    google.protobuf.FloatValue field_4 = 4;
+    google.protobuf.Int32Value field_5 = 5;
+    google.protobuf.Int64Value field_6 = 6;
+    google.protobuf.StringValue field_7 = 7;
+    google.protobuf.UInt32Value field_8 = 8;
+    google.protobuf.UInt64Value field_9 = 9;
+}
+
+message TestYtModel {
+    option (h.yt.dynamic_table) = true;
+
+    option (h.yt.replication_clusters) = "markov";
+    option (h.yt.replication_clusters) = "hahn";
+    option (h.yt.replication_clusters) = "arnold";
+
+    string id = 1 [(h.yt.pk) = true];
+}

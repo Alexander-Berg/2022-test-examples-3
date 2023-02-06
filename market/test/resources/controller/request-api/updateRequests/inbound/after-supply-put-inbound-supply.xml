@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <SUPPLIER
+        ID="1"
+        NAME="supplier1"
+    />
+    <FULFILLMENT_SERVICE
+        ID="555"
+        NAME="test"
+        STATUS="1"
+        TYPE="1"
+    />
+    <SHOP_REQUEST
+        ID="1"
+        SUPPLIER_ID="1"
+        SERVICE_ID="555"
+        STATUS="3"
+        TYPE="0"
+        CREATED_AT="2018-1-1 10:10:10"
+
+        REQUESTED_DATE="2018-01-06 10:10:10"
+        ITEMS_TOTAL_COUNT="6"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="1"
+        ARTICLE="1714984234"
+        BARCODES="4LJP"
+        COUNT="4"
+        NAME="Картридж HP CF218A"
+        CONSIGNMENT_ID="consignment_id_1"
+    />
+    <REQUEST_ITEM
+        REQUEST_ID="1"
+        ARTICLE="1714984176"
+        BARCODES="884420588689"
+        COUNT="2"
+        NAME="Картридж HP CE285A"
+        CONSIGNMENT_ID="consignment_id_2"
+    />
+
+    <REQUEST_STATUS_HISTORY
+        REQUEST_ID="1"
+        STATUS="0"
+        UPDATED_AT="2018-01-01 10:10:10"
+    />
+
+    <REQUEST_STATUS_HISTORY
+        REQUEST_ID="1"
+        STATUS="2"
+        UPDATED_AT="2018-01-01 10:10:10"
+    />
+
+    <REQUEST_STATUS_HISTORY
+        REQUEST_ID="1"
+        STATUS="3"
+        UPDATED_AT="2018-01-01 10:10:10"
+    />
+
+    <queue_tasks
+        queue_name="PUBLISH_CALENDAR_SHOP_REQUEST_CHANGE"
+        task='{"externalId":1,"oldMeta":{"ffwfId":1,"status":"SENT_TO_SERVICE"},"newMeta":{"ffwfId":1,"status":"ACCEPTED_BY_SERVICE"},"updatedTime":"2018-01-01T10:10:10","topic":"CALENDARING_META_INFO_CHANGE_EVENTS","source":"FFWF-test"}'
+        attempt="0"
+    />
+
+    <queue_tasks
+        queue_name="SEND_MBI_NOTIFICATION"
+        task='{"supplierId":1,"notificationType":1519887797,"data":"&lt;request-info&gt;&lt;id&gt;1&lt;/id&gt;&lt;service-request-id&gt;0001&lt;/service-request-id&gt;&lt;destination-warehouse-id&gt;555&lt;/destination-warehouse-id&gt;&lt;destination-warehouse-name&gt;test&lt;/destination-warehouse-name&gt;&lt;merchandise-receipt-date&gt;06 января&lt;/merchandise-receipt-date&gt;&lt;merchandise-receipt-time&gt;10:10&lt;/merchandise-receipt-time&gt;&lt;/request-info&gt;"}'
+        attempt="0"
+    />
+
+    <queue_tasks
+        queue_name="PUBLISH_REQUEST_STATUS_CHANGE"
+        task='{"requestId":1,"requestType":0,"detailsLoaded":false,"preparedDetailsLoaded":false,"changedAt":"2018-01-01T10:10:10","oldStatus":2,"newStatus":3,"receivedChangeAt":"2018-01-01T10:10:10","topic":"REQUEST_STATUS_EVENTS"}'
+        attempt="0"
+    />
+
+    <queue_tasks
+        queue_name="CREATE_PLAN_REGISTRY"
+        task='{"requestId":1}'
+        attempt="0"
+    />
+
+    <queue_tasks
+        queue_name="REGISTER_STATUS_TRACKING"
+        task='{"requestId":1}'
+        attempt="0"
+    />
+
+</dataset>

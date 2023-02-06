@@ -1,0 +1,49 @@
+java_service:
+  service_name: framework-test-service
+  deploy_type: nanny
+
+trace:
+  module: FRAMEWORK_TEST_SERVICE
+
+clients:
+  list:
+    - openapi_spec_path: market/infra/java-application/mj/v1/src/test/resources/test_service/src/main/resources/openapi/api/api.yaml
+      circuit_breaker_id: test_service
+      retry_id: test_service
+
+tvm:
+  sources:
+    - id: 2029758
+  destinations:
+    - id: 2029758
+  env:
+    local:
+      serverTvmDisabled: false
+      clientsTvmDisabled: true
+    production:
+      self.id: 8888
+      sources:
+        - id: 32343
+        - id: 645647
+        - ref: market/infra/java-application/mj/v1/src/test/resources/test_service/service.yaml
+      destinations:
+        - id: 423
+        - id: 224
+    testing:
+      self.id: 7777
+      sources:
+        - id: 424
+        - id: 647
+        - ref: market/infra/java-application/mj/v1/src/test/resources/test_service/service.yaml
+      destinations:
+        - id: 42213
+        - id: 2243
+    prestable:
+      self.id: 745645
+      sources:
+        - id: 767
+        - id: 24789
+        - ref: market/infra/java-application/mj/v1/src/test/resources/test_service/service.yaml
+      destinations:
+        - id: 423
+        - id: 224

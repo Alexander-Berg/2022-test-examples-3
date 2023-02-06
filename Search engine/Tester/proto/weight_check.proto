@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+import "search/resonance/proto/backend.proto";
+import "search/resonance/tester/proto/script.proto";
+
+package NResonanceTester.NProto;
+
+message TWeightCheck {
+    message TBackendsSet {
+        double SubsetWeight = 1;
+        double BalancerWeight = 2;
+        NResonance.NProto.TBackend Backend = 3;
+    }
+    TLoadgenConfig Loadgen = 1;
+    repeated TBackendsSet Backends = 2;
+    double Timeout = 4; // timeout in seconds
+    double Precision = 5; // weights l1 distance
+    double PassedInterval = 6; // weights check passed interval
+
+    int32 Repeat = 7;
+}

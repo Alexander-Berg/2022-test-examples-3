@@ -1,0 +1,83 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый market_etcd-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_etcd-testing
+
+juggler:
+  checks:
+
+  # Check UNREACHABLE
+  # https://juggler.yandex-team.ru/check_details/?host=market_etcd-testing&service=UNREACHABLE&last=1DAY&mode=edit
+  - active: icmpping
+    active_kwargs:
+      disable_ipv4: yes
+      use_all_dc: 'false'
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    service: UNREACHABLE
+
+  # Check etcd
+  # https://juggler.yandex-team.ru/check_details/?host=market_etcd-testing&service=etcd&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 0
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 0
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    service: etcd
+
+  # Check unispace
+  # https://juggler.yandex-team.ru/check_details/?host=market_etcd-testing&service=unispace&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 0
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 0
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    service: unispace
+  default:
+    check_options: {}
+    children:
+    - CGROUP%market_etcd-testing
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_etcd-testing
+    namespace: market.sre
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_etcd
+    - market_sre_incident
+    - market
+    - _market_
+    ttl: 900

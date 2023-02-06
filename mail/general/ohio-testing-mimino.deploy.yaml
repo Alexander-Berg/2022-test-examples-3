@@ -1,0 +1,168 @@
+annotations:
+  project: ohio
+meta:
+  account_id: "abc:service:31636"
+  id: "ohio-testing-mimino"
+  acl:
+    -
+      action: "allow"
+      permissions:
+        - "read"
+        - "write"
+        - "create"
+        - "ssh_access"
+        - "root_ssh_access"
+        - "read_secrets"
+      subjects:
+        - "hmnid"
+        - "salavat"
+  creation_time: 1602857136220196
+  effective_account_id: null
+  inherit_acl: true
+  project_id: "ohio"
+  type: "stage"
+  uuid: "bdcebfee-40be93ad-2fbf923e-278ec6e6"
+spec:
+  account_id: "abc:service:31636"
+  deploy_units:
+    api:
+      endpoint_sets:
+        -
+          port: 80
+      images_for_boxes:
+        backend:
+          name: "mail/ohio/ohio"
+          registry_host: "registry.yandex.net"
+          tag: "20201230-1830.r2a4a8a01c3210dc87f0cfe6e54d85b0b94598bff"
+      multi_cluster_replica_set:
+        replica_set:
+          clusters:
+          # Нужно раскомментить эту секцию, когда ресурсов будет хватать. Чтобы тестинг не исчезал при учениях
+          #- cluster: iva
+          #  spec:
+          #    constraints:
+          #      antiaffinity_constraints:
+          #      - key: rack
+          #        max_pods: 1
+          #    replica_count: 1
+            -
+              cluster: "myt"
+              spec:
+                constraints:
+                  antiaffinity_constraints:
+                    -
+                      key: "rack"
+                      max_pods: 1
+                replica_count: 1
+          deployment_strategy:
+            max_unavailable: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+                -
+                  id: "ohio-testing-mimino-disk-0"
+                  labels:
+                    used_by_infra: true
+                  quota_policy:
+                    bandwidth_guarantee: 2097152
+                    bandwidth_limit: 4194304
+                    capacity: 3221225472
+                  storage_class: "hdd"
+              host_infra:
+                monitoring:
+                  unistats:
+                    -
+                      path: "/unistat"
+                      port: 8080
+                      workload_id: "Box1-Workload1"
+              pod_agent_payload:
+                spec:
+                  boxes:
+                    -
+                      compute_resources:
+                        memory_limit: 1073741824
+                        vcpu_limit: 1000
+                      id: "backend"
+                      rootfs: {}
+                      static_resources:
+                        -
+                          mount_point: "/opt/bin"
+                          resource_ref: "1351940593"
+                  mutable_workloads:
+                    -
+                      workload_ref: "Box1-Workload1"
+                  resources:
+                    static_resources:
+                      -
+                        id: "1351940593"
+                        url: "rbtorrent:528de89037ce1395535e5547c347b3a4417bc7e9"
+                        verification:
+                          check_period_ms: 180000
+                          checksum: "MD5:c3485de97dba8cbfd59f2d433cde5029"
+                  workloads:
+                    -
+                      box_ref: "backend"
+                      env:
+                        -
+                          name: "YENV_TYPE"
+                          value:
+                            literal_env:
+                              value: "testing"
+                        -
+                          name: "TVM_PORT"
+                          value:
+                            literal_env:
+                              value: "2"
+                        -
+                          name: "OHIO_CONFIG"
+                          value:
+                            secret_env:
+                              alias: "sec-01eds1976kda8d352x47612xj5:ver-01en3132q5ss77y9p8j4xxqsjb"
+                              id: "testing"
+                      id: "Box1-Workload1"
+                      init:
+                        -
+                          command_line: "bash -c \"mkdir -p /config/local; echo $OHIO_CONFIG | base64 --decode > /config/local/settings.py\""
+                      readiness_check:
+                        http_get:
+                          expected_answer: "pong"
+                          path: "/ping"
+                          port: 80
+                      start: {}
+                      transmit_logs: true
+              resource_requests:
+                memory_guarantee: 1073741824
+                memory_limit: 1073741824
+                vcpu_guarantee: 1000
+                vcpu_limit: 1000
+              secrets:
+                sec-01ec7gynbz8jsqqm64n0gr8b51:ver-ver-01ec7gyncv5m31av7xjsrwemzd:
+                  delegation_token: "dflvBdth8KCTIBKG_jW0LipaA0DWoRBvyfLHrZ0Qm7U.1.8b083f6dd26a1d32"
+                  secret_id: "sec-01ec7gynbz8jsqqm64n0gr8b51"
+                  secret_version: "ver-01ec7gyncv5m31av7xjsrwemzd"
+                sec-01eds1976kda8d352x47612xj5:ver-01en3132q5ss77y9p8j4xxqsjb:
+                  delegation_token: "7xG2C3EVJTKW09uFR_Vkm4ZlJQVwmb3Cfvl1Xmi4qFk.1.d56d3772483ffea2"
+                  secret_id: "sec-01eds1976kda8d352x47612xj5"
+                  secret_version: "ver-01en3132q5ss77y9p8j4xxqsjb"
+      network_defaults:
+        network_id: "_PAYMENTS_TEST_NETS_"
+      revision: 6
+      tvm_config:
+        blackbox_environment: "Prod"
+        client_port: 2
+        clients:
+          -
+            destinations:
+              -
+                abc_service_id: "31636"
+                alias: "ohio"
+                app_id: 2021145
+            secret_selector:
+              alias: "sec-01ec7gynbz8jsqqm64n0gr8b51:ver-ver-01ec7gyncv5m31av7xjsrwemzd"
+              id: "client_secret"
+            source:
+              abc_service_id: "31636"
+              alias: "ohio"
+              app_id: 2021145
+        mode: "enabled"
+  revision: 6

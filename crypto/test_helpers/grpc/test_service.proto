@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+option go_package = "a.yandex-team.ru/crypta/lib/native/grpc/test_helpers/grpc;test_helpers";
+
+package NCrypta.NGrpc;
+
+message TRequest {
+  required string Message = 1;
+}
+
+message TResponse {
+  required string Message = 1;
+}
+
+service TTestService {
+  rpc Echo(TRequest) returns (TResponse) {}
+  rpc NotFound(TRequest) returns (TResponse) {}
+  rpc Fail(TRequest) returns (TResponse) {}
+  rpc Timeout(TRequest) returns (TResponse) {}
+}

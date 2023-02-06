@@ -1,0 +1,13 @@
+{
+    "staticField": 42,
+    "str": "{{ complexObject.strField }}",
+    "int": {{ complexObject.intField | int }},
+    "joinedList": [
+        {% for obj in complexObject.listField %}
+            {
+                "field": "{{ obj }}"
+            }{% if not loop.last %},{% endif %}
+
+        {% endfor %}
+    ]
+}

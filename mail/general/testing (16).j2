@@ -1,0 +1,24 @@
+{% extends "base.yml" %}
+{% from "secrets/testing.j2" import secrets %}
+
+{% block environment %}testing{% endblock %}
+{% block infra_environment %}2701{% endblock %}
+
+{% block network_macro %}_MAILTESTNETS_{% endblock %}
+
+{% set l3_balancers = [ "pop3-tst.stable.qloud-b.yandex.net" ] %}
+{% set endpoint_sets = [ 995 ] %}
+
+{% set enable_monitoring = False %}
+
+{% set deploy_units = {
+    "main": {
+      "version": "r2022-07-11-13-24master",
+      "max_unavailable": 1,
+      "clusters": {
+        "iva": 1,
+        "myt": 1,
+      }
+    }
+  }
+%}

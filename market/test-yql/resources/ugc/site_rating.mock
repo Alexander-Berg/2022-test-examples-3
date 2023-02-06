@@ -1,0 +1,162 @@
+# Берём только включенные магазины, собираем их домены, фильтруем от лишнего и собираем в рейтинг.
+# Чтобы магазин пророс до рейтинга, нужно:
+# - включен в dictionaries/shops/latest
+# - есть в shop_datasource/latest
+# - есть в маппинге бизнесов
+# - есть рейтинг
+# Поэтому тесты могут выглядеть довольно громоздко.
+# Самое сложное - проверить упрощение доменов - постараюсь выделить в тексте моки.
+#
+# Простые кейсы (по id магазина, домен однозначен, в маппинге один магаз, домен - simple_<shop_id>.ru):
+# 1. всё ок (попадёт в файл результата)
+# 2. всё ок (попадёт в файл результата)
+# 11. нет рейтинга
+# 12. нулевой рейтинг
+# 13. рейтинг ок, выключен, есть домен
+# 14. рейтинг ок, включен, пустой домен
+# 15. рейтинг ок, нет в магазе, есть домен
+# 16. рейтинг ок, включен, нет домена (записи в shop_datasource)
+# 17. всё ок, но нет маппинга
+# 18. всё ок, но это дубликат домена от 1. И у него меньше отзывов, поэтому не попадёт.
+#
+# Кейсы с маппингом доменов. В одном бизнесе 100 магазины 100+
+# Домены, которые должны склеиться
+# 101. mysite.ru
+# 102. www.mysite.ru
+# 103. m.mysite.ru
+# 104. msk.mysite.ru
+# 105. http://mysite.ru/lalala
+# 106. https://mysite.ru/path/secure
+# 107. http://spb.mysite.ru/more
+# Которые не должны склеиться
+# 120. shmysite.ru
+# 121. msk.haha.ru - потому что нет общего поддомена внутри магаза
+# 122. spb.haha.ru
+# Не должны попасть вообще (банличт
+# 130. site.ru
+# 131. mysuperdomain.site.ru
+
+
+
+MOCK TABLE //home/market/production/mstat/dictionaries/shops/latest
+SCHEMA shop_id:int64, is_enabled:bool
+{"shop_id":1, "is_enabled":true}
+{"shop_id":2, "is_enabled":true}
+{"shop_id":11, "is_enabled":true}
+{"shop_id":12, "is_enabled":true}
+{"shop_id":13, "is_enabled":false}
+{"shop_id":14, "is_enabled":true}
+{"shop_id":16, "is_enabled":true}
+{"shop_id":17, "is_enabled":true}
+{"shop_id":18, "is_enabled":true}
+# домены
+{"shop_id":101, "is_enabled":true}
+{"shop_id":102, "is_enabled":true}
+{"shop_id":103, "is_enabled":true}
+{"shop_id":104, "is_enabled":true}
+{"shop_id":105, "is_enabled":true}
+{"shop_id":106, "is_enabled":true}
+{"shop_id":107, "is_enabled":true}
+{"shop_id":120, "is_enabled":true}
+{"shop_id":121, "is_enabled":true}
+{"shop_id":122, "is_enabled":true}
+{"shop_id":130, "is_enabled":true}
+{"shop_id":131, "is_enabled":true}
+{"shop_id":141, "is_enabled":true}
+{"shop_id":151, "is_enabled":true}
+{"shop_id":161, "is_enabled":true}
+{"shop_id":171, "is_enabled":true}
+
+MOCK TABLE //home/market/production/mstat/dictionaries/shop_datasource/latest
+SCHEMA id:int64, domain:string
+{"id":1, "domain":"simple_1.ru"}
+{"id":2, "domain":"simple_2.ru"}
+{"id":11, "domain":"simple_11.ru"}
+{"id":12, "domain":"simple_12.ru"}
+{"id":13, "domain":"simple_13.ru"}
+{"id":14, "domain":""}
+{"id":15, "domain":"simple_15.ru"}
+{"id":17, "domain":"simple_17.ru"}
+{"id":18, "domain":"simple_1.ru"}
+# домены
+{"id":101, "domain":"mysite.ru"}
+{"id":102, "domain":"www.mysite.ru"}
+{"id":103, "domain":"m.mysite.ru"}
+{"id":104, "domain":"msk.mysite.ru"}
+{"id":105, "domain":"http://mysite.ru/lalala"}
+{"id":106, "domain":"https://mysite.ru/path/secure"}
+{"id":107, "domain":"http://spb.mysite.ru/more"}
+{"id":120, "domain":"shmysite.ru"}
+{"id":121, "domain":"msk.haha.ru"}
+{"id":122, "domain":"spb.haha.ru"}
+{"id":130, "domain":"site.ru"}
+{"id":131, "domain":"mysuperdomain.site.ru"}
+{"id":141, "domain":"ecwid.com"}
+{"id":151, "domain":"tilda.ws"}
+{"id":161, "domain":"damirvvlpx.tilda.ws"}
+{"id":171, "domain":"https://disk.yandex.ru"}
+
+MOCK VAR_TABLE $shopIdMapping
+SCHEMA shop_id:int64, group_id:int64
+{"shop_id":1, "group_id":1}
+{"shop_id":2, "group_id":2}
+{"shop_id":11, "group_id":11}
+{"shop_id":12, "group_id":12}
+{"shop_id":13, "group_id":13}
+{"shop_id":14, "group_id":14}
+{"shop_id":15, "group_id":15}
+{"shop_id":16, "group_id":16}
+{"shop_id":18, "group_id":18}
+# домены
+{"shop_id":101, "group_id":100}
+{"shop_id":102, "group_id":100}
+{"shop_id":103, "group_id":100}
+{"shop_id":104, "group_id":100}
+{"shop_id":105, "group_id":100}
+{"shop_id":106, "group_id":100}
+{"shop_id":107, "group_id":100}
+{"shop_id":120, "group_id":100}
+{"shop_id":121, "group_id":100}
+{"shop_id":122, "group_id":100}
+{"shop_id":130, "group_id":100}
+{"shop_id":131, "group_id":100}
+{"shop_id":141, "group_id":100}
+{"shop_id":151, "group_id":100}
+{"shop_id":161, "group_id":100}
+{"shop_id":171, "group_id":100}
+
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/tables/shop_rating/current
+SCHEMA shop_id:int64, rating:double, gradeCount:int64, gradeCountFull:int64, gradeCountFresh:int64
+{"shop_id":1, "rating":4.8, "gradeCount":1, "gradeCountFull":2, "gradeCountFresh":1}
+{"shop_id":2, "rating":4.5, "gradeCount":2, "gradeCountFull":2, "gradeCountFresh":2}
+{"shop_id":12, "rating":0.0, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":13, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":14, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":15, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":16, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":17, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":18, "rating":4.3, "gradeCount":0, "gradeCountFull":20, "gradeCountFresh":0}
+# домены
+{"shop_id":101, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":102, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":103, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":104, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":105, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":106, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":107, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":120, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":121, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":122, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":130, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":131, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":141, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":151, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":161, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+{"shop_id":171, "rating":4.9, "gradeCount":3, "gradeCountFull":2, "gradeCountFresh":3}
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_site_rating_banlist
+SCHEMA id:int64, type:int64, domain:string, comment:string, creation_time:string, active:int64
+{"id": 1, "type": 0, "domain": "site.ru", "comment": "MARKETPERS-55555", "creation_time": "2010-02-04T12:40:08", "active": 1}
+{"id": 2, "type": 0, "domain": "yandex.ru", "comment": "MARKETPERS-55555", "creation_time": "2010-02-04T12:40:08", "active": 0}
+{"id": 3, "type": 1, "domain": "tilda.ws", "comment": "MARKETPERS-55555", "creation_time": "2010-02-04T12:40:08", "active": 1}
+{"id": 4, "type": 1, "domain": "ecwid.com", "comment": "MARKETPERS-55555", "creation_time": "2010-02-04T12:40:08", "active": 0}

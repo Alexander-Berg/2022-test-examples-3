@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <fulfillment_service
+        ID="555"
+        NAME="test"
+        STATUS="1"
+        TYPE="1"
+    />
+
+    <!-- 3p VALIDATED, to cancel -->
+    <shop_request
+        ID="4"
+        SUPPLIER_ID="3"
+        STATUS="100"
+        TYPE="18"
+        CREATED_AT="2018-01-01 09:10:09"
+        REQUESTED_DATE="2018-01-01 09:10:09"
+        ITEMS_TOTAL_COUNT="1"
+        CALENDARING_MODE="0"
+        NEED_CONFIRMATION="true"
+        SERVICE_ID="555"
+    />
+
+    <queue_tasks
+        queue_name="CANCEL_REQUEST"
+        task='{"requestId":4}'
+        attempt="0"
+    />
+
+    <queue_tasks
+        queue_name="PUBLISH_CALENDAR_SHOP_REQUEST_CHANGE"
+        task='{"externalId":4,"oldMeta":{"ffwfId":4,"status":"VALIDATED"},"newMeta":{"ffwfId":4,"status":"CANCELLATION_REQUESTED"},"updatedTime":"2018-01-01T10:10:10","topic":"CALENDARING_META_INFO_CHANGE_EVENTS","source":"FFWF-test"}'
+        attempt="0"
+    />
+
+    <queue_tasks
+        queue_name="PUBLISH_REQUEST_STATUS_CHANGE"
+        task='{"requestId":4,"requestType":18,"detailsLoaded":false,"preparedDetailsLoaded":false,"changedAt":"2018-01-01T10:10:10","oldStatus":1,"newStatus":100,"receivedChangeAt":"2018-01-01T10:10:10","topic":"REQUEST_STATUS_EVENTS"}'
+        attempt="0"
+    />
+
+</dataset>

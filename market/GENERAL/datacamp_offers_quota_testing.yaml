@@ -1,0 +1,35 @@
+juggler:
+  checks:
+    - service: offers-count-limit-exceeded
+      meta:
+        urls:
+          - title: Траблшутинг
+            url: https://docs.yandex-team.ru/market-datacamp/support/monitorings#offers-count-limit-exceeded
+      children:
+        - datacamp-state-quotas-testing:direct-offers-count-quota
+        - datacamp-state-quotas-testing:direct-wildweb-offers-count-quota
+        - datacamp-state-quotas-testing:eda-offers-count-quota
+        - datacamp-state-quotas-testing:lavka-offers-count-quota
+        - datacamp-state-quotas-testing:market-offers-count-quota
+        - datacamp-state-quotas-testing:vertical-offers-count-quota
+        - datacamp-state-quotas-testing:vertical-wildweb-offers-count-quota
+      notifications:
+      - template_name: push
+        template_kwargs:
+          push_url: 'https://datacamp-admin.white.tst.vs.market.yandex.net/juggler_alert_handler'
+          period: 1800
+          description: 'автоматика по включению/выключению возможности создавать новые офферы'
+
+  default:
+    aggregator: logic_or
+    check_options: {}
+    namespace: market.datacamp
+    host: datacamp-state-quotas-testing
+    notifications: []
+    tags:
+      - market_testing
+      - market_indexer_datacamp
+      - testing
+      - market
+      - _market_
+    ttl: 900

@@ -1,0 +1,282 @@
+<dataset>
+    <TRANSPORTATION_UNIT
+            ID="11"
+            STATUS="NEW"
+            TYPE="INBOUND"
+            LOGISTIC_POINT_ID="2"
+            PARTNER_ID="3"
+            REQUEST_ID="[null]"
+            EXTERNAL_ID="[null]"
+            MARKET_ID="[null]"
+            PLANNED_INTERVAL_START="2020-03-01 00:00:00"
+            PLANNED_INTERVAL_END="2020-03-01 00:00:00"
+            ACTUAL_DATE_TIME="2020-03-03 00:00:00"
+    />
+
+    <TRANSPORTATION_UNIT
+            ID="12"
+            STATUS="NEW"
+            TYPE="OUTBOUND"
+            LOGISTIC_POINT_ID="3"
+            PARTNER_ID="4"
+            PLANNED_INTERVAL_START="2020-03-01 00:00:00"
+            PLANNED_INTERVAL_END="2020-03-01 00:00:00"
+            ACTUAL_DATE_TIME="2020-03-03 00:00:00"
+            EXTERNAL_ID="00012"
+            REQUEST_ID="12"
+    />
+
+    <MOVEMENT
+            ID="14"
+            STATUS="NEW"
+            PARTNER_ID="7"
+            VOLUME="15"
+            WEIGHT="94"
+    />
+
+    <TRANSPORTATION
+            ID="11"
+            STATUS="SCHEDULED"
+            OUTBOUND_UNIT_ID="12"
+            INBOUND_UNIT_ID="11"
+            MOVEMENT_ID="14"
+            transportation_source="LMS_TM_MOVEMENT"
+            transportation_type="XDOC_TRANSPORT"
+            subtype="BREAK_BULK_XDOCK"
+            regular="true"
+    />
+
+    <REGISTER
+            id="12"
+            type="PLAN"
+            status="PREPARING"
+            external_id="register1"
+            document_id="abc123"
+            partner_id="2"
+            date="2020-10-24 13:17:29.00 +0000"
+            comment="Очень важный комментарий"
+    />
+
+    <TRANSPORTATION_UNIT_REGISTER
+            transportation_unit_id="12"
+            register_id="12"
+    />
+
+    <REGISTER_UNIT
+            id="20000"
+            REGISTER_ID="12"
+            TYPE="PALLET"
+            BARCODE="abc"
+            partial_ids='[]'
+            counts='[]'
+            unit_meta='{}'
+            width="[null]"
+            height="[null]"
+            length="[null]"
+            weight_gross="[null]"
+            weight_net="[null]"
+            weight_tare="[null]"
+    />
+
+    <!--    Паллета, которая не содержится в поставках (для проверки подсчёта общего кол-ва)-->
+    <REGISTER_UNIT
+            id="20001"
+            REGISTER_ID="12"
+            TYPE="PALLET"
+            BARCODE="def"
+            partial_ids='[]'
+            counts='[]'
+            unit_meta='{}'
+            width="[null]"
+            height="[null]"
+            length="[null]"
+            weight_gross="[null]"
+            weight_net="[null]"
+            weight_tare="[null]"
+    />
+
+    <!--    Две мультипаллеты-->
+    <REGISTER_UNIT
+            id="50001"
+            REGISTER_ID="12"
+            TYPE="PALLET"
+            BARCODE="multipallet1"
+            partial_ids='[]'
+            counts='[]'
+            unit_meta='{}'
+            width="[null]"
+            height="[null]"
+            length="[null]"
+            weight_gross="[null]"
+            weight_net="[null]"
+            weight_tare="[null]"
+    />
+
+    <REGISTER_UNIT
+            id="50002"
+            REGISTER_ID="12"
+            TYPE="PALLET"
+            BARCODE="multipallet2"
+            partial_ids='[]'
+            counts='[]'
+            unit_meta='{}'
+            width="[null]"
+            height="[null]"
+            length="[null]"
+            weight_gross="[null]"
+            weight_net="[null]"
+            weight_tare="[null]"
+    />
+
+    <!--    Коробочки!!!-->
+
+    <REGISTER_UNIT
+            ID="10000"
+            REGISTER_ID="12"
+            TYPE="BOX"
+            BARCODE="abc0"
+            partial_ids='[]'
+            counts='[]'
+            unit_meta='{}'
+            width="[null]"
+            height="[null]"
+            length="[null]"
+            weight_gross="[null]"
+            weight_net="[null]"
+            weight_tare="[null]"
+    />
+
+    <REGISTER_UNIT
+            ID="10001"
+            REGISTER_ID="12"
+            TYPE="BOX"
+            BARCODE="abc1"
+            partial_ids='[]'
+            counts='[]'
+            unit_meta='{}'
+            width="[null]"
+            height="[null]"
+            length="[null]"
+            weight_gross="[null]"
+            weight_net="[null]"
+            weight_tare="[null]"
+    />
+
+    <REGISTER_UNIT
+            ID="10002"
+            REGISTER_ID="12"
+            TYPE="BOX"
+            BARCODE="abc2"
+            partial_ids='[]'
+            counts='[]'
+            unit_meta='{}'
+            width="[null]"
+            height="[null]"
+            length="[null]"
+            weight_gross="[null]"
+            weight_net="[null]"
+            weight_tare="[null]"
+    />
+
+
+    <REGISTER_UNIT
+            ID="10003"
+            REGISTER_ID="12"
+            TYPE="BOX"
+            BARCODE="abc3"
+            partial_ids='[]'
+            counts='[]'
+            unit_meta='{}'
+            width="[null]"
+            height="[null]"
+            length="[null]"
+            weight_gross="[null]"
+            weight_net="[null]"
+            weight_tare="[null]"
+    />
+
+    <!--    Связи коробочек и паллет-->
+    <register_unit_relation id="10000" parent_id="50001"/>
+    <register_unit_relation id="10001" parent_id="50002"/>
+    <register_unit_relation id="10002" parent_id="50002"/>
+    <register_unit_relation id="10003" parent_id="50001"/>
+
+    <REGISTER
+            id="122"
+            type="FACT"
+            status="DO_NOT_NEED_TO_SEND"
+            external_id="register11"
+            document_id="abc123"
+            partner_id="3"
+            date="2020-10-24 13:17:29.00 +0000"
+            comment="Очень важный комментарий"
+    />
+
+    <TRANSPORTATION_UNIT_REGISTER
+            transportation_unit_id="12"
+            register_id="122"
+    />
+
+    <REGISTER_UNIT
+            id="80001"
+            REGISTER_ID="122"
+            TYPE="PALLET"
+            BARCODE="abc"
+            partial_ids='[]'
+            counts='[]'
+            unit_meta='{}'
+            width="[null]"
+            height="[null]"
+            length="[null]"
+            weight_gross="[null]"
+            weight_net="[null]"
+            weight_tare="[null]"
+    />
+
+    <REGISTER_UNIT
+            id="80002"
+            REGISTER_ID="122"
+            TYPE="ITEM"
+            BARCODE="abc1"
+            partial_ids='[]'
+            counts='[{"quantity": 10, "countType":"FIT"},{"quantity": 5, "countType":"DEFECT"}]'
+            unit_meta='{}'
+            width="[null]"
+            height="[null]"
+            length="[null]"
+            weight_gross="[null]"
+            weight_net="[null]"
+            weight_tare="[null]"
+    />
+
+    <REGISTER_UNIT
+            id="80003"
+            REGISTER_ID="122"
+            TYPE="ITEM"
+            BARCODE="abc2"
+            partial_ids='[]'
+            counts='[]'
+            unit_meta='{}'
+            width="[null]"
+            height="[null]"
+            length="[null]"
+            weight_gross="[null]"
+            weight_net="[null]"
+            weight_tare="[null]"
+    />
+
+    <REGISTER_UNIT
+            id="80004"
+            REGISTER_ID="122"
+            TYPE="ITEM"
+            BARCODE="abc3"
+            partial_ids='[]'
+            unit_meta='{}'
+            width="[null]"
+            height="[null]"
+            length="[null]"
+            weight_gross="[null]"
+            weight_net="[null]"
+            weight_tare="[null]"
+    />
+</dataset>

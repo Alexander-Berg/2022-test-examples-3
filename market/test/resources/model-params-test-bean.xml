@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          lazy-init="false">
+        <property name="locations">
+            <list>
+                <value>classpath:test-application.properties</value>
+            </list>
+        </property>
+        <property name="fileEncoding" value="UTF-8"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+
+    <bean id="modelDocumentsXml" class="ru.yandex.market.modelparams.data.ClasspathDataProvider">
+        <constructor-arg value="/model_params/model_params_model_document.xml"/>
+    </bean>
+
+    <bean id="modelPageXml" class="ru.yandex.market.modelparams.data.ClasspathDataProvider">
+        <constructor-arg value="/model_params/model_params_model_page.xml"/>
+    </bean>
+
+    <bean id="modelReviewXml" class="ru.yandex.market.modelparams.data.ClasspathDataProvider">
+        <constructor-arg value="/model_params/model_params_model_review.xml"/>
+    </bean>
+
+    <bean id="postCountXml" class="ru.yandex.market.modelparams.data.ClasspathDataProvider">
+        <constructor-arg value="/model_params/model_params_post_count.xml"/>
+    </bean>
+
+    <bean id="threadPool" class="com.google.common.util.concurrent.MoreExecutors"
+          factory-method="newDirectExecutorService"/>
+
+    <import resource="classpath:model-params/servantlet.xml"/>
+</beans>

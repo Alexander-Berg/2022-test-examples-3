@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{1.} - %msg%n"/>
+            <!--remove spam aboud custom datasource-->
+            <RegexFilter regex=".*(DcAwareDynamicMasterSlaveDataSource@[a-z0-9]+ datasource has been closed).*"
+                         onMatch="DENY"
+                         onMismatch="ACCEPT"
+            />
+        </Console>
+    </Appenders>
+    <Loggers>
+        <!-- ================ default error logger. change to info to get logs on PR ========== -->
+        <Root level="error">
+            <AppenderRef ref="CONSOLE"/>
+        </Root>
+        <Logger name="user-feature-toggle" level="info"/>
+    </Loggers>
+</Configuration>

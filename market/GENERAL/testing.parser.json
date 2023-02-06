@@ -1,0 +1,169 @@
+{
+  "input_size": 30001,
+  "output_size": 30000,
+
+  "blog": {
+    "enable": false,
+    "writers_count": 2,
+    "topic": "market-indexer/testing/white/datacamp-offers-blog",
+    "log_level": "message",
+    "enable_blog_compression": true
+  },
+
+  "explanation_log": {
+    "enable": true,
+    "filename": "feed_errors.pbuf.sn",
+    "log_level": "warning"
+  },
+
+  "partner_stats": {
+    "enable": true,
+    "filename": "partner_stats.pbuf.sn"
+  },
+
+  "logbroker": {
+    "enable": true,
+    "bind_business_id_to_partition": true,
+    "enable_sending_stocks_to_separate_topic": true,
+    "enable_stocks_deduplication_by_ts": true,
+    "bind_business_id_to_data_center": true,
+    "host_man": "man.logbroker.yandex.net",
+    "host_sas": "sas.logbroker.yandex.net",
+    "host_vla": "vla.logbroker.yandex.net",
+    "host": "logbroker.yandex.net",
+    "port": 2135,
+    "qoffers_topic": "market-indexer/testing/united/datacamp-qoffers",
+    "enable_compression": true,
+    "stocks_topic": "market-indexer/testing/united/datacamp-offers-stocks",
+    "enable_stocks_compression": true,
+    "writers_count": 4,
+    "qoffers_topic_direct": "market-indexer/testing/united/datacamp-qoffers-direct",
+    "enable_direct_compression": true,
+    "writers_count_direct": 2,
+    "qoffers_topic_upload_update": "market-indexer/testing/united/datacamp-qoffers-upload-update",
+    "enable_upload_update_compression": true,
+    "qoffers_topic_vertical": "market-indexer/testing/united/datacamp-qoffers-vertical",
+    "writers_count_vertical": 1,
+    "enable_vertical_compression": true,
+    "categories_topic": "market-indexer/testing/united/datacamp-categories",
+    "enable_categories_compression": true,
+    "categories_topic_writers_count": 1,
+    "categories_topic_batch_size":50,
+    "categories_in_dedicated_topic": true,
+    "source_id": "qparser-20210823-",
+    "tvm_client_id": 2002296,
+    "tvm_secret_path": "app/secrets/tvm",
+    "complete_feed_finish_command_batch_size": 10000,
+    "datacamp_messages_topic": "market-indexer/testing/white/datacamp-messages",
+    "enable_complete_feed_compression": true,
+    "datacamp_messages_writers_count": 4,
+    "sort_dc_feed_updates_topic": "sortdc/test/feed-updates",
+    "sort_dc_feed_updates_writers_count": 4,
+    "sort_dc_feed_updates_command_batch_size": 4000,
+    "sort_dc_offer_data_topic": "sortdc/test/feed-offer-updates",
+    "sort_dc_offer_data_write_probability_percent": 1,
+    "sort_dc_offer_data_writers_count": 10,
+    "sort_dc_offer_data_batch_size": 100,
+    "batch_size": 50,
+    "max_inflight_per_partition": 100,
+    "enable_log_error_limit": true,
+    "log_error_limit": 100000,
+    "qoffers_quick_pipeline_messages_topic": "market-indexer/testing/united/datacamp-qoffers-quick-pipeline",
+    "enable_quick_pipeline_messages_compression": true,
+    "qoffers_quick_pipeline_messages_writers_count": 1
+  },
+
+  "data": {
+    "rates": "app/data-getter/recent/parser-data/currency_rates/currency_rates.xml"
+  },
+
+  "trace" : {
+    "enable_offers_trace": false,
+    "offers_trace_dir": "app/log/trace"
+  },
+
+  "stroller": {
+    "host": "datacamp.white.tst.vs.market.yandex.net"
+  },
+
+  "feature": {
+    "force_rur_currency_for_blue": false,
+    "force_restore_offer": true,
+    "allow_books_type": true,
+    "allow_alcohol_type": true,
+    "allow_artist_title_type": true,
+    "enable_required_fields_verification": true,
+    "accept_cpa_offers_for_adv_shop": true,
+    "enable_quick_pipeline": false,
+    "enable_price_diff_check": false,
+    "enable_deduplicate_categories": true,
+    "enable_sort_dc_complete_feed_commands": true,
+    "enable_sort_dc_complete_feed_commands_for_all_platforms": true,
+    "enable_sort_dc_complete_feed_commands_random_partitions": true,
+    "enable_sort_dc_complete_feed_commands_compression": true,
+    "enable_sort_dc_offer_data": true,
+    "enable_sort_dc_offer_data_random_partitions": false,
+    "enable_sort_dc_offer_data_compression": true,
+    "enable_sort_dc_vertical_offers_flow": true,
+    "mr_complete_commands_enable_for_all": false,
+    "complete_feed_explicit_disabling": true,
+    "complete_feed_explicit_stocks": true,
+    "enable_topic_complete_command_queue": false,
+    "use_strict_discount_validation": true,
+    "forced_complete_commands": true,
+    "enable_assortment_feeds_bindng": true,
+    "enable_sort_dc_complete_feed_commands_send_fake_url": true
+  },
+
+  "limits": {
+    "offer_params_limit": 100
+  },
+
+  "deduplication": {
+    "quota_enabled_for_feeds_by_url": true,
+    "feed_id_binding_enabled": true
+  },
+
+  "yt": {
+    "sas_proxy": "hahn",
+    "vla_proxy": "arnold",
+    "token_path": "app/secrets/yt-market-indexer",
+    "basic_offers_table": "//home/market/testing/indexer/datacamp/united/basic_offers",
+    "full_deduplication": true,
+    "service_offers_table": "//home/market/testing/indexer/datacamp/united/service_offers",
+    "actual_service_offers_table": "//home/market/testing/indexer/datacamp/united/actual_service_offers",
+    "search_service_offers_table": "//home/market/testing/indexer/datacamp/united/search_tables/service_offers",
+    "search_actual_service_offers_table": "//home/market/testing/indexer/datacamp/united/search_tables/actual_service_offers",
+    "system_partners": "10522310,10454595",
+    "max_inflight": 600,
+    "meta_proxy": "markov",
+    "mr_complete_commands_queue_table": "//home/market/testing/indexer/datacamp/united/routines/CompleteCommands/commands_queue",
+    "mr_complete_commands_business_id_whitelist": "",
+    "log_level": "Info",
+    "tracing_sample_percent": 1,
+    "tracing_root_span_name ": "Parser"
+  },
+
+  "ydb": {
+    "get_mr_cluster_from_coordination_service": true,
+    "enable_coordination_service": true,
+    "database_end_point": "ydb-ru-prestable.yandex.net:2135",
+    "database_path": "/ru-prestable/marketindexer/test/market-indexer",
+    "coordination_node_path": "/coordination",
+    "token_path": "app/secrets/ydb",
+    "publishing_semaphore_name": "mr_cluster_provider_publishing_semaphore",
+    "drop_filter_coordination_node_path": "drop_filter",
+    "drop_filter_publishing_semaphore_name": "publishSem",
+    "drop_filter_blocking_semaphore_name": "blockSem"
+  },
+
+  "ignore_lists" : {
+    "business" : "",
+    "shop" : "",
+    "feed" : ""
+  },
+
+  "disabled_shop": {
+    "direct_ttl": 24
+  }
+}

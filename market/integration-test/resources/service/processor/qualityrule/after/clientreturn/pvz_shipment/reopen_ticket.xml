@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <plan_fact
+            id="1"
+            entity_id="11"
+            entity_type="CLIENT_RETURN"
+            waybill_segment_type="PICKUP"
+            expected_status="UNKNOWN"
+            processing_status="ENQUEUED"
+            plan_fact_status="CREATED"
+            expected_status_datetime="2021-03-03 11:00:00 +0300"
+            schedule_time="2021-03-03 11:00:00 +0300"
+            fact_status_datetime="[null]"
+            data='{
+                "ClientReturnPvzShipmentPlanFactAdditionalData": {
+                    "_type": ".ClientReturnPvzShipmentPlanFactAdditionalData",
+                    "recordId": 10,
+                    "returnId": 11,
+                    "orderId" : 12,
+                    "barcode": "BARCODE10",
+                    "arrivedAt": "2021-03-01T11:00:00.000000",
+                    "pickupPointType": "PVZ"
+                }
+            }'
+    />
+
+    <plan_fact
+            id="2"
+            entity_id="21"
+            entity_type="CLIENT_RETURN"
+            waybill_segment_type="PICKUP"
+            expected_status="UNKNOWN"
+            processing_status="ENQUEUED"
+            plan_fact_status="CREATED"
+            expected_status_datetime="2021-03-03 12:00:00 +0300"
+            schedule_time="2021-03-03 12:00:00 +0300"
+            fact_status_datetime="[null]"
+            data='{
+                "ClientReturnPvzShipmentPlanFactAdditionalData": {
+                    "_type": ".ClientReturnPvzShipmentPlanFactAdditionalData",
+                    "recordId": 20,
+                    "returnId": 21,
+                    "orderId" : 22,
+                    "barcode": "BARCODE20",
+                    "arrivedAt": "2021-03-01T12:00:00.000000",
+                    "pickupPointType": "PVZ"
+                }
+            }'
+    />
+
+    <plan_fact_group
+            id="1"
+            aggregation_key="date:2020-12-01;clientReturnAdditionalDataType:ClientReturnPvzShipmentPlanFactAdditionalData;"
+            aggregation_type="CLIENT_RETURN_PVZ_SHIPMENT"
+            processing_status="ENQUEUED"
+            expected_status="UNKNOWN"
+            schedule_time="2020-11-07 14:15:00 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 6],
+                        "clientReturnAdditionalDataType": "ClientReturnPvzShipmentPlanFactAdditionalData"
+                    }
+                },
+                "ClientReturnPvzShipmentGroupAdditionalData": {
+                    "_type": ".ClientReturnPvzShipmentGroupAdditionalData",
+                    "issueKey": "MONITORINGSNDBX-1",
+                    "orderIds": ["11", "21"],
+                    "issueClosed": false,
+                    "issueCreatedAt": [2020, 11, 7, 14, 0, 1],
+                    "affectedOrderIds": ["11", "21"]
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="1"
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="2"
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="UNKNOWN"
+            aggregation_type="CLIENT_RETURN_PVZ_SHIPMENT"
+            rule_processor="STARTREK"
+            rule='{
+                "_type": ".ClientReturnPvzShipmentStartrekPayload",
+                "components": [92195],
+                "queue": "MONITORINGSNDBX"
+            }'
+    />
+
+</dataset>

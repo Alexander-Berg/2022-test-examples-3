@@ -1,0 +1,112 @@
+{
+  "owner": "marketinfra",
+  "tableName": "clickphite_metric_lag_testing",
+  "splits": {
+    "table": "table",
+    "period": "period"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "clickphite.testing.lag.full-lag-seconds.TOTAL",
+        "clickphite.testing.lag.full-lag-seconds.table.${table}",
+        "clickphite.testing.lag.full-lag-seconds.period.${period}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "fullLagSeconds",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.lag.full-queue-periods.quantiles.TOTAL",
+        "clickphite.testing.lag.full-queue-periods.quantiles.table.${table}",
+        "clickphite.testing.lag.full-queue-periods.quantiles.period.${period}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "fullQueuePeriods",
+      "type": "QUANTILE"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.lag.full-queue-periods.sum.TOTAL",
+        "clickphite.testing.lag.full-queue-periods.sum.table.${table}",
+        "clickphite.testing.lag.full-queue-periods.sum.period.${period}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "sum(fullQueuePeriods)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.lag.full-queue-seconds.TOTAL",
+        "clickphite.testing.lag.full-queue-seconds.table.${table}",
+        "clickphite.testing.lag.full-queue-seconds.period.${period}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "fullQueueSeconds",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.lag.real-time-lag-seconds.TOTAL",
+        "clickphite.testing.lag.real-time-lag-seconds.table.${table}",
+        "clickphite.testing.lag.real-time-lag-seconds.period.${period}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "realTimeLagSeconds",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.lag.real-time-queue-periods.quantiles.TOTAL",
+        "clickphite.testing.lag.real-time-queue-periods.quantiles.table.${table}",
+        "clickphite.testing.lag.real-time-queue-periods.quantiles.period.${period}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "realTimeQueuePeriods",
+      "type": "QUANTILE"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.lag.real-time-queue-periods.sum.TOTAL",
+        "clickphite.testing.lag.real-time-queue-periods.sum.table.${table}",
+        "clickphite.testing.lag.real-time-queue-periods.sum.period.${period}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "sum(realTimeQueuePeriods)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.lag.real-time-queue-seconds.TOTAL",
+        "clickphite.testing.lag.real-time-queue-seconds.table.${table}",
+        "clickphite.testing.lag.real-time-queue-seconds.period.${period}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "realTimeQueueSeconds",
+      "type": "QUANTILE_TIMING"
+    }
+  ],
+  "commonSolomonLabels": {
+    "project": "market-infra",
+    "service": "clickphite",
+    "cluster": "testing"
+  },
+  "solomonSensors": [
+    {
+      "labelsArray": [
+        {
+          "sensor": "real-time-lag-seconds"
+        },
+        {
+          "table": "${table}",
+          "metric_period": "${period}",
+          "sensor": "real-time-lag-seconds"
+        }
+      ],
+      "period": "ONE_MIN",
+      "metricField": "realTimeLagSeconds",
+      "type": "QUANTILE_TIMING"
+    }
+  ]
+}

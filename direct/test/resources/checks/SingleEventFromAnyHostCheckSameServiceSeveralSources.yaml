@@ -1,0 +1,14 @@
+---
+host: targetHost
+service: junitTestService
+flap: false
+ttl: 7200
+aggregator: logic_and
+aggregator_kwargs:
+  downtimes_mode: skip
+children:
+- CGROUP%sourceHostsGroup:junitTestService
+- simple.host.name:junitTestService
+- CGROUP%secondGroup:junitTestService
+namespace: testnamespace
+jcheck_mark: junitTestMark

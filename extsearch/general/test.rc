@@ -1,0 +1,173 @@
+export YT_POOL=images_test_index
+
+INDEX_DIR=${INDEX_DIR:-$IMAGES/mrtest}
+INDEX_INFRA_DIR=${IMAGES}
+INDEX_INFRA_BIN_DIR=${INDEX_INFRA_DIR}/bin
+
+# States that presented in _control attribute on MR (index state node)
+INDEX_DEPENDENT_STATES='
+LINKDB_STATE
+IMAGEDB_STATE
+IMTUB_STATE
+SEMIDUPS_STATE
+FACTORDB_STATE
+INDEX_PREV_STATE
+IMTUB_PREV_STATE
+PORNOBAN_STATE
+MONEYDATA_STATE
+MONEYDATA_DOC_STATE
+EXTERNALDATA_STATE
+TAGS_STATE
+PREV_INDEX_STATE
+WEB_HOST_FACTORS_STATE
+ANTISPAM_FACTORS_STATE
+ANTISPAM_BAN_STATE
+CBIR_EXTDATA_STATE
+CLUSTERING_STATE
+'
+
+PROD_INDEX_DIR=${PROD_INDEX_DIR:-${BERKANAVT}/images/main_arnold/mrindex}
+INDEX_BIN_DIR=${INDEX_BIN_DIR:-$INDEX_DIR/bin}
+INDEX_CONFIG_DIR=${INDEX_CONFIG_DIR:-$INDEX_DIR/config}
+MRINDEX_SCRIPTS_DIR=${IMAGES}/scripts/cm/mrindex
+
+INDEX_BINARIES_TASK=IMAGES_BUILD_MAIN_INDEX_BINARIES
+INDEX_BINARIES_STATUS=unstable
+
+INDEX_BINARIES_TASK_ID_ATTR="index_binaries_task_id"
+INDEX_CONFIG_TASK_ID_ATTR="index_config_task_id"
+
+POSTBUILD_QUEUE=${YT_PREFIX}${MR_PREFIX}/index/postbuild_queue
+POSTBUILD_REQUEST=_postbuild_request
+
+# Rsync path
+INDEX_RSYNC_DIR=${INDEX_RSYNC_DIR:-berkanavt_ro/images/mrindex}
+
+# External files and dirs.
+INDEX_HOSTLIST_DIR=${INDEX_HOSTLIST_DIR:-/Berkanavt/clustermaster/var/db/image_mrdb_master/host-list.dump}
+INDEX_CM_LOGS_DIR=${INDEX_CM_LOGS_DIR:-/Berkanavt/clustermaster/var/db/image_test_worker/logs}
+
+# Files for request. TODO: use zookeeper.
+INDEX_URLTRACER_REQUEST=${INDEX_URLTRACER_REQUEST:-${INDEX_DIR}/urltracer}
+INDEX_STATISTICS_REQUEST=${INDEX_STATISTICS_REQUEST:-${INDEX_DIR}/statistics}
+
+# Svn dirs in mrindex/store_index.sh
+
+# Number of link db shards.
+LINKDB_SHARD_COUNT=25
+LINKDB_KEEP_STATES=1
+
+# Number of thumb shards.
+IMTUB_SHARD_COUNT=2000
+THUMB_DB_SHARD_COUNT=10
+IMAGEDB_KEEP_STATES=1
+
+STREAMDB_KEEP_STATES=1
+
+# Number of inputdoc shards.
+INPUTDOC_SHARD_COUNT=10
+
+# Number of primary tier shards.
+INDEX_SHARD_COUNT=432
+GARBAGE_INDEX_SHARD_COUNT=0
+
+# Links per document.
+MAX_IMAGE_PAGE_COUNT=10000
+
+# Number of thumbs in index in all documents.
+THUMBS_COUNT=6000000000
+
+# Number of links in index in all documents.
+LINKS_COUNT=12212800000
+
+DOCS_COUNT=8000000000
+
+# Number of thumbs in index in garbage documents.
+THUMBS_COUNT_GARBAGE=24000000000
+
+# Number of links in index in garbage documents.
+LINKS_COUNT_GARBAGE=48851200000
+
+DOCS_COUNT_GARBAGE=13000000000
+
+# Commercial documents force threshold, force commercial documents until total commercial documents count  less than number.
+COMMERCIAL_DOCS_THRESHOLD=100000000
+
+# Number of documents to reserve, not delete them in cleanup.
+RESERVED_DOCUMENTS=4000000000
+
+# Cbir copies index (indexgeompacked file) documents count per shard.
+CBIR_GEOMINDEX_DOCS_COUNT=5000000
+# Cbir copies features (indexfeatures file) documents count per shard.
+CBIR_FEATURES_DOCS_COUNT=13700000
+# Cbir similar index documents count per shard.
+CBIR_SIMILAR_DOCS_COUNT=16500000
+
+# Cbir total documents count per shard in garbage tier.
+CBIR_GARBAGE_DOC_COUNT=33000000
+
+# Query normalization version in user index.
+QUERY_NORMALIZATION_VERSION=10
+
+# Master host.
+# TODO: move to *_main.sh
+MASTER_HOST=$(get-cm-master-host)
+
+# E-mail for statistics.
+STATISTICS_MAIL_TO="images-index@yandex-team.ru"
+
+# E-mails in index building process.
+INDEX_MAIL_TO="images-index@yandex-team.ru"
+
+SANDBOX_RESOURCES_URL="https://sandbox.yandex-team.ru/sandbox/resources/redirect?"
+SANDBOX_RELEASE="attr_name=released&attr_value=stable"
+SANDBOX_ARCH_FREEBSD="arch=freebsd"
+SANDBOX_ARCH_LINUX="arch=linux"
+
+# Number of shards for kiwi confirmation
+KIWI_CONF_SHARDS=30
+
+# Index taas username
+INDEX_TAAS_USER=index
+
+# ZooKeeper
+ZK_SHELL="/usr/local/bin/zk-shell"
+ZK_IMAGES_ROBOT=robot
+ZK_MRINDEX=$ZK_IMAGES_ROBOT/index
+ZK_MRINDEX_TAAS=$ZK_MRINDEX/taas
+ZK_MRINDEX_TAAS_TASKS=$ZK_MRINDEX_TAAS/tasks
+
+#StatFace statistics
+STAT_ROBOT_USER="robot_timofeich"
+
+#Statistics MR cluster paths
+MR_STATISTICS_PATH=statistics
+MR_STATISTICS_INDEX_CONTENT=${MR_STATISTICS_PATH}/result/index_content
+MR_STATISTICS_FILE_SIZES=${MR_STATISTICS_PATH}/result/file_sizes
+MR_STATISTICS_STATES=${MR_STATISTICS_PATH}/result/states
+
+INDEX_MAKE_FULL=1
+
+SOLOMON_PROD="http://api.solomon.search.yandex.net/push/json"
+
+RUNTIME_PROXY="http://images-proxy.n.yandex-team.ru/proxy?url="
+
+SMS_API_URL="http://golem.yandex-team.ru/api/sms/send.sbml"
+DELTA_SMS_TO="sakhnov,ulgen4a,vitamin-ca,robot-images-sentry"
+
+# Callisto deploy
+CALLISTO_FAKE_DEPLOY_PREFIX=//home/images/fake/control
+CALLISTO_FAKE_BUNDLE_ID=352007677
+
+CALLISTO_DEPLOY_PREFIX=${CALLISTO_FAKE_DEPLOY_PREFIX}
+CALLISTO_BUNDLE_ID=${CALLISTO_FAKE_BUNDLE_ID}
+CALLISTO_DEPLOY_QUEUE=//home/images/main_acceptance/shard_deploy/acceptance_test
+CALLISTO_DEPLOY_STATUS_URL="https://ctrl.clusterstate.yandex-team.ru/img/beta1/status"
+
+# hash(docid) % chunk_size goes to sample
+METADOC_SAMPLING_CHUNK_SIZE=97
+ANTISPAM_BAN_ACCEPTANCE_SOFT_THRESHOLD=0.05
+ANTISPAM_BAN_ACCEPTANCE_HARD_THRESHOLD=0.1
+ANTISPAM_BAN_ACCEPTANCE_MAIL_TO="smurylev@yandex-team.ru"
+
+MAIN_ACCEPTANCE=1

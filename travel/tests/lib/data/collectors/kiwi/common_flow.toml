@@ -1,0 +1,89 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "kiwi",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+    "-u", "kiwi",
+    "--ssh-key", "kiwi",
+    "--date-from", "2020-02-28",
+    "--date-to", "2020-02-28",
+    "--test-only-local-path",  "%(test_only_local_path)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+    "local"
+]
+
+[local]
+
+[local.arc_paths]
+    test_only_local_path = "travel/cpa/tests/lib/data/collectors/kiwi/yandexflights_daily_2020-02-28_2020-02-28.xlsx"
+
+[yt]
+
+[yt.input.partner_table]
+    path = "//home/rasp/reference/partner"
+
+[[yt.input.partner_table.data]]
+    billing_order_id = 1012
+    code = "kiwi"
+    partner_id = 88
+
+[lb]
+    topic = "topic-kiwi"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen", "profit_amount"]
+
+[[lb.expected]]
+    status = "confirmed"
+    category = "avia"
+    partner_id = 88
+    created_at = 1582882472
+    origin = 'KUF'
+    partner_order_id = "110791659"
+    label = "51413d13-a5e969-c9f8-4704-b61c-304b9c64f4241"
+    source = "kiwi"
+    destination = 'GRV'
+    partner_name = "kiwi"
+    trip_type = "oneway"
+    billing_order_id = 1012
+    order_amount = 279.43
+    travel_order_id = "kiwi:110791659"
+    currency_code = "EUR"
+
+[[lb.expected]]
+    status = "confirmed"
+    category = "avia"
+    partner_id = 88
+    created_at = 1582888937
+    origin = "LEJ"
+    partner_order_id = "110808522"
+    source = "kiwi"
+    destination = "LCK"
+    partner_name = "kiwi"
+    trip_type = "roundtrip"
+    billing_order_id = 1012
+    order_amount = 4136.23
+    travel_order_id = "kiwi:110808522"
+    currency_code = "EUR"
+
+[[lb.expected]]
+    status = "cancelled"
+    category = "avia"
+    partner_id = 88
+    created_at = 1582910478
+    origin = "LED"
+    partner_order_id = "110868857"
+    label = "b459cf16-a5e969-da77-432c-afd5-de56b433d9311"
+    source = "kiwi"
+    destination = "TFS"
+    partner_name = "kiwi"
+    trip_type = "oneway"
+    billing_order_id = 1012
+    order_amount = 104.3
+    travel_order_id = "kiwi:110868857"
+    currency_code = "EUR"

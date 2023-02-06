@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:c="urn:jmf:common:1.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="urn:jmf:trigger:1.0">
+
+    <trigger id="testCreate">
+        <title>
+            <c:value>Тригер для проверки срабатывания при создания объекта</c:value>
+        </title>
+        <event xsi:type="entity" fqn="simple$type1" event="create"/>
+        <action xsi:type="script">
+            <scriptCode>createTrigger</scriptCode>
+        </action>
+    </trigger>
+
+    <trigger id="testEdit">
+        <title>
+            <c:value>Тригер для проверки срабатывания при редактировании объекта</c:value>
+        </title>
+        <event xsi:type="entity" fqn="simple$type1" event="edit"/>
+        <action xsi:type="script">
+            <scriptCode>editTrigger</scriptCode>
+        </action>
+    </trigger>
+
+    <trigger id="testDelete">
+        <title>
+            <c:value>Тригер для проверки срабатывания при удалении объекта</c:value>
+        </title>
+        <event xsi:type="entity" fqn="simple$type1" event="delete"/>
+        <action xsi:type="script">
+            <scriptCode>deleteTrigger</scriptCode>
+        </action>
+    </trigger>
+
+    <trigger id="testEdit2">
+        <title>
+            <c:value>Триггер для проверки защиты от зацикливания</c:value>
+        </title>
+        <event xsi:type="entity" fqn="simple$type2" event="edit"/>
+        <action xsi:type="script">
+            <scriptCode>cyclingProtection</scriptCode>
+        </action>
+    </trigger>
+
+    <trigger id="asynctTrigger">
+        <title>
+            <c:value>Триггер для проверки ассинхронных триггеров</c:value>
+        </title>
+        <event xsi:type="entity" fqn="forAsyncTrigger" event="create"/>
+        <action xsi:type="script">
+            <scriptCode>asyncTriggerScript</scriptCode>
+        </action>
+        <async/>
+    </trigger>
+
+</config>

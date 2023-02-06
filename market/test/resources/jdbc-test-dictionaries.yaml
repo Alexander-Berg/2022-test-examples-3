@@ -1,0 +1,68 @@
+---
+test: []
+test1:
+- source: test_table1
+test2:
+- source: test_table2
+  isSla: true
+test3:
+- source: database.scheme.test_table3
+  destination: stuff/test_renamed_table3
+  isSla: true
+  allowEmpty: true
+  scales:
+    - scale: 1d
+      ttlDays: 42
+      loadPeriodHours: 24
+      isSla: false
+    - scale: 1h
+      ttlDays: 3
+
+test4:
+- source: public.test_table4
+  loadPeriodHours: 12
+  ttlDays: 55
+  skipEmpty: true
+  cron: "half_hourly"
+  scales:
+     - scale: 1d
+       cron: '0 * * * *'
+       isSla: true
+     - scale: 1h
+       ttlDays: 3
+       loadPeriodHours: 1
+       readyTime: "06:00:00"
+     - scale: default
+       isHeavy: True
+
+test5:
+- source: test_table5
+  conversionStrategy: LEGACY
+  systemSource: oroboros
+
+test6:
+- source: test_table_with_tx6
+  transactionIsolation: READ_UNCOMMITTED
+- source: test_table_without6
+  isHeavy: True
+
+mbi:
+- source: some_mbi_table
+
+testLoadTimeout:
+  - source: testLoadTimeout
+    loadTimeoutMinutes: 111
+
+testSortBy:
+  - source: testSortBy
+    sortBy: [first, second]
+
+testReadyTime:
+  - source: test_ready_time
+    readyTime: '00:00:00'
+  - source: test_ready_time_2
+    scales:
+      - scale: 1d
+        readyTime: '23:59:59'
+      - scale: 1h
+        readyTime: '23:59:59'

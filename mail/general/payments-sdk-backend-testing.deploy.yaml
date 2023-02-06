@@ -1,0 +1,163 @@
+labels:
+  migration_from: paymentsdk.payments-backend.testing
+  migration_type: qloud
+  infra_environment: 3508
+  infra_environment_name: testing
+  infra_service: 2187
+  infra_service_name: Payments SDK Backend
+meta:
+  account_id: abc:service:31744
+  id: payments-sdk-backend-testing
+  project_id: payments-sdk
+spec:
+  deploy_units:
+    backend:
+      endpoint_sets:
+      - port: 80
+      images_for_boxes:
+        backend:
+          name: payments-sdk-backend/payments-sdk-backend
+          registry_host: registry.yandex.net
+          tag: v.1.4.6-16b18e355f1c532df74b9c5a2ab492cdaff72c41
+        jaeger-agent:
+          name: balance/jaeger-agent
+          registry_host: registry.yandex.net
+          tag: svn.7858958-sandbox.0
+      multi_cluster_replica_set:
+        replica_set:
+          clusters:
+          - cluster: myt
+            spec:
+              constraints:
+                antiaffinity_constraints:
+                - key: rack
+                  max_pods: 1
+              replica_count: 1
+          - cluster: sas
+            spec:
+              constraints:
+                antiaffinity_constraints:
+                - key: rack
+                  max_pods: 1
+              replica_count: 1
+          deployment_strategy:
+            max_unavailable: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+              - id: infra
+                labels:
+                  used_by_infra: true
+                quota_policy:
+                  capacity: 16106127360
+                  bandwidth_guarantee: 2097152
+                  bandwidth_limit: 4194304
+                storage_class: hdd
+              host_infra:
+                monitoring:
+                  unistats:
+                  - labels:
+                      itype: "deploy"
+                    output_format: yasm_json
+                    path: /unistat
+                    port: 8080
+                    workload_id: backend
+              pod_agent_payload:
+                spec:
+                  boxes:
+                  - id: backend
+                    volumes:
+                    - mode: read_write
+                      mount_point: /ephemeral
+                      volume_ref: ephemeral
+                  - id: jaeger-agent
+                    rootfs: {}
+                  volumes:
+                  - id: ephemeral
+                  workloads:
+                  - box_ref: backend
+                    env:
+                    - name: SCOPE_TO_VALIDATE
+                      value:
+                        literal_env:
+                          value: payments%3Aall
+                    - name: LOG_LEVEL
+                      value:
+                        literal_env:
+                          value: debug
+                    - name: LOG_LOGGER
+                      value:
+                        literal_env:
+                          value: yadeploy
+                    - name: QLOUD_HTTP_PORT
+                      value:
+                        literal_env:
+                          value: '80'
+                    - name: LICENSE_URL
+                      value:
+                        literal_env:
+                          value: https%3A%2F%2Fyandex.ru%2Flegal%2Fpayer_termsofuse
+                    - name: SERVER_PORT
+                      value:
+                        literal_env:
+                          value: '8000'
+                    - name: APPLICATION_NAME
+                      value:
+                        literal_env:
+                          value: server
+                    - name: GPAY_ENABLED
+                      value:
+                        literal_env:
+                          value: '0'
+                    id: backend
+                    readiness_check:
+                      http_get:
+                        any: true
+                        path: /ping
+                        port: 80
+                        time_limit:
+                          max_execution_time_ms: 1000
+                    transmit_logs: true
+                  - box_ref: "jaeger-agent"
+                    id: "jaeger-agent"
+                    liveness_check:
+                      tcp_check:
+                        port: 5778
+                    start:
+                      command_line: /opt/bin/jaeger-agent --reporter.grpc.host-port trust-test.collector.t.yandex-team.ru:14250 --agent.tags ssh="ssh root@billing-accounts-api.${DEPLOY_POD_PERSISTENT_FQDN}"
+              resource_requests:
+                memory_guarantee: 2147483648
+                memory_limit: 2147483648
+                vcpu_guarantee: 1000
+                vcpu_limit: 1000
+              secret_refs:
+                sec-01dzp3zvv1pyw47mxqz48ht414:ver-01dzp3zvwert64f6tbcg3wsyrm:
+                  secret_id: "sec-01dzp3zvv1pyw47mxqz48ht414"
+                  secret_version: "ver-01dzp3zvwert64f6tbcg3wsyrm"
+      network_defaults:
+        network_id: _PAYMENT_SDK_TEST_NETS_
+      sox_service: false
+      tvm_config:
+        blackbox_environment: "Test"
+        client_port: 2
+        clients:
+          -
+            destinations:
+              -
+                abc_service_id: "3031"
+                alias: "ya-payments"
+                app_id: 2002162
+              -
+                alias: "blackbox"
+                app_id: 224
+              -
+                alias: "trust"
+                app_id: 2001798
+            secret_selector:
+              alias: "sec-01dzp3zvv1pyw47mxqz48ht414:ver-01dzp3zvwert64f6tbcg3wsyrm"
+              id: "client_secret"
+            source:
+              abc_service_id: "15915"
+              alias: "self"
+              app_id: 2018139
+        mode: "enabled"

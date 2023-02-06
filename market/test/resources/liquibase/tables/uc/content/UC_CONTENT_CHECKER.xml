@@ -1,0 +1,27 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+			http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <changeSet id="uc_content_checker" author="imelnikov" context="tables" runOnChange="true">
+        <createTable tableName="UC_CONTENT_CHECKER"
+                     remarks="названия алгоритмов для контентных проверок и их id">
+            <column name="ID" type="NUMBER">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="BEAN" type="VARCHAR2(4000 BYTE)"/>
+        </createTable>
+
+        <createSequence sequenceName="SQ_UC_CONTENT_CHECKER" startValue="7"/>
+    </changeSet>
+
+
+    <changeSet id="uc_content_checker_data" author="imelnikov" runOnChange="true" context="tables-data">
+        <loadUpdateData tableName="UC_CONTENT_CHECKER" primaryKey="ID"
+                        file="UC_CONTENT_CHECKER.csv" relativeToChangelogFile="true" quotchar="&quot;">
+            <column name="ID" type="NUMERIC"/>
+            <column name="BEAN" type="STRING"/>
+        </loadUpdateData>
+    </changeSet>
+</databaseChangeLog>

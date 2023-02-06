@@ -1,0 +1,26 @@
+micronaut:
+  security:
+    enabled: true
+  http:
+    services:
+      tvm-tool:
+        url: http://localhost:${tvmtool-port}
+        health-check: false
+        health-check-uri: http://localhost:${tvmtool-port}/tvm/ping
+        read-idle-timeout: 1s
+        read-timeout: 1s
+        connect-timeout: 1s
+        num-of-threads: 1
+      staff:
+        url: http://staff-api.test.yandex-team.ru
+        health-check: false
+        health-check-uri: http://staff-api.test.yandex-team.ru/ping
+        read-idle-timeout: 10s
+        read-timeout: 10s
+        connect-timeout: 10s
+        num-of-threads: 1
+tvm2:
+  token: '01234567890123456789012345678901'
+  services:
+    staff: 2001976
+  allowed-clients:

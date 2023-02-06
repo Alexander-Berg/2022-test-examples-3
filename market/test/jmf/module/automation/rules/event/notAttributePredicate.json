@@ -1,0 +1,78 @@
+{
+  "rules": [
+    {
+      "conditions": [
+        {
+          "predicate": {
+            "type": "attribute",
+            "parameter": "obj",
+            "filter": {
+              "type": "not",
+              "filter": {
+                "type": "and",
+                "filters": [
+                  {
+                    "type": "contains",
+                    "attribute": "simple1@ruleCondition1",
+                    "value": [
+                      "cat"
+                    ]
+                  },
+                  {
+                    "type": "contains",
+                    "attribute": "simple1@ruleCondition1",
+                    "value": [
+                      "dog"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "positiveBranch": {
+            "rules": [
+              {
+                "actions": [
+                  {
+                    "type": "edit",
+                    "parameter": "obj",
+                    "properties": [
+                      {
+                        "code": "simple1@ruleResult",
+                        "value": {
+                          "type": "raw",
+                          "value": "success"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "negativeBranch": {
+            "rules": [
+              {
+                "actions": [
+                  {
+                    "type": "edit",
+                    "parameter": "obj",
+                    "properties": [
+                      {
+                        "code": "simple1@ruleResult",
+                        "value": {
+                          "type": "raw",
+                          "value": "failed"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

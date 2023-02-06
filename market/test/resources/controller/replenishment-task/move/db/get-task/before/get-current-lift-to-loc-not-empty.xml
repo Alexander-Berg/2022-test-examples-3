@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<dataset>
+
+    <TASKDETAIL
+            TASKDETAILKEY="TASK01"
+            TASKTYPE="REP_MOVE"
+            FROMID="PLT01"
+            FROMLOC="STAGE01"
+            TOLOC="BUF01"
+            STATUS="9"
+            STORERKEY=""
+            SKU=""
+            GROUPID="123"
+            SUBTASK="DOWN"
+            USERKEY="TEST"
+    />
+
+    <TASKDETAIL
+            TASKDETAILKEY="TASK02"
+            TASKTYPE="REP_MOVE"
+            FROMID="PLT01"
+            FROMLOC="BUF01"
+            TOLOC="STAGE01"
+            STATUS="3"
+            STORERKEY=""
+            SKU=""
+            GROUPID="123"
+            SUBTASK="UP"
+            USERKEY="TEST"
+    />
+
+    <!--  Задание на отбор из НЗН, указанного в задании на спуск,
+через которое происходит получение информации о спускаемом товаре  -->
+    <TASKDETAIL
+            TASKDETAILKEY="TASK03"
+            TASKTYPE="REP_PICK"
+            FROMID="PLT01"
+            FROMLOC="BUF01"
+            TOLOC=""
+            STATUS="9"
+            GROUPID="123"
+            STORERKEY="465852"
+            SKU="ROV0000000000000000359"
+            USERKEY="TEST"
+    />
+
+    <!--  Ячейка не должна быть пустой, чтобы задание выдавалось  -->
+    <SERIALINVENTORY ID="PLT01" LOT="1234" LOC="BUF01"   SERIALNUMBER="000101" STORERKEY="465852" SKU="ROV0000000000000000359" QTY="1"/>
+    <!--  Ячейка, из которой спустили паллету, занята, поэтому не будет предлагаться как финальная при подъёме  -->
+    <SERIALINVENTORY ID="PLT02" LOT="1235" LOC="BUF01"   SERIALNUMBER="000102" STORERKEY="465852" SKU="ROV0000000000000000359" QTY="1"/>
+    <SERIALINVENTORY ID="PLT03" LOT="1236" LOC="STAGE01" SERIALNUMBER="000103" STORERKEY="465852" SKU="ROV0000000000000000359" QTY="1"/>
+
+    <LOTxLOCxID LOC="BUF01"   LOT="1234" ID="PLT01" QTY="1" STORERKEY="465852" SKU="ROV0000000000000000359"/>
+    <LOTxLOCxID LOC="BUF01"   LOT="1235" ID="PLT02" QTY="1" STORERKEY="465852" SKU="ROV0000000000000000359"/>
+    <LOTxLOCxID LOC="STAGE01" LOT="1236" ID="PLT03" QTY="1" STORERKEY="465852" SKU="ROV0000000000000000359"/>
+
+    <SKUxLOC STORERKEY="465852" SKU="ROV0000000000000000359" LOC="BUF01"   QTY="2" />
+    <SKUxLOC STORERKEY="465852" SKU="ROV0000000000000000359" LOC="STAGE01" QTY="1" />
+
+</dataset>

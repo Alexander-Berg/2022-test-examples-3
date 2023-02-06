@@ -1,0 +1,32 @@
+{
+  "logHosts": "*",
+  "logPath": "**/matcher2-access.log",
+  "clickhouseTable": "matcher_access_testing",
+  "parser": {
+    "dateFormat": "dd/MMM/yyyy:HH:mm:ss Z",
+    "patterns": {
+      "message": ".*?\\[%{date}\\] \"[A-Z]{2,10} /%{method} HTTP/[\\d\\.]+\" %{http_code} .*%{resptime_ms}"
+    },
+    "ignoreNoMatches": true,
+    "columns": {
+      "host": {
+        "type": "String"
+      },
+      "http_code": {
+        "type": "UInt16",
+        "default": "0"
+      },
+      "method": {
+        "type": "String",
+        "default": "Get"
+      },
+      "resptime_ms": {
+        "type": "UInt32",
+        "default": "-1"
+      }
+    }
+  },
+  "sources": [
+    "logbroker://market-health-testing--other"
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "rules": [
+    {
+      "conditions": [
+        {
+          "predicate": {
+            "type": "and",
+            "predicates": [
+              {
+                "type": "attribute",
+                "parameter": "oldTicket",
+                "filter": {
+                  "type": "ne",
+                  "attribute": "ticket@description",
+                  "value": [
+                    "start"
+                  ]
+                }
+              },
+              {
+                "type": "attribute",
+                "parameter": "ticket",
+                "filter": {
+                  "type": "eq",
+                  "attribute": "ticket@description",
+                  "value": [
+                    "start"
+                  ]
+                }
+              }
+            ]
+          },
+          "positiveBranch": {
+            "rules": [
+              {
+                "conditions": [
+                  {
+                    "predicate": {
+                      "type": "and",
+                      "predicates": [
+                        {
+                          "type": "not",
+                          "predicate": {
+                            "type": "attribute",
+                            "parameter": "oldTicket",
+                            "filter": {
+                              "type": "contains",
+                              "attribute": "ticket@title",
+                              "value": [
+                                "automationRule"
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "type": "attribute",
+                          "parameter": "ticket",
+                          "filter": {
+                            "type": "contains",
+                            "attribute": "ticket@title",
+                            "value": [
+                              "automationRule"
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    "positiveBranch": {
+                      "rules": [
+                        {
+                          "actions": [
+                            {
+                              "type": "edit",
+                              "parameter": "ticket",
+                              "properties": [
+                                {
+                                  "code": "@comment",
+                                  "value": {
+                                    "type": "raw",
+                                    "value": {
+                                      "body": "true",
+                                      "metaclass": "comment$internal"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "negativeBranch": {
+                      "rules": [
+                        {
+                          "actions": [
+                            {
+                              "type": "edit",
+                              "parameter": "ticket",
+                              "properties": [
+                                {
+                                  "code": "@comment",
+                                  "value": {
+                                    "type": "raw",
+                                    "value": {
+                                      "body": "false",
+                                      "metaclass": "comment$internal"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

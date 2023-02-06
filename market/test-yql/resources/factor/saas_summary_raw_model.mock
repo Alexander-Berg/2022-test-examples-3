@@ -1,0 +1,49 @@
+# Testing model_grade_summary response
+# case 1 - few grades have same factor
+# case 2 - one grade have different factors
+# case 3 - each grade has one factor value
+# case 4 - grade has no factors
+# case 5 - model with grades without factors (reource = 3)
+
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/tables/r_mod_rejection_reason/current
+SCHEMA id:int64, rated:int64
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_ungrouped_model
+SCHEMA old_id:int64, new_id:int64
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_grade
+SCHEMA resource_id:int64, id:int64, type:int64, gr_0:int64, grade_state:int64, state:int16
+SCHEMA mod_state:int64, author_id:int64, cpa:int64, verified:int64, mod_reason:int32
+SCHEMA recommend:int16
+{"resource_id":1, "id":1, "type":1, "gr_0":2, "mod_state":3, "author_id":12, "state":0}
+{"resource_id":1, "id":2, "type":1, "gr_0":2, "mod_state":3, "author_id":13, "state":0}
+{"resource_id":1, "id":3, "type":1, "gr_0":2, "mod_state":3, "author_id":14, "state":0}
+{"resource_id":2, "id":4, "type":1, "gr_0":2, "mod_state":3, "author_id":32, "state":0}
+{"resource_id":2, "id":5, "type":1, "gr_0":2, "mod_state":3, "author_id":42, "state":0}
+{"resource_id":2, "id":6, "type":1, "gr_0":2, "mod_state":3, "author_id":44, "state":0}
+# model without factors
+{"resource_id":3, "id":7, "type":1, "gr_0":2, "mod_state":3, "author_id":44, "state":0}
+{"resource_id":3, "id":8, "type":1, "gr_0":1, "mod_state":3, "author_id":44, "state":0}
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_grade_factor
+SCHEMA id:int64, name:utf8, order_num:int32, type:int16
+{"id":1, "name":"Отличный фактор", "order_num":1, "type":1}
+{"id":2, "name":"Отличный фактор 2", "order_num":2, "type":0}
+{"id":3, "name":"Отличный фактор 3", "order_num":3, "type":1}
+{"id":4, "name":"Отличный фактор 4", "order_num":4, "type":0}
+{"id":5, "name":"Отличный фактор 5", "order_num":5, "type":0}
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_grade_factor_value
+SCHEMA factor_id:int64, grade_id:int64, value:int32
+# one factor value for each grade
+{"factor_id":1, "grade_id":1, "value":4}
+{"factor_id":1, "grade_id":2, "value":5}
+{"factor_id":1, "grade_id":3, "value":5}
+
+# two factors for one grade
+{"factor_id":2, "grade_id":1, "value":4}
+{"factor_id":3, "grade_id":1, "value":4}
+
+# each grade has one factor value
+{"factor_id":4, "grade_id":4, "value":5}
+{"factor_id":5, "grade_id":5, "value":5}

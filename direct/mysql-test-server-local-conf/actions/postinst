@@ -1,0 +1,22 @@
+#!/bin/bash
+
+AUTO_INCREMENT_OFFSET=0
+
+if hostname | grep -q ppctest-devtest-mysql; then
+    AUTO_INCREMENT_OFFSET=1
+elif hostname | grep -q ppctest-dev7-mysql; then
+    AUTO_INCREMENT_OFFSET=2
+elif hostname | grep -q ppctest-ts1-mysql; then
+    AUTO_INCREMENT_OFFSET=3
+elif hostname | grep -q ppctest-ts2-mysql; then
+    AUTO_INCREMENT_OFFSET=4
+elif hostname | grep -q ppctest-load-mysql; then
+    AUTO_INCREMENT_OFFSET=5
+fi
+
+if [ $AUTO_INCREMENT_OFFSET != 0 ]; then
+    echo "Writing auto_increment settings for ppcdict, auto_increment_offset = $AUTO_INCREMENT_OFFSET"
+    echo -e "[mysqld]\nauto-increment-increment = 5\nauto-increment-offset = $AUTO_INCREMENT_OFFSET" > \
+        /etc/mysql/ppcdict.conf.d/auto-increment.cnf
+fi
+

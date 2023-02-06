@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>RTA - Running {{ table|length() }} instances</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/rta.css"/>
+        <link rel="shortcut icon" href="/static/png/favicon.png" type="image/png"/>
+    </head>
+    <body>
+        <div class="header">
+            <div class="avatar">
+                <a href="/user">
+                    <img class="avatar" src="https://center.yandex-team.ru/api/v1/user/{{ user or "-" }}/avatar/300.jpg"/>
+                </a>
+            </div>
+            <div class="panel">
+                <form action="/do" method="POST">
+                    <input name="action" type="hidden" value="/ticket/{ticket}/binary/launch"/>
+                    <input name="ticket" placeholder="TICKET-1234"/>
+                    <input type="submit" value="Launch"/>
+                </form>
+            </div>
+            <div class="faq">
+                <a target="_blank" href="/static/html/faq.html">
+                    <img class="faq" src="/static/png/faq.png"/>
+                </a>
+            </div>
+        </div>
+        <div class="split"></div>
+        {%- if is_loading %}
+        <div class="top_message">
+            Rta is loading and starting reports...
+        </div>
+        {%- endif %}
+        <form action="/dispatch" method="POST">
+            <table style="min-width: 81em">
+                <tr>
+                    {%- for caption in ["", "User", "Ticket", "Servant", "Port", "Status", "Launch time", "Command", "PID", "Logs", ""] %}
+                    <th>{{ caption }}</th>
+                    {%- endfor %}
+                </tr>
+                <tr><td class="padder"></td></tr>
+                {%- for row in table %}
+                <tr>
+                    {% set pid = row["pid"] -%}
+                    <td style="width: 1em">
+                        <input name="pids" type="checkbox" value="{{ pid }}"/>
+                    </td>
+                    {% set user = row["user"] -%}
+                    <td style="width: 9em; max-width: 9em">
+                        <a target="_blank" href="https://staff.yandex-team.ru/{{ user }}">
+                            <span class="spot">{{ user[0] }}</span>{{ user[1:] }}@
+                        </a>
+                    </td>
+                    {% set ticket = row["ticket"] -%}
+                    <td style="width: 12em; max-width: 12em">
+                        <a target="_blank" href="https://st.yandex-team.ru/{{ ticket }}">{{ ticket }}</a>
+                    </td>
+                    <td style="width: 10em; max-width: 10em">
+                        {{ row["servant"] }}
+                    </td>
+                    <td style="width: 4em; max-width: 4em">
+                        {{ row["port"] }}
+                    </td>
+                    {% set status = row["status"] -%}
+                    <td style="width: 4em; max-width: 4em">
+                        <span class="{{ status }}">{{ status }}</span>
+                    </td>
+                    <td style="width: 10em; max-width: 10em">
+                        {{ row["timestamp"] }}
+                    </td>
+                    {% set command = row["command"] -%}
+                    <td style="width: 7em; max-width: 7em" title="{{ command }}">
+                        {{ command }}
+                    </td>
+                    <td style="width: 5em; max-width: 5em">
+                        {{ pid }}
+                    </td>
+                    {% set logs = row["logs"] -%}
+                    <td style="width: 7em; max-width: 7em" title="{{ logs }}">
+                        <a target="_blank" href="/logs/{{ ticket }}">{{ logs }}</a>
+                    </td>
+                </tr>
+                {%- endfor %}
+                <tr><td class="padder"></td></tr>
+            </table>
+            <div class="rule"></div>
+            <div>
+              <input name="action" type="submit" value="Terminate"/>
+              <input name="action" type="submit" value="Kill"/>
+            </div>
+        </form>
+        <div class="split"></div>
+        <div>
+          <form action="/clean" method="POST">
+            <input type="submit" value="Purge"/>
+          </form>
+          <form action="/log" method="GET" target="_blank">
+            <input type="submit" value="View log"/>
+          </form>
+        </div>
+    </body>
+</html>

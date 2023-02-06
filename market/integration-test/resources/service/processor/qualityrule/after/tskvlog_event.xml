@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset reset_sequences="plan_fact_group_id_seq">
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="2"
+            waybill_segment_type="FULFILLMENT"
+            expected_status="IN"
+            processing_status="PROCESSED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2020-11-07 11:11:50 +0300"
+            fact_status_datetime="[null]"
+            created="2020-11-01 12:00:00 +0000"
+            schedule_time="[null]"
+    />
+
+    <plan_fact_group
+            expected_status="IN"
+            waybill_segment_type="FULFILLMENT"
+            aggregation_key="testKey"
+            aggregation_type="DATE_PARTNER_RELATION_FROM"
+            processing_status="ENQUEUED"
+            schedule_time="2020-11-07 00:00:00 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 7],
+                        "partnerFrom": {
+                            "id": 201,
+                            "type": "FULFILLMENT"
+                        },
+                        "partner": {
+                            "id": 202,
+                            "type": "FULFILLMENT"
+                        }
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+            plan_fact_id="1"
+    />
+
+    <plan_fact_group
+            expected_status="IN"
+            waybill_segment_type="FULFILLMENT"
+            aggregation_key="date:2020-11-07;partner:202;"
+            aggregation_type="DATE_PARTNER"
+            processing_status="ENQUEUED"
+            schedule_time="2020-11-07 00:00:00 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 7],
+                        "partner": {
+                            "id": 202,
+                            "type": "FULFILLMENT"
+                        }
+                    }
+                }
+            }'
+    />
+
+</dataset>

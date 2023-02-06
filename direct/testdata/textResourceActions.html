@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Текстовые ресурсы</title>
+        <meta charset="utf-8">
+        <link rel="icon" type="image/x-icon" href="../resources/images/favicon.png"/>
+        <link rel="shortcut icon" type="image/x-icon" href="../resources/images/favicon.png"/>
+        <link rel="stylesheet" href="../resources/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../resources/css/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="../resources/css/style.css"/>
+        <script type="text/javascript" src="../resources/js/jquery.min.js"></script>
+        <script type="text/javascript" src="../resources/js/requestHelper.js"></script>
+    <script type="text/javascript" src="../resources/js/constants.js"></script>
+        <script type="text/javascript" src="../resources/js/viewHelper.js"></script>
+        <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            var serviceName = "mongo-text-resource";
+            $(document).ready(function(){
+                if(parseGetParams()["resourceName"] != undefined && parseGetParams()["resourceName"].length > 0){
+                    $('#resourceName').val(parseGetParams()["resourceName"]);
+                    load();
+                };
+                generateHeaderFooter();
+            });
+            function save() {
+                serviceName = "mongo-text-resource/save";
+                result = sendPostRequest(serviceName,
+                   {  resourceName:$('#resourceName').val()
+                    , russianValue:$('#russianValue').val()
+                    , englishValue:$('#englishValue').val()
+                   }, appendResult);
+            };
+
+            function load() {
+                serviceName = "mongo-text-resource/load?resourceName=" + $('#resourceName').val();
+                result = sendGetRequest(serviceName, appendResult);
+            };
+
+            function search() {
+                $("#results").html("");
+                serviceName = "mongo-text-resource/search";
+                result = sendPostRequest(serviceName,
+                        {  resourceName:$('#resourceName').val()
+                         , russianValue:$('#russianValue').val()
+                         , englishValue:$('#englishValue').val()
+                        }, appendSearchResult);
+            };
+
+            function appendResult(result){
+                $('#resourceName').val(result.resourceName);
+                $('#russianValue').val(result.russianValue);
+                $('#englishValue').val(result.englishValue);
+            };
+
+            function appendRemoveResult(result){
+                $('#resourceName').val("");
+                $('#russianValue').val("");
+                $('#englishValue').val("");
+            };
+
+            function appendSearchResult(result){
+                var s = "";
+                if(result.length == 0){
+                    $("#error").html("Ни одного совпадения по запросу");
+                    $("#alert").show();
+                }
+                $.each(result, function() {
+                    var resourse_row = ""
+                    + "<blockquote class=\"bg-info small\">"
+                    +        "<div>Ключ: <a onclick='$(\"#resourceName\").val(\"" + this.resourceName + "\"); load();'>"
+                            + this.resourceName + "</a></div>"
+                    +        "<div>RU: " + this.russianValue + "</div>"
+                    +        "<div>EN: " + this.englishValue + "</div>"
+                    + "</blockquote>";
+                        s += resourse_row;
+                });
+                $("#results").html(s);
+            };
+        </script>
+    </head>
+    <body>
+        <div id="spinner">
+            <img src="../resources/images/spinner.gif" id="spinner_img">
+        </div>
+        <div id="menu"></div>
+        <div id="content">
+            <h1><small>Текстовые ресурсы</small></h1>
+            <div class="alert alert-dismissable alert-danger" id="alert" style="display:none">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <span id="error"></span>
+            </div>
+            <form id="mainForm" class="form-horizontal">
+                <div class="form-group">
+                    <label for="resourceName" class="col-lg-2 control-label">Ключ</label>
+                    <div class="col-lg-8">
+                        <input type="text" id="resourceName" placeholder="Ключ" class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="russianValue" class="col-lg-2 control-label">RU</label>
+                    <div class="col-lg-8">
+                        <input type="text" id="russianValue" placeholder="RU" class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="englishValue" class="col-lg-2 control-label">EN</label>
+                    <div class="col-lg-8">
+                        <input type="text" id="englishValue" placeholder="EN" class="form-control"/>
+                    </div>
+                </div>
+                <input type="button" onclick="load()" class="btn btn-primary" value="Прочитать"/>
+                <input type="button" onclick="search()" class="btn btn-info" value="Найти"/>
+                <input type="button" onclick="save()" class="btn btn-success" value="Сохранить"/>
+                <input type="button" onclick="appendRemoveResult(null)" class="btn btn-warning" value="Очистить"/>
+            </form>
+        </div>
+        <div id="results"></div>
+        <div id="footer"></div>
+    </body>
+</html>

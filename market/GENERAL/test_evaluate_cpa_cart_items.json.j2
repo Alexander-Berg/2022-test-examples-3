@@ -1,0 +1,128 @@
+{% set table = table|default("statistics_cpa_cart_items") %}
+
+{% if table == "statistics_cpa_cart_items" %}
+    {% table "statistics" %}
+        ["Market", "Total", "total", {{ (3.0 if direct else 4.0) }}, "{{ day }}"],
+        ["DesktopMainPageRetargeting", "Total", "total", {{ (3.0 if direct else 4.0) }}, "{{ day }}"],
+        ["Desktop", "Total", "total", {{ (3.0 if direct else 4.0) }}, "{{ day }}"],
+        ["DesktopMainPage", "Total", "total", {{ (3.0 if direct else 4.0) }}, "{{ day }}"],
+        ["MarketMainPage", "Total", "total", {{ (3.0 if direct else 4.0) }}, "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_metrika_actions_day_before" %}
+    {% table "events" %}
+        [
+            1508662380000,
+            {"yandexuid": null, "puid": null, "uuid": "111003606f3cddca99a6ed5474160000"},
+            "{{ action }}",
+            "sku",
+            "11",
+            {"place": "DesktopMainPageRetargeting", "batch": "2"},
+            "{{ day }}"
+        ],
+        [
+            1508666270000,
+            {"yandexuid": "1", "puid": "99934355", "uuid": null},
+            "{{ action }}",
+            "model",
+            "22",
+            {"place": "DesktopMainPageRetargeting", "batch": "1"},
+            "{{ day }}"
+        ],
+        [
+            1508666270000,
+            {"yandexuid": null, "puid": null, "uuid": "356003606f3cddca99a6ed5474160000"},
+            "{{ action }}",
+            "sku",
+            "1",
+            {"place": "DesktopMainPageRetargeting", "batch": "2"},
+            "{{ day }}"
+        ],
+        [
+            1508666270000,
+            {"yandexuid": null, "puid": null, "uuid": "356003606f3cddca99a6ed5474160000"},
+            "{{ action }}",
+            "navnode",
+            "a87ff679a2f3e71d9181a67b7542122c",
+            {"place": "DesktopMainPageRetargeting", "batch": "3", "models": "33"},
+            "{{ day }}"
+        ]
+    {% endtable %}
+{% elif table == "events_metrika_actions" %}
+    {% table "events" %}
+         [
+            1508752270000,
+            {"yandexuid": "3", "puid": null, "uuid": null},
+            "{{ action }}",
+            "sku",
+            "333",
+            {"place": "DesktopMainPageRetargeting", "batch": "3"},
+            "{{ day }}"
+        ],
+        [
+            1508752270000,
+            {"yandexuid": "4", "puid": null, "uuid": null},
+            "{{ action }}",
+            "model",
+            "444",
+            {"place": "DesktopMainPageRetargeting", "batch": "4"},
+            "{{ day }}"
+        ]
+    {% endtable %}
+{% elif table == "events_cart_additions" %}
+    {% table "events" %}
+        [
+            1508752280000,
+            {"yandexuid": "1", "puid": null, "uuid": null},
+            "order",
+            "offer",
+            "offer_id_2",
+            {"model_id": "22", "show_uid": "12345", "sku_id": "2", "rgb": "BLUE", "category_id": "1"},
+            "{{ day }}"
+        ],
+        [
+            1508752280000,
+            {"yandexuid": "2", "puid": null, "uuid": "356003606f3cddca99a6ed5474160000"},
+            "order",
+            "offer",
+            "1222222",
+            {"model_id": "1", "show_uid": "23456", "sku_id": "1", "rgb": "BLUE", "category_id": "2"},
+            "{{ day }}"
+        ],
+        [
+            1508752280000,
+            {"yandexuid": "2", "puid": null, "uuid": "111003606f3cddca99a6ed5474160000"},
+            "order",
+            "offer",
+            "1222222",
+            {"model_id": "1", "show_uid": "54554", "sku_id": "11", "rgb": "BLUE", "category_id": "2"},
+            "{{ day }}"
+        ],
+        [
+            1508752280000,
+            {"yandexuid": "3", "puid": null, "uuid": null},
+            "order",
+            "offer",
+            "asljfljsdf",
+            {"model_id": "9999999", "show_uid": "34567", "sku_id": "2", "rgb": "BLUE", "category_id": "3"},
+            "{{ day }}"
+        ],
+        [
+            1508752280000,
+            {"yandexuid": "9999999", "puid": null, "uuid": null},
+            "order",
+            "offer",
+            "444",
+            {"model_id": "9999999", "show_uid": "45678", "sku_id": "2", "rgb": "BLUE", "category_id": "3"},
+            "{{ day }}"
+        ],
+        [
+            1508752280000,
+            {"yandexuid": null, "puid": null, "uuid": "356003606f3cddca99a6ed5474160000"},
+            "order",
+            "offer",
+            "555",
+            {"model_id": "33", "show_uid": "56789", "sku_id": "3", "rgb": "BLUE", "category_id": "3"},
+            "{{ day }}"
+        ]
+    {% endtable %}
+{% endif %}

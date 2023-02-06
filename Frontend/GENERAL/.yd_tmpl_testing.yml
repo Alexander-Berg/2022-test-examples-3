@@ -1,0 +1,199 @@
+annotations:
+  project: tap-backend
+labels:
+  deploy_engine: env_controller
+  stagectl_epoch: 150
+  stagectl_vcs:
+    svn_branch: stage_controller/stable-57-1
+    svn_revision: 6598110
+    svn_tag: ''
+meta:
+  account_id: abc:service:5999
+  acl:
+    - action: allow
+      permissions:
+        - read
+        - write
+        - create
+        - ssh_access
+        - root_ssh_access
+        - read_secrets
+      subjects:
+        - robot-drug-deploy
+        - abc:service:5999
+  project_id: tap-backend
+  id: tap_backend_testing
+  inherit_acl: true
+spec:
+  account_id: abc:service:5999
+  deploy_units:
+    App:
+      endpoint_sets:
+        - port: 80
+      images_for_boxes:
+        app:
+          name: tap/backend
+          registry_host: registry.yandex.net
+          tag: {{VERSION}}
+      multi_cluster_replica_set:
+        replica_set:
+          clusters:
+            - cluster: sas
+              spec:
+                constraints:
+                  antiaffinity_constraints:
+                    - key: rack
+                      max_pods: 1
+                replica_count: 1
+            - cluster: vla
+              spec:
+                constraints:
+                  antiaffinity_constraints:
+                    - key: rack
+                      max_pods: 1
+                replica_count: 1
+          deployment_strategy:
+            max_unavailable: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+                - id: tap_backend_testing-disk
+                  labels:
+                    used_by_infra: true
+                  quota_policy:
+                    bandwidth_guarantee: 15728640
+                    bandwidth_limit: 31457280
+                    capacity: 6442450944
+                  storage_class: hdd
+              host_infra:
+                monitoring: {}
+              ip6_address_requests:
+                - enable_dns: true
+                  network_id: _TAPDEVNETS_
+                  vlan_id: backbone
+                - enable_dns: true
+                  network_id: _TAPDEVNETS_
+                  vlan_id: fastbone
+              pod_agent_payload:
+                spec:
+                  resources:
+                    layers:
+                      - id: host_skynet
+                        url: rbtorrent:6b66545e2b224db62da37ae273519f71c9112581
+                        checksum: MD5:244e11638ec8421488858510799c73b6
+                    static_resources:
+                      - id: geobase
+                        url: {{GEOBASE_URL}}
+                        verification:
+                          checksum: {{GEOBASE_CHECKSUM}}
+                          check_period_ms: 86400000
+                      - id: unified_agent
+                        url: rbtorrent:eb0a2645b3cba0c3bdf3a4d4d358c05e0011d1db
+                        verification:
+                          checksum: MD5:912a8bf9f1da2d5932503810fe716a9c
+                          check_period_ms: 86400000
+                  boxes:
+                    - id: app
+                      bind_skynet: true
+                      init:
+                        - command_line: mkdir -p /var/cache/geobase
+                      rootfs:
+                        layer_refs:
+                          - host_skynet
+                      static_resources:
+                        - resource_ref: geobase
+                          mount_point: /var/cache/geobase
+                        - resource_ref: unified_agent
+                          mount_point: /resources
+                  workloads:
+                    - id: api
+                      box_ref: app
+                      env:
+                        - name: HTTP_PORT
+                          value:
+                            literal_env:
+                              value: '80'
+                        - name: NODE_ENV
+                          value:
+                            literal_env:
+                              value: 'testing'
+                      readiness_check:
+                        http_get:
+                          path: '/health-checks/ping'
+                          port: 80
+                          expected_answer: 'OK'
+                          time_limit:
+                            max_execution_time_ms: 2000
+                            min_restart_period_ms: 10000
+                            max_restart_period_ms: 10000
+                      transmit_logs: true
+                    - id: unified_agent
+                      box_ref: app
+                      env:
+                        - name: LOGBROKER_OAUTH_TOKEN
+                          value:
+                            secret_env:
+                              alias: sec-01dsze537917bpah02f6rmxepj:ver-01emkhvrq19n02zyrte279jfnf
+                              id: LOGBROKER_OAUTH_TOKEN
+                      readiness_check:
+                        http_get:
+                          path: /ready
+                          port: 16301
+                          expected_answer: 'OK'
+                          time_limit:
+                            max_execution_time_ms: 2000
+                            max_restart_period_ms: 10000
+                            min_restart_period_ms: 10000
+                      start:
+                        command_line: 'bash /app/unified-agent/start.sh'
+                        time_limit:
+                          max_execution_time_ms: 1000
+                          max_restart_period_ms: 3000
+                          min_restart_period_ms: 3000
+                      stop_policy:
+                        container:
+                          command_line: 'bash /app/unified-agent/stop.sh'
+                          time_limit:
+                            max_execution_time_ms: 10000
+                            max_restart_period_ms: 3000
+                            min_restart_period_ms: 3000
+                        max_tries: 3
+                      transmit_logs: true
+                  mutable_workloads:
+                    - workload_ref: api
+                    - workload_ref: unified_agent
+              resource_requests:
+                memory_guarantee: 2147483648
+                memory_limit: 2147483648
+                vcpu_guarantee: 100
+                vcpu_limit: 100
+              secrets:
+                sec-01ek9tpc7brk55whg1jdapb746:ver-01ek9tpc89js4y8wad17s99fg4:
+                  delegation_token: {{TVM_DELEGATION_TOKEN}}
+                  secret_id: sec-01ek9tpc7brk55whg1jdapb746
+                  secret_version: ver-01ek9tpc89js4y8wad17s99fg4
+                sec-01dsze537917bpah02f6rmxepj:ver-01emkhvrq19n02zyrte279jfnf:
+                  delegation_token: {{LOGBROKER_DELEGATION_TOKEN}}
+                  secret_id: sec-01dsze537917bpah02f6rmxepj
+                  secret_version: ver-01emkhvrq19n02zyrte279jfnf
+      network_defaults:
+        network_id: _TAPDEVNETS_
+      tvm_config:
+        blackbox_environment: Test
+        client_port: 8001
+        clients:
+          - destinations:
+              - alias: blackbox
+                app_id: 224
+              - alias: geocoder
+                app_id: 2008261
+              - alias: persAddress
+                app_id: 2001207
+            secret_selector:
+              id: client_secret
+              alias: sec-01ek9tpc7brk55whg1jdapb746:ver-01ek9tpc89js4y8wad17s99fg4
+            source:
+              abc_service_id: '5999'
+              alias: tapBackend
+              app_id: 2023794
+        mode: enabled

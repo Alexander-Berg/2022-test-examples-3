@@ -1,0 +1,315 @@
+{
+    "serviceId": "GRAPH_ID",
+    "name": "ФФЦ Софьино",
+    "initialState": "REGISTERED",
+    "states": [
+        {
+            "name": "ALLOCATED",
+            "priorityFunction": null,
+            "final": null
+        },
+        {
+            "name": "WAITING",
+            "priorityFunction": null,
+            "final": null
+        },
+        {
+            "name": "PROCESSING_START",
+            "priorityFunction": null,
+            "final": null
+        },
+        {
+            "name": "DECLINED",
+            "priorityFunction": null,
+            "final": true
+        },
+        {
+            "name": "SIGNED",
+            "priorityFunction": null,
+            "final": true
+        },
+        {
+            "name": "DATA_SAVING",
+            "priorityFunction": null,
+            "final": null
+        },
+        {
+            "name": "PROCCESED",
+            "priorityFunction": null,
+            "final": true
+        },
+        {
+            "name": "CANCELLED",
+            "priorityFunction": null,
+            "final": true
+        },
+        {
+            "name": "ASSIGNED",
+            "priorityFunction": {
+                "type": "REQUEST_TYPE",
+                "params": [
+                    {
+                        "type": "HIGH_PRIORITY_REQUEST_TYPES",
+                        "value": "SIGNING_DOCUMENTS"
+                    }
+                ]
+            },
+            "final": null
+        },
+        {
+            "name": "REGISTERED",
+            "priorityFunction": null,
+            "final": null
+        }
+    ],
+    "edges": [
+        {
+            "fromState": "PROCCESED",
+            "toState": "REGISTERED",
+            "restrictions": [
+                {
+                    "type": "EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "TO_INITIAL_STATE"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 0
+        },
+        {
+            "fromState": "REGISTERED",
+            "toState": "ALLOCATED",
+            "restrictions": [
+                {
+                    "type": "SITE",
+                    "params": [
+                        {
+                            "type": "SITE_ID",
+                            "value": "Диспетчерская входящего потока"
+                        }
+                    ]
+                }
+            ],
+            "actions": [
+                {
+                    "type": "SEND_SMS",
+                    "params": [
+                        {
+                            "type": "SMS_NOTIFICATION_TEMPLATE",
+                            "value": "Ваш номер талона [ticketCode]"
+                        }
+                    ]
+                }
+            ],
+            "priority": 0
+        },
+        {
+            "fromState": "ASSIGNED",
+            "toState": "WAITING",
+            "restrictions": [
+                {
+                    "type": "UNPROCESSED_EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "CALL"
+                        }
+                    ]
+                }
+            ],
+            "actions": [
+                {
+                    "type": "GENERATE_AUDIO_NOTIFICATION",
+                    "params": [
+                        {
+                            "type": "AUDIO_NOTIFICATION_TEMPLATE",
+                            "value": "Талон с номером \\\\[ticketCode] приглашается к окну [windowNum]"
+                        }
+                    ]
+                }
+            ],
+            "priority": 1
+        },
+        {
+            "fromState": "ASSIGNED",
+            "toState": "ALLOCATED",
+            "restrictions": [
+                {
+                    "type": "UNPROCESSED_EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "MOVE_CLIENT_BACK_TO_QUEUE"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 0
+        },
+        {
+            "fromState": "ALLOCATED",
+            "toState": "ASSIGNED",
+            "restrictions": [
+                {
+                    "type": "CAPACITY_UNIT_AVAILABILITY_RESTRICTION",
+                    "params": []
+                }
+            ],
+            "actions": [],
+            "priority": 1
+        },
+        {
+            "fromState": "WAITING",
+            "toState": "PROCESSING_START",
+            "restrictions": [
+                {
+                    "type": "UNPROCESSED_EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "DISPATCHER_START_PROCESSING"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 1
+        },
+        {
+            "fromState": "PROCESSING_START",
+            "toState": "DATA_SAVING",
+            "restrictions": [
+                {
+                    "type": "UNPROCESSED_EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "ACCEPT"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 3
+        },
+        {
+            "fromState": "PROCESSING_START",
+            "toState": "DECLINED",
+            "restrictions": [
+                {
+                    "type": "UNPROCESSED_EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "DECLINE"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 1
+        },
+        {
+            "fromState": "WAITING",
+            "toState": "CANCELLED",
+            "restrictions": [
+                {
+                    "type": "UNPROCESSED_EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "CANCEL"
+                        }
+                    ]
+                }
+            ],
+            "actions": [
+                {
+                    "type": "SEND_SMS",
+                    "params": [
+                        {
+                            "type": "SMS_NOTIFICATION_TEMPLATE",
+                            "value": "Ваш талон исключен из очереди по причине неявки. При необходимости пройдите регистрацию повторно."
+                        }
+                    ]
+                }
+            ],
+            "priority": 2
+        },
+        {
+            "fromState": "PROCESSING_START",
+            "toState": "SIGNED",
+            "restrictions": [
+                {
+                    "type": "UNPROCESSED_EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "DOCUMENTS_SIGNED"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 2
+        },
+        {
+            "fromState": "DATA_SAVING",
+            "toState": "PROCCESED",
+            "restrictions": [],
+            "actions": [],
+            "priority": 0
+        }
+    ],
+    "capacities": [
+        {
+            "name": "Диспетчерская входящего потока",
+            "states": [
+                "WAITING",
+                "PROCESSING_START",
+                "DATA_SAVING",
+                "ASSIGNED"
+            ],
+            "value": 10,
+            "capacityUnits": [
+                {
+                    "readableName": "2",
+                    "active": true
+                },
+                {
+                    "readableName": "5",
+                    "active": false
+                },
+                {
+                    "readableName": "8",
+                    "active": false
+                },
+                {
+                    "readableName": "7",
+                    "active": false
+                },
+                {
+                    "readableName": "4",
+                    "active": false
+                },
+                {
+                    "readableName": "1",
+                    "active": true
+                },
+                {
+                    "readableName": "666",
+                    "active": true
+                },
+                {
+                    "readableName": "3",
+                    "active": true
+                }
+            ]
+        }
+    ]
+}

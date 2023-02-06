@@ -1,0 +1,30 @@
+SELECT
+  K.pid AS pid,
+  K.id AS id,
+  K.cid AS cid,
+  first(K.price) AS price,
+  first(K.bid_type) AS bid_type,
+  first(K.price_context) AS price_context,
+  first(K.PhraseID) AS PhraseID,
+  first(K.is_suspended) AS is_suspended,
+  first(K.phrase) AS phrase,
+  first(K.net_stop) AS net_stop,
+  first(K.is_deleted) AS is_deleted,
+  first(K.search_stop) AS search_stop,
+  first(K.showsForecast) AS showsForecast,
+  first(K.autobudgetPriority) AS autobudgetPriority,
+  first(K.statusModerate) AS statusModerate,
+  first(K.is_archived) AS is_archived,
+FROM yt.bidstable_direct AS K
+WHERE K.cid IN (11)
+GROUP BY
+  pid,
+  id,
+  cid,
+  K.__hash__,
+  K.__shard__
+ORDER BY
+  cid,
+  pid,
+  id
+LIMIT 1000

@@ -1,0 +1,129 @@
+worker_processes 1;
+worker_shutdown_timeout 10s;
+
+pid /var/run/nginx.pid;
+
+events {
+    worker_connections 8192;
+}
+
+env DEPLOY_NODE_DC;
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    server_tokens off;
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+
+    keepalive_timeout 120s;
+
+    client_body_timeout 120s;
+    client_header_timeout 120s;
+    client_max_body_size 128m;
+    large_client_header_buffers 8 16k;
+
+    server_names_hash_bucket_size 64;
+    server_name_in_redirect on;
+
+    fastcgi_intercept_errors on;
+
+    #
+    # robots section start
+    #
+
+    # DARIA-37068
+    map $host $robots {
+        default robots.txt;
+        mail.yandex.ru robots.txt.ru;
+        mail.yandex.by robots.txt.by;
+        mail.yandex.com robots.txt.com;
+        mail.yandex.com.tr robots.txt.com.tr;
+        mail.yandex.kz robots.txt.kz;
+        mail.yandex.fr robots.txt.fr;
+        mail.yandex.az robots.txt.az;
+        mail.yandex.com.am robots.txt.com.am;
+        mail.yandex.com.ge robots.txt.com.ge;
+        mail.yandex.co.il robots.txt.co.il;
+        mail.yandex.kg robots.txt.kg;
+        mail.yandex.lt robots.txt.lt;
+        mail.yandex.lv robots.txt.lv;
+        mail.yandex.md robots.txt.md;
+        mail.yandex.tj robots.txt.tj;
+        mail.yandex.tm robots.txt.tm;
+        mail.yandex.uz robots.txt.uz;
+        mail.yandex.ee robots.txt.ee;
+    }
+
+    #
+    # robots section end
+    #
+
+    #
+    # proxy section start
+    #
+
+    proxy_buffer_size  64k;
+    proxy_buffers 8 64k;
+
+    proxy_cache_path /var/spool/nginx/cache levels=1:2 keys_zone=cache:512m ;
+    proxy_temp_path /var/spool/nginx/tmp;
+
+    proxy_intercept_errors on;
+
+    proxy_headers_hash_bucket_size 128;
+
+    #
+    # proxy section start
+    #
+
+    #
+    # gzip section start
+    #
+
+    gzip on;
+    gzip_vary on;
+    gzip_static on;
+    gzip_disable "msie6";
+    gzip_types text/plain application/xml text/css application/x-javascript text/js application/json;
+
+    #
+    # gzip section end
+    #
+
+    #
+    # log section start
+    #
+
+    tskv_log_format mail-nginx-access-log "$https $upstream_addr $upstream_response_time $upstream_status $request_id $request_length $bytes_sent $request_time $antirobot_status";
+
+    log_format main '[$time_local] $host $remote_addr "$request" $status "$http_referer" "$http_user_agent" "$http_cookie" "$http_x_forwarded_for" $request_id $request_length $bytes_sent $request_time' ;
+
+    log_format proxy '[$time_local] $host $remote_addr "$request" $status "$http_referer" "$http_user_agent" "$http_cookie" "$http_x_forwarded_for" [proxy ($upstream_cache_status) : $upstream_addr $upstream_response_time $upstream_status ] $request_id $request_length $bytes_sent $request_time' ;
+
+    log_format debug '[$time_local] $host $remote_addr "$request" $status "$http_referer" "$http_user_agent" "$full_http_cookie" "$http_x_forwarded_for" "$request_body" $request_id $request_length $bytes_sent $request_time' ;
+
+    tskv_log /var/log/nginx/access.tskv mail-nginx-access-log;
+    access_log off;
+    error_log /var/log/nginx/error.log;
+
+    #
+    # log section start
+    #
+
+    include ssl.conf;
+
+    error_page 403 /403.html;
+    error_page 404 /404.html;
+    error_page 500 /500.html;
+    error_page 501 /501.html;
+    error_page 502 /502.html;
+    error_page 503 /503.html;
+    error_page 504 /504.html;
+    error_page 505 /505.html;
+
+    include /etc/nginx/conf.d/*.conf;
+    include /etc/nginx/sites-enabled/*.conf;
+}

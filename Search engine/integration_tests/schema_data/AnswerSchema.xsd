@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="DataTypes.xsd"/>
+
+    <xs:element name="yandexsearch" type="yandexsearchType"/>
+    <xs:complexType name="yandexsearchType">
+        <xs:sequence>
+            <xs:element type="requestType" name="request"/>
+            <xs:element type="responseType" name="response"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="version"/>
+    </xs:complexType>
+    <xs:complexType name="propertiesType">
+        <xs:sequence>
+            <xs:element type="xs:int" name="_PassagesType" minOccurs="0"/>
+            <xs:element type="Lang" name="lang" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="docType">
+        <xs:sequence>
+            <xs:element type="relevanceType" name="relevance"/>
+            <xs:element type="Url" name="url"/>
+            <xs:element type="Domain" name="domain"/>
+            <xs:element type="titleType" name="title"/>
+            <xs:element name="headline" minOccurs="0">
+                <xs:complexType mixed="true">
+                    <xs:sequence>
+                        <xs:element type="HlWorld" name="hlword" maxOccurs="unbounded" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element type="Modtime" name="modtime" minOccurs="0"/>
+            <xs:element type="Size" name="size"/>
+            <xs:element type="Charset" name="charset"/>
+            <xs:element type="passagesType" name="passages" minOccurs="0"/>
+            <xs:element type="propertiesType" name="properties"/>
+            <xs:element type="xs:string" name="mime-type"/>
+            <xs:element type="SavedCopyUrl" name="saved-copy-url" minOccurs="0"/>
+            <xs:element type="snippetsType" name="snippets" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <xs:attribute type="xs:string" name="malicious" use="optional"/>
+    </xs:complexType>
+
+
+    <xs:complexType name="passagesType">
+        <xs:sequence>
+            <xs:element type="passageType" name="passage" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="foundType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="Priority" name="priority" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="groupingsType">
+        <xs:sequence>
+            <xs:element type="groupbyType" name="groupby"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="sortbyType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="order"/>
+                <xs:attribute type="xs:string" name="priority"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="passageType" mixed="true">
+        <xs:sequence>
+            <xs:element type="HlWorld" name="hlword" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="relevanceType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="Priority" name="priority" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="groupingType">
+        <xs:sequence>
+            <xs:element type="foundType" name="found" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="found-docsType" name="found-docs" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="FoundDocsHuman" name="found-docs-human"/>
+            <xs:element type="pageType" name="page"/>
+            <xs:element type="groupType" name="group" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute type="Attr" name="attr"/>
+        <xs:attribute type="Mode" name="mode"/>
+        <xs:attribute type="GroupsOnPage" name="groups-on-page"/>
+        <xs:attribute type="DocsInGroup" name="docs-in-group"/>
+        <xs:attribute type="xs:string" name="curcateg"/>
+    </xs:complexType>
+    <xs:complexType name="titleType" mixed="true">
+        <xs:sequence>
+            <xs:element type="HlWorld" name="hlword" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="responseType">
+        <xs:sequence>
+            <xs:element type="ReqId" name="reqid"/>
+            <!--<xs:element type="WordStat" name="wordstat" minOccurs="0"/>-->
+            <xs:element type="foundType" name="found" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="FoundHuman" name="found-human"/>
+            <xs:element type="Misspell" name="misspell" minOccurs="0"/>
+            <xs:element type="Reask" name="reask" minOccurs="0"/>
+            <xs:element type="xs:string" name="is-local" minOccurs="0"/>
+            <xs:element type="resultsType" name="results"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="date"/>
+    </xs:complexType>
+    <xs:complexType name="sitelinksType">
+        <xs:sequence>
+            <xs:element type="linkType" name="link" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="snippetsType">
+        <xs:sequence>
+            <xs:element type="local-geoType" name="local-geo" minOccurs="0"/>
+            <xs:element type="sitelinksType" name="sitelinks" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="groupType">
+        <xs:sequence>
+            <xs:element type="categType" name="categ"/>
+            <xs:element type="DocCount" name="doccount"/>
+            <xs:element type="relevanceType" name="relevance"/>
+            <xs:element type="docType" name="doc"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="linkType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="Name" name="name" use="optional"/>
+                <xs:attribute type="Url" name="url" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="requestType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="query"/>
+            <xs:element type="Page" name="page"/>
+            <xs:element type="sortbyType" name="sortby"/>
+            <xs:element type="xs:string" name="maxpassages"/>
+            <xs:element type="groupingsType" name="groupings"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="pathType">
+        <xs:sequence>
+            <xs:element type="regionType" name="region" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="local-geoType">
+        <xs:sequence>
+            <xs:element type="regionType" name="region"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="regionType" mixed="true">
+        <xs:sequence>
+            <xs:element type="pathType" name="path" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute type="Id" name="id" use="optional"/>
+        <xs:attribute type="Name" name="name" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="found-docsType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="Priority" name="priority" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="pageType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="first"/>
+                <xs:attribute type="xs:string" name="last"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="categType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="attr" use="optional"/>
+                <xs:attribute type="xs:string" name="name" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="groupbyType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="attr"/>
+                <xs:attribute type="xs:string" name="mode"/>
+                <xs:attribute type="xs:string" name="groups-on-page"/>
+                <xs:attribute type="xs:string" name="docs-in-group"/>
+                <xs:attribute type="xs:string" name="curcateg"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="resultsType">
+        <xs:sequence>
+            <xs:element type="groupingType" name="grouping"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="headlineType" mixed="true">
+        <xs:sequence>
+            <xs:element type="xs:string" name="hlword" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

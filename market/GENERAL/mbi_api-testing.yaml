@@ -1,0 +1,117 @@
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=mbi_api-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: '0'
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: skip
+    notifications: []
+    service: disk_free_space
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=mbi_api-testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    notifications: []
+    service: logrotate
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=mbi_api-testing&service=ping&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    notifications:
+    - template_kwargs:
+        login: mbi-testing-tg
+        method: telegram
+        status:
+        - from: OK
+          to: CRIT
+        - from: CRIT
+          to: OK
+        - from: CRIT
+          to: WARN
+        - from: WARN
+          to: CRIT
+      template_name: on_status_change
+    service: ping
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=mbi_api-testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    notifications: []
+    service: push-client-status
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    check_options: {}
+    children:
+    - DEPLOY%market-mbi@stage=testing_market_mbi-api;deploy_unit=mbi-api
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: mbi_api-testing
+    namespace: market.mbi_shops
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - marketmbiapi
+    - market_mbi
+    - testing
+    - market
+    - _market_
+    ttl: 900
+

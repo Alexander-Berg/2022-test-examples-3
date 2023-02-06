@@ -1,0 +1,151 @@
+annotations:
+  project: crypta
+  stagectl_epoch: 770
+  stagectl_vcs:
+    svn_branch: stage_controller/stable-134-1
+    svn_revision: 8751927
+    svn_tag: stage_controller/stable-134-1
+labels:
+  deploy_engine: env_controller
+  du_sidecar_target_revision:
+    docker:
+      podBin: 2460258894
+  notifications_last_timestamp: 1635246596656243000
+  separate_du_revision: 'true'
+  stagectl_epoch: 589
+  stagectl_vcs:
+    svn_branch: stage_controller/stable-108-2
+    svn_revision: 7951591
+    svn_tag: stage_controller/stable-108-2
+  tags: []
+meta:
+  account_id: abc:service:1547
+  acl:
+  - action: allow
+    permissions:
+    - read
+    - write
+    - create
+    - ssh_access
+    - root_ssh_access
+    - read_secrets
+    subjects:
+    - robot-drug-deploy
+  effective_account_id: null
+  id: crypta-rtsklejka-resharder
+  inherit_acl: true
+  project_id: crypta
+spec:
+  deploy_units:
+    docker:
+      endpoint_sets:
+      - port: 80
+      images_for_boxes:
+        docker:
+          digest: EMPTY
+          name: crypta/rtsklejka-resharder
+          registry_host: registry.yandex.net
+          tag: 8768652-trunk
+      logbroker_tools_sandbox_info:
+        revision: 2249562029
+      network_defaults:
+        network_id: _CRYPTADEVNETS_
+      pod_agent_sandbox_info:
+        revision: 2460258894
+      replica_set:
+        per_cluster_settings:
+          man:
+            deployment_strategy:
+              max_unavailable: 2
+            pod_count: 6
+          sas:
+            deployment_strategy:
+              max_unavailable: 4
+            pod_count: 6
+        replica_set_template:
+          constraints:
+            antiaffinity_constraints:
+            - key: rack
+              max_pods: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+              - id: crypta-rtsklejka-resharder-disk-0
+                labels:
+                  used_by_infra: true
+                quota_policy:
+                  bandwidth_guarantee: 20971520
+                  bandwidth_limit: 41943040
+                  capacity: 3221225472
+                storage_class: hdd
+              host_infra:
+                monitoring: {}
+              pod_agent_payload:
+                spec:
+                  boxes:
+                  - compute_resources:
+                      memory_limit: 3221225472
+                      vcpu_limit: 1000
+                    id: docker
+                    resolv_conf: nat64
+                    rootfs: {}
+                  mutable_workloads:
+                  - workload_ref: main
+                  resources: {}
+                  workloads:
+                  - box_ref: docker
+                    destroy_policy:
+                      http_get:
+                        any: true
+                        path: /info
+                        port: 80
+                      max_tries: 5
+                    env:
+                    - name: CRYPTA_TVM_ID
+                      value:
+                        literal_env:
+                          value: '2017217'
+                    - name: CRYPTA_TVM_SECRET
+                      value:
+                        secret_env:
+                          alias: sec-01dv8s7w8p432bctjes0z2vw8d:ver-01dv8s7w9jmgw17c82s99q2f97
+                          id: client_secret
+                    - name: YT_TOKEN
+                      value:
+                        secret_env:
+                          alias: sec-01csvzgg3mdasmdygkr5s8n6mz:ver-01d7q23zq6gqhxdcpggs5epbdk
+                          id: token
+                    - name: CRYPTA_ENV
+                      value:
+                        literal_env:
+                          value: test
+                    id: main
+                    liveness_check:
+                      http_get:
+                        any: true
+                        path: /info
+                        port: 80
+                    start:
+                      command_line: /bin/bash /root/entrypoint.sh
+                    transmit_logs: true
+              resource_requests:
+                memory_guarantee: 3221225472
+                memory_limit: 3221225472
+                network_bandwidth_guarantee: 10485760
+                vcpu_guarantee: 2000
+                vcpu_limit: 2000
+              secrets:
+                sec-01csvzgg3mdasmdygkr5s8n6mz:ver-01d7q23zq6gqhxdcpggs5epbdk:
+                  delegation_token: YoOxdRCVpuRwsi4m6PlV9GBLPKYkIBxJFDQtGDWkN2c.1.2a921484b0be95e2
+                  secret_id: sec-01csvzgg3mdasmdygkr5s8n6mz
+                  secret_version: ver-01d7q23zq6gqhxdcpggs5epbdk
+                sec-01dv8s7w8p432bctjes0z2vw8d:ver-01dv8s7w9jmgw17c82s99q2f97:
+                  delegation_token: Mphj1cQiX1GIZ_Ol5ta8bVh--kbh1u30-TBZjpJeHIQ.1.c51ef68ceacb16ca
+                  secret_id: sec-01dv8s7w8p432bctjes0z2vw8d
+                  secret_version: ver-01dv8s7w9jmgw17c82s99q2f97
+      revision: 357
+      tvm_config: {}
+  revision: 357
+  revision_info:
+    description: tmp bump cpu 2 force redeploy
+

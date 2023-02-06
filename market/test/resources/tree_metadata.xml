@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<m:config xmlns:c="urn:jmf:common:1.0"
+          xmlns:m="urn:jmf:metaclass:config:1.0"
+          xmlns:a="urn:jmf:attribute:type:default:config:1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <m:metaclass>
+        <m:fqn>selfParent</m:fqn>
+        <m:parent>bo</m:parent>
+        <m:title>
+            <c:value>Вложенный сам в себя</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>parent</m:code>
+                <m:title>
+                    <c:value>Родитель</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="selfParent"/>
+                <m:relation parent="true"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+    <m:metaclass typed="false">
+        <m:fqn>withTwoParents</m:fqn>
+        <m:parent>bo</m:parent>
+        <m:title>
+            <c:value>Класс с двумя возможными родителями</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>firstParent</m:code>
+                <m:title>
+                    <c:value>Первый родитель</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="withTwoParents"/>
+                <m:relation parent="true"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>secondParent</m:code>
+                <m:title>
+                    <c:value>Второй родитель</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="selfParent"/>
+                <m:relation parent="true" order="1"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+    <m:metaclass typed="false">
+        <m:fqn>withThreeParents</m:fqn>
+        <m:parent>bo</m:parent>
+        <m:title>
+            <c:value>Класс с тремя возможными родителями</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>firstParent</m:code>
+                <m:title>
+                    <c:value>Первый родитель</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="withThreeParents"/>
+                <m:relation parent="true"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>secondParent</m:code>
+                <m:title>
+                    <c:value>Второй родитель</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="withTwoParents"/>
+                <m:relation parent="true" order="1"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>thirdParent</m:code>
+                <m:title>
+                    <c:value>Третий родитель</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="selfParent"/>
+                <m:relation parent="true" order="2"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+    <m:metaclass>
+        <m:fqn>selfParent$t0</m:fqn>
+        <m:parent>selfParent</m:parent>
+        <m:title>
+            <c:value>Тип 0</c:value>
+        </m:title>
+    </m:metaclass>
+
+    <m:metaclass>
+        <m:fqn>selfParent$t1</m:fqn>
+        <m:parent>selfParent</m:parent>
+        <m:title>
+            <c:value>Тип 1</c:value>
+        </m:title>
+    </m:metaclass>
+
+    <m:metaclass>
+        <m:fqn>selfParent$t2</m:fqn>
+        <m:parent>selfParent$t1</m:parent>
+        <m:title>
+            <c:value>Тип 2</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>t1</m:code>
+                <m:title>
+                    <c:value>t1</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="selfParent$t1"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>t2</m:code>
+                <m:title>
+                    <c:value>t2</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="selfParent$t2"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+    <m:metaclass typed="false">
+        <m:fqn>otherParent</m:fqn>
+        <m:parent>bo</m:parent>
+        <m:title>
+            <c:value>Вложенный в объекты другого типа</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>parent</m:code>
+                <m:title>
+                    <c:value>Родитель</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="selfParent"/>
+                <m:relation parent="true"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+    <m:metaclass typed="false">
+        <m:fqn>otherParentRelated</m:fqn>
+        <m:parent>bo</m:parent>
+        <m:title>
+            <c:value>Метакласс с атрибутом ссылающимся на otherParent</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>treeAttr</m:code>
+                <m:title>
+                    <c:value>otherParent</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="otherParent"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+
+    <m:metaclass>
+        <m:fqn>simpleParent</m:fqn>
+        <m:parent>bo</m:parent>
+        <m:title>
+            <c:value>Родитель</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>parent</m:code>
+                <m:title>
+                    <c:value>Родитель</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="simpleParent"/>
+                <m:relation parent="true"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>simpleChilds</m:code>
+                <m:title>
+                    <c:value>Потомки</c:value>
+                </m:title>
+                <m:type xsi:type="a:back" fqn="simpleChild@simpleParent" expectedSize="SMALL"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+    <m:metaclass>
+        <m:fqn>simpleParent$t0</m:fqn>
+        <m:parent>simpleParent</m:parent>
+        <m:title>
+            <c:value>Тип 0</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>supervisors</m:code>
+                <m:title>
+                    <c:value>Супервизоры</c:value>
+                </m:title>
+                <m:type xsi:type="a:objects" fqn="simpleChild"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+    <m:metaclass>
+        <m:fqn>simpleChild</m:fqn>
+        <m:parent>bo</m:parent>
+        <m:title>
+            <c:value>Потомок</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>simpleParent</m:code>
+                <m:title>
+                    <c:value>Родитель</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="simpleParent"/>
+                <m:relation parent="true"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+    <m:metaclass>
+        <m:fqn>simpleChild$t0</m:fqn>
+        <m:parent>simpleChild</m:parent>
+        <m:title>
+            <c:value>Тип 0</c:value>
+        </m:title>
+    </m:metaclass>
+
+</m:config>

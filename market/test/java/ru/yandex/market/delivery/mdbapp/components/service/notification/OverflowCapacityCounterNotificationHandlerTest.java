@@ -1,0 +1,122 @@
+package ru.yandex.market.delivery.mdbapp.components.service.notification;
+
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationEventPublisher;
+
+import ru.yandex.common.util.region.RegionService;
+import ru.yandex.market.delivery.mdbapp.components.storage.domain.CapacityCounter;
+import ru.yandex.market.delivery.mdbapp.components.storage.domain.CapacityCounterNotification;
+import ru.yandex.market.delivery.mdbapp.components.storage.domain.PartnerCapacity;
+import ru.yandex.market.logistics.management.client.LMSClient;
+
+public class OverflowCapacityCounterNotificationHandlerTest {
+    @MockBean
+    LMSClient lmsClient;
+    @MockBean
+    RegionService regionService;
+    @MockBean
+    ApplicationEventPublisher eventPublisher;
+    OverflowCapacityCounterNotificationHandler handler;
+
+    private static Stream<Arguments> testData() {
+        return Stream.of(
+            Arguments.of(0L, 0L, 0L, false, true),
+            // превышение на 180 парселов, но уведомление не отправлялось, результат нет
+            Arguments.of(20L, 0L, 200L, true, false),
+            // превышение на 200 парселов, но уведомление отправлялось, результат да
+            Arguments.of(0L, 0L, 200L, false, true),
+            Arguments.of(20L, 0L, 20L, true, false),
+            Arguments.of(10L, 10L, 11L, false, false),
+            Arguments.of(10L, 10L, 20L, true, false),
+            // превышение на 10 парселов, уведомление отправлялось, но отправлено и текущее равны, результат нет
+            Arguments.of(10L, 20L, 20L, true, false),
+            Arguments.of(20L, 20L, 20L, true, false),
+            // капасити = 10, отправлено уже 10, всего парселов 20, уведомелние отправлялось, результат нет
+            Arguments.of(10L, 10L, 20L, true, false),
+            // парселов больше остальных цифр и уведомелние отправлялось, результат ДА
+            Arguments.of(0L, 0L, 20L, false, true),
+            Arguments.of(0L, 10L, 20L, false, true),
+            Arguments.of(10L, 0L, 20L, false, true)
+        );
+    }
+
+    private static Stream<Arguments> testData2() {
+        return Stream.of(
+            Arguments.of(10L, 20L, 100L),
+            Arguments.of(20L, 20L, 0L),
+            Arguments.of(0L, 0L, 0L),
+            Arguments.of(0L, 10L, 10L),
+            Arguments.of(10L, 0L, 0L)
+        );
+    }
+
+    @BeforeEach
+    void setUp() {
+        handler = new OverflowCapacityCounterNotificationHandler(
+            lmsClient,
+            regionService,
+            eventPublisher
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("testData")
+    void canHandle(
+        long capacityValue,
+        long lastSentCount,
+        long parcelCount,
+        boolean overflowPercentNotified,
+        boolean result
+    ) {
+        Assertions.assertEquals(
+            handler.canHandle(getCounter(capacityValue, lastSentCount, parcelCount, overflowPercentNotified)),
+            result
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("testData2")
+    void getOverFlowPercent(long capacityValue, long parcelCount, long result) {
+        CapacityWarnDto dto = CapacityWarnDto.builder()
+            .totalCapacity(capacityValue)
+            .currentCapacity(parcelCount)
+            .build();
+        Assertions.assertEquals(
+            result, handler.getOverFlowPercent(dto)
+        );
+    }
+
+    CapacityCounter getCounter(
+        long capacityValue,
+        long lastSentCount,
+        long parcelCount,
+        boolean overflowPercentNotified
+    ) {
+        var pc = new PartnerCapacity();
+        pc.setCapacityId(123L);
+        pc.setValue(capacityValue);
+
+        var n = new CapacityCounterNotification();
+        n.setLastSentCount(lastSentCount);
+        n.setIs100PercentNotificationSend(overflowPercentNotified);
+
+        var c = new CapacityCounter();
+        c.setMaxAllowedParcelCount(0L);
+        c.setParcelCount(parcelCount);
+        c.setPartnerCapacity(pc);
+        c.setCapacityCounterNotification(n);
+
+        n.setCapacityCounter(c);
+        n.setCapacityCounterId(c.getId());
+
+        pc.addCapacityCounter(c);
+        return c;
+    }
+}

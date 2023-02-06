@@ -1,0 +1,30 @@
+juggler:
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    check_options: {}
+    namespace: market.datacamp
+    notifications: []
+    refresh_time: 60
+    ttl: 600
+    host: market-yt-datacamp-testing
+    tags:
+    - market_indexer_datacamp
+    - market_testing
+    - testing
+    - market
+    - _market_
+  checks:
+    - service: datacamp_replication_lag
+      children:
+        - host: dbd2cfc9-b21c-49ef-b626-137cf68330d2
+          service: all
+          type: MONITORING_MULTIALERT
+          instance: all
+    - service: datacamp_yt_quota
+      children:
+        - host: (tag=market-datacamp)&(tag=yt_account_market-datacamp-testing|tag=yt_account_market-ecom-testing)
+          service: all
+          type: EVENTS
+          instance: all

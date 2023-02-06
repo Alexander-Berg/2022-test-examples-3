@@ -1,0 +1,12 @@
+---
+approved_by: 'hrustyashko'
+tasks:
+  - db: 'ppcdict'
+    sql: |-
+      ALTER TABLE placements
+          ADD COLUMN `is_testing` tinyint(1) unsigned NOT NULL DEFAULT '0',
+      LOCK=NONE, ALGORITHM=INPLACE
+    time_estimate: 'менее секунды'
+    comment: 'можно выполнять через dbs-guard + dbs-sql'
+    type: sql
+    when: any

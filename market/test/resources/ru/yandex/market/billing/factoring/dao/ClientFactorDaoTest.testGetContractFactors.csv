@@ -1,0 +1,57 @@
+# Записи для market не выгружаем
+# 1 - должны быть raiffeisen, alfa и sber , т.к. расписание смотрится на прошлый день
+# 2 - должен быть только market, при этом мерч заблокирован Райфом, Альфой и Сбером в FACTOR_REJECT в текущем дне
+# 3 - должны быть alfa и sber, так как для raiffeisen в CLIENT_FACTOR специальная запись для bi-weekly, для INCOME_CONTRACT_ID = 4
+#     market в таком случае не выгружаем, так как можно через факторинг
+#
+# 4 - должен быть raiffeisen, т.к. для него есть специальная запись в CLIENT_FACTOR
+
+MARKET_BILLING.PAYOUT_SCHEDULE
+FREQUENCY,CRON,OFFSET_DAYS
+daily,"0 0 0 * * ?",0
+weekly,"0 0 0 1,8,16,24 * ?",0
+bi-weekly,"0 0 0 1,16 * ?",0
+
+MARKET_BILLING.CLIENT_PAYOUT_FREQUENCY
+INCOME_CONTRACT_ID,FREQUENCY,START_DATE,END_DATE,ORG_ID,PLATFORM
+1,daily,2020-01-01,2021-08-01,64554,yandex_market
+1,bi-weekly,2021-08-01,null,64554,yandex_market
+2,weekly,2020-01-01,null,64554,yandex_market
+null,bi-weekly,2020-01-01,null,64554,yandex_market
+
+MARKET_BILLING.FACTOR_REJECT
+NAME,INN,OGRN,FACTOR,REJECT_DATE,END_REJECT_DATE,STATUS
+name2,222,OGRN2,raiffeisen,2021-08-01,null,sent_to_check
+name2,222,OGRN2,alfa,2021-08-01,null,sent_to_check
+name2,222,OGRN2,sber,2021-08-01,null,sent_to_check
+
+MARKET_BILLING.CLIENT_FACTOR
+INCOME_CONTRACT_ID,FREQUENCY,FACTOR
+null,daily,raiffeisen
+null,weekly,raiffeisen
+null,daily,alfa
+null,weekly,alfa
+null,bi-weekly,alfa
+null,daily,sber
+null,weekly,sber
+null,bi-weekly,sber
+null,bi-weekly,market
+null,weekly,market
+4,bi-weekly,raiffeisen
+
+SHOPS_WEB.SUPPLIER_CONTRACT
+SUPPLIER_ID,REQUEST_ID,CLIENT_ID,PERSON_ID,CONTRACT_ID,IS_ACTIVE,CONTRACT_TYPE
+1,1,1,1,1,true,income
+2,2,2,2,2,true,income
+3,3,3,3,3,true,income
+4,4,4,4,4,true,income
+# странный кейс, который есть на проде - в итогую выгрузку попасть должен флаг is_active = true
+5,5,4,4,4,false,income
+
+MARKET_BILLING.PERSON_INFO
+PERSON_ID,INN,OGRN,FULL_NAME,BIK,ACCOUNT,KPP,CUSTOMER_SUBTYPE
+1,111,OGRN1,name1,1,1234567890123456,KPP1,ORGANIZATION
+2,222,OGRN2,name2,2,2234567890123456,KPP2,ORGANIZATION
+3,333,OGRN3,name3,3,3234567890123456,KPP3,ORGANIZATION
+4,444,OGRN4,name4,4,4234567890123456,KPP4,ORGANIZATION
+

@@ -1,0 +1,82 @@
+{% macro metrika_event(eventtime, yandexuid, puid, cryptaid, host, goal, referer) %}
+    [
+        "{{ eventtime }}",
+        "{{ referer }}",
+        "goal://{{ host }}/{{ goal }}",
+        "{\\\"reqId\\\": \\\"73ca4b969cc1213c8fe41a8daac011f9\\\"}",
+        "{{ yandexuid }}",
+        "160656",
+        "0",
+        "browserinfo",
+        "0",
+        "watchid",
+        "clientip6",
+        "{{ puid }}",
+        "{{ cryptaid }}"
+    ]
+{% endmacro %}
+
+{% macro metrika_event_touch(eventtime, yandexuid, puid, cryptaid, goal, referer) %}
+    {{ metrika_event(eventtime, yandexuid, puid, cryptaid, "m.market.yandex.ru", goal, referer) }}
+{% endmacro %}
+
+{% macro metrika_event_desktop(eventtime, yandexuid, puid, cryptaid, goal, referer) %}
+    {{ metrika_event(eventtime, yandexuid, puid, cryptaid, "market.yandex.ru", goal, referer) }}
+{% endmacro %}
+
+{% macro article(article_id, type, semantic_id) %}
+    [
+        "{{ semantic_id }}",
+        "text",
+        "{{ type }}",
+        "title",
+        1,
+        "{{ article_id }}",
+        ["nc01"],
+        ["c01"],
+        ["picture"],
+        1506963677001,
+        ["m01"]
+    ]
+{% endmacro %}
+
+{% macro dwell_time(timestamp, yandexuid, puid, cryptaid, article_id, dwell_time, is_truncated, host) %}
+    [
+        {{ timestamp }},
+        {
+            "yandexuid": "{{ yandexuid }}",
+            "puid": {% if puid %}"{{ puid }}"{% else %}null{% endif %},
+            "cryptaid": {% if cryptaid %}"{{ cryptaid }}"{% else %}null{% endif %}
+        },
+        "dwell_time",
+        "article",
+        "{{ article_id }}",
+        {
+            "dwell_time": "{{ dwell_time }}",
+            "is_truncated": "{{ is_truncated }}",
+            "host": "{{ host }}"
+        },
+        "{{ day }}"
+    ]
+{% endmacro %}
+
+{% if table == "events_article_dwell_time" %}
+    {# Result data. #}
+    {% table "events" %}
+        {{ dwell_time(1506963677000, "Y1", None, "CRYPTA1", "1756786", 900, "true", "market.yandex.ru") }},
+        {{ dwell_time(1506963677000, "Y2", "PUID1", None, "2756786", 10, "false", "m.market.yandex.ru") }}
+    {% endtable %}
+{% elif table == "logfeller_bs_watch_log" %}
+    {% table table %}
+        {{ metrika_event_touch(1506963677, "Y2", "PUID1", "0", "journal-article-page_window-scroll-tracker_window-scroll-tracker-track", "http://m.market.yandex.net/journal/knowledge/semantic-id-knowledge") }},
+        {{ metrika_event_touch(1506963687, "Y2", "PUID1", "0", "journal-article-page_window-scroll-tracker_window-scroll-tracker-track", "http://m.market.yandex.net/journal/knowledge/semantic-id-knowledge") }},
+        {{ metrika_event_desktop(1506963677, "Y1", "0", "CRYPTA1", "scroll-through", "http://m.market.yandex.net/journal/articles/semantic-id-article") }},
+        {{ metrika_event_desktop(1506964677, "Y1", "0", "CRYPTA1", "scroll-through", "http://m.market.yandex.net/journal/articles/semantic-id-article") }}
+    {% endtable %}
+{% elif table == "dj_article" %}
+    {% table table %}
+        {{ article("1756786", "article", "semantic-id-article") }},
+        {{ article("2756786", "knowledge", "semantic-id-knowledge") }},
+        {{ article("fake", "fake", "fake") }}
+    {% endtable %}
+{% endif %}

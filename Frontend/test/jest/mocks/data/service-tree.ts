@@ -1,0 +1,72 @@
+import { OebsTree } from '~/src/features/ServiceTree/redux/types/oebs-tree';
+
+export const getSampleOebsTree = (): OebsTree => ({
+    id: 1,
+    slug: 'abc-1',
+    name: 'ABC-1',
+    nameEn: 'ABC-1',
+    state: 'develop',
+    useForHr: true,
+    useForProcurement: false,
+    useForRevenue: false,
+    useForHardware: true,
+    useForGroup: true,
+    groupOebsId: 1,
+    leafOebsId: 1,
+    childNodes: [{
+        id: 2,
+        slug: 'abc-2',
+        name: 'ABC-2',
+        nameEn: 'ABC-2',
+        state: 'develop',
+        useForHr: false,
+        useForProcurement: true,
+        useForRevenue: false,
+        useForHardware: true,
+        useForGroup: true,
+        groupOebsId: 2,
+        leafOebsId: 2,
+        childNodes: [{
+            id: 3,
+            slug: 'abc-3',
+            name: 'ABC-3',
+            nameEn: 'ABC-3',
+            state: 'develop',
+            useForHr: false,
+            useForProcurement: false,
+            useForRevenue: true,
+            useForHardware: true,
+            useForGroup: true,
+            groupOebsId: 3,
+            leafOebsId: 3,
+        }],
+    }, {
+        id: 4,
+        slug: 'abc-4',
+        name: 'ABC-4',
+        nameEn: 'ABC-4',
+        state: 'develop',
+        useForHr: true,
+        useForProcurement: true,
+        useForRevenue: true,
+        useForHardware: true,
+        useForGroup: true,
+        groupOebsId: 4,
+        leafOebsId: 4,
+    }],
+});
+
+export const getNotFoundError = () => ({
+    data: {
+        detail: 'Not found.',
+        code: 'not_found',
+        title: {
+            ru: 'Не найдено',
+            en: 'Not found',
+        },
+        message: {
+            ru: 'Наши еноты ничего не нашли по вашему запросу',
+            en: 'Our raccoons could not find anything to satisfy your query',
+        },
+    },
+});

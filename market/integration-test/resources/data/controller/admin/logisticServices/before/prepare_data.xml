@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <partner id="1" status="active" type="DROPSHIP" name="Partner 1"/>
+    <partner id="2" status="active" type="SORTING_CENTER" name="Partner 2"/>
+    <partner id="3" status="active" type="DELIVERY" name="Partner 3"/>
+
+    <address id="11"/>
+    <address id="12"/>
+    <address id="13"/>
+
+    <logistics_point
+            id="101"
+            name="Point 101"
+            external_id="warehouse_101"
+            type="WAREHOUSE"
+            address_id="11"
+            active="true"
+    />
+
+    <logistics_point
+            id="102"
+            name="Point 102"
+            external_id="warehouse_102"
+            type="WAREHOUSE"
+            address_id="12"
+            active="true"
+    />
+
+    <logistics_point
+            id="103"
+            name="Point 103"
+            external_id="pickup_point_103"
+            type="PICKUP_POINT"
+            address_id="12"
+            active="true"
+    />
+
+    <service_code
+            id="1"
+            type="internal"
+            code="CASH_SERVICE"
+            name="Вознаграждение за перечисление денежных средств"
+            is_optional="false"
+    />
+    <service_code
+            id="2"
+            type="internal"
+            code="WAIT_20"
+            name="Ожидание курьера"
+            is_optional="false"
+    />
+    <service_code
+            id="3"
+            type="internal"
+            code="INSURANCE"
+            name=" Услуга Объявленная ценность"
+            is_optional="false"
+    />
+    <service_code
+            id="4"
+            type="internal"
+            code="PACK"
+            name=" Упаковка по заявке клиента"
+            is_optional="false"
+    />
+    <service_code
+            id="5"
+            type="internal"
+            code="REPACK"
+            name="Переупаковка по причине испорченной коробки, поступившей на склад сортировки без заявки магазина"
+            is_optional="false"
+    />
+    <service_code
+            id="6"
+            type="internal"
+            code="SORT"
+            name=" Сортировка на едином складе"
+            is_optional="false"
+    />
+    <service_code
+            id="7"
+            type="internal"
+            code="STORAGE"
+            name=" Платное хранение"
+            is_optional="false"
+    />
+    <service_code
+            id="8"
+            type="internal"
+            code="RETURN"
+            name=" Возврат на единый склад"
+            is_optional="true"
+    />
+    <service_code
+            id="9"
+            type="internal"
+            code="UNDEFINED"
+            name=" Неизвестно"
+            is_optional="false"
+    />
+    <service_code
+            id="10"
+            type="internal"
+            code="RETURN_SORT"
+            name=" Сортировка возврата"
+            is_optional="false"
+    />
+
+    <service_code
+            id="11"
+            type="outbound"
+            code="SHIPMENT"
+            name="Отгрузка"
+            is_optional="false"
+    />
+
+    <logistic_segments id="10001" partner_id="1" logistic_point_id="101" location_id="1001" type="warehouse"/>
+    <logistic_segments id="10002" partner_id="2" logistic_point_id="102" location_id="1002" type="movement"/>
+    <logistic_segments id="10003" partner_id="2" logistic_point_id="102" location_id="1002" type="warehouse"/>
+    <logistic_segments id="10004" partner_id="3" logistic_point_id="103" location_id="1003" type="movement"/>
+    <logistic_segments id="10005" partner_id="3" logistic_point_id="103" location_id="1003" type="linehaul"/>
+    <logistic_segments id="10006" partner_id="3" logistic_point_id="103" location_id="1003" type="pickup"/>
+    <logistic_segments id="10007" partner_id="3" logistic_point_id="[null]" location_id="1003" type="handing"/>
+
+    <logistic_segments_services
+            id="10"
+            segment_id="10001"
+            code="1"
+            duration="32"
+            price="113"
+            delivery_type="courier"
+            status="inactive"
+            frozen="false"
+    />
+    <logistic_segments_services
+            id="20"
+            segment_id="10001"
+            code="3"
+            duration="111"
+            price="331"
+            delivery_type="pickup"
+            status="active"
+            frozen="false"
+    />
+    <logistic_segments_services
+            id="30"
+            segment_id="10002"
+            code="10"
+            duration="322"
+            price="98"
+            delivery_type="pickup"
+            status="inactive"
+            frozen="false"
+    />
+    <logistic_segments_services
+            id="40"
+            segment_id="10003"
+            code="4"
+            duration="913"
+            price="54"
+            delivery_type="courier"
+            status="active"
+            frozen="false"
+    />
+
+    <korobyte_restriction id="1" key="TEST"/>
+</dataset>

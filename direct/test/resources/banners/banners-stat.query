@@ -1,0 +1,79 @@
+SELECT
+  B.bid AS bid,
+  B.pid AS pid,
+  B.cid AS cid,
+  first(B.statusBsSynced) AS statusBsSynced,
+  first(B.statusPostModerate) AS statusPostModerate,
+  first(B.type) AS type,
+  first(B.statusSitelinksModerate) AS statusSitelinksModerate,
+  first(B.BannerID) AS BannerID,
+  first(B.statusModerate) AS statusModerate,
+  first(B.phoneflag) AS phoneflag,
+  first(B.opts_geoflag) AS opts_geoflag,
+  first(B.opts_no_display_href) AS opts_no_display_href,
+  first(B.banner_type) AS banner_type,
+  first(B.LastChange) AS LastChange,
+  first(B.statusActive) AS statusActive,
+  first(B.title) AS title,
+  first(B.title_extension) AS title_extension,
+  first(B.body) AS body,
+  first(B.href) AS href,
+  first(B.domain_id) AS domain_id,
+  first(B.domain) AS domain,
+  first(B.reverse_domain) AS reverse_domain,
+  first(B.statusShow) AS statusShow,
+  first(B.statusArch) AS statusArch,
+  first(B.vcard_id) AS vcard_id,
+  first(B.flags) AS flags,
+  first(B.sitelinks_set_id) AS sitelinks_set_id,
+  first(B.bannersInternalTemplateId) AS bannersInternalTemplateId,
+  first(B.bannersInternalDescription) AS bannersInternalDescription,
+  IF(is_null(sum(S.Shows)), 0, sum(S.Shows)) AS shows,
+  IF(is_null(sum(S.Clicks)), 0, sum(S.Clicks)) AS clicks,
+  IF(is_null(sum(IF(S.CurrencyID = 0, ((S.Cost * 100) / 118), S.CostTaxFree))), 0, sum(IF(S.CurrencyID = 0, ((S.Cost * 100) / 118), S.CostTaxFree))) AS cost,
+  IF(is_null(sum(S.CostCur)), 0, sum(S.CostCur)) AS costWithTax,
+  IF(is_null(sum(S.PriceCur)), 0, sum(S.PriceCur)) AS revenue,
+  IF(is_null(sum(S.GoalsNum)), 0, sum(S.GoalsNum)) AS goals,
+  IF(shows > 0, ((cost / shows) * 1000), 0) AS cpmPrice,
+  IF(is_null(sum(S.FirstPageClicks)), 0, sum(S.FirstPageClicks)) AS firstPageClicks,
+  IF(is_null(sum(S.FirstPageShows)), 0, sum(S.FirstPageShows)) AS firstPageShows,
+  IF(is_null(sum(S.FirstPageSumPosClicks)), 0, sum(S.FirstPageSumPosClicks)) AS firstPageSumPosClicks,
+  IF(is_null(sum(S.FirstPageSumPosShows)), 0, sum(S.FirstPageSumPosShows)) AS firstPageSumPosShows,
+  IF(is_null(sum(IF(S.IsRMP, S.Clicks, S.SessionNum))), 0, sum(IF(S.IsRMP, S.Clicks, S.SessionNum))) AS sessions,
+  IF(is_null(sum(S.SessionNumLimited)), 0, sum(S.SessionNumLimited)) AS sessionsLimited,
+  IF(is_null(sum(S.Bounces)), 0, sum(S.Bounces)) AS bounces,
+  IF(is_null(sum(S.SessionDepth)), 0, sum(S.SessionDepth)) AS sessionDepth,
+  IF(shows > 0, ((clicks * 100000000) / shows), 0) AS ctr,
+  IF(clicks > 0, (cost / clicks), 0) AS avgClickCost,
+  IF(firstPageShows > 0, ((firstPageSumPosShows * 1000000) / firstPageShows), 0) AS avgShowPosition,
+  IF(firstPageClicks > 0, ((firstPageSumPosClicks * 1000000) / firstPageClicks), 0) AS avgClickPosition,
+  IF(sessionsLimited > 0, ((bounces * 100000000) / sessionsLimited), 0) AS bounceRate,
+  IF(sessionsLimited > 0, ((sessionDepth * 1000000) / sessionsLimited), 0) AS avgDepth,
+  IF(clicks > 0, ((goals * 100000000) / clicks), 0) AS conversionRate,
+  IF(goals > 0, (cost / goals), null) AS avgGoalCost,
+  IF((
+    cost > 0
+    AND revenue > 0
+  ), ((double((revenue - cost)) * 1000000.0) / double(cost)), null) AS profitability,
+  IF((
+    cost > 0
+    AND revenue > 0
+  ), ((double(cost) * 100000000.0) / double(revenue)), null) AS crr
+FROM yt.bannerstable_direct AS B
+  LEFT OUTER JOIN yt.DirectPhraseStatV2_bs AS S
+  ON (
+    (B.cid, B.pid, B.bid) = (S.ExportID, S.GroupExportID, S.DirectBannerID)
+    AND S.UpdateTime = 1546290000
+  )
+WHERE B.bid IN (11)
+GROUP BY
+  bid,
+  pid,
+  cid,
+  B.cid_hash,
+  B.__shard__
+ORDER BY
+  cid,
+  pid,
+  bid
+LIMIT 1000

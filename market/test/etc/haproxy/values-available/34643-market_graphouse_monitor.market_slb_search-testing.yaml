@@ -1,0 +1,30 @@
+# Параметры обработки
+params:
+  default:
+    resolve: true
+    templates:
+      - user_mslb_http.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          check observe layer7
+      on_error:       fastinter
+    globals:
+      service_name:   market-graphouse-monitor.tst.vs.market.yandex.net
+      service_port:   2005
+      addr_ip6:       2a02:6b8:0:3400:0:3c9:0:253
+    meta:
+      monrun_ignore:  yes
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+      - name: "YP@market-infra_market-graphouse_testing.graphouse"
+        dns_resolvers: "yandex-ns"
+        resolve: false        
+        port:       2005
+        check_port: 2005
+        sort_order: shuffled

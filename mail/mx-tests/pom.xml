@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>ru.yandex.autotests</groupId>
+        <artifactId>innerpochta-mx</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>mx-tests</artifactId>
+    <packaging>jar</packaging>
+
+
+    <name>Autotests Mail MX Tests</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mx-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.yandex.autotests</groupId>
+            <artifactId>imap-steps</artifactId>
+            <version>2.0-SNAPSHOT</version>
+        </dependency>
+
+
+
+
+    </dependencies>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <artifactId>testpers-api-report-plugin</artifactId>
+                <groupId>ru.yandex.autotests.plugins</groupId>
+                <version>1.3-SNAPSHOT</version>
+                <configuration>
+                    <name>Mail Mx Report</name>
+                    <description>Mail Mx Report</description>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>ru.yandex.qatools.allure</groupId>
+                <artifactId>allure-maven-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <resultsPattern>**/allure-maven-plugin</resultsPattern>
+                    <outputDirectory>${project.build.directory}/site/allure-maven-plugin</outputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+</project>

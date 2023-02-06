@@ -1,0 +1,21 @@
+module.exports = [
+    { name: 'ywOpenPage', fn: require('./ywOpenPage').ywOpenPage },
+    { name: 'ywOpenMeteumPage', fn: require('./ywOpenPage').ywOpenMeteumPage },
+    { name: 'ywWaitForVisible', fn: require('./ywWaitForVisible') },
+    { name: 'ywHideCamerasAndNews', fn: require('./ywHideCamerasAndNews') },
+    { name: 'ywDeletePromos', fn: require('./ywDeletePromos') },
+    { name: 'ywDeleteLoader', fn: require('./ywDeleteLoader') },
+    { name: 'ywAssertAdv', fn: require('./ywAssertAdv') },
+    { name: 'ywHidePopup', fn: require('./ywHidePopup') },
+    { name: 'ywInitLazyLoading', fn: require('./ywInitLazyLoading') },
+    { name: 'ywGetBrowserLog', fn: require('./ywGetBrowserLog') },
+    { name: 'ywRemoveShadowFromContainer', fn: require('./ywRemoveShadowFromContainer') },
+    { name: 'ywStopSkeletonAnimation', fn: require('./ywStopSkeletonAnimation') },
+    { name: 'ywDisguiseAllDetailsBlocks', fn: require('./ywDisguiseAllDetailsBlocks') },
+    { name: 'ywDisguiseAllIndexBlocks', fn: require('./ywDisguiseAllIndexBlocks') },
+    { name: 'ywDisguiseAllMonthBlocks', fn: require('./ywDisguiseAllMonthBlocks') },
+    { name: 'ywAppendStyle', fn: require('./ywAppendStyle') },
+    { name: 'ywSetYSFont', fn: require('./ywSetYSFont') },
+    { name: 'ywCheckElementA11y', fn: require('./ywCheckElementA11y') },
+    { name: 'ywHideElems', fn: require('./ywHideElems') }
+];

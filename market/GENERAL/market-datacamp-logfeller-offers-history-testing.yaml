@@ -1,0 +1,30 @@
+juggler:
+  checks:
+    - service: logfeller-offers-history-testing
+      meta:
+        urls:
+          - title: Траблшутинг
+            url: https://wiki.yandex-team.ru/logfeller/faq/
+      children:
+        - logfeller-offers-history-testing:hahn-logfeller-offers-history-testing-5min
+        - logfeller-offers-history-testing:arnold-logfeller-offers-history-testing-5min
+        - logfeller-offers-history-testing:hahn-logfeller-offers-history-testing-30min
+        - logfeller-offers-history-testing:arnold-logfeller-offers-history-testing-30min
+        - logfeller-offers-history-testing:hahn-logfeller-offers-history-testing-1d
+        - logfeller-offers-history-testing:arnold-logfeller-offers-history-testing-1d
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    check_options: { }
+    namespace: market.datacamp
+    notifications: [ ]
+    refresh_time: 60
+    ttl: 600
+    host: logfeller-offers-history-testing
+    tags:
+      - market_indexer_datacamp
+      - market_testing
+      - testing
+      - market
+      - _market_

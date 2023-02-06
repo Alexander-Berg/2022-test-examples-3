@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="clicksBoundaryDefinition"
+          class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.MigrationBoundaryDefinition">
+        <constructor-arg name="oracleLifeTime" value="#{T(java.time.Duration).ofDays(7)}"/>
+        <constructor-arg name="dateTimeAccuracy" value="DAYS"/>
+        <constructor-arg name="partitionsInterval" value="#{T(java.time.Duration).ofDays(1)}"/>
+        <property name="partitionKeyFormatter"
+                  value="#{T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM[-dd]')}"/>
+    </bean>
+
+    <beans profile="migration">
+        <bean id="migrationProcess"
+              class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.MigrationProcessDefinition">
+            <constructor-arg name="oracleArchiverOperations" ref="migrationClicksService"/>
+            <constructor-arg name="samplesCount" value="10"/>
+            <constructor-arg name="boundaryDefinition" ref="clicksBoundaryDefinition"/>
+            <property name="yqlTablePath" value="clicks"/>
+        </bean>
+
+        <bean id="migrationJob"
+              class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.MigrationJobDefinition">
+            <constructor-arg name="jobName" value="migrateClicksExecutor"/>
+            <constructor-arg name="boundaryDefinition" ref="clicksBoundaryDefinition"/>
+            <property name="yqlEntityName" value="CLICKS"/>
+        </bean>
+    </beans>
+</beans>

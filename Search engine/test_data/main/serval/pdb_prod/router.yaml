@@ -1,0 +1,90 @@
+urls: urls
+headers:
+  h-authorization: authorization
+  tag_user: x-yandex-icookie
+cookies:
+  login: yandex_login
+export:
+  - h-authorization
+  - tag_user
+  - login
+
+router:
+  - map: urls
+    data:
+      - key: /api/boards
+        router:
+          - not-empty: login
+            quota: post_api_boards_login
+        quota: post_api_boards
+      - key: /collections/api/boards
+        router:
+          - not-empty: login
+            quota: post_api_boards_login
+        quota: post_api_boards_icookie
+      - key: /api/v1.0/boards
+        router:
+          - not-empty: login
+            quota: post_api_boards_login
+        quota: post_api_boards_icookie
+      - key: /collections/api/v1.0/boards
+        router:
+          - not-empty: login
+            quota: post_api_boards_login
+        quota: post_api_boards_icookie
+      - key: /api/comments
+        quota: post_api_comments
+      - key: /collections/api/comments
+        quota: post_api_comments
+      - key: /api/subscriptions
+        quota: post_api_subscriptions
+      - key: /collections/api/subscriptions
+        quota: post_api_subscriptions
+      - key: /api/cards
+        router:
+          - not-empty: login
+            quota: post_api_cards_login
+        quota: post_api_cards_icookie
+      - key: /collections/api/cards
+        router:
+          - not-empty: login
+            quota: post_api_cards_login
+        quota: post_api_cards_icookie
+      - key: /api/v1.0/cards
+        router:
+          - not-empty: login
+            quota: post_api_cards_login
+        quota: post_api_cards_icookie
+      - key: /collections/api/v1.0/cards
+        router:
+          - not-empty: login
+            quota: post_api_cards_login
+        quota: post_api_cards_icookie
+      - key: /api/pages
+        router:
+          - not-empty: login
+            quota: post_api_pages_login
+        quota: post_api_pages_icookie
+      - key: /collections/api/pages
+        router:
+          - not-empty: login
+            quota: post_api_pages_login
+        quota: post_api_pages_icookie
+      - key: /api/cards/bulk
+        quota: post_api_cards_bulk
+      - key: /collections/api/cards/bulk
+        quota: post_api_cards_bulk
+      - key: /api/content
+        router:
+          - not-empty: login
+            quota: post_api_content_login
+        quota: post_api_content_icookie
+      - key: /collections/api/content
+        router:
+          - not-empty: login
+            quota: post_api_content_login
+        quota: post_api_content_icookie
+      - key: /api/favorites/cards
+        quota: post_api_favorites_cards
+      - key: /collections/api/favorites/cards
+        quota: post_api_favorites_cards

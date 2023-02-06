@@ -1,0 +1,369 @@
+bin_path = "travel/cpa/data_processing/update_orders/update_orders"
+
+args = [
+    "--category", "train",
+    "--yt-proxy", "%(yt_proxy)s",
+    "--skip-set-media-attribute",
+    "--stocks-url", "%(stocks_server_url)s",
+    "--src-dir", "//home/tests/update_orders",
+    "--dst-dir", "//home/tests/update_orders",
+]
+
+checkers = [
+    "stocks",
+    "yt",
+]
+
+
+[stocks]
+    check_type = "http"
+    mime_type = "apllication/json"
+
+[[stocks.responses]]
+    path = "/graph_23.json"
+    data_file = "stocks_EUR.json"
+
+[[stocks.responses]]
+    path = "/graph_1.json"
+    data_file = "stocks_USD.json"
+
+[[stocks.responses]]
+    path = "/graph_10009.json"
+    data_file = "stocks_KZT.json"
+
+[[stocks.responses]]
+    path = "/graph_10011.json"
+    data_file = "stocks_TRY.json"
+
+[[stocks.responses]]
+    path = "/graph_10018.json"
+    data_file = "stocks_CNY.json"
+
+[[stocks.responses]]
+    path = "/graph_10022.json"
+    data_file = "stocks_AZN.json"
+
+[[stocks.responses]]
+    path = "/graph_10006.json"
+    data_file = "stocks_UAH.json"
+
+[[stocks.responses]]
+    path = "/graph_10007.json"
+    data_file = "stocks_CHF.json"
+
+
+[[stocks.responses]]
+    path = "/23.xml"
+    data_file = "meta_EUR.xml"
+
+[[stocks.responses]]
+    path = "/1.xml"
+    data_file = "meta_USD.xml"
+
+[[stocks.responses]]
+    path = "/10009.xml"
+    data_file = "meta_KZT.xml"
+
+[[stocks.responses]]
+    path = "/10011.xml"
+    data_file = "meta_TRY.xml"
+
+[[stocks.responses]]
+    path = "/10018.xml"
+    data_file = "meta_CNY.xml"
+
+[[stocks.responses]]
+    path = "/10022.xml"
+    data_file = "meta_AZN.xml"
+
+[[stocks.responses]]
+    path = "/10006.xml"
+    data_file = "meta_UAH.xml"
+
+[[stocks.responses]]
+    path = "/10007.xml"
+    data_file = "meta_CHF.xml"
+
+[yt.input.snapshots]
+    path = "//home/tests/update_orders/order_snapshots"
+    sort_by = ["partner_name", "partner_order_id"]
+
+[[yt.input.snapshots.data]]
+    partner_order_id = "YA-01"
+    travel_order_id = "im_boy:YA-01"
+    category = "train"
+    partner_name = "im_boy"
+    created_at = 1580479665
+    updated_at = 1580510000
+    status = "pending"
+    currency_code = "RUB"
+    order_amount = 4000.1
+    profit_amount = 0.0
+    label = "proto_label_0"
+    source_partner = "partner_0"
+    partner_data_provider = "P1"
+    source_icookie = ""
+
+    adult_passengers_count = 0
+    bought_insurance_count = 0
+    children_with_seats_count = 0
+    children_without_seats_count = 0
+    departure = 0
+    insurance_auto_return = false
+    payment_attempts = 0
+    payment_use_deferred_clearing = true
+    rebooking_available = true
+    rebooked = false
+    refunded_ticket_count = 0
+    refunds_count = 0
+    requested_ticket_count = 0
+    tickets_with_places_count = 0
+    tickets_without_places_count = 0
+    total_fee_amount = 0.0
+    total_insurance_amount = 0.0
+    total_insurance_profit_amount = 0.0
+    total_partner_fee_amount = 0.0
+    total_partner_refund_fee_amount = 0.0
+    total_refund_fee_amount = 0.0
+    total_refund_insurance_amount = 0.0
+    total_refund_ticket_amount = 0.0
+    total_service_amount = 0.0
+    total_tariff_amount = 0.0
+    total_ticket_count = 0
+    train_internal_status = ""
+    train_number = ""
+    train_ticket_number = ""
+    two_storey = true
+    uid = ""
+    user_ip = ""
+    user_region_id = 0
+    non_refundable_tickets_count = 0
+
+# order without label
+[[yt.input.snapshots.data]]
+    partner_order_id = "YA-02"
+    travel_order_id = "im_boy:YA-02"
+    category = "train"
+    partner_name = "im_boy"
+    created_at = 1580489666
+    updated_at = 1580520000
+    status = "cancelled"
+    currency_code = "RUB"
+    order_amount = 100.1
+    profit_amount = 0.0
+    source_partner = "label_partner_1"
+    partner_data_provider = "P2"
+
+    adult_passengers_count = 0
+    bought_insurance_count = 0
+    children_with_seats_count = 0
+    children_without_seats_count = 0
+    departure = 0
+    insurance_auto_return = false
+    payment_attempts = 0
+    payment_use_deferred_clearing = true
+    rebooking_available = true
+    rebooked = false
+    refunded_ticket_count = 0
+    refunds_count = 0
+    requested_ticket_count = 0
+    tickets_with_places_count = 0
+    tickets_without_places_count = 0
+    total_fee_amount = 0.0
+    total_insurance_amount = 0.0
+    total_insurance_profit_amount = 0.0
+    total_partner_fee_amount = 0.0
+    total_partner_refund_fee_amount = 0.0
+    total_refund_fee_amount = 0.0
+    total_refund_insurance_amount = 0.0
+    total_refund_ticket_amount = 0.0
+    total_service_amount = 0.0
+    total_tariff_amount = 0.0
+    total_ticket_count = 0
+    train_internal_status = ""
+    train_number = ""
+    train_ticket_number = ""
+    two_storey = true
+    uid = ""
+    user_ip = ""
+    user_region_id = 0
+    non_refundable_tickets_count = 0
+
+[yt.input.labels]
+    path = "//home/tests/update_orders/train/labels"
+    sort_by = ["label"]
+
+[[yt.input.labels.data]]
+    label = "proto_label_0"
+    label_yandex_uid = "label_yandex_uid_0"
+    label_wizard_req_id = "proto_wizard_req_id"
+    label_serp_test_id = "proto_serp_test_id"
+    label_ytp_referer = "proto_test_referer"
+    source_partner = "label_partner_0"
+    source_icookie = "label_icookie_0"
+
+[[yt.input.labels.data]]
+    label = "proto_label_1"
+    label_yandex_uid = "label_yandex_uid_1"
+
+[yt.output.orders]
+    path = "//home/tests/update_orders/train/orders"
+    ignore_unknown_fields = true
+    fields_to_skip = [
+        "status_explanation",
+        "suspicious_explanation",
+        "first_seen_at",
+        "updated_at",
+        "is_suspicious"
+    ]
+
+[[yt.output.orders.data]]
+    partner_name = "im_boy"
+    travel_order_id = "im_boy:YA-01"
+    partner_order_id = "YA-01"
+    category = "train"
+    created_at = 1580479665
+    status = "pending"
+    currency_code = "RUB"
+    order_amount = 4000.1
+    order_amount_rub = 4000.1
+    profit_amount = 0.0
+    profit_amount_rub = 0.0
+    partner_data_provider = "P1"
+
+    label = "proto_label_0"
+    label_yandex_uid = "label_yandex_uid_0"
+    label_wizard_req_id = "proto_wizard_req_id"
+    label_serp_test_id = "proto_serp_test_id"
+    label_ytp_referer = "proto_test_referer"
+    source_partner = "label_partner_0"
+    source_icookie = "label_icookie_0"
+    source_gclid = ""
+    source_req_id = ""
+    source_utm_content = ""
+    source_utm_medium = ""
+    label_uid = ""
+    label_ip = ""
+    source_partner_uid = ""
+    source_test_buckets = ""
+    source_utm_source = ""
+    source_terminal = ""
+    source_utm_term = ""
+    source_from = ""
+    source_utm_campaign = ""
+    source_subpartner = ""
+    source_is_transfer = false
+    label_region_id = 0
+    source_serp_uuid = ""
+    has_label = true
+    source_device = ""
+
+    adult_passengers_count = 0
+    bought_insurance_count = 0
+    children_with_seats_count = 0
+    children_without_seats_count = 0
+    departure = 0
+    insurance_auto_return = false
+    payment_attempts = 0
+    payment_use_deferred_clearing = true
+    rebooking_available = true
+    rebooked = false
+    refunded_ticket_count = 0
+    refunds_count = 0
+    requested_ticket_count = 0
+    tickets_with_places_count = 0
+    tickets_without_places_count = 0
+    total_fee_amount = 0.0
+    total_insurance_amount = 0.0
+    total_insurance_profit_amount = 0.0
+    total_partner_fee_amount = 0.0
+    total_partner_refund_fee_amount = 0.0
+    total_refund_fee_amount = 0.0
+    total_refund_insurance_amount = 0.0
+    total_refund_ticket_amount = 0.0
+    total_service_amount = 0.0
+    total_tariff_amount = 0.0
+    total_ticket_count = 0
+    train_internal_status = ""
+    train_number = ""
+    train_ticket_number = ""
+    two_storey = true
+    uid = ""
+    user_ip = ""
+    user_region_id = 0
+    non_refundable_tickets_count = 0
+
+[[yt.output.orders.data]]
+    partner_name = "im_boy"
+    travel_order_id = "im_boy:YA-02"
+    partner_order_id = "YA-02"
+    category = "train"
+    created_at = 1580489666
+    status = "cancelled"
+    currency_code = "RUB"
+    order_amount = 100.1
+    order_amount_rub = 100.1
+    profit_amount = 0.0
+    profit_amount_rub = 0.0
+    source_partner = "label_partner_1"
+    has_label = false
+    partner_data_provider = "P2"
+
+    source_gclid = ""
+    source_req_id = ""
+    source_utm_content = ""
+    source_utm_medium = ""
+    label_uid = ""
+    label_ip = ""
+    label_wizard_req_id = ""
+    label_serp_test_id = ""
+    label_ytp_referer = ""
+    source_partner_uid = ""
+    source_test_buckets = ""
+    source_utm_source = ""
+    source_terminal = ""
+    label_yandex_uid = ""
+    source_utm_term = ""
+    source_from = ""
+    source_utm_campaign = ""
+    source_icookie = ""
+    source_subpartner = ""
+    source_is_transfer = false
+    label_region_id = 0
+    source_serp_uuid = ""
+    source_device = ""
+
+    adult_passengers_count = 0
+    bought_insurance_count = 0
+    children_with_seats_count = 0
+    children_without_seats_count = 0
+    departure = 0
+    insurance_auto_return = false
+    payment_attempts = 0
+    payment_use_deferred_clearing = true
+    rebooking_available = true
+    rebooked = false
+    refunded_ticket_count = 0
+    refunds_count = 0
+    requested_ticket_count = 0
+    tickets_with_places_count = 0
+    tickets_without_places_count = 0
+    total_fee_amount = 0.0
+    total_insurance_amount = 0.0
+    total_insurance_profit_amount = 0.0
+    total_partner_fee_amount = 0.0
+    total_partner_refund_fee_amount = 0.0
+    total_refund_fee_amount = 0.0
+    total_refund_insurance_amount = 0.0
+    total_refund_ticket_amount = 0.0
+    total_service_amount = 0.0
+    total_tariff_amount = 0.0
+    total_ticket_count = 0
+    train_internal_status = ""
+    train_number = ""
+    train_ticket_number = ""
+    two_storey = true
+    uid = ""
+    user_ip = ""
+    user_region_id = 0
+    non_refundable_tickets_count = 0

@@ -1,0 +1,29 @@
+{
+  "owner": "mbidevops",
+  "tableName": "market_payment_query_profiler",
+  "splits": {
+    "dc": "if(substring(host, 1, 3) in ('iva', 'man', 'vla', 'sas'), substring(host, 1, 3), if(endsWith(host, 'yp-c.yandex.net'), substring(host, position(host, '.') + 1, 3), if(dictGetString('dc', 'dc', sipHash64(host)) <> '', dictGetString('dc', 'dc', sipHash64(host)), 'undefined_dc')))",
+    "host": "host",
+    "method": "url",
+    "type": "type",
+    "queryType": "queryType"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "market_payment.queryprofiler.timings.testing.${dc}.${type}",
+        "market_payment.queryprofiler.timings.testing.${dc}.${type}.${queryType}",
+        "market_payment.queryprofiler.timings.testing.${dc}.paged.${method}.${type}",
+        "market_payment.queryprofiler.timings.testing.${dc}.paged.${method}.${type}.${queryType}",
+        "market_payment.queryprofiler.timings.testing.${type}",
+        "market_payment.queryprofiler.timings.testing.${type}.${queryType}",
+        "market_payment.queryprofiler.timings.testing.paged.${method}.${type}",
+        "market_payment.queryprofiler.timings.testing.paged.${method}.${type}.${queryType}"
+      ],
+      "period": "FIVE_MIN",
+      "type": "QUANTILE_TIMING",
+      "metricField": "duration",
+      "filter": "host like '%test%'"
+    }
+  ]
+}

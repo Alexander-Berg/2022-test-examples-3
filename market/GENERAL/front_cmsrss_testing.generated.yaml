@@ -1,0 +1,107 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый front_cmsrss_testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dfront_cmsrss_testing
+
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=front_cmsrss_testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_front_cms_rss_sas
+    - NANNY%testing_market_front_cms_rss_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: disk_free_space
+    tags:
+    - market_testing
+    - market_rtc
+    - market
+    - _market_
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=front_cmsrss_testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_front_cms_rss_sas
+    - NANNY%testing_market_front_cms_rss_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: logrotate
+    tags:
+    - market_testing
+    - market_rtc
+    - market
+    - _market_
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=front_cmsrss_testing&service=ping&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /ping
+      regexp: ^0;
+      warn_codes: []
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_front_cms_rss_sas:ping:all
+    - NANNY%testing_market_front_cms_rss_vla:ping:all
+    service: ping
+    tags:
+    - market_testing
+    - market_rtc
+    - market
+    - _market_
+    - ping
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=front_cmsrss_testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_front_cms_rss_sas
+    - NANNY%testing_market_front_cms_rss_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: push-client-status
+    tags:
+    - market_testing
+    - market_rtc
+    - market
+    - _market_
+  default:
+    check_options: {}
+    host: front_cmsrss_testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    ttl: 900

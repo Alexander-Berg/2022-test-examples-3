@@ -1,0 +1,74 @@
+service: direct
+title: Steps
+ci:
+  release-title-source: flow
+  secret: sec-01exf1rgke9yja9hy2h26sxpx7
+  runtime:
+    sandbox-owner: DIRECT
+  releases:
+    deploy-layer-release:
+      title: Release Steps to Yandex Deploy
+      flow: release-deploy-layer-flow
+      stages:
+        build-stage:
+          title: build
+        deploy-stage:
+          title: deploy
+  flows:
+    release-deploy-layer-flow:
+      title: Release Steps to Yandex Deploy
+      jobs:
+        build-job:
+          title: Build test-steps layer
+          stage: build-stage
+          task: projects/direct/direct_ya_package
+          input:
+            packages: direct/apps/test-steps/package-steps-yadeploy.json
+            resource_type: DIRECT_STEPS_DEPLOY_PACKAGE
+            package_type: tarball
+            arcadia_patch: https://paste.yandex-team.ru/9358336/text
+
+        release-test-job:
+          task: common/deploy/create_release
+          needs: build-job
+          title: Deploy to direct-steps-test
+          manual: false
+          input:
+            config:
+              stage_id: direct-steps-test
+              patches:
+              - sandbox:
+                  sandbox_resource_type: DIRECT_STEPS_DEPLOY_PACKAGE
+                  static:
+                    deploy_unit_id: steps
+                    layer_ref: steps
+
+        release-devtest-job:
+          task: common/deploy/create_release
+          needs: build-job
+          title: Deploy to direct-steps-devtest
+          manual: false
+          input:
+            config:
+              stage_id: direct-steps-devtest
+              patches:
+              - sandbox:
+                  sandbox_resource_type: DIRECT_STEPS_DEPLOY_PACKAGE
+                  static:
+                    deploy_unit_id: steps
+                    layer_ref: steps
+
+        release-dev7-job:
+          task: common/deploy/create_release
+          needs: build-job
+          title: Deploy to direct-steps-dev7
+          manual: false
+          input:
+            config:
+              stage_id: direct-steps-dev7
+              patches:
+              - sandbox:
+                  sandbox_resource_type: DIRECT_STEPS_DEPLOY_PACKAGE
+                  static:
+                    deploy_unit_id: steps
+                    layer_ref: steps

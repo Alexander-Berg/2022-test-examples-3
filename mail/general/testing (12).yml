@@ -1,0 +1,39 @@
+base: app/config/base.yml
+config:
+    system:
+        daemon: 1
+        dir: {dir}
+        pid: {pid}
+    modules:
+        module:
+        -   _name: tvm
+            configuration:
+                my_tvm_id: &tmv_service_id 2025290
+        -   _name: mdb
+            configuration:
+                sharpei:
+                    host: sharpei-testing.mail.yandex.net
+                pg:
+                    user: mxback
+        -   _name: mdb_sync
+            configuration:
+                sharpei:
+                    host: sharpei-testing.mail.yandex.net
+                pg:
+                    user: mxback
+        -   _name: web_server
+            configuration:
+                endpoints:
+                    listen:
+                    -   addr: '::'
+                        port: {webserver_port}
+                ssl:
+                    cert_file: app/secrets/dev-cert.pem
+                    key_file: app/secrets/dev-key.pem
+        -   _name: web
+            configuration:
+                tvm_guard:
+                    root_client_id: *tmv_service_id
+                    clients:
+                    -   name: nsls
+                        id: 2008447

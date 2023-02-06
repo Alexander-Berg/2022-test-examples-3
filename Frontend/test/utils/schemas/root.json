@@ -1,0 +1,50 @@
+{
+  "type": "object",
+  "properties": {
+    "info": {
+      "type": "object",
+      "properties": {
+        "app_req_id": {"type": "string"},
+        "req_id": {"type": "string"},
+        "serpid": {"type": "string"},
+        "porno": {"type": "integer"},
+        "debug_host": {"type": "string"},
+        "show_split_view": {"type": "integer"}
+      },
+      "required": ["app_req_id", "req_id", "serpid", "porno", "debug_host", "show_split_view"],
+      "additionalProperties": false
+    },
+    "docs": {
+      "type": "array",
+      "items": [{
+        "type": "object",
+        "properties": {
+          "type": {"const": "sites"},
+          "info": {
+            "type": "object",
+            "properties": {
+              "cur_page": {"type": "integer"},
+              "last_page": {"type": "integer"},
+              "numdocs": {"type": "integer"},
+              "numitems": {"type": "integer"},
+              "request": {"type": "string"},
+              "text_to_show": {"type": "string"},
+              "region_id": {"type": "integer"},
+              "serpid": {"type": "string"}
+            },
+            "required": ["cur_page", "last_page", "numdocs", "numitems", "request", "text_to_show", "region_id", "serpid"],
+            "additionalProperties": false
+          },
+          "list": {
+            "type": "array",
+            "minItems": 6
+          }
+        },
+        "required": ["type", "info", "list"],
+        "additionalProperties": false
+      }]
+    }
+  },
+  "required": ["info", "docs"],
+  "additionalProperties": false
+}

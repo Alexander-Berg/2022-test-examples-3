@@ -1,0 +1,28 @@
+{% set table = table|default("statistics") %}
+
+{% set history = history|default(1) %}
+
+{% macro event(place, batch) %}
+    [
+        1516620000000,
+        {"yandexuid": "987654321", "uuid": null, "puid": null},
+        "{{ action }}",
+        "article",
+        "1731461904",
+        {"place": "{{ place }}", "session": "{{ batch + day|string }}"},
+        "{{ day }}"
+    ]
+{% endmacro %}
+
+{% if table == "statistics" %}
+    {% table "statistics" %}
+        ["TouchUgcFeedArticle", "Total", "total", {{ 2.0 * history }}, "{{ day }}"],
+        ["TouchUgcFeed", "Total", "total", {{ 2.0 * history }}, "{{ day }}"],
+        ["MarketUgcFeed", "Total", "total", {{ 2.0 * history }}, "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_feed_actions" %}
+    {% table "events" %}
+        {{ event("TouchUgcFeedArticle", "1") }},
+        {{ event("TouchUgcFeedArticle", "2") }}
+    {% endtable %}
+{% endif %}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property resource="wrap-secrets.properties"/>
+    <include resource="logback/appender/jetty_pool.xml"/>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${LOG_FILE}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <maxHistory>7</maxHistory>
+            <fileNamePattern>${LOG_PATH}/archive/${LOG_FILE}-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d [%thread] [requestId=%X{requestId:-NA}] %-5level %logger{35} - %replace(%replace(%msg){'[\r\n]+',' '}){'${fulfillment.marschroute.api.key}','{api_key}'} %replace(%replace(%ex{30}){'[\r\n]+', ' '}){'${fulfillment.marschroute.api.key}','{api_key}'}%n</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="REQUEST_TRACE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${LOG_FILE}-trace.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <maxHistory>7</maxHistory>
+            <fileNamePattern>${LOG_PATH}/archive/${LOG_FILE}-trace-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%replace(%m){'${fulfillment.marschroute.api.key}','{api_key}'}{}%n</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="FILE"/>
+    </root>
+
+    <logger name="requestTrace" level="TRACE" additivity="false">
+        <appender-ref ref="REQUEST_TRACE"/>
+    </logger>
+    <logger name="JettyMonitoring" level="DEBUG" additivity="false">
+        <appender-ref ref="JETTY_POOL"/>
+    </logger>
+</configuration>

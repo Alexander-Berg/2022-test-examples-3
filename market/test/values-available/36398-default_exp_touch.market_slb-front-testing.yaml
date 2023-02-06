@@ -1,0 +1,21 @@
+# -> mproxy -> haproxy: 30008-market_front_touch.market_slb-front-testing.yaml
+# old: 967-touch_default.market_slb-front-testing.yaml
+
+context:
+  default:
+    service_name: default_exp_touch
+    servername_regexp: 'default\\.exp-touch\\.tst\\.market\\.yandex\\.(ru|by|kz|ua|com)'
+    vs: default_exp_touch
+    antirobot: true
+    antirobot_service_name: market
+    health_check: '"GET /ping HTTP/1.1\r\nHost: default.exp-touch.tst.market.yandex.ru\r\n\r\n"'
+    cert: default.exp-touch.tst.vs.market.yandex.net
+    priority: 1000
+
+servers:
+  default:
+    main:
+    - name: "GREY%market-front-touch.tst.vs.market.yandex.net"
+      plain_http_backend: True
+      port: 9080
+      timeout: "35s"

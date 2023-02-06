@@ -1,0 +1,43 @@
+{
+  "rules": [
+    {
+      "conditions": [
+        {
+          "predicate": {
+            "type": "attribute",
+            "parameter": "obj",
+            "filter": {
+              "type": "eq",
+              "attribute": "simple1@linked.simple2@ruleCondition3",
+              "value": [
+                "cat"
+              ]
+            }
+          },
+          "positiveBranch": {
+            "rules": [
+              {
+                "actions": [
+                  {
+                    "type": "edit",
+                    "parameter": "obj",
+                    "entityPath": "simple1@linked",
+                    "properties": [
+                      {
+                        "code": "simple2@ruleResult",
+                        "value": {
+                          "type": "raw",
+                          "value": "success"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

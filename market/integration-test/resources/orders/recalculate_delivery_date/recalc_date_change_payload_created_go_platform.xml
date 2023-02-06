@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <orders
+            id="1001"
+            external_id="1002"
+
+            route_uuid="00000000-0000-0000-0000-000000000001"
+    />
+
+    <change_order_request
+            order_id="1001"
+            status="REJECTED"
+            request_type="RECALCULATE_ROUTE_DATES"
+            waybill_segment_id="1"
+    />
+
+    <change_order_request_payloads
+            id="1"
+            change_order_request_id="1"
+            payload='{
+            "startTime": 1628199325,
+            "serviceCode": "SHIPMENT",
+            "segmentStatus": "OUT"
+            }'
+            change_order_request_status="CREATED"
+    />
+
+    <change_order_request_payloads
+            id="2"
+            change_order_request_id="1"
+            payload='{
+              "oldDeliveryDateMin": "2021-06-06",
+              "oldDeliveryDateMax": "2021-06-07",
+              "oldStartTime": "10:00:00",
+              "oldEndTime": "15:00:00",
+              "deliveryDateMin": "2021-08-20",
+              "deliveryDateMax": "2021-08-30",
+              "startTime": "16:00:00",
+              "endTime": "17:00:00",
+              "routeUuid": "92b2a721-8e98-4b4a-8f86-a045d570e036",
+              "oldRouteUuid": "00000000-0000-0000-0000-000000000001"
+            }'
+            change_order_request_status="REJECTED"
+    />
+
+    <order_history_event
+            order_id="1001"
+            diff="[{
+                'op':'replace',
+                'fromValue':'CREATED',
+                'path':'/changeOrderRequests/0/status',
+                'value':'REJECTED'
+            },
+            {
+                'op':'replace',
+                'fromValue':null,
+                'path':'/changeOrderRequests/0/comment',
+                'value':'Update recalculated date feature is disabled'
+            }
+            ]"
+    />
+</dataset>

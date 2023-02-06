@@ -1,0 +1,118 @@
+{
+    "main.test_cluster_unavailable": [
+        {
+            "host": "crypta-yt-replicated-table-checker",
+            "service": "master.master.//table",
+            "status": "CRIT"
+        },
+        {
+            "host": "crypta-yt-replicated-table-checker",
+            "service": "replica.replica.//table",
+            "status": "CRIT"
+        }
+    ],
+    "main.test_healthy": [
+        {
+            "description": "OK",
+            "host": "crypta-yt-replicated-table-checker",
+            "service": "master.master.//table",
+            "status": "OK"
+        },
+        {
+            "description": "OK",
+            "host": "crypta-yt-replicated-table-checker",
+            "service": "replica.replica-1.//table",
+            "status": "OK"
+        },
+        {
+            "description": "OK",
+            "host": "crypta-yt-replicated-table-checker",
+            "service": "replica.replica-2.//table",
+            "status": "OK"
+        }
+    ],
+    "main.test_missing_tables": [
+        {
+            "description": "//table does not exist",
+            "host": "crypta-yt-replicated-table-checker",
+            "service": "master.master.//table",
+            "status": "CRIT"
+        },
+        {
+            "description": "//table does not exist",
+            "host": "crypta-yt-replicated-table-checker",
+            "service": "replica.replica-1.//table",
+            "status": "CRIT"
+        },
+        {
+            "description": "//table does not exist",
+            "host": "crypta-yt-replicated-table-checker",
+            "service": "replica.replica-2.//table",
+            "status": "CRIT"
+        }
+    ],
+    "main.test_replication_errors": [
+        {
+            "description": {
+                "uri": "file://main.test_replication_errors/extracted"
+            },
+            "host": "crypta-yt-replicated-table-checker",
+            "service": "master.master.//table",
+            "status": "CRIT"
+        },
+        {
+            "description": "unexpected configuration:\n--- expected\n+++ actual\n{\n-'tablet_state': 'mounted',\n+'tablet_state': 'unmounted',\n}",
+            "host": "crypta-yt-replicated-table-checker",
+            "service": "replica.replica-1.//table",
+            "status": "CRIT"
+        },
+        {
+            "description": "unexpected configuration:\n--- expected\n+++ actual\n{\n-'tablet_state': 'mounted',\n+'tablet_state': 'unmounted',\n}",
+            "host": "crypta-yt-replicated-table-checker",
+            "service": "replica.replica-2.//table",
+            "status": "CRIT"
+        }
+    ],
+    "main.test_unmounted_tables": [
+        {
+            "description": {
+                "uri": "file://main.test_unmounted_tables/extracted"
+            },
+            "host": "crypta-yt-replicated-table-checker",
+            "service": "master.master.//table",
+            "status": "CRIT"
+        },
+        {
+            "description": "unexpected configuration:\n--- expected\n+++ actual\n{\n-'tablet_state': 'mounted',\n+'tablet_state': 'unmounted',\n}",
+            "host": "crypta-yt-replicated-table-checker",
+            "service": "replica.replica-1.//table",
+            "status": "CRIT"
+        },
+        {
+            "description": "unexpected configuration:\n--- expected\n+++ actual\n{\n-'tablet_state': 'mounted',\n+'tablet_state': 'unmounted',\n}",
+            "host": "crypta-yt-replicated-table-checker",
+            "service": "replica.replica-2.//table",
+            "status": "CRIT"
+        }
+    ],
+    "main.test_wrong_replicas": [
+        {
+            "description": "replica-1.[//table]: [\"missing replica\"]\nreplica-1.[//another_table]: [\"extra replica\"]",
+            "host": "crypta-yt-replicated-table-checker",
+            "service": "master.master.//table",
+            "status": "CRIT"
+        },
+        {
+            "description": "OK",
+            "host": "crypta-yt-replicated-table-checker",
+            "service": "replica.replica-1.//table",
+            "status": "OK"
+        },
+        {
+            "description": "OK",
+            "host": "crypta-yt-replicated-table-checker",
+            "service": "replica.replica-2.//table",
+            "status": "OK"
+        }
+    ]
+}

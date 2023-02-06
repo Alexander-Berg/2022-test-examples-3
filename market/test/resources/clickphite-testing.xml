@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans default-lazy-init="false" default-autowire="byName">
+
+    <!-- Не прописаны init-methods, чтобы не запускать все сервисы по умолчанию для тестов -->
+    <import resource="classpath:property-configurer.xml"/>
+
+    <bean id="requiredPostProcessor"
+          class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+
+    <bean id="monitoring" class="ru.yandex.market.monitoring.ComplicatedMonitoring"/>
+
+    <bean id="clickHouseSource" class="ru.yandex.market.clickhouse.ClickHouseSource">
+        <property name="host" value="${clickphite.clickhouse.host}"/>
+        <property name="slbHost" value="${clickphite.clickhouse.slbHost}"/>
+        <property name="cluster" value="${clickphite.clickhouse.cluster}"/>
+        <property name="db" value="${clickphite.clickhouse.db}"/>
+        <property name="user" value="${clickphite.clickhouse.user}"/>
+        <property name="passwd" value="${clickphite.clickhouse.password}"/>
+    </bean>
+
+    <bean id="clickhouseTemplate" class="ru.yandex.market.clickhouse.ClickhouseTemplate">
+        <property name="db" ref="clickHouseSource"/>
+    </bean>
+
+     <bean id="clickphiteMetaDao" class="ru.yandex.market.clickphite.meta.ClickphiteMetaDao">
+        <property name="mongoUrl" value="${clickphite.mongo.main-url}"/>
+    </bean>
+
+    <bean id="healthMetaDao" class="ru.yandex.market.health.HealthMetaDao">
+        <constructor-arg index="0" value="${clickphite.mongo.url}"/>
+        <constructor-arg index="1" value="health"/>
+        <constructor-arg index="2" value="${clickphite.mongo.connect-timeout-millis}"/>
+        <constructor-arg index="3" value="${clickphite.mongo.socket-timeout-millis}"/>
+        <constructor-arg index="4" value="${clickphite.mongo.replica-set}"/>
+        <constructor-arg index="5" value="${clickphite.mongo.ssl}"/>
+    </bean>
+
+    <bean id="metricService" class="ru.yandex.market.clickphite.metric.MetricService" init-method="afterPropertiesSet">
+        <property name="maxConcurrentQueries" value="${clickphite.concurrent-queries.max}"/>
+        <property name="warnRowsPerPeriod" value="${clickphite.metric.rows-per-query.warn}"/>
+        <property name="maxRowsPerPeriod" value="${clickphite.metric.rows-per-query.max}"/>
+    </bean>
+
+    <bean id="monitoringService" class="ru.yandex.market.clickphite.monitoring.MonitoringService">
+        <property name="monitoringCheckHost" value="${clickphite.monitoring.check-host}"/>
+        <property name="monitoringGroupHost" value="${clickphite.monitoring.group-host}"/>
+    </bean>
+
+    <bean id="yandexCalendarService" class="ru.yandex.market.calendar.YandexCalendarService">
+        <property name="clientName" value="market-clickphite"/>
+    </bean>
+
+    <bean id="configValidator" class="ru.yandex.market.clickphite.config.validation.context.ConfigValidator">
+        <constructor-arg index="0" value="${clickphite.config.forbidden-functions}"/>
+        <constructor-arg index="1" value="${clickphite.config.allowed-functions}"/>
+    </bean>
+
+    <bean id="configurationService" class="ru.yandex.market.clickphite.config.ConfigurationService">
+        <property name="configDir" value="${clickphite.config-dir}"/>
+        <property name="graphiteMetricPrefix" value="${clickphite.env-prefix}"/>
+        <property name="statfaceReportPrefix" value="${clickphite.statface.report-prefix:}"/>
+        <property name="dashboardGraphiteDataSource" value="${clickphite.dashboard.datasource}"/>
+        <property name="dashboardDefaultTags" value="${clickphite.dashboard.default-tags}"/>
+        <property name="dashboardPrefix" value="${clickphite.dashboard.prefix}"/>
+    </bean>
+
+    <bean id="grafanaDashboardUploader" class="ru.yandex.market.dashboard.GrafanaDashboardUploader">
+        <property name="uploadUrl" value="${clickphite.dashboard.grafana.upload-url}"/>
+        <property name="token" value="${clickphite.dashboard.grafana.token}"/>
+        <property name="login" value="${clickphite.login}" />
+        <property name="password" value="${clickphite.password}" />
+    </bean>
+
+    <bean id="passportClient" class="ru.yandex.market.auth.PassportClient">
+        <property name="passportUrl" value="${clickphite.passportUrl}"/>
+    </bean>
+
+    <bean id="dashboardService" class="ru.yandex.market.clickphite.dashboard.DashboardService">
+        <property name="clickhouseTemplate" ref="clickhouseTemplate"/>
+        <property name="configurationService" ref="configurationService"/>
+        <property name="grafanaDashboardUploader" ref="grafanaDashboardUploader"/>
+        <property name="monitoring" ref="monitoring"/>
+    </bean>
+
+    <bean id="clickphiteService" class="ru.yandex.market.clickphite.ClickphiteService">
+        <property name="lightThreadCount" value="${clickphite.light-thread-count}"/>
+        <property name="heavyThreadCount" value="${clickphite.heavy-thread-count}"/>
+        <property name="zookeeperQuorum" value="${clickphite.zookeeper.quorum}"/>
+        <property name="zookeeperPrefix" value="${clickphite.zookeeper.prefix}"/>
+        <property name="metricDelaySeconds" value="${clickphite.metric-delay.seconds}"/>
+        <property name="metricThrottler" ref="metricThrottler"/>
+    </bean>
+
+    <bean id="metricThrottler" class="ru.yandex.market.clickphite.worker.MetricThrottler">
+        <constructor-arg index="0" value="${clickphite.throttler.real-time-soft-throttle-interval-seconds}"/>
+        <constructor-arg index="1" value="${clickphite.throttler.real-time-hard-throttle-interval-seconds}"/>
+        <constructor-arg index="2" value="${clickphite.throttler.non-real-time-soft-throttle-interval-seconds}"/>
+        <constructor-arg index="3" value="${clickphite.throttler.non-real-time-hard-throttle-interval-seconds}"/>
+        <constructor-arg index="4" value="${clickphite.throttler.max-seconds-since-period-start-for-real-time}"/>
+        <constructor-arg index="5" value="${clickphite.throttler.metric-rebuild-history-max-size}"/>
+        <constructor-arg index="6" value="${clickphite.throttler.metric-rebuild-history-max-interval-seconds}"/>
+    </bean>
+
+</beans>
+

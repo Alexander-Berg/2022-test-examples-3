@@ -1,0 +1,72 @@
+base: etc/fan_send/base.yml
+config:
+    log:
+        global:
+            async: false
+            sinks:
+            -   type: file
+                path: var/log/fan_send/fan_send.log
+                force_flush: true
+        WebAccessTskv:
+            async: false
+            sinks:
+            -   type: file
+                path: var/log/fan_send/access.log
+                force_flush: true
+        HttpTskv:
+            async: false
+            sinks:
+            -   type: file
+                path: var/log/fan_send/httpout.log
+                force_flush: true
+        smtp:
+            sinks:
+            -   type: file
+                path: var/log/fan_send/smtp.log
+                force_flush: true
+        typed_log:
+            async: false
+            sinks:
+            -   type: file
+                path: var/log/fan_send/typed.log
+                force_flush: true
+        lease_log:
+            async: false
+            sinks:
+            -   type: file
+                path: var/log/fan_send/lease.log
+                force_flush: true
+    modules:
+        module:
+        -   _name: send_api_client
+            configuration:
+                hosts: http://fan-back-test.mail.yandex.net
+        -   _name: delivery
+            configuration:
+                smtp:
+                    host: yabacks-test.mail.yandex.net
+                    port: 25
+                dry_run: false
+        -   _name: web_server
+            configuration:
+                endpoints:
+                    listen:
+                    -   addr: '::'
+                        port: 8080
+                        endpoint_name: 'internal'
+        -   _name: messenger
+            configuration:
+                peers:
+                -   fan-lease-1.fan-lease.testing.leasemeta.mail.stable.qloud-d.yandex.net:4040
+                -   fan-lease-2.fan-lease.testing.leasemeta.mail.stable.qloud-d.yandex.net:4040
+                -   fan-lease-3.fan-lease.testing.leasemeta.mail.stable.qloud-d.yandex.net:4040
+        -   _name: test_send
+            configuration:
+                use_lease: true
+        -   _name: send
+            configuration:
+                lease:
+                    groups_count: 4
+                    max_owned_groups: 4
+                    extra_acquire_count: 1
+                    send_resource_prefix: send_

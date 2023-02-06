@@ -1,0 +1,82 @@
+feature: Добавление номера телефона
+
+import-steps:
+    - tests/hermione/suites/messenger/shared-steps/open-messenger.testpalm.steps.yml
+
+specs:
+
+  beforeEach:
+    - do: в режиме инкогнито перейти по ссылке "https://passport.yandex.ru/"
+    - assert: открылся Яндекс.паспорт
+    - do: авторизоваться под пользователем testchat23 пароль qwaszx23
+    - assert: прошла авторизация под пользователем testchat23
+    - attach: Открытие месенджера
+    - assert: открылась веб версия мессенджера
+    - do: кликнуть на кнопку создания чата в левом верхнем углу (рядом с поиском)
+    - screenshot: пример внешнего вида [https://jing.yandex-team.ru/files/zaurkhutinaev/uhura_2019-09-17T12:39:54.784989.jpg]
+    - assert: открылось меню создания чата
+    - do: кликнуть "Создать групповой чат"
+    - screenshot: пример внешнего вида [https://jing.yandex-team.ru/files/zaurkhutinaev/uhura_2019-09-17T12:42:28.869164.jpg]
+    - assert: открылось окно добавления номера телефона
+    - screenshot: пример внешнего вида [https://jing.yandex-team.ru/files/zaurkhutinaev/uhura_2019-09-17T12:48:16.077405.jpg]
+
+  Закрытие окна добавления номера телефона по клику на крестик:
+    - automation: MSSNGRFRONR-3772
+    - do: кликнуть на крестик в правом верхнем углу окна
+    - screenshot: пример внешнего вида [https://jing.yandex-team.ru/files/zaurkhutinaev/uhura_2019-09-17T12:58:11.870330.jpg]
+    - assert: окно добавления номера телефона закрылось
+
+  Закрытие окна добавления номера телефона по клику в область за пределами окна:
+    - automation: MSSNGRFRONR-3772
+    - do: кликнуть по области за пределами окна добавления номера телефона
+    - screenshot: пример внешнего вида [https://jing.yandex-team.ru/files/zaurkhutinaev/uhura_2019-10-01T11:13:44.545878.jpg]
+    - assert: окно добавления номера телефона закрылось
+
+  Кнопка "Отмена" в окне добавления номера телефона:
+    - automation: MSSNGRFRONR-3772
+    - do: кликнуть на кнопку "отмена" внизу окна
+    - screenshot: пример внешнего вида [https://jing.yandex-team.ru/files/zaurkhutinaev/uhura_2019-09-17T13:39:49.055140.jpg]
+    - assert: окно добавления номера телефона закрылось
+
+  Кнопка "Далее" при пустом поле ввода номера телефона:
+    - automation: MSSNGRFRONR-3772
+    - do: не вводить ничего в поле ввода номера телфона
+    - assert: кнопка "Далее" не активна и не кликабельна, нет ховера
+    - screenshot: пример внешнего вида [https://jing.yandex-team.ru/files/zaurkhutinaev/uhura_2019-09-23T12:26:23.281742.jpg]
+
+  Ввод корректного номера в поле ввода номера телефона:
+    - automation: MSSNGRFRONR-3772
+    - do: ввести свой мобильный номер (должен начинаться с +7 или 8)
+    - assert: кнопка "Далее" активна, кликабельна, появился ховер
+    - screenshot: пример внешнего вида [https://jing.yandex-team.ru/files/zaurkhutinaev/uhura_2019-09-23T14:25:25.029287.jpg]
+    - do: кликнуть "Далее"
+    - assert: |
+        в окне появилось сообщение об отправлении смс с кодом подтверждения
+        пришла смс с кодом подтверждения
+    - screenshot: пример внешнего вида [https://jing.yandex-team.ru/files/zaurkhutinaev/uhura_2019-10-03T19:03:30.949117.jpg]
+    - do: подождать минуту
+    - do: кликнуть "Получить код еще раз"
+    - screenshot: пример внешнего вида [https://jing.yandex-team.ru/files/zaurkhutinaev/uhura_2019-10-03T19:13:45.002625.jpg]
+    - assert: повторно пришла смс с кодом подтверждения
+    - do: в поле ввода кода из смс ввести "0000"
+    - do: кликнуть "Готово"
+    - assert: под полем ввода высветилось сообщение "Неправильный код подтверждения"
+    - screenshot: [https://jing.yandex-team.ru/files/zaurkhutinaev/uhura_2019-10-03T19:30:51.746562.jpg]
+
+  Ввод неккоректных данных в поле ввода номера телефона:
+    - automation: MSSNGRFRONR-3772
+    - do: ввести в поле ввода номера телефона некорректные данные (текст, спецсимволы, номер телефона в неверном формате)
+    - do: кликнуть на кнопку "Далее"
+    - assert: под полем ввода номера телефона появилась надпись красным цветом "Неверный формат телефона"
+    - screenshot: пример внешнего вида [https://jing.yandex-team.ru/files/zaurkhutinaev/uhura_2019-09-30T18:25:13.524451.jpg]
+
+files: []
+
+v-team: Chat
+
+tags:
+  - release
+  - yamb
+  - no_assessors
+
+tlds: ru

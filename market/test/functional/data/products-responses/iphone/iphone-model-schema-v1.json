@@ -1,0 +1,112 @@
+{
+  "title": "iphone model schema v1",
+  "type": "object",
+  "required": [
+    "name",
+    "reviewsCount",
+    "rating",
+    "prices",
+    "offersCount",
+    "mainPhoto",
+    "photo",
+    "urls"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "iPhone"
+    },
+    "reviewsCount": {
+      "type": "number",
+      "minimum": 0
+    },
+    "outletsCount": {
+      "type": "number",
+      "minimum": 0
+    },
+    "rating": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 5
+    },
+
+    "prices": {
+      "type": "object",
+      "required": ["max", "min", "avg", "curCode", "curName"],
+      "properties": {
+        "max": {
+          "type": "number",
+          "minimum": 0
+        },
+        "min": {
+          "type": "number",
+          "minimum": 0
+        },
+        "avg": {
+          "type": "number",
+          "minimum": 0
+        },
+        "curCode": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 3
+        },
+        "curName": {
+          "type": "string"
+        }
+      }
+    },
+    "offersCount": {
+      "type": "number",
+      "minimum": 0
+    },
+    "mainPhoto": {
+      "type": "object",
+      "required": ["url", "width", "height"],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "width": {
+          "type": "number",
+          "minimum": 1
+        },
+        "height": {
+          "type": "number",
+          "minimum": 1
+        }
+      }
+    },
+    "photo": {
+      "type": "string",
+      "format": "uri"
+    },
+    "urls": {
+      "type": "object",
+      "required": ["model", "offers", "map", "price", "reviews"],
+      "properties": {
+        "model": {
+          "type": "string",
+          "format": "uri"
+        },
+        "offers": {
+          "type": "string",
+          "format": "uri"
+        },
+        "map": {
+          "type": "string",
+          "format": "uri"
+        },
+        "price": {
+          "type": "string",
+          "format": "uri"
+        },
+        "reviews": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    }
+  }
+}

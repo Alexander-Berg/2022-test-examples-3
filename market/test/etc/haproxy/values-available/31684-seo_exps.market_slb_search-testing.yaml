@@ -1,0 +1,45 @@
+# Параметры обработки
+params:
+  default:
+    resolve: yes
+    templates:
+      - user_mslb_triple_waterfall.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          check observe layer7
+      on_error:       fastinter
+    globals:
+      service_name:   seo-exps.tst.vs.market.yandex.net
+      service_port:   80
+      ping_expect:    "status 200"
+    meta:
+      monrun_ignore:  yes
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    be1:
+    - name: YP@testing-market-seo-exps-vla@local
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing-market-seo-exps-iva@local
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing-market-seo-exps-sas@local
+      sort_order: shuffled
+      dns_resolvers: yandex-ns
+      resolve: false
+    be3:
+    - name: YP@testing-market-seo-exps-vla
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing-market-seo-exps-iva
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing-market-seo-exps-sas
+      sort_order: shuffled
+      dns_resolvers: yandex-ns
+      resolve: false

@@ -1,0 +1,57 @@
+/* eslint-disable */
+module.exports = [
+    {
+        id: '243089',
+        type: '4',
+        cpaRegnum: '111111111111111',
+        cpaRegnumTranslation: 'ОГРНИП',
+        url: 'market-verstka.yandex.ru',
+        name: 'market-verstka edit 04.10.15 20:27',
+        juridicalAddress: 'Санкт-Петербург, ул. Тестовая д.2',
+        shopName: 'market-verstka.yandex.ru',
+        slug: 'market-verstka-yandex-ru',
+        contactPhone: '88001234567',
+        cpaPersonId: '',
+        shopJurId: '2284307',
+        createdAt: '2014-08-20 14:49:35.0',
+        datasourceUrl: 'market-verstka.yandex.ru',
+        datasourceUrlDecoded: "market-verstka.yandex.ru",
+        inn: '3092618181'
+    },
+    {
+        id: '123456',
+        type: '4',
+        cpaRegnum: '1234567890',
+        cpaRegnumTranslation: 'Регистрационный номер',
+        url: 'market-verstka.yandex.ru',
+        name: 'market-verstka edit 04.10.15 20:27',
+        juridicalAddress: 'Санкт-Петербург, ул. Тестовая д.2',
+        shopName: 'market-verstka.yandex.ru',
+        slug: 'market-verstka-yandex-ru',
+        contactPhone: '88001234567',
+        cpaPersonId: '',
+        shopJurId: '2284307',
+        createdAt: '2014-08-20 14:49:35.0',
+        datasourceUrl: 'market-verstka.yandex.ru',
+        datasourceUrlDecoded: "market-verstka.yandex.ru",
+        inn: '3092618181'
+    },
+    {
+        id: '7890123',
+        type: '4',
+        cpaRegnum: '',
+        cpaRegnumTranslation: 'Регистрационный номер',
+        url: 'market-verstka.yandex.ru',
+        name: 'market-verstka edit 04.10.15 20:27',
+        slug: 'market-verstka-yandex-ru',
+        juridicalAddress: 'Санкт-Петербург, ул. Тестовая д.2',
+        shopName: 'market-verstka.yandex.ru',
+        contactPhone: '88001234567',
+        cpaPersonId: '',
+        shopJurId: '2284307',
+        createdAt: '2014-08-20 14:49:35.0',
+        datasourceUrl: 'market-verstka.yandex.ru',
+        datasourceUrlDecoded: "market-verstka.yandex.ru",
+        inn: '3092618181'
+    }
+];

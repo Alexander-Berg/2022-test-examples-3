@@ -1,0 +1,31 @@
+[uwsgi]
+processes = 4
+stats = :3738
+socket = [::]:3132
+buffer-size = 16384
+api_configuration = external
+uid=nginx
+gid=nginx
+MPFS_PACKAGE = platform
+env = MPFS_PACKAGE=%(MPFS_PACKAGE)
+; POSIX Signal handlers require this flag
+py-call-osafterfork = true
+; Enable disabled GIL
+enable-threads = true
+harakiri = 600
+listen = 256
+max-requests = 4096
+min-worker-lifetime = 300
+max-worker-lifetime = 1800
+thunder-lock = true
+cache2 = name=workers_states,items=250
+spooler = /var/lib/mpfs/extapi_spoolers/platform_access_config_cache
+spooler-import = mpfs.platform.dynamic_settings.cache_writer
+
+; Logging:
+; Aware of IDE's tab replacement
+tab = @(exec://bash -c "echo -en '\t'")
+; Do not confuse with %(host) from uWSGI log format
+host = @(exec://bash -c "hostname")
+req-logger = file:$(UWSGI_LOG)
+logformat = tskv%(tab)tskv_format=ydisk-mpfs-uwsgi-log%(tab)host=%(host)%(tab)unixtime=%(epoch)%(tab)timestamp=%(ctime)%(tab)timezone=+0300%(tab)appname=%(MPFS_PACKAGE)%(tab)pid=%(pid)%(tab)remote_addr=%(addr)%(tab)remote_user=%(user)%(tab)vars=%(vars)%(tab)pktsize=%(pktsize)%(tab)method=%(method)%(tab)uri=%(uri)%(tab)size=%(size)%(tab)msecs=%(msecs)%(tab)proto=%(proto)%(tab)status=%(status)%(tab)headers=%(headers)%(tab)hsize=%(hsize)%(tab)switches=%(switches)%(tab)core=%(core)

@@ -1,0 +1,19 @@
+Project: "market-report"
+Service: "porto"
+
+PullInterval: "3s"
+
+Modules: [
+    { 
+        Porto: {
+            Containerized: true
+        }
+
+        Transformations {
+            Rule {
+                Match: "path=*"
+                ReplaceMeta: "sensor={{path}}, path=-"
+            }
+        }
+    }
+]

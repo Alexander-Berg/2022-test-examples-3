@@ -1,0 +1,93 @@
+{
+    "serviceId": 123,
+    "name": "service",
+    "initialState": "REGISTERED",
+    "states": [
+        {
+            "name": "REGISTERED"
+        },
+        {
+            "name": "ALLOCATED"
+        },
+        {
+            "name": "IN_QUEUE",
+            "priorityFunction": {
+                "type": "ARRIVAL_TIME",
+                "params": []
+            }
+        },
+        {
+            "name": "FINISHED",
+            "priorityFunction": {
+                "type": "DEFAULT",
+                "params": []
+            }
+        }
+    ],
+    "edges": [
+        {
+            "fromState": "REGISTERED",
+            "toState": "ALLOCATED",
+            "restrictions": [
+                {
+                    "type": "EVENT_REQUIRED",
+                    "params": []
+                },
+                {
+                    "type": "DISJUNCTION",
+                    "params": []
+                }
+            ],
+            "actions": [
+                {
+                    "type": "SEND_NOTIFICATION",
+                    "params": []
+                }
+            ],
+            "priority": "1"
+        },
+        {
+            "fromState": "ALLOCATED",
+            "toState": "IN_QUEUE",
+            "restrictions": [],
+            "actions": [],
+            "priority": "1"
+        },
+        {
+            "fromState": "IN_QUEUE",
+            "toState": "FINISHED",
+            "restrictions": [
+                {
+                    "type": "EVENT_REQUIRED",
+                    "params": []
+                }
+            ],
+            "actions": [],
+            "priority": "1"
+        },
+        {
+            "fromState": "REGISTERED",
+            "toState": "FINISHED",
+            "restrictions": [
+                {
+                    "type": "EVENT_REQUIRED",
+                    "params": []
+                }
+            ],
+            "actions": [],
+            "priority": "2"
+        }
+    ],
+    "capacities": [
+        {
+            "name": "FIRST",
+            "states": ["ALLOCATED", "IN_QUEUE"],
+            "value": 10
+        },
+        {
+            "name": "SECOND",
+            "states": ["FINISHED"],
+            "value": 100
+        }
+    ]
+}

@@ -1,0 +1,417 @@
+[
+  {
+    "path":"map.py",
+    "func":"check_contains",
+    "tests": [
+      [
+        {
+          "json":{ "search":[
+            1,
+            {
+              "name":2,
+              "class":4
+            },
+            3
+          ]},
+          "path":"search/1/class"
+        },
+        true
+      ],
+      [
+        {
+          "json":{ "search":[
+            1,
+            {
+              "name":2,
+              "class":4
+            }
+          ]},
+          "path":"search/2/class"
+        },
+        false
+      ],
+      [
+        {
+          "json":{
+                 "searchdata.docs_right" : [
+                    {
+                       "_markers" : [
+                          "blndrPos=5",
+                          "WizardPos=0",
+                          "Placement=right"
+                       ],
+                       "base_type" : null,
+                       "host" : "maps.yandex.ru",
+                       "is_index_page" : 0,
+                       "num" : "11",
+                       "passages" : [],
+                       "server_region" : "",
+                       "shard" : null,
+                       "size" : 0,
+                       "snippets" : {
+                          "full" : {
+                             "applicable" : 1,
+                             "counter_prefix" : "/parallel/result/snippet/companies/company/",
+                             "data" : {
+                                "GeoMetaSearchData" : {
+                                   "_json_geosearch_version" : "27.04.15",
+                                  
+                                  "path":"searchdata.docs_right/0/snippets/full/counter_prefix"
+                        }
+                      }
+                    }
+                  }
+                  }
+              ]
+          },
+          "path":"searchdata.docs_right/0/snippets/full/counter_prefix"
+                 
+             },
+             true
+        ]
+    ]
+  },
+  {
+    "path":"reduce.py",
+    "func":"get_sum",
+    "tests": [
+      [
+        {
+          "responds":{ "is_company_wizard":[true, true, false, true, false, true], "to_time":"23"},
+          "field":"is_company_wizard",
+          "type":"int"
+        },
+        4
+      ],
+      [
+        {
+          "responds":{ "is_company_wizard":[false, false, false, false, false, false]},
+          "field":"is_company_wizard",
+          "type":"int"
+        },
+        0
+      ]
+    ]
+  },
+  {
+    "path": "methods.py",
+    "func": "get_geo_common_wizard_winner_tab",
+    "tests": [
+      [
+        {
+          "json": {
+            "searchdata.docs": [
+              {
+                "snippets": {
+                  "full": {
+                    "applicable": 1,
+                    "counter_prefix": "/snippet/geo_common_wizard/",
+                    "data": {"order": ["avia", "rasp"]}
+                  }
+                }
+              }
+            ]
+          },
+          "tab": "avia"
+        },
+        true
+      ],
+      [
+        {
+          "json": {
+            "searchdata.docs": [
+              {
+                "construct": [
+                  {
+                    "counter": {
+                      "path": "/snippet/favorite/"
+                    }, 
+                    "favorite": 1, 
+                    "id": "d_0", 
+                    "type": "favorite"
+                  }
+                ], 
+                "doc": "YxWeb::Search::Doc: YxWeb::Search::Doc=HASH(0x7f000e465270)", 
+                "docid": "", 
+                "shard": null, 
+                "size": 0, 
+                "snippets": {
+                  "full": {
+                    "applicable": 1, 
+                    "counter_prefix": "/snippet/geo_common_wizard/", 
+                    "data": {
+                      "order": [
+                        "avia"
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "tab": "avia"
+        },
+        true
+      ],
+      [
+        {
+          "json": {
+            "searchdata.docs": [
+              {
+                "snippets": {
+                  "full": {
+                    "applicable": 1,
+                    "counter_prefix": "/snippet/geo_common_wizard/",
+                    "data": {"order": ["bus"]}
+                  }
+                }
+              }
+            ]
+          },
+          "tab": "tab_name"
+        },
+        false
+      ],
+      [
+        {
+          "json": {
+            "searchdata.docs": [
+              {
+                "snippets": {
+                  "full": {
+                    "applicable": 1,
+                    "counter_prefix": "/snippet/geo_common_wizard",
+                    "data": {"order": ["bus"]}
+                  }
+                }
+              }
+            ]
+          },
+          "tab": "bus"
+        },
+        false
+      ]
+    ]
+  },
+  {
+    "path": "map.py",
+    "func": "check_phone",
+    "tests": [
+      [
+        {
+          "phone": "+7(495)784-32-21"
+        },
+        true
+      ],
+      [
+        {
+          "phone": "+7 495 363-12-66"
+        },
+        true
+      ],
+      [
+        {
+          "phone": "+7 495 231-82-79"
+        },
+        true
+      ],
+      [
+        {
+          "phone": "+7 495 227-26-90"
+        },
+        true
+      ],
+      [
+        {
+          "phone": ""
+        },
+        false
+      ],
+      [
+        {
+          "phone": null
+        },
+        false
+      ],
+      [
+        {
+          "phone": true
+        },
+        false
+      ],
+      [
+        {
+          "phone": 989
+        },
+        false
+      ]
+    ]
+  },
+  {
+    "path": "map.py",
+    "func": "check_realty_phone",
+    "tests": [
+      [
+        {
+          "json": {
+             "searchdata.docs_right" : [
+                  {
+                     "applicable" : 1,
+                     "counter_prefix" : "/snippet/companies/company/",
+                     "data" : {
+                        "GeoMetaSearchData" : {
+                           "_json_geosearch_version" : "27.04.15",
+                           "_json_source" : "GeoMetaSearch",
+                           "features" : [
+                              {
+                                 "geometry" : {
+                                    "coordinates" : [
+                                       37.453606,
+                                       55.591358
+                                    ],
+                                    "type" : "Point"
+                                 },
+                                 "properties" : {
+                                    "BusinessRating" : {
+                                       "ratings" : "286",
+                                       "reviews" : "74",
+                                       "score" : "9.6"
+                                    },
+                                    "ExperimentalMetaData" : {
+                                       "Items" : [
+                                          {
+                                             "key" : "matchedobjects/1.x",
+                                             "value" : []
+                                          },
+                                          {
+                                             "key" : "org_wizard_factors/1.x",
+                                             "value" : {
+                                                "MapCTR" : 0.010544,
+                                                "MapClicks" : 99,
+                                                "SiteCTR" : 0.015976,
+                                                "SiteClicks" : 150,
+                                                "SiteFRC" : 0.179641,
+                                                "ThumbFRC" : 0.061078
+                                             }
+                                          },
+                                          {
+                                             "key" : "search:pin_subtitle",
+                                             "value" : "working_hours;travel_time;rating"
+                                          },
+                                          {
+                                             "key" : "search:rating",
+                                             "value" : "0.48"
+                                          }
+                                       ]
+                                    },
+                                    "Realty" : {
+                                       "Callback" : {
+                                          "link" : {
+                                             "href" : "https://realty.yandex.ru/api/1.0/event/phone/click?key=CAGAAdKf8-AFiAHSwvjgBZAB6aPQqKDosOFomAHQjsroj_yMjIEB"
+                                          }
+                                       },
+                                       "ConstructionTypes" : {
+                                          "constructionType" : "кирпично-монолитный"
+                                       },
+                                       "Developers" : {
+                                          "Developer" : {
+                                             "Url" : {
+                                                "link" : {
+                                                   "href" : "http://a101.ru/"
+                                                }
+                                             },
+                                             "name" : "ГК «А101»"
+                                          }
+                                       },
+                                       
+                                       "SalesDepartment" : {
+                                          "Callback" : {
+                                             "link" : {
+                                                "href" : "https://realty.yandex.ru/api/1.0/event/phone/click?key=CAGAAdKf8-AFiAHSwvjgBZAB6aPQqKDosOFomAHQjsroj_yMjIEB"
+                                             }
+                                          },
+                                          "Logo" : {
+                                             "link" : {
+                                                "href" : "https://avatars.mds.yandex.net/get-realty/1385959/company.223636.2282227014230456561/builder_logo_info"
+                                             }
+                                          },
+                                          "name" : "ГК «А101»",
+                                          "phone" : "+7 (495) 231-82-79"
+                                       }
+                                    }
+                                 }
+                              }
+                          ]
+                      }
+                  }
+              }
+            ]
+          },
+          "path": "searchdata.docs_right/0/data/GeoMetaSearchData/features/0/properties/Realty"
+        },
+        true
+      ],
+      [
+        {
+          "json": {
+            "phone":12
+          },
+          "path": "phone"
+        },
+        false
+      ]
+    ]
+  },
+  {
+      "path": "map.py",
+      "func": "check_contains_snippet",
+      "tests": [
+        [
+          {
+            "json": {
+              "searchdata.docs.*.snippets" : [
+                {
+                  "city" : "Санкт-Петербург",
+                  "counter_prefix" : "/snippet/maps/transit/",
+                  "features" : []
+                }
+              ]
+            },
+            "counter_prefix": "/snippet/maps/transit/"
+            },
+            true
+        ],
+        [
+          {
+            "json": {
+              "searchdata.docs.*.snippets" : [
+                {
+                  "city" : "Санкт-Петербург",
+                  "counter_prefix" : "/snippet/maps/transit/",
+                  "features" : []
+                }
+              ]
+            },
+            "counter_prefix": "/snippet/weather/"
+            },
+            false
+        ],
+        [
+          {
+            "json": {
+              "searchdata.docs.*.snippets" : [
+                {
+                    "applicable" : 1,
+                    "city_id" : 213,
+                    "counter_prefix" : "/snippet/weather/",
+                    "forecast" : []
+                }
+              ]
+            },
+            "counter_prefix": "/snippet/weather/"
+            },
+            true
+        ]
+      ]
+  }
+]

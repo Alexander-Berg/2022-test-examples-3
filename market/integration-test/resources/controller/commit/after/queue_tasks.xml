@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <!--Создание черновика-->
+    <order_history_event
+            order_id="1"
+            abc_service_id="222"
+    />
+
+    <!--Конвертация роута в вейбилл и сохранение вейбилла-->
+    <order_history_event
+            order_id="1"
+            abc_service_id="222"
+    />
+
+    <!--Коммит заказа-->
+    <order_history_event
+            order_id="1"
+            abc_service_id="222"
+    />
+
+    <queue_tasks
+            queue_name="CONVERT_ROUTE_TO_WAYBILL"
+            task='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1","orderId":1,"author":{"abcServiceId":222,"yandexUid":null},"sequenceId":1}'
+            attempt="0"
+    />
+
+    <queue_tasks
+            queue_name="COMMIT_ORDER"
+            task='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1/1","orderId":1,"author":{"abcServiceId":222,"yandexUid":null},"sequenceId":2}'
+            attempt="0"
+    />
+
+    <queue_tasks
+            queue_name="VALIDATE_ORDER_EXTERNAL"
+            task='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1/1/1","orderId":1,"sequenceId":3}'
+            attempt="0"
+    />
+</dataset>

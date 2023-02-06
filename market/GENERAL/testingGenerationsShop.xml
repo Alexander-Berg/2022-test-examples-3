@@ -1,0 +1,36 @@
+<report>
+    <name>testingGenerationsShop</name>
+    <description><![CDATA[Количество магазинов и фидов в тестовом индексе]]></description>
+    <title>Данные: Количество магазинов в тестовом индексе</title>
+    <jdbcTemplate>readOnlyJdbcTemplate</jdbcTemplate>
+    <graphReport>1</graphReport>
+    <defSortOrder>0</defSortOrder>
+    <query><![CDATA[
+select flh.RELEASE_TIME                    x_release_time,
+       count(distinct dfeed.datasource_id) y_shop_cnt,
+       count(distinct flh.feed_id)         y_feed_cnt
+from shops_web.feed_log_history flh
+         join shops_web.datafeed dfeed on flh.feed_id = dfeed.id
+where flh.INDEXER_TYPE = 1
+  and flh.GENERATION_TYPE = 0
+  and flh.RELEASE_TIME between
+    coalesce(to_date(:dt_from, 'dd.mm.yyyy'), trunc(sysdate - interval '7' day))
+    and
+    coalesce(to_date(:dt_to, 'dd.mm.yyyy'), trunc(sysdate) + interval '1' day)
+group by flh.RELEASE_TIME
+order by flh.RELEASE_TIME
+]]></query>
+    <inputParameters>
+        <parameter index="10" type="1" name="dt_from">
+            <description><![CDATA[От]]></description>
+        </parameter>
+        <parameter index="20" type="1" name="dt_to">
+            <description><![CDATA[До]]></description>
+        </parameter>
+    </inputParameters>
+    <outputColumns>
+        <column title="Время публикации поколения" index="10"/>
+        <column title="Количество магазинов" index="20"/>
+        <column title="Количество фидов" index="30"/>
+    </outputColumns>
+</report>

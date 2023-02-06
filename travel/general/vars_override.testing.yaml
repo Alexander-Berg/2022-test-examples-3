@@ -1,0 +1,23 @@
+experiments3_consumers:   # кэши каких консюмеров нужно прогружать
+  - travel-app/server-config/update-info
+  - travel-app/server-config/retry-policy
+  - travel-app/server-config/user-profile
+exp3_matching_logs_enabled: true  # нужно ли писать логи матчинга в файл /var/log/yandex/taxi-exp3-matcher/exp3/exp3-matched.log
+geobase_lookup_enabled: false  # нужна ли геобаза, если true, то её надо добавлять в образ
+exp3_default_kwargs: # дефолтные аргументы, которые будут всегда добавляться при матчинге в сайдкаре
+  - name: service
+    type: string
+    value: travel-app-backend
+  - name: application
+    type: string
+    value: travelapp
+
+# Если хочется использовать TCP вместо unix-сокета, необходимо добавить
+# unix_socket: ''
+# server_port: <номер порта>
+# host_names:
+# - <имя хоста>
+
+# TVM настройки
+tvm2_service_id_filepath: /etc/yandex/taxi/exp3-matcher/self_tvm_id
+tvm2_secret_filepath: /etc/yandex/taxi/exp3-matcher/tvm_secret

@@ -1,0 +1,26 @@
+{
+  "name": "@yandex-int/sitesearch-serp-test",
+  "version": "1.0.0",
+  "description": "Приложение для тестирования выдачи ПДС. Тут есть nginx и несколько статических страничек, на которых можно проверить выдачу, «вставленную на сайт». См. [Dockerfile](build/Dockerfile).",
+  "main": "app/index.js",
+  "private": true,
+  "scripts": {
+    "start": "node app/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy:beta": "YENV=testing frontend-deploy deploy -c ./.config/deploy/config.beta.yml",
+    "deploy:production": "YENV=production frontend-deploy deploy -c ./.config/deploy/config.production.yml",
+    "ci:deploy:beta": "YENV=testing ./tools/ci/deploy.sh",
+    "ci:deploy:master": "YENV=production ./tools/ci/deploy.sh",
+    "ci:deploy:remove": "YENV=testing frontend-deploy remove -c ./.config/deploy/config.beta.yml"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.yandex-team.ru:isqua/sitesearch-serp-test.git"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@yandex-int/frontend.ci.deploy": "0.7.3",
+    "@yandex-int/si.ci.sandbox-shovel-cli": "^3.0.1",
+    "express": "4.17.1"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "owner": "marketir",
+  "statfaceReports": [
+    {
+      "title": "Метрики Deep Suggester (Тестинг)",
+      "report": "Market/Content/Markup/DeepSuggesterTesting",
+      "tableName": "markup_worker_deepmatcher_suggest_metrics_testing",
+      "periodArray": [
+        "DAY"
+      ],
+      "splits": [
+        {
+          "name": "category",
+          "title": "Категория",
+          "splitField": "dictGetString('category', 'full_name', arrayJoin(dictGetHierarchy('category', toUInt64(category_id))))",
+          "tree": true
+        }
+      ],
+      "fields": [
+        {
+          "name": "total",
+          "title": "Кол-во выданных офферов",
+          "metricField": "sum(total_count)"
+        }, {
+          "name": "matched",
+          "title": "Сматчевшиеся офферы",
+          "metricField": "sum(matched_count)"
+        }, {
+          "name": "cannot_be_improved",
+          "title": "Не могут быть улучшены",
+          "metricField": "sum(cannot_be_improved_count)"
+        }, {
+          "name": "deferred",
+          "title": "Отложенные офферы",
+          "metricField": "sum(deferred_count)"
+        }, {
+          "name": "trash",
+          "title": "Мусорные офферы",
+          "metricField": "sum(trash_count)"
+        }, {
+          "name": "no_matching_card",
+          "title": "Нет подходящей карточки",
+          "metricField": "sum(no_matching_card_count)"
+        }, {
+          "name": "no_matching_card_ratio",
+          "title": "Процент офферов без подходящей карточки",
+          "metricField": "sum(no_matching_card_count)/(0.0 + sum(total_count) - sum(deferred_count))*100",
+          "viewType": "Percent"
+        }
+      ],
+      "graphs": [
+        {
+          "title": "Доля офферов без подходящей карточки",
+          "fields": [
+            "no_matching_card_ratio"
+          ]
+        }
+      ]
+    }
+  ]
+}

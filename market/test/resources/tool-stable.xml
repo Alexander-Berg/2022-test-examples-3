@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd"
+       default-lazy-init="true" default-autowire="byName">
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="properties">
+            <util:properties>
+                <prop key="mbo.http-exporter.url">http://mbo-http-exporter.yandex.net:8084</prop>
+                <prop key="mbo.card.api.model.storage.host">http://mbo01h.market.yandex.net:33402/modelStorage/</prop>
+
+                <prop key="site_catalog.scat.jdbc.driverClassName">oracle.jdbc.driver.OracleDriver</prop>
+                <prop key="site_catalog.scat.jdbc.url">jdbc:oracle:thin:@scatdb1v.paysys.yandex.net:1521/scatdb</prop>
+                <prop key="site_catalog.scat.username">site_catalog</prop>
+                <prop key="site_catalog.scat.password">CHANGE_ME</prop>
+
+                <prop key="market.markup2.jdbc.driverClassName">org.postgresql.Driver</prop>
+                <prop key="market.markup2.jdbc.url">jdbc:postgresql://localhost:6432/market_markup2?ssl=true&amp;prepareThreshold=0&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory</prop>
+                <prop key="market.markup2.username">market_markup2_worker</prop>
+                <prop key="market.markup2.password">CHANGE_ME</prop>
+
+                <prop key="hitman.main.api.oauth.token">CHANGE_ME</prop>
+                <prop key="hitman.main.api.host.url">https://hitman.yandex-team.ru</prop>
+                <prop key="qloud.service.auth">https://auth.yandex-team.ru</prop>
+                <prop key="qe.hostname">ir01h.yandex.ru</prop>
+                <prop key="market.markup.worker.login">tanlit</prop>
+
+                <prop key="markup_worker.yang.api.url">https://yang.yandex-team.ru/api/v1/</prop>
+                <prop key="markup_worker.yang.api.token">CHANGE_ME</prop>
+                <prop key="markup_worker.yang.api.timeout_milliseconds">600000</prop>
+                <prop key="markup_worker.yang.api.max_connections_per_route">50</prop>
+                <prop key="markup_worker.yang.api.max_connections_total">50</prop>
+                <prop key="markup_worker.yang.api.user_agent">yandex-market</prop>
+
+                <prop key="markup_worker.yql.url">CHANGE_ME</prop>
+                <prop key="markup_worker.yql.driverClassName">CHANGE_ME</prop>
+                <prop key="markup_worker.yql.username">CHANGE_ME</prop>
+                <prop key="markup_worker.yql.password">CHANGE_ME</prop>
+
+                <prop key="markup-worker.yt.proxy">CHANGE_ME</prop>
+                <prop key="markup-worker.yt.token">CHANGE_ME</prop>
+            </util:properties>
+        </property>
+    </bean>
+
+    <import resource="tool-common.xml"/>
+
+</beans>

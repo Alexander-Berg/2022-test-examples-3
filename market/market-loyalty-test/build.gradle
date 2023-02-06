@@ -1,0 +1,34 @@
+version = version
+
+def lightweightMatcher = rootProject.project(":market-loyalty-common:market-loyalty-lightweight").version =~ /(\d+)([^\d]*$)/
+def lightweightVersion = lightweightMatcher.replaceAll("${(lightweightMatcher[0][1] as int) - 1}${lightweightMatcher[0][2]}")
+
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute module("ru.yandex.market:market-loyalty-lightweight") with project(":market-loyalty-common:market-loyalty-lightweight")
+    }
+}
+
+buildscript {
+    repositories {
+        maven { url 'https://artifactory.yandex.net/market' }
+        maven { url 'https://artifactory.yandex.net/jcenter' }
+    }
+}
+
+dependencies {
+    compile "ru.yandex.market:market-loyalty-lightweight:${lightweightVersion}"
+
+    compile "org.hamcrest:hamcrest:${hamcrestVersion}"
+    compile "junit:junit:${junitVersion}"
+    compile "uk.co.jemos.podam:podam:${podamVersion}"
+    compile 'com.github.javaparser:javaparser-core:3.8.3'
+    compile 'com.github.javaparser:javaparser-symbol-solver-core:3.8.3'
+    compile("org.apache.logging.log4j:log4j-1.2-api:${log4jVersion}")
+    compile 'com.github.jsqlparser:jsqlparser:1.4'
+    compile "org.springframework:spring-aspects:${springVersion}"
+    compile "org.springframework:spring-jdbc:${springVersion}"
+    compile "org.springframework:spring-context:${springVersion}"
+    compile "org.springframework:spring-web:${springVersion}"
+    compile "org.apache.commons:commons-dbcp2:${dbcp2version}"
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<m:config xmlns:c="urn:jmf:common:1.0"
+          xmlns:m="urn:jmf:metaclass:config:1.0"
+          xmlns:db="urn:jmf:db:api:extension:config:1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <m:metaclass typed="false">
+        <m:fqn>sharded</m:fqn>
+        <m:parent>bo</m:parent>
+        <m:title>
+            <c:value>Метакласс, хранящийся на отдельном шарде</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>attr1</m:code>
+                <m:title>
+                    <c:value>String attribute</c:value>
+                </m:title>
+                <m:type code="string"/>
+            </m:attribute>
+        </m:attributes>
+        <m:extensions>
+            <m:extension xsi:type="db:sharding">
+                <db:strategy xsi:type="db:constShardChooser" shardName="constSharding"/>
+            </m:extension>
+        </m:extensions>
+    </m:metaclass>
+</m:config>

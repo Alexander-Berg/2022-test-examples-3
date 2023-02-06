@@ -1,0 +1,39 @@
+context:
+  default:
+    service_name: market_mbi_admin
+    servername_regexp: admin(-test)?\\.market\\.([\\w\\d]+\\.)?yandex\\.(ru|ua|kz|by)
+    vs: admin_market
+    antirobot: false
+    health_check: '"GET /ping HTTP/1.1\r\nHost: admin.market.yandex.ru\r\n\r\n"'
+    cert: admin.market
+    disable_icookie: true
+
+  testing:
+    cert: fslb-testing
+
+servers:
+  default:
+    main:
+    - name: N%production_market_mbi_admin_sas@local
+      plain_http_backend: true
+      timeout: 30s
+      weight: 100
+    - name: N%production_market_mbi_admin_vla@local
+      plain_http_backend: true
+      timeout: 30s
+      weight: 100
+    - name: N%production_market_mbi_admin_sas
+      plain_http_backend: true
+      timeout: 30s
+    - name: N%production_market_mbi_admin_vla
+      plain_http_backend: true
+      timeout: 30s
+
+  testing:
+    main:
+    - name: N%testing_market_mbi_admin_sas
+      plain_http_backend: true
+      timeout: 30s
+    - name: N%testing_market_mbi_admin_vla
+      plain_http_backend: true
+      timeout: 30s

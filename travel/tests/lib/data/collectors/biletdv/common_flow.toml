@@ -1,0 +1,204 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "biletdv",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--login", "login",
+    "--password", "password",
+    "--date-from", "2019-01-01",
+    "--date-to", "2019-01-03",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "partner",
+    "yt",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "apllication/xml"
+
+[[partner.responses]]
+    args = {date1 = "2019-01-01", date2 = "2019-01-01"}
+    data_file = "partner_response_2019_01_01.xml"
+
+[[partner.responses]]
+    args = {date1 = "2019-01-02", date2 = "2019-01-02"}
+    data_file = "partner_response_2019_01_02.xml"
+
+[[partner.responses]]
+    args = {date1 = "2019-01-03", date2 = "2019-01-03"}
+    data_file = "partner_response_2019_01_03.xml"
+
+[yt.input.partner_table]
+    path = "//home/rasp/reference/partner"
+
+[[yt.input.partner_table.data]]
+    billing_order_id = 430
+    code = "biletdv"
+    partner_id = 19
+
+[yt.input.station_table]
+    path = "//home/rasp/reference/station"
+
+[[yt.input.station_table.data]]
+    city_id = "c54"
+    iata = "SVX"
+    sirena = ""
+
+[[yt.input.station_table.data]]
+    city_id = "c213"
+    iata = "DME"
+    sirena = ""
+
+[[yt.input.station_table.data]]
+    city_id = "c2"
+    iata = "LED"
+    sirena = ""
+
+[lb]
+    topic = "topic-biletdv"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+[[lb.expected]]
+    partner_name = "biletdv"
+    travel_order_id = "biletdv:pnr_0_0_2019-01-01T00:00:00"
+    partner_order_id = "pnr_0_0_2019-01-01T00:00:00"
+    created_at = 1546300800
+    status = "confirmed"
+    label = "person_id_0_0"
+    currency_code = "RUB"
+    order_amount = 1000.0
+    category = "avia"
+    source = "biletdv"
+    partner_id = 19
+    billing_order_id = 430
+    origin = "SVX"
+    destination = "DME"
+    trip_type = "oneway"
+    date_forward = "2019-01-01"
+    date_backward = ""
+
+[[lb.expected]]
+    partner_name = "biletdv"
+    travel_order_id = "biletdv:pnr_0_1_2019-01-01T00:00:01"
+    partner_order_id = "pnr_0_1_2019-01-01T00:00:01"
+    created_at = 1546300801
+    status = "cancelled"
+    label = "person_id_0_1"
+    currency_code = "RUB"
+    order_amount = 2000.0
+    category = "avia"
+    source = "biletdv"
+    partner_id = 19
+    billing_order_id = 430
+    origin = "LED"
+    destination = "DME"
+    trip_type = "oneway"
+    date_forward = "2019-01-01"
+    date_backward = ""
+
+
+[[lb.expected]]
+    partner_name = "biletdv"
+    travel_order_id = "biletdv:pnr_0_2_2019-01-01T00:00:02"
+    partner_order_id = "pnr_0_2_2019-01-01T00:00:02"
+    created_at = 1546300802
+    status = "confirmed"
+    label = "person_id_0_2"
+    currency_code = "RUB"
+    order_amount = 3000.0
+    category = "avia"
+    source = "biletdv"
+    partner_id = 19
+    billing_order_id = 430
+    origin = "LED"
+    destination = "SVX"
+    trip_type = "oneway"
+    date_forward = "2019-01-01"
+    date_backward = ""
+
+
+[[lb.expected]]
+    partner_name = "biletdv"
+    travel_order_id = "biletdv:pnr_1_0_2019-01-02T00:00:00"
+    partner_order_id = "pnr_1_0_2019-01-02T00:00:00"
+    created_at = 1546387200
+    status = "cancelled"
+    label = "person_id_1_0"
+    currency_code = "RUB"
+    order_amount = 1000.0
+    category = "avia"
+    source = "biletdv"
+    partner_id = 19
+    billing_order_id = 430
+    origin = "SVX"
+    destination = "DME"
+    trip_type = "oneway"
+    date_forward = "2019-01-02"
+    date_backward = ""
+
+
+[[lb.expected]]
+    partner_name = "biletdv"
+    travel_order_id = "biletdv:pnr_1_1_2019-01-02T00:00:01"
+    partner_order_id = "pnr_1_1_2019-01-02T00:00:01"
+    created_at = 1546387201
+    status = "confirmed"
+    label = "person_id_1_1"
+    currency_code = "RUB"
+    order_amount = 2000.0
+    category = "avia"
+    source = "biletdv"
+    partner_id = 19
+    billing_order_id = 430
+    origin = "LED"
+    destination = "DME"
+    trip_type = "oneway"
+    date_forward = "2019-01-02"
+    date_backward = ""
+
+[[lb.expected]]
+    partner_name = "biletdv"
+    travel_order_id = "biletdv:pnr_1_2_2019-01-02T00:00:02"
+    partner_order_id = "pnr_1_2_2019-01-02T00:00:02"
+    created_at = 1546387202
+    status = "cancelled"
+    label = "person_id_1_2"
+    currency_code = "RUB"
+    order_amount = 3000.0
+    category = "avia"
+    source = "biletdv"
+    partner_id = 19
+    billing_order_id = 430
+    origin = "LED"
+    destination = "SVX"
+    trip_type = "oneway"
+    date_forward = "2019-01-02"
+    date_backward = ""
+
+
+[[lb.expected]]
+    partner_name = "biletdv"
+    travel_order_id = "biletdv:pnr_2_0_2019-01-03T00:00:01"
+    partner_order_id = "pnr_2_0_2019-01-03T00:00:01"
+    created_at = 1546473601
+    status = "confirmed"
+    label = "person_id_2_0"
+    currency_code = "RUB"
+    order_amount = 4111
+    category = "avia"
+    source = "biletdv"
+    partner_id = 19
+    billing_order_id = 430
+    origin = "LED"
+    destination = "SVX"
+    trip_type = "oneway"
+    date_forward = "2019-01-03"
+    date_backward = ""

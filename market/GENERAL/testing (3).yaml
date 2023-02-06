@@ -1,0 +1,40 @@
+ident: market-indexer@testing@health
+
+logger:
+  file: /var/log/yandex/push-client/market-indexer-cron-health_logbroker.log
+  level: 5
+  mode: file
+
+files:
+- chunk:
+    send-file: 1
+    send-server: 1
+  metainfo: 0
+  name: /var/log/marketindexer/health/availability_metrics.log
+  send_delay: 5
+  log_type: indexer-health-log
+- chunk:
+    send-file: 1
+    send-server: 1
+  metainfo: 0
+  name: /var/log/marketindexer/health/release_age.log
+  send_delay: 5
+  log_type: indexer-health-log
+- chunk:
+    send-file: 1
+    send-server: 1
+  metainfo: 0
+  name: /var/log/marketindexer/health/freshness_kpi_with_publish.log
+  send_delay: 5
+  log_type: indexer-health-log
+
+network:
+  master_addr: logbroker.yandex.net
+  proto: pq
+  tvm-client-id: 2014380
+  tvm-server-id: 2001059
+  tvm-secret-file: /etc/datasources/push-client-tvm-secret-health
+
+watcher:
+  drop_on_error: 1
+  state: "/var/lib/push-client/market-indexer-cron-health_logbroker"

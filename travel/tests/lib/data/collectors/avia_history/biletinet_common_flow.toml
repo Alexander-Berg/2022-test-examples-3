@@ -1,0 +1,57 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "biletinet_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 1028
+    confirm_dt = ""
+    created_at = "2019-03-04 01:15:28"
+    currency = ""
+    from = "CEE"
+    marker = "2ac8c6ab-a5e969-eb20-494c-9a1f-1a416447c0e51"
+    order_id = "3WTX74"
+    partner = "biletinet"
+    partner_id = 113
+    price = 9564.0
+    source = "biletinet"
+    status = "paid"
+    ticket_number = ""
+    to = "DME"
+    trip_type = "oneway"
+    unixtime = 1551682943
+
+[lb]
+    topic = "topic-biletinet_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "updated_at"]
+
+[[lb.expected]]
+    status = "confirmed"
+    category = "avia"
+    partner_id = 113
+    created_at = 1551662128
+    origin = "CEE"
+    partner_order_id = "3WTX74"
+    label = "2ac8c6ab-a5e969-eb20-494c-9a1f-1a416447c0e51"
+    source = "history"
+    destination = "DME"
+    partner_name = "biletinet"
+    trip_type = "oneway"
+    billing_order_id = 1028
+    order_amount = 9564.0
+    travel_order_id = "biletinet:3WTX74"
+    currency_code = "RUB"

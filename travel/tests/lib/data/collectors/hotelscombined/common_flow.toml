@@ -1,0 +1,93 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "hotelscombined",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--api-key", "api_key",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+]
+
+checkers = [
+    "lb",
+    "partner",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "apllication/json"
+
+[[partner.responses]]
+    data_file = "partner_response.json"
+
+[lb]
+    topic = "topic-hotelscombined"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+[[lb.expected]]
+    partner_name = "hotelscombined"
+    travel_order_id = "hotelscombined:0"
+    partner_order_id = "0"
+    created_at = 1546300800
+    status = "confirmed"
+    label = "label_0"
+    currency_code = "USD"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-01-01"
+    check_out = "2019-01-01"
+    order_amount = 10.0
+    profit_amount = 1.0
+    hotel_name = "hotel_name_0"
+    hotel_country = "hotel_country_0"
+    hotel_city = "hotel_city_0"
+    deferred_payment_eligibility = "unknown"
+    partner_hotel_id = "1515932"
+    post_pay_eligible = false
+    post_pay_used = false
+
+[[lb.expected]]
+    partner_name = "hotelscombined"
+    travel_order_id = "hotelscombined:1"
+    partner_order_id = "1"
+    created_at = 1546387200
+    status = "confirmed"
+    label = "label_1"
+    currency_code = "USD"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-01-03"
+    check_out = "2019-01-04"
+    order_amount = 10.0
+    profit_amount = 1.0
+    hotel_name = "hotel_name_1"
+    hotel_country = "hotel_country_1"
+    hotel_city = "hotel_city_1"
+    deferred_payment_eligibility = "unknown"
+    partner_hotel_id = "1515932"
+    post_pay_eligible = false
+    post_pay_used = false
+
+[[lb.expected]]
+    partner_name = "hotelscombined"
+    travel_order_id = "hotelscombined:2"
+    partner_order_id = "2"
+    created_at = 1546473600
+    status = "confirmed"
+    label = "label_2"
+    currency_code = "USD"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-01-04"
+    check_out = "2019-01-05"
+    order_amount = 10.0
+    profit_amount = 1.0
+    hotel_name = "hotel_name_2"
+    hotel_country = "hotel_country_2"
+    hotel_city = "hotel_city_2"
+    deferred_payment_eligibility = "unknown"
+    partner_hotel_id = "1515932"
+    post_pay_eligible = false
+    post_pay_used = false

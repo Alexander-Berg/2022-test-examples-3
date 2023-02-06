@@ -1,0 +1,24 @@
+pools:
+  - id: main
+    gun:
+      type: delivery_tracker_gun
+      target: delivery-tracker-api.tst.vs.market.yandex.net:35700
+      baseOrderId: 2
+    ammo:
+      type: delivery_tracker_ammo_provider
+      source:
+        type: file
+        path: ./ammo.json
+    result:
+      type: phout
+      destination: ./phout.log
+    rps:
+      - {duration: 10s, type: line,  from: 1, to: 1}
+    startup:
+      - {type: once, times: 1}
+log:
+  level: error
+monitoring:
+  expvar:
+    enabled: true
+    port: 1234

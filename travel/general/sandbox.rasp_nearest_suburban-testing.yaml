@@ -1,0 +1,21 @@
+- gather_facts: false
+  hosts: localhost
+  roles:
+  - checks:
+    - rasp_nearest_suburban.update_all_nearest_suburbans
+    - rasp_nearest_suburban.update_nearest_main_stations_suburbans
+    - rasp_nearest_suburban.update_nearest_suburbans
+    limits: '{{ crit_0_warn_0 }}'
+    flap: '{{ stable1h_critical1d }}'
+    role: chat_only
+    nodata_mode: force_ok
+    rtime: 60
+  vars:
+    children:
+      - rasp_sandbox_testing
+    host: rasp_sandbox_testing
+    telegram_chats:
+      - 'rasp-achtung'
+  vars_files:
+  - ../vars/common.yml
+  - vars/rasp.yml

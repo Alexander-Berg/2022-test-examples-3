@@ -1,0 +1,182 @@
+Core {
+    Log {
+        Level: DEBUG
+
+        # comment for writting to stdout
+        # Target {
+        #    FilePath: "logs/sailor/sailor.log"
+        # }
+    }
+
+    Identity {
+        Name: "sailor"
+    }
+
+    TraceLog {
+        Target {
+            FilePath: "logs/sailor/sailor-trace.log"
+        }
+    }
+
+}
+
+YtProxy: "arnold"
+YtTokenPath: "yt_token/market-sailor-yt-testing"
+SolomonTokenPath: "yt_token/market-sailor-solomon-testing"
+YtUser: "market-indexer-testing"
+YtBaseDir: "//home/market/testing/indexer/stratocaster/sailor"
+TmpDir: "tmp/"
+OutputStatisticsPath: "logs/sailor/stats.log"
+
+Collections {
+    Name: "Model"
+    CollectionType: MODEL
+    SenderParams {
+        ServiceName: "market_snippet_tst"
+        ServiceCtype: "prestable"
+        TvmClientId: 2021392
+        TvmSecretPath: "tvm_lb/client_secret"
+        LogBrokerServer: "logbroker.yandex.net"
+    }
+    SenderParams {
+        ServiceName: "market_snippet_tst"
+        ServiceCtype: "prestable"
+        TvmClientId: 2021392
+        TvmSecretPath: "tvm_lb/client_secret"
+        LogBrokerServer: "logbroker.yandex.net"
+        Namespace: 1
+    }
+    SenderParams {
+        ServiceName: "goods_snippets_tst"
+        ServiceCtype: "prestable_market"
+        TvmClientId: 2029772
+        TvmSecretPath: "tvm_lb_goods/client_secret"
+        LogBrokerServer: "logbroker.yandex.net"
+    }
+}
+
+Collections {
+    Name: "Offers"
+    CollectionType: OFFER
+}
+
+Collections {
+    Name: "FreshOffers"
+    CollectionType: FRESH_OFFER
+    SenderParams {
+        ServiceName: "market_snippet_tst"
+        ServiceCtype: "prestable"
+        TvmClientId: 2021392
+        TvmSecretPath: "tvm_lb/client_secret"
+        LogBrokerServer: "logbroker.yandex.net"
+        DontSendDeleted: true
+    }
+}
+
+Collections {
+    Name: "Cards"
+    CollectionType: CARDS
+    SenderParams {
+        ServiceName: "market_snippet_tst"
+        ServiceCtype: "prestable"
+        TvmClientId: 2021392
+        TvmSecretPath: "tvm_lb/client_secret"
+        LogBrokerServer: "logbroker.yandex.net"
+    }
+    SenderParams {
+        ServiceName: "market_snippet_tst"
+        ServiceCtype: "prestable"
+        TvmClientId: 2021392
+        TvmSecretPath: "tvm_lb/client_secret"
+        LogBrokerServer: "logbroker.yandex.net"
+        Namespace: 1
+    }
+}
+
+Collections {
+    Name: "Wizard"
+    CollectionType: WIZARD
+    SenderParams {
+        ServiceName: "market_snippet_tst"
+        ServiceCtype: "prestable"
+        TvmClientId: 2021392
+        TvmSecretPath: "tvm_lb/client_secret"
+        LogBrokerServer: "logbroker.yandex.net"
+    }
+    SenderParams {
+        ServiceName: "market_snippet_tst"
+        ServiceCtype: "prestable"
+        TvmClientId: 2021392
+        TvmSecretPath: "tvm_lb/client_secret"
+        LogBrokerServer: "logbroker.yandex.net"
+        Namespace: 1
+    }
+}
+
+Collections {
+    Name: "TurboOffers"
+    YtPool : "sailor_turbo_yt_pool"
+    CollectionType: TURBO_OFFER
+    SenderParams {
+        ServiceName: "goods_snippets_tst"
+        ServiceCtype: "prestable_market"
+        TvmClientId: 2029772
+        TvmSecretPath: "tvm_lb_goods/client_secret"
+        LogBrokerServer: "logbroker.yandex.net"
+    }
+}
+
+Collections {
+    Name: "PlaneshiftOffers"
+    CollectionType: PLANESHIFT_OFFER
+    SenderParams {
+            ServiceName: "market_snippet_tst"
+            ServiceCtype: "prestable"
+            TvmClientId: 2021392
+            TvmSecretPath: "tvm_lb/client_secret"
+            LogBrokerServer: "logbroker.yandex.net"
+            Namespace: 1
+        }
+}
+
+ModelInputParams {
+    InputModelTableDir: "//home/market/testing/mbo/export/recent"
+    TovarTreePath: "data/sailor_data/mbo_stuff/tovar-tree.pb"
+    ThumbsConfigPath: "data/sailor_data/picrobot/picrobot_thumbs.meta"
+    InputVclusterPicturesTable: "//home/market/testing/indexer/stratocaster/mi3/main/last_complete/vcluster_pictures"
+    InputBookStuffTable: "//home/market/testing/indexer/stratocaster/mi3/bookstuff/recent"
+}
+
+OrderPrepareParams {
+    DeletedTtl: 31
+    UnchangedTtl: 30
+    DoNotDeleteDocs: false
+    EnableReverseDiffs: true
+}
+
+MasterSlaveParams {
+    MyIdxMaster: "stratocaster"
+    IdxApiUrl: "http://idxapi.tst.vs.market.yandex.net:29334"
+    YtLockConfig {
+        LockDir: "//home/market-sailor/testing"
+    }
+}
+
+SyncParams {
+    Enabled: true
+    YtProxy: "hahn"
+    YtBaseDir: "//home/market/testing/indexer/sailor"
+}
+
+SenderParams {
+    ServiceName: "market_snippet_tst"
+    ServiceCtype: "prestable"
+    TvmClientId: 2021392
+    TvmSecretPath: "tvm_lb/client_secret"
+    LogBrokerServer: "logbroker.yandex.net"
+}
+
+MetricsParams {
+    IgnoredException: "Load balancer could not find any available backend for the requested upstream"
+    IgnoredException: "Cannot take \"exclusive\" lock for node"
+}

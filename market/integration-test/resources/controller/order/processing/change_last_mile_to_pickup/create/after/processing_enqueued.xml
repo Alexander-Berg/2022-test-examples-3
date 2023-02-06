@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <change_order_request
+            id="1"
+            order_id="1"
+            status="PROCESSING"
+            request_type="CHANGE_LAST_MILE_TO_PICKUP"
+    />
+
+    <change_order_request
+            id="2"
+            order_id="1"
+            status="PROCESSING"
+            request_type="UPDATE_ITEMS_INSTANCES"
+    />
+
+    <change_order_segment_request
+            id="1"
+            status="WAITING_FOR_PROCESSING_AVAILABILITY"
+            change_order_request_id="1"
+            segment_id="3"
+            required="true"
+    />
+
+    <change_order_segment_request
+            id="2"
+            status="PROCESSING"
+            change_order_request_id="1"
+            segment_id="4"
+            required="true"
+    />
+
+    <business_process_state
+            id="10"
+            queue_type="PROCESS_WAYBILL_SEGMENT_CHANGE_LAST_MILE"
+            status="ASYNC_REQUEST_SENT"
+            author="[null]"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd","changeOrderSegmentRequestId":10}'
+            sequence_id="10"
+    />
+
+    <business_process_state_entity_id
+            business_process_state_id="10"
+            entity_type="CHANGE_ORDER_SEGMENT_REQUEST"
+            entity_id="2"
+    />
+
+    <business_process_state
+            id="1"
+            queue_type="PROCESS_CREATE_ORDER_ASYNC_SUCCESS_RESULT"
+            status="ENQUEUED"
+            author="[null]"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1","apiType":"DELIVERY","partnerId":50,"waybillId":4,"orderId":1,"createOrderSuccessDto":{"externalId":"pickup-external-id","partnerId":50,"barcode":"1001","sequenceId":10},"sequenceId":1}'
+            comment="[null]"
+            sequence_id="1"
+    />
+
+    <business_process_state_entity_id
+            business_process_state_id="1"
+            entity_type="PARTNER"
+            entity_id="50"
+    />
+
+    <business_process_state_entity_id
+            business_process_state_id="1"
+            entity_type="ORDER"
+            entity_id="1"
+    />
+
+    <business_process_state_entity_id
+            business_process_state_id="1"
+            entity_type="WAYBILL_SEGMENT"
+            entity_id="4"
+    />
+</dataset>

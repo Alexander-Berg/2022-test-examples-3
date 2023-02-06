@@ -1,0 +1,168 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "bus-boy",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--date-from", "2022-03-01",
+    "--date-to", "2022-03-05",
+    "--limit", "5"
+]
+
+checkers = [
+    "lb",
+    "partner",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "apllication/json"
+
+[[partner.responses]]
+    args = {"updated_at_from_utc"="2022-03-01T00:00:00"}
+    data_file = "partner_response_0.json"
+
+[lb]
+    topic = "topic-bus-boy"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+# idex 0
+[[lb.expected]]
+    partner_name = "bus-boy"
+    travel_order_id = "bus-boy:YA-0000-0006-5536:0"
+    partner_order_id = "YA-0000-0006-5536:0"
+    boy_order_id = "YA-0000-0006-5536"
+    provider = "unitiki-new"
+    uid = "21706f78-6d6b-49f7-8bfe-6f59f6eead8b"
+    created_at = 1646308855
+    status = "cancelled"
+    currency_code = "RUB"
+    category = "buses"
+    snapshot_source = "collectors"
+
+    arrival = 1646701200
+    departure = 1646647200
+    requested_ticket_count = 1
+    active_ticket_count = 0
+    adult_passengers_count = 0
+    children_with_seats_count = 0
+    baggage_tickets_count = 0
+    refunded_ticket_count = 0
+    bus_internal_status = "IS_CANCELLED"
+    bus_model = ""
+    carrier_id = "ООО \"Перевозчик\""
+    online_refund = true
+    route_name = "Москва — Санкт-Петербург"
+    from_id = "c213"
+    from_partner_description = "Москва, Павелецкий вокзал"
+    search_from_id = "c213"
+    to_id = "c2"
+    to_partner_description = "Санкт-Петербург, метро Обводный канал"
+    search_to_id = "c2"
+    order_amount = 0.0
+    profit_amount = 0.0
+    total_fee_amount = 0.0
+    total_partner_fee_amount = 0.0
+    total_partner_refund_fee_amount = 0.0
+    total_refund_fee_amount = 0.0
+    total_refund_ticket_amount = 0.0
+    total_tariff_amount = 0.0
+    total_ticket_count = 0.0
+    label = ""
+
+# idex 1
+[[lb.expected]]
+    partner_name = "bus-boy"
+    travel_order_id = "bus-boy:YA-9999-9986-8991:0"
+    partner_order_id = "YA-9999-9986-8991:0"
+    boy_order_id = "YA-9999-9986-8991"
+    provider = "unitiki-new"
+    uid = "4d890a76-fed4-44f5-a47b-47d8d1fe7351"
+    created_at = 1646309061
+    finished_at = 1646309065
+    status = "confirmed"
+    currency_code = "RUB"
+    category = "buses"
+    snapshot_source = "collectors"
+
+    arrival = 1646701200
+    departure = 1646647200
+    requested_ticket_count = 1
+    active_ticket_count = 1
+    adult_passengers_count = 1
+    children_with_seats_count = 0
+    baggage_tickets_count = 0
+    refunded_ticket_count = 0
+    bus_internal_status = "IS_CONFIRMED"
+    bus_model = ""
+    carrier_id = "ООО \"Перевозчик\""
+    online_refund = true
+    route_name = "Москва — Санкт-Петербург"
+    from_id = "c213"
+    from_partner_description = "Москва, Павелецкий вокзал"
+    search_from_id = "c213"
+    to_id = "c2"
+    to_partner_description = "Санкт-Петербург, метро Обводный канал"
+    search_to_id = "c2"
+    order_amount = 1067.0
+    profit_amount = 0.0
+    total_fee_amount = 97.0
+    total_partner_fee_amount = 0.0
+    total_partner_refund_fee_amount = 0.0
+    total_refund_fee_amount = 0.0
+    total_refund_ticket_amount = 0.0
+    total_tariff_amount = 970.0
+    total_ticket_count = 1
+    label = ""
+    total_agency_fee_amount = 22.0
+    payment_ts = 1646309065
+
+# idex 2
+[[lb.expected]]
+    partner_name = "bus-boy"
+    travel_order_id = "bus-boy:YA-0000-0026-2144:0"
+    partner_order_id = "YA-0000-0026-2144:0"
+    boy_order_id = "YA-0000-0026-2144"
+    provider = "unitiki-new"
+    uid = "912ffa72-4b10-487a-8b50-3109936e81e9"
+    created_at = 1646309106
+    finished_at = 1646309110
+    status = "refunded"
+    currency_code = "RUB"
+    category = "buses"
+    snapshot_source = "collectors"
+
+    arrival = 1646701200
+    departure = 1646647200
+    requested_ticket_count = 1
+    active_ticket_count = 0
+    adult_passengers_count = 1
+    children_with_seats_count = 0
+    baggage_tickets_count = 0
+    refunded_ticket_count = 1
+    bus_internal_status = "IS_REFUNDED"
+    bus_model = ""
+    carrier_id = "ООО \"Перевозчик\""
+    online_refund = true
+    route_name = "Москва — Санкт-Петербург"
+    from_id = "c213"
+    from_partner_description = "Москва, Павелецкий вокзал"
+    search_from_id = "c213"
+    to_id = "c2"
+    to_partner_description = "Санкт-Петербург, метро Обводный канал"
+    search_to_id = "c2"
+    order_amount = 1067.0
+    profit_amount = 0.0
+    total_fee_amount = 97.0
+    total_partner_fee_amount = 0.0
+    total_partner_refund_fee_amount = 0.0
+    total_refund_fee_amount = 0.0
+    total_refund_ticket_amount = 550.0
+    total_tariff_amount = 970.0
+    total_ticket_count = 1
+    label = ""
+    total_agency_fee_amount = 0.02
+    payment_ts = 1646309110

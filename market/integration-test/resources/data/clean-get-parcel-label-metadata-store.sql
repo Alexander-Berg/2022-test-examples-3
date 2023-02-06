@@ -1,0 +1,1 @@
+DELETE FROM get_parcel_order_label_metadata_store

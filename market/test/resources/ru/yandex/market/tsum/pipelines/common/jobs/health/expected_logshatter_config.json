@@ -1,0 +1,33 @@
+{
+  "id": {
+    "configId": "log_id",
+    "vesionNumber": "0"
+  },
+  "dataSource": {
+    "logBroker": {
+      "topics": [
+        "market-health-stable--other",
+        "market-health-prestable--other",
+        "market-health-testing--other",
+        "market-health-dev--other"
+      ],
+      "hostGlob": "*",
+      "pathGlob": "**/nginx/applicationName-access-tskv.log"
+    }
+  },
+  "parser": {
+    "java": {
+      "className": "ru.yandex.market.logshatter.parser.nginx.NginxTskvLogParser"
+    },
+    "params": {
+      "logbroker://market-health-stable": "PRODUCTION",
+      "logbroker://market-health-prestable": "PRESTABLE",
+      "logbroker://market-health-testing": "TESTING",
+      "logbroker://market-health-dev": "DEVELOPMENT"
+    }
+  },
+  "table": {
+    "table": "log_id_nginx"
+  },
+  "dataRotationDays": 14
+}

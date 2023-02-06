@@ -1,0 +1,67 @@
+DCRM.YANDEX.RU =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = meta-load1h.paysys.yandex.net)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = dcrmdb)
+    )
+  )
+
+TCRM.YANDEX.RU =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = tcrm-db1f.yandex.ru)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = tcrmdb)
+    )
+  )
+
+PCRM.YANDEX.RU=
+  (DESCRIPTION=
+    (ENABLE=BROKEN)
+    (LOAD_BALANCE=on)
+    (FAILOVER=on)
+    (address = (protocol = tcp)(host = crm-vla-scan.paysys.yandex.net)(port = 1521))
+    (address = (protocol = tcp)(host = crm-sas-scan.paysys.yandex.net)(port = 1521))
+    (address = (protocol = tcp)(host = crm-myt-scan.paysys.yandex.net)(port = 1521))
+    (connect_data =
+      (service_name=pcrmdb)
+      (server=dedicated)
+      (failover_mode=(type=select)(method=basic)(retries=3)(delay=5))
+    )
+  )
+
+PCRM_RO.YANDEX.RU=
+  (DESCRIPTION_LIST=
+    (LOAD_BALANCE=off)
+    (DESCRIPTION=
+      (CONNECT_TIMEOUT=2)(RETRY_COUNT=2)
+      (enable=broken)
+      (ADDRESS_LIST=
+        (FAILOVER=on)
+        (LOAD_BALANCE=on)
+        (address = (protocol = tcp)(host = crm-vla-scan.paysys.yandex.net)(port = 1521))
+        (address = (protocol = tcp)(host = crm-sas-scan.paysys.yandex.net)(port = 1521))
+        (address = (protocol = tcp)(host = crm-myt-scan.paysys.yandex.net)(port = 1521))
+      )
+      (CONNECT_DATA=
+        (SERVICE_NAME=pcrmdb_ro)
+        (FAILOVER_MODE=(TYPE=SELECT)(METHOD=BASIC))
+      )
+    )
+    (DESCRIPTION=
+      (CONNECT_TIMEOUT=2)(RETRY_COUNT=2)
+      (enable=broken)
+      (ADDRESS_LIST=
+        (FAILOVER=on)
+        (LOAD_BALANCE=on)
+        (address = (protocol = tcp)(host = crm-vla-scan.paysys.yandex.net)(port = 1521))
+        (address = (protocol = tcp)(host = crm-sas-scan.paysys.yandex.net)(port = 1521))
+        (address = (protocol = tcp)(host = crm-myt-scan.paysys.yandex.net)(port = 1521))
+      )
+      (CONNECT_DATA=
+        (SERVICE_NAME=pcrmdb)
+        (FAILOVER_MODE=(TYPE=SELECT)(METHOD=BASIC))
+      )
+    )
+  )

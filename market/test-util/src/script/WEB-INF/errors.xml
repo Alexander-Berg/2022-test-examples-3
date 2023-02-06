@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd"
+       default-lazy-init="false"
+       default-autowire="no">
+
+    <import resource="classpath:WEB-INF/common-errors.xml"/>
+
+    <util:constant id="defaultErrorStatusCode" static-field="javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR"/>
+
+    <bean id="serviceUnavailableExceptionHandler" class="ru.yandex.market.checkout.common.web.SimpleExceptionHandler">
+        <property name="statusCode">
+            <util:constant static-field="javax.servlet.http.HttpServletResponse.SC_SERVICE_UNAVAILABLE"/>
+        </property>
+        <property name="errorCode" value="INTERNAL_ERROR" />
+    </bean>
+    <bean id="badRequestExceptionHandler" class="ru.yandex.market.checkout.common.web.SimpleExceptionHandler">
+        <property name="statusCode">
+            <util:constant static-field="javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST" />
+        </property>
+        <property name="errorCode" value="BAD_REQUEST" />
+    </bean>
+
+
+    <bean id="exceptionHandlersMap" class="ru.yandex.market.checkout.common.common.ClassMapping">
+        <property name="mapping">
+            <map>
+                <entry key="ru.yandex.market.checkout.pushapi.client.error.ShopErrorException">
+                    <bean class="ru.yandex.market.checkout.pushapi.error.ShopErrorHandler" />
+                </entry>
+                <entry key="org.springframework.http.converter.HttpMessageNotReadableException"
+                       value-ref="badRequestExceptionHandler" />
+                <entry key="org.springframework.web.HttpMediaTypeNotSupportedException"
+                       value-ref="badRequestExceptionHandler" />
+                <entry key="ru.yandex.market.checkout.pushapi.shop.validate.ValidationException"
+                       value-ref="badRequestExceptionHandler" />
+                <entry key="org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException"
+                       value-ref="notFoundExceptionHandler" />
+                <entry key="org.springframework.beans.TypeMismatchException"
+                       value-ref="badRequestExceptionHandler" />
+                <entry key="org.springframework.web.HttpRequestMethodNotSupportedException"
+                       value-ref="badRequestExceptionHandler" />
+                <entry key="ru.yandex.market.checkout.common.rest.ErrorCodeException">
+                    <bean class="ru.yandex.market.checkout.pushapi.error.CustomErrorCodeHandler" />
+                </entry>
+            </map>
+        </property>
+        <property name="defaultMapping" ref="serviceUnavailableExceptionHandler"/>
+    </bean>
+
+</beans>

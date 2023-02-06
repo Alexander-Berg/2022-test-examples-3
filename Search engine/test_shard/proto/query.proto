@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+import "search/tools/test_shard/proto/query_tree.proto";
+
+package NProto;
+
+message TQueryInfo {
+    uint32 Qid = 1;
+    uint32 Region = 2;
+    string Country = 3;
+    string Platform = 4;
+}
+
+message TDoc {
+    uint32 Id = 1;
+    uint64 Hash = 2;
+}
+
+message TQuery {
+    TNode Query = 1;
+    bytes Request = 2;
+    TQueryInfo Info = 3;
+    repeated TDoc ExpectedDocs = 4;
+}
+
+message TQueryVector {
+    repeated TQuery Query = 1;
+}

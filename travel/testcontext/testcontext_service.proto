@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package BusesTestContext;
+
+import "protoc-gen-swagger/options/annotations.proto";
+import "google/api/annotations.proto";
+
+import "travel/buses/backend/proto/worker/worker_service.proto";
+
+option go_package="a.yandex-team.ru/travel/buses/backend/proto/testcontext";
+
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+    info: {
+        title: "Buses.Backend.TestContext"
+        version: "1.0.0"
+    }
+    external_docs: {
+        url: "https://a.yandex-team.ru/arc/trunk/arcadia/travel/buses/backend/internal/testcontext";
+        description: "gRPC-gateway for Buses.Backend.TestContext";
+    }
+};
+
+service BusesTestContextService {
+
+    rpc SetBookParams (TTestContextSetBookParamsRequest) returns (TTestContextSetResponse) {
+        option (google.api.http) = {
+                post: "/testcontext/bookparams/set" // TODO: no get set
+                body: "*"
+            };
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+                summary: "Set book params context"
+                description: "Set book params response by book params request"
+                tags: "Book params"
+            };
+    };
+    rpc GetBookParams (TTestContextGetRequest) returns (TTestContextGetBookParamsResponse) {
+        option (google.api.http) = {
+            get: "/testcontext/bookparams/get"
+        };
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+            summary: "Get book params context"
+            description: "Get book params response by book params request"
+            tags: "Book params"
+        };
+    };
+}
+
+message TTestContextSetResponse {
+    string TestContextToken = 2;
+}
+
+message TTestContextGetRequest {
+    string TestContextToken = 1;
+}
+
+message TTestContextBookParamsPayload {
+    TravelBusesBackendWorker.TBookParamsResponse Response = 1;
+}
+
+message TTestContextSetBookParamsRequest {
+    string TestContextToken = 1;
+    TTestContextBookParamsPayload Payload = 2;
+}
+
+message TTestContextGetBookParamsResponse {
+    TTestContextBookParamsPayload Payload = 1;
+}

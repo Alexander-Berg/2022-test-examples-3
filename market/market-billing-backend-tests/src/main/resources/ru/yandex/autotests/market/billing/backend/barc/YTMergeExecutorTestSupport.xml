@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- because boundaryDefinition is common part between tests -->
+    <import resource="AuctionHistoryMigrationTestSupport.xml"/>
+    <import resource="AuctionResultMigrationTestSupport.xml"/>
+    <import resource="ClicksMigrationTestSupport.xml"/>
+
+    <bean name="auctionHistoryMergeDefinition"
+          class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.MergeEntityDefinition">
+        <constructor-arg name="entityName" value="auction_history"/>
+        <constructor-arg name="boundaryDefinition" ref="auctionHistoryBoundary"/>
+        <constructor-arg name="mergeAccuracy" value="DAYS"/>
+    </bean>
+
+    <bean name="auctionResultMergeDefinition"
+          class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.MergeEntityDefinition">
+        <constructor-arg name="entityName" value="auction_result"/>
+        <constructor-arg name="boundaryDefinition" ref="auctionResultBoundary"/>
+        <constructor-arg name="mergeAccuracy" value="DAYS"/>
+    </bean>
+
+    <bean name="clicksMergeDefinition"
+          class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.MergeEntityDefinition">
+        <constructor-arg name="entityName" value="clicks"/>
+        <constructor-arg name="boundaryDefinition" ref="clicksBoundaryDefinition"/>
+        <constructor-arg name="mergeAccuracy" value="MONTHS"/>
+    </bean>
+
+</beans>

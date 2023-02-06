@@ -1,0 +1,51 @@
+{
+  "logHosts": "*",
+  "logPath": "**/yandex/clusterizer-dispatcher/quality-assessor-evaluation.log",
+  "parser": {
+    "fields": [
+      "date",
+      "session_id",
+      "category_id",
+      "sample_id",
+      "sample_name",
+      "tp",
+      "fp",
+      "tn",
+      "fn",
+      "host"
+    ],
+    "columns": {
+      "session_id": {
+        "type": "String"
+      },
+      "category_id": {
+        "type": "UInt32"
+      },
+      "sample_id": {
+        "type": "UInt32"
+      },
+      "sample_name": {
+        "type": "String"
+      },
+      "tp": {
+        "type": "UInt32"
+      },
+      "tn": {
+        "type": "UInt32"
+      },
+      "fp": {
+        "type": "UInt32"
+      },
+      "fn": {
+        "type": "UInt32"
+      },
+      "host": {
+        "type": "String"
+      }
+    }
+  },
+  "clickhouseTable": "clusterizer_quality_assessor_testing",
+  "sources": [
+    "logbroker://market-health-testing--other"
+  ]
+}

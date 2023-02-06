@@ -1,0 +1,1 @@
+create table test_sql_resource_table (ID serial);

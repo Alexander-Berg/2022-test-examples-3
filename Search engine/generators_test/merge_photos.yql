@@ -1,0 +1,36 @@
+USE hahn;
+PRAGMA yt.InferSchema = '1000';
+PRAGMA SimpleColumns;
+PRAGMA AllowDotInAlias;
+
+$withFresh = (SELECT
+    -- keys
+    COALESCE(base.Url, fresh.Url, maps_photos_2x.id, maps_photos_1x.id) as Url,
+    COALESCE(base.tag_merge_key, fresh.tag_merge_key,maps_photos_1x.id, maps_photos_2x.id) as tag_merge_key,
+    -- can be fresh
+    COALESCE(fresh.`businessimages/1.x`, base.`businessimages/1.x`) as `businessimages/1.x`,
+    COALESCE(fresh.`photos/1.x`, base.`photos/1.x`, maps_photos_1x.snippet) as `photos/1.x`,
+    COALESCE(fresh.`photos/2.x`, base.`photos/2.x`, maps_photos_2x.snippet) as `photos/2.x`,
+    COALESCE(fresh.`photos/3.x`, base.`photos/3.x`) as `photos/3.x`,
+    COALESCE(fresh.sprav_proto_photos, base.sprav_proto_photos) as sprav_proto_photos,
+    -- only in base
+    base.`chainlogo/1.x` as `chainlogo/1.x`,
+    base.feedback_ids as feedback_ids,
+    
+from `{{ input_table }}` as base
+FULL JOIN `{{ delta_table }}` as fresh
+ON base.Url = fresh.Url
+);
+
+
+{% set processing_out_without_schema = processing_out.split('//')[-1] %}
+INSERT INTO hahn.`{{ processing_out_without_schema }}` WITH TRUNCATE
+SELECT
+    d.*,
+    exp.* WITHOUT exp.Url
+FROM
+    $withFresh AS d
+LEFT JOIN
+    `{{ exp_table }}` AS exp
+ON d.Url == exp.Url
+;

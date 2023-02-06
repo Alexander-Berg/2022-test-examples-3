@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+[ -z "${KEEP}" ] && set -e
+
+#export KEEP=1
+export VERBOSE=1
+
+SCRIPTS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd) #"
+
+export PG_PROD=1
+export HTTP_SEND_PORT=8001
+
+. "${SCRIPTS_DIR}"/config.sh
+
+ulimit -n 1000000
+ulimit -n
+sudo sysctl net.ipv4.ip_local_port_range="2000 64000"
+#sysctl net.ipv4.ip_local_port_range
+sudo sysctl net.core.somaxconn=50000
+sudo sysctl net.core.netdev_max_backlog=50000
+sudo sysctl net.ipv4.tcp_max_syn_backlog=50000
+
+[ -z "${NO_BUILD}" ] && ${YA_MAKE} -r ${ARCADIA_ROOT}/extsearch/video/vh/wsnotify/client
+${STARTER} ${ARCADIA_ROOT}/extsearch/video/vh/wsnotify/client/client --threads=${STRESS=1000} --uri="ws://vh.test.yandex.ru/v2/subscribe/websocket?service=vhnotify%3Astreams*822175596154484715%2Bviewers*822175596154484715" &
+last_killer
+sleep ${SLEEP_TEST1=10}
+
+#${STARTER} ${ARCADIA_ROOT}/extsearch/video/vh/wsnotify/client/client ws://${HOST}:${WEBSOCKET_PORT}/v2/subscribe/websocket?service=vhnotify%3Astreams*4835278639222173563%2Bviewers*4835278639222173563&client=ether&session=1653782874162129-5790827006215367649-z7zgmghedxjqaxit-BAL&user=5668682531646263931  &
+#last_killer
+
+curl -sS "http://test-wsnotify-1.sas.yp-c.yandex.net:${HTTP_SEND_PORT}/beta/wild/send?user=vhnotify" -X POST -d '{"tags": ["viewers","822175596154484715"], "payload": {"test-payload":"ya-video"}}' ||:
+curl -sS "http://test-wsnotify-1.vla.yp-c.yandex.net:${HTTP_SEND_PORT}/beta/wild/send?user=vhnotify" -X POST -d '{"tags": ["viewers","822175596154484715"], "payload": {"test-payload":"ya-video"}}' ||:
+
+echo '{"tags": ["viewers","822175596154484715"], "payload": {"test-payload":"ya-video"}}' > post.data
+ab -r -n ${STRESS1=1000} -c2 -p post.data  -H "Authorization: Xiva ${XIVA_SEND_TOKEN}" "http://test-wsnotify-1.vla.yp-c.yandex.net:${HTTP_SEND_PORT}/beta/wild/send?user=vhnotify"
+
+. "${SCRIPTS_DIR}"/stream_viewers_pusher
+
+sleep ${SLEEP_TEST=300}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-lazy-init="false" default-autowire="no">
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>file:/etc/yandex/market-datasources/datasources.properties</value>
+                <value>file:/etc/datasources/billing.properties</value>
+                <value>app.properties</value>
+                <value>app-${environment}.properties</value>
+                <value>${module.properties.file}</value>
+                <value>local-app.properties</value>
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+</beans>

@@ -1,0 +1,34 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый market_mbo.dev_testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_mbo.dev_testing
+
+juggler:
+  checks:
+  - {}
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    check_options: {}
+    children:
+    - CGROUP%market_antishow_head-testing
+    - CGROUP%mi_testing
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_mbo.dev_testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    service: mbo-dump-download
+    tags:
+    - market_mbo
+    - market_dev
+    - market
+    - _market_
+    ttl: 900

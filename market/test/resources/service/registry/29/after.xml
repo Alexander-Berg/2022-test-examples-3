@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <FULFILLMENT_SERVICE
+        ID="100"
+        NAME="test"
+        STATUS="1"
+        TYPE="1"
+    />
+
+    <SUPPLIER
+        ID="2"
+        NAME="supplier2"
+        TYPE="1"
+    />
+
+    <LOGISTICS_POINT
+        ID="222"
+        EXTERNAL_ID="a-b2"
+        PARTNER_ID="100"
+        ACTIVE="true"
+        ADDRESS='{"settlement":"Котельники","street":"Яничкин проезд","house":"7","comment":"терминал БД-6"}'
+        FOUND="true"
+    />
+
+    <SHOP_REQUEST ID="1"
+                  SUPPLIER_ID="2"
+                  SERVICE_ID="100"
+                  LOGISTICS_POINT_ID="222"
+                  STATUS="7"
+                  TYPE="0"
+                  CREATED_AT="2018-1-1 9:9:9"
+                  REQUESTED_DATE="2018-1-1 9:0:0"
+                  ITEMS_TOTAL_COUNT="1"
+                  CALENDARING_MODE="0"
+                  DETAILS_LOADED="true"
+    />
+
+    <registry id="1"
+              request_id="1"
+              type="5"
+    />
+
+    <registry_unit id="1" registry_id="1" type="0"
+                   identifiers='{"parts": [{"type": "PALLET_ID", "value": "PL1001"}]}'
+                   parents='[]' meta='{"description": "Some pallet"}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 1, "relatedUnitIds": [{}]}]}'/>
+    <registry_unit id="2" registry_id="1" type="10"
+                   identifiers='{"parts": [{"type": "ORDER_ID", "value": "12345"}, {"type": "BOX_ID", "value": "P001"}]}'
+                   parents='[{"parts": [{"type": "PALLET_ID", "value": "PL1001"}]}]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "ANOMALY", "count": 1, "relatedUnitIds": [{}]}]}'/>
+    <registry_unit id="3" registry_id="1" type="20"
+                   identifiers='{"parts": [{"type": "VENDOR_ID", "value": "444444"}, {"type": "CONSIGNMENT_ID", "value": "CONS_1"}]}'
+                   parents='[{"parts": [{"type": "ORDER_ID", "value": "12345"}, {"type": "BOX_ID", "value": "P001"}]}]'
+                   meta='{"name": "name", "korobyte": {"width": 20, "height": 10, "length": 30}, "lifeTime": 10, "hasLifeTime": true,
+                   "supplyPrice": 100.0, "vendorCodes": ["vendorCode1", "vendorCode2"], "manufacturedDate": "2021-05-17T14:00:00+03:00", "packageNumInSpike": 5}'
+                   unit_counts='{"unitCounts": [{"type": "NON_COMPLIENT", "count": 10, "relatedUnitIds": [{"unitIds": [{"parts": [{"type": "UIT", "value": "uit1"}]}, {"parts": [{"type": "UIT", "value": "uit2"}]}]}], "nonconformityAttributes": ["DEFECT", "MISGRADING", "UNKNOWN_SKU"]}]}'/>
+
+    <registry_unit_relation parent_id="1" child_id="2"/>
+    <registry_unit_relation parent_id="2" child_id="3"/>
+
+    <unit_identifier/>
+    <queue_tasks
+        queue_name="PUBLISH_REQUEST_STATUS_CHANGE"
+    />
+    <queue_tasks queue_name="BUILD_ACCEPTABLE_GOODS_FILE_REQUEST" />
+    <queue_tasks queue_name="BUILD_UNACCEPTABLE_GOODS_FILE_REQUEST" />
+    <queue_tasks queue_name="BUILD_ADDITIONAL_SECONDARY_RECEPTION_ACT_REQUEST" />
+</dataset>

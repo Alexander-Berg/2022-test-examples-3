@@ -1,0 +1,54 @@
+public.domain
+id,name,oebs_name,timezone,type
+1,ФФЦ Софьино,ОП ООО Маркет.Операции МО Софьино,Europe/Moscow,FF
+
+public.domain_warehouse
+domain_id,warehouse_id,code,outstaff_area
+1,172,SOF,ФФЦ Софьино
+
+public.employee
+id,staff_login,name,position,type,ya_uid,gender,domain_id,hired_at
+5932,aleksbobykin,Бобыкин Алексей Юрьевич,Кладовщик,EXTERNAL,1120000000287855,male,1,2021-12-03
+15906,elenavlad-i,Иванова Елена Владимировна,Кладовщик,EXTERNAL,1120000000366046,female,1,2021-12-03
+16340,juli78,Пугина Юлия Сергеевна,Кладовщик,EXTERNAL,1120000000397268,female,1,2021-12-03
+15459,slav-sam,Самойлов Вячеслав Алексеевич,Оператор системы управления складом,EXTERNAL,1120000000340534,male,1,2021-12-03
+
+
+public.wms_user
+login,employee_id,state,domain_id
+sof-aleurbobyk,5932,READY,1
+sof-elenavlad,15906,READY,1
+sof-juli78,16340,READY,1
+sof-slav-sam,15459,READY,1
+
+public.group
+id,name,domain_id,parent_group_id
+10,Софьино,1,null
+11,Операционный отдел,1,10
+12,Административный отдел,1,10
+
+public.department_group
+id,domain_id,oebs_org_name,domain_group_id,is_office
+1,1,"Склад Софьино (Поддержка бизнеса).RU",11,false
+2,1,"Фулфилмент центр Софьино.RU",12,true
+
+
+public.new_schedule
+id,oebs_schedule_id,oebs_shift_id,name,work_days,not_work_days,working_hours
+2,8648,4,СОФЬИНО_2/2 ДЕНЬ\НОЧЬ ПО 11 ЧАСОВ,15,16,165
+28,316,2,2/2 ПО 11 Ч.,15,16,165
+
+
+public.oebs_employee_info
+id,date,name,staff_login,assignment_number,oebs_schedule_id,schedule_offset,deleted_at,employee_id,hrms_schedule_id,start_admission,start_date,position,primary_flag,department_group_id
+13035051,2022-02-24,Бобыкин Алексей Юрьевич,aleksbobykin,146747-1152,8648,-60,null,5932,2,2020-12-03,2021-09-01,Кладовщик,true,1
+13034465,2022-02-24,Иванова Елена Владимировна,elenavlad-i,180951-1582,8648,-60,null,15906,2,2021-06-01,2021-09-01,Кладовщик,true,1
+13034188,2022-02-24,Пугина Юлия Сергеевна,juli78,193119-1942,8648,-60,null,16340,2,2021-07-23,2021-09-01,Кладовщик,true,1
+13034453,2022-02-24,Самойлов Вячеслав Алексеевич,slav-sam,168182-1962,316,15,null,15459,28,2021-04-06,2021-09-01,Оператор системы управления складом,true,1
+
+
+public.new_schedule_day
+id,schedule_id,date,start_date_time,end_date_time,hr_operation_type_id,schedule_offset
+64380,2,2022-02-24,2022-02-24 05:00:00,2022-02-24 17:00:00,1,-60
+70051,28,2022-02-24,2022-02-24 05:15:00,2022-02-24 17:15:00,1,15
+

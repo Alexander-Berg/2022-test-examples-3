@@ -1,0 +1,29 @@
+{
+  "definitions": {
+    "lids": {
+      "type": "array",
+      "items": { "type": "integer" },
+      "uniqueItems": true
+    },
+    "tribool": {
+      "oneOf": [
+        { "type": "boolean" },
+        { "type": "null" }
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "seen":     { "$ref": "#/definitions/tribool" },
+    "recent":   { "$ref": "#/definitions/tribool" },
+    "deleted":  { "$ref": "#/definitions/tribool" },
+    "lids_add": { "$ref": "#/definitions/lids" },
+    "lids_del": { "$ref": "#/definitions/lids" }
+  },
+  "additionalProperties": false,
+  "required": ["seen",
+               "recent",
+               "deleted",
+               "lids_add",
+               "lids_del"]
+}

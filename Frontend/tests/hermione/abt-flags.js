@@ -1,0 +1,78 @@
+/* eslint-disable camelcase */
+module.exports = {
+    spa_viber_promo_position: 0,
+    spa_prec_report: 0,
+    spa_forecast_n_days: 0,
+    spa_forecast_n_days_adv: 0,
+    adv_spatouch: [
+        '3817:4920',
+        '3818:4921',
+        '3819:4922',
+        // Виджет:
+        '3820:C-I-486953-4923',
+        // Главная блоки в 10 днях:
+        '4359:4924',
+        '4360:4925',
+        '4361:4926',
+        '4362:4927',
+        '4363:4928',
+        '4364:4929',
+        '4365:4930',
+        '4366:4931',
+        '4367:4932',
+        '4368:4933',
+        '4369:4934',
+        // Месяц:
+        '3822:4935',
+        '3823:4936',
+        // MONTH calendar:
+        '3824:4937',
+        '3825:4938',
+        // Details:
+        //    top
+        '3826:4939',
+        '3827:4940',
+        '3828:4941',
+        '3829:4942',
+        '3830:4943',
+        '3831:4944',
+        '3832:4945',
+        '3833:4946',
+        '3834:4947',
+        '3835:4948',
+        // footer
+        '3836:4949',
+        '3837:4950',
+        '3838:4951',
+        '3839:4952',
+        '3840:4953',
+        '3841:4954',
+        '3842:4955',
+        '3843:4956',
+        '3844:4957',
+        '3845:4958',
+        // Region
+        '3846:4959',
+        '3847:4960',
+        '3848:4961'
+    ].join(','),
+    adv_without_camera: 0,
+    adv_camera_replace: 0,
+    adv_without_camera_and_second_adv: 0,
+    adv_camera_replace_slider_adv: 0,
+    spa_zen_widget: 0,
+    spa_maps: 0,
+    spa_maps_ugc: 0,
+    spa_new_fact: 0,
+    spa_promo_meteum: 0,
+    geolocation_precise: 0,
+    spa_smartbanner_fullscreen: 0,
+    is_hermione: 1,
+    spa_details_new_all: 0,
+    spa_main_allergy_card_new: 0,
+    spa_pro_details: 0,
+    spa_pro_fact: 0,
+    spa_pro_alert_garden: 0,
+    spa_pro_promo: 0,
+    spa_alert_redesign: 0
+};

@@ -1,0 +1,17 @@
+module.exports = {
+    js: /\.jsx?$/,
+    ts: /\.tsx?$/,
+    worker: /\.worker\.js$/,
+    css: /\.css$/,
+    stylus: /\.styl$/,
+    svg: /\.svg$/,
+    images: /\.(png|svg|jpe?g|webp|woff)$/,
+    controllers: /\/(widgets|@yandex-market\/mandrel\/devTools|lib\/mandrel\/dist\/devTools)\/.*\/(controller.js|legacyController.js|controller\/index.*.js)$/,
+    resolvers: /\/resolvers\/.*\.js$/,
+    pageObjects: /__pageObject/,
+    markdown: /\.md$/,
+    bcm: /\/bcm\//,
+    levitanGui: /@yandex-market\/levitan-gui/,
+    levitanAnnex: /@yandex-market\/levitan-annex/,
+    levitanMarket: /@yandex-levitan\/market/,
+};

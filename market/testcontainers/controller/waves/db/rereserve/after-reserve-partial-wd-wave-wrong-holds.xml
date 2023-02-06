@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<dataset>
+    <ORDER_FLOW_TYPE
+            SERIALKEY="1"
+            mini_batch="1"
+            item_sorter="0"
+            non_customer="0"
+            non_sortable="0"
+            is_fashion="0"
+    />
+
+    <PACK PACKKEY="STD" PACKDESCR="PACKDESCR" />
+    <PUTAWAYZONE PUTAWAYZONE="RACK" />
+
+    <LOC LOC="LOC-001" PUTAWAYZONE="RACK" LOCATIONHANDLING="2" LOCATIONTYPE="PICK" />
+    <LOC LOC="LOC-002" PUTAWAYZONE="RACK" LOCATIONHANDLING="2" LOCATIONTYPE="OTHER" />
+
+    <SKU SKU="SKU-001" STORERKEY="STORER-001" PACKKEY="STD" PUTAWAYLOC="LOC-001" SHELFLIFEINDICATOR="N" />
+
+    <!--
+                    LOT1 (OK)    LOT2 (DAMAGE)
+    LOC1 (PICKING)   1            3
+    LOC2 (STORAGE)   2            4
+    -->
+    <LOTxLOCxID SKU="SKU-001" STORERKEY="STORER-001" QTYALLOCATED="1" QTYPICKED="0"
+                QTY="1" LOT="LOT-001" LOC="LOC-001" />
+    <LOTxLOCxID SKU="SKU-001" STORERKEY="STORER-001" QTYALLOCATED="0" QTYPICKED="0"
+                QTY="2" LOT="LOT-001" LOC="LOC-002" />
+    <LOTxLOCxID SKU="SKU-001" STORERKEY="STORER-001" QTYALLOCATED="0" QTYPICKED="0"
+                QTY="3" LOT="LOT-002" LOC="LOC-001" />
+    <LOTxLOCxID SKU="SKU-001" STORERKEY="STORER-001" QTYALLOCATED="0" QTYPICKED="0"
+                QTY="4" LOT="LOT-002" LOC="LOC-002" />
+
+    <SKUxLOC LOC="LOC-001" QTY="4" QTYEXPECTED="0" QTYALLOCATED="1" SKU="SKU-001" STORERKEY="STORER-001"/>
+    <SKUxLOC LOC="LOC-002" QTY="6" QTYEXPECTED="0" QTYALLOCATED="0" SKU="SKU-001" STORERKEY="STORER-001"/>
+
+    <LOT LOT="LOT-001" SKU="SKU-001" STORERKEY="STORER-001" QTY="3" QTYALLOCATED="1" />
+    <LOT LOT="LOT-002" SKU="SKU-001" STORERKEY="STORER-001" QTY="7" QTYALLOCATED="0" />
+
+    <LOTATTRIBUTE SKU="SKU-001" STORERKEY="STORER-001" LOTTABLE08="1" LOT="LOT-001" />
+    <LOTATTRIBUTE SKU="SKU-001" STORERKEY="STORER-001" LOTTABLE08="1" LOT="LOT-002" />
+
+    <INVENTORYHOLD STATUS="DAMAGE"  LOT="LOT-002" LOC=""  ID="" HOLD="1"/>
+
+    <AREA AREAKEY="AREA51" />
+    <AREADETAIL AREAKEY="AREA51" PUTAWAYZONE="RACK" />
+
+    <ORDERS
+            ORDERKEY="BORDER-001"
+            EXTERNORDERKEY="1"
+            TYPE="100"
+    />
+
+    <ORDERS
+        ORDERKEY="ORDER-001"
+        EXTERNORDERKEY="1"
+        TYPE="14"
+    />
+
+    <ORDERDETAIL
+            ORDERKEY="BORDER-001"
+            ORDERLINENUMBER="1"
+            originalqty="12"
+            ShippedQty="0"
+            OpenQty="12"
+            QtyPicked="0"
+            QtyAllocated="1"
+            QtyPreAllocated="0"
+            ISMASTER="1"
+            SKU="SKU-001"
+            STORERKEY="STORER-001"
+    />
+
+    <ORDERDETAIL
+        ORDERKEY="ORDER-001"
+        ORDERLINENUMBER="7"
+        originalqty="12"
+        ShippedQty="0"
+        OpenQty="12"
+        QtyPicked="0"
+        QtyAllocated="0"
+        QtyPreAllocated="0"
+        ISMASTER="1"
+        SKU="SKU-001"
+        STORERKEY="STORER-001"
+        ORDER_FLOW_ID="1"
+    />
+
+    <WAVE
+        WAVEKEY="WAVE-001"
+        SORTATIONSTATIONKEY="S01"
+        STATUS="5"
+        INPROCESS="19"
+        ADDWHO="test_user_1"
+        DESCR="test_description_1"
+        BATCHORDERNUMBER="BORDER-001"
+        WAVE_TYPE="WITHDRAWAL"
+    />
+
+    <WAVEDETAIL
+        WAVEKEY="WAVE-001"
+        ORDERKEY="ORDER-001"
+        WAVEDETAILKEY="WD-001"
+    />
+
+    <WAVEDETAIL
+            WAVEKEY="WAVE-001"
+            ORDERKEY="BORDER-001"
+            WAVEDETAILKEY="WD-002"
+    />
+
+    <PICKDETAIL
+        ORDERKEY="BORDER-001"
+        WAVEKEY="WAVE-001"
+        STATUS="1"
+        STORERKEY="STORER-001"
+        SKU="SKU-001"
+        LOC="LOC-001"
+        ID=""
+        ADDWHO="TEST"
+        EDITWHO="TEST"
+        ADDDATE="2020-04-01 12:34:56.79"
+        EDITDATE="2020-04-01 12:34:56.79"
+        PICKHEADERKEY=" "
+        ORDERLINENUMBER="1"
+        LOT="LOT-001"
+        FROMLOC="LOC-001"
+        TOLOC="PICKTO"
+    />
+
+    <TASKDETAIL
+        STORERKEY="STORER-001"
+        SKU="SKU-001"
+        QTY="1"
+        FROMLOC="LOC-001"
+        TOLOC="PICKTO"
+        FINALTOLOC=""
+        PRIORITY="3"
+        SOURCEPRIORITY="3"
+        WAVEKEY="WAVE-001"
+        ORDERKEY="BORDER-001"
+        PUTAWAYZONE="RACK"
+        ORDERLINENUMBER="1"
+        LOT="LOT-001"
+        MAXNUMPERCLUSTERCARTON="30"
+    />
+
+    <USERACTIVITY
+        TYPE="PK"
+        WAVEKEY="WAVE-001"
+        EQUIPMENT="BC1"
+        MAXNUMPERCLUSTERCARTON="30"
+        PRIORITY="3"
+        ACTYPE="3"
+    />
+
+    <ASSIGNMENTS
+        ASSIGNMENTNUMBER="0000000001"
+        WAVEKEY="WAVE-001"
+        TYPE="SORTABLE_NON_CONVEYABLE"
+        PUTAWAYZONE="RACK"
+        CONS_LOC="[null]"
+    />
+
+</dataset>

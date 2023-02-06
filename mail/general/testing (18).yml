@@ -1,0 +1,20 @@
+base: app/config/base-testing.yml
+config:
+    system:
+        uid: app
+        gid: app
+    modules:
+        module:
+        -   _name: pop_server
+            configuration:
+                ssl_context:
+                    cert_file: app/secrets/pop3-tst.stable.qloud-b.yandex.net.pem
+                    key_file: app/secrets/pop3-tst.stable.qloud-b.yandex.net.pem
+                endpoints:
+                    listen:
+                    -   _addr: '::'
+                        _port: 110
+                        force_ssl: 0
+                    -   _addr: '::'
+                        _port: 995
+                        force_ssl: 1

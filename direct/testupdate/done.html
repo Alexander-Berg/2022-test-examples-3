@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+{%load attr%}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Версионика/Обновление тестовых контейнеров ВЫПОЛНЕНО</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/releaser.css" media="all"/>
+    <link href="{{ MEDIA_URL }}/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 10px; /* to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+        {% include "index/header.html" %}    
+        <br>
+        <h1> Версионика: обновление ТС 
+        </h1>
+        <br>
+        <br>
+        <div class="row12" style="font-size:120%;">
+            {% ifequal ok '1' %}
+            <span class="label label-info">Успешно</span>
+            {% else %}
+            <span class="label label-important" style="font-size:100%;">Произошла ошибка!</span>
+            <br>
+            {% endifequal %}
+            <br>
+            <br>
+            Контейнеры: 
+            <br>
+            {% for s in testservers %} 
+            <b>{{s.name}}</b>
+            <br>
+            {% endfor %}
+            <br>
+            Версия: <b>{{version}}</b>
+            <br>
+            <br>
+            <a href='{{versionica_link}}'>Версионика</a>
+            <br>
+            <br>
+            Reqid: {{ reqid }}
+            <br>
+            <br>
+            <a href='/testupdate/logindex'>Логи обновлений</a>
+            <br>
+            <a href="/testupdate/index">Список версий и тестовых серверов</a>
+        </div>
+
+    </div> <!-- /container -->
+  </body>
+</html>

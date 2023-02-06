@@ -1,0 +1,20 @@
+base: etc/imap/base-testing.yml
+config:
+    system:
+        uid: imap
+        gid: imap
+    modules:
+        module:
+        -   _name: imap_server
+            configuration:
+                ssl:
+                    cert_file: etc/imap/ssl/imap-tst.mail.yandex.net.pem
+                    key_file: etc/imap/ssl/imap-tst.mail.yandex.net.pem
+                endpoints:
+                    listen:
+                    -   addr: '::'
+                        port: 143
+                        secure: 0
+                    -   addr: '::'
+                        port: 993
+                        secure: 1

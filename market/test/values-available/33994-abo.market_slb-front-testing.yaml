@@ -1,0 +1,20 @@
+context:
+  default:
+    service_name: abo
+    servername_regexp: 'abo\\.(tst\\.market\\.yandex-team|market\\.fslb\\.yandex)\\.ru'
+    vs: abo
+    health_check: '"GET /ping HTTP/1.1\r\nHost: abo.tst.market.yandex-team.ru\r\n\r\n"'
+    antirobot: True
+    antirobot_service_name: market
+    balancing_method: "active"
+    cert: abo.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+
+servers:
+  default:
+    main:
+      - name: "GREY%abo.tst.vs.market.yandex.net"
+        timeout: "1800s"
+        port: 80
+        plain_http_backend: True

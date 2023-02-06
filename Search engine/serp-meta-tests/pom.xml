@@ -1,0 +1,139 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>serp-meta</artifactId>
+        <groupId>ru.yandex.autotests.search</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>serp-meta-tests</artifactId>
+    <packaging>jar</packaging>
+    <name>Autotests Search Meta Tests</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <parallel-method>methods</parallel-method>
+        <thread-count>10</thread-count>
+
+        <report.artifact.id>custom-report-plugin</report.artifact.id>
+        <report.directory>${project.basedir}/target/site/${report.artifact.id}</report.directory>
+        <report.xml.name>meta.xml</report.xml.name>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>ru.yandex.autotests.search</groupId>
+            <artifactId>serp-meta-utils</artifactId>
+            <version>${parent.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>ru.yandex.autotests.search</groupId>
+                    <artifactId>common-urlutils</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>ru.yandex.autotests.search</groupId>
+            <artifactId>common-urlutils</artifactId>
+            <version>1.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.7</version>
+                <executions>
+                    <execution>
+                        <id>unpack-report-files</id>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>ru.yandex.autotests.search</groupId>
+                                    <artifactId>meta-report-files</artifactId>
+                                    <version>${parent.version}</version>
+                                    <outputDirectory>${report.directory}</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>net.sf.xsltmp</groupId>
+                <artifactId>xslt-generator-maven-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>generate-report</id>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>many-to-many</goal>
+                        </goals>
+                        <configuration>
+                            <srcDir>${report.directory}</srcDir>
+                            <destDir>${report.directory}</destDir>
+                            <xslTemplate>${report.directory}/report.xsl</xslTemplate>
+                            <srcIncludes>${report.xml.name}</srcIncludes>
+                            <fileNameRegex>${report.xml.name}</fileNameRegex>
+                            <fileNameReplacement>index.html</fileNameReplacement>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-junit-xml</id>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>many-to-one</goal>
+                        </goals>
+                        <configuration>
+                            <srcDir>${report.directory}</srcDir>
+                            <srcFile>${report.directory}/${report.xml.name}</srcFile>
+                            <destFile>${report.directory}/junit.xml</destFile>
+                            <xslTemplate>${report.directory}/junit.xsl</xslTemplate>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sf.saxon</groupId>
+                        <artifactId>saxon</artifactId>
+                        <version>8.7</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <reportPlugins>
+                        <plugin>
+                            <groupId>ru.yandex.autotests.plugins</groupId>
+                            <artifactId>custom-report-plugin</artifactId>
+                            <version>1.0-SNAPSHOT</version>
+                            <configuration>
+                                <name>Meta Report</name>
+                                <description>MetaSearch test automation tool</description>
+                            </configuration>
+                        </plugin>
+                    </reportPlugins>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.20</version>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+

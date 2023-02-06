@@ -1,0 +1,28 @@
+module.exports = [{
+    entity: 'opinion',
+    id: 59586730,
+    anonymous: 0,
+    comment: '12312311331',
+    pro: '123123',
+    type: 1,
+    contra: '12312131',
+    factors: [],
+    photos: [
+        {
+            entity: 'photo',
+            groupId: '3723',
+            imageName: '2a0000015acd62e61f1ad0f4aa17a81300e1',
+            'mod-status': 'UNMODERATED',
+        },
+    ],
+    votes: {agree: 0, reject: 0, total: 0},
+    averageGrade: 4,
+    created: 1489504547000,
+    user: {entity: 'user', uid: 4000690763},
+    region: {entity: 'region', id: null},
+    moderationState: 0,
+    moderationReason: 0,
+    usage: 0,
+    modelId: 12799223,
+    product: {entity: 'product', id: 12799223},
+}];

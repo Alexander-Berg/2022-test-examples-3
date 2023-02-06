@@ -1,0 +1,57 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "azimuth_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 1034
+    confirm_dt = "2019-08-15 14:21:33"
+    created_at = "2019-08-15 14:20:32"
+    currency = ""
+    from = "KRR"
+    marker = "e76cf7dd-a5e969-8357-4c7c-8c65-75d423729ea81"
+    order_id = "6368949"
+    partner = "azimuth"
+    partner_id = 124
+    price = 9840.0
+    source = "azimuth"
+    status = "paid"
+    ticket_number = ""
+    to = "BZK"
+    trip_type = "oneway"
+    unixtime = 1565879488
+
+[lb]
+    topic = "topic-azimuth_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "updated_at"]
+
+[[lb.expected]]
+    status = "confirmed"
+    category = "avia"
+    partner_id = 124
+    created_at = 1565878832
+    origin = "KRR"
+    partner_order_id = "6368949"
+    label = "e76cf7dd-a5e969-8357-4c7c-8c65-75d423729ea81"
+    source = "history"
+    destination = "BZK"
+    partner_name = "azimuth"
+    trip_type = "oneway"
+    billing_order_id = 1034
+    order_amount = 9840.0
+    travel_order_id = "azimuth:6368949"
+    currency_code = "RUB"

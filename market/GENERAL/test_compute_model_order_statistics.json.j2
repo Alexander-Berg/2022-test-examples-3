@@ -1,0 +1,38 @@
+{% if table == "features_item_model_order_statistics" %}
+    {# Result data. #}
+    {% table "features_item_model_order_statistics" %}
+        ["1", 1.0, 1.0, 0.25, 0.5,  0.0, 0.0, 0.0, 0.0,  0.0, 0.0, 0.0, 0.0,                          1.0, {{ 1.0 / 9.0 }}, "model", "{{ day }}"],
+        ["2", 3.0, 2.0, 0.75, 0.3,  1.0, 1.0, 0.2, 0.1,  1.0, 1.0, {{ 1.0 / 3.0 }}, {{ 1.0 / 9.0}},   4.0, {{ 4.0 / 9.0 }}, "model", "{{ day }}"],
+        ["3", 0.0, 0.0, 0.0, 0.0,   4.0, 2.0, 0.8, 0.5,  2.0, 2.0, {{ 2.0 / 3.0 }}, {{ 2.0 / 7.0 }},  4.0, {{ 4.0 / 9.0 }}, "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "features_item_model_cart_addition_statistics" %}
+    {% table "features_item_model_cart_addition_statistics" %}
+        ["2",  10.0, 1.0, {{ 10.0 / 18.0 }},  9.0, 1.0, {{ 9.0 / 16.0 }},  "model", "{{ day }}"],
+        ["3",  8.0, 1.0, {{ 8.0 / 18.0 }},    7.0, 1.0, {{ 7.0 / 16.0 }},  "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "features_item_model_clickout_statistics" %}
+    {% table "features_item_model_clickout_statistics" %}
+        ["1", 2.0, 1.0, "model", "{{ day }}"],
+        ["2", 10.0, 1.0, "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_external_orders" %}
+    {% table "events" %}
+        [12345, {"yandexuid": "1"}, "order", "offer", null, {}, "{{ day }}"],
+        [12346, {"yandexuid": "1"}, "order", "offer", null, {"model_id": null}, "{{ day }}"],
+        [12347, {"yandexuid": "1"}, "order", "offer", null, {"model_id": "1"}, "{{ day }}"],
+        [12348, {"yandexuid": "1"}, "order", "offer", null, {"model_id": "2"}, "{{ day }}"],
+        [12349, {"yandexuid": "1"}, "order", "offer", null, {"model_id": "2"}, "{{ day }}"],
+        [12350, {"yandexuid": "2"}, "order", "offer", null, {"model_id": "2"}, "{{ day }}"],
+        [12351, {"yandexuid": null}, "order", "offer", null, {"model_id": "3"}, "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_internal_orders" %}
+    {% table "events" %}
+        [12345, {"yandexuid": "111", "puid": "0111", "uuid": null}, "order", "offer", null, {}, "{{ day }}"],
+        [12346, {"yandexuid": "111", "puid": "0111", "uuid": null}, "order", "offer", null, {"model_id": null}, "{{ day }}"],
+        [12347, {"yandexuid": "111", "puid": "0111", "uuid": null}, "order", "offer", null, {"model_id": "2", "rgb": "BLUE"}, "{{ day }}"],
+        [12348, {"yandexuid": "111", "puid": "0111", "uuid": null}, "order", "offer", null, {"model_id": "3", "rgb": "BLUE"}, "{{ day }}"],
+        [12349, {"yandexuid": "222", "puid": "0222", "uuid": null}, "order", "offer", null, {"model_id": "3", "rgb": "BLUE"}, "{{ day }}"],
+        [12350, {"yandexuid": "222", "puid": "0222", "uuid": null}, "order", "offer", null, {"model_id": "3", "rgb": "RED"}, "{{ day }}"],
+        [12351, {"yandexuid": "222", "puid": "0222", "uuid": null}, "order", "offer", null, {"model_id": "3", "rgb": "RED"}, "{{ day }}"]
+    {% endtable %}
+{% endif %}

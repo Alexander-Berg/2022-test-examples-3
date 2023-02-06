@@ -1,0 +1,46 @@
+autostop:
+  autostop:
+  - limit(10m)
+  - quantile(50,7000,20)
+  - http(4xx,25%,10)
+  - http(5xx,25%,7)
+  package: yandextank.plugins.Autostop
+pandora:
+    enabled: true
+    pandora_cmd: ./pandora
+    config_content:
+        pools:
+           - id: Custom
+             gun:
+                 type: grpc_gun
+                 target: tank.weenae5r6v5aut4a.myt.yp-c.yandex.net:8080
+             ammo:
+                  type: custom_provider
+                  source:
+                      type: file
+                      path: ./ammo.json
+             result:
+                 type: phout
+                 destination: ./phout.log
+             rps:
+               - {duration: 30s, type: line,  from: 1, to: 10}
+             startup:
+               - {type: once, times: 10000}
+        log:
+            level: error
+            #        monitoring:
+            #expvar:
+            #    enabled: true
+            #    port: 1234
+phantom:
+  enabled: false
+telegraf:
+  config: monitoring.xml
+  enabled: false
+  package: yandextank.plugins.Telegraf
+uploader:
+  operator: ligreen
+  package: yandextank.plugins.DataUploader
+  task: LOAD-1139
+console:
+  enabled: true

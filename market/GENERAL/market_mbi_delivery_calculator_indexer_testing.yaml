@@ -1,0 +1,316 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_mbi_delivery_calculator_indexer_testing
+
+juggler:
+  checks:
+
+  # Check delicalc-nginx-testing-check
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_delivery_calculator_indexer_testing&service=delicalc-nginx-testing-check&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    check_options: {}
+    children:
+    - delicalc-nginx-testing:delicalc-nginx-testing-daas-deliverySearch-400s
+    - delicalc-nginx-testing:delicalc-nginx-testing-daas-deliverySearch-500s
+    - delicalc-nginx-testing:delicalc-nginx-testing-marketActualDeliveryInfo-400s
+    - delicalc-nginx-testing:delicalc-nginx-testing-marketActualDeliveryInfo-500s
+    - delicalc-nginx-testing:delicalc-nginx-testing-shopDeliveryMeta-400s
+    - delicalc-nginx-testing:delicalc-nginx-testing-shopDeliveryMeta-500s
+    - delicalc-nginx-testing:delicalc-nginx-testing-shopOffers-400s
+    - delicalc-nginx-testing:delicalc-nginx-testing-shopOffers-500s
+    - delicalc-nginx-testing:delicalc-nginx-testing-shopOffers-respTime-q95
+    notifications:
+    - template_kwargs:
+        login: mbi-testing-tg
+        method: telegram
+        status:
+        - from: OK
+          to: CRIT
+        - from: CRIT
+          to: OK
+        - from: CRIT
+          to: WARN
+        - from: WARN
+          to: CRIT
+      template_name: on_status_change
+    service: delicalc-nginx-testing-check
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_delivery_calculator_indexer_testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: '0'
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: skip
+    check_options: {}
+    children:
+    - NANNY%testing_market_delivery_calculator_indexer_sas
+    - NANNY%testing_market_delivery_calculator_indexer_vla
+    notifications:
+    - template_kwargs:
+        login: mbi-release-tg
+        method: telegram
+        status:
+        - CRIT
+        - WARN
+        - OK
+      template_name: on_status_change
+    service: disk_free_space
+
+  # Check fresh-hprof-files
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_delivery_calculator_indexer_testing&service=fresh-hprof-files&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options: {}
+    children:
+    - NANNY%testing_market_delivery_calculator_indexer_sas
+    - NANNY%testing_market_delivery_calculator_indexer_vla
+    notifications:
+    - template_kwargs:
+        login: mbi-testing-tg
+        method: telegram
+        status:
+        - CRIT
+        - WARN
+        - OK
+      template_name: on_status_change
+    service: fresh-hprof-files
+
+  # Check logbroker-messages
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_delivery_calculator_indexer_testing&service=logbroker-messages&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "tms", "path": "/jobStatus"}, {"service": "logbroker-messages",
+        "path": "/monitorLogbrokerMessages"} ]
+
+        '
+    children:
+    - NANNY%testing_market_delivery_calculator_indexer_sas
+    - NANNY%testing_market_delivery_calculator_indexer_vla
+    notifications:
+    - template_kwargs:
+        login: mbi-testing-tg
+        method: telegram
+        status:
+        - from: OK
+          to: CRIT
+        - from: CRIT
+          to: OK
+        - from: CRIT
+          to: WARN
+        - from: WARN
+          to: CRIT
+      template_name: on_status_change
+    service: logbroker-messages
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_delivery_calculator_indexer_testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options: {}
+    children:
+    - NANNY%testing_market_delivery_calculator_indexer_sas
+    - NANNY%testing_market_delivery_calculator_indexer_vla
+    notifications:
+    - template_kwargs:
+        login: mbi-testing-tg
+        method: telegram
+        status:
+        - CRIT
+        - WARN
+        - OK
+      template_name: on_status_change
+    service: logrotate
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_delivery_calculator_indexer_testing&service=ping&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "tms", "path": "/jobStatus"}, {"service": "logbroker-messages",
+        "path": "/monitorLogbrokerMessages"} ]
+
+        '
+    children:
+    - NANNY%testing_market_delivery_calculator_indexer_sas
+    - NANNY%testing_market_delivery_calculator_indexer_vla
+    notifications:
+    - template_kwargs:
+        login: mbi-testing-tg
+        method: telegram
+        status:
+        - from: OK
+          to: CRIT
+        - from: CRIT
+          to: OK
+        - from: CRIT
+          to: WARN
+        - from: WARN
+          to: CRIT
+      template_name: on_status_change
+    service: ping
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_delivery_calculator_indexer_testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options: {}
+    children:
+    - NANNY%testing_market_delivery_calculator_indexer_sas
+    - NANNY%testing_market_delivery_calculator_indexer_vla
+    notifications:
+    - template_kwargs:
+        login: mbi-testing-tg
+        method: telegram
+        status:
+        - CRIT
+        - WARN
+        - OK
+      template_name: on_status_change
+    service: push-client-status
+
+  # Check tms
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_delivery_calculator_indexer_testing&service=tms&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "tms", "path": "/jobStatus"}, {"service": "logbroker-messages",
+        "path": "/monitorLogbrokerMessages"} ]
+
+        '
+    children:
+    - NANNY%testing_market_delivery_calculator_indexer_sas
+    - NANNY%testing_market_delivery_calculator_indexer_vla
+    notifications:
+    - template_kwargs:
+        login: mbi-testing-tg
+        method: telegram
+        status:
+        - from: OK
+          to: CRIT
+        - from: CRIT
+          to: OK
+        - from: CRIT
+          to: WARN
+        - from: WARN
+          to: CRIT
+      template_name: on_status_change
+    service: tms
+  default:
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_mbi_delivery_calculator_indexer_testing
+    namespace: market.mbi_shops
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - market_mbi
+    - market_mbi_delivery_calculator_indexer
+    - market
+    - _market_
+    ttl: 1800

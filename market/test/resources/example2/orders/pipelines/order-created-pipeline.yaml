@@ -1,0 +1,14 @@
+module: orders-pipelines
+operators:
+  - id: order-created-pipeline
+    visibility: public
+    value#processing-pipeline:
+      id: order-created-pipeline
+      conditions:
+        - reason: order-created
+      shared-state-init:
+        {}
+      stages:
+        - id: get-order-stage
+          handlers:
+            - value#xget: /external/order-handlers/get-checkouter-order-handler

@@ -1,0 +1,20 @@
+context:
+  default:
+    service_name: mbo_proxy_front
+    servername_regexp: '([a-z0-9-_\\.]+)\\.proxy-front\\.mbo-testing\\.(market\\.)?yandex(-team)?\\.ru'
+    vs: mbo_proxy_front
+    health_check: '"GET /ping HTTP/1.1\r\nHost: ping.proxy-front.mbo-testing.yandex-team.ru\r\n\r\n"'
+    antirobot: False
+    balancing_method: "active"
+    cert: mbo-proxy-front.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+    disable_icookie: true
+
+servers:
+  default:
+    main:
+      - name: "GREY%mbo-proxy-front.tst.vs.market.yandex.net"
+        timeout: "600s"
+        port: 80
+        plain_http_backend: True

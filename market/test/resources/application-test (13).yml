@@ -1,0 +1,61 @@
+warehouse-timezone: Europe/Moscow
+application:
+  security:
+    use-tvm-auth: false
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:WMS;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS inventory_management\;SET SCHEMA inventory_management
+    username: inventory-management
+    separator: ^^^ END OF SCRIPT ^^^
+  config:
+    import:
+      - application-fragment-common-test.yml
+  main:
+    allow-bean-definition-overriding: true
+  liquibase:
+    enabled: true
+
+AppServer: localhost
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms: debug
+    org.springframework.jdbc.core: debug
+    root: info
+
+check:
+  authentication: 'no'
+
+wiremock.server.port: 9999
+
+wms:
+  inventory-management:
+    host: localhost/inventory-management
+    tvm:
+      serviceId: 0
+      secret: xxx
+      log-only-mode: false
+      check-user-ticket: false
+      cache:
+        dir: /var/cache/tvm
+  core:
+    tvm:
+      serviceId: 0
+  inventory:
+    tvm:
+      serviceId: 0
+
+core:
+  api:
+    host: http://core.local
+
+inventory:
+  api:
+    host: http://iventory.local
+
+s3.use: false
+
+tts:
+  warehouse-name: 100

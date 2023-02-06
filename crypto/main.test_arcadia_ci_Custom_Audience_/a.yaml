@@ -1,0 +1,222 @@
+ci:
+  flows:
+    flow-custom-audience:
+      jobs:
+        build-crypta-siberia-custom-audience:
+          input:
+            custom_version: ${context.version_info.full}
+            packages: crypta/siberia/bin/custom_audience/fast/docker/crypta-siberia-custom-audience.json
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package_docker
+          title: Build crypta-siberia-custom-audience
+        build-crypta-siberia-custom-audience-bs-apps-cluster-mapping:
+          input:
+            package_resource_attrs:
+              name: crypta-siberia-custom-audience-bs-apps-cluster-mapping
+            packages: crypta/siberia/bin/custom_audience/bs_apps_cluster_mapping/bundle/crypta-siberia-custom-audience-bs-apps-cluster-mapping.json
+            resource_type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package
+          title: Build crypta-siberia-custom-audience-bs-apps-cluster-mapping
+        build-crypta-siberia-custom-audience-bs-host-cluster-mapping:
+          input:
+            package_resource_attrs:
+              name: crypta-siberia-custom-audience-bs-host-cluster-mapping
+            packages: crypta/siberia/bin/custom_audience/bs_host_cluster_mapping/bundle/crypta-siberia-custom-audience-bs-host-cluster-mapping.json
+            resource_type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package
+          title: Build crypta-siberia-custom-audience-bs-host-cluster-mapping
+        build-crypta-siberia-custom-audience-build-apps-for-suggester:
+          input:
+            package_resource_attrs:
+              name: crypta-siberia-custom-audience-build-apps-for-suggester
+            packages: crypta/siberia/bin/custom_audience/build_apps_for_suggester/bundle/crypta-siberia-custom-audience-build-apps-for-suggester.json
+            resource_type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package
+          title: Build crypta-siberia-custom-audience-build-apps-for-suggester
+        build-crypta-siberia-custom-audience-builder:
+          input:
+            package_resource_attrs:
+              name: crypta-siberia-custom-audience-builder
+            packages: crypta/siberia/bin/custom_audience/ca_builder/bundle/crypta-siberia-custom-audience-builder.json
+            resource_type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package
+          title: Build crypta-siberia-custom-audience-builder
+        build-crypta-siberia-custom-audience-hosts-filter:
+          input:
+            package_resource_attrs:
+              name: crypta-siberia-custom-audience-hosts-filter
+            packages: crypta/siberia/bin/custom_audience/hosts_filter/bundle/crypta-siberia-custom-audience-hosts-filter.json
+            resource_type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package
+          title: Build crypta-siberia-custom-audience-hosts-filter
+        build-crypta-siberia-custom-audience-suggester:
+          input:
+            custom_version: ${context.version_info.full}
+            packages: crypta/siberia/bin/custom_audience/suggester/docker/crypta-siberia-custom-audience-suggester.json
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package_docker
+          title: Build crypta-siberia-custom-audience-suggester
+        build-crypta-siberia-custom-audience-to-bigb-collector:
+          input:
+            package_resource_attrs:
+              name: crypta-siberia-custom-audience-to-bigb-collector
+            packages: crypta/siberia/bin/custom_audience/to_bigb_collector/bundle/crypta-siberia-custom-audience-to-bigb-collector.json
+            resource_type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package
+          title: Build crypta-siberia-custom-audience-to-bigb-collector
+        release-stable:
+          input:
+            config:
+              common_release_data:
+                sandbox_common_release_data:
+                  release_stage: stable
+              deploy_system: SANDBOX
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-siberia-custom-audience-builder.resources[?type
+                  == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-siberia-custom-audience-hosts-filter.resources[?type
+                  == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-siberia-custom-audience-bs-host-cluster-mapping.resources[?type
+                  == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-siberia-custom-audience-build-apps-for-suggester.resources[?type
+                  == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-siberia-custom-audience-bs-apps-cluster-mapping.resources[?type
+                  == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-siberia-custom-audience-to-bigb-collector.resources[?type
+                  == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-siberia-custom-audience.resources[?type
+                  == 'CRYPTA_DOCKER'])[0].id}
+                type: CRYPTA_DOCKER
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-siberia-custom-audience-suggester.resources[?type
+                  == 'CRYPTA_DOCKER'])[0].id}
+                type: CRYPTA_DOCKER
+          needs:
+          - start-stable
+          stage: stable
+          task: common/releases/simple_releaser
+          title: Release to stable
+        release-testing:
+          input:
+            config:
+              common_release_data:
+                sandbox_common_release_data:
+                  release_stage: testing
+              deploy_system: SANDBOX
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-siberia-custom-audience-builder.resources[?type
+                  == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-siberia-custom-audience-hosts-filter.resources[?type
+                  == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-siberia-custom-audience-bs-host-cluster-mapping.resources[?type
+                  == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-siberia-custom-audience-build-apps-for-suggester.resources[?type
+                  == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-siberia-custom-audience-bs-apps-cluster-mapping.resources[?type
+                  == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-siberia-custom-audience-to-bigb-collector.resources[?type
+                  == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-siberia-custom-audience.resources[?type
+                  == 'CRYPTA_DOCKER'])[0].id}
+                type: CRYPTA_DOCKER
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-siberia-custom-audience-suggester.resources[?type
+                  == 'CRYPTA_DOCKER'])[0].id}
+                type: CRYPTA_DOCKER
+          needs:
+          - start-testing
+          stage: testing
+          task: common/releases/simple_releaser
+          title: Release to testing
+        start-build:
+          stage: build
+          task: dummy
+          title: Start build
+        start-stable:
+          manual: true
+          needs:
+          - release-testing
+          stage: stable
+          task: dummy
+          title: Start stable
+        start-testing:
+          needs:
+          - build-crypta-siberia-custom-audience-builder
+          - build-crypta-siberia-custom-audience-hosts-filter
+          - build-crypta-siberia-custom-audience-bs-host-cluster-mapping
+          - build-crypta-siberia-custom-audience-build-apps-for-suggester
+          - build-crypta-siberia-custom-audience-bs-apps-cluster-mapping
+          - build-crypta-siberia-custom-audience-to-bigb-collector
+          - build-crypta-siberia-custom-audience
+          - build-crypta-siberia-custom-audience-suggester
+          stage: testing
+          task: dummy
+          title: Start testing
+  releases:
+    custom-audience:
+      auto: true
+      filters:
+      - abs-paths:
+        - crypta/siberia/bin/custom_audience/**
+        discovery: dir
+      flow: flow-custom-audience
+      stages:
+      - displace: true
+        id: build
+      - displace: true
+        id: testing
+      - id: stable
+      title: Custom Audience
+  runtime:
+    sandbox-owner: CRYPTA
+  secret: sec-01efps66gnbmejg9wvc9ptvhmc
+service: cryptadev
+title: Custom Audience

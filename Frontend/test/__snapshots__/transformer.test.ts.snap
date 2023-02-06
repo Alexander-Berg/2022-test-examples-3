@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`transformer should not transform when it is not pushModuleRendererImport call 1`] = `
+"PushModuleRenderer.something();
+"
+`;
+
+exports[`transformer should not transform when more than one argument is passed to pushModuleRendererImport 1`] = `
+"PushModuleRenderer.pushModuleRendererImport(import(\\"module\\"), 42);
+"
+`;
+
+exports[`transformer should not transform when the thing passed to pushModuleRendererImport as an argument is not a dynamic import 1`] = `
+"PushModuleRenderer.pushModuleRendererImport(true);
+"
+`;
+
+exports[`transformer should not transform when the thing passed to pushModuleRendererImport as an argument is not a dynamic import 2`] = `
+"PushModuleRenderer.pushModuleRendererImport(f(\\"module\\"));
+"
+`;
+
+exports[`transformer should not transform when the thing passed to pushModuleRendererImport as an argument is not a dynamic import 3`] = `
+"PushModuleRenderer.pushModuleRendererImport(import());
+"
+`;
+
+exports[`transformer should not transform when the thing passed to pushModuleRendererImport as an argument is not a dynamic import 4`] = `
+"PushModuleRenderer.pushModuleRendererImport(import(identifier));
+"
+`;
+
+exports[`transformer should not transform when zero arguments are passed to pushModuleRendererImport 1`] = `
+"PushModuleRenderer.pushModuleRendererImport();
+"
+`;
+
+exports[`transformer should replace push module import with a normal one when it is property assignment 1`] = `
+"{
+    prop: __webpack_require__(require.resolve(\\"module\\")).default;
+}
+;
+"
+`;
+
+exports[`transformer should replace push module import with a normal one when it is the simplest case 1`] = `
+"__webpack_require__(require.resolve(\\"module\\")).default;
+"
+`;
+
+exports[`transformer should replace push module import with a normal one when it is variable declaration 1`] = `
+"const x = __webpack_require__(require.resolve(\\"module\\")).default;
+"
+`;
+
+exports[`transformer should replace push module import with a normal one when there is multiple occurrences of it 1`] = `
+"const x = __webpack_require__(require.resolve(\\"module1\\")).default;
+{
+    prop: __webpack_require__(require.resolve(\\"module2\\")).default;
+}
+;
+"
+`;
+
+exports[`transformer should work with transpiling 1`] = `
+"__webpack_require__(require.resolve(\\"module\\")).default;
+"
+`;

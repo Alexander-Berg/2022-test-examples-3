@@ -1,0 +1,152 @@
+yenv_type: "testing"
+travel_portal_url: "https://travel-test.yandex.ru"
+grpc:
+  addr: "[::]:9001"
+  allowreflection: true
+tvm:
+  enabled: true
+  whitelist:
+    - 2002740 # travel-orders
+    - 2025412 # travel-notifer own tvm-id for /readiness probe and debugging purposes
+    - 2002548 # travel-api
+    - 2032083 # travel-trips-api
+  selfappid: 2025412
+database:
+  user: "avia"
+  name: "notifier"
+logging:
+  sentrydsn: "http://1645b310b33248bb9789af8b2bd7f10c:9659f93fd5e347918874277cee6885a8@sentry.testing.avia.yandex.net/270"
+ordersapp:
+  tvmid: 2002740
+  yplannerid: "travel-orders-app-testing"
+contentadmin:
+  tvmid: 2025764
+  host: "production.content-backend.rasp.yandex.net:9001"
+sender:
+  timeout: 10s
+  authkey: "SECRET"
+  url: "https://test.sender.yandex-team.ru"
+  account: "travel"
+dicts:
+  resources_path: "/dynamic_resources/symlinks/dicts"
+  use_dynamic_resources: true
+yt_dicts:
+  ignore_startup_errors: true
+  promo_events:
+    enabled: true
+    update_interval: 1m
+    proxies:
+      - hahn
+      - arnold
+    table_path: "//home/travel/testing/config/promo_events"
+subscriptions:
+  sender_campaigns:
+    promo-send: "WG0SE064-3ZF1"
+    promo-remind: "KJ4UX464-FF91"
+  send_promo_notifications: true
+  promo_code_valid_duration: "24h"
+  promo_code_notify_start: "2h"
+  promo_code_notify_end: "1h"
+  sender_unsubscribe_list_slug: "8EYZRSH2-Y2K1"
+  unsubscribe_path: "/subscription/unsubscribe/promo/"
+pretrip:
+  email_rules:
+    always_allowed:
+      - ".+" # Enables scheduling pretrip-notifications for all emails.
+  testing:
+    adhoc_sending_interval: "2m"
+    week_before_sending_interval: "2m"
+    day_before_sending_interval: "4m"
+    emails:
+      - "travel.mail.test@gmail.com"
+      - "travel.mail.test@mail.ru"
+      - "travel.mail.test@rambler.ru"
+      - "travel.mail.test@yandex.ru"
+      - "rtyuiuytretyuioiuytresxcvbnkl@outlook.com"
+      - "tcheremnykh@yandex-team.ru"
+  settlements_whitelist:
+    # these IDs are not geoIDs
+    - 2 # Санкт-Петербург
+    - 4 # Белгород
+    - 5 # Иваново
+    - 6 # Калуга
+    - 7 # Кострома
+    - 8 # Курск
+    - 9 # Липецк
+    - 10 # Орёл
+    - 15 # Тула
+    - 11 # Рязань
+    - 12 # Смоленск
+    - 13 # Тамбов
+    - 14 # Тверь
+    - 16 # Ярославль
+    - 18 # Петрозаводск
+    - 20 # Архангельск
+    - 21 # Вологда
+    - 22 # Калининград
+    - 25 # Псков
+    - 35 # Краснодар
+    - 37 # Астрахань
+    - 38 # Волгоград
+    - 39 # Ростов-на-Дону
+    - 42 # Саранск
+    - 43 # Казань
+    - 44 # Ижевск
+    - 45 # Чебоксары
+    - 46 # Киров
+    - 48 # Оренбург
+    - 49 # Пенза
+    - 50 # Пермь
+    - 51 # Самара
+    - 54 # Екатеринбург
+    - 55 # Тюмень
+    - 56 # Челябинск
+    - 62 # Красноярск
+    - 63 # Иркутск
+    - 65 # Новосибирск
+    - 66 # Омск
+    - 67 # Томск
+    - 68 # Чита
+    - 75 # Владивосток
+    - 76 # Хабаровск
+    - 172 # Уфа
+    - 191 # Брянск
+    - 192 # Владимир
+    - 193 # Воронеж
+    - 194 # Саратов
+    - 195 # Ульяновск
+    - 197 # Барнаул
+    - 198 # Улан-Удэ
+    - 213 # Москва
+    - 237 # Новокузнецк
+    - 239 # Сочи
+    - 968 # Череповец
+    - 970 # Новороссийск
+    - 973 # Сургут
+    - 1058 # Туапсе
+    - 1091 # Нижневартовск
+    - 1107 # Анапа
+    - 10664 # Ковров
+    - 10739 # Можайск
+    - 10752 # Сергиев Посад
+    - 10754 # Серпухов
+    - 10782 # Вязьма
+    - 10783 # Гагарин
+    - 10803 # Мичуринск
+    - 10937 # Сортавала
+    - 10987 # Армавир
+    - 10990 # Геленджик
+    - 10994 # Красная Поляна
+    - 10998 # Лазаревское
+    - 11062 # Кисловодск
+    - 11063 # Минеральные Воды
+    - 11064 # Невинномысск
+    - 11067 # Пятигорск
+    - 11139 # Сызрань
+    - 11470 # Ялта
+    - 20210 # Грязи
+    - 23243 # Нижний Новгород
+    - 73086 # Эсто-Садок
+
+online_registration:
+  enabled: true

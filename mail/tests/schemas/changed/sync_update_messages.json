@@ -1,0 +1,45 @@
+{
+  "definitions": {
+    "lids": {
+      "type": "array",
+      "items": { "type": "integer" },
+      "uniqueItems": true
+    },
+    "tid": {
+      "oneOf": [
+        { "type": "integer" },
+        { "type": "null" }
+      ]
+    }
+  },
+  "type": "array",
+  "uniqueItems": true,
+  "minLength": 1,
+  "items": {
+    "type": "object",
+    "properties": {
+      "owner_uid": { "type": "integer" },
+      "owner_mid": { "type": "integer" },
+      "owner_fid": { "type": "integer" },
+      "mid":       { "type": "integer" },
+      "fid":       { "type": "integer" },
+      "tid":       { "$ref": "#/definitions/tid" },
+      "lids":      { "$ref": "#/definitions/lids" },
+      "seen":      { "type": "boolean" },
+      "recent":    { "type": "boolean" },
+      "deleted":   { "type": "boolean" }
+    },
+    "additionalProperties": false,
+    "required": [
+      "owner_uid",
+      "owner_mid",
+      "owner_fid",
+      "mid",
+      "tid",
+      "lids",
+      "seen",
+      "recent",
+      "deleted"
+    ]
+  }
+}

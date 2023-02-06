@@ -1,0 +1,425 @@
+annotations:
+  stagectl_epoch: 803
+  stagectl_vcs:
+    svn_branch: stage_controller/stable-144-1
+    svn_revision: 9047699
+    svn_tag: stage_controller/stable-144-1
+labels:
+  deploy_engine: env_controller
+  du_patchers_target_revision:
+    cabinet1p: 11
+  du_sidecar_target_revision:
+    cabinet1p:
+      podBin: 2621390537
+    common-template-placeholder:
+      podBin: 2460258894
+  notifications_last_timestamp: 1643160579173516000
+  stagectl_epoch: 589
+  stagectl_vcs:
+    svn_branch: stage_controller/stable-108-2
+    svn_revision: 7951591
+    svn_tag: stage_controller/stable-108-2
+  tags:
+  - ABC0:meta_market
+  - ABC1:market
+  - ABC:partner_1p
+  - testing
+  - market_testing
+meta:
+  account_id: abc:service:36272
+  acl:
+  - action: allow
+    permissions:
+    - read
+    - read_secrets
+    - write
+    - create
+    - ssh_access
+    - root_ssh_access
+    subjects:
+    - robot-drug-deploy
+  id: testing_market_cabinet1p
+  inherit_acl: true
+  project_id: market_cabinet1p
+spec:
+  deploy_units:
+    cabinet1p:
+      box_juggler_configs:
+        cabinet1p_box:
+          port: 31580
+        infra_box:
+          port: 31579
+      deploy_settings:
+        cluster_sequence:
+        - yp_cluster: sas
+        - yp_cluster: vla
+      endpoint_sets:
+      - liveness_limit_ratio: 1.0
+        port: 80
+      logbroker_tools_sandbox_info:
+        revision: 2249562029
+      logrotate_configs:
+        cabinet1p_box:
+          raw_config: "/app/log/*.log\n{\n        missingok\n\n        daily\n        dateext\n
+            \       dateformat .%Y-%m-%d.%s\n\n        rotate 30\n\n        compress\n
+            \       delaycompress\n\n        maxsize 2G\n\n        nocopytruncate\n
+            \       nocreate\n}"
+          run_period_millisecond: 3600000
+        infra_box:
+          run_period_millisecond: 60000
+      network_defaults:
+        network_id: _MARKET_TEST_CABINET_1P_API_NETS_
+      patchers_revision: 11
+      pod_agent_sandbox_info:
+        revision: 2621390537
+      replica_set:
+        per_cluster_settings:
+          sas:
+            deployment_strategy:
+              max_unavailable: 1
+            pod_count: 1
+          vla:
+            deployment_strategy:
+              max_unavailable: 1
+            pod_count: 1
+        replica_set_template:
+          constraints:
+            antiaffinity_constraints:
+            - key: rack
+              max_pods: 1
+          pod_template_spec:
+            labels:
+              market_abc: partner_1p
+              market_env: testing
+            spec:
+              disk_volume_requests:
+              - id: disk-0
+                labels:
+                  used_by_infra: true
+                quota_policy:
+                  bandwidth_guarantee: 15728640
+                  bandwidth_limit: 15728640
+                  capacity: 10737418240
+                storage_class: ssd
+              host_infra:
+                monitoring:
+                  labels:
+                    ctype: testing
+                    itype: marketcabinet1p
+                    prj: market
+                  unistats:
+                  - labels:
+                      itype: marketcabinet1p
+                    workload_id: cabinet1p_workload
+                  - labels:
+                      itype: marketcabinet1p
+                    path: /unistat
+                    port: 80
+                    workload_id: nginx_workload
+              pod_agent_payload:
+                spec:
+                  boxes:
+                  - env:
+                    - name: R
+                      value:
+                        literal_env:
+                          value: '3'
+                    id: cabinet1p_box
+                    rootfs:
+                      layer_refs:
+                      - layer
+                      - application
+                      - webapp
+                      - app-juggler-checks
+                      - market-sre-binaries
+                    volumes:
+                    - mode: read_write
+                      mount_point: /var/log/yandex
+                      volume_ref: logs_volume
+                    - mode: read_write
+                      mount_point: /app/data
+                      volume_ref: data_volume
+                  - id: infra_box
+                    init:
+                    - command_line: prostarter dpreparer manifest execute
+                      time_limit:
+                        max_execution_time_ms: 60000
+                    rootfs:
+                      layer_refs:
+                      - layer
+                      - custom_conf_layer
+                      - market-sre-configs
+                      - logkeeper
+                      - solomon-agent
+                      - push-client
+                      - nginx-juggler-checks
+                      - infra-juggler-checks
+                      - market-sre-binaries
+                      - infra-layer
+                    static_resources:
+                    - mount_point: /app/secrets
+                      resource_ref: market-sre-resources-secrets
+                    volumes:
+                    - mode: read_write
+                      mount_point: /var/log/yandex
+                      volume_ref: logs_volume
+                  mutable_workloads:
+                  - workload_ref: cabinet1p_workload
+                  - workload_ref: nginx_workload
+                  - workload_ref: logkeeper-minion_workload
+                  - workload_ref: push-client_workload
+                  - workload_ref: solomon-agent_workload
+                  resources:
+                    layers:
+                    - checksum: MD5:fdb52f3f4318cfbf6132f456bcc218e3
+                      id: layer
+                      meta:
+                        sandbox_resource:
+                          attributes:
+                            backup_task: '980485135'
+                            compression: tar.xz
+                            name: PORTO_LAYER_MARKET_BASE_DEPLOY_XENIAL
+                            released: testing
+                            stack: PORTO_LAYER_MARKET_BASE_DEPLOY_XENIAL unknown
+                            ttl: inf
+                            unpacked_size: '2501963776'
+                          resource_id: '2187640623'
+                          resource_type: PORTO_LAYER_MARKET_BASE_DEPLOY_XENIAL
+                          task_id: '980450593'
+                          task_type: MARKET_BUILD_PORTO_LAYER
+                      url: sbr:2187640623
+                    - checksum: MD5:adbfa68a6771352fcb65a95e465505e5
+                      id: infra-layer
+                      meta:
+                        sandbox_resource:
+                          attributes:
+                            backup_task: '980514154'
+                            compression: tar.xz
+                            dependencies: '2187640623'
+                            name: PORTO_LAYER_MARKET_INFRA_DEPLOY_XENIAL
+                            parent_layer: '2187640623'
+                            released: testing
+                            stack: PORTO_LAYER_MARKET_INFRA_DEPLOY_XENIAL PORTO_LAYER_MARKET_BASE_DEPLOY_XENIAL
+                            ttl: inf
+                            unpacked_size: '1018724352'
+                          resource_id: '2187761794'
+                          resource_type: PORTO_LAYER_MARKET_INFRA_DEPLOY_XENIAL
+                          task_id: '980502359'
+                          task_type: MARKET_BUILD_PORTO_LAYER
+                      url: sbr:2187761794
+                    - checksum: 'EMPTY:'
+                      id: application
+                      url: sbr:2728752165
+                    - checksum: 'EMPTY:'
+                      id: webapp
+                      url: sbr:2728828096
+                    - checksum: MD5:5b0a3a3bc573612ab18f1bced4a67ebf
+                      id: market-sre-configs
+                      meta:
+                        sandbox_resource:
+                          attributes:
+                            backup_task: 'True'
+                            branch: trunk
+                            build_type: release
+                            platform: Linux-4.19.183-42.2mofed-x86_64-with-Ubuntu-12.04-precise
+                            released: testing
+                            resource_name: market-sre-configs
+                            resource_version: '8794975'
+                            svn_path: arcadia:/arc/trunk/arcadia
+                            svn_revision: '8794975'
+                            ttl: inf
+                          resource_id: '2535328139'
+                          resource_type: MARKET_DEPLOY_SRE_CONFIGS
+                          task_id: '1116978097'
+                          task_type: MARKET_YA_PACKAGE
+                      url: sbr:2535328139
+                    - checksum: MD5:98265f1e09e628f7b943b7d90012aa70
+                      id: logkeeper
+                      meta:
+                        sandbox_resource:
+                          attributes:
+                            backup_task: 'True'
+                            branch: trunk
+                            build_type: release
+                            platform: Linux-4.9.151-35-x86_64-with-Ubuntu-12.04-precise
+                            released: testing
+                            resource_name: layer-logkeeper-minion
+                            resource_version: '8353579'
+                            svn_path: arcadia:/arc/trunk/arcadia
+                            svn_revision: '8353579'
+                            ttl: inf
+                          resource_id: '2254249580'
+                          resource_type: MARKET_DEPLOY_LOGKEEPER_BINARY
+                          task_id: '1007037952'
+                          task_type: MARKET_YA_PACKAGE
+                      url: sbr:2254249580
+                    - checksum: 'EMPTY:'
+                      id: solomon-agent
+                      url: sbr:1935335310
+                    - checksum: 'EMPTY:'
+                      id: push-client
+                      url: sbr:2358187952
+                    - checksum: MD5:88dc617213728dc6ef41d76f60009a01
+                      id: market-sre-binaries
+                      meta:
+                        sandbox_resource:
+                          attributes:
+                            backup_task: 'True'
+                            branch: trunk
+                            build_type: release
+                            platform: Linux-4.19.183-42.2mofed-x86_64-with-Ubuntu-12.04-precise
+                            released: testing
+                            resource_name: market-sre-binaries
+                            resource_version: '8795869'
+                            svn_path: arcadia:/arc/trunk/arcadia
+                            svn_revision: '8795869'
+                            ttl: inf
+                          resource_id: '2535684926'
+                          resource_type: MARKET_DEPLOY_SRE_BINARIES
+                          task_id: '1117144186'
+                          task_type: MARKET_YA_PACKAGE
+                      url: sbr:2535684926
+                    - checksum: 'EMPTY:'
+                      id: app-juggler-checks
+                      url: sbr:2288229608
+                    - checksum: 'EMPTY:'
+                      id: infra-juggler-checks
+                      url: sbr:2288229690
+                    - checksum: 'EMPTY:'
+                      id: nginx-juggler-checks
+                      url: sbr:2288229697
+                    - checksum: 'EMPTY:'
+                      id: custom_conf_layer
+                      url: sbr:2731769419
+                    static_resources:
+                    - files:
+                        files:
+                        - file_name: push-client-tvm-secret
+                          secret_data:
+                            alias: market-sre-resources-secrets
+                            id: client_secret
+                      id: market-sre-resources-secrets
+                      verification:
+                        check_period_ms: 180000
+                        checksum: 'EMPTY:'
+                  volumes:
+                  - generic: {}
+                    id: logs_volume
+                  - generic: {}
+                    id: data_volume
+                  workloads:
+                  - box_ref: cabinet1p_box
+                    env:
+                    - name: LILUCRM_PGAAS_PASSWORD
+                      value:
+                        secret_env:
+                          alias: cabinet1p-testing:20211221
+                          id: postgresql.password
+                    - name: TVM_SECRET
+                      value:
+                        secret_env:
+                          alias: cabinet1p-testing:20211221
+                          id: tvm.json
+                    - name: OPERATOR_WINDOW_MDS_SECRET_KEY
+                      value:
+                        secret_env:
+                          alias: cabinet1p-testing:20211221
+                          id: mds.s3.accessSecretKey
+                    - name: LILUCRM_STAFF_OAUTH_TOKEN
+                      value:
+                        secret_env:
+                          alias: cabinet1p-testing:20211221
+                          id: robot_yt
+                    - name: YT_OAUTH
+                      value:
+                        secret_env:
+                          alias: cabinet1p-testing:20211221
+                          id: YT_OAUTH
+                    - name: JMF_CRYPTO_KEY
+                      value:
+                        secret_env:
+                          alias: cabinet1p-testing:20211221
+                          id: JMF_CRYPTO_KEY
+                    id: cabinet1p_workload
+                    readiness_check:
+                      http_get:
+                        any: true
+                        path: /ping
+                        port: 81
+                    start:
+                      command_line: prostarter ./fps-start.sh -c --logdir=/var/log/yandex/
+                        --httpport=81 --tmpdir=/tmp --debug='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000'
+                        --extra-java-opts='-DscheduledTasks=false -Dtms.service.key=tms
+                        --enable-preview'
+                    transmit_logs: true
+                  - box_ref: infra_box
+                    id: nginx_workload
+                    readiness_check:
+                      tcp_check:
+                        port: 80
+                    start:
+                      command_line: nginx -c /etc/nginx/nginx.conf
+                    transmit_logs: true
+                  - box_ref: infra_box
+                    id: logkeeper-minion_workload
+                    readiness_check:
+                      container:
+                        command_line: bash -c "ps aux | grep -q 'logkeeper-minion.sh'"
+                    start:
+                      command_line: logkeeper-minion.sh
+                    transmit_logs: true
+                  - box_ref: infra_box
+                    id: push-client_workload
+                    readiness_check:
+                      container:
+                        command_line: push-client-check.sh
+                    start:
+                      command_line: prostarter push-client-start.sh
+                    transmit_logs: true
+                  - box_ref: infra_box
+                    id: solomon-agent_workload
+                    readiness_check:
+                      container:
+                        command_line: bash /app/bin/solomon-agent-check.sh
+                    start:
+                      command_line: bash /app/bin/solomon-agent-start.sh
+                    transmit_logs: true
+              resource_requests:
+                memory_guarantee: 4294967296
+                memory_limit: 4294967296
+                network_bandwidth_guarantee: 5242880
+                network_bandwidth_limit: 5242880
+                vcpu_guarantee: 1000
+                vcpu_limit: 1000
+              secret_refs:
+                cabinet1p-testing:20211210:
+                  secret_id: sec-01fm78a0b98nasjphdd18rf3pg
+                  secret_version: ver-01fpjdzxj24vgw8z7c2x3we08s
+                cabinet1p-testing:20211214:
+                  secret_id: sec-01fm78a0b98nasjphdd18rf3pg
+                  secret_version: ver-01fptmmk8jbqd33dw3m2b9whc6
+                cabinet1p-testing:20211221:
+                  secret_id: sec-01fm78a0b98nasjphdd18rf3pg
+                  secret_version: ver-01fqegnd4rrx47nztnrns60s6k
+                market-sre-resources-secrets:
+                  secret_id: sec-01dq7mnes1n6rq2mh7zn53n8ws
+                  secret_version: ver-01dq7mneytmhjcm8dgcagcdvs4
+      revision: 62
+      tvm_config:
+        blackbox_environment: ProdYaTeam
+        clients:
+        - destinations:
+          - alias: blackbox
+            app_id: 239
+          - alias: balance_tst
+            app_id: 2000601
+          secret_selector:
+            alias: cabinet1p-testing:20211221
+            id: tvm_secret
+          source:
+            app_id: 2030709
+        mode: enabled
+  revision: 64
+  revision_info:
+    description: Release https://tsum.yandex-team.ru/pipe/projects/partner_1p/delivery-dashboard/cabinet1p_test_infra_conf/release/61eff341608dd81b0d070bb2
+

@@ -1,0 +1,43 @@
+-- --liquibase formatted sql
+-- --changeset katejud:pharma_test_shop_settings
+-- CREATE TABLE IF NOT EXISTS pharma_test_shop_settings
+-- (
+--     shop_id   BIGINT NOT NULL PRIMARY KEY,
+--     status VARCHAR(30) NOT NULL ,
+--     message VARCHAR(100) NOT NULL ,
+--     delivery_types VARCHAR(30) NOT NULL ,
+--     from_date_express DATE,
+--     to_date_express DATE,
+--     from_date_delivery DATE,
+--     to_date_delivery DATE,
+--     from_date_pickup DATE,
+--     to_date_pickup DATE,
+--     payment_method_express varchar(200),
+--     payment_method_delivery varchar(200),
+--     payment_method_pickup varchar(200)
+-- );
+--
+-- --changeset katejud:delete
+-- DELETE FROM pharma_test_shop_settings;
+--
+-- --changeset katejud:add
+-- INSERT INTO pharma_test_shop_settings
+-- VALUES (1, 'OK' , 'Success',  'EXPRESS_DELIVERY_PICKUP','2021-10-13','2021-10-14','2021-10-13','2021-10-15','2021-10-13',
+--         '2021-10-17','YANDEX,APPLE_PAY,GOOGLE_PAY',
+--         'YANDEX,APPLE_PAY,GOOGLE_PAY',
+--         'CARD_ON_DELIVERY,CASH_ON_DELIVERY');
+--
+-- --changeset katejud:add_shop_with_id=1
+-- DELETE FROM pharma_test_shop_settings;
+--
+-- INSERT INTO pharma_test_shop_settings
+-- VALUES (1, 'OK' , 'Success',  'EXPRESS_DELIVERY_PICKUP','2021-10-13','2021-10-14','2021-10-13','2021-10-15','2021-10-13',
+--         '2021-10-17','YANDEX,APPLE_PAY,GOOGLE_PAY',
+--         'YANDEX,APPLE_PAY,GOOGLE_PAY',
+--         'CARD_ON_DELIVERY,CASH_ON_DELIVERY');
+--
+-- --changeset katejud:add_columns|oauth_token|oauth_client_id|sales_model
+-- ALTER TABLE pharma_test_shop_settings
+--     ADD COLUMN oauth_token varchar(100),
+--     ADD COLUMN oauth_client_id varchar(100),
+--     ADD COLUMN sales_model varchar(10);

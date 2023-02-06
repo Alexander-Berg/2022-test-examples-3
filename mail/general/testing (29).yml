@@ -1,0 +1,32 @@
+base: /etc/equalizer/base-auth.yml
+config:
+    modules:
+        module:
+        -   _name: netch
+            configuration:
+                endpoints:
+                    listen: [ { _addr: '::', _port: 14001 } ]
+        -   _name: auth
+            configuration:
+                url: https://pass-test.yandex.ru/blackbox
+        -   _name: web_server
+            configuration:
+                endpoints:
+                    listen: [ { _addr: '::', _port: 31080, ipv6_only: 1 } ]
+        -   _name: equalizer
+            configuration:
+                equalizer:
+                    host: https://mailpusher-tst.mail.yandex.net
+                pg:
+                    sharpei_host: sharpei-testing.mail.yandex.net:80
+        -   _name: lock-manager
+            configuration:
+                cluster:
+                    hosts:
+                        - eqlease-1.eqlease.testing.leasemeta.mail.stable.qloud-d.yandex.net
+                        - eqlease-2.eqlease.testing.leasemeta.mail.stable.qloud-d.yandex.net
+                        - eqlease-3.eqlease.testing.leasemeta.mail.stable.qloud-d.yandex.net
+        -   _name: tvm
+            configuration:
+                destinations: [hound-tst, blackbox-test]
+                secret_file: /etc/equalizer/tvm_secret

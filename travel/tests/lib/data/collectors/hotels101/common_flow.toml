@@ -1,0 +1,149 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "hotels101",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--username", "username",
+    "--password", "password",
+    "--date-from", "2019-01-01",
+    "--date-to", "2019-02-01",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+]
+
+checkers = [
+    "lb",
+    "partner",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "apllication/json"
+
+[[partner.responses]]
+    args = {"date_from"="2019-01-01", "date_to"="2019-01-31"}
+    data_file = "partner_response_2019_01_01.json"
+
+[[partner.responses]]
+    args = {"date_from"="2019-02-01", "date_to"="2019-02-28"}
+    data_file = "partner_response_2019_02_01.json"
+
+[lb]
+    topic = "topic-hotels101"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+[[lb.expected]]
+    partner_name = "hotels101"
+    travel_order_id = "hotels101:0"
+    partner_order_id = "0"
+    created_at = 1546300800
+    status = "pending"
+    partner_status = "progress"
+    label = "label_0"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-01-01"
+    check_out = "2019-01-02"
+    order_amount = 10.0
+    profit_amount = 1.0
+    hotel_name = "hotel_name_0"
+    hotel_country = "hotel_country_0"
+    hotel_city = "region_name_0"
+
+[[lb.expected]]
+    partner_name = "hotels101"
+    travel_order_id = "hotels101:1"
+    partner_order_id = "1"
+    created_at = 1546387200
+    status = "refunded"
+    partner_status = "cancelled"
+    label = "label_1"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-01-03"
+    check_out = "2019-01-04"
+    order_amount = 10.0
+    profit_amount = 1.0
+    hotel_name = "hotel_name_1"
+    hotel_country = "hotel_country_1"
+    hotel_city = "region_name_1"
+
+[[lb.expected]]
+    partner_name = "hotels101"
+    travel_order_id = "hotels101:2"
+    partner_order_id = "2"
+    created_at = 1546473600
+    status = "confirmed"
+    partner_status = "success"
+    label = "label_2"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-01-04"
+    check_out = "2019-01-05"
+    order_amount = 10.0
+    profit_amount = 1.0
+    hotel_name = "hotel_name_2"
+    hotel_country = "hotel_country_2"
+    hotel_city = "region_name_2"
+
+[[lb.expected]]
+    partner_name = "hotels101"
+    travel_order_id = "hotels101:3"
+    partner_order_id = "3"
+    created_at = 1548979200
+    status = "pending"
+    partner_status = "progress"
+    label = "label_3"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-02-01"
+    check_out = "2019-02-02"
+    order_amount = 10.0
+    profit_amount = 1.0
+    hotel_name = "hotel_name_3"
+    hotel_country = "hotel_country_3"
+    hotel_city = "region_name_3"
+
+[[lb.expected]]
+    partner_name = "hotels101"
+    travel_order_id = "hotels101:4"
+    partner_order_id = "4"
+    created_at = 1549065600
+    status = "refunded"
+    partner_status = "cancelled"
+    label = "label_4"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-02-03"
+    check_out = "2019-02-04"
+    order_amount = 10.0
+    profit_amount = 1.0
+    hotel_name = "hotel_name_4"
+    hotel_country = "hotel_country_4"
+    hotel_city = "region_name_4"
+
+[[lb.expected]]
+    partner_name = "hotels101"
+    travel_order_id = "hotels101:5"
+    partner_order_id = "5"
+    created_at = 1549152000
+    status = "confirmed"
+    partner_status = "success"
+    label = "label_5"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-02-04"
+    check_out = "2019-02-05"
+    order_amount = 10.0
+    profit_amount = 1.0
+    hotel_name = "hotel_name_5"
+    hotel_country = "hotel_country_5"
+    hotel_city = "region_name_5"

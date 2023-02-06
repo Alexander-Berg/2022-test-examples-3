@@ -1,0 +1,34 @@
+itype: itype_from_imported_panel
+prj:
+  - example
+
+geo:
+  - sas
+
+ctype:
+ - ctype_from_imported_panel
+
+preserve_on_import:
+  - geo
+  - prj
+  - itype
+  - ctype
+
+
+graph: SELF  # look into web/app_host/conf/graph_generator/vertical/WEB and around
+source_caption: AH backend
+signal: Failures  # Errors, Timeouts, Error-Connection-timed-out, etc.
+origin: apphost  # or unistat-SOURCES for graph sources
+source: SS  # for backend; or a real source name
+
+warning: .1
+critical: 1
+ignored_requests: 500  # for less RPS to the graph, no indication will happen
+caption: '{source_caption} {signal}'
+format: '%3.1f%%'
+
+monitors:
+- signal: perc({origin}-{graph}-{source}-{signal}_dmmm,max(sum({origin}-{graph}-{source}-<Success|Failur>es_dmmm), {ignored_requests}))
+  caption: '{caption}'
+  warning: ['{warning}', '{critical}']
+  critical: ['{critical}', null]

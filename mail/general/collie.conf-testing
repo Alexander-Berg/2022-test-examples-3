@@ -1,0 +1,72 @@
+include /etc/nginx/sites-enabled/collie.include;
+
+server {
+    listen [::]:80 default ipv6only=on;
+    server_name collie-test.mail.yandex.net;
+
+    underscores_in_headers on;
+    request_id_from_header on;
+
+    large_client_header_buffers 4 512k;
+
+    location / {
+        proxy_connect_timeout 500ms;
+        proxy_read_timeout 5;
+        proxy_send_timeout 5;
+        proxy_set_header X-Request-Id $request_id;
+
+        proxy_next_upstream_tries 1;
+        proxy_pass http://collie-backend;
+
+        include /etc/nginx/sites-enabled/log_by_lua.include;
+    }
+
+    location /ping {
+        proxy_pass http://[::1]:12930;
+    }
+
+    tskv_log /var/log/nginx/collie/access.tskv mail-nginx-access-log;
+    access_log off;
+    error_log /var/log/nginx/collie/error.log crit;
+}
+
+server {
+    listen [::]:443 default ssl ipv6only=on;
+    server_name collie-test.mail.yandex.net;
+
+    underscores_in_headers on;
+    request_id_from_header on;
+
+    large_client_header_buffers 4 512k;
+
+    location / {
+
+        proxy_connect_timeout 500ms;
+        proxy_read_timeout 5;
+        proxy_send_timeout 5;
+        proxy_set_header X-Request-Id $request_id;
+
+        proxy_next_upstream_tries 1;
+        proxy_pass http://collie-backend;
+
+        include /etc/nginx/sites-enabled/log_by_lua.include;
+    }
+
+    location /ping {
+        proxy_pass http://[::1]:12930;
+    }
+
+    ssl_certificate /etc/nginx/ssl/star.mail.yandex.net.pem;
+    ssl_certificate_key /etc/nginx/ssl/star.mail.yandex.net.pem;
+
+    ssl_protocols TLSv1.2 TLSv1.1 TLSv1;
+    ssl_ciphers kEECDH+AESGCM+AES128:kEECDH+AES128:kRSA+AESGCM+AES128:kRSA+AES128:DES-CBC3-SHA:!RC4:!aNULL:!eNULL:!MD5:!EXPORT:!LOW:!SEED:!CAMELLIA:!IDEA:!PSK:!SRP:!SSLv2;
+    ssl_prefer_server_ciphers on;
+
+    ssl_session_cache   shared:SSL:128m;
+    ssl_session_timeout 28h;
+
+    tskv_log /var/log/nginx/collie/access.tskv mail-nginx-access-log;
+    access_log off;
+    error_log /var/log/nginx/collie/error.log crit;
+}

@@ -1,0 +1,60 @@
+{
+  "owner": "mbidevops",
+  "tableName": "mbidding_nginx_testing",
+  "splits": {
+    "host": "host",
+    "page": "page_id",
+    "crud": "lower(http_method)"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "market-bidding.testing.rps.${crud}_${page}.ALL",
+        "market-bidding.testing.rps.${host}.${crud}_${page}.ALL"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "count() / 300",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "market-bidding.testing.timings.${crud}_${page}",
+        "market-bidding.testing.timings.${host}.${crud}_${page}"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "resptime_ms",
+      "filter": "http_code in (200,204)",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "market-bidding.testing.rps.${crud}_${page}.2xx",
+        "market-bidding.testing.rps.${host}.${crud}_${page}.2xx"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "count() / 300",
+      "filter": "http_code >= 200 and http_code <= 299",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "market-bidding.testing.rps.${crud}_${page}.5xx",
+        "market-bidding.testing.rps.${host}.${crud}_${page}.5xx"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "count() / 300",
+      "filter": "http_code >= 500 and http_code <= 599",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "market-bidding.testing.rps.${crud}_${page}.4xx",
+        "market-bidding.testing.rps.${host}.${crud}_${page}.4xx"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "count() / 300",
+      "filter": "http_code >= 400 and http_code <= 499",
+      "type": "SIMPLE"
+    }
+  ]
+}

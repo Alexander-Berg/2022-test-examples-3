@@ -1,0 +1,61 @@
+spring:
+  solomon:
+    service: test
+  sql:
+    init:
+      mode: 'never'
+  liquibase:
+    change-log: classpath:changelog-test.xml
+application:
+  security:
+    lgw-token: 'xxx'
+
+wms:
+  balancer: localhost
+  cookieDomain: localhost
+  warehouseName: TEST
+  api:
+    host: 'http://localhost:${wiremock.server.port}/api'
+    username: 'wmsuser'
+    password: 'wmspass'
+  receiving:
+    host: http://localhost:${wiremock.server.port}/receiving
+    username: 'wmsuser'
+    password: 'wmspass'
+  auth:
+    host: http://localhost:${wiremock.server.port}/auth
+
+warehouse-id: 000
+
+wiremock.server.port: 9999
+
+messaging:
+  MqProvider: embedded
+
+jwt:
+  secret-key: VRBZQLAu7HDCpLESBEKtNJlTHd5olN/L1BftBKIQ6KNQntc0BPkAg7HcEiuNglOV622IjJZ/cl8jtFVsjKzHSw==
+  token-expiration-minutes: 1
+
+iris:
+  url: 'http://iris.local'
+  tvmServiceId: 0
+
+solomon:
+  monitoringEnabled: 'false'
+  host: 'localhost'
+  port: 10050
+
+ldap:
+  context-source:
+    connect:
+      timeout: 1000
+    read:
+      timeout: 5000
+    urls: ldap://localhost:389
+    base: ou=users,dc=test,dc=com
+    userDn: uid=admin
+    password: secret
+
+juggler:
+  enabled: false
+  eventHost: none

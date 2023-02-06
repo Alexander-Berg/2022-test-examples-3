@@ -1,0 +1,28 @@
+{
+  "id" : "9933547a-8600-49d1-b334-6a2498d898be",
+  "name" : "3_itineraries",
+  "request" : {
+    "url" : "/v3/itineraries?token=price_mismatch",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"affiliate_reference_id\":\"unit-test\",\"hold\":true,\"email\":\"john-doe@example.com\",\"phone\":{\"country_code\":\"7\",\"number\":\"9011234567\"},\"rooms\":[{\"given_name\":\"John\",\"family_name\":\"Doe\",\"smoking\":false}],\"payments\":[{\"type\":\"affiliate_collect\",\"billing_contact\":{\"given_name\":\"John\",\"family_name\":\"Doe\",\"address\":{\"city\":\"Moscow\",\"country_code\":\"ru\",\"line_1\":\"Lva Tolstogo, 16\"}}}]}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 409,
+    "body" : "{\"type\":\"price_mismatch\",\"message\":\"Payment amount did not match current price, please check price and try again.\",\"fields\":[{\"name\":\"payments.amount\",\"type\":\"body\",\"value\":\"1\"},{\"name\":\"price.amount\",\"type\":\"body\",\"value\":\"803.2\"}]}",
+    "headers" : {
+      "Content-Type" : "application/json",
+      "Server" : "EAN",
+      "Transaction-Id" : "51fb0729-873b-43b1-9424-8eb5cf17a5be",
+      "X-NewRelic-App-Data" : "PxQCVFRSCQsTVVlaDgIOVl0AFB9AMQYAZBBZDEtZV0ZaClc9HjNWERBhUgM1BkpFWQcEPhgDGVI4Hl9HCwgGEFEQUQdLGBxifDZtSBNNA0xUGgdPV1UMBAhTU1sbAwdUSBMGAFcDUFtSAAhTDQ9VBgsGG01XAF8RAWs=",
+      "Vary" : "Accept-Encoding,Accept-Encoding",
+      "Date" : "Wed, 06 May 2020 10:10:58 GMT"
+    }
+  },
+  "uuid" : "3769edfc-85cf-403a-938e-2980edab444b",
+  "persistent" : true,
+  "insertionIndex" : 1
+}

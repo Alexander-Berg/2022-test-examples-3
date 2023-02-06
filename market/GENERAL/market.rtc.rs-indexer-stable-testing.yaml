@@ -1,0 +1,30 @@
+juggler:
+  checks:
+
+  - aggregator_kwargs:
+      nodata_mode: force_crit
+    children:
+    - rs-testing-stable-offer
+    - rs-testing-stable-delivery
+    service: rsindexer_freshness
+    tags:
+      - market_testing
+      - market_rtc
+      - marketrsindexer
+      - market
+      - testing
+      - market
+      - _market_
+
+  default:
+    aggregator: logic_or
+    check_options: {}
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: rs-testing-stable
+    namespace: market.indexer
+    notifications: []
+    refresh_time: 60
+    ttl: 900

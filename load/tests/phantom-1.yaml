@@ -1,0 +1,32 @@
+autostop:
+  autostop:
+  - time(500,10)
+  - http(4xx,25%,3)
+  - http(5xx,25%,3)
+  - total_net(1xx,400,20)
+  enabled: true
+  package: yandextank.plugins.Autostop
+phantom:
+  address: '[some.host]:25405'
+  ammofile: https://storage-int.mds.yandex.net/get-load-ammo/21533/fbde58698f0852d68891e5c94e427102
+  ammo_type: uri
+  enabled: true
+  header_http: '1.1'
+  #  instances: 100000
+  load_profile:
+    load_type: rps
+    schedule: const(30,1m) const(1, 10m) line(1,1000,10m) step(10,100, 10, 2m)
+  package: yandextank.plugins.Phantom
+  port: '25405'
+  writelog: proto_warning
+uploader:
+  api_address: https://lunapark.yandex-team.ru/
+  component:
+  enabled: true
+  job_name: Geocoder
+  lock_targets:
+  - sas1-1008.search.yandex.net
+  operator: lunapark
+  package: yandextank.plugins.DataUploader
+  task: LOAD-2
+

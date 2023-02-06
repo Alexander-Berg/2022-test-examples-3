@@ -1,0 +1,57 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "superkassa_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 1007
+    confirm_dt = ""
+    created_at = "2020-01-31 00:43:33"
+    currency = "RUB"
+    from = "KJA"
+    marker = "68401ea8-a5e969-5465-4691-a3a5-1bdba7dd8d991"
+    order_id = "1KL4B"
+    partner = "superkassa"
+    partner_id = 83
+    price = 4227.0
+    source = "superkassa"
+    status = "paid"
+    ticket_number = ""
+    to = "DME"
+    trip_type = "oneway"
+    unixtime = 1580432489
+
+[lb]
+    topic = "topic-superkassa_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "updated_at"]
+
+[[lb.expected]]
+    status = "confirmed"
+    category = "avia"
+    partner_id = 83
+    created_at = 1580431413
+    origin = "KJA"
+    partner_order_id = "1KL4B"
+    label = "68401ea8-a5e969-5465-4691-a3a5-1bdba7dd8d991"
+    source = "history"
+    destination = "DME"
+    partner_name = "superkassa"
+    trip_type = "oneway"
+    billing_order_id = 1007
+    order_amount = 4227.0
+    travel_order_id = "superkassa:1KL4B"
+    currency_code = "RUB"

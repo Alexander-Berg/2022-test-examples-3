@@ -1,0 +1,180 @@
+annotations:
+  stagectl_epoch: 806
+  stagectl_vcs:
+    svn_branch: stage_controller/stable-144-2
+    svn_revision: 9102181
+    svn_tag: stage_controller/stable-144-2
+labels:
+  deploy_engine: env_controller
+  notifications_last_timestamp: 1643983137281343000
+meta:
+  account_id: abc:service:200
+  acl:
+  - action: allow
+    permissions:
+    - read
+    - read_secrets
+    - write
+    - create
+    - ssh_access
+    - root_ssh_access
+    subjects:
+    - robot-drug-deploy
+  id: crm-floyd-connector-test
+  inherit_acl: true
+  project_id: crm-test
+spec:
+  deploy_units:
+    floyd-connector:
+      images_for_boxes:
+        floyd-connector-box:
+          digest: sha256:2f58fc5fde3a04e99543781d50a7d1f512af8af4c42a1016e446d0c4c886966a
+          name: crm/floyd-connector
+          registry_host: registry.yandex.net
+          tag: 22-a779
+        logexport-box:
+          name: crm/log-export-worker
+          registry_host: registry.yandex.net
+          tag: '24'
+      multi_cluster_replica_set:
+        replica_set:
+          clusters:
+          - cluster: sas
+            spec:
+              replica_count: 1
+          - cluster: vla
+            spec:
+              replica_count: 1
+          deployment_strategy:
+            max_unavailable: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+              - id: main-disk
+                labels:
+                  used_by_infra: true
+                quota_policy:
+                  bandwidth_guarantee: 1048576
+                  bandwidth_limit: 2097152
+                  capacity: 53687091200
+                storage_class: hdd
+              pod_agent_payload:
+                spec:
+                  boxes:
+                  - cgroup_fs_mount_mode: ro
+                    env:
+                    - name: ASPNETCORE_ENVIRONMENT
+                      value:
+                        literal_env:
+                          value: Testing
+                    id: floyd-connector-box
+                    volumes:
+                    - mode: read_write
+                      mount_point: /logs
+                      volume_ref: logs
+                  - cgroup_fs_mount_mode: ro
+                    env:
+                    - name: ASPNETCORE_ENVIRONMENT
+                      value:
+                        literal_env:
+                          value: Testing
+                    id: logexport-box
+                    volumes:
+                    - mode: read_write
+                      mount_point: /logs
+                      volume_ref: logs
+                  mutable_workloads:
+                  - workload_ref: floyd-connector-workload
+                  - workload_ref: logexport-workload
+                  volumes:
+                  - id: logs
+                  workloads:
+                  - box_ref: floyd-connector-box
+                    env:
+                    - name: ConnectionStrings__FloydConnectorDatabase
+                      value:
+                        secret_env:
+                          alias: crm-floyd-connector-test
+                          id: connection-string
+                    - name: HangfireConfig__DbConnectionString
+                      value:
+                        secret_env:
+                          alias: crm-floyd-connector-test
+                          id: connection-string
+                    - name: YandexS3ClientConfig__AccessKeyId
+                      value:
+                        secret_env:
+                          alias: s3-mds-crm-test
+                          id: AccessKeyId
+                    - name: YandexS3ClientConfig__SecretAccessKey
+                      value:
+                        secret_env:
+                          alias: s3-mds-crm-test
+                          id: AccessSecretKey
+                    id: floyd-connector-workload
+                  - box_ref: logexport-box
+                    env:
+                    - name: ElasticConfig__Password
+                      value:
+                        secret_env:
+                          alias: crm-logs-admin
+                          id: crm-floyd-connector
+                    - name: ElasticConfig__Username
+                      value:
+                        literal_env:
+                          value: crm-floyd-connector
+                    - name: LogSourcesConfig__Sources__1__ApplicationName
+                      value:
+                        literal_env:
+                          value: logs-floyd-connector
+                    - name: LogSourcesConfig__Sources__1__DirectoryPath
+                      value:
+                        literal_env:
+                          value: /logs/Yandex.Crm.FloydConnector.Service
+                    id: logexport-workload
+                    transmit_logs: true
+              resource_requests:
+                memory_guarantee: 1073741824
+                memory_limit: 1073741824
+                network_bandwidth_guarantee: 2097152
+                vcpu_guarantee: 1000
+                vcpu_limit: 1000
+              secret_refs:
+                crm-floyd-connector-test:
+                  secret_id: sec-01fjws22vg5jvxhaj5kwa273qm
+                  secret_version: ver-01fjzay3jy0c5hnghbc55s18qg
+                crm-logs-admin:
+                  secret_id: sec-01f92gcrxd4j2czhv1x3epk464
+                  secret_version: ver-01fmgqf3a79e1gct4mznk5njzh
+                s3-mds-crm-test:
+                  secret_id: sec-01fm1m86xxmxsh97ebbj5tbfph
+                  secret_version: ver-01fm1m86zvnf3j2aqjqb930r7v
+                tvm.secret.2001283:
+                  secret_id: sec-01dq7m10q03ytkzp4z39hzs07w
+                  secret_version: ver-01dq7m10yrrfwh13ng7azs89ge
+      network_defaults:
+        network_id: _CRMTEST_DEPLOY_NETS_
+      patchers_revision: 11
+      pod_agent_layer_sandbox_info: {}
+      pod_agent_sandbox_info: {}
+      revision: 7
+      tvm_config:
+        blackbox_environment: ProdYaTeam
+        clients:
+        - destinations:
+          - alias: crm
+            app_id: 2001283
+          - alias: floyd
+            app_id: 2006065
+          secret_selector:
+            alias: tvm.secret.2001283
+            id: client_secret
+          source:
+            alias: crm
+            app_id: 2001283
+        mode: enabled
+      tvm_sandbox_info: {}
+  revision: 7
+  revision_info:
+    description: CRM-16577 Make metrics more discrete and add a little timeout to dumb sender
+

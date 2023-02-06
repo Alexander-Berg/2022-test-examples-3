@@ -1,0 +1,21 @@
+context:
+  default:
+    service_name: tpl_api
+    servername_regexp: 'tpl-api\\.tst\\.vs\\.market\\.yandex\\.net'
+    vs: tpl_api
+    health_check: '"GET /ping HTTP/1.1\r\nHost: tpl-api.tst.vs.market.yandex.net\r\n\r\n"'
+    attempts: 3
+    antirobot: True
+    antirobot_service_name: market_other
+    balancing_method: "active"
+    cert: tpl-api.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+
+servers:
+  default:
+    main:
+      - name: "GREY%tpl-api.tst.vs.market.yandex.net"
+        timeout: "35s"
+        port: 80
+        plain_http_backend: True

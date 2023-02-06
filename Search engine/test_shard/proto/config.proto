@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+import "search/tools/test_shard/proto/query_tree.proto";
+
+package NProto;
+
+message TQueryType {
+    TNode Node = 1;
+    float Weight = 2;
+}
+
+message TQuotesConfig {
+    uint32 MaxDocs = 1;
+    uint32 MinWords = 2;
+    uint32 MaxWords = 3;
+}
+
+message TAsterisksConfig {
+    uint32 MaxDocs = 1;
+    uint32 MinPrefix = 2;
+}
+
+message TConfig {
+    repeated TQueryType Type = 1;
+    TQuotesConfig Quotes = 2;
+    TAsterisksConfig Asterisks = 3;
+}

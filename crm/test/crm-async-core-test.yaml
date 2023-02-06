@@ -1,0 +1,242 @@
+labels:
+  tags:
+    - test
+  deploy:
+    disabled_clusters:
+      - man
+  deploy_engine: env_controller
+  du_sidecar_target_revision:
+    crm-async:
+      logbrokerToolsLayer: 2739742779
+      podBin: 3006211268
+  notifications_last_timestamp: 1653473438046445000
+meta:
+  id: crm-async-core-test
+  effective_account_id: null
+  fqid: yp|xdc|stage|crm-async-core-test|c97e0b32-605b-4cb1-a3ea-f209b65b2141
+  inherit_acl: true
+  type: stage
+  project_id: crm-test
+  parent_key: ''
+  creation_time: 1647270252090654
+  acl:
+    - action: allow
+      permissions:
+        - read
+        - read_secrets
+        - write
+        - create
+        - ssh_access
+        - root_ssh_access
+      subjects:
+        - robot-drug-deploy
+  account_id: abc:service:200
+  key: crm-async-core-test
+  uuid: c97e0b32-605b-4cb1-a3ea-f209b65b2141
+spec:
+  deploy_units:
+    async-core:
+      network_defaults:
+        network_id: _CRMTEST_DEPLOY_NETS_
+      tvm_config:
+        mode: enabled
+        blackbox_environment: ProdYaTeam
+        clients:
+          - secret_selector:
+              id: client_secret
+              alias: tvm.secret.2001283
+            source:
+              app_id: 2001283
+            destinations:
+              - app_id: 2001283
+              - app_id: 2000993
+              - app_id: 223
+                alias: blackbox
+              - app_id: 2018804
+                alias: yaCalls
+              - app_id: 2016621
+                alias: April
+              - app_id: 2006065
+                alias: floyd
+              - app_id: 239
+                alias: external-blackbox
+      images_for_boxes:
+        async-core-box:
+          registry_host: registry.yandex.net
+          name: crm/async-core
+          tag: s86-b
+        logexport-box:
+          registry_host: registry.yandex.net
+          name: crm/log-export-worker
+          tag: '34'
+      endpoint_sets:
+        - port: 5000
+          liveness_limit_ratio: 0.35
+          id: test-async-core-endpoint
+      revision: 1
+      replica_set:
+        replica_set_template:
+          pod_template_spec:
+            spec:
+              resource_requests:
+                vcpu_guarantee: 120
+                vcpu_limit: 120
+                memory_guarantee: 17179869184
+                memory_limit: 17179869184
+                network_bandwidth_guarantee: 10485760
+              disk_volume_requests:
+                - id: main-disk
+                  labels:
+                    used_by_infra: true
+                  storage_class: hdd
+                  quota_policy:
+                    capacity: 53687091200
+                    bandwidth_guarantee: 15728640
+                    bandwidth_limit: 31457280
+              pod_agent_payload:
+                spec:
+                  resources:
+                    layers:
+                      - id: simple_http_server
+                        checksum: 'EMPTY:'
+                        url: sbr:755375039
+                    static_resources:
+                      - id: async-protected-properties-resource
+                        verification:
+                          checksum: 'EMPTY:'
+                          check_period_ms: 180000
+                        files:
+                          files:
+                            - file_name: app-protected.properties
+                              secret_data:
+                                id: test-app-protected.properties
+                                alias: crm-test-async-core:20220602
+                                decode_base64: true
+                      - id: tnsnames-resource
+                        verification:
+                          disabled: true
+                        files:
+                          files:
+                            - file_name: tnsnames.ora
+                              raw_data: |-
+                                TCRM.YANDEX.RU =
+                                  (DESCRIPTION =
+                                    (ADDRESS = (PROTOCOL = TCP)(HOST = tcrm-db1f.yandex.ru)(PORT = 1521))
+                                    (CONNECT_DATA =
+                                      (SERVER = DEDICATED)
+                                      (SERVICE_NAME = tcrmdb)
+                                    )
+                                  )
+                  volumes:
+                    - id: logs
+                    - id: "yt_import_storage"
+                  workloads:
+                    - id: crm-async-core-workload
+                      env:
+                        - name: ASPNETCORE_ENVIRONMENT
+                          value:
+                            literal_env:
+                              value: Testing
+                        - name: TvmClientConfig__TvmSecret
+                          value:
+                            secret_env:
+                              id: client_secret
+                              alias: tvm.secret.2001283
+                      readiness_check:
+                        tcp_check:
+                          port: 80
+                      box_ref: async-core-box
+                    - id: logexport-workload
+                      env:
+                        - name: LogSourcesConfig__Sources__1__ApplicationName
+                          value:
+                            literal_env:
+                              value: logs-async-core
+                        - name: LogSourcesConfig__Sources__1__DirectoryPath
+                          value:
+                            literal_env:
+                              value: /logs/CrmAsync.WebHost.Core
+                        - name: ElasticConfig__Username
+                          value:
+                            literal_env:
+                              value: crm-async-core
+                        - name: ElasticConfig__Password
+                          value:
+                            secret_env:
+                              id: crm-async-core
+                              alias: crm-logs-test-admin
+                        - name: ASPNETCORE_ENVIRONMENT
+                          value:
+                            literal_env:
+                              value: Testing
+                      readiness_check:
+                        tcp_check:
+                          port: 80
+                      box_ref: logexport-box
+                      start: {}
+                      transmit_logs: true
+                  boxes:
+                    - id: async-core-box
+                      volumes:
+                        - volume_ref: logs
+                          mount_point: /logs
+                          mode: read_write
+                        - mode: "read_write"
+                          mount_point: "/crm/temp"
+                          volume_ref: "yt_import_storage"
+                      static_resources:
+                        - resource_ref: async-protected-properties-resource
+                          mount_point: /App/secrets
+                        - resource_ref: tnsnames-resource
+                          mount_point: /oracle
+                      env:
+                        - name: TNS_ADMIN
+                          value:
+                            literal_env:
+                              value: /oracle
+                      cgroup_fs_mount_mode: ro
+                    - id: logexport-box
+                      volumes:
+                        - volume_ref: logs
+                          mount_point: /logs
+                          mode: read_write
+                      env:
+                        - name: ASPNETCORE_ENVIRONMENT
+                          value:
+                            literal_env:
+                              value: Testing
+                      cgroup_fs_mount_mode: ro
+                  mutable_workloads:
+                    - workload_ref: crm-async-core-workload
+                    - workload_ref: logexport-workload
+              secret_refs:
+                crm-test-async-core:20220602:
+                  secret_id: sec-01fynr384edb88fx39yc0v6wsj
+                  secret_version: ver-01g4hqykhdkgfggwtrtsb54j44
+                tvm.secret.2001283:
+                  secret_id: sec-01dq7m10q03ytkzp4z39hzs07w
+                  secret_version: ver-01dq7m10yrrfwh13ng7azs89ge
+                crm-logs-test-admin:
+                  secret_id: sec-01f92gcrxd4j2czhv1x3epk464
+                  secret_version: ver-01fya5yh86fa29dmts9r05taaf
+          constraints:
+            antiaffinity_constraints:
+              - key: rack
+                max_pods: 1
+              - key: node
+                max_pods: 1
+        per_cluster_settings:
+          vla:
+            pod_count: 1
+            deployment_strategy:
+              max_unavailable: 1
+          sas:
+            pod_count: 1
+            deployment_strategy:
+              max_unavailable: 1
+      pod_agent_sandbox_info:
+        revision: 3006211268
+      pod_agent_layer_sandbox_info: {}
+      logbroker_tools_sandbox_info:
+        revision: 2739742779
+      patchers_revision: 11

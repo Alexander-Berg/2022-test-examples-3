@@ -1,0 +1,67 @@
+{
+    "VerboseLevel": 6,
+    "YtVerboseLevel": "Error",
+    "YtLog": "{{yt_log}}",
+    "Port": {{port}},
+
+    "OauthTokenEnvName": "DIRECT_OAUTH_TOKEN",
+
+    "GlobalLog": "{{global_log}}",
+    "ConsumingInstances": [
+        {
+        "Suppliers": [
+                {
+                    "Alias": "copier_yt_log",
+                    "YtSupplier": {
+                        "QueueConsumer": "{{queue_consumer}}",
+                        "QueuePath": "{{input_queue_path}}",
+                        "Cluster": "{{yt_cluster}}"
+                    }
+                }
+            ],
+            "ConsumingSystem": {
+                "MainPath": "{{cs_path}}",
+                "MaxShards": {{shard_count}},
+                "MaxShardsToCheck": {{shard_count}},
+                "WorkerMinorName": "0",
+                "Cluster": "{{yt_cluster}}"
+            },
+            "StatelessShardProcessorConfig": {
+                "ThreadLabelPrefix": "copier_log"
+            },
+            "NumThreads": 2
+        },
+        {
+        "Suppliers": [
+                {
+                    "Alias": "copier_namespace_yt_log",
+                    "YtSupplier": {
+                        "QueueConsumer": "{{queue_consumer_namespace}}",
+                        "QueuePath": "{{input_queue_path_namespace}}",
+                        "Cluster": "{{yt_cluster}}"
+                    }
+                }
+            ],
+            "ConsumingSystem": {
+                "MainPath": "{{cs_path_namespace}}",
+                "MaxShards": {{shard_count}},
+                "MaxShardsToCheck": {{shard_count}},
+                "WorkerMinorName": "0",
+                "Cluster": "{{yt_cluster}}"
+            },
+            "StatelessShardProcessorConfig": {
+                "ThreadLabelPrefix": "copier_namespace_log"
+            },
+            "NumThreads": 2
+        }
+    ],
+    "MaxInflightBytes": 2000,
+    "CollectConfig": {
+        "OutputQueue": "{{output_queue_path}}",
+        "ShardCount": {{shard_count}}
+    },
+    "MdsSettings": {
+        "MdsHost": "{{mds_host}}",
+        "VideoMdsUrl": "http://{{mds_host}}/json/v5"
+    }
+}

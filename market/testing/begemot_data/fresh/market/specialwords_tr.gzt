@@ -1,0 +1,448 @@
+import "search/begemot/rules/market/proto/market.gztproto";
+
+encoding "utf-8";
+
+TArticle stopwords {
+key ={
+"açıklamalar" |
+"almak" |
+"değerlendirme" |
+"değerlendirmeler" |
+"denetleme" |
+"denetlemeler" |
+"detay" |
+"detaylar" |
+"fiyat" |
+"fiyatı" |
+"fiyatlar" |
+"fiyatları" |
+"internet" |
+"karşılaştırma" |
+"karşılaştırmak" |
+"karşılaştırmalar" |
+"katalog" |
+"kataloglar" |
+"liste" |
+"listeler" |
+"mağaza" |
+"mağazalar" |
+"modeller" |
+"mümkün" |
+"nasıl" |
+"nerede" |
+"satış" |
+"seçim" |
+"seçmek" |
+"site" |
+"taban" |
+"ücretler" |
+"yeni" |
+"yorumlar" |
+"kampanya" |
+"buy" |
+"açıklama" |
+"price" |
+"market" |
+"özellikleri" |
+"modelleri" |
+"fiyatlari" |
+"yapmak" |
+"modellerı" |
+"ucuz" |
+"özelliklerı" |
+"kaça?" |
+"kaça" |
+"marka" |
+"fiyati" |
+"açıklaması" |
+"özelliği" |
+"yorum" |
+"yorumlarını" |
+"yorumları" |
+"yorumu" |
+"şikayetler" |
+"şikayet" |
+"şikayeti" |
+"şikayetleri" |
+"kdv" |
+"soma" |
+"mavi" |
+"siyah" |
+"yeşil" |
+"yesil" |
+"kırmızı" |
+"kirmizi" |
+"sarı" |
+"sari" |
+"turuncu" |
+"mor" |
+"fitre" |
+"esoteric" |
+"usd" |
+"online magaza" |
+"online mağazalar" |
+"online mağaza" |
+"rambo 3" |
+"the sims 3"
+morph=EXACT_FORM
+}
+}
+TArticle pricewords {
+key ={
+"fiyatları" |
+"fiyatlar" |
+"fiyatı" |
+"fiyat" |
+"kaç para" |
+"kaç lira" |
+"kaç tl" |
+"en ucuz" |
+"ucuz" |
+"en ucuzu" |
+"en ucuzunu" |
+"fiyati" |
+"fiyatlari" |
+"fiyat listesi" |
+"fiyat listeleri" |
+"almak" |
+"değerlendirme" |
+"değerlendirmeler" |
+"kdv" |
+"özellikleri ve fiyatı" |
+"özellikleri" |
+"almak istiyorum"
+morph=EXACT_FORM
+}
+}
+TArticle paramwords {
+key ={
+"açıklama" |
+"özellikleri" |
+"özellikler" |
+"özelliği" |
+"açıklaması" |
+"açıklamalar"
+morph=EXACT_FORM
+}
+}
+TArticle opinionwords {
+key ={
+"yorumlar" |
+"yorumu" |
+"yorumları" |
+"yorum" |
+"yorumlarını" |
+"şikayet" |
+"şikayetler" |
+"şikayetleri" |
+"şikayeti"
+morph=EXACT_FORM
+}
+}
+TArticle whitewords {
+key ={
+"htc" |
+"ps3" |
+"ps4" |
+"s4" |
+"4s"
+morph=EXACT_FORM
+}
+}
+TArticle minuswords {
+key ={
+"vodafone" |
+"vodafone internet" |
+"transformers 3" |
+"e çift" |
+"ben 10 ultimate alien" |
+"candy crush" |
+"windows market" |
+"ağrı dağı" |
+"test internet speed" |
+"salon 1" |
+"best 10" |
+"transformers 2" |
+"how u doing" |
+"USD" |
+"az tv" |
+"sultan ahmet camii" |
+"çeyrek altın" |
+"türk mobilya" |
+"milli piyango" |
+"piyano taşıma" |
+"Şampiyonlar Ligi" |
+"zaman" |
+"Galata Tower" |
+"pclabs" |
+"canlı tv" |
+"oyun kolu" |
+"oyun gemisi" |
+"lig tv" |
+"kral oyunlar" |
+"sol kol" |
+"acı" |
+"e öğrenme" |
+"star wars" |
+"james bond" |
+"turkey" |
+"deva" |
+"aşk kırmızı" |
+"bit" |
+"yemek sepeti" |
+"sağlık bakanlığı" |
+"seni seviyorum" |
+"Pilli Bebek" |
+"patlıcan" |
+"star tv" |
+"youtube" |
+"google" |
+"facebook" |
+"www" |
+"pizza" |
+".de" |
+".com" |
+"Alfa Romeo" |
+"Cadillac" |
+"Chevrolet" |
+"Chrysler" |
+"Citroen" |
+"Daewoo" |
+"Dodge" |
+"Fiat" |
+"Ford" |
+"Honda" |
+"Hyundai" |
+"Infiniti" |
+"seks" |
+"film" |
+"Isuzu" |
+"Kia" |
+"Lamborghini" |
+"Maserati" |
+"Peugeot" |
+"Pontiac" |
+"Saab" |
+"SsangYong" |
+"Subaru" |
+"Toyota" |
+"Volkswagen" |
+"Volvo" |
+"Daihatsu" |
+"Bugatti" |
+"Aston Martin" |
+"Bentley" |
+"Buick" |
+"lada" |
+"megane" |
+"renk" |
+"metre" |
+"kanal" |
+"box.tc" |
+"ebay" |
+"e-bay" |
+"iphone 6" |
+"Ferrari" |
+"Jeep" |
+"Land Rover" |
+"Lexus" |
+"Lotus" |
+"Lincoln" |
+"McLaren" |
+"Mercedes" |
+"Nissan" |
+"Opel" |
+"Pagani" |
+"Porsche" |
+"Renault" |
+"Rover" |
+"Smart" |
+"Suzuki" |
+"TVR" |
+"top" |
+"Jaguar" |
+"cam4" |
+"4cam" |
+"Maybach" |
+"Mazda" |
+"Seat" |
+"Mitsubishi" |
+"Rolls-Royce" |
+"Skoda" |
+"Plymouth" |
+"focus" |
+"Logan" |
+"Dacia" |
+"Benz" |
+"mondeo" |
+"e bay" |
+".tr" |
+"Audi" |
+"BMW" |
+"Chery" |
+"BYD" |
+"kral oyun" |
+"super fm" |
+"radyo 7" |
+"oyun oyna" |
+"kuzu kuzu" |
+"aras kargo" |
+"hayvanlar alemi" |
+"elektronik müzik" |
+"|x|=|y|" |
+"linked in" |
+"rock müzik" |
+"x hamster" |
+"x hamsters" |
+"e posta" |
+"e-posta" |
+"radyo planet" |
+"britney spears" |
+"turkcell" |
+"Tencere.tv" |
+"s.ü" |
+"ev içi" |
+"radyo medya" |
+"penis büyütücüler" |
+"ev car" |
+"renkli cam" |
+"unutma beni" |
+"şok" |
+"arama motoru" |
+"müzik video" |
+"tayfun" |
+"ay tutulması" |
+"nice" |
+"tÜm" |
+"tum" |
+"transport" |
+"Michael Jackson" |
+"hava durumu" |
+"george michael" |
+"coca cola" |
+"winter springs" |
+"evim evim güzel" |
+"web tv" |
+"x art" |
+"daisy anne" |
+"box office türkiye" |
+"box office" |
+"d.cam" |
+"d-cam" |
+"xxl 18" |
+"yerel yÖnetİm" |
+"nİce" |
+"radyo" |
+"klas oyun" |
+"e okul" |
+"el yazısı" |
+"scooby doo" |
+"çocuk gelişimi" |
+"sanayi" |
+"tatlı" |
+"hades" |
+"güneş sistemi" |
+"bing" |
+"who is" |
+"los angeles" |
+"öğretmenler günü" |
+"o ses türkiye" |
+"c++" |
+"galileo" |
+"oyunlar 1" |
+"oyunlar 100" |
+"pc labs" |
+"toprak rengi" |
+"Süper FM" |
+"beyaz show" |
+"vali" |
+"kırmızı tuvalet" |
+"yaz tatili" |
+"tem" |
+"pclabs" |
+"oyun" |
+"teens girls" |
+"x men oyunu" |
+"2 2 daha" |
+"il özel idareleri" |
+"genç sevgililer" |
+"flsah pleyr" |
+"meyve salatası" |
+"kay tv" |
+"gülen bebek" |
+"çiçek bahçesi" |
+"parmak çocuk" |
+"kız seksi" |
+"mustafa kemal" |
+"A-ha" |
+"m teorisi" |
+"hi 5" |
+"yerel yönetimler" |
+"oyunu" |
+"3d games" |
+"ingilizce student" |
+"at v" |
+"deniz mavisi" |
+"muhteşem yüzyıl" |
+"istanbul" |
+"fifa 13" |
+"nisan" |
+"23 nisan" |
+"1 mayıs" |
+"türkiye" |
+"oceans 12" |
+"8 mart" |
+"ateş ve su" |
+"ios 6" |
+"e-kitap" |
+"android market" |
+"4 cam" |
+"cam 4" |
+"android market" |
+"xbox one" |
+"lady gaga" |
+"n 11" |
+"n11" |
+"fenerbahçe" |
+"face" |
+"jennifer lopez" |
+"x videos" |
+"call of duty" |
+"atatürk resimleri" |
+"londra" |
+"ios 7" |
+"galatasaray" |
+"beşiktaş" |
+"besiktas" |
+"oda tv" |
+"transformers 1" |
+"escort" |
+"ayı teddy" |
+"call of duty modern warfare 3" |
+"disney junior" |
+"fenerbahce" |
+"hüseyin çelik" |
+"müzik dinle" |
+"justin bieber" |
+"3d oyunlar" |
+"ben 10" |
+"hello kitty oyunları" |
+"x men" |
+"house md" |
+"futbol aşkı" |
+"grand meeting" |
+"easy-going" |
+"easy going" |
+"vw golf 7" |
+"paris eyfel kulesi" |
+"plastik kasa" |
+"s&amp;amp;amp;amp;amp;amp;amp;p" |
+"dünyanın" |
+"escort" |
+"1 usd" |
+"2009 kasa bmw" |
+"h&amp;amp;amp;amp;amp;amp;amp;amp;m" |
+"s&amp;amp;amp;amp;amp;amp;amp;amp;p" |
+"ip track"
+}
+}

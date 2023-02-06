@@ -1,0 +1,1 @@
+CREATE KEYSPACE tours WITH replication = { 'class': 'NetworkTopologyStrategy', 'SAS': '2' };

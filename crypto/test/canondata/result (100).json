@@ -1,0 +1,124 @@
+{
+    "main.test_upload_to_audience": [
+        {
+            "args": {
+                "ulogin": [
+                    "crypta-dmp-test-login"
+                ]
+            },
+            "method": "GET",
+            "path": "/v1/management/client/segments",
+            "request_data": "",
+            "response_data": "{\"segments\":[]}\n",
+            "status_code": 200
+        },
+        {
+            "args": {
+                "ulogin": [
+                    "crypta-dmp-test-login"
+                ]
+            },
+            "files": {
+                "file": "user_no_matching\nuser_one"
+            },
+            "method": "POST",
+            "path": "/v1/management/client/segments/upload_file",
+            "request_data": "",
+            "response_data": "{\"segment\":{\"id\":1}}\n",
+            "status_code": 200
+        },
+        {
+            "args": {
+                "check_size": [
+                    "False"
+                ],
+                "ulogin": [
+                    "crypta-dmp-test-login"
+                ]
+            },
+            "method": "POST",
+            "path": "/v1/management/client/segment/1/confirm",
+            "request_data": "{\"segment\": {\"hashed\": 0, \"id\": 1, \"content_type\": \"yuid\", \"name\": \"Soul [1]\"}}",
+            "response_data": "{\"segment\":{}}\n",
+            "status_code": 200
+        },
+        {
+            "args": {},
+            "method": "GET",
+            "path": "/v1/management/segment/1/grants",
+            "request_data": "",
+            "response_data": "{\"grants\":[]}\n",
+            "status_code": 200
+        },
+        {
+            "args": {},
+            "method": "PUT",
+            "path": "/v1/management/segment/1/grant",
+            "request_data": "{\"grant\": {\"comment\": \"API\", \"user_login\": \"test1\"}}",
+            "response_data": "{\"grant\":{}}\n",
+            "status_code": 200
+        },
+        {
+            "args": {},
+            "method": "PUT",
+            "path": "/v1/management/segment/1/grant",
+            "request_data": "{\"grant\": {\"comment\": \"API\", \"user_login\": \"test2\"}}",
+            "response_data": "{\"grant\":{}}\n",
+            "status_code": 200
+        },
+        {
+            "args": {
+                "ulogin": [
+                    "crypta-dmp-test-login"
+                ]
+            },
+            "files": {
+                "file": "user_no_matching\nuser_one\nuser_two"
+            },
+            "method": "POST",
+            "path": "/v1/management/client/segments/upload_file",
+            "request_data": "",
+            "response_data": "{\"segment\":{\"id\":2}}\n",
+            "status_code": 200
+        },
+        {
+            "args": {
+                "check_size": [
+                    "False"
+                ],
+                "ulogin": [
+                    "crypta-dmp-test-login"
+                ]
+            },
+            "method": "POST",
+            "path": "/v1/management/client/segment/2/confirm",
+            "request_data": "{\"segment\": {\"hashed\": 0, \"id\": 2, \"content_type\": \"yuid\", \"name\": \"Soul [6]\"}}",
+            "response_data": "{\"segment\":{}}\n",
+            "status_code": 200
+        },
+        {
+            "args": {},
+            "method": "GET",
+            "path": "/v1/management/segment/2/grants",
+            "request_data": "",
+            "response_data": "{\"grants\":[]}\n",
+            "status_code": 200
+        },
+        {
+            "args": {},
+            "method": "PUT",
+            "path": "/v1/management/segment/2/grant",
+            "request_data": "{\"grant\": {\"comment\": \"API\", \"user_login\": \"test1\"}}",
+            "response_data": "{\"grant\":{}}\n",
+            "status_code": 200
+        },
+        {
+            "args": {},
+            "method": "PUT",
+            "path": "/v1/management/segment/2/grant",
+            "request_data": "{\"grant\": {\"comment\": \"API\", \"user_login\": \"test2\"}}",
+            "response_data": "{\"grant\":{}}\n",
+            "status_code": 200
+        }
+    ]
+}

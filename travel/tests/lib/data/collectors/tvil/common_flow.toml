@@ -1,0 +1,70 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "tvil",
+    "--base-url", "%(partner_server_url)s",
+    "--password", "___not_used___",
+    "--no-proxy",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--date-from", "2020-05-28",
+    "--date-to", "2020-05-28",
+]
+
+checkers = [
+    "lb",
+    "partner",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "application/json"
+
+[[partner.responses]]
+    data_file = "cpa_export_response.xml"
+    method = "POST"
+
+[lb]
+    topic = "topic-tvil"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+[[lb.expected]]
+    partner_name = "tvil"
+    travel_order_id = "tvil:2360531"
+    partner_order_id = "2360531"
+    created_at = 1590658580
+    status = "cancelled"
+    partner_status = "CANCELLED"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2020-06-01"
+    check_out = "2020-06-07"
+    order_amount = 7200
+    hotel_name = ""
+    label = "20200528001"
+    deferred_payment_eligibility = "unknown"
+    partner_hotel_id = "424275"
+    post_pay_eligible = false
+    post_pay_used = false
+
+[[lb.expected]]
+    partner_name = "tvil"
+    travel_order_id = "tvil:2408004"
+    partner_order_id = "2408004"
+    created_at = 1593144915
+    status = "confirmed"
+    partner_status = "FINISHED"
+    currency_code = "USD"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2020-07-27"
+    check_out = "2020-08-04"
+    order_amount = 56201.17
+    hotel_name = ""
+    label = "sGm4uH3JxSl0KOaIGex8qTt22r3ClmYWQlEG9Bw"
+    deferred_payment_eligibility = "unknown"
+    partner_hotel_id = "424276"
+    post_pay_eligible = false
+    post_pay_used = false

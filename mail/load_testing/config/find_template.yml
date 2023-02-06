@@ -1,0 +1,63 @@
+autostop:
+    autostop: ['http(5xx, 1%, 5s)', 'net(0xx, 1%, 5m)', 'net(1xx, 1%, 5m)', 'quantile (95, 50ms, 5s)']
+console: {enabled: false}
+neuploader: {api_address: 'https://back.luna.yandex-team.ru/', enabled: true, package: yandextank.plugins.NeUploader}
+phantom:
+    address: template-master-1.template-master.load.template-master.mail.stable.qloud-d.yandex.net:443
+    autocases: 1
+    header_http: '1.1'
+    load_profile: {load_type: rps, schedule: 'const(1, 10m)'}
+    multi:
+    -   address: template-master-1.template-master.load.template-master.mail.stable.qloud-d.yandex.net:443
+        ammofile: https://proxy.sandbox.yandex-team.ru/1370629193
+        autocases: 1
+        load_profile: {load_type: rps, schedule: 'const(100, 10m)'}
+        ssl: true
+        uris: []
+    package: yandextank.plugins.Phantom
+    ssl: true
+    uris: [/ping]
+uploader:
+    component: tm-find-template
+    enabled: true
+    meta: {use_tank: tank.load.template-master.mail.stable.qloud-d.yandex.net}
+    operator: lunapark
+    package: yandextank.plugins.DataUploader
+yasm:
+    enabled: true
+    package: yandextank.plugins.YASM
+    panels:
+        template-master:
+            default_signals: true
+            host: QLOUD
+            signals:
+                - 'quant(hmerge(unistat-application_db_AsyncSaveTemplate_dhhh), 50)'
+                - 'quant(hmerge(unistat-application_db_AsyncSaveTemplate_dhhh), 85)'
+                - 'quant(hmerge(unistat-application_db_AsyncSaveTemplate_dhhh), 95)'
+                - 'quant(hmerge(unistat-application_db_FindSimilarTemplates_dhhh), 50)'
+                - 'quant(hmerge(unistat-application_db_FindSimilarTemplates_dhhh), 85)'
+                - 'quant(hmerge(unistat-application_db_FindSimilarTemplates_dhhh), 95)'
+                - 'quant(hmerge(unistat-application_db_FindTemplateByStableSign_dhhh), 50)'
+                - 'quant(hmerge(unistat-application_db_FindTemplateByStableSign_dhhh), 85)'
+                - 'quant(hmerge(unistat-application_db_FindTemplateByStableSign_dhhh), 95)'
+                - 'quant(hmerge(unistat-application_db_SaveTemplate_dhhh), 50)'
+                - 'quant(hmerge(unistat-application_db_SaveTemplate_dhhh), 85)'
+                - 'quant(hmerge(unistat-application_db_SaveTemplate_dhhh), 95)'
+                - 'quant(hmerge(unistat-application_pool_AddToPool_dhhh), 50)'
+                - 'quant(hmerge(unistat-application_pool_AddToPool_dhhh), 85)'
+                - 'quant(hmerge(unistat-application_pool_AddToPool_dhhh), 95)'
+                - 'quant(hmerge(unistat-application_pool_CalculateBestMatch_dhhh), 50)'
+                - 'quant(hmerge(unistat-application_pool_CalculateBestMatch_dhhh), 85)'
+                - 'quant(hmerge(unistat-application_pool_CalculateBestMatch_dhhh), 95)'
+                - 'quant(hmerge(unistat-application_pool_Diff_dhhh), 50)'
+                - 'quant(hmerge(unistat-application_pool_Diff_dhhh), 85)'
+                - 'quant(hmerge(unistat-application_pool_Diff_dhhh), 95)'
+                - 'quant(hmerge(unistat-application_pool_FindSimilarTemplates_dhhh), 50)'
+                - 'quant(hmerge(unistat-application_pool_FindSimilarTemplates_dhhh), 85)'
+                - 'quant(hmerge(unistat-application_pool_FindSimilarTemplates_dhhh), 95)'
+                - 'quant(hmerge(unistat-application_pool_GetCandidateTemplates_dhhh), 50)'
+                - 'quant(hmerge(unistat-application_pool_GetCandidateTemplates_dhhh), 85)'
+                - 'quant(hmerge(unistat-application_pool_GetCandidateTemplates_dhhh), 95)'
+            tags: itype=qloud; prj=mail.template-master.load;
+    timeout: 300
+    verbose_logging: false

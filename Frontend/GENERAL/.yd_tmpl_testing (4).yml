@@ -1,0 +1,154 @@
+annotations:
+  project: tap-sampleapp-api
+labels:
+  deploy_engine: env_controller
+  stagectl_epoch: 150
+  stagectl_vcs:
+    svn_branch: stage_controller/stable-57-1
+    svn_revision: 6598110
+    svn_tag: ''
+meta:
+  acl:
+  - action: allow
+    permissions:
+    - read
+    - write
+    - create
+    - ssh_access
+    - root_ssh_access
+    - read_secrets
+    subjects:
+    - robot-drug-deploy
+    - abc:service:5999
+  project_id: tap-sampleapp-api
+  id: tap_sampleapp_api_testing
+  inherit_acl: true
+spec:
+  account_id: abc:service:5999
+  deploy_units:
+    App:
+      endpoint_sets:
+      - port: 80
+      images_for_boxes:
+        api:
+          name: tap/sampleapp_api
+          registry_host: registry.yandex.net
+          tag: {{VERSION}}
+      multi_cluster_replica_set:
+        replica_set:
+          clusters:
+          - cluster: sas
+            spec:
+              constraints:
+                antiaffinity_constraints:
+                - key: rack
+                  max_pods: 1
+              replica_count: 1
+          - cluster: vla
+            spec:
+              constraints:
+                antiaffinity_constraints:
+                - key: rack
+                  max_pods: 1
+              replica_count: 1
+          deployment_strategy:
+            max_unavailable: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+              - id: tap_sampleapp_api_testing-disk-0
+                labels:
+                  used_by_infra: true
+                quota_policy:
+                  bandwidth_guarantee: 15728640
+                  bandwidth_limit: 31457280
+                  capacity: 3221225472
+                storage_class: hdd
+              host_infra:
+                monitoring: {}
+              ip6_address_requests:
+              - enable_dns: true
+                network_id: _TAPDEVNETS_
+                vlan_id: backbone
+              - enable_dns: true
+                network_id: _TAPDEVNETS_
+                vlan_id: fastbone
+              pod_agent_payload:
+                spec:
+                  boxes:
+                  - id: api
+                    rootfs: {}
+                  mutable_workloads:
+                  - workload_ref: api
+                  resources: {}
+                  workloads:
+                  - box_ref: api
+                    env:
+                    - name: HTTP_PORT
+                      value:
+                        literal_env:
+                          value: '80'
+                    - name: DB_HOST
+                      value:
+                        literal_env:
+                          value: 'c-mdb9oskhf1q0eo48o19a.rw.db.yandex.net'
+                    - name: DB_PORT
+                      value:
+                        literal_env:
+                          value: '6432'
+                    - name: DB_NAME
+                      value:
+                        literal_env:
+                          value: 'miniapp_testing'
+                    - name: DB_PASSWORD
+                      value:
+                        secret_env:
+                          alias: sec-01e6bt47hxyjfpcswcar6jcfm1:ver-01eb5zrrfg27n6yp4kk65zapdk
+                          id: DATABASE_TESTING_PASSWORD
+                    - name: DB_USER
+                      value:
+                        secret_env:
+                          alias: sec-01e6bt47hxyjfpcswcar6jcfm1:ver-01eb5zrrfg27n6yp4kk65zapdk
+                          id: DATABASE_TESTING_USER
+                    - name: PAYMENT_API_TOKEN
+                      value:
+                        secret_env:
+                          alias: sec-01e6bf57z6fd8bkzqm4z749e8h:ver-01e6bfc1m9bqy30p24176evxep
+                          id: grigory51-token-apikeys-zemskov
+                    - name: AUTH_SECRET_KEY
+                      value:
+                        secret_env:
+                          alias: sec-01e6bt47hxyjfpcswcar6jcfm1:ver-01eb5zrrfg27n6yp4kk65zapdk
+                          id: OAUTH_SECRET_KEY
+                    - name: PLATFORM_API_KEY
+                      value:
+                        secret_env:
+                          alias: sec-01e6kzn12xbrb7tfhyg3n07n7z:ver-01ecphp374ay7x7c559g2pnyx9
+                          id: APIKey
+                    id: api
+                    readiness_check:
+                      tcp_check:
+                        port: 80
+                    start: {}
+                    transmit_logs: true
+              resource_requests:
+                memory_guarantee: 1073741824
+                memory_limit: 1073741824
+                vcpu_guarantee: 100
+                vcpu_limit: 100
+              secrets:
+                sec-01e6bf57z6fd8bkzqm4z749e8h:ver-01e6bfc1m9bqy30p24176evxep:
+                  delegation_token: {{PAYMENT_DELEGATION_TOKEN}}
+                  secret_id: sec-01e6bf57z6fd8bkzqm4z749e8h
+                  secret_version: ver-01e6bfc1m9bqy30p24176evxep
+                sec-01e6bt47hxyjfpcswcar6jcfm1:ver-01eb5zrrfg27n6yp4kk65zapdk:
+                  delegation_token: {{DB_DELEGATION_TOKEN}}
+                  secret_id: sec-01e6bt47hxyjfpcswcar6jcfm1
+                  secret_version: ver-01eb5zrrfg27n6yp4kk65zapdk
+                sec-01e6kzn12xbrb7tfhyg3n07n7z:ver-01ecphp374ay7x7c559g2pnyx9:
+                  delegation_token: {{PLATFORM_DELEGATION_TOKEN}}
+                  secret_id: sec-01e6kzn12xbrb7tfhyg3n07n7z
+                  secret_version: ver-01ecphp374ay7x7c559g2pnyx9
+      network_defaults:
+        network_id: _TAPDEVNETS_
+      tvm_config: {}

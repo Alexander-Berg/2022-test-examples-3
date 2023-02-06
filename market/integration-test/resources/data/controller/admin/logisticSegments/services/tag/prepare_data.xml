@@ -1,0 +1,71 @@
+<dataset>
+    <logistic_segments_services_meta_key
+            id="401"
+            key="RETURN_SORTING_CENTER_ID"
+            description="Возвратный СЦ для дропоффа"
+    />
+
+    <service_code id="201" code="MOVEMENT" is_optional="false" name="TEST SERVICE 1" type="internal"/>
+    <service_code id="202" code="INBOUND" is_optional="false" name="TEST SERVICE 2" type="internal"/>
+
+    <partner id="1" status="active" type="DROPSHIP" name="Partner 1"/>
+    <partner id="2" status="active" type="SORTING_CENTER" name="Partner 2"/>
+    <partner id="3" status="active" type="DELIVERY" name="Partner 3"/>
+
+    <address id="11"/>
+    <address id="12"/>
+    <address id="13"/>
+
+    <logistics_point
+            id="101"
+            name="Point 101"
+            external_id="warehouse_101"
+            type="WAREHOUSE"
+            address_id="11"
+            active="true"
+    />
+
+    <logistics_point
+            id="102"
+            name="Point 102"
+            external_id="warehouse_102"
+            type="WAREHOUSE"
+            address_id="12"
+            active="true"
+    />
+
+    <logistics_point
+            id="103"
+            name="Point 103"
+            external_id="pickup_point_103"
+            type="PICKUP_POINT"
+            address_id="12"
+            active="true"
+    />
+
+    <logistic_segments id="10001" partner_id="1" logistic_point_id="101" location_id="1001" type="warehouse"/>
+    <logistic_segments id="10002" partner_id="2" logistic_point_id="[null]" location_id="1002" type="movement"/>
+    <logistic_segments id="10003" partner_id="2" logistic_point_id="102" location_id="1002" type="warehouse"/>
+    <logistic_segments id="10004" partner_id="3" logistic_point_id="[null]" location_id="1003" type="movement"/>
+    <logistic_segments id="10005" partner_id="3" logistic_point_id="[null]" location_id="1003" type="linehaul"/>
+    <logistic_segments id="10006" partner_id="3" logistic_point_id="103" location_id="1003" type="pickup"/>
+    <logistic_segments id="10007" partner_id="3" logistic_point_id="[null]" location_id="1003" type="handing"/>
+
+    <logistic_segments_services id="301" segment_id="10001" status="active" code="201" duration="0" price="0"/>
+    <logistic_segments_services id="302" segment_id="10001" status="inactive" code="202" duration="0" price="0"/>
+    <logistic_segments_services id="303" segment_id="10002" status="inactive" code="201" duration="0" price="0"/>
+    <logistic_segments_services id="304" segment_id="10003" status="inactive" code="201" duration="0" price="0"/>
+
+    <logistic_segments_services_meta_value
+            id="100"
+            service_id="301"
+            key_id="401"
+            value="[null]"
+    />
+    <logistic_segments_services_meta_value
+            id="300"
+            service_id="302"
+            key_id="401"
+            value="test"
+    />
+</dataset>

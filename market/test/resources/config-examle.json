@@ -1,0 +1,39 @@
+{
+  "owner": "some_owner",
+  "metrics": [
+    {
+      "metricName": "r.partner.timings.page.${method}",
+      "tableName": "market_nginx",
+      "period": "FIVE_MIN",
+      "type": "QUANTILE",
+      "metricField": "resptime_ms",
+      "filter": "vhost like '%partner.market.yandex%' and dynamic = 1 and http_code = 200",
+      "splits": [
+        {
+          "name": "method",
+          "field": "cutQueryStringAndFragment(url)",
+          "totalMetric": false
+        }
+      ]
+    },
+    {
+      "metricName": "r.partner.timings.${dc}",
+      "tableName": "market_nginx",
+      "period": "FIVE_MIN",
+      "type": "QUANTILE",
+      "metricField": "resptime_ms",
+      "filter": "vhost like '%partner.market.yandex%' and dynamic = 1 and http_code = 200",
+      "splits": [
+        {
+          "name": "dc",
+          "field": "dictGetString('dc', 'dc', sipHash64(host))",
+          "totalMetric": true
+        }
+      ]
+    }
+  ]
+
+
+
+}
+

@@ -1,0 +1,57 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "pobeda_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 409
+    confirm_dt = ""
+    created_at = "2020-01-31 00:13:00"
+    currency = ""
+    from = ""
+    marker = "efe7c76a-a5e969-1325-4573-bfe8-877bda45f8c11"
+    order_id = "ZB3TUF"
+    partner = "pobeda"
+    partner_id = 58
+    price = 7676.47
+    source = "pobeda"
+    status = "paid"
+    ticket_number = ""
+    to = ""
+    trip_type = "roundtrip"
+    unixtime = 1580548460
+
+[lb]
+    topic = "topic-pobeda_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "updated_at"]
+
+[[lb.expected]]
+    status = "confirmed"
+    category = "avia"
+    partner_id = 58
+    created_at = 1580429580
+    origin = ""
+    partner_order_id = "ZB3TUF"
+    label = "efe7c76a-a5e969-1325-4573-bfe8-877bda45f8c11"
+    source = "history"
+    destination = ""
+    partner_name = "pobeda"
+    trip_type = "roundtrip"
+    billing_order_id = 409
+    order_amount = 7676.47
+    travel_order_id = "pobeda:ZB3TUF"
+    currency_code = "RUB"

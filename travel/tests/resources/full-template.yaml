@@ -1,0 +1,75 @@
+Sentence.CenterDistance: |+
+  {% if Feature.Star and Feature.Name and Feature.CityCenterDistanceKm %}
+  {{Feature.Star.Value}}-звёздочный отель "{{Feature.Name.Value}}" расположен в {{Feature.CityCenterDistanceKm.Value}} км от центра.
+  {% endif %}
+
+Sentence.RoomFeatures: |+
+  {% if Feature.WiFi.Value or Feature.AirConditioning.Value or Feature.Refrigerator.Value or Feature.TvInRoom.Value or Feature.Hairdryer.Value or Feature.Iron.Value %}
+  В каждом вы найдёте
+  {% for feature in [Feature.WiFi, Feature.AirConditioning, Feature.Refrigerator, Feature.TvInRoom, Feature.Hairdryer, Feature.Iron] if feature.Value %}
+  {% if loop.first %} {% else %}, {% endif %}
+  {{feature.Name}}
+  {% if loop.last %}.{% endif %}
+  {% endfor %}
+  {% endif %}
+
+Sentence.HotelFeatures: |+
+  {% if Feature.HasRestaurant.Value or Feature.Gym.Value or Feature.Sauna.Value or Feature.Laundry.Value or Feature.DryCleaning.Valule %}
+  На территории гостиницы расположены
+  {% for feature in [Feature.HasRestaurant, Feature.Gym, Feature.Sauna, Feature.Laundry, Feature.DryCleaning] if feature.Value %}
+  {% if loop.first %} {% else %}, {% endif %}
+  {{feature.Name}}
+  {% if loop.last %}.{% endif %}
+  {% endfor %}
+  {% endif %}
+
+Sentence.CheckInOut: |+
+  {% if Feature.CheckInTime and Feature.CheckOutTime %}
+  Учитывайте время заселения в отель. Заезд здесь начинается с {{Feature.CheckInTime.Value}}, выехать нужно до {{Feature.CheckOutTime.Value}}.
+  {% endif %}
+
+Sentence.Transfer: |+
+  {% if Feature.CarPark and Feature.Transfer %}
+  Если вы на машине, можете оставить её на охраняемой парковке. А если своим ходом, воспользуйтесь услугой трансфера.
+  {% elif Feature.CarPark %}
+  Если вы на машине, можете оставить её на охраняемой парковке.
+  {% elif Feature.Transfer %}
+  Если вы добираетесь своим ходом, воспользуйтесь услугой трансфера.
+  {% endif %}
+
+Paragraph.HotelFeaturesAndTransfer: |+
+  {{Sentence.HotelFeatures}} {{Sentence.Transfer}}
+
+Paragraph.Rooms: |+
+  {% if Feature.Rooms and Sentence.RoomFeatures %}
+  Здесь созданы все условия для комфортного проживания — выбирайте один из {{Feature.Rooms.Value}} номеров. {{Sentence.RoomFeatures}} Будьте как дома!
+  {% endif %}
+
+Text.Default: |+
+  {{Sentence.CenterDistance}}
+
+  {{Paragraph.Rooms}}
+
+  {% if Feature.Pets.Value %}
+  И берите с собой питомцев, им будут рады и даже нальют миску воды.
+  {% endif %}
+
+  {% if Feature.InternetInHotel %}
+  И вы сможете выложить фотографии, отправить файл или позвонить родным по видео — интернету ставят оценку "{{Feature.InternetInHotel.Value}}".
+  {% endif %}
+
+  {% if Feature.RoomMinPrice %}
+  Цены на номера в этом году вас удивят: {{Feature.RoomMinPrice.Value}}.
+  {% endif %}
+
+  {{Paragraph.HotelFeaturesAndTransfer}}
+
+  {% if Feature.Pool.Value %}
+  И вы наверняка захотите отдохнуть у бассейна. Спешим обрадовать — он тут есть!
+  {% endif %}
+
+  {{Sentence.CheckInOut}}
+
+  {% if Feature.AroundTheClockFrontDesk.Value %}
+  Даже если вы прибудете поздно ночью, вас встретят на круглосуточной стойке регистрации и помогут с размещением.
+  {% endif %}

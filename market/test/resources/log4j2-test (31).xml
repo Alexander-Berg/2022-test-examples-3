@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG">
+    <Properties>
+        <Property name="mainPattern" value="%d %-5p [%c{1} %t] %m [%X{MarketReqId}]%n"/>
+    </Properties>
+    <Appenders>
+        <Async name="ASYNC">
+            <AppenderRef ref="CONSOLE"/>
+        </Async>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="${mainPattern}"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="ru.yandex.market.marketpromo.core.scheduling" level="INFO"/>
+        <Logger name="ru.yandex.market.marketpromo.core.service.task" level="INFO"/>
+        <Logger name="ru.yandex.market.marketpromo.core.test" level="WARN"/>
+        <Logger name="ru.yandex.market.marketpromo.core.data.source.ydb" level="WARN"/>
+        <Logger name="ru.yandex.market.marketpromo.core.data.source.logbroker" level="DEBUG"/>
+
+        <Logger name="ru.yandex.kikimr.persqueue" level="DEBUG"/>
+        <Logger name="ru.yandex.misc.io.http.apache" level="WARN"/>
+        <Logger name="ru.yandex.inside.yt" level="INFO"/>
+
+        <Logger name="requestTrace" level="TRACE" additivity="false">
+            <AppenderRef ref="ASYNC"/>
+        </Logger>
+
+        <Root level="INFO">
+            <AppenderRef ref="ASYNC"/>
+        </Root>
+    </Loggers>
+</Configuration>

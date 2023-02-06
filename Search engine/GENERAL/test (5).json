@@ -1,0 +1,65 @@
+{
+    "id": "test",
+    "gratitude": "Спасибо, что помогаете улучшить Поиск!",
+    "revisionId": 1,
+    "questions": [
+        {
+            "id": 1,
+            "type": "choice",
+            "label": "Вы довольны поиском Яндекса?",
+            "options": [
+            {
+                "id": 1,
+                "label": "Да"
+            },
+            {
+                "id": 2,
+                "label": "Нет"
+            },
+            {
+                "id": 3,
+                "label": "Частично"
+            }
+            ],
+            "required": true,
+            "rotation": true
+        },
+        {
+            "id": 2,
+            "type": "longText",
+            "label": "Спасибо. Расскажете подробнее?",
+            "showIf": [
+            {
+                "op": "or",
+                "type": "block",
+                "content": [
+                1
+                ],
+                "id": 0
+            },
+            {
+                "op": "and",
+                "type": "block",
+                "content": [
+                2
+                ],
+                "id": 1
+            },
+            {
+                "op": "any",
+                "node": {
+                "type": "questions",
+                "key": "1"
+                },
+                "type": "condition",
+                "id": 2,
+                "arguments": [
+                "2",
+                "3"
+                ]
+            }
+            ],
+            "required": false
+        }
+    ]
+}

@@ -1,0 +1,61 @@
+{
+    "additionalProperties": false, 
+    "required": [
+        "type", 
+        "client_ctx"
+    ], 
+    "type": "object", 
+    "properties": {
+        "__compressed__": {
+            "type": ["string", "null"]
+        },
+        "raw_ctx": {
+            "minItems": 1, 
+            "items": {
+                "additionalProperties": false, 
+                "required": [
+                    "global_ctx", 
+                    "client_ctx"
+                ], 
+                "type": "object", 
+                "properties": {
+                    "client_ctx": {
+                        "type": "object", 
+                        "properties": {}
+                    }, 
+                    "global_ctx": {
+                        "required": [
+                            "context_name"
+                        ], 
+                        "type": "object", 
+                        "properties": {
+                            "context_name": {
+                                "minItems": 1, 
+                                "items": {
+                                    "type": "string"
+                                }, 
+                                "type": "array", 
+                                "maxItems": 1
+                            }
+                        }
+                    }
+                }
+            }, 
+            "type": "array"
+        }, 
+        "type": {
+            "enum": [
+                "noapache_setup"
+            ], 
+            "type": "string"
+        }, 
+        "client_ctx": {
+            "type": "object", 
+            "properties": {}
+        }, 
+        "global_ctx": {
+            "type": "object", 
+            "properties": {}
+        }
+    }
+}

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset reset_sequences="plan_fact_group_id_seq">
+
+    <lom_order
+            id="1"
+            barcode="LOinttest-1"
+            platform_client_id="1"
+            status="DRAFT"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="1"
+            partner_id="201"
+            partner_type="FULFILLMENT"
+            segment_type="FULFILLMENT"
+            waybill_segment_index="0"
+            shipment_date="2020-11-02"
+            shipment_type="IMPORT"
+            partner_name="Partner 201"
+    />
+
+    <lom_waybill_segment
+            id="2"
+            order_id="1"
+            partner_id="202"
+            partner_type="FULFILLMENT"
+            segment_type="FULFILLMENT"
+            waybill_segment_index="1"
+            shipment_date="2020-11-02"
+            shipment_type="IMPORT"
+            partner_name="Partner 202"
+    />
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="2"
+            waybill_segment_type="FULFILLMENT"
+            expected_status="IN"
+            processing_status="ENQUEUED"
+            plan_fact_status="CREATED"
+            expected_status_datetime="2020-11-07 11:11:50 +0300"
+            schedule_time="2020-11-07 11:11:50 +0300"
+            fact_status_datetime="2020-11-08 10:11:50 +0300"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="IN"
+            waybill_segment_type="FULFILLMENT"
+            aggregation_type="NONE"
+            rule_processor="TSKV_LOG"
+            rule='{
+                "_type": ".TskvLoggerPayload",
+                "logEveryPlanFact": true
+            }'
+    />
+
+    <quality_rule
+            id="2"
+            enabled="true"
+            expected_status="IN"
+            waybill_segment_type="FULFILLMENT"
+            aggregation_type="DATE_PARTNER_RELATION_FROM"
+            rule_processor="TSKV_LOG"
+            rule='{
+                "_type": ".TskvLoggerPayload",
+                "logEveryPlanFact": true
+            }'
+    />
+
+    <quality_rule
+            id="3"
+            enabled="true"
+            expected_status="IN"
+            waybill_segment_type="FULFILLMENT"
+            aggregation_type="DATE_PARTNER"
+            rule_processor="TSKV_LOG"
+            rule='{
+                "_type": ".TskvLoggerPayload",
+                "logEveryPlanFact": true
+            }'
+    />
+
+    <quality_rule
+            id="4"
+            enabled="true"
+            expected_status="IN"
+            waybill_segment_type="FULFILLMENT"
+            aggregation_type="PARTNER"
+            rule_processor="TSKV_LOG"
+            rule='{
+                "_type": ".TskvLoggerPayload",
+                "logEveryPlanFact": true
+            }'
+    />
+
+    <quality_rule
+            id="5"
+            enabled="true"
+            expected_status="IN"
+            waybill_segment_type="FULFILLMENT"
+            aggregation_type="PARTNER_RELATION_FROM"
+            rule_processor="TSKV_LOG"
+            rule='{
+                "_type": ".TskvLoggerPayload",
+                "logEveryPlanFact": true
+            }'
+    />
+
+    <quality_rule
+            id="6"
+            enabled="true"
+            expected_status="IN"
+            waybill_segment_type="FULFILLMENT"
+            aggregation_type="PARTNER_RELATION_TO"
+            rule_processor="TSKV_LOG"
+            rule='{
+                "_type": ".TskvLoggerPayload",
+                "logEveryPlanFact": true
+            }'
+    />
+
+    <plan_fact_group
+            id="101"
+            expected_status="IN"
+            waybill_segment_type="FULFILLMENT"
+            aggregation_key="testKey"
+            aggregation_type="DATE_PARTNER_RELATION_FROM"
+            processing_status="ENQUEUED"
+            schedule_time="2020-11-07 14:59:00 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 7],
+                        "partnerFrom": {
+                            "id": 201,
+                            "type": "FULFILLMENT",
+                            "name": "Партнёр 201",
+                            "subtype": "TAXI_LAVKA"
+                        },
+                        "partner": {
+                            "id": 202,
+                            "type": "FULFILLMENT",
+                            "name": "Партнёр 202",
+                            "subtype": "MARKET_COURIER"
+                        }
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="101"
+            plan_fact_id="1"
+    />
+
+    <plan_fact_group
+            id="103"
+            expected_status="IN"
+            waybill_segment_type="FULFILLMENT"
+            aggregation_key="date:2020-11-07;partner:202;"
+            aggregation_type="DATE_PARTNER"
+            processing_status="ENQUEUED"
+            schedule_time="2020-11-07 14:59:00 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 7],
+                        "partner": {
+                            "id": 202,
+                            "type": "FULFILLMENT",
+                            "name": "Partner 202"
+                        }
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group
+            id="105"
+            expected_status="IN"
+            waybill_segment_type="FULFILLMENT"
+            aggregation_key="testKey"
+            aggregation_type="PARTNER"
+            processing_status="ENQUEUED"
+            schedule_time="2020-11-07 14:59:00 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "partner": {
+                            "id": 202,
+                            "type": "FULFILLMENT",
+                            "subtype": "MARKET_COURIER"
+                        }
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group
+            id="107"
+            expected_status="IN"
+            waybill_segment_type="FULFILLMENT"
+            aggregation_key="testKey"
+            aggregation_type="PARTNER_RELATION_FROM"
+            processing_status="ENQUEUED"
+            schedule_time="2020-11-07 14:59:00 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "partnerFrom": {
+                            "id": 201,
+                            "type": "FULFILLMENT",
+                            "subtype": "MARKET_COURIER"
+                        },
+                        "partner": {
+                            "id": 202,
+                            "type": "FULFILLMENT",
+                            "subtype": "MARKET_COURIER"
+                        }
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group
+            id="109"
+            expected_status="IN"
+            waybill_segment_type="FULFILLMENT"
+            aggregation_key="testKey"
+            aggregation_type="PARTNER_RELATION_TO"
+            processing_status="ENQUEUED"
+            schedule_time="2020-11-07 14:59:00 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "partnerTo": {
+                            "id": 201,
+                            "type": "FULFILLMENT",
+                            "subtype": "MARKET_COURIER"
+                        },
+                        "partner": {
+                            "id": 202,
+                            "type": "FULFILLMENT",
+                            "subtype": "MARKET_COURIER"
+                        }
+                    }
+                }
+            }'
+    />
+
+</dataset>

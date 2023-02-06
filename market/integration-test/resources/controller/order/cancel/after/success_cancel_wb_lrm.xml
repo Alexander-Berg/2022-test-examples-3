@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <orders
+            id="1"
+            external_id="1001"
+            platform_client_id="1"
+            sender_id="1"
+
+            status="CANCELLED"
+
+            created="2018-01-01 12:00:00 +0000"
+    />
+
+    <cancellation_order_request
+        id="1"
+        order_id="1"
+        status="SUCCESS"
+    />
+
+    <order_history_event
+            id="1"
+            order_id="1"
+            diff='[
+                  {
+                    "op": "add",
+                    "path": "/cancellationOrderRequests/0",
+                    "value": {
+                      "id": 1,
+                      "status": "CREATED",
+                      "cancellationErrorMessage": null,
+                      "reason": null
+                    }
+                  }
+                ]'
+    />
+
+    <order_history_event
+            id="2"
+            order_id="1"
+            diff='[
+                  {
+                    "op": "replace",
+                    "fromValue": "DRAFT",
+                    "path": "/status",
+                    "value": "CANCELLED"
+                  },
+                  {
+                    "op": "replace",
+                    "fromValue": "CREATED",
+                    "path": "/cancellationOrderRequests/0/status",
+                    "value": "SUCCESS"
+                  },
+                  {
+                     "op": "add",
+                     "path": "/orderStatusHistory/0",
+                     "value": {
+                        "id": 1,
+                        "status": "CANCELLED",
+                        "datetime": "2020-05-02T22:00:11Z"
+                     }
+                  }
+                ]'
+    />
+
+</dataset>

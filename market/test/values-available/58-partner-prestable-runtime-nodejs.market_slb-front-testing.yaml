@@ -1,0 +1,23 @@
+context:
+  default:
+    service_name: partner_market_prestable_runtime_nodejs
+    servername_regexp: (www\\.)?partner-prestable\\.market\\.([\\w\\d]+\\.)?yandex\\.(ru|ua|com|kz|by)
+    vs: market
+    antirobot: true
+    antirobot_service_name: market
+    cert: partner-market
+    balancing_method: rr
+    attempts: 1
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+
+  testing:
+    cert: fslb-testing
+
+servers:
+  default:
+    main:
+    - name: ::1
+      plain_http_backend: true
+      port: 12302
+      timeout: 35s

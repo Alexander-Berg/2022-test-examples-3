@@ -1,0 +1,52 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый pers_model_params-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dpers_model_params-testing
+
+juggler:
+  checks:
+  - {}
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options: {}
+    children:
+    - NANNY%testing_market_pers_model_params_iva
+    - NANNY%testing_market_pers_model_params_vla
+    - NANNY%testing_market_pers_model_params_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: pers_model_params-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    service: ping
+    tags:
+    - market_testing
+    - market_rtc
+    - marketpersmodelparams
+    - testing
+    - market
+    - _market_
+    - market_pers_toplevel
+    - market_pers_ugc_testing
+    - push-client-status
+    - disk_free_space
+    - logrotate
+    ttl: 900

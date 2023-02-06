@@ -1,0 +1,29 @@
+{% extends "base.yaml" %}
+{% from "tvm/testing.j2" import tvm %}
+
+{% block network_macro %}_MAILTESTNETS_{% endblock %}
+{% set enable_push_client = False %}
+
+{% set ENVIRONMENT_TYPE = "testing" %}
+{% set ENVIRONMENT = "testing" %}
+{% set deploy_environment = "testing" %}
+
+
+{%
+set deploy_units = {
+    "fan": {
+        "per_cluster": False,
+        "max_unavailable": 1,
+        "clusters": {
+            "vla": 1,
+        },
+        "memory_guarantee": 2,
+        "vcpu_guarantee": 1000,
+        "network_bandwidth_guarantee": 1,
+        "disk_capacity": 10,
+        "disk_bandwidth_guarantee": 2,
+        "disk_bandwidth_limit": 15,
+        "duffman_workers": 2,
+    },
+}
+%}

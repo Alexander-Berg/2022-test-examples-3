@@ -1,0 +1,61 @@
+{
+    "name": "pcode_test",
+    "input_deps": [
+        "HTTP_REQUEST"
+    ],
+    "graph": {
+        "INIT_MERGED": [
+            "HTTP_REQUEST"
+        ],
+        "TEMPLATES_DATA": [
+            "HTTP_REQUEST"
+        ],
+        "BLACKBOX_PRE": [
+            "INIT_MERGED"
+        ],
+        "BLACKBOX": [
+            "BLACKBOX_PRE"
+        ],
+        "TEMPLATES": [
+            "HTTP_REQUEST",
+            "TEMPLATES_DATA",
+            "INIT_MERGED",
+            "BLACKBOX"
+        ],
+        "RESPONSE": [
+            "TEMPLATES"
+        ]
+    },
+    "sources": {
+        "BLACKBOX_PRE": {
+            "source": "SRC_SETUP",
+            "handler": "/setup/blackbox_pre",
+            "max_attempts": 2,
+            "timeout": 1000
+        },
+        "BLACKBOX": {
+            "source": "SRC_SETUP",
+            "handler": "/proxy/blackbox",
+            "max_attempts": 2,
+            "timeout": 1000
+        },
+        "INIT_MERGED": {
+            "source": "SELF",
+            "handler": "/_subhost/init",
+            "max_attempts": 2,
+            "timeout": 1000
+        },
+        "TEMPLATES": {
+            "source": "RENDERER_SHARED",
+            "timeout": 1000
+        },
+        "TEMPLATES_DATA": {
+            "embed": [
+                {
+                    "type": "template_params",
+                    "template": "pcode"
+                }
+            ]
+        }
+    }
+}

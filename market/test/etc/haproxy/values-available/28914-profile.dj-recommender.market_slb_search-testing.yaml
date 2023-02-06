@@ -1,0 +1,31 @@
+# Параметры обработки
+params:
+  default:
+    resolve: true
+    templates:
+      - user_mslb_http.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          check observe layer7
+      on_error:       fastinter
+    globals:
+      service_name:   profile.dj-recommender.tst.vs.market.yandex.net
+      service_port:   80
+      ping:           "/remote_admin?action=health"
+      ping_expect:    "status 200"
+    meta:
+      monrun_ignore:  yes
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+      - name: YP@testing_market_dj-fresh-profile-server.dj-fresh-profile-server@sas
+        dns_resolvers: "yandex-ns"
+        resolve: false
+      - name: YP@testing_market_dj-fresh-profile-server.dj-fresh-profile-server@vla
+        dns_resolvers: "yandex-ns"
+        resolve: false

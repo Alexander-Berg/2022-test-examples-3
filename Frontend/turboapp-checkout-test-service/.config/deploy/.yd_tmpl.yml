@@ -1,0 +1,105 @@
+annotations:
+  project: tap-checkout-test-service
+labels:
+  deploy_engine: env_controller
+  stagectl_epoch: 53
+meta:
+  acl:
+    - action: allow
+      permissions:
+        - create
+        - read
+        - read_secrets
+        - root_ssh_access
+        - ssh_access
+        - write
+      subjects:
+        - abc:service:5999
+        - robot-drug-deploy
+  creation_time: 1574190967097260
+  project_id: tap-checkout-test-service
+  id: tap_checkout_test_service
+  inherit_acl: true
+  type: stage
+spec:
+  account_id: abc:service:5999
+  deploy_units:
+    App:
+      endpoint_sets:
+        - port: 80
+      images_for_boxes:
+        checkout-ws:
+          name: tap/turboapp-checkout-test-service-ws
+          registry_host: registry.yandex.net
+          tag: {{VERSION}}
+      network_defaults:
+        network_id: _TAPDEVNETS_
+      multi_cluster_replica_set:
+        replica_set:
+          clusters:
+            - cluster: "sas"
+              spec:
+                constraints:
+                  antiaffinity_constraints:
+                    - key: "rack"
+                      max_pods: 1
+                replica_count: 1
+            - cluster: "vla"
+              spec:
+                constraints:
+                  antiaffinity_constraints:
+                    - key: "rack"
+                      max_pods: 1
+                replica_count: 1
+          deployment_strategy:
+            max_unavailable: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+                - id: tap_checkout_test_service-disk-0
+                  labels:
+                    used_by_infra: true
+                  quota_policy:
+                    bandwidth_guarantee: 15728640
+                    bandwidth_limit: 31457280
+                    capacity: 3221225472
+                  storage_class: hdd
+              host_infra:
+                monitoring: {}
+              ip6_address_requests:
+                - enable_dns: true
+                  network_id: _TAPDEVNETS_
+                  vlan_id: backbone
+                - enable_dns: true
+                  network_id: _TAPDEVNETS_
+                  vlan_id: fastbone
+              pod_agent_payload:
+                spec:
+                  boxes:
+                    - id: checkout-ws
+                      rootfs: {}
+                  mutable_workloads:
+                    - workload_ref: init
+                  resources: {}
+                  workloads:
+                    - box_ref: checkout-ws
+                      env:
+                        - name: NODE_ENV
+                          value:
+                            literal_env:
+                              value: production
+                        - name: QLOUD_HTTP_PORT
+                          value:
+                            literal_env:
+                              value: '80'
+                      id: init
+                      readiness_check:
+                        tcp_check:
+                          port: 80
+                      start: {}
+                      transmit_logs: true
+              resource_requests:
+                memory_guarantee: 1073741824
+                memory_limit: 1073741824
+                vcpu_guarantee: 100
+                vcpu_limit: 100

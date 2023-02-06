@@ -1,0 +1,33 @@
+#!/usr/bin/make -f
+
+package=yandex-market-project-builder-gradle-deb-plugin-sub-project
+
+build:
+	dh_testdir
+	../gradlew build
+	touch build
+
+clean:
+	dh_testroot
+	dh_testdir
+	rm -rf build
+	rm -rf debian/$(package)
+	../gradlew clean
+	dh_clean
+
+binary-indep: build
+
+binary-arch: build
+
+binary: binary-indep binary-arch
+	dh_testroot
+	dh_testdir
+	../gradlew prepareDebuild
+	dh_installdeb
+	dh_gencontrol
+	dh_fixperms
+	dh_md5sums
+	dh_builddeb
+
+
+.PHONY: binary binary-arch binary-indep clean checkroot

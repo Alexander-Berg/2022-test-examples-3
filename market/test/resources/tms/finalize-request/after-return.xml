@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <SUPPLIER
+        ID="1"
+        NAME="supplier1"
+    />
+
+    <SHOP_REQUEST
+        ID="13"
+        SUPPLIER_ID="1"
+        SERVICE_ID="121"
+        STATUS="10"
+        TYPE="7"
+        STOCK="3"
+        INBOUND_ID="2"
+        CREATED_AT="1999-9-9 9:9:9"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        ITEMS_TOTAL_COUNT="6"
+        ITEMS_TOTAL_DEFECT_COUNT="0"
+        ITEMS_TOTAL_FACT_COUNT="6"
+        TO_STOCK_TYPE="0"
+        COMMENT="test"
+        DETAILS_LOADED="1"
+    />
+
+    <REQUEST_STATUS_HISTORY
+        REQUEST_ID="13"
+        STATUS="10"
+        UPDATED_AT="2018-1-1 10:10:10"
+    />
+
+    <queue_tasks
+        queue_name="LES_RETURN_BOX_EVENT"
+        task='{"requestId":13}'
+        attempt="0"
+    />
+
+    <queue_tasks
+        queue_name="PUBLISH_REQUEST_STATUS_CHANGE"
+        task='{"requestId":13,"requestType":7,"detailsLoaded":true,"preparedDetailsLoaded":false,"changedAt":"2018-01-01T10:10:10","oldStatus":7,"newStatus":10,"receivedChangeAt":"2018-01-01T10:10:10","topic":"REQUEST_STATUS_EVENTS"}'
+        attempt="0"
+    />
+
+    <queue_tasks
+            queue_name="CREATE_AUTO_ADDITIONAL_SUPPLY_ON_UNKNOWN_BOXES"
+            task='{"requestId":13}'
+            attempt="0"
+    />
+</dataset>

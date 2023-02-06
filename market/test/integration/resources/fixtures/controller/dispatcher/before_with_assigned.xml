@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <service
+        id="1"
+        name="service"
+        initial_state_id="1000"
+    />
+
+    <capacity
+        id="100"
+        name="capacity"
+        value="1"
+    />
+
+    <state
+        id="1000"
+        name="ALLOCATED"
+        service_id="1"
+    />
+    <state
+        id="1001"
+        name="ASSIGNED"
+        service_id="1"
+        capacity_id="100"
+    />
+
+    <edge
+        id="1"
+        from_state_id="1000"
+        to_state_id="1001"/>
+
+    <car
+        id="1"
+        licence_plate="E105TM53"
+        required_gate_type="big test car"
+    />
+    <car
+        id="2"
+        licence_plate="car2"
+        required_gate_type="false"
+    />
+
+    <yard_client
+        id="1"
+        state_id="1001"
+        phone="+71111111111"
+        created_at="2021-05-01 10:00:00"
+        updated_at="2021-05-01 10:00:00"
+        service_id="1"
+        car_id="1"
+        meta='{"siteId": 100, "windowNum": "1", "clientType": "OTHER", "ticketCode": "2020", "requestType": "LOADING", "capacityUnitId": "1"}'
+    />
+
+    <yard_client
+        id="2"
+        state_id="1000"
+        phone="+72222222222"
+        created_at="2021-05-01 10:00:00"
+        updated_at="2021-05-01 10:00:00"
+        service_id="1"
+        car_id="2"
+        meta='{"siteId": 100, "clientType": "OTHER", "ticketCode": "2021", "requestType": "LOADING"}'
+    />
+
+    <ticket
+        id="1"
+        ticket_code="2020"
+        service_id="1"
+        yard_client_id="1"
+        type="LOADING"
+        created_at="2021-05-01 10:00:00"
+        updated_at="2021-05-01 10:00:00"
+        site_id="100"
+        operator_window_id="1"
+        initial_type="LOADING"
+        operator_login="test"
+    />
+
+    <ticket
+        id="2"
+        ticket_code="2021"
+        service_id="1"
+        yard_client_id="2"
+        type="LOADING"
+        created_at="2021-05-01 10:00:00"
+        updated_at="2021-05-01 10:00:00"
+        site_id="100"
+        initial_type="LOADING"
+    />
+
+    <capacity_unit
+        id="2"
+        capacity_id="100"
+        readable_name="test_capacity_unit_2"
+        is_active="true"
+    />
+    <capacity_unit
+        id="1"
+        capacity_id="100"
+        readable_name="test_capacity_unit"
+        is_active="true"
+        occupied_by_client_id="1"
+    />
+
+    <capacity_unit_login
+        id="1"
+        capacity_unit_id="1"
+        login="test"
+    />
+    <capacity_unit_login
+        id="2"
+        capacity_unit_id="2"
+    />
+
+</dataset>

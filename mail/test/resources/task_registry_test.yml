@@ -1,0 +1,29 @@
+test-port: ${random.port}
+micronaut:
+  security:
+    enabled: false
+  server:
+    port: ${test-port}
+  executors:
+    io:
+      n-threads: 1
+      type: scheduled
+      core-pool-size: 1
+    scheduled:
+      n-threads: 1
+      type: scheduled
+      core-pool-size: 1
+    cerberus-worker-executor:
+      type: scheduled
+      core-pool-size: 1
+cerberus:
+  worker:
+    pollInterval: 1s
+    threadsCount: 2
+    callbackHost: http://localhost:${test-port}
+    tasks:
+      one-off:
+        timeout: 5m
+      cron:
+        timeout: 5m
+        repetitionRate: 10m

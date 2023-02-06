@@ -1,0 +1,109 @@
+java_service:
+  service_name: framework-test-service
+  deploy_type: nanny
+
+trace:
+  module: FRAMEWORK_TEST_SERVICE
+
+server:
+  openapi_spec_path: market/infra/java-application/mj/v1/src/test/resources/test_service/api/custom/path/api.yaml
+
+clients:
+  fault_tolerance_presets:
+    circuit_breakers:
+      test_service:
+        failure_rate_threshold: 50
+        permitted_number_of_calls_in_half_open_state: 10
+        sliding_window_size: 100
+        sliding_window_type: COUNT_BASED
+        minimum_number_of_calls: 100
+        writable_stack_trac_enabled: true
+        automatic_transition_from_open_to_half_open_enabled: false
+        wait_interval_function_in_open_state_seconds: 60
+        slow_call_rate_threshold: 100
+        slow_call_duration_threshold_seconds: 60
+        max_wait_duration_in_half_open_state_seconds: 0
+    retries:
+      test_service:
+        max_attempts: 3
+        fail_after_max_attempts: false
+        writable_stack_trace_enabled: true
+        wait_duration_millis: 3000
+
+  list:
+    test_service:
+      openapi_spec_path: market/infra/java-application/mj/v1/src/test/resources/test_service/src/main/resources/openapi/api/api.yaml
+      circuit_breaker_id: test_service
+      retry_id: test_service
+
+tvm:
+  sources:
+    - id: 2029758
+  destinations:
+    - id: 2029758
+  env:
+    local:
+      serverTvmDisabled: false
+      clientsTvmDisabled: true
+    production:
+      self.id: 8888
+      sources:
+        - id: 32343
+        - id: 645647
+        - ref: market/infra/java-application/templates/mj-template/service.yaml
+      destinations:
+        - id: 423
+        - id: 224
+    testing:
+      self.id: 7777
+      sources:
+        - id: 424
+        - id: 647
+        - ref: market/infra/java-application/templates/mj-template/service.yaml
+      destinations:
+        - id: 42213
+        - id: 2243
+    prestable:
+      self.id: 745645
+      sources:
+        - id: 767
+        - id: 24789
+      destinations:
+        - id: 423
+        - id: 224
+
+
+modules:
+  resilience4j:
+    circuitbreaker:
+      instances:
+        backendA:
+          registerHealthIndicator: true
+          slidingWindowSize: 100
+    ratelimiter:
+      instances:
+        defaultRateLimiter:
+          limitForPeriod: 6
+          limitRefreshPeriod: 500ms
+          timeoutDuration: 3s
+        customRateLimiter:
+          limitForPeriod: 7
+          limitRefreshPeriod: 1s
+          timeoutDuration: 3s
+  postgres:
+    env:
+      local:
+        embedded:
+          enabled: true
+          zonky:
+            port: 5454
+      functionalTest:
+        embedded:
+          enabled: true
+      functionalTestRecipe:
+        embedded:
+          enabled: true
+          type: recipe
+  quartz:
+  bazinga:
+  mongo:

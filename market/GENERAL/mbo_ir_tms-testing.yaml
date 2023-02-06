@@ -1,0 +1,219 @@
+juggler:
+  checks:
+
+    # Check barcode-loader-full
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_ir_tms-testing&service=barcode-loader-full&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      check_options:
+        args:
+          - --kwargs
+          - '[ {"service": "barcode-storage-full",
+        "path": "/servlet/check/barcode-storage-full"}, {"service": "barcode-loader-full",
+        "path": "/servlet/check/barcode-loader-full"} ]
+
+        '
+      notifications: []
+      service: barcode-loader-full
+
+    # Check barcode-storage-full
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_ir_tms-testing&service=barcode-storage-full&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      check_options:
+        args:
+          - --kwargs
+          - '[ {"service": "barcode-storage-full",
+        "path": "/servlet/check/barcode-storage-full"}, {"service": "barcode-loader-full",
+        "path": "/servlet/check/barcode-loader-full"} ]
+
+        '
+      notifications: []
+      service: barcode-storage-full
+
+    # Check disk_free_space
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_ir_tms-testing&service=disk_free_space&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 0%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+      check_options: {}
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+      service: disk_free_space
+
+    # Check fresh-hprof-files
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_ir_tms-testing&service=fresh-hprof-files&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 0%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+      check_options: {}
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+      service: fresh-hprof-files
+
+
+    # Check logrotate
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_ir_tms-testing&service=logrotate&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+      check_options: {}
+      notifications: []
+      service: logrotate
+
+    # Check ping
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_ir_tms-testing&service=ping&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: force_crit
+      check_options:
+        args:
+          - --kwargs
+          - '[ {"service": "barcode-storage-full",
+        "path": "/servlet/check/barcode-storage-full"}, {"service": "barcode-loader-full",
+        "path": "/servlet/check/barcode-loader-full"} ]
+
+        '
+      notifications: []
+      service: ping
+
+    # Check push-client-status
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_ir_tms-testing&service=push-client-status&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+      check_options: {}
+      notifications: []
+      service: push-client-status
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    children:
+      - NANNY%testing_market_mbo_ir_tms_vla
+      - NANNY%testing_market_mbo_ir_tms_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: mbo_ir_tms-testing
+    namespace: market.common
+    refresh_time: 60
+    tags:
+      - market_testing
+      - market_rtc
+      - mboirtms
+      - testing
+      - market
+      - _market_
+    ttl: 900

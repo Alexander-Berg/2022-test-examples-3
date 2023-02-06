@@ -1,0 +1,23 @@
+context:
+  default:
+    service_name: nesu
+    servername_regexp: 'nesu\\.tst\\.vs\\.market\\.yandex\\.net'
+    vs: nesu
+    health_check: '"GET /ping HTTP/1.1\r\nHost: nesu.tst.vs.market.yandex.net\r\n\r\n"'
+    attempts: 3
+    antirobot: True
+    antirobot_service_name: market_other
+    balancing_method: "active"
+    cert: nesu.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+    rps_limiter: True
+    rps_limiter_namespace: logistics
+
+servers:
+  default:
+    main:
+      - name: "GREY%nesu.tst.vs.market.yandex.net"
+        timeout: "35s"
+        port: 80
+        plain_http_backend: True

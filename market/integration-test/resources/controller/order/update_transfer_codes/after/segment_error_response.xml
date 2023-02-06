@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <business_process_state
+            id="1002"
+            queue_type="PROCESS_WAYBILL_SEGMENT_UPDATE_TRANSFER_CODES"
+            status="ERROR_RESPONSE_PROCESSING_SUCCEEDED"
+            payload='{
+              "requestId": "1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1",
+              "changeOrderSegmentRequestId": 1101,
+              "sequenceId": 1002
+            }'
+    />
+
+    <business_process_state
+            id="1003"
+            queue_type="PROCESS_WAYBILL_SEGMENT_UPDATE_TRANSFER_CODES"
+            status="ENQUEUED"
+            payload='{
+              "requestId": "1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1",
+              "changeOrderSegmentRequestId": 1102,
+              "sequenceId": 1003
+            }'
+    />
+
+    <business_process_state
+            id="1"
+            queue_type="UPDATE_TRANSFER_CODES_REQUEST_STATUS_UPDATE"
+            status="SYNC_PROCESS_SUCCEEDED"
+            save_to_yt_only="true"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1","changeOrderSegmentRequestId":1101,"sequenceId":1}'
+    />
+
+    <business_process_state
+            id="2"
+            queue_type="NOTIFY_ORDER_ERROR_TO_MQM"
+            status="ENQUEUED"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1","orderId":1110,"externalId":"1001","eventType":"DYNAMIC","eventCode":"LOM_CHANGE_ORDER_REQUEST_ERROR","mqmPayloadParams":{"orderId":"1110","orderExternalId":"1001","orderCreatedDate":"2022-07-14","changeOrderRequestId":"1100","changeOrderRequestType":"UPDATE_TRANSFER_CODES","changeOrderRequestCreatedDate":"2022-07-14","partnerId":"1000004","partnerName":"Партнер","apiType":"DS"},"sequenceId":2}'
+    />
+
+    <change_order_request
+            id="1100"
+            status="FAIL"
+    />
+
+    <change_order_request
+            id="1101"
+            status="PROCESSING"
+    />
+
+    <change_order_segment_request
+            id="1101"
+            status="FAIL"
+    />
+
+    <change_order_segment_request
+            id="1102"
+            status="PROCESSING"
+    />
+</dataset>

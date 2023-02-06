@@ -1,0 +1,11 @@
+module: lb_checkouter_event
+operators:
+  - id: lb_checkouter_event_push
+    visibility: public
+    value#processing-handler:
+        id: lb_checkouter_event_push
+        logbrokers:
+          - id: lb_checkouter_event_push
+            alias: procaas-event-bus
+            args#xget: /event/payload
+# Надо перенести в /handlers и переименовать по kebab-case

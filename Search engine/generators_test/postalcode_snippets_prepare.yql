@@ -1,0 +1,33 @@
+USE hahn;
+
+$extract_func = @@
+import json
+def extract_from_names(data):
+    names = json.loads(data)
+    for name in names:
+        if name["type"] == "main" and name["value"]["locale"] == "ru":
+            office = name["value"]["value"]
+            num = office.rsplit(' ', 2)[-1]
+            if num.isdigit() and len(num) == 6:
+                return num, office
+    return None, None
+
+def get_post(address, names):
+    code, name = extract_from_names(names)
+    if address and code:
+        return {"key": "~".join([code, "ru"]), "value": json.dumps({"postalCodeNumber": code, "postOffice": address, "postOfficeGeocoded": address})}
+@@;
+$extract_code_from_name = Python2::get_post(Callable<(String?, Json?) -> Struct<key:String, value:String>?>, $extract_func);
+
+INSERT INTO `{{ pre_processing_out }}`
+    WITH TRUNCATE
+
+PROCESS `{{ input_table }}` as comp
+
+USING $extract_code_from_name(
+    Yson::ConvertToString(comp.address.formatted.value),
+    Yson::SerializeJson(comp.names)
+)
+WHERE
+Yson::ConvertToInt64(Yson::ConvertToList(parent_companies)[0]["company_id"]) = 72141
+AND publishing_status = "publish";

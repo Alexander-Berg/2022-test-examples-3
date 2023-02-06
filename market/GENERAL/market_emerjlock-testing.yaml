@@ -1,0 +1,44 @@
+juggler:
+  checks:
+    - {}
+
+  default:
+    host: market_slb-testing
+    service: "emerjlock_status"
+    pronounce: "Стопкран взведен слишком долго"
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    check_options: {}
+    tags:
+      - market_testing
+      - market
+      - _market_
+      - market_slb
+      - market_balancer
+      - market_balancer_emerjlock
+    children:
+    - CGROUP%market_slb-testing
+    namespace: market.sre
+    notifications:
+      - template_name: on_status_change
+        template_kwargs:
+          ignore_gaps: true
+          login: e-a-sokolov
+          method: telegram
+          status:
+          - from: OK
+            to: CRIT
+          - from: CRIT
+            to: OK
+          - from: CRIT
+            to: WARN
+          - from: WARN
+            to: CRIT
+          min_interval: 30
+    refresh_time: 60
+    flaps:
+      boost_time: 0
+      critical_time: 300
+      stable_time: 60
+    ttl: 900

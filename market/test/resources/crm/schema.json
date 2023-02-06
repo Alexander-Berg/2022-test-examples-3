@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "CRM event",
+  "description": "Format of the event sent to CRM via RabbitMQ",
+  "type": "object",
+  "properties": {
+    "source": {
+      "description": "Producer of the event",
+      "type": "string"
+    },
+    "timestamp": {
+      "description": "Occurence time of the event",
+      "type": "integer"
+    },
+    "product": {
+      "description": "Business product this entity belongs to (market, delivery, telephony)",
+      "type": "string"
+    },
+    "entity_type": {
+      "description": "Type of the entity that event is about (client, shop, contact...)",
+      "type": "string"
+    },
+    "entity_id": {
+      "description": "ID of the entity that event is about",
+      "type": "integer",
+      "minimum": 0
+    },
+    "event_type": {
+      "description": "Type of the event described",
+      "type": "string"
+    },
+    "payload": {}
+  },
+  "required": [
+    "source",
+    "timestamp",
+    "entity_type",
+    "entity_id",
+    "event_type"
+  ]
+}

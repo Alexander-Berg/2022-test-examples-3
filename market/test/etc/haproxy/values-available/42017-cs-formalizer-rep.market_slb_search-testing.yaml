@@ -1,0 +1,37 @@
+# Formalizer's balancer only for report.
+# https://st.yandex-team.ru/CSADMIN-15833
+# Moved to arcadia in https://st.yandex-team.ru/CSADMIN-42017
+
+# Параметры обработки
+params:
+  default:
+    resolve: yes
+    templates:
+      - user_mslb_http.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          "check observe layer7"
+      inter:          1000
+      downinter:      3000
+      slowstart:      60000
+      fall:           2
+      on_error:       mark-down
+    globals:
+      balance:        roundrobin
+      http_reuse:     safe
+      min_nbsrv:      1
+      service_name:   cs-formalizer-rep.tst.vs.market.yandex.net
+      service_port:   34512
+      timeout_server: 4h
+      ping_expect:    "status 200"
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+      - name: "YP@testing_market_formalizer_report_yp_man"
+        dns_resolvers: "yandex-ns"
+        resolve: no

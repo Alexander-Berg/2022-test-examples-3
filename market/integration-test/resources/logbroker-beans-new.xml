@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--common beans-->
+
+    <bean id="notOnlineAntifraudStateFilter"
+          class="ru.yandex.market.mbi.msapi.handler.lines.NotOnlineAntifraudStateFilter"/>
+
+    <bean id="jsonLineParser" class="ru.yandex.market.mbi.msapi.handler.lines.JsonLineParser"/>
+
+    <bean id="metadataRepository" class="ru.yandex.market.mbi.msapi.logbroker.MetadataRepository">
+        <constructor-arg name="chunksTable" value="WUSER.CHUNKS_STATE"/>
+        <constructor-arg name="stashTable" value="WUSER.STASHED_RECORDS"/>
+        <constructor-arg name="chunksSequence" value="WUSER.S_CHUNKS_STATE"/>
+        <constructor-arg name="jdbcTemplate" ref="namedMbiStatsJdbcTemplate"/>
+    </bean>
+
+    <bean id="receiverService" class="ru.yandex.market.mbi.msapi.logbroker.ReceiverService">
+        <constructor-arg name="metadataRepository" ref="metadataRepository"/>
+        <constructor-arg name="lineParser" ref="jsonLineParser"/>
+    </bean>
+
+    <!--old lib beans-->
+
+    <bean id="loaderFactory" class="ru.yandex.market.mbi.msapi.logbroker.LoaderFactory">
+        <constructor-arg name="host" value="${logbroker.host}"/>
+        <constructor-arg name="port" value="${logbroker.port}"/>
+        <constructor-arg name="clientId" value="${logbroker.client_id}"/>
+        <constructor-arg name="dc" value="${logbroker.dc}"/>
+    </bean>
+
+    <bean id="commonConfigurationBuilder" abstract="true"
+          class="ru.yandex.market.mbi.msapi.logbroker.ReceiveConfig$Builder">
+        <property name="receiver" value="logbroker-mstat-receiver"/>
+        <property name="ident" value="${logbroker.ident}"/>
+        <property name="receiveExecutionTimeLimit" value="15"/>
+        <property name="recoveryAttemptLimit" value="5"/>
+        <property name="isEnabled" value="${logbroker.mstapi.old.read.enabled}"/>
+    </bean>
+
+    <bean id="clicksConfigurationBuilder" parent="commonConfigurationBuilder">
+        <property name="logType" value="${logbroker.logtype.clicks}"/>
+        <property name="userLogType" value="${logbroker.user.logtype.clicks}"/>
+    </bean>
+
+    <bean id="clicksConfiguration" factory-bean="clicksConfigurationBuilder" factory-method="build"/>
+
+    <bean id="cpaClicksConfigurationBuilder" parent="commonConfigurationBuilder">
+        <property name="logType" value="${logbroker.logtype.cpa_clicks}"/>
+        <property name="userLogType" value="${logbroker.user.logtype.cpa_clicks}"/>
+    </bean>
+
+    <bean id="cpaClicksConfiguration" factory-bean="cpaClicksConfigurationBuilder" factory-method="build"/>
+
+    <bean id="rollbacksConfigurationBuilder" parent="commonConfigurationBuilder">
+        <property name="logType" value="${logbroker.logtype.clicks_rollbacks}"/>
+        <property name="userLogType" value="${logbroker.user.logtype.clicks_rollbacks}"/>
+    </bean>
+
+    <bean id="rollbacksConfiguration" factory-bean="rollbacksConfigurationBuilder" factory-method="build"/>
+
+    <bean id="lbAbstractReader" abstract="true" class="ru.yandex.market.mbi.msapi.logbroker.ReceiveManager">
+        <constructor-arg name="loaderFactory" ref="loaderFactory"/>
+        <constructor-arg name="receiverService" ref="receiverService"/>
+        <constructor-arg name="metadataRepository" ref="metadataRepository"/>
+    </bean>
+
+    <!-- clicks -->
+
+    <bean id="lbСlicksSaver" class="ru.yandex.market.mbi.msapi.clicks.JdbcEntitySaver" init-method="init">
+        <property name="tableName" value="wuser.lb_plog_click"/>
+        <property name="fieldRenamings">
+            <map>
+                <entry key="rowid" value="click_row_id"/>
+                <entry key="ip6" value="ipv6"/>
+                <entry key="cp_vnd" value="vendor_price"/>
+                <entry key="cb_vnd" value="vendor_bid"/>
+                <entry key="vnd_id" value="vendor_id"/>
+                <entry key="dtsrc_id" value="vendor_datasource_id"/>
+            </map>
+        </property>
+        <property name="binders">
+            <map>
+                <entry key="rowid" value-ref="stringBinder"/>
+                <entry key="eventtime" value-ref="nullableUnixtimeBinder"/>
+                <entry key="url" value-ref="nullableString4000Binder"/>
+                <entry key="ip6" value-ref="nullableStringBinder"/>
+                <entry key="cookie" value-ref="nullableString200Binder"/>
+                <entry key="show_uid" value-ref="nullableBigNumberBinder"/>
+                <entry key="categ_id" value-ref="nullableIntegerBinder"/>
+                <entry key="pp" value-ref="nullableIntegerBinder"/>
+                <entry key="price" value-ref="nullableIntegerBinder"/>
+                <entry key="filter" value-ref="nullableIntegerBinder"/>
+                <entry key="geo_id" value-ref="nullableIntegerBinder"/>
+                <entry key="shop_id" value-ref="nullableIntegerBinder"/>
+                <entry key="block_id" value-ref="nullableBigNumberBinder"/>
+                <entry key="pof" value-ref="nullableLongBinder"/>
+                <entry key="state" value-ref="nullableIntegerBinder"/>
+                <entry key="referer" value-ref="nullableString4000Binder"/>
+                <entry key="hyper_id" value-ref="nullableLongBinder"/>
+                <entry key="hyper_cat_id" value-ref="nullableLongBinder"/>
+                <entry key="onstock" value-ref="nullableBooleanBinder"/>
+                <entry key="autobroker_enabled" value-ref="nullableBooleanBinder"/>
+                <entry key="bid" value-ref="nullableIntegerBinder"/>
+                <entry key="ware_md5" value-ref="nullableStringBinder"/>
+                <entry key="link_id" value-ref="nullableBigNumberBinder"/>
+                <entry key="ip_geo_id" value-ref="nullableIntegerBinder"/>
+                <entry key="offer_price" value-ref="nullableBigNumberBinder"/>
+                <entry key="test_tag" value-ref="nullableBigNumberBinder"/>
+                <entry key="test_buckets" value-ref="nullableString1000Binder"/>
+                <entry key="cpa" value-ref="nullableBooleanBinder"/>
+                <entry key="user_type" value-ref="nullableBigNumberBinder"/>
+                <entry key="sbid" value-ref="nullableIntegerBinder"/>
+                <entry key="show_time" value-ref="nullableUnixtimeBinder"/>
+                <entry key="cp_vnd" value-ref="nullableIntegerBinder"/>
+                <entry key="cb_vnd" value-ref="nullableIntegerBinder"/>
+                <entry key="vnd_id" value-ref="nullableIntegerBinder"/>
+                <entry key="dtsrc_id" value-ref="nullableIntegerBinder"/>
+                <entry key="type_id" value-ref="bigNumberBinder"/>
+                <entry key="clid" value-ref="nullableLongBinder"/>
+                <entry key="vid" value-ref="nullableIntegerBinder"/>
+                <entry key="distr_type" value-ref="nullableIntegerBinder"/>
+                <entry key="bid_type" value-ref="nullableStringBinder"/>
+                <entry key="feed_id" value-ref="nullableBigNumberBinder"/>
+                <entry key="offer_id" value-ref="silentNullableLongBinder"/>
+                <entry key="min_bid" value-ref="nullableIntegerBinder"/>
+                <entry key="url_type" value-ref="integerBinder"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="rawClickLbCopyLineFactory" class="ru.yandex.market.mbi.msapi.RawCopyLineFactory">
+        <property name="jdbcTemplate" ref="mbiStatsJdbcTemplate"/>
+        <property name="saver" ref="lbСlicksSaver"/>
+        <property name="lineFilter" ref="notOnlineAntifraudStateFilter"/>
+    </bean>
+
+    <bean id="lbRawClicksReader" parent="lbAbstractReader">
+        <constructor-arg name="config" ref="clicksConfiguration"/>
+        <constructor-arg name="lineFactories" ref="rawClickLbCopyLineFactory"/>
+    </bean>
+
+    <!-- cpa-clicks -->
+
+    <bean id="lbCpaClicksSaver" class="ru.yandex.market.mbi.msapi.clicks.JdbcEntitySaver" init-method="init">
+        <property name="tableName" value="wuser.lb_plog_click_cpa"/>
+        <property name="fieldRenamings">
+            <map>
+                <entry key="ip6" value="ipv6"/>
+            </map>
+        </property>
+        <property name="binders">
+            <map>
+                <entry key="eventtime" value-ref="nullableUnixtimeBinder"/>
+                <entry key="url" value-ref="nullableStringBinder"/>
+                <entry key="referer" value-ref="nullableStringBinder"/>
+                <entry key="ip6" value-ref="nullableStringBinder"/>
+                <entry key="cookie" value-ref="nullableStringBinder"/>
+                <entry key="show_uid" value-ref="nullableBigNumberBinder"/>
+                <entry key="pp" value-ref="nullableIntegerBinder"/>
+                <entry key="pof" value-ref="nullableLongBinder"/>
+                <entry key="fee" value-ref="nullableBigNumberBinder"/>
+                <entry key="fuid" value-ref="nullableStringBinder"/>
+                <entry key="hyper_id" value-ref="nullableLongBinder"/>
+                <entry key="hyper_cat_id" value-ref="nullableLongBinder"/>
+                <entry key="geo_id" value-ref="nullableIntegerBinder"/>
+                <entry key="shop_id" value-ref="nullableIntegerBinder"/>
+                <entry key="onstock" value-ref="nullableBooleanBinder"/>
+                <entry key="ip_geo_id" value-ref="nullableIntegerBinder"/>
+                <entry key="offer_price" value-ref="nullableBigNumberBinder"/>
+                <entry key="categ_id" value-ref="nullableLongBinder"/>
+                <entry key="vcluster_id" value-ref="nullableIntegerBinder"/>
+                <entry key="link_id" value-ref="nullableBigNumberBinder"/>
+                <entry key="ware_md5" value-ref="nullableStringBinder"/>
+                <entry key="test_buckets" value-ref="nullableStringBinder"/>
+                <entry key="req_id" value-ref="nullableStringBinder"/>
+                <entry key="wprid" value-ref="nullableStringBinder"/>
+                <entry key="user_type" value-ref="nullableBigNumberBinder"/>
+                <entry key="clid" value-ref="nullableLongBinder"/>
+                <entry key="vid" value-ref="nullableIntegerBinder"/>
+                <entry key="distr_type" value-ref="nullableIntegerBinder"/>
+                <entry key="bid_type" value-ref="nullableStringBinder"/>
+                <entry key="feed_id" value-ref="nullableBigNumberBinder"/>
+                <entry key="offer_id" value-ref="silentNullableLongBinder"/>
+                <entry key="show_time" value-ref="nullableUnixtimeBinder"/>
+                <entry key="min_bid" value-ref="nullableIntegerBinder"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="rawCpaClicksLbCopyLineFactory" class="ru.yandex.market.mbi.msapi.RawCopyLineFactory">
+        <property name="jdbcTemplate" ref="mbiStatsJdbcTemplate"/>
+        <property name="saver" ref="lbCpaClicksSaver"/>
+        <property name="lineFilter" ref="notOnlineAntifraudStateFilter"/>
+    </bean>
+
+    <bean id="lbRawCpaClicksReader" parent="lbAbstractReader">
+        <constructor-arg name="config" ref="cpaClicksConfiguration"/>
+        <constructor-arg name="lineFactories" ref="rawCpaClicksLbCopyLineFactory"/>
+    </bean>
+
+    <!-- clicks rollbacks -->
+
+    <bean id="lbRollbacksSaver" class="ru.yandex.market.mbi.msapi.clicks.JdbcEntitySaver" init-method="init">
+        <property name="tableName" value="wuser.lb_click_rollback"/>
+        <property name="fieldRenamings">
+            <map>
+                <entry key="rowid" value="click_row_id"/>
+                <entry key="ip6" value="ipv6"/>
+                <entry key="cp_vnd" value="vendor_price"/>
+                <entry key="cb_vnd" value="vendor_bid"/>
+                <entry key="vnd_id" value="vendor_id"/>
+                <entry key="dtsrc_id" value="vendor_datasource_id"/>
+            </map>
+        </property>
+        <property name="binders">
+            <map>
+                <entry key="rowid" value-ref="stringBinder"/>
+                <entry key="eventtime" value-ref="nullableUnixtimeBinder"/>
+                <entry key="url" value-ref="nullableString4000Binder"/>
+                <entry key="ip6" value-ref="nullableStringBinder"/>
+                <entry key="cookie" value-ref="nullableString200Binder"/>
+                <entry key="show_uid" value-ref="nullableBigNumberBinder"/>
+                <entry key="categ_id" value-ref="nullableIntegerBinder"/>
+                <entry key="pp" value-ref="nullableIntegerBinder"/>
+                <entry key="price" value-ref="nullableIntegerBinder"/>
+                <entry key="filter" value-ref="nullableIntegerBinder"/>
+                <entry key="geo_id" value-ref="nullableIntegerBinder"/>
+                <entry key="shop_id" value-ref="nullableIntegerBinder"/>
+                <entry key="block_id" value-ref="nullableBigNumberBinder"/>
+                <entry key="pof" value-ref="nullableLongBinder"/>
+                <entry key="state" value-ref="nullableIntegerBinder"/>
+                <entry key="referer" value-ref="nullableString4000Binder"/>
+                <entry key="hyper_id" value-ref="nullableLongBinder"/>
+                <entry key="hyper_cat_id" value-ref="nullableLongBinder"/>
+                <entry key="onstock" value-ref="nullableBooleanBinder"/>
+                <entry key="autobroker_enabled" value-ref="nullableBooleanBinder"/>
+                <entry key="bid" value-ref="nullableIntegerBinder"/>
+                <entry key="ware_id" value-ref="nullableLongBinder"/>
+                <entry key="ware_md5" value-ref="nullableStringBinder"/>
+                <entry key="link_id" value-ref="nullableBigNumberBinder"/>
+                <entry key="ip_geo_id" value-ref="nullableIntegerBinder"/>
+                <entry key="offer_price" value-ref="nullableBigNumberBinder"/>
+                <entry key="test_tag" value-ref="nullableBigNumberBinder"/>
+                <entry key="uah" value-ref="nullableBigNumberBinder"/>
+                <entry key="vcluster_id" value-ref="nullableIntegerBinder"/>
+                <entry key="fuid" value-ref="nullableStringBinder"/>
+                <entry key="req_id" value-ref="nullableStringBinder"/>
+                <entry key="wprid" value-ref="nullableStringBinder"/>
+                <entry key="test_buckets" value-ref="nullableString1000Binder"/>
+                <entry key="cpa" value-ref="nullableBooleanBinder"/>
+                <entry key="user_type" value-ref="nullableBigNumberBinder"/>
+                <entry key="sbid" value-ref="nullableIntegerBinder"/>
+                <entry key="show_time" value-ref="nullableUnixtimeBinder"/>
+                <entry key="cp_vnd" value-ref="nullableIntegerBinder"/>
+                <entry key="cb_vnd" value-ref="nullableIntegerBinder"/>
+                <entry key="vnd_id" value-ref="nullableIntegerBinder"/>
+                <entry key="dtsrc_id" value-ref="nullableIntegerBinder"/>
+                <entry key="type_id" value-ref="bigNumberBinder"/>
+                <entry key="clid" value-ref="nullableLongBinder"/>
+                <entry key="vid" value-ref="nullableIntegerBinder"/>
+                <entry key="distr_type" value-ref="nullableIntegerBinder"/>
+                <entry key="bid_type" value-ref="nullableStringBinder"/>
+                <entry key="feed_id" value-ref="nullableBigNumberBinder"/>
+                <entry key="offer_id" value-ref="silentNullableLongBinder"/>
+                <entry key="min_bid" value-ref="nullableIntegerBinder"/>
+                <entry key="url_type" value-ref="integerBinder"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="rawLbRollbacksCopyLineFactory" class="ru.yandex.market.mbi.msapi.RollbacksCopyLineFactory">
+        <property name="jdbcTemplate" ref="mbiStatsJdbcTemplate"/>
+        <property name="saver" ref="lbRollbacksSaver"/>
+        <property name="clickTableName" value="wuser.lb_plog_click"/>
+        <property name="apiVersion" value="LOGBROKER_API"/>
+        <property name="lineFilter" ref="notOnlineAntifraudStateFilter"/>
+    </bean>
+
+    <bean id="lbRawClicksRollbacksReader" parent="lbAbstractReader">
+        <constructor-arg name="config" ref="rollbacksConfiguration"/>
+        <constructor-arg name="lineFactories" ref="rawLbRollbacksCopyLineFactory"/>
+    </bean>
+
+    <!--new lb lib common beans-->
+
+    <bean id="lbClientFactory" class="ru.yandex.market.mbi.msapi.logbroker_new.wrappers.LBClientsWrapper">
+        <constructor-arg name="balancerHost" value="${logbroker.mstapi.proxy.host}"/>
+        <constructor-arg name="balancerPort" value="${logbroker.mstapi.proxy.port:-1}"/>
+        <constructor-arg name="proxyPort" value="${logbroker.mstapi.proxy.proxyPort:-1}"/>
+    </bean>
+
+    <bean id="newlbConfigurationBuilder" abstract="true"
+          class="ru.yandex.market.mbi.msapi.logbroker.ReceiveConfig$Builder">
+        <property name="clientId" value="${logbroker.mstapi.clientId}"/>
+        <property name="receiver" value="${logbroker.mstapi.receiver}"/>
+        <property name="receiveExecutionTimeLimit" value="2"/>
+        <property name="recoveryAttemptLimit" value="5"/>
+        <property name="logbrokerReadOnlyAfter" value="${logbroker.mstapi.read_timestamp:1970-01-01T00:00:00}"/>
+        <property name="isEnabled" value="${logbroker.mstapi.new.read.enabled}"/>
+        <property name="readOnlyLocal" value="${logbroker.mstapi.new.read.onlylocal:false}"/>
+    </bean>
+
+    <bean id="streamListenerFactory" class="ru.yandex.market.mbi.msapi.logbroker_new.LBStreamListenerFactory">
+        <constructor-arg name="metadata" ref="metadataRepository"/>
+        <constructor-arg name="receiverService" ref="receiverService"/>
+    </bean>
+
+    <bean id="newlbAbstractReader" abstract="true" class="ru.yandex.market.mbi.msapi.logbroker_new.LbReceiveManager">
+        <constructor-arg name="receiverService" ref="receiverService"/>
+        <constructor-arg name="metadataRepository" ref="metadataRepository"/>
+        <constructor-arg name="streamListenerFactory" ref="streamListenerFactory"/>
+    </bean>
+
+    <bean id="logbrokerCredentialsProvider" class="ru.yandex.market.mbi.msapi.tvm.CredentialsProvider">
+        <constructor-arg name="tvmClient" ref="mstApiTvmClient"/>
+        <constructor-arg name="conf" ref="mstApiTvmConfiguration"/>
+    </bean>
+
+    <!--new lb clicks-->
+    <bean id="newlbClicksConfigurationBuilder" parent="newlbConfigurationBuilder">
+        <property name="logType" value="${logbroker.logtype.clicks}"/>
+        <property name="userLogType" value="${logbroker.user.logtype.clicks}"/>
+        <property name="topic" value="${logbroker.mstapi.clicks.topic}"/>
+    </bean>
+
+    <bean id="newLbClicksConfiguration" factory-bean="newlbClicksConfigurationBuilder" factory-method="build"/>
+
+    <bean id="newLbClicksRetryConf" class="ru.yandex.market.mbi.msapi.logbroker.config.CustomLogbrokerRetryConfiguratorForTest">
+        <constructor-arg name="receiveConfig" ref="newLbClicksConfiguration"/>
+        <constructor-arg name="moduleName" value="integr_test_mbi"/>
+    </bean>
+
+    <bean id="clicksConsumerFactory" class="ru.yandex.market.mbi.msapi.logbroker_new.StreamConsumerFactory">
+        <constructor-arg name="logbrokerClientFactory" ref="lbClientFactory"/>
+        <constructor-arg name="credentialsSupplier" ref="logbrokerCredentialsProvider"/>
+        <constructor-arg name="config" ref="newLbClicksConfiguration"/>
+        <constructor-arg name="retryConfigurator" ref="newLbClicksRetryConf"/>
+    </bean>
+
+    <bean id="newlbRawClicksReader" parent="newlbAbstractReader">
+        <constructor-arg name="config" ref="newLbClicksConfiguration"/>
+        <constructor-arg name="lineFactories" ref="rawClickLbCopyLineFactory"/>
+        <constructor-arg name="streamConsumerFactory" ref="clicksConsumerFactory"/>
+    </bean>
+
+    <!--new lb cpa clicks-->
+    <bean id="newLbCpaClicksConfigurationBuilder" parent="newlbConfigurationBuilder">
+        <property name="logType" value="${logbroker.logtype.cpa_clicks}"/>
+        <property name="userLogType" value="${logbroker.user.logtype.cpa_clicks}"/>
+        <property name="topic" value="${logbroker.mstapi.cpa_clicks.topic}"/>
+    </bean>
+
+    <bean id="newLbCpaClicksConfiguration" factory-bean="newLbCpaClicksConfigurationBuilder" factory-method="build"/>
+
+    <bean id="newLbCpaClicksRetryConf" class="ru.yandex.market.mbi.msapi.logbroker.config.CustomLogbrokerRetryConfiguratorForTest">
+        <constructor-arg name="receiveConfig" ref="newLbCpaClicksConfiguration"/>
+        <constructor-arg name="moduleName" value="integr_test_mbi"/>
+    </bean>
+
+    <bean id="cpaClicksConsumerFactory" class="ru.yandex.market.mbi.msapi.logbroker_new.StreamConsumerFactory">
+        <constructor-arg name="logbrokerClientFactory" ref="lbClientFactory"/>
+        <constructor-arg name="credentialsSupplier" ref="logbrokerCredentialsProvider"/>
+        <constructor-arg name="config" ref="newLbCpaClicksConfiguration"/>
+        <!--проверка, что без конфига тоже работает -->
+        <!--<constructor-arg name="retryConfigurator" ref="newLbCpaClicksRetryConf"/>-->
+    </bean>
+
+    <bean id="newlbRawCpaClicksReader" parent="newlbAbstractReader">
+        <constructor-arg name="config" ref="newLbCpaClicksConfiguration"/>
+        <constructor-arg name="lineFactories" ref="rawCpaClicksLbCopyLineFactory"/>
+        <constructor-arg name="streamConsumerFactory" ref="cpaClicksConsumerFactory"/>
+    </bean>
+
+    <!--new lb click rollbacks-->
+    <bean id="newLbRollbacksConfigurationBuilder" parent="newlbConfigurationBuilder">
+        <property name="logType" value="${logbroker.logtype.clicks_rollbacks}"/>
+        <property name="userLogType" value="${logbroker.user.logtype.clicks_rollbacks}"/>
+        <property name="topic" value="${logbroker.mstapi.clicks_rollbacks.topic}"/>
+    </bean>
+
+    <bean id="newLbRollbacksConfiguration" factory-bean="newLbRollbacksConfigurationBuilder" factory-method="build"/>
+
+    <bean id="newLbRollbacksRetryConf" class="ru.yandex.market.mbi.msapi.logbroker.config.CustomLogbrokerRetryConfiguratorForTest">
+        <constructor-arg name="receiveConfig" ref="newLbRollbacksConfiguration"/>
+        <constructor-arg name="moduleName" value="integr_test_mbi"/>
+    </bean>
+
+    <bean id="clicksRollbacksConsumerFactory" class="ru.yandex.market.mbi.msapi.logbroker_new.StreamConsumerFactory">
+        <constructor-arg name="logbrokerClientFactory" ref="lbClientFactory"/>
+        <constructor-arg name="credentialsSupplier" ref="logbrokerCredentialsProvider"/>
+        <constructor-arg name="config" ref="newLbRollbacksConfiguration"/>
+        <constructor-arg name="retryConfigurator" ref="newLbRollbacksRetryConf"/>
+    </bean>
+
+    <bean id="newlbRawClicksRollbacksReader" parent="newlbAbstractReader">
+        <constructor-arg name="config" ref="newLbRollbacksConfiguration"/>
+        <constructor-arg name="lineFactories" ref="rawLbRollbacksCopyLineFactory"/>
+        <constructor-arg name="streamConsumerFactory" ref="clicksRollbacksConsumerFactory"/>
+    </bean>
+
+</beans>

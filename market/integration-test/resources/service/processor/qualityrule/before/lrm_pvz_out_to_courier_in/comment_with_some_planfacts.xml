@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lrm_return
+        id="1"
+        lrm_return_id="1"
+        source="PICKUP_POINT"
+        external_id="1"
+        order_external_id="NOT_VALID"
+        logistic_point_from_id="1"
+        pickup_point_partner_id="1"
+        pickup_point_external_id="1"
+        committed="2021-05-11 03:40:51 +0000"
+        destination_point_type="SHOP"
+        destination_point_shop_id="1"
+        destination_point_partner_id="1"
+        status="CREATED"
+    />
+
+    <lrm_return
+        id="3"
+        lrm_return_id="2"
+        source="PICKUP_POINT"
+        external_id="1"
+        order_external_id="NOT_VALID"
+        logistic_point_from_id="1"
+        pickup_point_partner_id="1"
+        pickup_point_external_id="1"
+        committed="2021-05-11 03:40:51 +0000"
+        destination_point_type="SHOP"
+        destination_point_shop_id="1"
+        destination_point_partner_id="1"
+        status="CREATED"
+    />
+
+    <lrm_return_item
+        supplier_id="1"
+        vendor_code="vendorCode"
+        instances='{}'
+        external_box_id="ORDER1"
+        return_id="1"
+        return_reason="returnReason"
+        return_subreason="BAD_PACKAGE"
+        return_reason_type="BAD_QUALITY"
+    />
+
+    <lrm_return_item
+        supplier_id="1"
+        vendor_code="vendorCode"
+        instances='{}'
+        external_box_id="ORDER3"
+        return_id="3"
+        return_reason="returnReason"
+        return_subreason="BAD_PACKAGE"
+        return_reason_type="BAD_QUALITY"
+    />
+
+    <lrm_return_box
+        id="1"
+        return_id="1"
+        external_id="ORDER1"
+    />
+
+
+    <lrm_return_box
+        id="3"
+        return_id="3"
+        external_id="ORDER3"
+    />
+
+    <plan_fact
+        id="1"
+        entity_type="LRM_RETURN_BOX"
+        entity_id="1"
+        expected_status="RECEIVED_PICKUP"
+        processing_status="ENQUEUED"
+        plan_fact_status="ACTIVE"
+        expected_status_datetime="2020-11-01 12:00:00 +0000"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        created="2020-11-01 12:00:00 +0000"
+    />
+
+    <plan_fact
+        id="3"
+        entity_type="LRM_RETURN_BOX"
+        entity_id="3"
+        expected_status="RECEIVED_PICKUP"
+        processing_status="ENQUEUED"
+        plan_fact_status="ACTIVE"
+        expected_status_datetime="2020-11-01 12:00:00 +0000"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        created="2020-11-01 12:00:00 +0000"
+    />
+
+
+    <quality_rule
+        id="1"
+        enabled="true"
+        expected_status="RECEIVED_PICKUP"
+        aggregation_type="LRM_PVZ_OUT_TO_COURIER_IN"
+        rule_processor="STARTREK"
+        rule='{
+                "queue": "MQMTESTRETURN",
+                "_type": ".LrmPvzOutToCourierInPayload",
+                "allowedToCloseAssigned": false
+            }'
+    />
+
+    <plan_fact_group
+        id="1"
+        aggregation_key="date:2020-11-01;partner:1337;"
+        aggregation_type="LRM_PVZ_OUT_TO_COURIER_IN"
+        processing_status="ENQUEUED"
+        expected_status="RECEIVED_PICKUP"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 1],
+                        "partner" : {
+                            "id" : 1337,
+                            "name" : "МК СД"
+                        }
+                    }
+                },
+                "LrmPvzOutToCourierInAdditionalData": {
+                    "_type": ".LrmPvzOutToCourierInAdditionalData",
+                    "issueKey": "MQMTESTRETURN-1",
+                    "issueClosed" : false,
+                    "issueCreatedAt" : [2020, 11, 2 , 12, 30],
+                    "affectedOrderIds": ["ORDER1", "ORDER2"],
+                    "orderIds" : ["ORDER1", "ORDER2"]
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+        plan_fact_group_id="1"
+        plan_fact_id="1"
+    />
+
+    <plan_fact_group_relations
+        plan_fact_group_id="1"
+        plan_fact_id="3"
+    />
+
+</dataset>

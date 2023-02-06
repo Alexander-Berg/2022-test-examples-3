@@ -1,0 +1,57 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "kupibilet_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 1014
+    confirm_dt = ""
+    created_at = "2020-01-30 00:00:00"
+    currency = "RUB"
+    from = "MOW"
+    marker = "3b7d0451-a5e969-d5ad-4350-b4f5-108661ad1daf1"
+    order_id = "6370061902"
+    partner = "kupibilet"
+    partner_id = 90
+    price = 2972.0
+    source = "kupibilet"
+    status = "paid"
+    ticket_number = ""
+    to = "SIP"
+    trip_type = ""
+    unixtime = 1580418095
+
+[lb]
+    topic = "topic-kupibilet_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "updated_at"]
+
+[[lb.expected]]
+    status = "confirmed"
+    category = "avia"
+    partner_id = 90
+    created_at = 1580342400
+    origin = "MOW"
+    partner_order_id = "6370061902"
+    label = "3b7d0451-a5e969-d5ad-4350-b4f5-108661ad1daf1"
+    source = "history"
+    destination = "SIP"
+    partner_name = "kupibilet"
+    trip_type = ""
+    billing_order_id = 1014
+    order_amount = 2972.0
+    travel_order_id = "kupibilet:6370061902"
+    currency_code = "RUB"

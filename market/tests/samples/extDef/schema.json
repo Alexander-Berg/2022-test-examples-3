@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "extDef::A": {"type": "array", "items": {"type": "string"}},
+    "extDef::B": {
+      "uniqueItems": true,
+      "type": "array",
+      "items": {"$ref": "#/definitions/extDef::A"}
+    },
+    "extDef::X": {
+      "properties": {
+        "a": {
+          "additionalItems": {"a": {"a": "string"}},
+          "maxItems": 10,
+          "minItems": 1,
+          "uniqueItems": false,
+          "type": "array",
+          "items": {"$ref": "#/definitions/extDef::A"}
+        },
+        "b": {"$ref": "#/definitions/extDef::B"},
+        "c": {
+          "maxLength": 1,
+          "minLength": 1,
+          "pattern": "/[a-z]+/i",
+          "format": "email",
+          "type": "string"
+        },
+        "d": {
+          "multipleOf": 1,
+          "maximum": 10,
+          "exclusiveMaximum": 10,
+          "minimum": 1,
+          "exclusiveMinimum": 1,
+          "type": "number"
+        },
+        "e": {
+          "minProperties": 1,
+          "maxProperties": 2,
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "f": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "maxProperties": 1,
+            "properties": {"a": {"const": "string"}},
+            "type": "object",
+            "required": ["a"]
+          }
+        },
+        "g": {"title": "lol", "description": "kek", "lol": "kek", "const": "g"},
+        "h": {"enum": [{"title": "lol", "description": "kek", "const": "h"}, "kek"]},
+        "i": {"title": "i", "enum": ["i", "I"]},
+        "j": {"title": "j", "allOf": [{"const": "j"}, {"const": "J"}]},
+        "k": {"title": "k", "enum": ["k1", "k2"]},
+        "l": {"title": "l", "allOf": [{"const": "l1"}, {"const": "l2"}]}
+      },
+      "type": "object",
+      "required": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"]
+    }
+  }
+}

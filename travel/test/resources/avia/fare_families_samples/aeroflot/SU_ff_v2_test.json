@@ -1,0 +1,177 @@
+[
+  {
+    "base_class": "ECONOMY",
+    "tariff_code_pattern": "^([YQx](FM|FO))\\w*\\d*$",
+    "tariff_group_name": {
+      "ru": "ЭКОНОМ TEST",
+      "en": "ECONOMY TEST"
+    },
+    "terms": [
+      {
+        "code": "open_return_date",
+        "rules": [
+          {
+            "availability": "FREE"
+          }
+        ]
+      },
+      {
+        "code": "miles",
+        "rules": [
+          {
+            "xpath": "Leg/Seg[contains('YFO,YFM', FareCodePrefix) and string-length(FareCodePrefix)>0]",
+            "miles": "200%"
+          },
+          {
+            "xpath": "Leg/Seg[contains('QFO,QFM', FareCodePrefix) and string-length(FareCodePrefix)>0]",
+            "miles": "150%"
+          }
+        ]
+      },
+      {
+        "code": "seat_preselection",
+        "rules": [
+          {
+            "availability": "FREE",
+            "special_notes": [
+              {
+                "ru": "Предоставляется без доплаты при наличии билета (только через раздел «Проверить бронирование» на сайте ПАО «Аэрофлот»)"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "code": "refundable",
+        "rules": [
+          {
+            "xpath": "Leg/Seg[/Leg/Seg[1][FromCountry = 'JP']]",
+            "availability": "CHARGE",
+            "charge": {
+              "currency": "JPY",
+              "value": "4500"
+            }
+          },
+          {
+            "availability": "CHARGE",
+            "charge": {
+              "currency": "RUB",
+              "value": "2300"
+            }
+          }
+        ]
+      },
+      {
+        "code": "refundable_no_show",
+        "rules": [
+          {
+            "comment": "Для перевозок от п.п. БСВ в п.п. РФ/Европы/Ближнего Зарубежья разрешается с удержанием/взиманием платы (за транзакцию): ....",
+            "xpath": "Leg/Seg[contains('BSV_countries_list', FromCountry) and string-length(FromCountry)>0]",
+            "availability": "CHARGE",
+            "charge": {
+              "currency": "USD",
+              "value": "45"
+            }
+          },
+          {
+            "availability": "NOT_AVAILABLE"
+          }
+        ]
+      },
+      {
+        "code": "changing_carriage",
+        "rules": [
+          {
+            "xpath": "Leg/Seg[count(/Leg/Seg[FromCountry != 'RU' or ToCountry != 'RU']) > 0]",
+            "availability": "CHARGE",
+            "charge": {
+              "currency": "USD",
+              "value": "40"
+            },
+            "special_notes": [
+              {
+                "ru": "за транзакцию"
+              }
+            ]
+          },
+          {
+            "xpath": "Leg/Seg",
+            "availability": "CHARGE",
+            "charge": {
+              "currency": "RUB",
+              "value": "2300"
+            },
+            "special_notes": [
+              {
+                "ru": "за транзакцию"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "code": "changing_carriage_no_show",
+        "rules": [
+          {
+            "availability": "NOT_AVAILABLE"
+          }
+        ]
+      },
+      {
+        "code": "baggage",
+        "special_notes": [
+          {
+            "ru": "Элитным участникам программ лояльности ..."
+          }
+        ],
+        "rules": [
+          {
+            "external_xpath_ref": "AFL_BAGGAGE_DEL_BJS_SHA_XPATH",
+            "places": 2,
+            "weight": 23,
+            "size": "158 cm"
+          },
+          {
+            "places": 1,
+            "weight": 23,
+            "size": "158 cm",
+            "special_notes": [
+              {
+                "ru": "Перевозки экипажей морских судов - 2 места"
+              },
+              {
+                "ru": "Элитным участникам программ лояльности ..."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "code": "carry_on",
+        "special_notes": [
+          {
+            "ru": "Elite/ElitePlus members ..."
+          }
+        ],
+        "rules": [
+          {
+            "xpath": "Leg/Seg[FromAirport = 'INH_NOTES']",
+            "places": 1,
+            "weight": 10,
+            "size": "55 x 40 x 25 cm",
+            "special_notes": [
+              {
+                "ru": "Переопределённая заметка"
+              }
+            ]
+          },
+          {
+            "places": 1,
+            "weight": 10,
+            "size": "55 x 40 x 25 cm"
+          }
+        ]
+      }
+    ]
+  }
+]

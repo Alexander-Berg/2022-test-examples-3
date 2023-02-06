@@ -1,0 +1,2 @@
+describe('Daria.mDoLabel', function() {
+});

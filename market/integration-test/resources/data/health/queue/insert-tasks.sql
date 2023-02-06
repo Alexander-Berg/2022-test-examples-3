@@ -1,0 +1,16 @@
+INSERT into queue_tasks (queue_name, task, attempt)
+values ('mail.queue', 'task1', 1),
+       ('mail.queue', 'task2', 2),
+       ('mail.queue', 'task3', 3),
+       ('mail.queue', 'task4', 1),
+       ('mail.queue', 'task5', 2),
+       ('mail.queue', 'task6', 3),
+       ('mail.queue', 'task7', 1),
+       ('mail.queue', 'task8', 2),
+       ('parcel.cancel', '1', 1),
+       ('parcel.cancel', '2', 2),
+       ('parcel.cancel', '3', 3),
+       ('parcel.cancel', '4', 1),
+       ('parcel.cancel', '5', 2),
+       ('parcel.cancel', '6', 3),
+       ('parcel.cancel', '7', 1);

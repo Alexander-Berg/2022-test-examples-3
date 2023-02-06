@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf8'?>
+<channel
+  t_type="bus"
+  carrier_code_system="local"
+  version="1.0"
+  station_code_system="vendor"
+  timezone="local"
+  vehicle_code_system="local"
+>
+  <group code="group1">
+    <stations>
+      <station code="1" title="Станция 1"></station>
+      <station code="2" title="Станция 2"></station>
+      <station code="3" title="Станция 3"></station>
+    </stations>
+    <vehicles>
+      <vehicle code="2" title="ПАЗ-3205"/>
+    </vehicles>
+    <carriers>
+      <carrier code="3" title="Carrier-title"/>
+    </carriers>
+    <fares>
+      <fare code='1'>
+        <price price="12" currency="USD" is_min_price="1">
+          <stop_from station_code="1"/>
+          <stop_to   station_code="2"/>
+        </price>
+        <price price="20" currency="USD" is_min_price="0">
+          <stop_from station_code="1"/>
+          <stop_to   station_code="3"/>
+        </price>
+        <price price="9" currency="USD">
+          <stop_from station_code="2"/>
+          <stop_to   station_code="3"/>
+        </price>
+      </fare>
+    </fares>
+    <threads>
+      <thread title="t-title" number="t-number" carrier_code="3" vehicle_code="2" timezone="end_station" fare_code="1">
+        <stoppoints>
+          <stoppoint station_title="Станция 1" station_code="1" departure_time="13:00:00" />
+          <stoppoint station_title="Станция 2" station_code="2" arrival_time="14:10:00" departure_time="14:11:00" />
+          <stoppoint station_title="Станция 3" station_code="3" arrival_time="17:30:00" />
+        </stoppoints>
+        <schedules>
+          <schedule period_start_date="2013-03-29" period_end_date="2015-03-29" days="135" times="13:00:00"/>
+        </schedules>
+      </thread>
+     </threads>
+  </group>
+</channel>

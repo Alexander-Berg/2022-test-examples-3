@@ -1,0 +1,814 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmi_strat-testing
+
+juggler:
+  checks:
+
+  # Check META
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=META&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    - CGROUP%mi_worker-testing-strat
+    service: META
+    ttl: 900
+
+  # Check UNREACHABLE
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=UNREACHABLE&last=1DAY&mode=edit
+  - active: icmpping
+    active_kwargs:
+      disable_ipv4: yes
+      use_all_dc: 'false'
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    children:
+    - CGROUP%mi_master-testing-strat
+    - CGROUP%mi_worker-testing-strat
+    service: UNREACHABLE
+    ttl: 900
+
+  # Check auction-result-upload-stalled
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=auction-result-upload-stalled&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: auction-result-upload-stalled
+    ttl: 900
+
+  # Check auction-result-upload-status
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=auction-result-upload-status&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: auction-result-upload-status
+    ttl: 900
+
+  # Check awaps-export
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=awaps-export&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: awaps-export
+    ttl: 3600
+
+  # Check banner-upload
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=banner-upload&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: banner-upload
+    ttl: 3600
+
+  # Check banner_feeds_row_count
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=banner_feeds_row_count&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: banner_feeds_row_count
+    ttl: 900
+
+  # Check blue_price_history_tables
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=blue_price_history_tables&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: blue_price_history_tables
+    ttl: 3600
+
+  # Check blue_pricedrops_tables
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=blue_pricedrops_tables&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: blue_pricedrops_tables
+    ttl: 3600
+
+  # Check cards_collection
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=cards_collection&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: cards_collection
+    ttl: 3600
+
+  # Check check_releases_stopped
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=check_releases_stopped&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: check_releases_stopped
+    ttl: 900
+
+  # Check common-fresh-sla
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=common-fresh-sla&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: common-fresh-sla
+    ttl: 900
+
+  # Check config-override
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=config-override&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: config-override
+    ttl: 3600
+
+  # Check cowboy-publisher
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=cowboy-publisher&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: cowboy-publisher
+    ttl: 3600
+
+  # Check cron
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=cron&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    - CGROUP%mi_worker-testing-strat
+    service: cron
+    ttl: 1920
+
+  # Check frozen_generations
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=frozen_generations&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: frozen_generations
+    ttl: 900
+
+  # Check market-data-getter
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=market-data-getter&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: market-data-getter
+    ttl: 2700
+
+  # Check market-data-getter-mbo_cms
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=market-data-getter-mbo_cms&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    notifications:
+    - template_kwargs:
+        login:
+        - MarketCmsHotline
+        method: telegram
+        status:
+        - CRIT
+        - WARN
+        - OK
+      template_name: on_status_change
+    service: market-data-getter-mbo_cms
+    ttl: 2700
+
+    # Check market-data-getter-pers
+    # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=market-data-getter-pers&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+        - check: market_walle:UNREACHABLE
+    children:
+      - CGROUP%mi_master-testing-strat
+    tags:
+      - market_testing
+      - market_pers_ugc_testing
+    service: market-data-getter-pers
+    ttl: 2700
+
+  # Check market-data-getter-freezed-generations
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=market-data-getter-freezed-generations&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: market-data-getter-freezed-generations
+    ttl: 900
+
+  # Check market-ghoul
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=market-ghoul&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    - CGROUP%mi_worker-testing-strat
+    service: market-ghoul
+    ttl: 1900
+
+  # Check market-indexer
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=market-indexer&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: market-indexer
+    ttl: 900
+
+  # Check market-indexer-daemons
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=market-indexer-daemons&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: market-indexer-daemons
+    ttl: 900
+
+  # Check market-indexer-switches
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=market-indexer-switches&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: market-indexer-switches
+    ttl: 900
+
+  # Check mbo-preview-daemon
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=mbo-preview-daemon&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: mbo-preview-daemon
+    ttl: 900
+
+  # Check mbo-preview-pipeline
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=mbo-preview-pipeline&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: mbo-preview-pipeline
+    ttl: 900
+
+  # Check mif-daemon
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=mif-daemon&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    - CGROUP%mi_worker-testing-strat
+    service: mif-daemon
+    ttl: 1920
+
+  # Check not-for-publishing
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=not-for-publishing&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: not-for-publishing
+    ttl: 3600
+
+  # Check offers_processor_memory
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=offers_processor_memory&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: offers_processor_memory
+    ttl: 3600
+
+  # Check opentracker
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=opentracker&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    - CGROUP%mi_worker-testing-strat
+    service: opentracker
+    ttl: 1920
+
+  # Check price_history_tables
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=price_history_tables&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: price_history_tables
+    ttl: 3600
+
+  # Check pricedrops_tables
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=pricedrops_tables&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: pricedrops_tables
+    ttl: 3600
+
+  # Check qbids
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=qbids&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: qbids
+    ttl: 900
+
+  # Check reductor-filter
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=reductor-filter&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: reductor-filter
+    ttl: 900
+
+  # Check rsync-daemon
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=rsync-daemon&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    - CGROUP%mi_worker-testing-strat
+    service: rsync-daemon
+    ttl: 1920
+
+  # Check shops_dat_regions
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=shops_dat_regions&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: shops_dat_regions
+    ttl: 900
+
+  # Check slowinfo_update
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=slowinfo_update&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: slowinfo_update
+    ttl: 3600
+
+  # Check ssh
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=ssh&last=1DAY&mode=edit
+  - active: ssh
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    - CGROUP%mi_worker-testing-strat
+    service: ssh
+    ttl: 900
+
+  # Check torrent-server3-rpc
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=torrent-server3-rpc&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    - CGROUP%mi_worker-testing-strat
+    service: torrent-server3-rpc
+    ttl: 1920
+
+  # Check torrent-server3-status
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=torrent-server3-status&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    - CGROUP%mi_worker-testing-strat
+    service: torrent-server3-status
+    ttl: 1920
+
+  # Check unispace
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=unispace&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    - CGROUP%mi_worker-testing-strat
+    service: unispace
+    ttl: 900
+
+  # Check web_data_freshness
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=web_data_freshness&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: web_data_freshness
+    ttl: 3600
+
+  # Check deleted_msku
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=deleted_msku&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: deleted_msku
+    ttl: 3600
+
+  # Check wizard_collection
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=wizard_collection&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: wizard_collection
+    ttl: 3600
+
+  # Check yandex_guruindexer_generation
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=yandex_guruindexer_generation&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: yandex_guruindexer_generation
+    ttl: 5400
+
+  # Check yandex_guruindexer_status
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=yandex_guruindexer_status&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: yandex_guruindexer_status
+    ttl: 1800
+
+  # Check yt-pic-maker
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=yt-pic-maker&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: yt-pic-maker
+    ttl: 3600
+
+  # Check yt_shows_data
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=yt_shows_data&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: yt_shows_data
+    ttl: 3600
+
+  # Check check_yt_attributes
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=check_yt_attributes&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+    - CGROUP%mi_master-testing-strat
+    service: check_yt_attributes
+    ttl: 3600
+
+  # Check white_razladka_generation_unit_sizes
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=white_razladka_generation_unit_sizes&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+        - check: market_walle:UNREACHABLE
+    children:
+      - CGROUP%mi_master-testing-strat
+    service: white_razladka_generation_unit_sizes
+    ttl: 3600
+
+  # Check white_razladka_genlog_integrity
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=white_razladka_genlog_integrity&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+        - check: market_walle:UNREACHABLE
+    children:
+      - CGROUP%mi_master-testing-strat
+    service: white_razladka_genlog_integrity
+    ttl: 3600
+
+  # Check blue_shard_razladka_generation_unit_sizes
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=blue_shard_razladka_generation_unit_sizes&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+        - check: market_walle:UNREACHABLE
+    children:
+      - CGROUP%mi_master-testing-strat
+    service: blue_shard_razladka_generation_unit_sizes
+    ttl: 3600
+
+  # Check blue_shard_razladka_genlog_integrity
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=blue_shard_razladka_genlog_integrity&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+        - check: market_walle:UNREACHABLE
+    children:
+      - CGROUP%mi_master-testing-strat
+    service: blue_shard_razladka_genlog_integrity
+    ttl: 3600
+
+  # Check chunk_excess
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=chunk_excess&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+        - check: market_walle:UNREACHABLE
+    children:
+      - CGROUP%mi_master-testing-strat
+    service: chunk_excess
+    ttl: 3600
+
+  # Check compression_queue
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=compression_queue&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+        - check: market_walle:UNREACHABLE
+    children:
+      - CGROUP%mi_master-testing-strat
+    service: compression_queue
+    ttl: 3600
+
+  # Check supercontroller
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=supercontroller&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+        - check: market_walle:UNREACHABLE
+    children:
+      - CGROUP%mi_master-testing-strat
+    service: supercontroller
+    ttl: 3600
+
+  # Check mbo_stuff_version
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=mbo_stuff_version&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    children:
+      - CGROUP%mi_master-testing-strat
+    service: mbo_stuff_version
+    ttl: 3600
+
+  # Check scale_generation_build
+  # https://juggler.yandex-team.ru/check_details/?host=mi_strat-testing&service=scale_generation_build&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+        - check: market_walle:UNREACHABLE
+    children:
+      - CGROUP%mi_master-testing-strat
+    service: scale_generation_build
+    ttl: 3600
+
+  default:
+    check_options: {}
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: mi_strat-testing
+    namespace: market.indexer
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_indexer
+    - market_dev
+    - market
+    - _market_
+    - market_indexer_testing

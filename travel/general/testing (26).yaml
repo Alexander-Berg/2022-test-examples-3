@@ -1,0 +1,44 @@
+import:
+  - config/base.yaml
+
+routes:
+  - input:
+      plugin: grpc
+      config:
+        uri: 127.0.0.1:16302
+    channel:
+      case:
+        - when:
+            message:
+              log_name: pretrip-render-log
+          channel:
+            pipe:
+              - pipe_ref:
+                  name: base_pipe
+            output:
+              plugin: logbroker
+              config:
+                endpoint: logbroker.yandex.net
+                topic: /avia/testing/notifier/pretrip-render-log
+                tvm:
+                  client_id: 2025412
+                  disk_cache_directory: /unified_agent/tvm_cache
+                  secret:
+                    env: TVM_SECRET
+        - when:
+            message:
+              log_name: "subscriptions-user-action-log"
+          channel:
+            pipe:
+              - pipe_ref:
+                  name: base_json_pipe
+            output:
+              plugin: logbroker
+              config:
+                endpoint: logbroker.yandex.net
+                topic: /avia/testing/notifier/subscriptions-user-action-log
+                tvm:
+                  client_id: 2025412
+                  disk_cache_directory: /unified_agent/tvm_cache
+                  secret:
+                    env: TVM_SECRET

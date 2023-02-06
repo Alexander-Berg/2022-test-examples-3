@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <service_capacity_mapping
+            id="111"
+            service_id="21"
+            capacity_id="2"
+    />
+    <service_capacity_mapping
+            id="112"
+            service_id="22"
+            capacity_id="2"
+    />
+    <service_capacity_mapping
+            id="113"
+            service_id="23"
+            capacity_id="2"
+    />
+
+    <event
+            id="12345"
+            key="12345"
+            type="NEW"
+            route="{}"
+            timestamp="[now]"
+            max_service_time="[now]"
+            processed="true"
+    />
+
+    <event
+            id="12346"
+            key="12346"
+            type="CANCELLED"
+            route="{}"
+            timestamp="[now]"
+            max_service_time="[now]"
+            processed="true"
+    />
+
+    <!-- for 21th service. Version inside ().
+     now: +1 (2) не должен плюсануться, т.к. такой уже есть
+     now: +100 (1)
+     now: -50 (1)
+     -->
+    <service_counter
+            id="1021"
+            service_id="21"
+            day="[now]"
+            event_id="2000"
+            service_version="1"
+            order_count="1"
+    />
+
+    <service_counter
+            id="1022"
+            service_id="21"
+            day="[now]"
+            event_id="12345"
+            service_version="1"
+            order_count="100"
+    />
+
+    <service_counter
+            id="1023"
+            service_id="21"
+            day="[now]"
+            event_id="12346"
+            service_version="2"
+            order_count="-50"
+    />
+
+    <!-- for 22nd service. Version inside ().
+     now: +100 (1) не должно ++ т.к. был плюс в 21-м
+     now: -50 (1) не должно - т.к. был минус в 21-м
+     -->
+    <service_counter
+            id="1024"
+            service_id="22"
+            day="[now]"
+            event_id="12345"
+            service_version="2"
+            order_count="100"
+    />
+
+    <service_counter
+            id="1025"
+            service_id="22"
+            day="[now]"
+            event_id="12346"
+            service_version="3"
+            order_count="-50"
+    />
+
+    <!-- for 23nd service. Version inside ().
+     now: +100 (1) не должно ++ т.к. был плюс в 21-м
+     now: -50 (1) не должно - т.к. был минус в 21-м
+     -->
+    <service_counter
+            id="1026"
+            service_id="23"
+            day="[now]"
+            event_id="12345"
+            service_version="3"
+            order_count="100"
+    />
+
+    <service_counter
+            id="1027"
+            service_id="23"
+            day="[now]"
+            event_id="12346"
+            service_version="3"
+            order_count="-50"
+    />
+
+</dataset>

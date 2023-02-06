@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <property name="TIMESTAMP_WITH_TIME_ZONE" value="datetimeoffset" dbms="mssql"/>
+    <property name="TIMESTAMP_WITH_TIME_ZONE" value="TIMESTAMP WITH TIME ZONE" dbms="h2"/>
+
+    <property name="NOW" value="getutcdate()" dbms="mssql"/>
+    <property name="NOW" value="CURRENT_TIMESTAMP()" dbms="h2"/>
+
+    <property name="USER_NAME" value="user_name()" dbms="mssql"/>
+    <property name="USER_NAME" value="USER()" dbms="h2"/>
+
+    <changeSet id="1" author="al-iz">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists
+                        schemaName="wmwhse1"
+                        tableName="ITEM_IDENTITY"
+                />
+            </not>
+        </preConditions>
+        <createTable tableName="ITEM_IDENTITY" schemaName="wmwhse1">
+            <column name="SERIALKEY" type="int" autoIncrement="true" startWith="1" incrementBy="1" remarks="Row key">
+                <constraints
+                        unique="true"
+                        uniqueConstraintName="ITEM_IDENTITY_SERIALKEY_UNIQUE"
+                        nullable="false"
+                />
+            </column>
+            <column name="ITEM" type="nvarchar(30)" remarks="Warehouse serial number">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IDENTITY" type="nvarchar(256)" remarks="Value of identity">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TYPE" type="nvarchar(255)" remarks="Type of identity (IMEI, SN, etc.)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PROCESS" type="nvarchar(64)" remarks="Source of value">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDDATE" type="${TIMESTAMP_WITH_TIME_ZONE}" defaultValueComputed="${NOW}"
+                    remarks="Insertion date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDWHO" type="nvarchar(256)" defaultValueComputed="${USER_NAME}" remarks="Who added">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITDATE" type="${TIMESTAMP_WITH_TIME_ZONE}" defaultValueComputed="${NOW}"
+                    remarks="Last update date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITWHO" type="nvarchar(256)" defaultValueComputed="${USER_NAME}" remarks="Who edited">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey
+                columnNames="ITEM, TYPE, IDENTITY"
+                constraintName="PK_ITEM_IDENTITY"
+                schemaName="wmwhse1"
+                tableName="ITEM_IDENTITY"
+        />
+        <addUniqueConstraint
+                columnNames="TYPE, IDENTITY"
+                constraintName="UQ_TYPE_IDENTITY"
+                schemaName="wmwhse1"
+                tableName="ITEM_IDENTITY"
+        />
+        <addForeignKeyConstraint
+                baseColumnNames="ITEM"
+                baseTableName="ITEM_IDENTITY"
+                baseTableSchemaName="wmwhse1"
+                constraintName="FK_ITEM_IDENTITY_SERIALINVENTORY"
+                referencedColumnNames="SERIALNUMBER"
+                referencedTableName="SERIALINVENTORY"
+                referencedTableSchemaName="wmwhse1"
+                onDelete="CASCADE"
+        />
+        <addForeignKeyConstraint
+                baseColumnNames="TYPE"
+                baseTableName="ITEM_IDENTITY"
+                baseTableSchemaName="wmwhse1"
+                constraintName="FK_ITEM_IDENTITY_IDENTITY_TYPE"
+                referencedColumnNames="TYPE"
+                referencedTableName="IDENTITY_TYPE"
+                referencedTableSchemaName="wmwhse1"
+                onDelete="CASCADE"
+        />
+        <rollback>
+            <dropTable schemaName="wmwhse1" tableName="ITEM_IDENTITY"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

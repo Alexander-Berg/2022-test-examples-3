@@ -1,0 +1,19 @@
+---
+ident: storage_mulca
+
+logger-mode: file
+logger-file: /var/log/statbox/watcher-mulca.log
+logger-level: 5
+logger-timeformat: "%d.%m.%Y-%H.%M.%S"
+
+watcher-method: inotify
+watcher-state: "/var/spool/push-client-mulca"
+
+network-master-addr: "logbroker-pre.yandex.net"
+network-proto: rt
+network-transport: ipv6
+
+files:
+  - name: /var/log/mulcagate/access.log
+    pipe: /usr/local/bin/lenulca2tskv.py 
+    log_type: lenulca-access-log

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<w:config xmlns:c="urn:jmf:common:1.0"
+          xmlns:w="urn:jmf:logic:wf:config:1.0">
+
+    <w:workflow metaclass="wf1">
+        <w:statuses initial="begin">
+            <w:status code="begin">
+                <w:title>
+                    <c:value lang="ru">Begin</c:value>
+                </w:title>
+            </w:status>
+            <w:status code="st1">
+                <w:title>
+                    <c:value lang="ru">Status 1</c:value>
+                </w:title>
+            </w:status>
+            <w:status code="st2">
+                <w:title>
+                    <c:value lang="ru">Status 2</c:value>
+                </w:title>
+            </w:status>
+            <w:status code="st3">
+                <w:title>
+                    <c:value lang="ru">Status 3</c:value>
+                </w:title>
+                <w:preConditions>
+                    <w:handler id="c1">
+                        <w:scriptCode>empty</w:scriptCode>
+                    </w:handler>
+                </w:preConditions>
+            </w:status>
+            <w:status code="st4">
+                <w:title>
+                    <c:value lang="ru">Status 4</c:value>
+                </w:title>
+                <w:preConditions>
+                    <w:handler id="c1">
+                        <w:scriptCode>error</w:scriptCode>
+                    </w:handler>
+                </w:preConditions>
+            </w:status>
+            <w:status code="st5">
+                <w:title>
+                    <c:value lang="ru">Status 5</c:value>
+                </w:title>
+                <w:postConditions>
+                    <w:handler id="c1">
+                        <w:scriptCode>error</w:scriptCode>
+                    </w:handler>
+                </w:postConditions>
+            </w:status>
+        </w:statuses>
+        <w:transitions>
+            <w:transition from="begin" to="st1"/>
+            <w:transition from="st1" to="st2"/>
+            <w:transition from="begin" to="st3"/>
+            <w:transition from="begin" to="st4"/>
+            <w:transition from="begin" to="st5"/>
+            <w:transition from="st5" to="st1"/>
+        </w:transitions>
+    </w:workflow>
+
+    <w:workflow metaclass="rootMC">
+        <w:statuses initial="s0">
+            <w:status code="s0">
+                <w:title>
+                    <c:value>s0</c:value>
+                </w:title>
+            </w:status>
+            <w:status code="s1">
+                <w:title>
+                    <c:value>s1</c:value>
+                </w:title>
+            </w:status>
+            <w:status code="s2">
+                <w:title>
+                    <c:value>s2</c:value>
+                </w:title>
+            </w:status>
+        </w:statuses>
+        <w:transitions>
+            <w:transition from="s0" to="s1"/>
+            <w:transition from="s0" to="s2"/>
+        </w:transitions>
+    </w:workflow>
+
+    <w:workflow metaclass="rootMC$child">
+        <w:transitions inherit="false">
+            <w:transition from="s0" to="s1"/>
+        </w:transitions>
+    </w:workflow>
+
+    <w:workflow metaclass="rootMC$child2">
+        <w:statuses initial="s0">
+            <w:status code="s3">
+                <w:title>
+                    <c:value>s3</c:value>
+                </w:title>
+            </w:status>
+        </w:statuses>
+        <w:transitions>
+            <w:transition from="s0" to="s3"/>
+            <w:transition from="s1" to="s2"/>
+        </w:transitions>
+    </w:workflow>
+
+    <w:workflow metaclass="rootMC$child3">
+        <w:statuses initial="s0">
+            <w:status code="s3">
+                <w:title>
+                    <c:value>s3</c:value>
+                </w:title>
+            </w:status>
+            <w:status code="s4">
+                <w:title>
+                    <c:value>s4</c:value>
+                </w:title>
+                <w:attributes>
+                    <w:attribute code="attr1" preCondition="REQUIRE"/>
+                </w:attributes>
+            </w:status>
+            <w:status code="s5">
+                <w:title>
+                    <c:value>s5</c:value>
+                </w:title>
+                <w:attributes>
+                    <w:attribute code="attr1" postCondition="REQUIRE"/>
+                </w:attributes>
+            </w:status>
+        </w:statuses>
+        <w:transitions inherit="false">
+            <w:transition from="s0" to="s1"/>
+            <w:transition from="s1" to="s2"/>
+            <w:transition from="s0" to="s3"/>
+            <w:transition from="s1" to="s4"/>
+            <w:transition from="s0" to="s5"/>
+            <w:transition from="s5" to="s0"/>
+        </w:transitions>
+    </w:workflow>
+
+    <!-- for FormSupported -->
+    <w:workflow metaclass="root2MC">
+        <w:statuses initial="s0">
+            <w:status code="s0">
+                <w:title>
+                    <c:value>s0</c:value>
+                </w:title>
+            </w:status>
+            <w:status code="s1">
+                <w:title>
+                    <c:value>s1</c:value>
+                </w:title>
+            </w:status>
+            <w:status code="s2">
+                <w:title>
+                    <c:value>s2</c:value>
+                </w:title>
+            </w:status>
+        </w:statuses>
+        <w:transitions>
+            <w:transition from="s0" to="s1"/>
+            <w:transition from="s0" to="s2"/>
+            <w:transition from="s1" to="s2"/>
+        </w:transitions>
+    </w:workflow>
+
+    <w:workflow metaclass="root2MC$child">
+        <w:transitions inherit="false">
+            <w:transition from="s0" to="s1"/>
+        </w:transitions>
+    </w:workflow>
+
+    <w:workflow metaclass="root2MC$child2">
+        <w:transitions inherit="false">
+            <w:transition from="s0" to="s1"/>
+            <w:transition from="s1" to="s2"/>
+        </w:transitions>
+    </w:workflow>
+
+</w:config>

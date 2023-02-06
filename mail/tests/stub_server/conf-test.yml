@@ -1,0 +1,44 @@
+config:
+    system:
+        daemon: 0
+        dir: ./
+        pid: var/run/smtp-server-test.pid
+        reactor:
+        -   { _io_threads: 1, _pool_count: 8, _name: global }
+        -   { _io_threads: 1, _pool_count: 8, _name: server }
+    log:
+        global:
+            level: debug
+            queue_size: 1024
+            async: true
+            sinks:
+            -   type: reopenable_file
+                path: var/log/smtp-server-test.log
+            -   type: stdout
+    modules:
+        module:
+        -   _name: smtp_server
+            system:
+                name: smtp_server
+                factory: ymod_smtpserver::Impl
+            configuration:
+                reactor: server
+                socket:
+                    tls_timeout: 1000   # ms
+                ssl:
+                    only_tls: false
+                timeouts:
+                    read_command: 10.0      # seconds
+                    read_message: 60.0      # seconds
+                    write_response: 5.0     # seconds
+                remove_leading_dots: true
+                read_chunk_size: 8192
+                endpoints:
+                    listen:
+                    -   { addr: '::', port: 1025, ssl: off }
+        -   _name: smtp_server_stub
+            system:
+                name: smtp_server_stub
+                factory: ymod_smtpserver_stub::ServerStub
+            configuration:
+                reactor: global

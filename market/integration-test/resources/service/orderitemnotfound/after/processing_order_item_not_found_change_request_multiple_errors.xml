@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <orders
+            id="1"
+            external_id="1001"
+            platform_client_id="3"
+            return_sorting_center_id="1"
+            sender_id="1"
+
+            status="PROCESSING"
+
+            created="2018-01-01 12:00:00 +0000"
+    />
+
+    <waybill_segment
+            order_id="1"
+            tracker_id="100"
+            waybill_segment_index="0"
+            segment_type="FULFILLMENT"
+            partner_id="20"
+            external_id="external-id-1"
+    />
+
+    <change_order_request
+            id="1"
+            order_id="1"
+            status="REJECTED"
+            request_type="ITEM_NOT_FOUND"
+            waybill_segment_id="1"
+    />
+
+    <order_history_event
+            id="1"
+            order_id="1"
+            diff='[
+                    {
+                      "op": "replace",
+                      "path": "/changeOrderRequests/0/status",
+                      "value": "REJECTED",
+                      "fromValue": "INFO_RECEIVED"
+                    },
+                    {
+                      "op": "replace",
+                      "path": "/changeOrderRequests/0/comment",
+                      "value": "Cannot process change request with status INFO_RECEIVED. Processable status is CREATED; Cannot process change request for order with cancellationRequests",
+                      "fromValue": null
+                    }
+                ]'
+    />
+
+</dataset>

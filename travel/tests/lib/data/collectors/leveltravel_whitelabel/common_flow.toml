@@ -1,0 +1,80 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "leveltravel_whitelabel",
+    "--base-url", "%(partner_server_url)s",
+    "--password", "___not_used___",
+    "--no-proxy",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--date-from", "2018-02-01",
+    "--date-to", "2018-02-10",
+]
+
+checkers = [
+    "lb",
+    "partner",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "application/xml"
+
+[[partner.responses]]
+    data_file = "cpa_export_response.xml"
+    method = "GET"
+
+[lb]
+    topic = "topic-leveltavel-whitelabel"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+[[lb.expected]]
+  partner_name = "leveltravel_whitelabel"
+  travel_order_id = "leveltravel_whitelabel:908354"
+  partner_order_id = "908354"
+  created_at = 1518367256
+  updated_at = 1644320223
+  status = "cancelled"
+  partner_status = "CANCELED"
+  currency_code = "RUB"
+  category = "tours"
+  snapshot_source = "collectors"
+  check_in = "2018-04-13"
+  check_out = "2018-04-20"
+  adults = 2
+  children = 1
+  infants = 0
+  fuel_charge = 7155
+  order_amount = 50427
+  profit_amount = 2521.35
+  hotel_name = "Hedef Resort Hotel & Spa"
+  hotel_pansion = "UAI"
+  country_name = "Турция"
+  city_name = "Конаклы"
+  label = "removed-123123"
+
+[[lb.expected]]
+  partner_name = "leveltravel_whitelabel"
+  travel_order_id = "leveltravel_whitelabel:907726"
+  partner_order_id = "907726"
+  created_at = 1518297012
+  updated_at = 1644320223
+  status = "confirmed"
+  partner_status = "PAID"
+  currency_code = "RUB"
+  category = "tours"
+  snapshot_source = "collectors"
+  check_in = "2018-06-30"
+  check_out = "2018-07-09"
+  adults = 2
+  children = 1
+  infants = 0
+  fuel_charge = 0
+  order_amount = 111644
+  profit_amount = 5582.2
+  hotel_name = "Парк-Отель Дивный (Ex.Эко-Отель Озеро Дивное)"
+  hotel_pansion = "AI"
+  country_name = "Россия"
+  city_name = "Лазаревское"
+  label = "removed-label"

@@ -1,0 +1,53 @@
+{
+  "type": "object",
+  "properties": {
+    "info": {
+      "type": "object",
+      "properties": {
+        "title": {"type": "string"},
+        "lang": {"type": "array", "items": [{"type": "string"}]},
+        "size": {"type": "integer"},
+        "mime": {"type": "string"}
+      },
+      "required": ["title", "lang", "size", "mime"]
+    },
+    "site": {
+      "type": "object",
+      "properties": {
+        "host": {"type": "string"}
+      },
+      "required": ["host"]
+    },
+    "url": {
+      "type": "object",
+      "properties": {
+        "domain_href": {"type": "string"},
+        "scheme": {"type": "string"},
+        "hostname": {"type": "string"},
+        "path": {"type": "string"},
+        "url": {"type": "string"},
+        "visible_url": {"type": "string"},
+        "visible_domain": {"type": "string"},
+        "click": {
+          "pattern": "/clck/jsredir\\?from=yandex\\.ru%3Bjsonsearch%3Bsearchapp(%3B[^&]+){3}&"
+        },
+        "url_menu": {
+          "type": "array",
+          "items": [{
+            "type": "object",
+            "properties": {
+              "url": {"type": "string"},
+              "visible_url": {"type": "string"}
+            }
+          }]
+        }
+      },
+      "required": ["domain_href", "scheme", "hostname", "path", "url", "visible_url", "visible_domain", "click"],
+      "additionalProperties": false
+    },
+    "snippets": {"type": "array"},
+    "place": {"type": "integer"}
+  },
+  "required": ["info", "site", "url", "snippets", "place"],
+  "additionalProperties": false
+}

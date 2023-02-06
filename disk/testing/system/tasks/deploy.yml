@@ -1,0 +1,54 @@
+---
+##################################################
+# Deploy package with Conductor and report to
+# Startrek issue on failure.
+#
+## Parameters:
+#
+# package_name:
+#   Package to be installed
+# version:
+#   Package's version
+# deploy_groups:
+#   List of deploy groups
+# issue:
+#   Startrek issue for failures notifications. No
+#   notifications if not provided.
+#
+- name: Create deploy ticket ({{ package_name }})
+  conductor:
+    packages:
+      - name: "{{ package_name }}"
+        version: "{{ version }}"
+    branch: "{{ branch | default('prestable') }}"
+    comment: "{{ issue }}"
+    filters:
+      deploy_groups: "{{ deploy_groups }}"
+  register: created_ticket
+
+- name: Wait for test bench to be set up
+  conductor:
+    ticket: "{{ created_ticket.info.ticket }}"
+  register: ticket
+  until: ticket.info.value.status == 'done' or
+         ticket.info.value.status == 'failed'
+  delay: 60
+  retries: 25
+
+- name: Send notification to release issue on failure
+  startrek:
+    issue: "{{ issue }}"
+    comment: |
+      Обновление стенда: !!(red)не удалось!!.
+      Пакет: **{{ package_name }}**=**{{ version }}**.
+      Logs: https://c.yandex-team.ru/tickets/{{ created_ticket.info.ticket }}
+  when:
+    - issue is defined
+    - ticket.info.value.status != 'done'
+  tags:
+    - notification
+
+- name: Check success
+  assert:
+    that: "ticket.info.value.status == 'done'"
+    msg: "Failed to deploy {{ package_name }}={{ version }}"

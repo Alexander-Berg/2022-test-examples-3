@@ -1,0 +1,146 @@
+{
+  "owner": "marketinfra",
+  "tableName": "common_kv_testing",
+  "splits": {
+    "subkey": "subkey",
+    "queue": "replaceRegexpOne(key, '.*-', '')"
+  },
+  "metrics": [
+    {
+      "metricName": "tsum.testing.tms.heartbeat.onetime",
+      "period": "ONE_MIN",
+      "metricField": "sumIf(value, key = 'tsum-tms-bazinga-heartbeat' AND subkey = 'onetime')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "tsum.testing.tms.heartbeat.cron",
+      "period": "ONE_MIN",
+      "metricField": "sumIf(value, key = 'tsum-tms-bazinga-heartbeat' AND subkey = 'cron')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "tsum.testing.tms.executors2.queue.${queue}.total",
+        "tsum.testing.tms.executors2.queue.${queue}.host.${subkey}.total"
+      ],
+      "period": "ONE_MIN",
+      "filter": "module = 'bazinga-metrics'",
+      "metricField": "sumIf(value, key LIKE 'tsum-tms-bazinga-thread-count-%')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "tsum.testing.tms.executors2.queue.${queue}.busy",
+        "tsum.testing.tms.executors2.queue.${queue}.host.${subkey}.busy"
+      ],
+      "period": "ONE_MIN",
+      "filter": "module = 'bazinga-metrics'",
+      "metricField": "sumIf(value, key LIKE 'tsum-tms-bazinga-job-count-%')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "tsum.testing.tms.executors2.queue.cron.busyAverage",
+      "period": "HOUR",
+      "filter": "module = 'bazinga-metrics'",
+      "metricField": "avgIf(value, key='tsum-tms-bazinga-job-count-cron')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "tsum.testing.tms.executors2.queue.regular.busyAverage",
+      "period": "HOUR",
+      "filter": "module = 'bazinga-metrics'",
+      "metricField": "avgIf(value, key='tsum-tms-bazinga-job-count-regular')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "tsum.testing.tms.executors2.queue.${queue}.available",
+        "tsum.testing.tms.executors2.queue.${queue}.host.${subkey}.available"
+      ],
+      "period": "ONE_MIN",
+      "filter": "module = 'bazinga-metrics'",
+      "metricField": "sumIf(value, key LIKE 'tsum-tms-bazinga-thread-count-%') - sumIf(value, key LIKE 'tsum-tms-bazinga-job-count-%')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "tsum.testing.tms.executors2.queue.${queue}.host.${subkey}.availablePercent",
+      "period": "ONE_MIN",
+      "filter": "module = 'bazinga-metrics'",
+      "metricField": "100 * (sumIf(value, key LIKE 'tsum-tms-bazinga-thread-count-%') - sumIf(value, key LIKE 'tsum-tms-bazinga-job-count-%')) / sumIf(value, key LIKE 'tsum-tms-bazinga-thread-count-%')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "tsum.testing.tms.executors2.queue.cron.availablePercent",
+      "period": "ONE_MIN",
+      "filter": "module = 'bazinga-metrics'",
+      "metricField": "100 * (sumIf(value, key='tsum-tms-bazinga-thread-count-cron') - sumIf(value, key='tsum-tms-bazinga-job-count-cron')) / sumIf(value, key='tsum-tms-bazinga-thread-count-cron')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "tsum.testing.tms.executors2.queue.regular.availablePercent",
+      "period": "ONE_MIN",
+      "filter": "module = 'bazinga-metrics'",
+      "metricField": "100 * (sumIf(value, key='tsum-tms-bazinga-thread-count-regular') - sumIf(value, key='tsum-tms-bazinga-job-count-regular')) / sumIf(value, key='tsum-tms-bazinga-thread-count-regular')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "tsum.testing.tms.delivery-machine.errors-count.stage.${subkey}",
+      "period": "ONE_MIN",
+      "filter": "key = 'tsum-tms-delivery-machine-errors-count'",
+      "metricField": "sum(value)",
+      "type": "SIMPLE"
+    },
+    // вынесено в отдельную метрику, чтобы при отсутствии данных на графике рисовались нули
+    {
+      "metricName": "tsum.testing.tms.delivery-machine.errors-count.TOTAL",
+      "period": "ONE_MIN",
+      "metricField": "sumIf(value, key = 'tsum-tms-delivery-machine-errors-count')",
+      "type": "SIMPLE"
+    }
+  ],
+
+  "commonSolomonLabels": {
+    "project": "market-infra",
+    "service": "tsum-tms",
+    "cluster": "testing"
+  },
+  "solomonSensors": [
+    {
+      "labels": {
+        "sensor": "heartbeat_${subkey}"  // В tsum-tms-bazinga-heartbeat subkey - cron или onetime
+      },
+      "period": "ONE_MIN",
+      "metricField": "sum(value)",
+      "filter": "module = 'bazinga-tasks-heartbeat' AND key = 'tsum-tms-bazinga-heartbeat'",
+      "type": "SIMPLE"
+    },
+    {
+      "labels": {
+        "sensor": "executor_count",
+        "queue": "${queue}"
+      },
+      "period": "ONE_MIN",
+      "filter": "module = 'bazinga-metrics' AND key LIKE 'tsum-tms-bazinga-thread-count-%'",
+      "metricField": "sum(value)",
+      "type": "SIMPLE"
+    },
+    {
+      "labels": {
+        "sensor": "job_count",
+        "queue": "${queue}"
+      },
+      "period": "ONE_MIN",
+      "filter": "module = 'bazinga-metrics' AND key LIKE 'tsum-tms-bazinga-job-count-%'",
+      "metricField": "count()",
+      "type": "SIMPLE"
+    },
+    {
+      "labels": {
+        "sensor": "delivery_machine_errors_count"
+      },
+      "period": "ONE_MIN",
+      "metricField": "sumIf(value, module = 'delivery-machine' AND key = 'tsum-tms-delivery-machine-errors-count')",
+      "type": "SIMPLE"
+    }
+  ]
+}

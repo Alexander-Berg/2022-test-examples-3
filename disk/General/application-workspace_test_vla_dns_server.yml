@@ -1,0 +1,20 @@
+# https://nanny.yandex-team.ru/ui/#/services/catalog/workspace_test_vla_dns_server/
+application:
+  profiles.include:
+    - dnsserver
+    - dnsserver-nsd
+
+nsd:
+  listen:
+    # localhost
+    - ::1@53
+    - ${instance.ipv6}@53
+    # dns-server.test.ws.yandex.net (https://l3.tt.yandex-team.ru/service/6038)
+    - 2a02:6b8:0:3400:0:961:0:5@53
+  dnsmaster:
+    dns:
+      # dns-master.test.ws.yandex.net (https://l3.tt.yandex-team.ru/service/6031)
+      host: 2a02:6b8:0:3400:0:961:0:4
+    http:
+      # dns-master.test.ws.yandex.net (https://l3.tt.yandex-team.ru/service/6031)
+      host: 2a02:6b8:0:3400:0:961:0:4

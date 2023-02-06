@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug">
+
+    <!-- Don't forget to set system property
+-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
+     to make all loggers asynchronous. -->
+
+    <Appenders>
+        <Console name="MAIN" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d] %-5p [%t] %mdc %c{1.}: %m%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="MAIN"/>
+        </Root>
+        <Logger name="requestTrace" level="info"/>
+        <Logger name="ACCESS_LOG" level="info"/>
+        <Logger name="tvmClient" level="info"/>
+        <Logger name="METRICS_LOG" level="info"/>
+
+
+        <Logger name="bcp" level="warn"/>
+        <Logger name="org" level="warn"/>
+        <Logger name="org.hibernate.tool.schema.internal.ExceptionHandlerLoggedImpl" level="info"/>
+        <Logger name="org.reflections" level="error"/>
+        <Logger name="ru.yandex" level="info"/>
+        <Logger name="ru.yandex.market.crm.LiluServer" level="debug"/>
+    </Loggers>
+
+</Configuration>

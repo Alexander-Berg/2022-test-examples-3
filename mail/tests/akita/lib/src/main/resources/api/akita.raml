@@ -1,0 +1,49 @@
+#%RAML 0.8
+title: akita
+baseUri: https://{host}
+baseUriParameters:
+    host:
+        default: localhost
+
+traits:
+- auth-handler:
+    queryParameters:
+        current_uid:
+            description: uid пользователя из мультикуки, которого надо считать главным
+            required: false
+        sids_to_check:
+            description: проверить эти сиды на наличие у пользователя
+            required: false
+        oauth_token:
+            description: передача OAUTH токена через параметры
+            required: false
+        emails:
+            description: запрашивать ли дополнительные адреса
+            required: false
+            enum: ['yes', 'no']
+    headers:
+        authorization:
+            description: передача OAUTH токена через заголовки
+            required: false
+        x-original-host:
+            description: хост с которого идёт запрос
+            required: true
+
+/auth:
+    get:
+        description: Авторизация пользователей по куке или токену
+        is: [auth-handler]
+
+
+/ninja_auth:
+    get:
+        description: Авторизация пользователей по куке или токену
+        is: [auth-handler]
+
+/check_cookies:
+    get:
+        description: Проверка куки
+        headers:
+            x-original-host:
+                description: хост с которого идёт запрос
+                required: true

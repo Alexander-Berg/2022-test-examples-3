@@ -1,0 +1,20 @@
+context:
+  default:
+    service_name: market_content_mapping
+    servername_regexp: '(market-content-mapping\\.tst\\.vs\\.market\\.yandex\\.net|((ct-testing|content-transformation-testing)\\.market\\.yandex\\.ru))'
+    vs: market_content_mapping
+    antirobot: true
+    antirobot_service_name: market
+    health_check: '"GET /ping HTTP/1.1\r\nHost: market-content-mapping.tst.vs.market.yandex.net\r\n\r\n"'
+    attempts: 3
+    cert: market-content-mapping.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+
+servers:
+  default:
+    main:
+      - name: "GREY%market-content-mapping.tst.vs.market.yandex.net"
+        timeout: "185s"
+        port: 80
+        plain_http_backend: True

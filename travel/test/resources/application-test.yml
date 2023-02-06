@@ -1,0 +1,267 @@
+aeroflot:
+  auth-token: not_used
+  booking-url: not_used
+  promo-2020:
+    auth-token: override_me_if_needed
+avia-api:
+  base-url: no_url
+  tvm-alias: -1
+avia-country-restrictions-v1:
+  enabled: true
+  index-path: './country-restrictions-v1-index'
+  table-path: '//home/avia/data/country-restrictions/testing/v1/front'
+  token: virtual
+  proxy: localhost
+avia-country-restrictions-extended-v1:
+  enabled: true
+  index-path: './country-restrictions-extended-v1-index'
+  table-path: '//home/avia/data/country-restrictions/testing/v1/result-as-extended-metrics'
+  token: virtual
+  proxy: localhost
+avia-fares:
+  fare-families-file: avia/fare_families/aeroflot_fare_families_v2_from_avia.json
+busbroker:
+  enabled: false
+  mode: EMPTY
+  yp:
+    endpoint-set-id: testepset
+    token: testtoken
+buses-http-service:
+  base-url: https://testing.backend.internal.bus.yandex.net/
+conditional-naming:
+  enabled: true
+cmnt:
+  base-url: 'http://httpadapter-dev-common.n.yandex-team.ru'
+  handlers:
+    sign: '/?graph=cmnt-api-sign'
+dict-country:
+  enabled: false
+encryption:
+  encryption-key: testkey
+expedia:
+  base-url: 'http://localhost'
+  secret: testsecret
+geo-counter:
+  channel:
+    mode: TARGETS
+    targets: localhost
+geo-search:
+  base_url: 'http://addrs-testing.search.yandex.net/search/stable/yandsearch'
+grpc:
+  enabled: false
+happy-page:
+  load-block-timeout: 3s
+  page-schemas:
+    HOTEL:
+      - type: promo
+        order: 1
+        ad-fox-id: 1
+      - type: transport_cross_sale
+        order: 2
+        promo-enabled: false
+    AVIA:
+      - type: promo
+        order: 1
+        ad-fox-id: 2
+      - type: hotel_cross_sale
+        order: 2
+        results-limit: 10
+        promo-enabled: false
+      - type: common_promo_code
+        order: 3
+    TRAIN:
+      - type: promo
+        order: 1
+        ad-fox-id: 3
+      - type: hotel_cross_sale
+        order: 2
+        results-limit: 10
+        promo-enabled: false
+      - type: common_promo_code
+        order: 3
+  promo-codes:
+    - name: placeholder
+      discount-amount: 300
+      min-order-price: 5000
+      valid-till: 2020-12-31T23:59:59.999999Z
+      show-from: 2020-11-01T00:00:00.000000Z
+      show-till: 2020-12-21T23:59:59.999999Z
+    - name: placeholder_2
+      discount-amount: 200
+      min-order-price: 4000
+      valid-till: 2020-12-01T23:59:59.999999Z
+      show-from: 2020-10-01T00:00:00.000000Z
+      show-till: 2020-10-31T23:59:59.999999Z
+hotel-images:
+  table-path: //home/travel/prod/config/hotel_images
+  index-path: ./hotel-images-index
+hotel-slug:
+  table-path: //home/travel/prod/general/slugs/latest/hotel_slugs
+  index-path: ./slug-index
+region-slug:
+  table-path: //home/travel/prod/general/slugs/latest/region_slugs
+  index-path: ./region-slug-index
+region-hotel-count:
+  table-path: //home/travel/testing/datasets/region_counters/latest/geoid_counters
+  index-path: ./region-hotel-count-index
+region-images:
+  table-path: //home/travel/prod/config/region_images
+  index-path: ./region-images-index
+region-name:
+  table-path: //home/travel/test/city_pages/latest/result
+  index-path: ./region-name-index
+region-pages-storage:
+  table-path: //home/travel/prod/city_pages/latest/result
+  index-path: ./city-static-pages-index
+hotels-legal-info:
+  table-path: //home/travel/test/hotels_administrator/hotels_legal_info
+  index-path: ./hotels-legal-info
+hotel-min-prices:
+  table-path: //home/travel/testing/datasets/aggregated_prices/latest/cluster_permalink_prices
+  index-path: ./min-prices-index
+hotel-region-min-prices:
+  table-path: //home/travel/testing/datasets/region_prices/latest/geoid_prices
+  index-path: ./region-min-prices-index
+hotel-popular-destinations:
+  enabled: false
+  table-path: //home/travel/testing/config/popular_destinations
+  index-path: ./hotel-destinations-index
+hotels:
+  legacy:
+    index:
+      type: none
+hotels-administrator:
+  mode: EMPTY
+  yp:
+    endpoint-set-id: testset
+    token: testtoken
+hotels-booking-flow:
+  offer-service:
+    deferred-schedule:
+      hotel-lists:
+        enabled: false
+        table-path: fake
+        index-path: fake
+  providers:
+    bnovo:
+      client:
+        password: testsecret
+        username: testsecret
+    dolphin:
+      client:
+        password: testsecret
+    travelline:
+      client:
+        base-url: no_url
+        api-key: no_key
+    bronevik:
+      client:
+        client-key: '${random.value}'
+        login: '${random.value}'
+        password: '${random.value}'
+hotels-extranet:
+  mode: TARGETS
+  targets: localhost:30858
+  yp:
+    endpoint-set-id: testepset
+    token: testtoken
+hotels-redir:
+  base-url: 'http://localhost'
+im:
+  base-url: 'https://testing.ipv4-proxy.internal.rasp.yandex.net/im-test/'
+image-whitelist:
+  enabled: false
+  table-path: unknown
+  index-path: ./cache/image-whitelist-index
+morda-backend:
+  base-url: https://morda-backend-fake-url
+offercache:
+  mode: EMPTY
+  yp:
+    endpoint-set-id: testepset
+    token: testtoken
+orchestrator:
+  mode: TARGETS
+  targets: localhost:30858
+  yp:
+    endpoint-set-id: testepset
+    token: testtoken
+notifier:
+  mode: EMPTY
+  yp:
+    endpoint-set-id: testepset
+    token: testtoken
+personalization:
+  mode: EMPTY
+  yp:
+    endpoint-set-id: testepset
+    token: testtoken
+trips:
+  mode: EMPTY
+  yp:
+    endpoint-set-id: testepset
+    token: testtoken
+portal-recipes-service:
+  enabled: true
+  table-path: '//home/travel/prod/portal_recipes/'
+  index-path: './portal-recipes-indexes/'
+promogranter:
+  yp:
+    endpoint-set-id: testset
+promo-events:
+  table-path: //home/travel/prod/config/promo_events
+  index-path: ./promo-events-index
+promo-campaigns:
+  mir2020:
+    always-show-rate: false
+promo-service:
+  mode: EMPTY
+  yp:
+    endpoint-set-id: UNEXISTENT_ENDPOINT_SET
+spring:
+  datasource:
+    initialize: true
+  main:
+    allow-bean-definition-overriding: true
+train-api:
+  base-url: no_url
+  tvm-alias: -1
+train-crosslink:
+  base-url: https://testing.crosslink.internal.rasp.yandex.net/
+train-http-proxy-cache:
+  base-url: https://testing.http-proxy-cache.internal.rasp.yandex.net/
+train-offer:
+  mode: TARGETS
+  targets: train-offer.host:9111
+  yp:
+    endpoint-set-id: fake
+train-search-service:
+  mode: EMPTY
+  yp:
+    endpoint-set-id: testepset
+    token: testtoken
+  tvm:
+    enabled: false
+trust:
+  base-url: https://trust-payments-test.paysys.yandex.net:8028/trust-payments/v2
+trust-plus:
+  service-token: fake_token
+tugc:
+  mode: EMPTY
+tvm:
+  enabled: false
+yt:
+  cache:
+    dolphin:
+      base-yt-path: //home/travel/testing/config
+      base-local-path: ./cache
+      token: testtoken
+      update-interval: 15m
+      proxy: hahn.yt.yandex.net
+hotels-partner-config:
+  proxy: localhost
+  table-path: //home/travel/testing/config/partners
+  token: virtual
+  index-path: partner-config-index
+ugc:
+  base-url: 'https://ugc-test.n.yandex-team.ru'

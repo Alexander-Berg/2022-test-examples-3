@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`middleware api should proxy error 1`] = `"{\\"error\\":true,\\"statusCode\\":500}"`;
+
+exports[`middleware api should proxy method to backend 1`] = `"{\\"uid\\":0}"`;
+
+exports[`middleware api shouldn't allow non-POST requests 1`] = `"{\\"error\\":true,\\"code\\":405}"`;
+
+exports[`middleware api shouldn't allow non-POST requests 2`] = `
+Array [
+  Array [
+    Object {
+      "component": "middleware/api",
+      "errorCode": "INCORRECT_API_METHOD",
+      "hostname": "127.0.0.1",
+      "ip": "::ffff:127.0.0.1",
+      "level": "warn",
+      "message": "Api request is GET, expected POST",
+      "method": "GET",
+      "originalUrl": "/api/yo",
+      "uid": 0,
+    },
+  ],
+]
+`;
+
+exports[`middleware api shouldn't allow requests when user uid doesn't correspond to the one in token 1`] = `"{\\"error\\":true,\\"uid\\":0,\\"message\\":\\"invalid uid\\"}"`;
+
+exports[`middleware api shouldn't allow requests without token 1`] = `"{\\"error\\":true,\\"code\\":400}"`;
+
+exports[`middleware api shouldn't allow requests without token 2`] = `
+Array [
+  Array [
+    Object {
+      "component": "middleware/api",
+      "errorCode": "NO_TOKEN_IN_API_REQUEST",
+      "hostname": "127.0.0.1",
+      "ip": "::ffff:127.0.0.1",
+      "level": "warn",
+      "message": "Can't get token from api request",
+      "method": "POST",
+      "originalUrl": "/api/yoyo",
+      "uid": 0,
+    },
+  ],
+]
+`;

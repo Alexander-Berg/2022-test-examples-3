@@ -1,0 +1,110 @@
+<dataset>
+    <platform_client id="2" name="Bringly"/>
+    <platform_client id="3" name="Yandex Delivery"/>
+
+    <partner id="1" name="Partner 1" type="DELIVERY"/>
+    <partner id="2" name="Partner 2" type="DELIVERY"/>
+    <partner id="3" name="Partner 3" type="DELIVERY"/>
+
+    <!-- ДА, локация "из" выше по дереву регионов -->
+    <partner_capacity
+            id="100"
+            partner_id="1"
+            location_from="225"
+            location_to="2"
+            delivery_type="courier"
+            service_type="delivery"
+            platform_client_id="3"
+            value="100"
+            type="regular"
+    />
+    <!-- НЕТ, неправильная пара партнера и способа доставки -->
+    <partner_capacity
+            id="101"
+            partner_id="1"
+            location_from="213"
+            location_to="2"
+            delivery_type="pickup"
+            service_type="delivery"
+            platform_client_id="3"
+            value="100"
+            type="regular"
+    />
+    <!-- НЕТ, неправильный id клиента платформы -->
+    <partner_capacity
+            id="102"
+            partner_id="1"
+            location_from="213"
+            location_to="2"
+            delivery_type="courier"
+            service_type="delivery"
+            platform_client_id="2"
+            value="100"
+            type="regular"
+    />
+    <!-- ДА, локация "в" выше по дереву регионов -->
+    <partner_capacity
+            id="200"
+            partner_id="2"
+            location_from="213"
+            location_to="225"
+            delivery_type="pickup"
+            service_type="delivery"
+            platform_client_id="3"
+            value="100"
+            type="regular"
+    />
+    <!-- НЕТ, неправильная локация отправления -->
+    <partner_capacity
+            id="201"
+            partner_id="2"
+            location_from="2"
+            location_to="2"
+            delivery_type="pickup"
+            service_type="delivery"
+            platform_client_id="3"
+            value="100"
+            type="regular"
+    />
+    <!-- НЕТ, неправильная локация назначения -->
+    <partner_capacity
+            id="202"
+            partner_id="2"
+            location_from="213"
+            location_to="213"
+            delivery_type="pickup"
+            service_type="delivery"
+            platform_client_id="3"
+            value="100"
+            type="regular"
+    />
+    <!-- ДА, не указан способ доставки -->
+    <partner_capacity
+            id="300"
+            partner_id="3"
+            location_from="213"
+            location_to="2"
+            delivery_type="[null]"
+            service_type="delivery"
+            platform_client_id="3"
+            value="100"
+            type="regular"
+    />
+
+    <partner_capacity_day_off capacity_id="300" day="2020-01-31"/>
+    <partner_capacity_day_off capacity_id="300" day="2020-02-01"/>
+    <partner_capacity_day_off capacity_id="300" day="2020-02-02"/>
+    <partner_capacity_day_off capacity_id="300" day="2020-02-03"/><!-- больше верхней границы дат -->
+    <partner_capacity_day_off capacity_id="200" day="2020-01-10"/>
+    <partner_capacity_day_off capacity_id="200" day="2020-01-11"/>
+    <partner_capacity_day_off capacity_id="200" day="2020-01-12"/>
+    <partner_capacity_day_off capacity_id="100" day="2019-12-31"/><!-- меньше нижней границы дат -->
+    <partner_capacity_day_off capacity_id="100" day="2020-01-01"/>
+    <partner_capacity_day_off capacity_id="100" day="2020-01-02"/>
+    <partner_capacity_day_off capacity_id="100" day="2020-01-03"/>
+    <partner_capacity_day_off capacity_id="101" day="2020-01-10"/>
+    <partner_capacity_day_off capacity_id="102" day="2020-01-10"/>
+    <partner_capacity_day_off capacity_id="201" day="2020-01-10"/>
+    <partner_capacity_day_off capacity_id="202" day="2020-01-10"/>
+
+</dataset>

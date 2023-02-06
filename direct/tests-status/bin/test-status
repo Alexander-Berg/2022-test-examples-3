@@ -1,0 +1,243 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings; 
+
+=head1 DESCRIPTION
+
+    Устанавливает и читает "статус прохождения тестов" на рабочих копиях.
+
+    Запись статуса должна происходить из скрипта, запускающего тесты (runtest.pl, Makefile для data2)
+
+    Чтение можно делать и вручную, и в любых скриптах, где может понадобится (скрипт commit, например).
+
+    Код выхода -- количество ошибок (упавших или отсутствующих тестов), если их не больше 9, и 9 иначе. 
+
+    Результаты тестов хранятся в /var/spool/test-status, через 2 недели удаляются
+
+    Опции: 
+
+        -h, --help 
+            справка
+        -l, --list
+            список известных типов тестов
+        -t, --type <тип тестов>
+            статус по каким тестам установить/проверить
+            для установки -- обязательный, для проверки -- нет (будут проверены все)
+        -s, --set OK|FAIL
+            какой статус установить
+        -q, --quiet
+            для проверки из скриптов: не писать сообщения, только вернуть код
+
+=head1 EXAMPLES
+
+Записать статус:
+
+    test-status --set fail -t perl-unit-tests /var/www/beta.lena-san.8080
+    test-status --set 0    -t perl-unit-tests /var/www/beta.lena-san.8080
+
+    test-status --set ok   -t perl-unit-tests /var/www/beta.lena-san.8080
+    test-status --set 1    -t perl-unit-tests /var/www/beta.lena-san.8080
+
+Прочитать статус:
+
+    test-status    /var/www/beta.lena-san.8080
+    test-status -q /var/www/beta.lena-san.8080
+    test-status -q -t perl-unit-tests /var/www/beta.lena-san.8080
+
+Известные виды тестов:
+
+    test-status --list
+
+=head1 TODO
+
+    - использовать в скрипте commit
+
+=cut
+
+use Getopt::Long;
+use Digest::MD5 qw(md5_hex);
+use File::Touch;
+use Cwd;
+
+use Yandex::Svn;
+use Yandex::Shell;
+
+our $BASE_DIR = "/var/spool/tests-status";
+
+run() unless caller();
+
+sub run
+{
+    my $opt = parse_options();
+
+    umask 0000;
+
+    if ( $opt->{action} eq "list" ){
+        print map {"$_\n"} @{test_types()};
+        exit 0;
+    }
+
+    my $wd = getcwd;
+    my $errors = 0;
+    for my $dir ( @{$opt->{dirs}} ){
+        chdir $wd;
+        if ( $opt->{action} eq "set" ){
+            $errors += set_test_status(dir => $dir, value => $opt->{set_value}, type => $opt->{type});
+        } elsif ( $opt->{action} eq "check" ){
+            $errors += check_test_status(dir => $dir, type => $opt->{type}, quiet => $opt->{quiet})
+        }
+    }
+
+    $errors = 9 if $errors > 9;
+
+    exit $errors;
+}
+
+
+=head2 set_test_status
+
+    записать статус по указанным видам тестов для указанного каталога
+
+    считает чексуммы и создает/обновляет файл /var/spool/test-status/<тип тестов>/<рекурсивная md5 от каталога>_(OK|FAIL)"
+
+    Параметры именованные 
+        
+        dir
+        type 
+        value
+
+=cut
+sub set_test_status
+{
+    my %O = @_;
+
+    chdir $O{dir} or die "can't chdir to $O{dir}";
+    my @f = sort grep {-f} svn_files(".", externals => 1);
+    my $md5_files = '';
+    while ( my @f_chunk = splice( @f, 0, 500 ) ) {
+        $md5_files .= yash_qx('md5sum', @f_chunk);
+    }
+    my $md5_total = md5_hex($md5_files);
+    for my $t (@{$O{type}}){
+        touch("$BASE_DIR/$t/${md5_total}_$O{value}");
+    }
+
+    return 0;
+}
+
+
+
+=head2 check_test_status
+
+    проверяет статусты тестов на указанном каталоге
+    
+    параметры
+
+        dir
+        type 
+
+    возврадает количетсво "проблем" (fail/no data)
+
+=cut
+sub check_test_status
+{
+    my %O = @_;
+
+    chdir $O{dir} or die "can't chdir to $O{dir}";
+    my @f = sort grep {-f} svn_files(".", externals => 1);
+    my $md5_files = yash_qx('md5sum', @f);
+    my $md5_total = md5_hex($md5_files);
+    my $errors = 0;
+    for my $t ( @{$O{type}} ){
+        my (undef, $i_fail, undef, undef, undef, undef, undef, undef,  undef, $mtime_fail) = stat("$BASE_DIR/$t/${md5_total}_FAIL");
+        my (undef, $i_ok,   undef, undef, undef, undef, undef, undef,  undef, $mtime_ok)   = stat("$BASE_DIR/$t/${md5_total}_OK");
+
+        my $message = '';
+        if      ( !$i_fail && !$i_ok ){
+            $errors += 1;
+            $message = "no data";
+        } elsif ( !$i_fail &&  $i_ok ){
+            $message = "OK\t".localtime($mtime_ok);
+        } elsif ( $i_fail  && !$i_ok ) {
+            $errors += 1;
+            $message = "FAIL\t".localtime($mtime_fail);
+        } elsif ( $i_fail  &&  $i_ok ){
+            if ($mtime_ok > $mtime_fail){
+                $message = "OK\t".localtime($mtime_ok);
+            } else {
+                $errors += 1;
+                $message = "FAIL\t".localtime($mtime_fail);
+            }
+        } else {
+            die "unbelievable!";
+        }
+
+        unless( $O{quiet} ){
+            print "$O{dir}\t$t\t$message\n";
+        }
+    }
+
+    return $errors;
+}
+
+
+=head2 test_types
+
+    возвращает ссылку на массив с типами тестов
+
+=cut
+sub test_types
+{
+    opendir(my $dh, $BASE_DIR) || die "cant opendir $BASE_DIR: $!"; 
+    my @d = grep {!/^(\.|\.\.)$/} readdir($dh);
+    return \@d;
+}
+
+
+sub parse_options
+{
+    my %O;
+
+    GetOptions(
+        "h|help"    => sub {system("podselect -section NAME -section DESCRIPTION -section EXAMPLES $0 | pod2text-utf8"); exit 0;},
+        "t|type=s@" => \$O{type},
+        "s|set=s"   => \$O{set_value},
+        "q|quiet"   => \$O{quiet},
+        "l|list"    => \$O{list},
+    ) or die "can't parse options, stopi\n";
+
+    $O{dirs} = [@ARGV];
+
+    if ( ! defined $O{set_value} ){
+        # nothing
+    } elsif ( $O{set_value} =~ /^(0|fail)$/i ){
+        $O{set_value} = "FAIL";
+    } elsif ( $O{set_value} =~ /^(1|ok)$/i ){
+        $O{set_value} = "OK";
+    } else {
+        die "недопустимое значение --set $O{set_value}, допустимые: (0|fail|FAIL|OK|ok|1)\n";
+    }
+
+    if ($O{type} && grep {!/^[a-z0-9_-]+$/i} @{$O{type}}){
+        die "недопустимое значение --type $O{type}\n";
+    }
+
+    $O{action} = "";
+    if ($O{list}){
+        $O{action} = "list";
+        die "--list несовместим с другими параметрами\n" if $O{quiet} || $O{test_type} || $O{set_value} || @{$O{dirs}} > 0;
+    } elsif ( $O{set_value} ){
+        $O{action} = "set";
+        die "требуется указать тип тестов (-t <type>), см. --list для списка доступных на этом сервере\n" unless @{$O{type}} > 0;
+        die "можно записать результать только одного типа тестов одновременно\n" if @{$O{type}} > 1;
+    } elsif ( @{$O{dirs}} > 0 ){
+        $O{action} = "check";
+        $O{type} ||= test_types();
+    } else {
+        die "требуется либо опция --list, либо каталог, чей статус надо проверить\n";
+    }
+
+    return \%O;
+}
+

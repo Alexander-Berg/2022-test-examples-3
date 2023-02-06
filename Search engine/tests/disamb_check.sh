@@ -1,0 +1,1 @@
+cat disamb_marks.txt | awk -F '\t' '{print $1}' | sort | uniq | iconv -c -t utf-8 | ~/trunk/arcadia/tools/printwzrd  -a ~/trunk/ -s ~/trunk/arcadia/tools/wizard.cfg -t | perl disamb_check.pl disamb_marks.txt >log

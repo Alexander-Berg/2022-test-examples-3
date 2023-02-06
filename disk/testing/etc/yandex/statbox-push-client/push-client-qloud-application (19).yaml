@@ -1,0 +1,19 @@
+---
+ident: disk-uploader-balancer
+logger-mode: file
+logger-file: /var/log/statbox/watcher.log
+logger-level: 5
+
+watcher-method: inotify
+watcher-state: "/var/spool/push-client"
+watcher-drop_on_error: 1
+
+network-master-addr: "logbroker-pre.yandex.net"
+network-transport: ipv6
+network-proto: rt
+
+files:
+  - name: /var/log/yandex/disk/uploader-balancer-tskv.log
+    log_type: ydisk-uploader-balancer-log
+  - name: /var/log/yandex/disk/uploader-balancer-access-tskv.log
+    log_type: ydisk-java-access-log

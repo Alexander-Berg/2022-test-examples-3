@@ -1,0 +1,25 @@
+import "search/wizard/entitysearch/string_template/proto/string_template.proto";
+
+message TCustomStringTemplate {
+    optional string RequestMask = 1;
+
+    message TPlaceholder {
+        optional string Text = 1;
+        optional string Variable = 2;
+    }
+    repeated TPlaceholder _ParsedParts = 3;
+
+    optional string Result = 4;
+}
+
+message TNested {
+    optional NEnt.NProto.TStringTemplate Template = 1;
+}
+
+message TTestTemplates {
+    repeated NEnt.NProto.TStringTemplate Templates = 1;
+    repeated TNested Nested = 2;
+
+    repeated TCustomStringTemplate CustomTemplates = 3;
+    optional TCustomStringTemplate CustomTemplate = 4;
+}

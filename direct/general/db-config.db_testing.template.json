@@ -1,0 +1,110 @@
+{
+   "db_config" : {
+      "AutoCommit" : "1",
+      "CHILDS" : {
+         "stubs" : {
+         },
+         "monitor" : {
+            "instance" : "ppcmonitor"
+         },
+         "ppc" : {
+            "CHILDS" : {
+               "1" : {
+                  "db" : "ppc1"
+               },
+               "2" : {
+                  "db" : "ppc2"
+               }
+            }
+         },
+         "ppcdict" : {
+            "CHILDS": {
+               "_": {},
+               "catalog" : {
+                  "db" : "adi",
+                  "names" : "utf8",
+                  "utf8" : "0"
+               }
+            }
+         },
+         "ppchouse" : {
+            "engine": "clickhouse",
+            "host": "ppctest-clickhouse02i.haze.yandex.net",
+            "port": 8123,
+            "user": "default",
+            "timeout": 10,
+            "ReadOnly" : 1,
+            "CHILDS" : {
+               "user_action_log": {
+                  "db": "user_action_log_db_testing"
+               },
+               "cloud_writer": {
+                  "db": "directdb",
+                  "host": "ppchouse-cloud.direct.yandex.net",
+                  "comment": "не предполагается запись с тестовой среды, поэтому данные production readonly",
+                  "pass": "password_stub",
+                  "user": "direct_reader",
+                  "port": 8443,
+                  "ssl": 1,
+                  "verify_ssl_certs": 0
+               }
+            }
+         },
+         "ppclog" : {
+            "CHILDS" : {
+               "_" : {},
+               "heavy" : {
+                  "ReadOnly" : "1"
+               }
+            }
+         },
+         "ppcpricelog" : {
+            "CHILDS" : {
+               "_" : {},
+               "heavy" : {
+                  "ReadOnly" : "1"
+               }
+            }
+         },
+         "rbac" : {
+            "AutoCommit" : "0",
+            "CHILDS" : {
+               "1" : {
+                 "db": "rbac2"
+               }
+            }
+         },
+         "redis" : {
+            "host": [
+               "sas-626ynbxkakulaar6.db.yandex.net:6379",
+               "vla-bhlxmwf9ie4uovgq.db.yandex.net:6379",
+               "myt-p593rewssfe5hede.db.yandex.net:6379",
+               "vla-ra7819odvsgiguj2.db.yandex.net:6379",
+               "sas-rko7cnt7uxtusidh.db.yandex.net:6379",
+               "myt-az7pu7cks83qde6f.db.yandex.net:6379",
+               "vla-0tm8dvthjghh9sey.db.yandex.net:6379",
+               "myt-zcki4eps4ma8gvcl.db.yandex.net:6379",
+               "sas-9ulkxac0a6mgfdrf.db.yandex.net:6379"
+            ],
+            "port": 6379,
+            "user": "",
+            "pass": "",
+            "connect_timeout": "1",
+            "request_retries": "3"
+         },
+         "chassis" : {
+            "host": "c-mdbo18obnrajn8nd60m4.rw.db.yandex.net",
+            "port": 3306
+         }
+      },
+      "extra_users": {
+          "direct-sql": {"pass": "aluminiumminimalimmunitaet"}
+      },
+      "connect_timeout" : "4",
+      "host" : "%1$s",
+      "port" : "%2$s",
+      "user" : "%3$s",
+      "pass" : "%4$s",
+      "utf8" : "1"
+   }
+}

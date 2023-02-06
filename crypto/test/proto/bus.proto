@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+import "mapreduce/yt/interface/protos/extension.proto";
+
+package NCrypta;
+
+message TPerson {
+    optional string Name = 1;
+}
+
+message TBus {
+    message TEngine {
+        optional string Model = 1;
+    }
+
+    optional TPerson Driver = 1;
+    optional TEngine Engine = 2 [(NYT.column_name) = "Motor"];
+    optional uint32 Route = 3;
+    repeated TPerson Passengers = 4;
+    optional TPerson Mechanic = 5 [(NYT.flags) = SERIALIZATION_YT];
+    optional bytes Data = 6;
+}
+
+message TGarage {
+    option (NYT.default_field_flags) = SERIALIZATION_YT;
+
+    optional TBus Bus = 1;
+}

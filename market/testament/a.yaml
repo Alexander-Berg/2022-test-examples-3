@@ -1,0 +1,169 @@
+service: marketfrontend
+title: Testament
+shred:
+  requirements: &requirements
+    cores: 1
+    sandbox:
+      client_tags: MULTISLOT | GENERIC
+      container_resource: 2864846541
+      dns: dns64
+      priority:
+        class: SERVICE
+        subclass: NORMAL
+  dist-resource-attributes: &dist-resource-attributes
+    app-name: market/front/libs/testament
+    type: dist
+    version: pr-${context.launch_pull_request_info.pull_request.id}
+  metatron-env:
+    secret_environment_variables: &metatron-env-vars
+      - key: NPMRC
+        secret_spec:
+          key: 'robot-metatron-npm-auth'
+  common-run-command-config: &common-run-command-config
+    arc_mount_config:
+      enabled: true
+    secret_environment_variables: *metatron-env-vars
+    logs_config:
+      stdout_ci_badge: true
+      stderr_ci_badge: true
+ci:
+  runtime:
+    sandbox-owner: MARKET
+  secret: sec-01cv39yy683mvszy5yt550amgq
+  flows:
+    pr:
+      title: pr checks
+      jobs:
+        build:
+          title: Build
+          requirements: *requirements
+          task: common/misc/run_command
+          input:
+            config:
+              <<: *common-run-command-config
+              result_resources:
+                - path: dist
+                  description: Собранный testament
+                  type: OTHER_RESOURCE
+                  compression_type: tgz
+                  ci_badge: true
+                  attributes: *dist-resource-attributes
+              cmd_line: |
+                export PATH=$PATH:/opt/nodejs/16/bin
+                cd ${context.config_info.dir}
+                npm run ci:build
+                cp -r dist $RESULT_RESOURCES_PATH
+
+        lint:
+          title: Lint
+          requirements: *requirements
+          needs: build
+          task: common/misc/run_command
+          input:
+            config:
+              <<: *common-run-command-config
+              cmd_line: |
+                export PATH=$PATH:/opt/nodejs/16/bin
+                cd ${context.config_info.dir}
+                npm run ci:lint
+
+        test:
+          title: Test
+          requirements: *requirements
+          needs: build
+          task: common/misc/run_command
+          input:
+            config:
+              <<: *common-run-command-config
+              dynamic_sandbox_resources:
+                - key: dist
+                  type: OTHER_RESOURCE
+                  attrs: *dist-resource-attributes
+              cmd_line: |
+                export PATH=$PATH:/opt/nodejs/16/bin
+                cd ${context.config_info.dir}
+                tar -xvf {dist}
+                npm run ci:test
+                cp -r html_reports $RESULT_RESOURCES_PATH
+                cp -r json_reports $RESULT_RESOURCES_PATH
+              result_resources:
+                - path: html_reports
+                  description: Отчет
+                  type: OTHER_RESOURCE
+                  compression_type: none
+                  ci_badge: true
+                  ci_badge_path: index.html
+                  attributes:
+                    <<: *dist-resource-attributes
+                    type: report
+                - path: json_reports
+                  description: Метрики
+                  type: OTHER_RESOURCE
+                  compression_type: none
+                  ci_badge: true
+                  ci_badge_path: metrics.json
+                  attributes:
+                    <<: *dist-resource-attributes
+                    type: metrics
+
+        publish-canary:
+          title: Publish Canary
+          requirements: *requirements
+          needs: build
+          task: common/misc/run_command
+          manual:
+            enabled: true
+            prompt: Опубликовать канарейку?
+          input:
+            config:
+              <<: *common-run-command-config
+              dynamic_sandbox_resources:
+                - key: dist
+                  type: OTHER_RESOURCE
+                  attrs: *dist-resource-attributes
+              cmd_line: |
+                set -e
+                export PATH=$PATH:/opt/nodejs/16/bin
+                cd ${context.config_info.dir}
+                tar -xvf {dist}
+                cd dist
+                CANARY_VERSION=`npm version prerelease --preid=${context.target_revision.hash}`
+                echo "$NPMRC" > ./.npmrc
+                npm publish -tag canary
+                echo "$CANARY_VERSION" > $RESULT_RESOURCES_PATH/canary_version
+              result_output:
+                - path: canary_version
+        skip-publish:
+          title: Skip Publish
+          task: dummy
+          needs:
+            - build
+
+        checks-finished:
+          title: Checks Finished
+          task: dummy
+          needs:
+            - lint
+            - test
+
+        publication-finished:
+          title: Publication Finished
+          task: dummy
+          needs-type: any
+          needs:
+            - publish-canary
+            - skip-publish
+
+        success:
+          title: Success
+          task: dummy
+          needs:
+            - checks-finished
+            - publication-finished
+
+  actions:
+    pr-flow:
+      flow: pr
+      triggers:
+        - on: pr
+

@@ -1,0 +1,53 @@
+{
+    "VerboseLevel": 6,
+    "YtVerboseLevel": "Error",
+
+    "YtCluster": "markov",
+    "YtLog": "logs/datacamp-picrobot/qyt2lb-yt.log",
+    "Port": 7572,
+
+    "GlobalLog": "logs/datacamp-picrobot/qyt2lb.log",
+
+    "Suppliers": [
+        {
+            "Alias": "processor_yt_log",
+            "YtSupplier": {
+                "QueueConsumer": "qyt2lb",
+                "QueuePath": "//home/market/testing/indexer/picrobot/queues/output_queue",
+                "Cluster": "markov"
+            }
+        }
+    ],
+    "ConsumingSystem": {
+        "MainPath": "//home/market/testing/indexer/picrobot/queues/output_queue",
+        "MaxShards": 16,
+        "MaxShardsToCheck": 16,
+        "WorkerMinorName": "0"
+    },
+    "StatelessShardProcessorConfig": {
+        "ThreadLabelPrefix": "qyt2lb_log"
+    },
+    "MaxInflightBytes": 2000,
+    "Outputs": [{
+        "MessageType": "IMAGE_RESPONSE",
+        "Settings": {
+            "Topic": "/market-indexer/testing/picrobot/datacamp-images-from-picrobot",
+            "TVMSecretEnv": "PICROBOT_TVM_SECRET",
+            "TVMClientId": 2002768
+        }
+    }, {
+        "MessageType": "VIDEO_RESPONSE",
+        "Settings": {
+            "Topic": "/market-indexer/testing/picrobot/datacamp-videos-from-picrobot",
+            "TVMSecretEnv": "PICROBOT_TVM_SECRET",
+            "TVMClientId": 2002768
+        }
+    }, {
+        "MessageType": "SAMOVAR_REQUEST",
+        "Settings": {
+            "Topic": "/samovar/feeds-ext",
+            "TVMSecretEnv": "PICROBOT_TVM_SECRET",
+            "TVMClientId":2002768
+        }
+    }]
+}

@@ -1,0 +1,122 @@
+{
+    "photos" : {
+        "snippet_name" : "photos/1.x",
+        "input_table": "//home/geosearch-prod/addrs_base/accepted_photos",
+        "delta_table": "//home/sprav/fast_export/fresh_states_snippets",
+        "exp_table": "//home/altay/db/photo-freshness/experiment_snippets",
+        "maps_photos_1x_table": "//home/maps/photos/snippets/testing/photos1x/snippets",
+        "maps_photos_2x_table": "//home/maps/photos/snippets/testing/photos2x/snippets",
+        "generation": "./merge_photos.yql",
+        "format": "json",
+        "yt_ttl": 1,
+        "v1": true
+    },
+    "fullobjects": {
+        "input_table": "//home/maps/geoapp/goods/testing/db/data_4production_fullobjects",
+        "snippet_name": "fullobjects/1.x",
+        "permalink_field": "permalink",
+        "format": "json",
+        "data_field": "value",
+        "key_type": "permalink_heavy",
+        "data_map": "field",
+        "single_snippet_size_limit": 400,
+        "pre": {
+            "type": "GENERATE_FULLOBJECTS_EXECUTABLE",
+            "attrs": {
+                "released": "prestable"
+            }
+        },
+        "generation": "",
+        "post": "",
+        "notify": [
+            "aaprokopyev",
+            "ankopeliovich"
+        ]
+    },
+    "topobjects": {
+        "input_table": "//home/maps/geoapp/goods/testing/db/data_4production_popular",
+        "snippet_name": "topobjects/1.x",
+        "permalink_field": "permalink",
+        "format": "json",
+        "data_field": "value",
+        "key_type": "permalink",
+        "data_map": "field",
+        "pre": "",
+        "generation": "",
+        "post": "",
+        "notify": [
+            "aaprokopyev"
+        ]
+    },
+    "uslugi" : {
+      "pre" : "uslugi.yql",
+      "snippet_name" : "uslugi/1.x",
+      "generation": "",
+      "format": "flat",
+      "data_field": "value",
+      "permalink_field": "key",
+      "notify": ["bokoveg"],
+      "v1": true,
+      "test" : true
+    },
+    "masstransit_test" : {
+      "snippet_name": "masstransit_test/2.x",
+      "format": "flat",
+      "data_field": "snippet",
+      "permalink_field": "id",
+      "data_map": "field",
+      "validate": true,
+      "input_table": "//home/yatransport-prod/testing/snippets/latest/snippets",
+      "number_of_snippets": 2500000
+    },
+    "trust_features_digest": {
+      "ugc_data_table": "//home/robot-ugc-test/export/aspects/data_for_trust_features/aspect_stats",
+      "photos_table": "//home/geosearch/aspects/aspect_image/testing",
+      "snippet_name": "trust_features_digest/1.x",
+      "generation": {
+        "type": "OTHER_RESOURCE",
+        "attrs": {"trust_features_binary_test": 1}
+      },
+      "pre": "trust_features_join.yql",
+      "permalink_field": "key",
+      "data_field": "value",
+      "data_map": "field",
+      "format": "json",
+      "ignore_row_count_change": true,
+      "key_type": "permalink",
+      "validate": true,
+      "schema": "schemas/trust_features_digest/1.x/trust_features_digest.json",
+      "table_schema": [
+        {"name": "Url", "type": "string"},
+        {"name": "trust_features_digest/1.x","type":"string"},
+        {"name": "trust_features/1.x","type":"string"},
+        {"name": "ugc_aspects/1.x","type":"string"}
+      ],
+      "missing_names_table": "//home/geosearch/yourmary/aspects_stuff/missing_names_test",
+      "notify": [
+        "yourmary"
+      ]
+    },
+    "potential_company_owners": {
+        "snippet_name": "potential_company_owners",
+        "input_table": "//home/geosearch/phil-grab/puid_hashes/snippets/potential_company_owners_sample",
+        "validate": true,
+        "schema": "schemas/potential_company_owners/potential_company_owners.json",
+        "format" : "json",
+        "permalink_field" : "uid",
+        "data_map" : "field",
+        "data_field" : "data",
+        "notify": ["phil-grab"]
+    },
+    "neurosummary": {
+        "snippet_name": "neurosummary",
+        "input_table": "//home/geosearch/nina-alex-vi/neurosummary_v6/snippets/try2",
+        "validate": true,
+        "schema": "schemas/neurosummarization/1.x/neurosummarization.json",
+        "format" : "json",
+        "permalink_field" : "key",
+        "data_map" : "field",
+        "data_field" : "value",
+        "notify": ["nina-alex-vi"]
+    }
+}

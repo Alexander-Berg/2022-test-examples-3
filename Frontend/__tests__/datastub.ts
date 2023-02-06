@@ -1,0 +1,9 @@
+export const dataDefault = {
+    children: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis magna massa, aliquet eget odio eu, convallis ' +
+        'tincidunt erat. Nunc bibendum ut magna sit amet porta. Vivamus ac porta magna, nec laoreet odio. Proin at nulla ' +
+        'nunc. Duis placerat, orci quis sagittis congue, justo nibh pretium mi, in pellentesque augue magna in nunc. ' +
+        'Suspendisse scelerisque pretium faucibus. Nunc eu luctus nunc. Pellentesque at vehicula arcu, ut cursus felis. ' +
+        'Morbi congue massa non sapien maximus, ut tincidunt neque dapibus. Nam mattis lacinia erat, vitae rutrum sapien ' +
+        'convallis id. Nam rutrum ultricies nunc at sagittis. Nam quis orci tincidunt, auctor tellus a, posuere',
+    maxLength: 100,
+};

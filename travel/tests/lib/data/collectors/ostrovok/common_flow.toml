@@ -1,0 +1,172 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "ostrovok",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--username", "username",
+    "--password", "password",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+]
+
+checkers = [
+    "lb",
+    "partner",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "apllication/json"
+
+[[partner.responses]]
+    args = {"page"="1"}
+    data_file = "partner_response_1.json"
+
+[[partner.responses]]
+    args = {"page"="2"}
+    data_file = "partner_response_2.json"
+
+[[partner.responses]]
+    args = {"page"="3"}
+    data_file = "partner_response_3.json"
+
+[lb]
+    topic = "topic-ostrovok"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+[[lb.expected]]
+    partner_name = "ostrovok"
+    travel_order_id = "ostrovok:0"
+    partner_order_id = "0"
+    created_at = 1546290000
+    status = "refunded"
+    partner_status = "noshow"
+    label = "partner_extra_cookie_0"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-01-01"
+    check_out = "2019-01-02"
+    order_amount = 1000.0
+    profit_amount = 9.5
+    hotel_name = "hotel_name_0"
+    hotel_country = "country_0"
+    hotel_city = "city_0"
+    deferred_payment_eligibility = "unknown"
+    partner_hotel_id = "6762781"
+    post_pay_eligible = false
+    post_pay_used = false
+
+[[lb.expected]]
+    partner_name = "ostrovok"
+    travel_order_id = "ostrovok:1"
+    partner_order_id = "1"
+    created_at = 1546376400
+    status = "refunded"
+    partner_status = "cancelled"
+    label = "partner_extra_cookie_1"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-01-02"
+    check_out = "2019-01-03"
+    order_amount = 1000.0
+    profit_amount = 9.5
+    hotel_name = "hotel_name_1"
+    hotel_country = "country_1"
+    hotel_city = "city_1"
+    deferred_payment_eligibility = "unknown"
+    partner_hotel_id = "6762781"
+    post_pay_eligible = false
+    post_pay_used = false
+
+[[lb.expected]]
+    partner_name = "ostrovok"
+    travel_order_id = "ostrovok:2"
+    partner_order_id = "2"
+    created_at = 1546462800
+    status = "refunded"
+    partner_status = "rejected"
+    label = "partner_extra_cookie_2"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-01-03"
+    check_out = "2019-01-04"
+    order_amount = 1000.0
+    profit_amount = 9.5
+    hotel_name = "hotel_name_2"
+    hotel_country = "country_2"
+    hotel_city = "city_2"
+    deferred_payment_eligibility = "unknown"
+    partner_hotel_id = "6762781"
+    post_pay_eligible = false
+    post_pay_used = false
+
+[[lb.expected]]
+    partner_name = "ostrovok"
+    travel_order_id = "ostrovok:3"
+    partner_order_id = "3"
+    created_at = 1548968400
+    status = "refunded"
+    partner_status = "failed"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-02-01"
+    check_out = "2019-02-02"
+    order_amount = 1000.0
+    profit_amount = 9.5
+    hotel_name = "hotel_name_3"
+    hotel_country = "country_3"
+    hotel_city = "city_3"
+    deferred_payment_eligibility = "unknown"
+    partner_hotel_id = "6762781"
+    post_pay_eligible = false
+    post_pay_used = false
+
+[[lb.expected]]
+    partner_name = "ostrovok"
+    travel_order_id = "ostrovok:4"
+    partner_order_id = "4"
+    created_at = 1549054800
+    status = "confirmed"
+    partner_status = "completed"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-02-02"
+    check_out = "2019-02-03"
+    order_amount = 1000.0
+    profit_amount = 9.5
+    hotel_name = "hotel_name_4"
+    hotel_country = "country_4"
+    hotel_city = "city_4"
+    deferred_payment_eligibility = "unknown"
+    partner_hotel_id = "6762781"
+    post_pay_eligible = false
+    post_pay_used = false
+
+[[lb.expected]]
+    partner_name = "ostrovok"
+    travel_order_id = "ostrovok:5"
+    partner_order_id = "5"
+    created_at = 1549141200
+    status = "confirmed"
+    partner_status = "completed"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-02-03"
+    check_out = "2019-02-04"
+    order_amount = 1000.0
+    profit_amount = 9.5
+    hotel_name = "hotel_name_5"
+    hotel_country = "country_5"
+    hotel_city = "city_5"
+    deferred_payment_eligibility = "unknown"
+    partner_hotel_id = "6762781"
+    post_pay_eligible = false
+    post_pay_used = false

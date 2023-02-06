@@ -1,0 +1,126 @@
+quota: default
+urls: urls
+
+headers:
+  service_token: X-Service-Token
+
+export:
+  - service_token
+
+router:
+  - regexp: service_token
+    data:
+      - key: "(tickets_[a-z0-9]{32})|(events_tickets_[a-z0-9]{32})|(events_tickets_new_[a-z0-9]{32})|(events_tickets_full_payout_[a-z0-9]{32})"
+        quota: always_allowed
+
+  - map: urls
+    data:
+      - key: ["/xmlrpc", "/simple/xmlrpc"]
+        quota: xmlrpc
+
+  - regexp: urls
+    data:
+      - key: "/trust-payments/v2/payments/[a-z0-9]{24,32}/start[/]?"
+        router:
+          - regexp: service_token
+            data:
+              - key: "taxifee_[a-z0-9]{32}"
+                quota: post-payments-start-taxi
+              - key: "zaxi_[a-z0-9]{32}"
+                quota: post-payments-start-zapravki
+        quota: post-payments-start
+      - key: "/trust-payments/v2/payments/[a-z0-9]{24,32}/clear[/]?"
+        router:
+          - regexp: service_token
+            data:
+              - key: "taxifee_[a-z0-9]{32}"
+                quota: post-payments-clear-taxi
+        quota: post-payments-clear
+      - key: "/trust-payments/v2/payments[/]?"
+        router:
+          - regexp: service_token
+            data:
+              - key: "taxifee_[a-z0-9]{32}"
+                quota: post-payments-taxi
+              - key: "zaxi_[a-z0-9]{32}"
+                quota: post-payments-zapravki
+        quota: post-payments
+      - key: "/trust-payments/v2/payments/[a-z0-9]{24,32}[/]?"
+        router:
+          - regexp: service_token
+            data:
+              - key: "taxifee_[a-z0-9]{32}"
+                quota: get-payments-taxi
+              - key: "blue_market_payments_[a-z0-9]{32}"
+                quota: get-payments-market
+              - key: "blue_market_subsidy_[a-z0-9]{32}"
+                quota: get-payments-market-sub
+              - key: "zapravki_[a-z0-9]{32}"
+                quota: get-payments-zapravki-621
+              - key: "zaxi_[a-z0-9]{32}"
+                quota: get-payments-zapravki
+              - key: "ubertaxi_[a-z0-9]{32}"
+                quota: get-payments-uber
+        quota: get-payments
+
+      - key: "/trust-payments/v2/payments/[a-z0-9]{24,32}/receipts[/]?.*"
+        quota: receipts
+
+      - key: "/trust-payments/v2/topup/[a-z0-9]{24,32}/start[/]?"
+        router:
+          - regexp: service_token
+            data:
+              - key: "taxifee_[a-z0-9]{32}"
+                quota: post-topup-start-taxi
+              - key: "tickets_[a-z0-9]{32}"
+                quota: post-topup-start-tickets
+        quota: post-topup-start
+      - key: "/trust-payments/v2/topup[/]?"
+        router:
+          - regexp: service_token
+            data:
+              - key: "taxifee_[a-z0-9]{32}"
+                quota: post-topup-taxi
+              - key: "tickets_[a-z0-9]{32}"
+                quota: post-topup-tickets
+        quota: post-topup
+      - key: "/trust-payments/v2/topup/[a-z0-9]{24,32}[/]?"
+        router:
+          - regexp: service_token
+            data:
+              - key: "taxifee_[a-z0-9]{32}"
+                quota: get-topup-taxi
+        quota: get-topup
+
+      - key: "/trust-payments/v2/refunds/[a-z0-9]{24,32}/start[/]?"
+        quota: post-refunds-start
+      - key: "/trust-payments/v2/refunds[/]?"
+        quota: post-refunds
+      - key: "/trust-payments/v2/refunds/[a-z0-9]{24,32}[/]?"
+        quota: get-refunds
+
+      - key: "/trust-payments/v2/orders[/]?"
+        router:
+          - regexp: service_token
+            data:
+              - key: "taxifee_[a-z0-9]{32}"
+                quota: post-orders-taxi
+        quota: post-orders
+      - key: "/trust-payments/v2/orders/.*[/]?"
+        router:
+          - regexp: service_token
+            data:
+              - key: "taxifee_[a-z0-9]{32}"
+                quota: get-orders-taxi
+        quota: get-orders
+
+      - key: "/trust-payments/v2/inapp_subscription/.+"
+        quota: subscriptions
+
+      - key: "/simple/notify/from_trust"
+        quota: from-trust
+
+  - not-empty: service_token
+    quota: common
+  - empty: service_token
+    quota: anonymous

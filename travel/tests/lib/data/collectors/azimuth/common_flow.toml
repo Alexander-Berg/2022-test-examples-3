@@ -1,0 +1,120 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "azimuth",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--shared-secret", "shared-secret",
+    "--session-token", "session-token",
+    "--date-from", "2019-01-01",
+    "--date-to", "2019-01-01",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "partner",
+    "yt",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "apllication/xml"
+
+[[partner.responses]]
+    method = "POST"
+    data_file = "partner_response_2019_01_01.xml"
+
+[yt.input.partner_table]
+    path = "//home/rasp/reference/partner"
+
+[[yt.input.partner_table.data]]
+    billing_order_id = 1034
+    code = "azimuth"
+    partner_id = 124
+
+[yt.input.station_table]
+    path = "//home/rasp/reference/station"
+
+[[yt.input.station_table.data]]
+    city_id = "c51"
+    iata = "KUF"
+    sirena = ""
+
+[[yt.input.station_table.data]]
+    city_id = "c39"
+    iata = "ROV"
+    sirena = ""
+
+[[yt.input.station_table.data]]
+    city_id = "c11063"
+    iata = "MRV"
+    sirena = ""
+
+[[yt.input.station_table.data]]
+    city_id = "c35"
+    iata = "KRR"
+    sirena = ""
+
+[[yt.input.station_table.data]]
+    city_id = "c37"
+    iata = "ASF"
+    sirena = ""
+
+[lb]
+    topic = "topic-azimuth"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+[[lb.expected]]
+    partner_name = "azimuth"
+    travel_order_id = "azimuth:order_id_0_0"
+    partner_order_id = "order_id_0_0"
+    created_at = 1546300800
+    status = "pending"
+    label = "marker_0_0"
+    currency_code = "RUB"
+    order_amount = 5230.0
+    category = "avia"
+    source = "azimuth"
+    partner_id = 124
+    billing_order_id = 1034
+    origin = "KUF"
+    destination = "ROV"
+    trip_type = "oneway"
+
+[[lb.expected]]
+    partner_name = "azimuth"
+    travel_order_id = "azimuth:order_id_0_1"
+    partner_order_id = "order_id_0_1"
+    created_at = 1546300920
+    status = "confirmed"
+    label = "marker_0_1"
+    currency_code = "RUB"
+    order_amount = 1570.0
+    category = "avia"
+    source = "azimuth"
+    partner_id = 124
+    billing_order_id = 1034
+    origin = "MRV"
+    destination = "KRR"
+    trip_type = "oneway"
+
+[[lb.expected]]
+    partner_name = "azimuth"
+    travel_order_id = "azimuth:order_id_0_2"
+    partner_order_id = "order_id_0_2"
+    created_at = 1546301040
+    status = "cancelled"
+    label = "marker_0_2"
+    currency_code = "RUB"
+    order_amount = 1570.0
+    category = "avia"
+    source = "azimuth"
+    partner_id = 124
+    billing_order_id = 1034
+    origin = "KRR"
+    destination = "ASF"
+    trip_type = "oneway"

@@ -1,0 +1,39 @@
+{
+  "logHosts": "*",
+  "logPath": "**/yandex/clusterizer-dispatcher/clusterizer-dispatcher-pairs-number.log",
+  "parser": {
+    "fields": [
+      "date",
+      "session_id",
+      "category_id",
+      "random_pairs_number",
+      "doubtful_pairs_number",
+      "bad_close_pairs_number",
+      "host"
+    ],
+    "columns": {
+      "session_id": {
+        "type": "String"
+      },
+      "category_id": {
+        "type": "UInt32"
+      },
+      "random_pairs_number": {
+        "type": "UInt32"
+      },
+      "doubtful_pairs_number": {
+        "type": "UInt32"
+      },
+      "bad_close_pairs_number": {
+        "type": "UInt32"
+      },
+      "host": {
+        "type": "String"
+      }
+    }
+  },
+  "clickhouseTable": "clusterizer_pairs_number_testing",
+  "sources": [
+    "logbroker://market-health-testing--other"
+  ]
+}

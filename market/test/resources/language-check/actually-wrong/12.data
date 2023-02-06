@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>DeWALT EU</title>
+<script type="text/javascript">
+/* <![CDATA[ */
+function initLands() {
+
+	//land images corresponding to <area> class
+	var arrLands = new Array();
+	arrLands[0] = "/landing/images/blank.gif";
+	arrLands[1] = "/landing/images/nether.gif";
+	arrLands[2] = "/landing/images/ger.gif";
+	arrLands[3] = "/landing/images/bel.gif";
+	arrLands[4] = "/landing/images/france.gif";
+	arrLands[5] = "/landing/images/uk.gif";
+	arrLands[6] = "/landing/images/ire.gif";
+	arrLands[7] = "/landing/images/den.gif";
+	arrLands[8] = "/landing/images/fin.gif";
+	arrLands[9] = "/landing/images/swe.gif";
+	arrLands[10] = "/landing/images/nor.gif";
+	arrLands[11] = "/landing/images/rus.gif";
+	arrLands[12] = "/landing/images/spain.gif";
+	arrLands[13] = "/landing/images/port.gif";
+	arrLands[14] = "/landing/images/slo.gif";
+	arrLands[15] = "/landing/images/pol.gif";
+	arrLands[16] = "/landing/images/aust.gif";
+	arrLands[17] = "/landing/images/turk.gif";
+	arrLands[18] = "/landing/images/greek.gif";
+	arrLands[19] = "/landing/images/hung.gif";
+	arrLands[20] = "/landing/images/swiss.gif";
+	arrLands[21] = "/landing/images/cze.gif";
+	arrLands[22] = "/landing/images/ita.gif";
+	arrLands[23] = "/landing/images/rus.gif";
+	arrLands[24] = "/landing/images/romania.gif";
+	arrLands[25] = "/landing/images/lithuania.gif";
+	arrLands[26] = "/landing/images/latvia.gif";
+	arrLands[27] = "/landing/images/estonia.gif";
+	arrLands[28] = "/landing/images/turkey.gif";
+		
+	var lands = document.getElementById("Landkarten").getElementsByTagName("area");
+	var links = document.getElementById("menu").getElementsByTagName("a");
+	
+	for (var i=0; i<lands.length; i++) {
+		var landID = lands[i].className;
+		if (landID) {
+			lands[i].onmouseover = function() {
+				changeStyle(1,this.className);
+			 }
+			lands[i].onmouseout = function() {
+				changeStyle(0,this.className);
+			}
+			lands[i].onclick = function() {
+				//urchintracker name
+				var relAttribute = document.getElementById('lnk_'+this.className).getAttribute("rel");
+				urchinTracker('/GoTo/'+relAttribute);
+			}
+		}
+	}
+	
+	for (var i=0; i<links.length; i++) {
+		var linkID = links[i].id.split("_")[1];
+		if (linkID) {
+			links[i].onmouseover = function() {
+				changeStyle(1,this.id.split("_")[1]);
+			}
+			links[i].onmouseout = function() {
+				changeStyle(0,this.id.split("_")[1]);
+			}
+			links[i].onclick = function() {
+				//urchintracker name
+				var relAttribute = this.getAttribute("rel");
+				urchinTracker('/GoTo/'+relAttribute);
+			}
+		}
+	}
+	
+	function changeStyle(direction, id) {
+		var linkStyle = document.getElementById("lnk_"+id).style;
+		
+		if (direction) {
+			document.Landkarte.src = arrLands[id];
+			with (linkStyle) {
+				color = "#ffcc00";
+				textDecoration = "underline";
+			}
+		} else {
+			document.Landkarte.src = arrLands[0];
+			with (linkStyle) {
+				color = "#cccccc";
+				textDecoration = "none";
+			}
+		}
+	}
+}
+/* ]]> */
+</script> 
+
+<style type="text/css">
+<!--
+body {
+	margin:0px;
+	padding:0px;
+	background-color:#000000;
+	font-family:Arial, Helvetica, sans-serif;
+}
+img {
+	border:0;
+}
+.flash {
+	text-align:center
+}
+.outer {
+	text-align:center
+}
+.main {
+	width:792px;
+	MARGIN-LEFT: auto; 
+	MARGIN-RIGHT: auto;
+}
+.main_area_left {
+	width:638px;
+	float:left;
+	text-align:left
+}
+.main_area_right {
+	width:144px;
+	float:right;
+	text-align:left;
+}
+.boxclear {
+	font-size:1px;
+	clear:both
+}
+.eu_continents {
+	font-size:12px;
+	height:20px;
+	background:url(images/leiste.gif)
+}
+.eu_headline {
+	padding-left:10px;
+	padding-top:2px
+}
+.eu_menu a {
+	color:#CCCCCC ;
+	text-decoration:none;
+	font-size:13px
+}
+.eu_menu a:hover {
+	color:#ffcc00 ;
+	text-decoration:underline;
+}
+.eu_menu {
+	line-height: 19px
+}
+
+-->
+</style>
+
+</head>
+
+<body onload="initLands()">
+<div class="top"><img src="/landing/images/bg_gelb_index.gif" width="100%" height="9" alt="" /></div>
+
+<div class="outer">
+<div class="main">
+
+<div class="main_area_left" style="background: url(/landing/europa_karte_small.gif) no-repeat">
+
+<span class="main_area_left" style="background: url(/landing/europa_karte_small.gif) no-repeat"><img id="Landkarte" alt="" height="472" name="Landkarte" src="/landing/europa_karte_small.gif" usemap="#Landkarten" width="638" /></span>
+<map id="Landkarten" name="Landkarten">
+  <area shape="rect" coords="1,234,78,247" href="http://www.dewalt.co.nz" alt="New Zealand" />
+  <area shape="rect" coords="1,218,67,231" href="http://www.dewalt.com.au" alt="Australia" />
+  <area shape="rect" coords="1,202,66,215" href="http://www.dewalt.ae" alt="Middle East" />
+  <area shape="rect" coords="2,184,45,198" href="/landing/world_asia.html" alt="" />
+  <area shape="rect" coords="3,166,87,180" href="/landing/world_south_am.html" alt="" />
+  <area class="23" shape="poly"  coords="489,357,443,331,437,275,457,244,460,180,433,108,485,72,634,72,634,353" href="http://www.dewalt.ru/" alt="&#1056;&#1086;&#1089;&#1089;&#1080;&#1103;&nbsp;" />
+  <area shape="rect"  coords="5,101,147,144" href="/landing/world.html"  alt="Worldwide" />
+  <area shape="rect" coords="3,147,87,161" href="/landing/world_north_am.html" alt="" />
+  <area class="7" shape="poly"  coords="336,270,370,268,366,252,359,231,340,238" href="http://www.dewalt.dk/" alt="Danmark" />
+  <area class="15" shape="poly"  coords="376,281,401,270,437,275,441,326,407,324,382,310" href="http://www.dewalt.pl/" alt="Polska" />
+  <area class="23" shape="poly" coords="429,264,435,273,410,270,415,259" href="#" alt="&#1056;&#1086;&#1089;&#1089;&#1080;&#1103;&nbsp;" />
+  <area class="9" shape="poly"  coords="398,262,406,181,424,156,414,121,392,130,379,172,370,177,367,219,360,223,368,262" href="http://www.dewalt.se/" alt="Sverige" />
+  <area class="3" shape="poly"  coords="326,303,308,300,301,301,302,306,322,321" href="http://www.dewalt.be/" alt="Belgi&euml;/Belgique" />
+  <area class="6" shape="poly"  coords="258,262,237,244,221,254,215,270,237,289" href="http://www.dewalt.ie/" alt="Ireland" />
+  <area class="13" shape="poly"  coords="190,391,196,369,219,378,202,422,184,418" href="http://www.dewalt.pt/" alt="Portugal" />
+  <area class="1" shape="poly"  coords="331,281,318,282,313,293,311,300,327,303" href="http://www.dewalt.nl/" alt="Nederlands" />
+  <area class="12" shape="poly"  coords="197,367,207,345,297,394,268,429,221,445,200,428,220,378" href="http://www.dewalt.es/" alt="Espa&ntilde;a" />
+  <area class="5" shape="poly"  coords="238,244,265,235,266,210,288,217,297,298,240,301,260,263" href="http://www.dewalt.co.uk/" alt="United Kingdom" />
+  <area class="22" shape="poly"  coords="322,354,338,362,349,352,369,357,415,423,387,462,335,461,323,409,353,412" href="http://www.dewalt.it/" alt="Italia" />
+  <area class="14" shape="poly"  coords="396,335,410,324,434,326,432,336,416,338,400,343" href="http://www.dewalt.sk/" alt="Slovensko" />
+  <area class="19" shape="poly"  coords="394,354,395,345,423,337,437,340,426,360,398,365" href="http://www.dewalt.hu/" alt="Magyarorsz&aacute;g" />
+  <area class="10" shape="poly"  coords="347,233,367,218,369,177,379,170,391,132,419,117,438,101,420,95,333,174,324,233" href="http://www.dewalt.no/" alt="Norge" />
+  <area class="8" shape="poly"  coords="462,175,442,139,441,122,429,108,413,120,424,152,410,180,418,207,429,212,452,204" href="http://www.dewalt.fi/" alt="Suomi" />
+  <area class="18" shape="poly"  coords="422,428,430,413,471,401,465,424,480,470,432,470" href="http://www.dewalt.gr/" alt="&Epsilon;&lambda;&lambda;&#940;&sigmaf;" />
+  <area class="2" shape="poly"  coords="332,342,362,345,374,335,363,319,382,309,372,269,344,268,335,273,323,317,336,331" href="http://www.dewalt.de/" alt="Deutschland" />
+  <area class="20" shape="poly"  coords="321,347,330,341,345,344,349,356,337,359,325,358" href="http://www.dewalt.ch/" alt="Switzerland" />
+  <area class="16" shape="poly"  coords="346,350,345,342,364,343,375,333,394,334,387,357" href="http://www.dewalt.at/" alt="&Ouml;sterreich" />
+  <area class="21" shape="poly"  coords="364,319,381,311,409,325,396,335,379,333,368,330" href="http://www.dewalt.cz/" alt="Cesk&aacute; republika" />
+  <area class="4" shape="poly"  coords="245,316,300,304,337,333,321,347,350,409,295,393,261,374" href="http://www.dewalt.fr/" alt="France" />
+<area class="24" shape="poly" coords="441,379,425,365,436,344,444,339,460,337,475,349,478,359,489,362,484,376,472,377,457,380" href="http://www.dewalt.ro" alt="Romania" />
+<area class="25" shape="poly" coords="435,276,429,264,418,260,418,255,424,253,437,249,450,256,448,267" href="http://www.dewalt.co.uk/" alt="Lithuania" />
+<area class="26" shape="poly" coords="452,256,438,249,419,254,418,248,421,236,427,242,437,238,435,231,451,237,458,240" href="http://www.dewalt.co.uk" alt="Latvia"/>
+<area class="27" shape="poly" coords="456,239,434,230,430,221,450,214,459,210" href="http://www.dewalt.co.uk/" alt="Estonia" />
+<area class="28" shape="poly" coords="492,447,470,406,481,396,508,401,539,383,558,385,579,380,590,370,605,370,623,403,558,434" href="http://www.dewalt.com.tr" alt="Turkey"/>
+</map>
+</div>
+<!--end main left area-->
+
+<!--start main right area-->
+<div class="main_area_right">
+	<div class="eu_continents"><div class="eu_headline">Europe</div></div>
+	<div class="eu_menu" id="menu">
+	<a href="http://www.dewalt.de" id="lnk_2" rel="Germany">Deutschland</a><br />
+	<a href="http://www.dewalt.co.uk/" id="lnk_5" rel="United Kingdom">United Kingdom</a><br />
+	<a href="http://www.dewalt.ie/" id="lnk_6" rel="Ireland" >Ireland</a><br />
+	<a href="http://www.dewalt.fr/" id="lnk_4" rel="France">France</a><br />
+	<a href="http://www.dewalt.it/" id="lnk_22" rel="Italy">Italia</a><br />
+	<a href="http://www.dewalt.se/" id="lnk_9" rel="Sweden">Sverige</a><br />
+	<a href="http://www.dewalt.es/" id="lnk_12" rel="Spain">Espa&ntilde;a</a><br />
+	<a href="http://www.dewalt.pt/" id="lnk_13" rel="Portugal">Portugal</a><br />
+	<a href="http://www.dewalt.dk/" id="lnk_7" rel="Denmark">Danmark</a><br />
+	<a href="http://www.dewalt.no/" id="lnk_10" rel="Norway">Norge</a><br />
+	<a href="http://www.dewalt.fi/" id="lnk_8" rel="Finland">Suomi</a><br />
+	<a href="http://www.dewalt.pl/" id="lnk_15" rel="Poland">Polska</a><br />
+	<a href="http://www.dewalt.cz/" id="lnk_21" rel="Czech Republik">&#268;esk&aacute; republika</a><br />
+	<a href="http://www.dewalt.hu/" id="lnk_19" rel="Hungary">Magyarorsz&aacute;g</a><br />
+	<a href="http://www.dewalt.gr/" id="lnk_18" rel="Greece">&Epsilon;&lambda;&lambda;&#940;&sigmaf;</a><br />
+	<a href="http://www.dewalt.be/" id="lnk_3" rel="Belgium">Belgi&euml;/Belgique/<br />Luxembourg</a><br />
+	<a href="http://www.dewalt.sk/" id="lnk_14" rel="Slovakia">Slovensko</a><br />
+	<a href="http://www.dewalt.ch/" id="lnk_20" rel="Switzerland">Switzerland</a><br />
+	<a href="http://www.dewalt.at/" id="lnk_16" rel="Austria">&Ouml;sterreich</a><br />
+	<a href="http://www.dewalt.nl/" id="lnk_1" rel="Netherlands">Nederlands</a><br />
+	<a href="http://www.dewalt.ru/" id="lnk_23" rel="Russia">&#1056;&#1086;&#1089;&#1089;&#1080;&#1103;</a><br />
+	<a href="http://www.dewalt.ro/" id="lnk_24" rel="Romania">Romania</a><br />
+	<a href="http://www.dewalt.co.uk/" id="lnk_25" rel="Lietuva">Lietuva</a><br />
+	<a href="http://www.dewalt.co.uk/" id="lnk_27" rel="Eesti">Eesti</a><br />
+	<a href="http://www.dewalt.co.uk/" id="lnk_26" rel="Latvija">Latvija</a><br />
+	<a href="http://www.dewalt.com.tr/" id="lnk_28" rel="Türkiye">Türkiye</a></div> 
+</div>
+<!--end main right area-->
+<div class="boxclear">&nbsp;</div>
+
+</div>
+</div>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-461274-7";
+urchinTracker();
+</script>
+</body>
+</html>

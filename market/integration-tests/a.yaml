@@ -1,0 +1,432 @@
+service: wms_autotests
+title: WMS Autotests
+
+shared:
+  save-result-requirements:
+    requirements: &save-result-requirements
+      sandbox:
+        client_tags: "MULTISLOT"
+        dns: dns64
+        platform: linux
+        priority:
+          class: SERVICE
+          subclass: HIGH
+  multitesting-configs:
+    cleanup: &autotest-cleanup
+      conditions:
+        reasons:
+          - pr-merged
+          - new-diff-set
+          - pr-discarded
+        interrupt: true
+
+arcanum:
+  review:
+    min_approvers_count: 1
+    rules:
+      - subpaths: "!src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/yard/**, !src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/ffwfapi/**"
+        reviewers:
+          - name: testing_wms:other
+            ship: 0
+            assign: 2
+  auto_merge:
+    requirements:
+      - system: arcanum
+        type: approved
+        data:
+          ignore_self_ship: true
+        disabling_policy: need_reason
+      - system: arcanum
+        type: comment_issues_closed
+        disabling_policy: need_reason
+      - system: arcanum
+        type: st_issue_linked
+        disabling_policy: need_reason
+
+ci:
+  secret: sec-01fjgywa4ngztgbsh7f7bpk5av
+  runtime:
+    sandbox-owner: MARKET-WMS-CI
+
+  actions:
+    start-mt:
+      flow: mt-flow
+      triggers:
+        - on: pr
+          filters:
+            - sub-paths:
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/**"
+      cleanup:
+        conditions:
+          - reasons: [new-diff-set]
+            interrupt: true
+            cleanup: false
+          - reasons: [pr-merged, pr-discarded]
+            cleanup: true
+            interrupt: true
+    autotest-receiving:
+      title: '[Autotests] Receiving'
+      flow: autotests
+      flow-vars:
+        test_name: "receiving"
+        test_filter: "*wms.suites.multitesting.ReceivingTestSuite*"
+      triggers:
+        - on: pr
+          filters:
+            - sub-paths:
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/extensions/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/selenium/receiving/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/AbstractUiTest.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/suites/multitesting/ReceivingTestSuite.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/balances/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/common/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/initialReceiving/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/receiving/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/receivingAdmin/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/returns/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/transport/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/uitAdmin/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/AbstractPage.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/AbstractInputPage.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/HtmlElementsCommon.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/common/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/datacreator/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/process/Incoming.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/ui/Balances.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/ui/Receiving.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/api/InboundSteps.java"
+      cleanup: *autotest-cleanup
+    autotest-inbound-management:
+      title: '[Autotests] Inbound Management'
+      flow: autotests
+      flow-vars:
+        test_name: "inbound-management"
+        test_filter: "*wms.suites.multitesting.InboundManagementTestSuite*"
+      triggers:
+        - on: pr
+          filters:
+            - sub-paths:
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/suites/multitesting/InboundManagementTestSuite.java"
+      cleanup: *autotest-cleanup
+    autotest-reporter:
+      title: '[Autotests] Reporter'
+      flow: autotests
+      flow-vars:
+        test_name: "reporter"
+        test_filter: "*wms.*tests.selenium.reporter*"
+      triggers:
+        - on: pr
+          filters:
+            - sub-paths:
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/extensions/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/selenium/reporter/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/AbstractUiTest.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/report/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/AbstractPage.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/MultiTabsAbstractPage.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/HtmlElementsCommon.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/common/**"
+      cleanup: *autotest-cleanup
+    autotest-transportation:
+      title: '[Autotests] Transportation'
+      flow: autotests
+      flow-vars:
+        test_name: "transportation"
+        test_filter: "*wms.suites.multitesting.TransportationTestSuite*"
+      triggers:
+        - on: pr
+          filters:
+            - sub-paths:
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/extensions/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/selenium/transportation/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/AbstractUiTest.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/suites/multitesting/TransportationTestSuite.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/balances/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/outbound/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/transport/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/AbstractPage.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/AbstractInputPage.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/HtmlElementsCommon.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/common/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/datacreator/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/ui/Nok.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/api/InboundSteps.java"
+      cleanup: *autotest-cleanup
+    autotest-front:
+      title: '[Autotests] Front'
+      flow: autotests
+      flow-vars:
+        test_name: "front"
+        test_filter: "*wms.*tests.selenium.front*"
+      triggers:
+        - on: pr
+          filters:
+            - sub-paths:
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/extensions/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/selenium/front/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/AbstractUiTest.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/AbstractPage.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/HtmlElementsCommon.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/common/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/datacreator/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/ui/Login.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/api/InboundSteps.java"
+      cleanup: *autotest-cleanup
+    autotest-placement:
+      title: '[Autotests] Placement'
+      flow: autotests
+      flow-vars:
+        test_name: "placement"
+        test_filter: "*wms.*tests.selenium.placement*"
+      triggers:
+        - on: pr
+          filters:
+            - sub-paths:
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/extensions/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/selenium/placement/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/AbstractUiTest.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/placement/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/AbstractPage.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/AbstractInputPage.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/HtmlElementsCommon.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/common/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/datacreator/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/ui/Balances.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/ui/Placement.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/api/InboundSteps.java"
+      cleanup: *autotest-cleanup
+    autotest-inventorization:
+      title: '[Autotests] Inventorization'
+      flow: autotests
+      flow-vars:
+        test_name: "inventorization"
+        test_filter: "*wms.*tests.selenium.inventorization*"
+      triggers:
+        - on: pr
+          filters:
+            - sub-paths:
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/extensions/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/selenium/inventorization/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/AbstractUiTest.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/balances/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/inventoryzation/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/AbstractPage.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/HtmlElementsCommon.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/common/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/datacreator/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/ui/Balances.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/ui/Inventorization.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/api/InboundSteps.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/api/InventorizationSteps.java"
+      cleanup: *autotest-cleanup
+    autotest-replenishment:
+      title: '[Autotests] Replenishment'
+      flow: autotests
+      flow-vars:
+        test_name: "replenishment"
+        test_filter: "*wms.suites.multitesting.ReplenishmentTestSuite*"
+      triggers:
+        - on: pr
+          filters:
+            - sub-paths:
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/extensions/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/selenium/replenishment/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/AbstractUiTest.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/balances/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/transport/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/replenishment/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/wave/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/AbstractPage.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/HtmlElementsCommon.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/common/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/datacreator/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/scheduler/SchedulerSteps.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/ui/Balances.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/api/InboundSteps.java"
+      cleanup: *autotest-cleanup
+    autotest-api:
+      title: '[Autotests] Api'
+      flow: autotests
+      flow-vars:
+        test_name: "api"
+        test_filter: "*wms.suites.multitesting.ApiTestSuite*"
+      triggers:
+        - on: pr
+          filters:
+            - sub-paths:
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/api/servicebus/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/api/inbound_management/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/client/ServiceBus.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/suites/multitesting/ApiTestSuite.java"
+      cleanup: *autotest-cleanup
+    autotest-scheduler:
+      title: '[Autotests] Scheduler'
+      flow: autotests
+      flow-vars:
+        test_name: "scheduler"
+        test_filter: "*wms.suites.multitesting.SchedulerTestSuite*"
+      triggers:
+        - on: pr
+          filters:
+            - sub-paths:
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/extensions/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/selenium/scheduler/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/AbstractUiTest.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/AbstractPage.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/HtmlElementsCommon.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/common/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/datacreator/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/process/Outgoing.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/suites/multitesting/SchedulerTestSuite.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/api/InboundSteps.java"
+      cleanup: *autotest-cleanup
+    autotest-order:
+      title: '[Autotests] Order'
+      flow: autotests
+      flow-vars:
+        test_name: "order"
+        test_filter: "*wms.suites.multitesting.OrderTestSuite*"
+      triggers:
+        - on: pr
+          filters:
+            - sub-paths:
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/extensions/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/selenium/order/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/AbstractUiTest.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/suites/multitesting/OrderTestSuite.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/AbstractPage.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/AbstractInputPage.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/balances/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/common/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/consolidation/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/deliverySorting/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/packing/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/picking/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/precons/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/shipping/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/shippingsorter/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/ui/wave"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/HtmlElementsCommon.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/common/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/datacreator/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/process/Outgoing.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/ui/Balances.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/ui/Order.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/ui/Wave.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/api/AutostartSteps.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/api/InboundSteps.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/api/OrderSteps.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/step/api/OutboundSteps.java"
+      cleanup: *autotest-cleanup
+    autotest-android:
+      title: '[Autotests] Android'
+      flow: autotests
+      flow-vars:
+        test_name: "wms-android"
+        test_filter: "*wms.tests.android*"
+      triggers:
+        - on: pr
+          filters:
+            - sub-paths:
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/android/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/pageobjects/Android/**"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/tests/AbstractUiTest.java"
+                - "src/test/java/ru/yandex/market/delivery/deliveryintegrationtests/wms/selenium/AndroidDriverFactory.java"
+      cleanup: *autotest-cleanup
+  flows:
+    mt-flow:
+      title: WMS Multitesting
+      jobs:
+        start-mt:
+          title: Запускаем мультитестинг
+          task: projects/market/wms/start_mt
+          input:
+            tsum_project: wms
+            tsum_pipeline_type: wms-pr-check-ci-mt
+            robot_secret: sec-01dgd1q7tdynkch7sdcf1taxyt
+        sleep:
+          title: Ждем 25 минут
+          task: common/misc/sleep
+          needs: start-mt
+          input:
+            config:
+              sleep_time: 1500s
+        wait-mt: &wait-mt
+          title: Ждем запуск мультитестинга
+          task: projects/market/wms/wait_mt
+          needs: sleep
+          input:
+            tsum_project: wms
+            robot_secret: sec-01dgd1q7tdynkch7sdcf1taxyt
+    autotests:
+      jobs:
+        sleep:
+          title: Ждем 25 минут
+          task: common/misc/sleep
+          input:
+            config:
+              sleep_time: 1500s
+        wait-mt: *wait-mt
+        run-autotests:
+          title: "Запускаем автотесты ${flow-vars.test_name}"
+          task: common/nanny/kosher_ya_make
+          needs: wait-mt
+          runtime:
+            get-output-on-fail: true
+          input:
+            checkout_arcadia_from_url: "arcadia-arc:/#${context.launch_pull_request_info.vcs_info.feature_branch}"
+            test: true
+            allure_report: true
+            allure_report_ttl: 365
+            build_type: release
+            test_filters: "${flow-vars.test_filter}"
+            jvm_args: "-Dinfor.token=xxxxxxxxxxxxxxxxxxxxDimaKotovProstoKosmosWh13Testxxxxxxxxxxxxxxx 
+            -Dinfor.host=${tasks.wait-mt.output_params.mt_url}
+            -Dappium.apk.path=https://proxy.sandbox.yandex-team.ru/last/MARKET_WMS_ANDROID_APP?attrs={%22released%22:%20%22stable%22}"
+            test_tag: "ya:fat"
+            build_system: semi_distbuild
+            targets: "market/delivery/integration-tests"
+          requirements:
+            disk: 12GB
+            ram: 12G
+            cores: 8
+            sandbox:
+              client_tags: "MULTISLOT"
+              dns: dns64
+              platform: linux
+              priority:
+                class: SERVICE
+                subclass: HIGH
+        save-result-success:
+          title: "Сохраняем результат об успешном запуске автотестов"
+          task: projects/market/wms/autotests_stat_collector
+          needs: run-autotests
+          attempts: 3
+          requirements: *save-result-requirements
+          input:
+            test_name: "${flow-vars.test_name}"
+            result_status: "SUCCESS"
+            resource: "${(tasks.run-autotests.resources[?type == 'ALLURE_REPORT'])[0].id}"
+            sandbox_task_id: "${(tasks.run-autotests.resources[?type == 'ALLURE_REPORT'])[0].task_id}"
+        save-result-failed:
+          title: "Сохраняем результат о неуспешном запуске автотестов"
+          task: projects/market/wms/autotests_stat_collector
+          needs: run-autotests
+          needs-type: fail
+          attempts: 3
+          requirements: *save-result-requirements
+          input:
+            test_name: "${flow-vars.test_name}"
+            result_status: "FAILED"
+            resource: "${(tasks.run-autotests.resources[?type == 'ALLURE_REPORT'])[0].id}"
+            sandbox_task_id: "${(tasks.run-autotests.resources[?type == 'ALLURE_REPORT'])[0].task_id}"
+        complete:
+          title: Завершаемся или падаем если автотесты упали
+          task: common/misc/run_command
+          needs-type: any
+          needs:
+            - save-result-failed
+            - save-result-success
+          input:
+            config:
+              cmd_line: "if [ ${length(tasks.run-autotests.resources[?type == 'BUILD_OUTPUT'])} -gt 0 ]; then exit 0; else exit 1; fi"

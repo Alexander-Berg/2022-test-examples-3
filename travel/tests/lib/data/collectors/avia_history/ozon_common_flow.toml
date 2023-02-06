@@ -1,0 +1,98 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "ozon_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+    "--date-from", "2020-01-01",
+    "--date-to", "2020-01-01",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log_2020_01_01]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-01"
+
+[[yt.input.avia_partner_booking_log_2020_01_01.data]]
+    unixtime = 1577831516
+    source = "ozon"
+    partner = "ozon"
+    partner_id = 1
+    billing_order_id = 23
+    marker = "marker_1"
+    status = "paid"
+    created_at = "2020-01-01 12:59:39"
+    confirm_dt = "2020-01-01 13:03:23"
+    order_id = "order_1"
+    price = 111
+    currency = ""
+    from = "OMS"
+    to = "DME"
+    trip_type = "oneway"
+    ticket_number = ""
+
+[[yt.input.avia_partner_booking_log_2020_01_01.data]]
+    unixtime = 1577831516
+    source = "other_source"
+    partner = "other_partner"
+    partner_id = 1
+    billing_order_id = 23
+    marker = "marker_2"
+    status = "paid"
+    created_at = "2020-01-01 12:59:39"
+    confirm_dt = "2020-01-01 13:03:23"
+    order_id = "order_2"
+    price = 222
+    currency = ""
+    from = "OMS"
+    to = "DME"
+    trip_type = "oneway"
+    ticket_number = ""
+
+[yt.input.avia_partner_booking_log_other_date]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-02-02"
+
+[[yt.input.avia_partner_booking_log_other_date.data]]
+    unixtime = 1577831516
+    source = "ozon"
+    partner = "ozon"
+    partner_id = 1
+    billing_order_id = 23
+    marker = "marker_3"
+    status = "paid"
+    created_at = "2020-01-01 12:59:39"
+    confirm_dt = "2020-01-01 13:03:23"
+    order_id = "order_3"
+    price = 333
+    currency = ""
+    from = "OMS"
+    to = "DME"
+    trip_type = "oneway"
+    ticket_number = ""
+
+[lb]
+    topic = "topic-ozon_history"
+    fields_to_skip = ["last_seen", "_timestamp", "updated_at"]
+
+[[lb.expected]]
+    partner_name = "ozon"
+    travel_order_id = "ozon:order_1"
+    partner_order_id = "order_1"
+    created_at = 1577883579
+    status = "confirmed"
+    label = "marker_1"
+    currency_code = "RUB"
+    order_amount = 111
+    category = "avia"
+    source = "history"
+    partner_id = 1
+    billing_order_id = 23
+    origin = "OMS"
+    destination = "DME"
+    trip_type = "oneway"

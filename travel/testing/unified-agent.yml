@@ -1,0 +1,92 @@
+import:
+  - unified-agent-base.yml
+
+routes:
+  - input:
+      id: main_app_log_input
+      plugin: grpc
+      config:
+        uri: localhost:16400
+    channel:
+      pipe:
+        - pipe_ref:
+            name: main_app_log_pipe
+      output:
+        plugin: logbroker
+        config:
+          endpoint: logbroker.yandex.net
+          topic: /travel/orders-app/application-log
+          tvm:
+            client_id: 2002740
+            destination_id: 2001059
+            secret:
+              env: PUSH_CLIENT_TVM_SECRET
+          export_session_meta_keys:
+            - file
+            - server
+  - input:
+      id: partners_http_input
+      plugin: grpc
+      config:
+        uri: localhost:16401
+    channel:
+      pipe:
+        - pipe_ref:
+            name: partners_http_pipe
+      output:
+        plugin: logbroker
+        config:
+          endpoint: logbroker.yandex.net
+          topic: /travel/test/orders-partners-http-log
+          tvm:
+            client_id: 2002740
+            destination_id: 2001059
+            secret:
+              env: PUSH_CLIENT_TVM_SECRET
+          export_session_meta_keys:
+            - file
+            - server
+  - input:
+      id: workflow_events_input
+      plugin: grpc
+      config:
+        uri: localhost:16402
+    channel:
+      pipe:
+        - pipe_ref:
+            name: workflow_events_pipe
+      output:
+        plugin: logbroker
+        config:
+          endpoint: logbroker.yandex.net
+          topic: /travel/test/orders-workflow-events-log
+          tvm:
+            client_id: 2002740
+            destination_id: 2001059
+            secret:
+              env: PUSH_CLIENT_TVM_SECRET
+          export_session_meta_keys:
+            - file
+            - server
+  - input:
+      id: train_refunds_cpa_export_input
+      plugin: grpc
+      config:
+        uri: localhost:16403
+    channel:
+      pipe:
+        - pipe_ref:
+            name: train_refunds_cpa_export_pipe
+      output:
+        plugin: logbroker
+        config:
+          endpoint: logbroker.yandex.net
+          topic: /travel/test/train-refunds-cpa-export-log
+          tvm:
+            client_id: 2002740
+            destination_id: 2001059
+            secret:
+              env: PUSH_CLIENT_TVM_SECRET
+          export_session_meta_keys:
+            - file
+            - server

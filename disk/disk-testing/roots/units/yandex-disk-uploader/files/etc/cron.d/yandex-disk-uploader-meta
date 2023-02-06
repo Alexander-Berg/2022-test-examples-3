@@ -1,0 +1,13 @@
+SHELL=/bin/sh
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+#MAILTO=disk-root@yandex-team.ru
+
+# clean imagemagick tmp files
+*/30 * * * * root  find /tmp -name 'magick-*' -mmin +30 -delete
+
+# clean uploader tmp files (CHEMODAN-18556)
+30 0 * * * root if [ -d /u0/disk/uploader/tmp/ ]; then flock -n /tmp/rm-uploader-tmp.lock find /u0/disk/uploader/tmp/ -maxdepth 1 -mindepth 1 -type d -mtime +1 | xargs -n 1 -I % rm -rf % >/dev/null ; fi
+
+# kill long dcraw (CHEMODAN-19359)
+*/5 * * * * root ps axwww -o pid,bsdtime,command  | grep -i dcraw | grep -v grep | cut -d':' -f1 | awk '{if ($2> 180) {print $1}}' | xargs -I % -n 1 kill -9 %
+

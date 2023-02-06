@@ -1,0 +1,230 @@
+{
+  "owner": "checkout",
+  "tableName": "checkouter_testing",
+  "splits": {
+    "method": "http_method",
+    "url": "url",
+    "dc": "if(substring(host, 1, 3) in ('iva', 'man', 'vla', 'sas'), substring(host, 1, 3), if(endsWith(host, 'yp-c.yandex.net'), substring(host, position(host, '.') + 1, 3), if(dictGetString('dc', 'dc', sipHash64(host)) <> '', dictGetString('dc', 'dc', sipHash64(host)), 'undefined_dc')))",
+    "marketEnv": "marketEnvironmentProfile"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "checkouter.PLANESHIFT.TESTING.${dc}.${method}.${url}.5xx-percent",
+        "checkouter.PLANESHIFT.TESTING.${dc}.${url}.5xx-percent",
+        "checkouter.PLANESHIFT.TESTING.${method}.${url}.5xx-percent",
+        "checkouter.PLANESHIFT.TESTING.${url}.5xx-percent"
+      ],
+      "filter": "marketEnvironmentProfile = 'planeshift'",
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code >=500 and http_code < 600 and not service_url) / countIf(not service_url) * 100",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.PLANESHIFT.TESTING.${dc}.${method}.5xx-percent",
+        "checkouter.PLANESHIFT.TESTING.${dc}.5xx-percent",
+        "checkouter.PLANESHIFT.TESTING.${method}.5xx-percent",
+        "checkouter.PLANESHIFT.TESTING.5xx-percent"
+      ],
+      "filter": "marketEnvironmentProfile = 'planeshift'",
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code >=500 and http_code < 600 and not service_url) / countIf(not service_url) * 100",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.PLANESHIFT.TESTING.${dc}.${method}.${url}.timings",
+        "checkouter.PLANESHIFT.TESTING.${dc}.${url}.timings",
+        "checkouter.PLANESHIFT.TESTING.${method}.${url}.timings",
+        "checkouter.PLANESHIFT.TESTING.${url}.timings"
+      ],
+      "filter": "marketEnvironmentProfile = 'planeshift'",
+      "period": "FIVE_MIN",
+      "metricField": "resptime_ms",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.PLANESHIFT.TESTING.${dc}.${method}.timings",
+        "checkouter.PLANESHIFT.TESTING.${dc}.timings",
+        "checkouter.PLANESHIFT.TESTING.${method}.timings",
+        "checkouter.PLANESHIFT.TESTING.timings"
+      ],
+
+      "period": "FIVE_MIN",
+      "metricField": "resptime_ms",
+      "filter":"not service_url and marketEnvironmentProfile = 'planeshift'",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.PLANESHIFT.TESTING.${dc}.${method}.${url}.errors",
+        "checkouter.PLANESHIFT.TESTING.${dc}.${url}.errors",
+        "checkouter.PLANESHIFT.TESTING.${method}.${url}.errors",
+        "checkouter.PLANESHIFT.TESTING.${url}.errors"
+      ],
+      "filter": "marketEnvironmentProfile = 'planeshift'",
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code != 200 and not service_url) / countIf(not service_url)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.PLANESHIFT.TESTING.${dc}.${method}.errors",
+        "checkouter.PLANESHIFT.TESTING.${dc}.errors",
+        "checkouter.PLANESHIFT.TESTING.${method}.errors",
+        "checkouter.PLANESHIFT.TESTING.errors"
+      ],
+      "filter": "marketEnvironmentProfile = 'planeshift'",
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code != 200 and not service_url) / countIf(not service_url)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.PLANESHIFT.TESTING.${dc}.${method}.${url}.rps",
+        "checkouter.PLANESHIFT.TESTING.${dc}.${url}.rps",
+        "checkouter.PLANESHIFT.TESTING.${method}.${url}.rps",
+        "checkouter.PLANESHIFT.TESTING.${url}.rps"
+      ],
+      "filter": "marketEnvironmentProfile = 'planeshift'",
+      "period": "FIVE_MIN",
+      "metricField": "count()/(5*60)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.PLANESHIFT.TESTING.${dc}.${method}.rps",
+        "checkouter.PLANESHIFT.TESTING.${dc}.rps",
+        "checkouter.PLANESHIFT.TESTING.${method}.rps",
+        "checkouter.PLANESHIFT.TESTING.rps"
+      ],
+      "filter": "marketEnvironmentProfile = 'planeshift'",
+      "period": "FIVE_MIN",
+      "metricField": "countIf(not service_url)/(5*60)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.PLANESHIFT.TESTING.${dc}.${method}.${url}.5xx",
+        "checkouter.PLANESHIFT.TESTING.${dc}.${url}.5xx",
+        "checkouter.PLANESHIFT.TESTING.${method}.${url}.5xx",
+        "checkouter.PLANESHIFT.TESTING.${url}.5xx"
+      ],
+      "filter": "marketEnvironmentProfile = 'planeshift'",
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code >=500 and http_code < 600) / count()",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.PLANESHIFT.TESTING.${dc}.${method}.5xx",
+        "checkouter.PLANESHIFT.TESTING.${dc}.5xx",
+        "checkouter.PLANESHIFT.TESTING.${method}.5xx",
+        "checkouter.PLANESHIFT.TESTING.5xx"
+      ],
+      "filter": "marketEnvironmentProfile = 'planeshift'",
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code >=500 and http_code < 600 and not service_url) / countIf(not service_url)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.PLANESHIFT.TESTING.${dc}.${method}.${url}.4xx-percent",
+        "checkouter.PLANESHIFT.TESTING.${dc}.${url}.4xx-percent",
+        "checkouter.PLANESHIFT.TESTING.${method}.${url}.4xx-percent",
+        "checkouter.PLANESHIFT.TESTING.${url}.4xx"
+      ],
+      "filter": "marketEnvironmentProfile = 'planeshift'",
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code >=400 and http_code < 500) / count() * 100",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.PLANESHIFT.TESTING.${dc}.${method}.4xx-percent",
+        "checkouter.PLANESHIFT.TESTING.${dc}.4xx-percent",
+        "checkouter.PLANESHIFT.TESTING.${method}.4xx-percent",
+        "checkouter.PLANESHIFT.TESTING.4xx-percent"
+      ],
+      "filter": "marketEnvironmentProfile = 'planeshift'",
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code >=400 and http_code < 500 and not service_url) / countIf(not service_url) * 100",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.PLANESHIFT.TESTING.${method}.${url}.hit-rate",
+        "checkouter.PLANESHIFT.TESTING.${url}.hit-rate"
+      ],
+      "filter": "marketEnvironmentProfile = 'planeshift'",
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code = 420)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.PLANESHIFT.TESTING.${method}.hit-rate",
+        "checkouter.PLANESHIFT.TESTING.hit-rate"
+      ],
+      "filter": "marketEnvironmentProfile = 'planeshift'",
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code = 420 and not service_url)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.PLANESHIFT.TESTING.pure.${dc}.${method}.${url}.timings",
+        "checkouter.PLANESHIFT.TESTING.pure.${dc}.${url}.timings",
+        "checkouter.PLANESHIFT.TESTING.pure.${method}.${url}.timings",
+        "checkouter.PLANESHIFT.TESTING.pure.${url}.timings"
+      ],
+      "filter": "marketEnvironmentProfile = 'planeshift'",
+      "period": "FIVE_MIN",
+      "metricField": "pure_time_ms",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.PLANESHIFT.TESTING.pure.${dc}.${method}.timings",
+        "checkouter.PLANESHIFT.TESTING.pure.${dc}.timings",
+        "checkouter.PLANESHIFT.TESTING.pure.${method}.timings",
+        "checkouter.PLANESHIFT.TESTING.pure.timings"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "pure_time_ms",
+      "filter":"not service_url and marketEnvironmentProfile = 'planeshift'",
+      "type": "QUANTILE_TIMING"
+    }
+  ],
+  "dashboards": [
+    {
+      "metric": "checkouter.PLANESHIFT.TESTING.${method}.timings",
+      "id": "checkouter-planeshift-testing-method-timings",
+      "title": "checkouter method timings",
+      "graphsInRow": 2,
+      "tags": [
+        "checkouter"
+      ]
+    },
+    {
+      "metric": "checkouter.PLANESHIFT.TESTING.${method}.errors",
+      "id": "checkouter-planeshift-testing-method-errors",
+      "title": "checkouter method errors (5xx)",
+      "graphsInRow": 2,
+      "tags": [
+        "checkouter"
+      ]
+    },
+    {
+      "metric": "checkouter.PLANESHIFT.TESTING.${method}.rps",
+      "id": "checkouter-planeshift-testing-method-rps",
+      "title": "checkouter method rps",
+      "graphsInRow": 2,
+      "tags": [
+        "checkouter"
+      ]
+    }
+  ]
+}

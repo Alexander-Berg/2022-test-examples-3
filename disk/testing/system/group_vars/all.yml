@@ -1,0 +1,54 @@
+---
+mpfs:
+  name: mpfs
+  issue_summary_keyword: Диска
+  package_name: python-mpfs-disk
+  aqua:
+    pack_id: 52fb1749e4b0325d65c636b6
+    props:
+      mpfs.host: http://mpfs03f.dsp.yandex.net
+      worker.host.first: http://mworker03f.dsp.yandex.net
+      worker.host.second: http://mworker04f.dsp.yandex.net
+  deploy_groups:
+    - project: disk
+      workflow: mpfs-disk
+      deploy_group: disk.mpfs-disk-prestable-autotests
+api:
+  name: api
+  issue_summary_keyword: Платформы
+  package_name: python-mpfs-api
+  aqua:
+    pack_id: 5530b17ae4b00c306643ee1e
+    props:
+      platform.host: api03f.dsp.yandex.net
+  deploy_groups:
+    - project: disk
+      workflow: mpfs-api
+      deploy_group: disk.mpfs-api-prestable-autotests
+queue:
+  package_name: python-mpfs-queue
+  qloud_deploy_env: disk.disk-mworker.prestable-autotests
+  deploy_groups:
+    - project: disk
+      workflow: python-mpfs-queue
+      deploy_group: disk.python-mpfs-queue-prestable-autotests
+
+mpfs_load:
+  name: mpfs_load
+  issue_summary_keyword: Диска
+  package_name: python-mpfs-disk
+  deploy_groups:
+    - project: disk
+      workflow: mpfs-disk
+      deploy_group: disk.mpfs-disk-testing-load
+  mpfs:
+      uid: 4032539912 # disktestload
+      host: mpfs-load01e.dst.yandex.net
+      port: 80
+  tank:
+      schedule: line(1, 50, 1m) const(25, 1m)
+      names: 
+        - matilda.tanks.yandex.net
+        - peony.tanks.yandex.net
+        - violet.tanks.yandex.net
+        - tulip.tanks.yandex.net

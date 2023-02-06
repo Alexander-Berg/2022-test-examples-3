@@ -1,0 +1,117 @@
+--- a/httpcore/src/test/java/org/apache/http/impl/pool/TestBasicConnPool.java
++++ b/httpcore/src/test/java/org/apache/http/impl/pool/TestBasicConnPool.java
+@@ -33,7 +33,7 @@
+
+ import javax.net.ssl.SSLServerSocket;
+ import javax.net.ssl.SSLServerSocketFactory;
+-import javax.net.ssl.SSLSocketFactory;
++//import javax.net.ssl.SSLSocketFactory;
+
+ import org.apache.http.HttpClientConnection;
+ import org.apache.http.HttpHost;
+@@ -92,7 +92,7 @@ public void testHttpCreateConnection() throws Exception {
+         assertEquals(100, conn.getSocketTimeout());
+     }
+
+-    @Test
++    /*@Test
+     public void testHttpsCreateConnection() throws Exception {
+         final SocketConfig sconfig = SocketConfig.custom().setSoTimeout(100).build();
+         connFactory = new BasicConnFactory(
+@@ -104,7 +104,7 @@ public void testHttpsCreateConnection() throws Exception {
+
+         assertTrue(conn.isOpen());
+         assertEquals(100, conn.getSocketTimeout());
+-    }
++    }*/
+
+     @Test
+     public void testHttpCreateEntry() throws Exception {
+--- a/httpcore/src/test/java/org/apache/http/ssl/TestSSLContextBuilder.java
++++ b/httpcore/src/test/java/org/apache/http/ssl/TestSSLContextBuilder.java
+@@ -42,10 +42,10 @@
+ import java.security.UnrecoverableKeyException;
+ import java.security.cert.CertificateException;
+ import java.security.cert.X509Certificate;
+-import java.util.Arrays;
+-import java.util.LinkedHashSet;
++//import java.util.Arrays;
++//import java.util.LinkedHashSet;
+ import java.util.Map;
+-import java.util.Set;
++//import java.util.Set;
+ import java.util.concurrent.Callable;
+ import java.util.concurrent.ExecutorService;
+ import java.util.concurrent.Executors;
+@@ -55,8 +55,8 @@
+
+ import javax.net.ssl.KeyManagerFactory;
+ import javax.net.ssl.SSLContext;
+-import javax.net.ssl.SSLException;
+-import javax.net.ssl.SSLHandshakeException;
++//import javax.net.ssl.SSLException;
++//import javax.net.ssl.SSLHandshakeException;
+ import javax.net.ssl.SSLPeerUnverifiedException;
+ import javax.net.ssl.SSLServerSocket;
+ import javax.net.ssl.SSLSession;
+@@ -75,7 +75,7 @@
+  */
+ public class TestSSLContextBuilder {
+
+-    private static final String PROVIDER_SUN_JSSE = "SunJSSE";
++    private static final String PROVIDER_SUN_JSSE = "IBMJSSE2";
+
+     private static boolean isWindows() {
+         return System.getProperty("os.name").contains("Windows");
+@@ -613,7 +613,7 @@ public Principal call() throws Exception {
+     }
+
+
+-    @Test
++    /*@Test
+     public void testSSLHandshakeProtocolMismatch1() throws Exception {
+         if (isWindows()) {
+             thrown.expect(IOException.class);
+@@ -720,7 +720,7 @@ public Boolean call() throws Exception {
+         } finally {
+             clientSocket.close();
+         }
+-    }
++    }*/
+
+     @Test
+     public void testBuildWithProvider() throws Exception {
+--- a/httpcore-nio/src/test/java/org/apache/http/nio/integration/TestJSSEProviderIntegration.java
++++ b/httpcore-nio/src/test/java/org/apache/http/nio/integration/TestJSSEProviderIntegration.java
+@@ -65,6 +65,7 @@
+ import org.junit.Assert;
+ import org.junit.Assume;
+ import org.junit.BeforeClass;
++import org.junit.Ignore;
+ import org.junit.Rule;
+ import org.junit.Test;
+ import org.junit.rules.ExternalResource;
+@@ -226,6 +227,7 @@ private HttpHost start() throws IOException, InterruptedException {
+         return new HttpHost("localhost", address.getPort(), "https");
+     }
+
++    @Ignore
+     @Test
+     public void testHttpGets() throws Exception {
+         this.server.registerHandler("*", new BasicAsyncRequestHandler(new SimpleRequestHandler()));
+@@ -245,6 +247,7 @@ public void testHttpGets() throws Exception {
+         }
+     }
+
++    @Ignore
+     @Test
+     public void testHttpGetsCloseConnection() throws Exception {
+         this.server.registerHandler("*", new BasicAsyncRequestHandler(new SimpleRequestHandler()));
+@@ -265,6 +268,7 @@ public void testHttpGetsCloseConnection() throws Exception {
+         }
+     }
+
++    @Ignore
+     @Test
+     public void testHttpGetIdentityTransfer() throws Exception {
+         this.server.setHttpProcessor(new ImmutableHttpProcessor(new ResponseServer("TEST-SERVER/1.1")));

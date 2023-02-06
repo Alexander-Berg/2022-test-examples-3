@@ -1,0 +1,240 @@
+bin_path = "travel/cpa/data_processing/update_snapshots/update_snapshots"
+
+args = [
+    "--yt-proxy", "%(yt_proxy)s",
+    "--src-dir", "//home/tests/update_snapshots/collector_logs",
+    "--dst-dir", "//home/tests/update_snapshots/snapshots",
+    "--fake-now", "2033-05-19T00:00:00",
+]
+
+checkers = [
+    "yt",
+]
+
+[yt.input.collector_logs_0]
+    path = "//home/tests/update_snapshots/collector_logs/logs_table_0"
+
+[[yt.input.collector_logs_0.data]]
+    category = "hotels"
+    partner_name = "partner_0"
+    partner_order_id = "0"
+    travel_order_id = "partner_0:0"
+    status = "pending"
+    label = "partner_0_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    profit_amount = 1.0
+    created_at = 2000000000
+    updated_at = 2000001000
+
+# status changed
+[[yt.input.collector_logs_0.data]]
+    category = "hotels"
+    partner_name = "partner_0"
+    partner_order_id = "0"
+    travel_order_id = "partner_0:0"
+    status = "confirmed"
+    label = "partner_0_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    profit_amount = 1.0
+    created_at = 2000000000
+    updated_at = 2000002000
+
+
+[yt.input.collector_logs_1]
+    path = "//home/tests/update_snapshots/collector_logs/logs_table_1"
+
+[[yt.input.collector_logs_1.data]]
+    category = "hotels"
+    partner_name = "partner_0"
+    partner_order_id = "1"
+    travel_order_id = "partner_0:1"
+    status = "pending"
+    label = "partner_0_0"
+    currency_code = "RUB"
+    order_amount = 20.0
+    profit_amount = 2.0
+    created_at = 2000000000
+    updated_at = 2000001000
+
+# profit_amount changed
+[[yt.input.collector_logs_1.data]]
+    category = "hotels"
+    partner_name = "partner_0"
+    partner_order_id = "1"
+    travel_order_id = "partner_0:1"
+    status = "pending"
+    label = "partner_0_0"
+    currency_code = "RUB"
+    order_amount = 20.0
+    profit_amount = 3.0
+    created_at = 2000000000
+    updated_at = 2000002000
+
+
+[yt.input.collector_logs_2]
+    path = "//home/tests/update_snapshots/collector_logs/logs_table_2"
+
+[[yt.input.collector_logs_2.data]]
+    category = "hotels"
+    partner_name = "partner_0"
+    partner_order_id = "2"
+    travel_order_id = "partner_0:2"
+    status = "pending"
+    label = "partner_0_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    profit_amount = 1.0
+    created_at = 2000000000
+    updated_at = 2000001000
+
+# created_at changed
+[[yt.input.collector_logs_2.data]]
+    category = "hotels"
+    partner_name = "partner_0"
+    partner_order_id = "2"
+    travel_order_id = "partner_0:2"
+    status = "cancelled"
+    label = "partner_0_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    profit_amount = 0.0
+    created_at = 2000001000
+    updated_at = 2000002000
+
+[yt.input.snapshots]
+    path = "//home/tests/update_snapshots/snapshots/order_snapshots"
+
+[[yt.input.snapshots.data]]
+    category = "hotels"
+    partner_name = "partner_1"
+    partner_order_id = "0"
+    travel_order_id = "partner_1:0"
+    status = "pending"
+    label = "partner_0_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    profit_amount = 1.0
+    created_at = 2000000000
+    updated_at = 2000001000
+    last_seen = 2000002000
+
+[yt.output.snapshots]
+    path = "//home/tests/update_snapshots/snapshots/order_snapshots"
+    ignore_unknown_fields = true
+
+# data from logs_table_0
+[[yt.output.snapshots.data]]
+    category = "hotels"
+    partner_name = "partner_0"
+    partner_order_id = "0"
+    travel_order_id = "partner_0:0"
+    status = "pending"
+    label = "partner_0_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    profit_amount = 1.0
+    created_at = 2000000000
+    updated_at = 2000001000
+    last_seen = 2000002000
+
+[[yt.output.snapshots.data]]
+    category = "hotels"
+    partner_name = "partner_0"
+    partner_order_id = "0"
+    travel_order_id = "partner_0:0"
+    status = "confirmed"
+    label = "partner_0_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    profit_amount = 1.0
+    created_at = 2000000000
+    updated_at = 2000002000
+    last_seen = 2000002000
+
+# data from logs_table_1
+[[yt.output.snapshots.data]]
+    category = "hotels"
+    partner_name = "partner_0"
+    partner_order_id = "1"
+    travel_order_id = "partner_0:1"
+    status = "pending"
+    label = "partner_0_0"
+    currency_code = "RUB"
+    order_amount = 20.0
+    profit_amount = 2.0
+    created_at = 2000000000
+    updated_at = 2000001000
+    last_seen = 2000002000
+
+[[yt.output.snapshots.data]]
+    category = "hotels"
+    partner_name = "partner_0"
+    partner_order_id = "1"
+    travel_order_id = "partner_0:1"
+    status = "pending"
+    label = "partner_0_0"
+    currency_code = "RUB"
+    order_amount = 20.0
+    profit_amount = 3.0
+    created_at = 2000000000
+    updated_at = 2000002000
+    last_seen = 2000002000
+
+# data from logs_table_2
+[[yt.output.snapshots.data]]
+    category = "hotels"
+    partner_name = "partner_0"
+    partner_order_id = "2"
+    travel_order_id = "partner_0:2"
+    status = "pending"
+    label = "partner_0_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    profit_amount = 1.0
+    created_at = 2000000000
+    updated_at = 2000001000
+    last_seen = 2000002000
+
+[[yt.output.snapshots.data]]
+    category = "hotels"
+    partner_name = "partner_0"
+    partner_order_id = "2"
+    travel_order_id = "partner_0:2"
+    status = "cancelled"
+    label = "partner_0_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    profit_amount = 0.0
+    created_at = 2000001000
+    updated_at = 2000002000
+    last_seen = 2000002000
+
+# data from order_snapshots table
+[[yt.output.snapshots.data]]
+    category = "hotels"
+    partner_name = "partner_1"
+    partner_order_id = "0"
+    travel_order_id = "partner_1:0"
+    status = "pending"
+    label = "partner_0_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    profit_amount = 1.0
+    created_at = 2000000000
+    updated_at = 2000001000
+    last_seen = 2000002000
+
+[yt.output.processed_snapshots]
+    path = "//home/tests/update_snapshots/snapshots/processed_snapshots"
+    fields_to_skip = ["content_revision"]
+
+[[yt.output.processed_snapshots.data]]
+    table = "//home/tests/update_snapshots/collector_logs/logs_table_0"
+
+[[yt.output.processed_snapshots.data]]
+    table = "//home/tests/update_snapshots/collector_logs/logs_table_1"
+
+[[yt.output.processed_snapshots.data]]
+    table = "//home/tests/update_snapshots/collector_logs/logs_table_2"

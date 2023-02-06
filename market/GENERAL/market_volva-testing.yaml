@@ -1,0 +1,19 @@
+juggler:
+  checks:
+  - aggregator: logic_or
+    service: pgaas_free_space
+    children:
+      - host: host=market_volva-testing & tag=monitoring_alert_id_3813264e-5a9b-4f13-96c8-4ef3cecee724
+        service: all
+        type: EVENTS
+    tags:
+      - market_testing
+      - marketantifraudvolvareader
+      - market
+      - testing
+      - marketantifraud_volva
+      - marketantifraud_volva_test
+
+  default:
+    host: market_volva-testing
+    namespace: market.antifraud

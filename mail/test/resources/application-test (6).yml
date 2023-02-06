@@ -1,0 +1,23 @@
+test-port: ${random.port}
+tvm2:
+  token: "${tvmtool.token}"
+  services: # service tvm ids which for we send requests
+    self: 42
+  allowed-clients: # service tvm ids which for we handle requests
+    self: 42
+micronaut:
+  security:
+    enabled: true
+  server:
+    port: ${test-port}
+  http:
+    services:
+      tvm-tool:
+        urls:
+          - http://localhost:${tvmtool.port}
+      self:
+        urls:
+          - http://localhost:${test-port}
+      self-unauthorized:
+        urls:
+          - http://localhost:${test-port}

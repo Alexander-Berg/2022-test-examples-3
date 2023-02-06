@@ -1,0 +1,95 @@
+{#
+    C1 - model category.
+    C2 - offer category.
+
+    R11 - trivial recipe for model category.
+    R12, R13 - nontrivial recipes for model category.
+        R12 checks equality.
+        R13 checks lower bound.
+        R14 checks both bounds.
+    R21 - trivial recipe for offer category.
+    R22 - nontrivial recipe for offer category.
+        R22 checks upper bound.
+#}
+{% if table == "features_item_pair_recipe_item_conformity" %}
+    {# Result data. #}
+    {% table table %}
+        {% if linked_item_type == "category" %}
+            ["R11", "C1", 1.0, "recipe", "category", "{{ day }}"],
+            ["R21", "C2", 1.0, "recipe", "category", "{{ day }}"]
+        {% elif linked_item_type == "model" %}
+            ["R12", "M11", 1.0, "recipe", "model", "{{ day }}"],
+            ["R13", "M13", 1.0, "recipe", "model", "{{ day }}"],
+            ["R13", "M14", 1.0, "recipe", "model", "{{ day }}"],
+            ["R14", "M16", 1.0, "recipe", "model", "{{ day }}"],
+            ["R14", "M17", 1.0, "recipe", "model", "{{ day }}"]
+        {% elif linked_item_type == "offer" %}
+            ["R22", "O22", 1.0, "recipe", "offer", "{{ day }}"]
+        {% endif %}
+    {% endtable %}
+{% elif table == "items_category_model_count" %}
+    {% table table %}
+        ["C1", 6, "category", "{{ day }}"]
+        {# C2 is offer only category without model count. #}
+    {% endtable %}
+{% elif table == "items_model_category_id" %}
+    {% table table %}
+        ["M11", "C1", "model", "{{ day }}"],
+        ["M12", "C1", "model", "{{ day }}"],
+        ["M13", "C1", "model", "{{ day }}"],
+        ["M14", "C1", "model", "{{ day }}"],
+        ["M15", "C1", "model", "{{ day }}"],
+        ["M16", "C1", "model", "{{ day }}"],
+        ["M17", "C1", "model", "{{ day }}"],
+        ["M18", "C1", "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "items_model_parameters" %}
+    {% table table %}
+        ["M11", {"0": "true"}, "model", "{{ day }}"],
+        ["M12", {"0": "false"}, "model", "{{ day }}"],
+        ["M13", {"1": "17"}, "model", "{{ day }}"],
+        ["M14", {"1": "17"}, "model", "{{ day }}"],
+        ["M15", {"1": "-1"}, "model", "{{ day }}"],
+        ["M16", {"2": "42"}, "model", "{{ day }}"],
+        ["M17", {"2": "42"}, "model", "{{ day }}"],
+        ["M18", {"2": "52"}, "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "items_offer_category_id" %}
+    {% table table %}
+        {# Offer from model category - should be ignored #}
+        ["O11", "C1", "offer", "{{ day }}"],
+        {# Offers from offer only category #}
+        ["O21", "C2", "offer", "{{ day }}"],
+        ["O22", "C2", "offer", "{{ day }}"],
+        ["O23", "C2", "offer", "{{ day }}"]
+    {% endtable %}
+{% elif table == "items_offer_parameters" %}
+    {% table table %}
+        ["O21", {"1": "9001"}, "offer", "{{ day }}"],
+        ["O22", {"1": "8999"}, "offer", "{{ day }}"],
+        {# O23 has unspecified parameter 1, so it shouldn't pass recipe R22. #}
+        ["O23", {"2": "whatever"}, "offer", "{{ day }}"]
+    {% endtable %}
+{% elif table == "items_recipe_category_id" %}
+    {% table table %}
+        ["R11", "C1", "recipe", "{{ day }}"],
+        ["R12", "C1", "recipe", "{{ day }}"],
+        ["R13", "C1", "recipe", "{{ day }}"],
+        ["R14", "C1", "recipe", "{{ day }}"],
+        ["R21", "C2", "recipe", "{{ day }}"],
+        ["R22", "C2", "recipe", "{{ day }}"]
+    {% endtable %}
+{% elif table == "items_recipe_filter" %}
+    {% table table %}
+        {# R11 is trivial recipe without filter. #}
+        {# R12 checks equality of boolean parameter. "1" should normalize to "true". #}
+        ["R12", "[{\"param_id\": \"0\", \"param_type\": \"BOOLEAN\", \"value_id\": \"1\"}]", "recipe", "{{ day }}"],
+        {# R13 checks lower bound of numeric parameter. #}
+        ["R13", "[{\"param_id\": \"1\", \"param_type\": \"NUMERIC\", \"min_value\": \"0\"}]", "recipe", "{{ day }}"],
+        {# R14 checks both upper and lower bounds of numeric parameter. #}
+        ["R14", "[{\"param_id\": \"2\", \"param_type\": \"NUMERIC\", \"min_value\": \"42\", \"max_value\": \"42\"}]", "recipe", "{{ day }}"],
+        {# R21 is trivial recipe without filter. #}
+        {# R22 checks upper bound. Is IT over nine thousand? #}
+        ["R22", "[{\"param_id\": \"1\", \"param_type\": \"NUMERIC\", \"max_value\": \"9000\"}]", "recipe", "{{ day }}"]
+    {% endtable %}
+{% endif %}

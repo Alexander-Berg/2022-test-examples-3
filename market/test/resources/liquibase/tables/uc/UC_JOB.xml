@@ -1,0 +1,57 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+			http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <changeSet id="uc_job" author="imelnikov" context="tables">
+        <createTable tableName="UC_JOB">
+            <column name="ID" type="NUMBER">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="JDBC_URL" type="VARCHAR2(4000 BYTE)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="JDBC_USER" type="VARCHAR2(4000 BYTE)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="JDBC_PASSWORD" type="VARCHAR2(4000 BYTE)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="HEAD_TIMEOUT" type="NUMBER" defaultValue="30000"/>
+            <column name="SOCKET_TIMEOUT" type="NUMBER" defaultValue="30000"/>
+            <column name="LAST_FETCH_TIME" type="NUMBER" defaultValue="0"/>
+            <column name="PERIOD" type="NUMBER" defaultValue="200000"/>
+            <column name="IS_WORKING" type="NUMBER"/>
+            <column name="PRIORITY" type="NUMBER" defaultValue="0"/>
+            <column name="DESCRIPTION" type="VARCHAR2(4000 BYTE)"/>
+            <column name="TABLE_VIEW"  type="VARCHAR2(4000 BYTE)"/>
+            <column name="TASK_LIFETIME_IN_DAYS" type="NUMBER" defaultValue="21"/>
+            <column name="MAKE_SAVE" type="NUMBER" defaultValue="0"/>
+            <column name="FOLLOW_REDIRECTS" type="NUMBER" defaultValue="0"/>
+            <column name="JDBC_DRIVER" type="VARCHAR2(100 BYTE)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="uc_job_data" author="imelnikov" context="table-data">
+       <loadUpdateData tableName="UC_JOB" primaryKey="ID" file="UC_JOB.csv" relativeToChangelogFile="true">
+            <column name="ID" type="NUMERIC"/>
+            <column name="JDBC_URL" type="STRING"/>
+            <column name="JDBC_USER" type="STRING"/>
+            <column name="JDBC_PASSWORD" type="STRING"/>
+            <column name="HEAD_TIMEOUT" type="NUMERIC"/>
+            <column name="SOCKET_TIMEOUT" type="NUMERIC"/>
+            <column name="LAST_FETCH_TIME" type="NUMERIC"/>
+            <column name="PERIOD" type="NUMERIC"/>
+            <column name="IS_WORKING" type="NUMERIC"/>
+            <column name="PRIORITY" type="NUMERIC"/>
+            <column name="DESCRIPTION" type="STRING"/>
+            <column name="TABLE_VIEW" type="STRING"/>
+            <column name="TASK_LIFETIME_IN_DAYS" type="NUMERIC"/>
+            <column name="MAKE_SAVE" type="NUMERIC"/>
+            <column name="FOLLOW_REDIRECTS" type="NUMERIC"/>
+            <column name="JDBC_DRIVER" type="STRING"/>
+        </loadUpdateData>
+    </changeSet>
+
+</databaseChangeLog>

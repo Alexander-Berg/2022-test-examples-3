@@ -1,0 +1,75 @@
+warehouse-timezone: Europe/Moscow
+spring.datasource-scprd.url: jdbc:h2:mem:SCPRD;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1;IGNORECASE=TRUE
+spring.datasource-scprdd1.url: jdbc:h2:mem:SCPRDD1;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS dbo\;SET SCHEMA dbo;BUILTIN_ALIAS_OVERRIDE=1;IGNORECASE=TRUE
+spring.datasource-auth.url: jdbc:h2:mem:WMS;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS Auth\;SET SCHEMA Auth;IGNORECASE=TRUE
+
+AppServer: localhost
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms.receiving: debug
+    org.springframework.jdbc.core: debug
+    root: info
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  transaction.default-timeout: 30s
+  liquibase:
+    enabled: true
+  config:
+    import:
+      - application-fragment-common-test.yml
+  jackson:
+    deserialization:
+      wrap-exceptions: false
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+ldap:
+  context-source:
+    urls: ldap://localhost:389
+    base: ou=users,dc=test,dc=com
+    userDn: uid=admin
+    password: secret
+    connect:
+      timeout: 1000
+    read:
+      timeout: 1000
+
+cte:
+  url: http://host.ru:123
+
+print:
+  server:
+    host: localhost
+    port: 631
+    mock: true
+
+oltp:
+  url: http://localhost:8383
+
+wms:
+  api:
+    host: 'http://wms.local'
+    username: 'wmsuser'
+    password: 'wmspass'
+
+check:
+  authentication: 'no'
+
+servicebus:
+  api:
+    host: http://localhost:8382
+
+identity:
+  cis:
+    gs: "#GS#"
+
+application:
+  security:
+    use-tvm-auth: false
+
+s3.use: false

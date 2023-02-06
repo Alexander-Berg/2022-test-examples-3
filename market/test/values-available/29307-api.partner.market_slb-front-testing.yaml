@@ -1,0 +1,20 @@
+context:
+  default:
+    antirobot: True
+    antirobot_service_name: marketapi
+    attempts: 3
+    balancing_method: "active"
+    cert: api.partner.tst.vs.market.yandex.net
+    health_check: '"GET /ping HTTP/1.1\r\nHost: api.partner.market.yandex.ru\r\n\r\n"'
+    priority: 1000
+    servername_regexp: 'api\\.partner\\.tst\\.(vs\\.market\\.yandex\\.net|market\\.yandex\\.ru)'
+    service_name: api_partner_tst
+    vs: api_partner_tst
+
+servers:
+  default:
+    main:
+      - name: "GREY%api.partner.tst.vs.market.yandex.net"
+        timeout: "60s"
+        port: 80
+        plain_http_backend: True

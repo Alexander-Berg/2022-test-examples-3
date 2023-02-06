@@ -1,0 +1,121 @@
+package NSnail;
+
+message TCrawlContext {
+    optional string CrawlType               = 1;
+    optional string CrawlUrl                = 2;
+    optional uint32 CurrentTry              = 3;
+    optional uint32 RetryCount              = 4;
+};
+
+message TJob {
+    message TFlags {
+        optional bool HttpProbe         = 1;
+        optional bool YastaticWrap      = 2;
+        optional bool CheckPopup        = 3;
+        optional bool CheckScrolling    = 4;
+        optional bool Fast              = 5;
+        optional bool Autoplay          = 6;
+        optional bool DontClick         = 7;
+        optional bool BrowserAutodetect = 8;
+    };
+
+    message TScripts {
+        optional string Play       = 1;
+        optional string Finish     = 2;
+        optional uint32 Timeout    = 3;
+        optional string Cookies    = 4;
+    };
+
+    message TVideoCaptureOpt {
+        optional uint32 Duration   = 1;
+    };
+
+    required string Id                      = 1;
+    required string Url                     = 2;
+    optional uint32 RetryCount              = 3; /* obsolete */
+    optional string Browser                 = 4;
+    optional string Device                  = 5;
+    optional string Country                 = 6;
+    optional TFlags Flags                   = 7;
+    optional TVideoCaptureOpt VideoCapture  = 8;
+    optional TScripts Scripts               = 9;
+    optional TCrawlContext Crawl            = 10;
+    optional string OutputPipeline          = 11;
+};
+
+
+enum EVideoFormat {
+    EVF_UNKNOWN = 0;
+    EVF_HLS     = 1;
+    EVF_DASH    = 2;
+    EVF_MP4     = 3;
+    EVF_FLV     = 4;
+};
+
+message TKnownPlayer {
+    optional string PlayerId            = 1;
+    optional string EmbedUrl            = 2;
+};
+
+message TPlayerFeatures {
+    optional float AutoplayArea = 1;
+    optional float WorkingArea  = 2;
+    optional bool IsScrolling   = 3;
+    optional bool IsPopup       = 4;
+    repeated TKnownPlayer Known = 5;
+};
+
+message THttpResource {
+    required string Url                 = 1;
+    optional string ContentType         = 2;
+    optional uint64 ContentSize         = 3;
+    optional uint32 HttpCode            = 4;
+    optional EVideoFormat VideoFormat   = 5;
+};
+
+message THttpFeatures {
+     repeated THttpResource Contents    = 1;
+     optional string ResultUrl          = 2;
+     optional string UserAgent          = 3;
+     optional uint64 BytesReceived      = 4;
+     optional uint64 BytesSent          = 5; 
+     optional bool ProbeStatusOk        = 6;
+     optional bool ProbeHttps           = 7;
+     optional bool ProbeHtml            = 8;
+     optional bool ProbeVideo           = 9;
+     optional string Error              = 10;
+     optional bool PrettyVideoContent   = 11;
+};
+
+enum EArtifactType {
+    EAT_UNKNOWN = 0;
+    EAT_IMAGE   = 1;
+    EAT_VIDEO   = 2;
+};
+
+message TArtifact {
+    optional EArtifactType Type = 1;
+    optional string Url         = 2;
+};
+
+message TProfilingRec {
+    optional string Name = 1;
+    optional uint32 Time = 2;
+};
+
+message TJobResult {
+    optional TJob Job                = 1;
+    optional uint64 Started          = 2;
+    optional uint64 Finished         = 3;
+    optional string Host             = 4;
+    optional string Error            = 5;
+    optional THttpFeatures Http      = 6;
+    optional TPlayerFeatures Player  = 7;
+    optional bool IsPlaying          = 8;
+    optional string Env              = 9;
+    repeated TArtifact Artifacts     = 10;
+    repeated TProfilingRec Profile   = 11;
+    optional string Source           = 12;
+    repeated TKnownPlayer Players    = 13;
+    optional string Log              = 14;
+};

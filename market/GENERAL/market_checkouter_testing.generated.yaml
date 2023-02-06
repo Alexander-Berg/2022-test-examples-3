@@ -1,0 +1,120 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый market_checkouter_testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_checkouter_testing
+
+juggler:
+  checks:
+
+  # Check checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_archived-entity-processor-queue
+  # https://juggler.yandex-team.ru/check_details/?host=market_checkouter_testing&service=checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_archived-entity-processor-queue&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      nodata_mode: skip
+    children:
+    - clickphite-monitoring
+    service: checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_archived-entity-processor-queue
+
+  # Check checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_fake-orders-cleaner-queue
+  # https://juggler.yandex-team.ru/check_details/?host=market_checkouter_testing&service=checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_fake-orders-cleaner-queue&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      nodata_mode: skip
+    children:
+    - clickphite-monitoring
+    service: checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_fake-orders-cleaner-queue
+
+  # Check checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_item-picture-exporter-queue
+  # https://juggler.yandex-team.ru/check_details/?host=market_checkouter_testing&service=checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_item-picture-exporter-queue&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      nodata_mode: skip
+    children:
+    - clickphite-monitoring
+    service: checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_item-picture-exporter-queue
+
+  # Check checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_order-expiry-message
+  # https://juggler.yandex-team.ru/check_details/?host=market_checkouter_testing&service=checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_order-expiry-message&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      nodata_mode: skip
+    children:
+    - clickphite-monitoring
+    service: checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_order-expiry-message
+
+  # Check checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_order-item-fill-empty-pic-url
+  # https://juggler.yandex-team.ru/check_details/?host=market_checkouter_testing&service=checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_order-item-fill-empty-pic-url&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      nodata_mode: skip
+    children:
+    - clickphite-monitoring
+    service: checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_order-item-fill-empty-pic-url
+
+  # Check checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_order-status-inspector-message
+  # https://juggler.yandex-team.ru/check_details/?host=market_checkouter_testing&service=checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_order-status-inspector-message&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      nodata_mode: skip
+    children:
+    - clickphite-monitoring
+    service: checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_order-status-inspector-message
+
+  # Check checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_payment-status-inspector-queue
+  # https://juggler.yandex-team.ru/check_details/?host=market_checkouter_testing&service=checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_payment-status-inspector-queue&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      nodata_mode: skip
+    children:
+    - clickphite-monitoring
+    service: checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_payment-status-inspector-queue
+
+  # Check checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_refund-status-inspector-queue
+  # https://juggler.yandex-team.ru/check_details/?host=market_checkouter_testing&service=checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_refund-status-inspector-queue&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      nodata_mode: skip
+    children:
+    - clickphite-monitoring
+    service: checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_refund-status-inspector-queue
+
+  # Check checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_storage-cleaner-queue
+  # https://juggler.yandex-team.ru/check_details/?host=market_checkouter_testing&service=checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_storage-cleaner-queue&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      nodata_mode: skip
+    children:
+    - clickphite-monitoring
+    service: checkouter.queue-monitorings.TESTING.queue_size.checkout_tasks_storage-cleaner-queue
+
+  # Check test_market_notifier
+  # https://juggler.yandex-team.ru/check_details/?host=market_checkouter_testing&service=test_market_notifier&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      nodata_mode: force_crit
+    children:
+    - logkeeper-minion
+    service: test_market_notifier
+
+  # Check testing_carter
+  # https://juggler.yandex-team.ru/check_details/?host=market_checkouter_testing&service=testing_carter&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      nodata_mode: force_crit
+    children:
+    - logkeeper-minion
+    service: testing_carter
+
+  # Check testing_checkouter
+  # https://juggler.yandex-team.ru/check_details/?host=market_checkouter_testing&service=testing_checkouter&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      nodata_mode: force_crit
+    children:
+    - logkeeper-minion
+    service: testing_checkouter
+  default:
+    aggregator: logic_or
+    check_options: {}
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_checkouter_testing
+    namespace: market.checkouter
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_dev
+    - market_checkout_testing
+    - market
+    - _market_
+    ttl: 900

@@ -1,0 +1,151 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый analytics_platform_tms-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Danalytics_platform_tms-testing
+
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=analytics_platform_tms-testing&service=disk_free_space&last=1DAY&mode=edit
+  - check_options: {}
+    notifications:
+    - template_kwargs:
+        login:
+        - ogonek
+        - analytics-platform-dev-tg
+        method: telegram
+        status:
+        - from: OK
+          to: CRIT
+        - from: CRIT
+          to: OK
+        - from: CRIT
+          to: WARN
+        - from: WARN
+          to: CRIT
+        - from: OK
+          to: WARN
+        - from: WARN
+          to: OK
+      template_name: on_status_change
+    service: disk_free_space
+    nodata_mode: force_ok
+
+  # Check fresh-hprof-files
+  # https://juggler.yandex-team.ru/check_details/?host=analytics_platform_tms-testing&service=fresh-hprof-files&last=1DAY&mode=edit
+  - check_options: {}
+    notifications:
+    - template_kwargs:
+        login:
+        - ogonek
+        - analytics-platform-dev-tg
+        method: telegram
+        status:
+        - from: OK
+          to: CRIT
+        - from: CRIT
+          to: OK
+        - from: CRIT
+          to: WARN
+        - from: WARN
+          to: CRIT
+        - from: OK
+          to: WARN
+        - from: WARN
+          to: OK
+      template_name: on_status_change
+    service: fresh-hprof-files
+    nodata_mode: force_ok
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=analytics_platform_tms-testing&service=ping&last=1DAY&mode=edit
+  - check_options:
+      args:
+      - --kwargs
+      - '{"service": "tms", "path": "/jobStatus"}'
+    notifications:
+    - template_kwargs:
+        login:
+        - ogonek
+        - analytics-platform-monitoring-tg
+        method: telegram
+        status:
+        - from: OK
+          to: CRIT
+        - from: CRIT
+          to: OK
+        - from: CRIT
+          to: WARN
+        - from: WARN
+          to: CRIT
+        - from: OK
+          to: WARN
+        - from: WARN
+          to: OK
+      template_name: on_status_change
+    service: ping
+
+  # Check tms
+  # https://juggler.yandex-team.ru/check_details/?host=analytics_platform_tms-testing&service=tms&last=1DAY&mode=edit
+  - check_options:
+      args:
+      - --kwargs
+      - '{"service": "tms", "path": "/jobStatus"}'
+    notifications:
+    - template_kwargs:
+        login:
+        - ogonek
+        - analytics-platform-dev-tg
+        method: telegram
+        status:
+        - from: OK
+          to: CRIT
+        - from: CRIT
+          to: OK
+        - from: CRIT
+          to: WARN
+        - from: WARN
+          to: CRIT
+        - from: OK
+          to: WARN
+        - from: WARN
+          to: OK
+      template_name: on_status_change
+    service: tms
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 35%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_market_analytics_tms_vla
+    - NANNY%testing_market_market_analytics_tms_man
+    - NANNY%testing_market_market_analytics_tms_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: analytics_platform_tms-testing
+    namespace: market.common
+    refresh_time: 60
+    tags:
+    - market_production
+    - market_rtc
+    - marketanalyticsplatform
+    - production
+    - market
+    - _market_
+    ttl: 900

@@ -1,0 +1,57 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "biletdv_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 430
+    confirm_dt = ""
+    created_at = "2020-01-31 02:14:05"
+    currency = ""
+    from = "YKS"
+    marker = "f4759386-a5e969-d8d6-41e5-b910-1f6cd8beaed41"
+    order_id = "6N7W2C"
+    partner = "biletdv"
+    partner_id = 19
+    price = 12917.0
+    source = "biletdv"
+    status = "paid"
+    ticket_number = "8496148582430"
+    to = "IKT"
+    trip_type = ""
+    unixtime = 1580437919
+
+[lb]
+    topic = "topic-biletdv_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "updated_at"]
+
+[[lb.expected]]
+    status = "confirmed"
+    category = "avia"
+    partner_id = 19
+    created_at = 1580436845
+    origin = "YKS"
+    partner_order_id = "6N7W2C"
+    label = "f4759386-a5e969-d8d6-41e5-b910-1f6cd8beaed41"
+    source = "history"
+    destination = "IKT"
+    partner_name = "biletdv"
+    trip_type = ""
+    billing_order_id = 430
+    order_amount = 12917.0
+    travel_order_id = "biletdv:6N7W2C"
+    currency_code = "RUB"

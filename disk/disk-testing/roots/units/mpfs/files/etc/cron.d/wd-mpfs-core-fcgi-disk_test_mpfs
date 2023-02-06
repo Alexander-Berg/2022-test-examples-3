@@ -1,0 +1,5 @@
+SHELL=/bin/sh
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+
+*/1 * * * * root curl -m 5 -s 'http://127.0.0.1/ping' | grep -q pong || ( /etc/init.d/mpfs-core-uwsgi-disk restart ; logger -p daemon.err "mpfs-core-uwsgi-disk restarted")  > /dev/null 2>&1
+

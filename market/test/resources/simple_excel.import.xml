@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="urn:jmf:dataimport:config:1.0"
+        xmlns:c="urn:jmf:dataimport:converter:1.0"
+        xmlns:d="urn:jmf:dataimport:datasource:1.0"
+        xmlns:m="urn:jmf:metaclass:config:1.0"
+        xmlns:r="urn:jmf:dataimport:resolver:1.0"
+        xmlns:v="urn:jmf:common:1.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <process name="ticket">
+        <mode>CREATE</mode>
+
+        <parameter name="fqn">excelTicket$default</parameter>
+
+        <dataSource xsi:type="d:EXCEL" url="classpath:/simpleExample.xlsx">
+            <d:column name="accountId" key="Account Id"/>
+            <d:column name="clientId" key="Client Id"/>
+            <d:column name="shopId" key="Shop ID"/>
+            <d:column name="url" key="URL"/>
+            <d:column name="comment" key="Comment"/>
+            <d:column name="accountManager" key="Account manager"/>
+            <d:column name="components" key="Components"/>
+            <d:column name="deadline" key="Deadline"/>
+            <d:column name="clientPhone" key="clientPhone"/>
+        </dataSource>
+
+
+        <metaclass xsi:type="r:constant" fqn="excelTicket$default"/>
+
+        <!--Для проверки взял текущую версию скрипта Импорта лидов КД. Просто он уже готов-->
+        <attr name="url" column="url"/>
+        <attr name="clientId" column="clientId"/>
+
+        <attr name="categories" column="components">
+            <converter xsi:type="c:script">
+                <c:script><![CDATA[
+                    value.split(';').collect { it }
+                    ]]></c:script>
+            </converter>
+        </attr>
+
+        <!--        Генерируем ссылку-->
+        <attr name="stTicket" column="accountId">
+            <converter xsi:type="c:script">
+                <c:script>
+                    <![CDATA[
+                    return "https://crm.yandex-team.ru/index.html#/account/" + value.longValue()
+                    ]]>
+                </c:script>
+            </converter>
+        </attr>
+
+        <attr name="deadline" column="deadline"/>
+
+        <attr name="title">
+            <converter xsi:type="c:script">
+                <c:script>
+                    <![CDATA[
+                    def title = ''
+
+                    if (row.url) {
+                        title += " url = " + row.url
+                    }
+
+                    if (row.clientId) {
+                        title += " clientId = " + row.clientId.longValue()
+                    }
+                    if (!title) {
+                        title = 'Пустой заголовок'
+                    }
+                    return title
+                    ]]>
+                </c:script>
+            </converter>
+        </attr>
+    </process>
+
+</config>

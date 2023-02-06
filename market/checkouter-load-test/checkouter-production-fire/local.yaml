@@ -1,0 +1,95 @@
+pools:
+    -   id: Main
+        gun:
+            id: 1
+            environment: testing
+            type: main_gun
+            shopId: 431782
+            #FIXME experiment with type=DELIVERY (local debug)
+            #deliveryType: ""
+            deliveryType: DELIVERY
+            deliveryServices: ""
+            warehouseId: 48339
+            cartRepeats: 1
+            cartDurationSec: 1
+            offersDistribution:
+                - { 'offersCount': 1, 'ordersDistribution': 1 }
+            shootingDelay: 10s
+            shipmentDay: -1
+            regionId: 213
+            distribution: { }
+            tvmSecret:
+                type: ENV
+                name: "TVM_SECRET"
+            handlesCommonDelayMs: 100
+            handles:
+                - {name: 'recentOrders', repeats: 3, delay: 1000ms, active: true }
+                - {name: 'ordersByUID', repeats: 1, delay: 1000ms, active: true }
+                - {name: 'ordersOptionsAvailabilities', repeats: 1, delay: 1000ms, active: true }
+                - {name: 'getOrders', repeats: 2, delay: 1000ms, active: true }
+                - {name: 'ordersById1', repeats: 1, delay: 2000ms, active: true }
+                - {name: 'ordersById2', repeats: 1, delay: 2000ms, active: true }
+            addresses:
+                - {'country':'Россия', 'postcode':'107031', 'city':'Москва', 'street':'улица Петровка', 'house':'7', 'floor':'1', 'recipient':'000', 'phone':'+77777777777'}
+                - {'country':'Россия', 'postcode':'119019', 'city':'Москва', 'street':'Пречистенская набережная', 'house':'43', 'floor':'1', 'recipient':'000', 'phone': '+77777777777'}
+                - {'country':'Россия', 'postcode':'115184', 'city':'Москва', 'street':'Вишняковский переулок', 'house':'4', 'floor':'1', 'recipient':'000', 'phone':'+77777777777'}
+                - {'country':'Россия', 'postcode':'105064', 'city':'Москва', 'street':'Большой Казённый переулок', 'house':'4', 'floor':'1', 'recipient':'000', 'phone':'+77777777777'}
+                - {'country':'Россия', 'postcode':'125047', 'city':'Москва', 'street':'Новоспасский переулок', 'house':'5', 'floor':'1', 'recipient':'000', 'phone':'+77777777777'}
+            totalOrders: 10
+            forceUnfreeze: false
+            checkouterBaseURL: https://checkouter.tst.vs.market.yandex.net:39011
+#            OnlyInitStocks: true
+#            GetStocksFromYql: true
+#            YQLQueryId: 615c7ba5ae4e0f2e142a3124
+#            YQLToken:
+#                type: ENV
+#                name: "YQL_TOKEN"
+#                file: ""
+#                property: ""
+#            MaxWeight: 30
+        ammo:
+            type: main_provider
+            cartsDistribution:
+                - { 'internalCarts': 1, 'ordersDistribution': 1 }
+            offersDistribution:
+                - { 'offersCount': 1, 'ordersDistribution': 1 }
+            readonlyUIDs: [5, 3, 7, 10]
+        result:
+            type: phout
+            id: true
+            destination: ./phout.log
+        rps:
+            - { type: const, duration: 4s, ops: 5 }
+        startup:
+            - { type: once, times: 1 }
+
+    -   id: Loyalty
+        gun:
+            id: 0
+            environment: testing
+            type: loyalty_gun
+            tvmSecret:
+                type: ENV
+                name: "TVM_SECRET"
+            promoID: 137433
+        ammo:
+            type: loyalty_provider
+        result:
+            type: phout
+            destination: ./phout.log
+        rps:
+            - { type: const, duration: 4s, ops: 5 }
+        startup:
+            - { type: once, times: 1 }
+log:
+    level: debug
+monitoring:
+    expvar:
+        enabled: false
+        port: 1234
+    cpuprofile:
+        enabled: true
+        file: cpu.pprof
+    memprofile:
+        enabled: true
+        file: mem.pprof

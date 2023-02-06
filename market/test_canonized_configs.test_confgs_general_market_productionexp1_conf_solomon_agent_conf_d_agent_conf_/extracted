@@ -1,0 +1,36 @@
+Logger {
+    Level: INFO
+    LogTo: FILE
+    LogFile: "/home/container/logs/solomon-agent.log"
+}
+
+ConfigLoader {
+    FileLoader {
+        UpdateInterval: "30s"
+        LoadFromDir: "/home/container/conf/solomon-agent/service.d/"
+    }
+}
+
+Storage {
+    Limit {
+        Total: "500MiB"
+    }
+}
+
+Push {
+  Endpoints: [
+      {
+          Url: "http://localhost:17076/write"
+      }
+  ],
+  AllShards: true
+  Cluster: "local_cluster" # doesn't matter, Unified Agent will drop that
+  PushInterval: "5s"
+  RetryInterval: "1s"
+  RetryTimes: 30
+}
+
+ManagementServer {
+    BindAddress: "::"
+    BindPort: 17074
+}

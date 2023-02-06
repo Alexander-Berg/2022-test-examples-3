@@ -1,0 +1,28 @@
+#!/bin/sh
+
+TIME_LIMIT=300
+PERCENT=75
+
+CFG=/etc/monitoring/$(basename $0).conf
+[ -r $CFG ] && . $CFG
+
+QUEUE=$1
+
+if [ -z $QUEUE ] ; then
+	QUEUE=queue-default
+fi
+
+queue_total=$(curl -s "http://localhost/queue/count?queue=${QUEUE}")
+queue_time=$(curl -s "http://localhost/queue/count?queue=${QUEUE}&time_offset=${TIME_LIMIT}")
+
+if [ "$queue_total" -eq "0" ]; then
+	prc=0
+else
+	prc=$(perl -e "print int(${queue_time}/${queue_total}*100)")
+fi
+
+if [ $prc -gt $PERCENT ] ; then
+    echo "2; Failed; ${prc}% of ${QUEUE} is older than ${TIME_LIMIT} seconds"
+else
+    echo "0; OK; ${prc}% of ${QUEUE} is older than ${TIME_LIMIT} seconds"
+fi

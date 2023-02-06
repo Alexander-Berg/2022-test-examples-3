@@ -1,0 +1,52 @@
+{% if table == "features_item_pair_model_model_blue_order_statistics" %}
+    {# Result data. #}
+    {% table "features_item_pair_model_model_blue_order_statistics" %}
+        ["M1", "M2", 2.0, 4.0, "model", "model", "{{ day }}"],
+        ["M2", "M1", 1.0, 3.0, "model", "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_internal_orders" %}
+    {% macro internal_order(timestamp, yandexuid, model_id, rgb) -%}
+        [
+            {{ timestamp }},
+            {
+                "yandexuid": "{{ yandexuid }}",
+                "puid": "{{ yandexuid }}",
+                "uuid": null
+            },
+            "order",
+            "offer",
+            "whatever",
+            {
+                "rgb": "{{ rgb }}"
+                {%- if model_id %},
+                    "model_id": "{{ model_id }}"
+                {%- elif model_id != "" %},
+                    "model_id": null
+                {% endif %}
+            },
+            "{{ day }}"
+        ]
+    {%- endmacro %}
+    {% table "events" %}
+        {% if shift == 0 %}
+            {{ internal_order(1503225532000, "19276", "M2", "BLUE") }},
+            {{ internal_order(1503225532001, "19274", "M1", "BLUE") }},
+            {{ internal_order(1503225532002, "19276", "M1", "BLUE") }},
+            {{ internal_order(1503225532003, "19276", "M2", "BLUE") }},
+            {{ internal_order(1503225532004, "19274", "M2", "BLUE") }},
+            {{ internal_order(1503225532005, "19276", "M1", "BLUE") }},
+            {{ internal_order(1503225532006, "19276", "M2", "BLUE") }},
+            {{ internal_order(1503225532007, "19277", None, "BLUE") }},
+            {{ internal_order(1503225532008, "19278", "", "BLUE") }},
+            {{ internal_order(1503225532000, "19276", "M2", "RED") }},
+            {{ internal_order(1503225532001, "19274", "M1", "RED") }},
+            {{ internal_order(1503225532002, "19276", "M1", "RED") }},
+            {{ internal_order(1503225532003, "19276", "M2", "RED") }},
+            {{ internal_order(1503225532004, "19274", "M2", "RED") }},
+            {{ internal_order(1503225532005, "19276", "M1", "RED") }},
+            {{ internal_order(1503225532006, "19276", "M2", "RED") }},
+            {{ internal_order(1503225532007, "19277", None, "RED") }},
+            {{ internal_order(1503225532008, "19278", "", "RED") }}
+        {% endif %}
+    {% endtable %}
+{% endif %}

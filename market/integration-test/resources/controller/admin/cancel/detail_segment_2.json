@@ -1,0 +1,249 @@
+{
+  "meta": {
+    "fields": [
+      {
+        "name": "created",
+        "title": "Дата/время создания",
+        "type": "DATE_TIME",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "status",
+        "title": "Статус",
+        "type": "LIST",
+        "editable": false,
+        "options": [
+          {
+            "id": "SEGMENT_NOT_STARTED",
+            "displayName": "Сегмент не был создан у партнера",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "WAITING_FOR_PROCESSING_AVAILABILITY",
+            "displayName": "Ожидание создания сегмента у партнера",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "NON_CANCELLABLE_SEGMENT",
+            "displayName": "Состояние сегмента не допускает отмену по API",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "PROCESSING",
+            "displayName": "В обработке",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "WAITING_CHECKPOINTS",
+            "displayName": "Ожидается получение чекпоинта об отмене",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "SUCCESS",
+            "displayName": "Успешно",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "SUCCESS_BY_RETURN",
+            "displayName": "Отменён возвратом",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "SUCCESS_BY_API",
+            "displayName": "Успешная отмена по API",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "SUCCESS_BY_CHECKPOINT",
+            "displayName": "Успешная отмена чекпоинтом",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "SUCCESS_BY_TIMEOUT",
+            "displayName": "Подтверждение отмены по таймауту ожидания",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "MANUALLY_CONFIRMED",
+            "displayName": "Подтверждена вручную",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "FAIL",
+            "displayName": "Отмена не выполнена",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "TECH_FAIL",
+            "displayName": "Тех. ошибка",
+            "slug": null,
+            "openNewTab": false
+          }
+        ],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "cancelOrderRequest",
+        "title": "Заявка на отмену заказа",
+        "type": "REFERENCE",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "order",
+        "title": "Заказ",
+        "type": "REFERENCE",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "partnerId",
+        "title": "Идентификатор партнера",
+        "type": "NUMBER",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "partnerName",
+        "title": "Имя партнера",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "segmentId",
+        "title": "Идентификатор сегмента",
+        "type": "NUMBER",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "segmentExternalId",
+        "title": "Идентификатор сегмента у партнера",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "shipment",
+        "title": "Отгрузка",
+        "type": "REFERENCE",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "required",
+        "title": "Обязательный для подтверждения отмены",
+        "type": "BOOLEAN",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "sufficient",
+        "title": "Достаточный для подтверждения отмены",
+        "type": "BOOLEAN",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      }
+    ],
+    "actions": [
+      {
+        "title": "Подтвердить отмену",
+        "description": "Подтвердить отмену сегмента",
+        "slug": "confirmation/new",
+        "identifiedBy": [],
+        "type": "ROW_ACTION",
+        "method": "GO_TO",
+        "authorities": [
+          "ROLE_CANCEL_ORDER_EDIT"
+        ],
+        "icon": null
+      }
+    ],
+    "mode": "VIEW",
+    "deletable": false,
+    "children": [
+      {
+        "title": "Фоновые процессы заявки на отмену",
+        "slug": "business-processes",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "cancelSegmentId",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      }
+    ],
+    "tabs": []
+  },
+  "item": {
+    "id": 2,
+    "values": {
+      "segmentExternalId": "Не создан",
+      "created": "2018-01-01T15:00:00",
+      "cancelOrderRequest": {
+        "id": "1",
+        "displayName": "1",
+        "slug": "lom/cancel-order",
+        "openNewTab": false
+      },
+      "segmentId": 2,
+      "partnerId": 51,
+      "status": "PROCESSING",
+      "order": {
+        "id": "1",
+        "displayName": "1",
+        "slug": "lom/orders",
+        "openNewTab": false
+      },
+      "required": true,
+      "sufficient": true
+    },
+    "title": "Заявка на отмену сегмента №2"
+  }
+}

@@ -1,0 +1,70 @@
+{% macro event(event_type, item_type, item_id, category_id, yandexuid) %}
+    {% if event_type in table %}
+        [
+            0,
+            {"yandexuid": ["{{ yandexuid }}"]},
+            "{{ event_type }}",
+            "{{ item_type }}",
+            "{{ item_id }}",
+            {% if category_id is none %} {} {% else %} { "category_id": "{{ category_id }}" } {% endif %},
+            "{{ day }}"
+        ]
+    {% else %}
+        [0, {}, "", "", null, {}, "{{ day }}"]
+    {% endif %}
+{% endmacro %}
+
+{% macro cart_addition(offer_id, category_id, yandexuid) %}
+    {{ event("cart_addition", "offer", offer_id, category_id, yandexuid) }}
+{% endmacro %}
+
+{% macro category_view(category_id, yandexuid) %}
+    {{ event("category_view", "category", category_id, none, yandexuid) }}
+{% endmacro %}
+
+{% macro clickout(offer_id, category_id, yandexuid) %}
+    {{ event("clickout", "offer", offer_id, category_id, yandexuid) }}
+{% endmacro %}
+
+{% macro model_view(model_id, category_id, yandexuid) %}
+    {{ event("model_view", "model", model_id, category_id, yandexuid) }}
+{% endmacro %}
+
+{% macro offer_view(offer_id, category_id, yandexuid) %}
+    {{ event("offer_view", "offer", offer_id, category_id, yandexuid) }}
+{% endmacro %}
+
+{% if table == "sets_parents" %}
+    {# Result data. #}
+    {% table table %}
+        {# From crypta #}
+        ["", "", "yandexuid:179100289143"],
+        {# From market events #}
+        ["", "", "yandexuid:U2"],
+        ["", "", "yandexuid:U3"]
+    {% endtable %}
+{% elif table == "items_category_tree" %}
+    {% table table %}
+        {# Adult category #}
+        ["AC", "ACP", ["root", "ACP"], "category", "{{ day }}"],
+        {# Baby categories #}
+        ["BCP", "90764", ["root", "90764"], "category", "{{ day }}"],
+        ["BC", "BCP", ["root", "90764", "BCP"], "category", "{{ day }}"]
+    {% endtable %}
+{% elif table.startswith("events") %}
+    {% table "events" %}
+        {% if shift == 0 %}
+            {# Events from non-baby category #}
+            {{ cart_addition("O1", "M1", "U1") }},
+            {# Events from baby categories #}
+            {{ clickout("O2", "BC", "U2") }},
+            {{ offer_view("O3", "BCP", "U3") }}
+        {% elif shift == 1 %}
+            {# Events from non-baby category #}
+            {{ model_view("M1", "U1") }},
+            {# Events from baby categories #}
+            {{ category_view("BC", "U2") }},
+            {{ category_view("BCP", "U3") }}
+        {% endif %}
+    {% endtable %}
+{% endif %}

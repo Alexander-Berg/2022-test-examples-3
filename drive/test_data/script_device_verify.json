@@ -1,0 +1,60 @@
+{
+  "items": [
+    {
+      "action_button_text": null,
+      "action_type": "context_buttons",
+      "id": "intro",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Вы уже авторизовались в Драйве с этого устройства"
+        },
+        {
+          "type": "plaintext",
+          "text": "Чтобы подтвердить, что это вы, введите код из смс, которое придет на $phone"
+        }
+      ],
+      "schema": {
+        "type": "options",
+        "options": [
+          {
+            "type": "message",
+            "text": "Конечно это я",
+            "node": "sent_sms"
+          },
+          {
+            "type": "logout",
+            "text": "Сменить аккаунт"
+          },
+          {
+            "type": "support_center",
+            "text": "Служба поддержки"
+          }
+        ]
+      },
+      "next_step": null
+    },
+    {
+      "on_entry_actions": [
+        {
+          "type": "device_verify"
+        }
+      ],
+      "action_button_text": null,
+      "action_type": "phone_verification_code",
+      "id": "sent_sms",
+      "pre_action_messages": [
+        
+      ],
+      "next_step": "ok"
+    },
+    {
+      "action_button_text": null,
+      "action_type": null,
+      "id": "ok",
+      "pre_action_messages": [
+      ],
+      "next_step": null
+    }
+  ]
+}

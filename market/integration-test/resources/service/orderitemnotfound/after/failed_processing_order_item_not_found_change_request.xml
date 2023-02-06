@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <orders
+            id="1"
+            barcode="2-LOinttest-1"
+            external_id="1001"
+            platform_client_id="3"
+            return_sorting_center_id="1"
+            sender_id="1"
+
+            status="PROCESSING"
+
+            created="2018-01-01 12:00:00 +0000"
+    />
+
+    <waybill_segment
+            order_id="1"
+            tracker_id="100"
+            waybill_segment_index="0"
+            segment_type="FULFILLMENT"
+            partner_id="20"
+            external_id="external-id-1"
+    />
+
+    <order_history_event
+            order_id="1"
+            diff='
+            [
+                {
+                    "op": "replace",
+                    "path": "/changeOrderRequests/0/status",
+                    "value": "REJECTED",
+                    "fromValue": "CREATED"
+                },
+                {
+                    "op": "replace",
+                    "path": "/changeOrderRequests/0/comment",
+                    "value": "Items were not changed",
+                    "fromValue": null
+                }
+            ]'
+    />
+
+    <change_order_request
+            id="1"
+            order_id="1"
+            status="REJECTED"
+            request_type="ITEM_NOT_FOUND"
+            created="2020-05-02 22:00:00 +0000"
+            waybill_segment_id="1"
+            comment="Items were not changed"
+    />
+
+    <business_process_state
+            id="29"
+            sequence_id="29"
+            queue_type="PROCESS_ORDER_ITEM_NOT_FOUND_REQUEST"
+            status="SUCCESS_RESPONSE_PROCESSING_SUCCEEDED"
+            author="[null]"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd","changeOrderRequestId":1}'
+    />
+</dataset>

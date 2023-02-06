@@ -1,0 +1,98 @@
+
+logbroker:
+  pq_lib:
+    worker_threads: 2
+
+  consumer:
+    server: lbkx.logbroker.yandex.net
+    port: 2135
+    topics:
+      - crypta@prod@siberia--change-log
+    client_id: crypta/prod/siberia/consumer
+    max_memory_usage: 16777216
+    max_infly_requests: 3
+    max_size: 1048576
+    use_lock_session: false
+    read_mirrored_partitions: true
+
+  credentials:
+    use_secure_tvm: True
+    tvm:
+      client_tvm_id: 2017437
+
+  pqlib_log_name: pqlib
+
+reader:
+  read_timeout_ms: 1000
+
+worker:
+  threads: 4
+
+processor:
+  max_batch_size_per_transaction: 100000
+
+ydb:
+  endpoint: ydb-ru.yandex.net:2135
+  database: /ru/cdp/production/cdp
+  max_active_sessions: 1000
+
+graphite:
+  host: localhost
+  port: 42000
+  root: siberia_mutator
+
+solomon:
+  project: crypta_siberia
+  service: mutator
+  cluster: production
+  labels:
+    dc: sas
+
+logs:
+  main:
+    level: info
+    targets:
+    - type: stdout
+    - type: rotating
+      file: /logs/main.log
+      max_file_size: 4194304
+      max_files: 1
+
+  scheduler:
+    level: info
+    targets:
+    - type: rotating
+      file: /logs/scheduler.log
+      max_file_size: 4194304
+      max_files: 1
+
+  worker:
+    level: info
+    targets:
+    - type: rotating
+      file: /logs/worker.log
+      max_file_size: 4194304
+      max_files: 1
+
+  pqlib:
+    level: info
+    targets:
+    - type: rotating
+      file: /logs/pqlib.log
+      max_file_size: 4194304
+      max_files: 1
+
+  graphite:
+    targets:
+    - type: rotating
+      file: /logs/graphite.log
+      max_file_size: 4194304
+      max_files: 1
+
+  solomon:
+    targets:
+    - type: rotating
+      file: /logs/solomon.log
+      max_file_size: 4194304
+      max_files: 1
+

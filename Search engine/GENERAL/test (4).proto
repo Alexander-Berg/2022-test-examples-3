@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package yappy;
+
+import "search/horadric2/proto/extensions/api.proto";
+
+
+message TestExtensions {
+    string no_str = 1;
+    repeated string no_str_repeated = 2;
+    map<string, string> no_str_map = 3;
+
+    string str = 7 [(h.api.ro) = true];
+    repeated string str_repeated = 8 [(h.api.disallowed) = true];
+    map<string, string> str_map = 9 [(h.api.ro) = true];
+
+    TestExtensions mes = 6 [(h.api.disallowed) = true];
+    repeated TestExtensions repeated = 4 [(h.api.ro) = true];
+    map<string, TestExtensions> map = 5 [(h.api.disallowed) = true];
+
+    TestExtensions no_mes = 10;
+    repeated TestExtensions no_repeated = 11;
+    map<string, TestExtensions> no_map = 12;
+}

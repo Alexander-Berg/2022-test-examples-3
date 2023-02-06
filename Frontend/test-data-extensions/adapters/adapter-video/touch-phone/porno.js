@@ -1,0 +1,346 @@
+var stubs = require('@yandex-int/gemini-serp-stubs');
+
+module.exports = {
+    request_text: 'видео порно смотреть',
+    type: 'snippet',
+    data_stub: {
+        num: 0,
+        snippets: {
+            full: {
+                applicable: 1,
+                clips: [
+                    {
+                        MediaDuration: '681',
+                        VisibleURL: 'http://semyana.com/232712/',
+                        cdt: '2016-08-29T07:00:00+0000',
+                        clip_host: 'semyana.com',
+                        clip_href: 'http://semyana.com/232712/',
+                        dur: '681',
+                        embed: 'y',
+                        global_img_id: 'f9dd18ddf9090ac4acba050a8cace5c7-00-96',
+                        green_host: 'semyana.com',
+                        hst: 'semyana.com',
+                        html5: 'y',
+                        is_playable: '0',
+                        mtime: '2016-08-29T07:00:00+0000',
+                        nid: 'f9dd18ddf9090ac4acba050a8cace5c7-00-96',
+                        raw_title: [
+                            ''
+                        ],
+                        server_descr: 'VIDEOP',
+                        thmb_h: 90,
+                        thmb_href: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_href_ext: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_w: 120,
+                        url: 'http://semyana.com/232712/',
+                        videoid: '2032537398467092080',
+                        views: '59934'
+                    },
+                    {
+                        MediaDuration: '518',
+                        VisibleURL: 'http://semyana.com/223142/',
+                        cdt: '2016-05-25T07:00:00+0000',
+                        clip_host: 'semyana.com',
+                        clip_href: 'http://semyana.com/223142/',
+                        dur: '518',
+                        embed: 'y',
+                        global_img_id: '3a1b7cfb41a6c952984d2811ee381d76-00-96',
+                        green_host: 'semyana.com',
+                        hst: 'semyana.com',
+                        html5: 'y',
+                        is_playable: '0',
+                        mtime: '2016-05-25T07:00:00+0000',
+                        nid: '3a1b7cfb41a6c952984d2811ee381d76-00-96',
+                        raw_title: [
+                            ''
+                        ],
+                        server_descr: 'VIDEOP',
+                        thmb_h: 90,
+                        thmb_href: stubs.imageUrlStub(140, 90, { color: '30caaa', patternSize: 24, format: 'png' }),
+                        thmb_href_ext: stubs.imageUrlStub(140, 90, { color: '30caaa', patternSize: 24, format: 'png' }),
+                        thmb_src: 'dur=518;cdt=2016-05-25T07:00:00Z;VisibleURL=http://semyana.com/223142/;html5=y;thumb=cs630929.vk.me/v630929027/274e/AIbIy8T3XME.jpg;nid=3a1b7cfb41a6c952984d2811ee381d76-00-96;views=87590;embed=y;hst=semyana.com;url=http://semyana.com/223142/;',
+                        thmb_w: 120,
+                        thumb: 'cs630929.vk.me/v630929027/274e/AIbIy8T3XME.jpg',
+                        url: 'http://semyana.com/223142/',
+                        videoid: '3150380317230782965',
+                        views: '87590'
+                    },
+                    {
+                        MediaDuration: '150',
+                        VisibleURL: 'http://semyana.com/231549/?pubpl=6855',
+                        cdt: '2016-08-16T07:00:00+0000',
+                        clip_host: 'semyana.com',
+                        clip_href: 'http://semyana.com/231549/?pubpl=6855',
+                        dur: '150',
+                        embed: 'y',
+                        global_img_id: '0231d6ac0ab09b783c3948e6c4b4cf1e-00-96',
+                        green_host: 'semyana.com',
+                        hst: 'semyana.com',
+                        html5: 'y',
+                        is_playable: '0',
+                        mtime: '2016-08-16T07:00:00+0000',
+                        nid: '0231d6ac0ab09b783c3948e6c4b4cf1e-00-96',
+                        raw_title: [
+                            ''
+                        ],
+                        server_descr: 'VIDEOP',
+                        thmb_h: 90,
+                        thmb_href: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_href_ext: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_src: 'dur=150;cdt=2016-08-16T07:00:00Z;VisibleURL=http://semyana.com/231549/?pubpl=6855;html5=y;thumb=cs626130.vk.me/v626130966/9de7/pOQFJjFoFeI.jpg;nid=0231d6ac0ab09b783c3948e6c4b4cf1e-00-96;views=12702;embed=y;hst=semyana.com;url=http://semyana.com/231549/?pubpl=6855;',
+                        thmb_w: 120,
+                        thumb: 'cs626130.vk.me/v626130966/9de7/pOQFJjFoFeI.jpg',
+                        url: 'http://semyana.com/231549/?pubpl=6855',
+                        videoid: '16012523775384775432',
+                        views: '12702'
+                    },
+                    {
+                        MediaDuration: '370',
+                        VisibleURL: 'http://semyana.com/224421/',
+                        cdt: '2016-06-18T07:00:00+0000',
+                        clip_host: 'semyana.com',
+                        clip_href: 'http://semyana.com/224421/',
+                        dur: '370',
+                        embed: 'y',
+                        global_img_id: '101d7a1e701bc23511ce6006613f3de6-00-96',
+                        green_host: 'semyana.com',
+                        hst: 'semyana.com',
+                        html5: 'y',
+                        is_playable: '0',
+                        mtime: '2016-06-18T07:00:00+0000',
+                        nid: '101d7a1e701bc23511ce6006613f3de6-00-96',
+                        raw_title: [
+                            ''
+                        ],
+                        server_descr: 'VIDEOP',
+                        thmb_h: 90,
+                        thmb_href: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_href_ext: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_src: 'dur=370;cdt=2016-06-18T07:00:00Z;VisibleURL=http://semyana.com/224421/;html5=y;thumb=cdn1.semyana.com/16/06/18/RiD1YyHpyg.jpg;nid=101d7a1e701bc23511ce6006613f3de6-00-96;views=4403;embed=y;hst=semyana.com;url=http://semyana.com/224421/;',
+                        thmb_w: 120,
+                        thumb: 'cdn1.semyana.com/16/06/18/RiD1YyHpyg.jpg',
+                        url: 'http://semyana.com/224421/',
+                        videoid: '12109787471070935111',
+                        views: '4403'
+                    },
+                    {
+                        MediaDuration: '201',
+                        VisibleURL: 'http://semyana.com/231262/',
+                        cdt: '2016-08-14T07:00:00+0000',
+                        clip_host: 'semyana.com',
+                        clip_href: 'http://semyana.com/231262/',
+                        dur: '201',
+                        embed: 'y',
+                        global_img_id: 'fee734a1baab13a3eb1cce48cc531b32-00-96',
+                        green_host: 'semyana.com',
+                        hst: 'semyana.com',
+                        html5: 'y',
+                        is_playable: '0',
+                        mtime: '2016-08-14T07:00:00+0000',
+                        nid: 'fee734a1baab13a3eb1cce48cc531b32-00-96',
+                        raw_title: [
+                            ''
+                        ],
+                        server_descr: 'VIDEOP',
+                        thmb_h: 90,
+                        thmb_href: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_href_ext: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_src: 'dur=201;cdt=2016-08-14T07:00:00Z;VisibleURL=http://semyana.com/231262/;html5=y;thumb=cs633620.vk.me/v633620254/4106b/1WaTNobHLAU.jpg;nid=fee734a1baab13a3eb1cce48cc531b32-00-96;views=76841;embed=y;hst=semyana.com;url=http://semyana.com/231262/;',
+                        thmb_w: 120,
+                        thumb: 'cs633620.vk.me/v633620254/4106b/1WaTNobHLAU.jpg',
+                        url: 'http://semyana.com/231262/',
+                        videoid: '3658566997280889372',
+                        views: '76841'
+                    },
+                    {
+                        MediaDuration: '300',
+                        VisibleURL: 'http://semyana.com/102441/?pubpl=1080',
+                        cdt: '2015-01-26T07:00:00+0000',
+                        clip_host: 'semyana.com',
+                        clip_href: 'http://semyana.com/102441/?pubpl=1080',
+                        dur: '300',
+                        embed: 'y',
+                        global_img_id: '2d22377c2bdaa111f57d3dd8af68280d-00-96',
+                        green_host: 'semyana.com',
+                        hst: 'semyana.com',
+                        html5: 'y',
+                        is_playable: '0',
+                        mtime: '2015-01-26T07:00:00+0000',
+                        nid: '2d22377c2bdaa111f57d3dd8af68280d-00-96',
+                        raw_title: [
+                            ''
+                        ],
+                        server_descr: 'VIDEOP',
+                        thmb_h: 90,
+                        thmb_href: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_href_ext: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_src: 'dur=300;cdt=2015-01-26T07:00:00Z;VisibleURL=http://semyana.com/102441/?pubpl=1080;html5=y;thumb=cs543606.userapi.com/u18801462/video/l_728826b6.jpg;nid=2d22377c2bdaa111f57d3dd8af68280d-00-96;views=13945;embed=y;hst=semyana.com;url=http://semyana.com/102441/?pubpl=1080;',
+                        thmb_w: 120,
+                        thumb: 'cs543606.userapi.com/u18801462/video/l_728826b6.jpg',
+                        url: 'http://semyana.com/102441/?pubpl=1080',
+                        videoid: '10538899964564703226',
+                        views: '13945'
+                    },
+                    {
+                        MediaDuration: '1152',
+                        VisibleURL: 'http://www.24video.xxx/video/view/2226555',
+                        cdt: '2016-02-29T18:52:42+0000',
+                        clip_host: 'www.24video.xxx',
+                        clip_href: 'http://www.24video.xxx/video/view/2226555',
+                        dur: '1152',
+                        embed: 'y',
+                        global_img_id: '3e76aa0759a670183d4e3a180894bdd0-00-96',
+                        green_host: '24video.xxx',
+                        hst: 'www.24video.xxx',
+                        html5: 'y',
+                        is_playable: '0',
+                        mtime: '2016-02-29T18:52:42+0000',
+                        nid: '3e76aa0759a670183d4e3a180894bdd0-00-96',
+                        raw_title: [
+                            ''
+                        ],
+                        server_descr: 'VIDEOP',
+                        thmb_h: 90,
+                        thmb_href: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_href_ext: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_src: 'dur=1152;cdt=2016-02-29T18:52:42Z;VisibleURL=http://www.24video.xxx/video/view/2226555;html5=y;thumb=img3.24video.xxx/2226/2226555/frame00153.jpg;nid=3e76aa0759a670183d4e3a180894bdd0-00-96;views=47149;embed=y;hst=www.24video.xxx;url=http://www.24video.xxx/video/view/2226555;',
+                        thmb_w: 120,
+                        thumb: 'img3.24video.xxx/2226/2226555/frame00153.jpg',
+                        url: 'http://www.24video.xxx/video/view/2226555',
+                        vhd: '2',
+                        vhdbin: '0',
+                        videoid: '18239987874563216940',
+                        views: '47149'
+                    },
+                    {
+                        MediaDuration: '720',
+                        VisibleURL: 'http://semyana.com/102242/',
+                        cdt: '2016-04-30T07:00:00+0000',
+                        clip_host: 'semyana.com',
+                        clip_href: 'http://semyana.com/102242/',
+                        dur: '720',
+                        embed: 'y',
+                        global_img_id: '80d50b683e939f4c60b45907a72fa64c-00-96',
+                        green_host: 'semyana.com',
+                        hst: 'semyana.com',
+                        html5: 'y',
+                        is_playable: '0',
+                        mtime: '2016-04-30T07:00:00+0000',
+                        nid: '80d50b683e939f4c60b45907a72fa64c-00-96',
+                        raw_title: [
+                            ''
+                        ],
+                        server_descr: 'VIDEOP',
+                        thmb_h: 90,
+                        thmb_href: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_href_ext: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_src: 'dur=720;cdt=2016-04-30T07:00:00Z;VisibleURL=http://semyana.com/102242/;html5=y;thumb=cdn1.semyana.com/16/06/24/STFM6kArAr.jpg;nid=80d50b683e939f4c60b45907a72fa64c-00-96;views=121422;embed=y;hst=semyana.com;url=http://semyana.com/102242/;',
+                        thmb_w: 120,
+                        thumb: 'cdn1.semyana.com/16/06/24/STFM6kArAr.jpg',
+                        url: 'http://semyana.com/102242/',
+                        videoid: '12287256459073351026',
+                        views: '121422'
+                    },
+                    {
+                        MediaDuration: '199',
+                        VisibleURL: 'http://semyana.com/236612/?pubpl=9014',
+                        cdt: '2016-10-14T07:00:00+0000',
+                        clip_host: 'semyana.com',
+                        clip_href: 'http://semyana.com/236612/?pubpl=9014',
+                        dur: '199',
+                        embed: 'y',
+                        global_img_id: '003048484dbd200b819b78570728b0db-00-96',
+                        green_host: 'semyana.com',
+                        hst: 'semyana.com',
+                        html5: 'y',
+                        is_playable: '0',
+                        mtime: '2016-10-14T07:00:00+0000',
+                        nid: '003048484dbd200b819b78570728b0db-00-96',
+                        raw_title: [
+                            ''
+                        ],
+                        server_descr: 'VIDEOP',
+                        thmb_h: 90,
+                        thmb_href: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_href_ext: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_src: 'dur=199;cdt=2016-10-14T07:00:00Z;VisibleURL=http://semyana.com/236612/?pubpl=9014;html5=y;thumb=pp.vk.me/c631520/v631520254/444e8/hHToX8KTsZo.jpg;nid=003048484dbd200b819b78570728b0db-00-96;views=4910;embed=y;hst=semyana.com;url=http://semyana.com/236612/?pubpl=9014;',
+                        thmb_w: 120,
+                        thumb: 'pp.vk.me/c631520/v631520254/444e8/hHToX8KTsZo.jpg',
+                        url: 'http://semyana.com/236612/?pubpl=9014',
+                        videoid: '14446660407791006591',
+                        views: '4910'
+                    },
+                    {
+                        MediaDuration: '198',
+                        VisibleURL: 'http://semyana.com/120111/',
+                        cdt: '2015-08-26T07:00:00+0000',
+                        clip_host: 'semyana.com',
+                        clip_href: 'http://semyana.com/120111/',
+                        dur: '198',
+                        embed: 'y',
+                        global_img_id: 'cb9eca4b1e3327a67f0fd8d277db784a-00-96',
+                        green_host: 'semyana.com',
+                        hst: 'semyana.com',
+                        html5: 'y',
+                        is_playable: '0',
+                        mtime: '2015-08-26T07:00:00+0000',
+                        nid: 'cb9eca4b1e3327a67f0fd8d277db784a-00-96',
+                        raw_title: [
+                            ''
+                        ],
+                        server_descr: 'VIDEOP',
+                        thmb_h: 90,
+                        thmb_href: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_href_ext: stubs.imageUrlStub(140, 90, { color: 'bf390c', patternSize: 24, format: 'png' }),
+                        thmb_src: 'dur=198;cdt=2015-08-26T07:00:00Z;VisibleURL=http://semyana.com/120111/;html5=y;thumb=cs621624.vk.me/v621624308/36b6b/GDBy1ac3umk.jpg;nid=cb9eca4b1e3327a67f0fd8d277db784a-00-96;views=47308;embed=y;hst=semyana.com;url=http://semyana.com/120111/;',
+                        thmb_w: 120,
+                        thumb: 'cs621624.vk.me/v621624308/36b6b/GDBy1ac3umk.jpg',
+                        url: 'http://semyana.com/120111/',
+                        videoid: '103886995134738286',
+                        views: '47308'
+                    }
+                ],
+                count: 22792,
+                counter_prefix: '/snippet/video/',
+                data: {},
+                request_caps: {
+                    porno: '1',
+                    user_request: 'порно видео смотреть',
+                    wizTemplate: 'porn'
+                },
+                serp_info: {
+                    flat: '1',
+                    format: 'json',
+                    type: 'video'
+                },
+                slot: 'full',
+                slot_rank: 0,
+                template: 'video',
+                type: 'video',
+                types: {
+                    all: [
+                        'snippets',
+                        'video'
+                    ],
+                    kind: 'wizard',
+                    main: 'video'
+                },
+                urls: {
+                    host: 'yandex.ru',
+                    paths: {
+                        favorites: '/video/favorites',
+                        main: '/video/',
+                        search: '/video/search'
+                    }
+                },
+                wizTexts: {
+                    greenurl1: 'yandex.ru/video?path=wizard',
+                    greenurlTitle1: 'yandex.ru/video',
+                    greenurlTitle2: '\u0007[порно видео смотреть\u0007]',
+                    title: '\u0007[порно видео смотреть\u0007] — 22 тыс. видео (18+)'
+                }
+            }
+        }
+
+    }
+};

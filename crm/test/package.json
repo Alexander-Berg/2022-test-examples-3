@@ -1,0 +1,64 @@
+{
+    "meta": {
+        "name": "crm-integration-test",
+        "maintainer": "crm-dev@yandex-team.ru",
+        "description": "Executes integration tests for CRM Space",
+        "version": "{branch}-{revision}"
+    },
+    "build": {
+        "targets": [
+            "crm/space/test"
+        ]
+    },
+    "data": [
+        {
+            "source": {
+                "type": "ARCADIA",
+                "path": "crm/space/test/Dockerfile"
+            },
+            "destination": {
+                "path": "/Dockerfile"
+            }
+        },
+        {
+            "source": {
+                "type": "ARCADIA",
+                "path": "crm/space/test/entrypoint.sh"
+            },
+            "destination": {
+                "path": "/entrypoint.sh"
+            }
+        },
+        {
+            "source": {
+                "type": "ARCADIA",
+                "path": "crm/space/test/tnsnames.ora"
+            },
+            "destination": {
+                "path": "/build/tnsnames.ora"
+            }
+        },
+        {
+            "source": {
+                "type": "BUILD_OUTPUT",
+                "path": "crm/space/test/crm_test"
+            },
+            "destination": {
+                "path": "/build/crm_test"
+            }
+        },
+        {
+            "source": {
+                "type": "ARCADIA",
+                "path": "crm/space/test",
+                "files": [
+                    "*.py",
+                    "*.json"
+                ]
+            },
+            "destination": {
+                "path": "/build/src/"
+            }
+        }
+    ]
+} 

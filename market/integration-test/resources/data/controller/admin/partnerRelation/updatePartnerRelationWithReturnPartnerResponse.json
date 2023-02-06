@@ -1,0 +1,250 @@
+{
+  "meta": {
+    "fields": [
+      {
+        "name": "partnerFrom",
+        "title": "Партнер-источник",
+        "type": "REFERENCE",
+        "editable": false,
+        "options": []
+      },
+      {
+        "name": "partnerTo",
+        "title": "Партнер-назначение",
+        "type": "REFERENCE",
+        "editable": false,
+        "options": []
+      },
+      {
+        "name": "handlingTime",
+        "title": "Срок обработки",
+        "type": "NUMBER",
+        "editable": true,
+        "options": []
+      },
+      {
+        "name": "toPartnerLogisticsPointId",
+        "title": "Склад партнера-назначения",
+        "type": "NUMBER",
+        "editable": true,
+        "options": []
+      },
+      {
+        "name": "importSchedule",
+        "title": "importSchedule",
+        "type": "NUMBER",
+        "editable": false,
+        "options": [],
+        "hidden": true
+      },
+      {
+        "name": "intakeSchedule",
+        "title": "intakeSchedule",
+        "type": "NUMBER",
+        "editable": false,
+        "options": [],
+        "hidden": true
+      },
+      {
+        "name": "registerSchedule",
+        "title": "registerSchedule",
+        "type": "NUMBER",
+        "editable": false,
+        "options": [],
+        "hidden": true
+      },
+      {
+        "name": "created",
+        "title": "Создано",
+        "type": "STRING",
+        "editable": false,
+        "options": []
+      },
+      {
+        "name": "updated",
+        "title": "Обновлено",
+        "type": "STRING",
+        "editable": false,
+        "options": []
+      },
+      {
+        "name": "active",
+        "title": "Активность",
+        "type": "BOOLEAN",
+        "editable": true,
+        "options": []
+      },
+      {
+        "name": "reasons",
+        "title": "Ошибки валидации",
+        "type": "TEXT",
+        "editable": false,
+        "options": []
+      },
+      {
+        "name": "shipmentType",
+        "title": "Способ отгрузки",
+        "type": "LIST",
+        "editable": true,
+        "options": [
+          {
+            "id": "IMPORT",
+            "openNewTab": false,
+            "displayName": "Самопривоз",
+            "slug": null
+          },
+          {
+            "id": "WITHDRAW",
+            "openNewTab": false,
+            "displayName": "Забор",
+            "slug": null
+          },
+          {
+            "id": "TPL",
+            "openNewTab": false,
+            "displayName": "3PL",
+            "slug": null
+          }
+        ],
+        "hidden": false,
+        "autocomplete": null
+      },
+      {
+        "name": "movingPartnerId",
+        "title": "Перемещающий партнер",
+        "type": "NUMBER",
+        "editable": true,
+        "hidden": false,
+        "options": [],
+        "autocomplete": {
+          "authorities": [
+            "ROLE_PARTNER"
+          ],
+          "hint": "Перемещающий партнер",
+          "idFieldName": "id",
+          "multiple": false,
+          "optionsSlug": "lms/partner",
+          "pageSize": 20,
+          "queryParamName": "searchQuery",
+          "titleFieldName": "name"
+        },
+        "secret": null
+      },
+      {
+        "name": "transferTime",
+        "title": "Время трансфера со склада поставщика на наш склад (чч:мм)",
+        "type": "STRING",
+        "editable": true,
+        "options": []
+      },
+      {
+        "name": "inboundTime",
+        "title": "Время на приёмку на нашем складе (чч:мм)",
+        "type": "STRING",
+        "editable": true,
+        "options": []
+      },
+      {
+        "name": "intakeDeadline",
+        "title": "Дельта дедлайна приемки (чч:мм)",
+        "type": "STRING",
+        "editable": true,
+        "options": []
+      },
+      {
+        "name": "partnerReturnId",
+        "title": "Партнер-возвратный склад",
+        "type": "NUMBER",
+        "editable": true,
+        "options": []
+      }
+    ],
+    "actions": [],
+    "mode": "EDIT",
+    "deletable": false,
+    "children": [
+      {
+        "title": "Расписание самопривозов",
+        "slug": "schedule",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "scheduleId",
+        "idFieldName": "importSchedule",
+        "pageSize": 7,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "Расписание заборов / 3PL",
+        "slug": "schedule",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "scheduleId",
+        "idFieldName": "intakeSchedule",
+        "pageSize": 7,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "Расписание межскладских перемещений",
+        "slug": "interwarehouse-schedule",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "partnerRelationId",
+        "idFieldName": "id",
+        "pageSize": 7,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "Расписание реестров",
+        "slug": "schedule",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "scheduleId",
+        "idFieldName": "registerSchedule",
+        "pageSize": 7,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "Cut Off'ы",
+        "slug": "cut-off",
+        "type": "GRID",
+        "parentColumn": "partnerRelation",
+        "pageSize": 5
+      },
+      {
+        "title": "Рейтинги",
+        "slug": "rating",
+        "type": "GRID",
+        "parentColumn": "partnerRelation",
+        "pageSize": 5
+      }
+    ],
+    "tabs": []
+  },
+  "item": {
+    "id": 1,
+    "values": {
+      "partnerFrom": {
+        "id": "1",
+        "displayName": "Fulfillment service 1",
+        "slug": "lms/partner"
+      },
+      "handlingTime": 10,
+      "reasons": {
+        "text": ""
+      },
+      "created": "14 февр. 2019 18:09",
+      "partnerReturnId": 3,
+      "active": true,
+      "shipmentType": "WITHDRAW",
+      "partnerTo": {
+        "id": "2",
+        "displayName": "Delivery service 1",
+        "slug": "lms/partner"
+      },
+      "registerSchedule": 1000,
+      "intakeSchedule": 2000,
+      "intakeDeadline": "05:00"
+    },
+    "title": "Fulfillment service 1 → Delivery service 1"
+  }
+}

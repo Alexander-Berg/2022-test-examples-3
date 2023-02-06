@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>innerpochta-imap-common-root</artifactId>
+        <groupId>ru.yandex.autotests</groupId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
+
+    <packaging>pom</packaging>
+
+
+    <artifactId>innerpochta-imap-new</artifactId>
+
+    <name>autotests-testpers-mail-imap-new-root</name>
+    <description>Pom for new IMAP tests and steps (2014-Q1)</description>
+
+
+    <modules>
+        <module>imap-steps</module>
+        <module>imap-tests</module>
+        <module>pop3-tests</module>
+        <module>ssh-utils</module>
+    </modules>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <allure.version>1.4.19</allure.version>
+        <aspectj.version>1.8.1</aspectj.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.15</version>
+                <configuration>
+                    <argLine>
+                        -javaagent:${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar
+                    </argLine>
+                    <properties>
+                        <property>
+                            <name>listener</name>
+                            <value>ru.yandex.qatools.allure.junit.AllureRunListener</value>
+                        </property>
+                    </properties>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjweaver</artifactId>
+                        <version>${aspectj.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+        </plugins>
+    </build>
+
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>ru.yandex.qatools.allure</groupId>
+                <artifactId>allure-maven-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <resultsDirectory>${project.build.directory}/allure-maven-plugin</resultsDirectory>
+                    <reportDirectory>${project.build.directory}/site/allure-maven-plugin</reportDirectory>
+                    <plugins>
+                        <plugin>
+                            <groupId>ru.yandex.qatools.allure</groupId>
+                            <artifactId>allure-metric-plugin</artifactId>
+                            <version>1.0-SNAPSHOT</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>ru.yandex.testpers.allure</groupId>
+                            <artifactId>packages-plugin</artifactId>
+                            <version>1.0-SNAPSHOT</version>
+                        </plugin>
+                    </plugins>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
+
+    <dependencies>
+        <!--for new session driver-->
+        <dependency>
+            <groupId>org.apache.mina</groupId>
+            <artifactId>mina-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.mina</groupId>
+            <artifactId>mina-example</artifactId>
+            <version>2.0.7</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>mina-core</artifactId>
+                    <groupId>org.apache.mina</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>mina-integration-beans</artifactId>
+                    <groupId>org.apache.mina</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>mina-integration-ognl</artifactId>
+                    <groupId>org.apache.mina</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>mina-integration-jmx</artifactId>
+                    <groupId>org.apache.mina</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>mina-statemachine</artifactId>
+                    <groupId>org.apache.mina</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.yandex.qatools.matchers</groupId>
+            <artifactId>matcher-decorators</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.cthul</groupId>
+            <artifactId>cthul-matchers</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.yandex.qatools.allure</groupId>
+            <artifactId>allure-junit-adaptor</artifactId>
+        </dependency>
+
+    </dependencies>
+
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>javax.ws.rs-api</artifactId>
+                <version>2.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.mina</groupId>
+                <artifactId>mina-core</artifactId>
+                <version>2.0.16</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>slf4j-api</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.7.7</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.qatools.matchers</groupId>
+                <artifactId>matcher-decorators</artifactId>
+                <version>1.0</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>hamcrest-core</artifactId>
+                        <groupId>org.hamcrest</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-all</artifactId>
+                <version>1.3</version>
+            </dependency>
+
+            <!--https://code.google.com/p/guava-libraries/-->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>17.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.qatools.allure</groupId>
+                <artifactId>allure-junit-adaptor</artifactId>
+                <version>${allure.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>slf4j-simple</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!--https://github.com/derari/cthul/wiki/Matchers#string-matchers-->
+            <dependency>
+                <groupId>org.cthul</groupId>
+                <artifactId>cthul-matchers</artifactId>
+                <version>1.1.0</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.2.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>imap-steps</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.qatools.properties</groupId>
+                <artifactId>properties-loader</artifactId>
+                <version>1.5</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>ru.yandex.autotests</groupId>
+                <artifactId>ssh-utils</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+            <!--ssh connection library-->
+            <dependency>
+                <groupId>ch.ethz.ganymed</groupId>
+                <artifactId>ganymed-ssh2</artifactId>
+                <version>261</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.17</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>ru.yandex.autotests</groupId>
+                <artifactId>wmi-core</artifactId>
+                <version>1.4.1-SNAPSHOT</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>jersey-client</artifactId>
+                        <groupId>com.sun.jersey</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>hamcrest-core</artifactId>
+                        <groupId>org.hamcrest</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>hamcrest-library</artifactId>
+                        <groupId>org.hamcrest</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-jdk14</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+
+            <dependency>
+                <groupId>ru.yandex.autotests</groupId>
+                <artifactId>innerpochta-common</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>junit</artifactId>
+                        <groupId>junit</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>browsermob-proxy</artifactId>
+                        <groupId>biz.neustar</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>slf4j-api</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>httpclient</artifactId>
+                        <groupId>org.apache.httpcomponents</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.lanwen.verbalregex</groupId>
+                <artifactId>java-verbal-expressions</artifactId>
+                <version>1.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-client</artifactId>
+                <version>1.14</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-net</groupId>
+                <artifactId>commons-net</artifactId>
+                <version>3.0.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.3.6</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.autotests</groupId>
+                <artifactId>passport-api-core</artifactId>
+                <version>1.1-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.lanwen.diff</groupId>
+                <artifactId>uri-differ-lib</artifactId>
+                <version>1.3.0</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+
+</project>

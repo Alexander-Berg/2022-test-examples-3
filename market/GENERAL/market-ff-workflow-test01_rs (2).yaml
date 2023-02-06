@@ -1,0 +1,43 @@
+- name: market-ff-workflow-test01h.db.yandex.net
+  cluster_id: b9ea4c16-c4a5-4bb4-b6cd-8abef3ec1e6b
+  zone_id: sas
+  resources:
+    resource_preset_id: db1.nano
+    disk_size: "10737418240"
+    disk_type_id: local-ssd
+  role: MASTER
+  health: ALIVE
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+    health: ALIVE
+- name: market-ff-workflow-test01i.db.yandex.net
+  cluster_id: b9ea4c16-c4a5-4bb4-b6cd-8abef3ec1e6b
+  zone_id: man
+  resources:
+    resource_preset_id: db1.nano
+    disk_size: "10737418240"
+    disk_type_id: local-ssd
+  role: REPLICA
+  health: ALIVE
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+    health: ALIVE
+  replica_type: ASYNC
+- name: vla-1fqzlamtrhi02rs7.db.yandex.net
+  cluster_id: b9ea4c16-c4a5-4bb4-b6cd-8abef3ec1e6b
+  zone_id: vla
+  resources:
+    resource_preset_id: db1.nano
+    disk_size: "10737418240"
+    disk_type_id: local-ssd
+  health: DEAD
+  services:
+  - type: POSTGRESQL
+  - type: POOLER
+    health: ALIVE
+  priority: "0"
+

@@ -1,0 +1,567 @@
+const offerMock = {
+    showUid: '386426439299069477300001',
+    entity: 'offer',
+    bundleSettings: {
+        quantityLimit: {
+            minimum: 12,
+            step: 20,
+        },
+    },
+    vendor: {
+        entity: 'vendor',
+        id: 153070,
+        name: 'Ricoh',
+        slug: 'Ricoh',
+        description: 'втоматизации офисных работ - это копиры, принтеры, сканеры',
+        webpageRecommendedShops: 'http://www.ricoh.ru/about-ricoh/Ricoh_Russia/recommended-store/index.aspx ',
+        website: 'http://www.ricoh.ru',
+        logo: {
+            entity: 'picture',
+            url: '//avatars.mds.yandex.net/get-mpic/199079/img_id2895790950456410386/orig',
+            thumbnails: [],
+        },
+        filter: '7893318:153070',
+    },
+    titles: {
+        raw: 'МФУ Ricoh SP 210SU',
+        highlighted: [
+            {
+                value: 'МФУ Ricoh SP 210SU',
+            },
+        ],
+    },
+    wareId: 'MRkHuflzbQ8rDi_6fP1y0A',
+    description: '',
+    categories: [
+        {
+            entity: 'category',
+            id: 54726,
+            nid: 54726,
+            name: 'Принтеры и МФУ',
+            fullName: 'Принтеры и МФУ',
+            type: 'guru',
+            isLeaf: true,
+        },
+    ],
+    cpc: 'test',
+    urls: {
+        encrypted: '/redir/test&keyno=1',
+        decrypted: '/redir/decrypted',
+        offercard: '/redir/offercard',
+        geo: '/redir/geo',
+        pickupGeo: '/redir/pickupGeo',
+        storeGeo: '/redir/storeGeo',
+        postomatGeo: '/redir/postomatGeo',
+    },
+    navnodes: [
+        {
+            entity: 'navnode',
+            id: 54726,
+            name: 'Принтеры и МФУ',
+            slug: 'printery-i-mfu',
+            fullName: 'Принтеры и МФУ',
+            isLeaf: false,
+            rootNavnode: {},
+        },
+    ],
+    pictures: [
+        {
+            entity: 'picture',
+            original: {
+                containerWidth: 356,
+                containerHeight: 460,
+                url: '//avatars.mds.yandex.net/get-mpic/96484/img_id8323216157427783023/orig',
+                width: 356,
+                height: 460,
+            },
+            thumbnails: [
+                {
+                    containerWidth: 50,
+                    containerHeight: 50,
+                    url: '//avatars.mds.yandex.net/get-mpic/96484/img_id8323216157427783023/1hq',
+                    width: 50,
+                    height: 50,
+                },
+                {
+                    containerWidth: 100,
+                    containerHeight: 100,
+                    url: '//avatars.mds.yandex.net/get-mpic/96484/img_id8323216157427783023/2hq',
+                    width: 100,
+                    height: 100,
+                },
+                {
+                    containerWidth: 75,
+                    containerHeight: 75,
+                    url: '//avatars.mds.yandex.net/get-mpic/96484/img_id8323216157427783023/3hq',
+                    width: 75,
+                    height: 75,
+                },
+                {
+                    containerWidth: 150,
+                    containerHeight: 150,
+                    url: '//avatars.mds.yandex.net/get-mpic/96484/img_id8323216157427783023/4hq',
+                    width: 150,
+                    height: 150,
+                },
+                {
+                    containerWidth: 200,
+                    containerHeight: 200,
+                    url: '//avatars.mds.yandex.net/get-mpic/96484/img_id8323216157427783023/5hq',
+                    width: 200,
+                    height: 200,
+                },
+                {
+                    containerWidth: 250,
+                    containerHeight: 250,
+                    url: '//avatars.mds.yandex.net/get-mpic/96484/img_id8323216157427783023/6hq',
+                    width: 250,
+                    height: 250,
+                },
+                {
+                    containerWidth: 120,
+                    containerHeight: 120,
+                    url: '//avatars.mds.yandex.net/get-mpic/96484/img_id8323216157427783023/7hq',
+                    width: 120,
+                    height: 120,
+                },
+                {
+                    containerWidth: 240,
+                    containerHeight: 240,
+                    url: '//avatars.mds.yandex.net/get-mpic/96484/img_id8323216157427783023/8hq',
+                    width: 240,
+                    height: 240,
+                },
+                {
+                    containerWidth: 500,
+                    containerHeight: 500,
+                    url: '//avatars.mds.yandex.net/get-mpic/96484/img_id8323216157427783023/9hq',
+                    width: 500,
+                    height: 500,
+                },
+            ],
+        },
+    ],
+    meta: {},
+    isTurboUrl: false,
+    isCutPrice: false,
+    previouslyUsed: false,
+    delivery: {
+        shopPriorityRegion: {
+            entity: 'region',
+            id: 213,
+            name: 'Москва',
+            lingua: {
+                name: {
+                    genitive: 'Москвы',
+                    preposition: 'в',
+                    prepositional: 'Москве',
+                    accusative: 'Москву',
+                },
+            },
+        },
+        shopPriorityCountry: {
+            entity: 'region',
+            id: 225,
+            name: 'Россия',
+            lingua: {
+                name: {
+                    genitive: 'России',
+                    preposition: 'в',
+                    prepositional: 'России',
+                    accusative: 'Россию',
+                },
+            },
+        },
+        isPriorityRegion: true,
+        isCountrywide: true,
+        isAvailable: true,
+        hasPickup: true,
+        hasLocalStore: false,
+        hasPost: false,
+        isFake: false,
+        region: {
+            entity: 'region',
+            id: 213,
+            name: 'Москва',
+            lingua: {
+                name: {
+                    genitive: 'Москвы',
+                    preposition: 'в',
+                    prepositional: 'Москве',
+                    accusative: 'Москву',
+                },
+            },
+        },
+        price: {
+            currency: 'RUR',
+            value: '300',
+            isDeliveryIncluded: false,
+        },
+        isFree: false,
+        isDownloadable: false,
+        inStock: true,
+        postAvailable: false,
+        options: [
+            {
+                price: {
+                    currency: 'RUR',
+                    value: '300',
+                    isDeliveryIncluded: false,
+                },
+                dayFrom: 1,
+                dayTo: 1,
+                orderBefore: '18',
+                isDefault: true,
+                serviceId: '99',
+                partnerType: 'regular',
+                region: {
+                    entity: 'region',
+                    id: 213,
+                    name: 'Москва',
+                    lingua: {
+                        name: {
+                            genitive: 'Москвы',
+                            preposition: 'в',
+                            prepositional: 'Москве',
+                            accusative: 'Москву',
+                        },
+                    },
+                },
+            },
+        ],
+        pickupOptions: [
+            {
+                serviceId: 99,
+                serviceName: 'Собственная служба',
+                price: {
+                    currency: 'RUR',
+                    value: '0',
+                },
+                groupCount: 1,
+                region: {
+                    entity: 'region',
+                    id: 213,
+                    name: 'Москва',
+                    lingua: {
+                        name: {
+                            genitive: 'Москвы',
+                            preposition: 'в',
+                            prepositional: 'Москве',
+                            accusative: 'Москву',
+                        },
+                    },
+                },
+            },
+        ],
+    },
+    shop: {
+        entity: 'shop',
+        id: 1672,
+        name: 'TechPort.ru',
+        gradesCount: 38303,
+        overallGradesCount: 75059,
+        qualityRating: 4,
+        isGlobal: false,
+        isCpaPrior: true,
+        isCpaPartner: false,
+        taxSystem: 'OSN',
+        isNewRating: true,
+        newGradesCount: 38303,
+        newQualityRating: 4.408505861,
+        newQualityRating3M: 4.364615821,
+        ratingToShow: 4.364615821,
+        newGradesCount3M: 3527,
+        status: 'actual',
+        cutoff: '',
+        outletsCount: 1,
+        storesCount: 0,
+        pickupStoresCount: 1,
+        depotStoresCount: 1,
+        postomatStoresCount: 0,
+        bookNowStoresCount: 0,
+        subsidies: false,
+        deliveryVat: 'NO_VAT',
+        feed: {
+            id: '2525',
+            offerId: '418884',
+            categoryId: '22090',
+        },
+        phones: {
+            raw: '+7 (495) 228-66-69',
+            sanitized: '+74952286669',
+        },
+        homeRegion: {
+            entity: 'region',
+            id: 225,
+            name: 'Россия',
+            lingua: {
+                name: {},
+            },
+        },
+    },
+    prices: {
+        currency: 'RUR',
+        value: '7290',
+        isDeliveryIncluded: false,
+        rawValue: '7290',
+        discount: {
+            percent: '20',
+            oldMin: '9000',
+        },
+    },
+    manufacturer: {
+        entity: 'manufacturer',
+        warranty: true,
+    },
+    seller: {
+        comment: 'Нал,Пластиковой картой при получении',
+        price: '7290',
+        currency: 'RUR',
+        sellerToUserExchangeRate: 1,
+    },
+    creditInfo: {
+        monthlyPayment: {
+            value: 2401,
+            currency: 'RUR',
+        },
+        bank: 'Банк Банковски',
+        url: '/redir/',
+        term: 18,
+        rate: 16.8,
+    },
+    promo: {
+        type: 'promo-code',
+        key: 'CIpIsJrgk2hUt4fRwFBetQ',
+        promoCode: 'CODE_FOR_100_RUR',
+        discount: {
+            value: 100,
+            currency: 'RUR',
+        },
+        parameters: {
+            requiredQuantity: 1,
+        },
+    },
+    filters: [
+        {
+            id: '4925874',
+            type: 'number',
+            name: 'Цифровая характеристика',
+            xslname: 'Diagonal',
+            subType: '',
+            kind: 1,
+            isGuruLight: true,
+            unit: '"',
+            position: 2,
+            noffers: 1,
+            precision: 2,
+            values: [
+                {
+                    ranges: '19, 40, 98',
+                    max: '42',
+                    initialMax: '42',
+                    initialMin: '42',
+                    min: '42',
+                    id: 'found',
+                },
+            ],
+            meta: {},
+        },
+    ],
+};
+
+const outlet = {
+    entity: 'outlet',
+    id: '1177093',
+    region: {
+        entity: 'region',
+        id: 213,
+        name: 'Москва',
+        type: 6,
+    },
+    purpose: [
+        'pickup',
+    ],
+    address: {
+        fullAddress: 'Москва, Полковая, д. 3, стр. Без №',
+        country: '',
+        region: '',
+        locality: 'Москва',
+        street: 'Полковая',
+        building: '3',
+    },
+    telephones: [
+        {
+            cityCode: '800',
+            countryCode: '7',
+            entity: 'telephone',
+            extensionNumber: '',
+            telephoneNumber: '7753729',
+        },
+    ],
+    workingTime: [
+        {
+            daysFrom: '1',
+            daysTo: '1',
+            hoursFrom: '10:00',
+            hoursTo: '21:00',
+        },
+        {
+            daysFrom: '2',
+            daysTo: '2',
+            hoursFrom: '10:00',
+            hoursTo: '21:00',
+        },
+        {
+            daysFrom: '3',
+            daysTo: '3',
+            hoursFrom: '10:00',
+            hoursTo: '21:00',
+        },
+        {
+            daysFrom: '4',
+            daysTo: '4',
+            hoursFrom: '10:00',
+            hoursTo: '21:00',
+        },
+        {
+            daysFrom: '5',
+            daysTo: '5',
+            hoursFrom: '10:00',
+            hoursTo: '21:00',
+        },
+        {
+            daysFrom: '6',
+            daysTo: '6',
+            hoursFrom: '10:00',
+            hoursTo: '21:00',
+        },
+    ],
+    shop: {
+        id: 1672,
+    },
+    gpsCoord: {
+        longitude: '37.6035721',
+        latitude: '55.79971565',
+    },
+    isMarketBranded: false,
+    serviceId: 99,
+    name: 'TechPort.ru',
+    type: 'pickup',
+};
+
+const bundledInfo = {
+    bundleCount: 1,
+    bundleSettings: {
+        quantityLimit: {
+            minimum: 1,
+            step: 1,
+        },
+    },
+    bundled: {
+        outletId: outlet.id,
+        count: 1,
+        shopCategory: {
+            count: 1,
+            minPrice: {
+                currency: 'RUR',
+                value: '2048',
+                isDeliveryIncluded: false,
+            },
+        },
+    },
+};
+
+const similarGoodsOfferMock = {
+    ...offerMock,
+    titles: {
+        raw: 'Оффер для похожих товаров',
+        highlighted: [
+            {
+                value: 'Оффер ',
+                highlight: true,
+            },
+            {
+                value: 'для ',
+                highlight: false,
+            },
+            {
+                value: 'похожих ',
+                highlight: true,
+            },
+            {
+                value: 'товаров ',
+                highlight: false,
+            },
+            {
+                value: 'с выделением',
+                highlight: true,
+            },
+        ],
+    },
+    description: 'Описание оффера для похожих товаров',
+    shop: {
+        entity: 'shop',
+        id: 266118,
+        name: 'OBI Москва',
+        slug: 'obi-moskva',
+        gradesCount: 13,
+        overallGradesCount: 13,
+        qualityRating: 3,
+        isGlobal: false,
+        isCpaPrior: false,
+        isCpaPartner: true,
+        isNewRating: true,
+        newGradesCount: 13,
+        newQualityRating: 3.153846154,
+        newQualityRating3M: 0,
+        ratingToShow: 3.153846154,
+        ratingType: 2,
+        newGradesCount3M: 0,
+        status: '',
+        cutoff: '',
+        outletsCount: 0,
+        storesCount: 0,
+        pickupStoresCount: 0,
+        depotStoresCount: 0,
+        postomatStoresCount: 0,
+        bookNowStoresCount: 0,
+        subsidies: false,
+        chatInfo: {
+            chatId: '5474ae96-af47-408b-bb28-ba735dd7942d',
+            schedule: [{fromHour: '540', toHour: '1080', weekDay: '0'}, {
+                fromHour: '540',
+                toHour: '1080',
+                weekDay: '1',
+            }, {fromHour: '540', toHour: '1080', weekDay: '2'}, {
+                fromHour: '540',
+                toHour: '1080',
+                weekDay: '3',
+            }, {fromHour: '540', toHour: '1080', weekDay: '4'}],
+            timeZone: '10800',
+        },
+        feed: {id: '441845', offerId: '4040', categoryId: '319'},
+        phones: {raw: '+7 495 980-70-98', sanitized: '+74959807098'},
+        createdAt: '2016-06-29T17:30:57',
+        mainCreatedAt: '2016-06-29T17:30:57',
+        homeRegion: {entity: 'region', id: 225, name: 'Россия', lingua: {name: {}}, type: 0},
+    },
+    price: {
+        currency: 'RUR',
+        value: '300',
+        isDeliveryIncluded: false,
+    },
+    cpc: 'test2',
+    urls: {
+        encrypted: '/redir/test&keyno=1',
+        decrypted: '/redir/decrypted',
+        offercard: '/redir/offercard',
+        geo: '/redir/geo',
+    },
+};
+
+export {
+    offerMock,
+    bundledInfo,
+    outlet,
+    similarGoodsOfferMock,
+};

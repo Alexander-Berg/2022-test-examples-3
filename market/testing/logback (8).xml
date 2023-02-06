@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty name="LOG_PATH" source="logging.path" />
+    <springProperty name="LOG_FILE" source="logging.file" />
+
+    <include resource="appender/main.xml"/>
+    <include resource="appender/json-file.xml"/>
+    <include resource="appender/request-trace.xml"/>
+    <include resource="appender/sql-trace.xml"/>
+    <include resource="appender/console.xml"/>
+
+    <include resource="appender/postgres-migration.xml"/>
+
+    <logger name="requestTrace" level="TRACE" additivity="false">
+        <appender-ref ref="REQUEST_TRACE"/>
+        <appender-ref ref="MAIN" />
+    </logger>
+
+    <logger name="time-tracking-system-sql-trace" level="TRACE" additivity="false">
+        <appender-ref ref="SQL_TRACE" />
+        <appender-ref ref="MAIN" />
+    </logger>
+
+    <logger name="org.springframework.jdbc.core" level="INFO" additivity="false">
+        <appender-ref ref="MAIN" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <logger name="ru.yandex.market" level="DEBUG" additivity="false">
+        <appender-ref ref="MAIN" />
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="JSON_FILE" />
+    </logger>
+
+    <logger name="ru.yandex.market.wms.timetracker.job.PostgresMigrationJob" level="INFO" additivity="false">
+        <appender-ref ref="postgres-migration" />
+        <appender-ref ref="postgres-migration-error" />
+        <appender-ref ref="MAIN" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="MAIN"/>
+        <appender-ref ref="JSON_FILE"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>

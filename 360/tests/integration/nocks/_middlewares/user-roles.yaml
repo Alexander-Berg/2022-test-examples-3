@@ -1,0 +1,32 @@
+$schema: ../_schemas/nock.yaml
+
+scope: 'http://payments'
+method: GET
+path: /v1/user_role/1234567890
+
+reqheaders:
+  $include: ../_samples/reqheaders.yaml
+  content-type: application/json
+
+status: 200
+
+response:
+  data:
+    - user_email: username@yandex.ru
+      merchant:
+        $include: ../_samples/merchant.yaml
+      description: description
+      user_uid: 1234567890
+      merchant_id: '1234567890'
+      created: '2019-10-07T11:28:51.732619+00:00'
+      updated: '2019-10-11T15:19:54.722349+00:00'
+      role: owner
+    - user_email: username@yandex.ru
+      merchant:
+        $include: ../_samples/merchant.yaml
+      description: description
+      user_uid: 1234567890
+      merchant_id: '0987654321'
+      created: '2019-10-10T16:03:46.430444+00:00'
+      updated: '2019-10-10T16:03:51.153941+00:00'
+      role: admin

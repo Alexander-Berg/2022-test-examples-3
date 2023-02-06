@@ -1,0 +1,16 @@
+context:
+  default:
+    service_name: clickdaemon_testing
+    servername_regexp: (www\\.)?market-click2-testing\\.(fslb[\\w\\d]*\\.|tst\\.vs\\.market\\.)?yandex\\.(ru|ua|com|kz|by)
+    vs: clickdaemon_testing
+    health_check: '"GET /ping HTTP/1.1\r\nHost: heartbeat.market.yandex.ru\r\n\r\n"'
+    antirobot: true
+    antirobot_service_name: market
+    cert: market-click2
+
+servers:
+  default:
+    main:
+    - name: GREY%market-click2.tst.vs.market.yandex.net
+      plain_http_backend: true      
+      timeout: 30s

@@ -1,0 +1,25 @@
+import ru.yandex.market.deepmind.common.services.rule_engine.pojo.REMskuStatus
+import ru.yandex.market.deepmind.common.db.jooq.generated.msku.enums.MskuStatusValue
+
+dialect  "mvel"
+
+global java.time.Instant NOW
+global java.time.LocalDate NOW_DATE
+
+rule "ЕСЛИ (MSKU = End_of_life) ТО (MSKU = Archive)"
+when
+    $msku: REMskuStatus(status == MskuStatusValue.END_OF_LIFE)
+then
+    modify($msku) {
+        status = MskuStatusValue.ARCHIVE
+    }
+end
+
+rule "ЕСЛИ (MSKU = Archive) ТО (MSKU = End_of_life)"
+when
+    $msku: REMskuStatus(status == MskuStatusValue.ARCHIVE)
+then
+    modify($msku) {
+        status = MskuStatusValue.END_OF_LIFE
+    }
+end

@@ -1,0 +1,36 @@
+base: etc/collectors/dev.yml
+config:
+    log:
+        global:
+            sinks:
+            -   type: file
+                path: var/log/collectors_master/collectors.log
+        macs:
+            sinks:
+            -   type: file
+                path: var/log/collectors_master/macs.log
+        WebAccessTskv:
+            sinks:
+            -   type: file
+                path: var/log/collectors_master/access.log
+        HttpTskv:
+            sinks:
+            -   type: file
+                path: var/log/collectors_master/httpout.log
+    modules:
+        module:
+        -   _name: web_server
+            configuration:
+                endpoints:
+                    listen:
+                    -   addr: '::'
+                        port: 4048
+                    -   addr: '::'
+                        port: 6048
+                        endpoint_name: 'internal'
+                    -   addr: '::'
+                        port: 9080
+                        endpoint_name: 'service'
+        -   _name: lease_node
+            configuration:
+                tag: collectors_sharding_master

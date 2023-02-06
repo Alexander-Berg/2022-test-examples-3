@@ -1,0 +1,37 @@
+warehouse-timezone: Europe/Moscow
+application:
+  security:
+    use-tvm-auth: false
+
+spring:
+  datasource:
+    url: &jdbc-url jdbc:h2:mem:SCPRD;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1
+    jdbc-url: *jdbc-url
+  config:
+    import:
+      - application-fragment-common-test.yml
+  main:
+    allow-bean-definition-overriding: true
+  liquibase:
+    enabled: true
+
+AppServer: localhost
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms: debug
+    org.springframework.jdbc.core: debug
+    root: info
+
+check:
+  authentication: 'no'
+
+servicebus:
+  api:
+    host: http://localhost:8382
+
+s3.use: false
+
+warehouse:
+  id: 123

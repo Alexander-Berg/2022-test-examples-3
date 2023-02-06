@@ -1,0 +1,289 @@
+#
+# EXAMPLE
+#
+#  - partner_id: 1003937           # Обязательное поле
+#    partner_name: DPD             # Обязательное поле
+#    locations: [ 213 ]
+#    logistic_points: [ 1000556473830 ]
+#    max_postpaid_price: 0
+#    max_prepaid_price: 10
+#    disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED, PREPAY_ALLOWED ]
+#    delivery_type: PICKUP
+#
+# TUTORIAL
+#
+# 1) Перед partner_id необходимо поставить дефис
+#  - partner_id: 1003937
+#
+# 2) Внимание!!!
+#   ОБЯЗАТЕЛЬНЫЕ ПОЛЯ - partner_id, partner_name
+#
+# 3) Все строки (partner_id, partner_name, locations, logistic_points, max_postpaid_price, max_prepaid_price,
+#       disabled_payment_types, delivery_type) должны иметь одинаковые отступы, как показано в примере.
+#
+# 4) В поле disabled_payment_types, locations, logistic_points значения должны всегда быть внутри [], запятые только между элементами
+#     disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ] / to: [ CASH_ALLOWED ]
+#     locations: [ 213 ] / [ 213, 2 ]
+#     logistic_points: [ 1000556473830 ]
+#
+# 5) Поле disabled_payment_types может включать в себя следующие значения - CASH_ALLOWED, CARD_ALLOWED, PREPAY_ALLOWED
+#     disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED, PREPAY_ALLOWED ]
+#
+# 6) Для отключения пост-оплаты вставьте в disabled_payment_types значение:
+#     disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ]
+#
+# 7) Для отключения предоплаты вставьте в disabled_payment_types значение:
+#     disabled_payment_types: [ PREPAY_ALLOWED ]
+#
+# 8) Для ограничения типа оплаты на определенной логистической точке, используйте поле logistic_points:
+#    - partner_id: 1003937
+#      partner_name: DPD
+#      logistic_points: [ 1000556473830 ]
+#      max_prepaid_price: 10
+#
+# 9) Для ограничения типа оплаты при доставке в определенные регионы, используйте поле locations:
+#    - partner_id: 1003937
+#      partner_name: DPD
+#      locations: [ 213, 2 ]
+#      disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED, PREPAY_ALLOWED ]
+#
+# 10) Для того чтобы полностью отключить тип оплаты, укажите его в поле disabled_payment_types:
+#    - partner_id: 1003937
+#      partner_name: DPD
+#      disabled_payment_types: [ PREPAY_ALLOWED ]
+#
+#    В данном примере для партнера 1003937, отключатся способы доставки с предоплатой
+#
+# 11) Оставьте комментарии для значений, для комментариев используется знак #
+#
+#   - partner_id: 1003937
+#     locations: [ 213 ]           # Москва
+#     partner_name: DPD
+#     max_postpaid_price: 200
+#
+
+limitation_for_payment_types:
+
+  - partner_id: 1003937
+    partner_name: DPD
+    max_postpaid_price: 200
+
+  - partner_id: 153
+    partner_name: DPD NextDay
+    max_postpaid_price: 200
+
+  - partner_id: 126
+    partner_name: Сберлогистика/Shiptor
+    max_postpaid_price: 150
+
+  - partner_id: 1005414
+    partner_name: Сберлогистика NDD
+    max_postpaid_price: 150
+
+  - partner_id: 51
+    partner_name: СДЭК
+    max_postpaid_price: 150
+
+  - partner_id: 9
+    partner_name: ПЭК
+    max_postpaid_price: 100
+
+  - partner_id: 107
+    partner_name: Pickpoint
+    max_postpaid_price: 150
+
+  - partner_id: 1004954
+    partner_name: PickPoint МСК
+    max_postpaid_price: 100
+
+  - partner_id: 1005330
+    partner_name: PickPoint SPB
+    max_postpaid_price: 100
+
+  - partner_id: 106
+    partner_name: Boxberry
+    max_postpaid_price: 100
+
+  - partner_id: 1004948
+    partner_name: Boxberry МСК
+    max_postpaid_price: 300
+
+  - partner_id: 1004972
+    partner_name: Boxberry KD
+    max_postpaid_price: 300
+
+  - partner_id: 48
+    partner_name: Стриж
+    max_postpaid_price: 1000
+
+  - partner_id: 162
+    partner_name: Стриж Почтоматы
+    max_postpaid_price: 1000
+
+  - partner_id: 165
+    partner_name: Стриж CrossDock
+    max_postpaid_price: 1000
+
+  - partner_id: 1005372
+    partner_name: Стриж. Доставка до ПВЗ
+    max_postpaid_price: 1000
+
+  - partner_id: 1005372
+    partner_name: Стриж. Доставка до ПВЗ
+    max_postpaid_price: 1000
+
+  - partner_id: 179
+    partner_name: Вестовой
+    max_postpaid_price: 300
+
+  - partner_id: 197
+    partner_name: Вестовой same day
+    max_postpaid_price: 300
+
+  - partner_id: 227
+    partner_name: Вестовой СПб
+    max_postpaid_price: 300
+
+  - partner_id: 1004951
+    partner_name: Вестовой NDD
+    max_postpaid_price: 300
+
+  - partner_id: 47
+    partner_name: Даймэкс
+    max_postpaid_price: 200
+
+  - partner_id: 180
+    partner_name: Dimex
+    max_postpaid_price: 200
+
+  - partner_id: 1005147
+    partner_name: Dimex SDD
+    max_postpaid_price: 200
+
+  - partner_id: 1005321
+    partner_name: Dimex MSK
+    max_postpaid_price: 200
+
+  - partner_id: 1005342
+    partner_name: Dimex Krasnodar
+    max_postpaid_price: 200
+
+  - partner_id: 1005456
+    partner_name: Dimex Volgograd
+    max_postpaid_price: 200
+
+  - partner_id: 215
+    partner_name: Vezu
+    max_postpaid_price: 200
+
+  - partner_id: 1005159
+    partner_name: Vezu - SPB
+    max_postpaid_price: 200
+
+  - partner_id: 19
+    partner_name: КСЭ
+    max_postpaid_price: 200
+
+  - partner_id: 1005005
+    partner_name: КСЭ - МСК
+    max_postpaid_price: 200
+
+  - partner_id: 1005333
+    partner_name: КСЭ - СПБ
+    max_postpaid_price: 200
+
+  - partner_id: 1005396
+    partner_name: КСЭ - Область
+    max_postpaid_price: 200
+
+  - partner_id: 1005075
+    partner_name: DHL - МСК
+    max_postpaid_price: 100
+
+  - partner_id: 200
+    partner_name: X5
+    max_postpaid_price: 200
+
+  - partner_id: 139
+    partner_name: Почта России - Посылка Нестандартная
+    max_postpaid_price: 100
+
+  - partner_id: 1005486
+    partner_name: Почта России
+    max_postpaid_price: 100
+    disabled_payment_types: [ CARD_ALLOWED ] # Почта России не умеет в пост-оплату картой.
+
+  - partner_id: 1005117
+    partner_name: СДТ
+    max_postpaid_price: 100
+
+  - partner_id: 55741
+    partner_name: АВИА
+    disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ]
+    max_prepaid_price: 10
+
+  - partner_id: 1006360
+    partner_name: Яндекс Go Экспрес
+    disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ]
+    max_prepaid_price: 150
+
+  - partner_id: 93730
+    partner_name: GO для часовых слотов
+    disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ]
+    max_prepaid_price: 100
+
+  - partner_id: 1005528
+    partner_name: МК Юг 31
+    disabled_payment_types: [ CASH_ALLOWED ]
+
+  - partner_id: 1005471
+    partner_name: Лавка МК Восток 21
+    disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ]
+
+  - partner_id: 1006308
+    partner_name: Лавка МК Питер
+    disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ]
+
+  - partner_id: 1006419
+    partner_name: Лавка МК Нижний Новгород
+    disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ]
+
+  - partner_id: 1006422
+    partner_name: Лавка МК Запад 41
+    disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ]
+
+  - partner_id: 1006425
+    partner_name: Лавка МК Север 11
+    disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ]
+
+  - partner_id: 1006428
+    partner_name: Лавка МК Юг 31
+    disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ]
+
+  - partner_id: 63158
+    partner_name: Лавка МК Казань
+    disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ]
+
+  - partner_id: 88423
+    partner_name: Лавка МК Ростов
+    disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ]
+
+  - partner_id: 92224
+    partner_name: Лавка МК Волгоград
+    disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ]
+
+  - partner_id: 92261
+    partner_name: Лавка МК Воронеж
+    disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ]
+
+  - partner_id: 92271
+    partner_name: Лавка МК Краснодар
+    disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ]
+
+  - partner_id: 92283
+    partner_name: Лавка МК Самара
+    disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ]
+
+  - partner_id: 92291
+    partner_name: Лавка МК Уфа
+    disabled_payment_types: [ CASH_ALLOWED, CARD_ALLOWED ]

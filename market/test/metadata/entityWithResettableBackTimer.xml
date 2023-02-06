@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<m:config xmlns:c="urn:jmf:common:1.0"
+          xmlns:m="urn:jmf:metaclass:config:1.0"
+          xmlns:a="urn:jmf:attribute:type:default:config:1.0"
+          xmlns:ta="urn:jmf:timing:engine:attributes:config:1.0"
+          xmlns:t="urn:jmf:timing:engine:timers:config:2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <m:metaclass typed="false">
+        <m:fqn>entityWithResettableBackTimer</m:fqn>
+        <m:parent>bo</m:parent>
+        <m:title>
+            <c:value>Тестовый БО с атрибутом "Счетчик времени"</c:value>
+        </m:title>
+        <m:logics>
+            <m:logic>wf</m:logic>
+        </m:logics>
+        <m:attributes>
+            <m:attribute required="true">
+                <m:code>timeZone</m:code>
+                <m:title>
+                    <c:value>Часовой пояс</c:value>
+                </m:title>
+                <m:type xsi:type="a:catalogItem" fqn="timeZone"/>
+                <m:default>Europe/Moscow</m:default>
+            </m:attribute>
+            <m:attribute required="true">
+                <m:code>serviceTime</m:code>
+                <m:title>
+                    <c:value>Время обслуживания</c:value>
+                </m:title>
+                <m:type xsi:type="a:catalogItem" fqn="serviceTime"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>resolutionTime</m:code>
+                <m:title>
+                    <c:value>Запас времени</c:value>
+                </m:title>
+                <m:type code="duration"/>
+                <m:default>PT1H</m:default>
+            </m:attribute>
+
+            <m:attribute versioned="true">
+                <m:code>timer</m:code>
+                <m:title>
+                    <c:value>Счетчик времени</c:value>
+                </m:title>
+                <m:type xsi:type="ta:backTimer" resettable="true">
+                    <ta:condition xsi:type="t:statusCondition">
+                        <t:status action="ACTIVATE" status="st2"/>
+                        <t:status action="RESET" status="st3"/>
+                    </ta:condition>
+                    <ta:metric xsi:type="t:serviceMetric">
+                        <t:timeZone xsi:type="t:attributeTimerParameter" name="timeZone"/>
+                        <t:serviceTime xsi:type="t:attributeTimerParameter" name="serviceTime"/>
+                    </ta:metric>
+                    <ta:resolutionTime xsi:type="t:attributeTimerParameter" name="resolutionTime"/>
+                </m:type>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+</m:config>

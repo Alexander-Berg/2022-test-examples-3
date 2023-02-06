@@ -1,0 +1,52 @@
+{
+  "logHosts": "*",
+  "logPath": "{/var/log/yandex/robot-tms/robot-reports.log,**/robot-tms-robot-reports.log}",
+  "clickhouseTable": "robot_reports_testing",
+  "parser": {
+    "dateFormat": "dd/MMM/yyyy:HH:mm:ss Z",
+    "separator": "\t",
+    "fields": [
+      "date", "category_id", "model_total_cov", "doc_total_cov", "review_total_count",
+      "model_total_click_cov", "doc_total_click_cov", "rel_model_total_cov", "rel_doc_total_cov",
+      "rel_model_total_click_cov", "rel_doc_total_click_cov"
+    ],
+    "columns": {
+      "host": {
+        "type": "String"
+      },
+      "category_id": {
+        "type": "UInt32"
+      },
+      "model_total_cov": {
+        "type": "UInt32"
+      },
+      "doc_total_cov": {
+        "type": "UInt32"
+      },
+      "review_total_count": {
+        "type": "UInt32"
+      },
+      "model_total_click_cov": {
+        "type": "UInt32"
+      },
+      "doc_total_click_cov": {
+        "type": "UInt32"
+      },
+      "rel_model_total_cov": {
+        "type": "Float32"
+      },
+      "rel_doc_total_cov": {
+        "type": "Float32"
+      },
+      "rel_model_total_click_cov": {
+        "type": "Float32"
+      },
+      "rel_doc_total_click_cov": {
+        "type": "Float32"
+      }
+    }
+  },
+  "sources": [
+    "logbroker://market-health-testing--other"
+  ]
+}

@@ -1,0 +1,502 @@
+{
+    "TvmConfig": {
+        "CacheDir": "./tvm_cache/",
+        "DstServices": [
+            {
+                "Alias": "logbroker",
+                "Id": 2001059
+            }
+        ],
+        "SrcIdEnvName": "CRYPTA_TVM_ID",
+        "SrcSecretEnvName": "CRYPTA_TVM_SECRET"
+    },
+    "YtCluster": "hahn",
+
+    "HttpServer": {
+        "Port": 80
+    },
+    "Logs": {
+        "Rules": [
+            {
+                "FilePath": "/dev/stderr",
+                "MinLevel": "Info"
+            },
+            {
+                "FilePath": "./resharder.log",
+                "MinLevel": "Warning"
+            }
+        ]
+    },
+
+    "HeavyWorkerThreads": 4,
+
+    "Destinations": [
+        {
+            "Name": "michurin_events",
+            "ShardsCount": 128,
+            "QytWriter": {
+                "Queues": [
+                    {
+                        "Cluster": "hahn",
+                        "Path": "//home/crypta/testing/rtsklejka/qyt/michurin_events"
+                    }
+                ]
+            }
+        },
+        {
+            "Name": "michurin_events_large",
+            "ShardsCount": 256,
+            "QytWriter": {
+                "Queues": [
+                    {
+                        "Cluster": "hahn",
+                        "Path": "//home/crypta/testing/rtsklejka/qyt/test/michurin_events_large"
+                    }
+                ]
+            }
+        }
+    ],
+
+    "CryptaIdResolverConfig": {
+        "YtClusters": [
+            "hahn"
+        ],
+        "Table": "//home/crypta/testing/rtsklejka/state/cryptaid_state",
+        "AttemptsCount": 5,
+        "TimeoutMs": 300,
+        "MaxCacheSize": 100000,
+        "MaxCacheDurationMs": 300000
+    },
+
+    "Instances": [
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "//home/crypta/testing/rtsklejka/consuming_systems/sas/soup_log/main",
+                    "OffsetsTable": "//home/crypta/testing/rtsklejka/consuming_systems/sas/soup_log/offsets",
+                    "LaunchShardProcessorInFiber": true,
+                    "MasterBalancing": {
+                        "MasterPath": "//home/crypta/testing/rtsklejka/consuming_systems/sas/soup_log/master"
+                    },
+                    "Shards": {
+                        "AutoResolve": {
+                            "ShardsCachePath": "//home/crypta/testing/rtsklejka/consuming_systems/sas/soup_log/shards_count_cache",
+                            "UpdateLocalCachePeriodMs": 30000,
+                            "UpdateYtCachePeriodMs": 600000
+                        }
+                    },
+                    "MaxShardsAutoResolveRatio": 0.661,
+                    "WorkerMinorName": "w_soup_log",
+                    "ThreadLabelPrefix": "t_soup_log"
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "Suppliers": [
+                    {
+                        "Alias": "sas_soup_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/crypta/test/graph/engine/consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "sas.logbroker.yandex.net",
+                            "SrcTopic": "/crypta/prod/graph/soup"
+                        }
+                    }
+                ],
+
+                "SrcDcLabel": "sas",
+                "SrcTopicLabel": "crypta/graph/soup",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "michurin_events",
+            "RowsProcessor": {
+                "MessageType": "SOUP",
+                "Parser": {
+                    "FromSoup": {
+                        "B64Encoding": true,
+                        "ValidateEdge": true
+                    }
+                },
+                "ShardingAlgorithm": "CryptaId"
+            }
+        },
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "//home/crypta/testing/rtsklejka/consuming_systems/michurin_rewind",
+                    "LaunchShardProcessorInFiber": true,
+                    "Shards": {
+                        "AutoResolve": {
+                            "UpdateLocalCachePeriodMs": 30000,
+                            "UpdateYtCachePeriodMs": 600000
+                        }
+                    },
+                    "MaxShardsAutoResolveRatio": 0.661,
+                    "WorkerMinorName": "w_rewind_log_yt",
+                    "ThreadLabelPrefix": "t_rewind_log_yt"
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "Suppliers": [
+                    {
+                        "Alias": "rewind_log_yt",
+                        "YtSupplier": {
+                            "QueueConsumer": "michurin_rewind",
+                            "QueuePath": "//home/crypta/testing/rtsklejka/qyt/rewound_events",
+                            "Cluster": "hahn"
+                        }
+                    }
+                ],
+
+                "TrottlerQuota": {
+                    "MaxAccumulatedSeconds": 0.1,
+                    "QuotaPerSecond": 3000000.0
+                },
+
+                "SrcDcLabel": "none",
+                "SrcTopicLabel": "crypta/graph/rewind/qyt",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "michurin_events",
+            "RowsProcessor": {
+                "MessageType": "SOUP",
+                "Parser": {
+                    "FromSoup": {
+                        "B64Encoding": true,
+                        "ValidateEdge": true
+                    }
+                },
+                "ShardingAlgorithm": "CryptaId"
+            }
+        },
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "//home/crypta/testing/rtsklejka/consuming_systems/sas/rtmr_log",
+                    "LaunchShardProcessorInFiber": true,
+                    "Shards": {
+                        "AutoResolve": {
+                            "UpdateLocalCachePeriodMs": 30000,
+                            "UpdateYtCachePeriodMs": 600000
+                        }
+                    },
+                    "MaxShardsAutoResolveRatio": 0.4,
+                    "WorkerMinorName": "w_rtmr_log",
+                    "ThreadLabelPrefix": "t_rtmr_log"
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "Suppliers": [
+                    {
+                        "Alias": "sas_rtmr_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/crypta/test/graph/engine/consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "sas.logbroker.yandex.net",
+                            "SrcTopic": "/rtmr/crypta-to-bigb"
+                        }
+                    }
+                ],
+
+                "SrcDcLabel": "sas",
+                "SrcTopicLabel": "crypta/graph/rtmr",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "michurin_events",
+            "RowsProcessor": {
+                "Splitter": {
+                    "LogfellerSplitter": "none"
+                },
+                "MessageType": "SOUP",
+                "Parser": {
+                    "FromLinks": {
+                        "ValidateEdge": true,
+                        "DebounceCfg": {
+                            "Lifetime": 30
+                        }
+                    }
+                },
+                "ShardingAlgorithm": "CryptaId"
+            }
+        },
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "//home/crypta/testing/rtsklejka/consuming_systems/iva/rtmr_log",
+                    "LaunchShardProcessorInFiber": true,
+                    "Shards": {
+                        "AutoResolve": {
+                            "UpdateLocalCachePeriodMs": 30000,
+                            "UpdateYtCachePeriodMs": 600000
+                        }
+                    },
+                    "MaxShardsAutoResolveRatio": 0.4,
+                    "WorkerMinorName": "w_rtmr_log",
+                    "ThreadLabelPrefix": "t_rtmr_log"
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "Suppliers": [
+                    {
+                        "Alias": "iva_rtmr_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/crypta/test/graph/engine/consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "iva.logbroker.yandex.net",
+                            "SrcTopic": "/rtmr/crypta-to-bigb"
+                        }
+                    }
+                ],
+
+                "SrcDcLabel": "iva",
+                "SrcTopicLabel": "crypta/graph/rtmr",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "michurin_events",
+            "RowsProcessor": {
+                "Splitter": {
+                    "LogfellerSplitter": "none"
+                },
+                "MessageType": "SOUP",
+                "Parser": {
+                    "FromLinks": {
+                        "ValidateEdge": true,
+                        "DebounceCfg": {
+                            "Lifetime": 30
+                        }
+                    }
+                },
+                "ShardingAlgorithm": "CryptaId"
+            }
+        },
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "//home/crypta/testing/rtsklejka/consuming_systems/vla/rtmr_log",
+                    "LaunchShardProcessorInFiber": true,
+                    "Shards": {
+                        "AutoResolve": {
+                            "UpdateLocalCachePeriodMs": 30000,
+                            "UpdateYtCachePeriodMs": 600000
+                        }
+                    },
+                    "MaxShardsAutoResolveRatio": 0.4,
+                    "WorkerMinorName": "w_rtmr_log",
+                    "ThreadLabelPrefix": "t_rtmr_log"
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "Suppliers": [
+                    {
+                        "Alias": "vla_rtmr_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/crypta/test/graph/engine/consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "vla.logbroker.yandex.net",
+                            "SrcTopic": "/rtmr/crypta-to-bigb"
+                        }
+                    }
+                ],
+                "SrcDcLabel": "vla",
+                "SrcTopicLabel": "crypta/graph/rtmr",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "michurin_events",
+            "RowsProcessor": {
+                "Splitter": {
+                    "LogfellerSplitter": "none"
+                },
+                "MessageType": "SOUP",
+                "Parser": {
+                    "FromLinks": {
+                        "ValidateEdge": true,
+                        "DebounceCfg": {
+                            "Lifetime": 30
+                        }
+                    }
+                },
+                "ShardingAlgorithm": "CryptaId"
+            }
+        },
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "//home/crypta/testing/rtsklejka/consuming_systems/michurin_bookkeeping",
+                    "LaunchShardProcessorInFiber": true,
+                    "Shards": {
+                        "AutoResolve": {
+                            "UpdateLocalCachePeriodMs": 30000,
+                            "UpdateYtCachePeriodMs": 600000
+                        }
+                    },
+                    "MaxShardsAutoResolveRatio": 0.661,
+                    "WorkerMinorName": "w_bookkeeping_log",
+                    "ThreadLabelPrefix": "t_bookkeeping_log"
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "Suppliers": [
+                    {
+                        "Alias": "yt_sorted_table",
+                        "YtSortedTableSupplier": {
+                            "Fetcher": {
+                                "ChunkSize": 4000,
+                                "Source": {
+                                    "Clusters": [
+                                        "hahn"
+                                    ],
+                                    "Path": "//home/crypta/testing/rtsklejka/state/michurin_state",
+                                    "Columns": ["Id"]
+                                }
+                            },
+                            "MasterCluster": "hahn",
+                            "ProcessPeriodSeconds": 172800,
+                            "ShardsCount": 128
+                        }
+                    }
+                ],
+
+                "SrcDcLabel": "none",
+                "SrcTopicLabel": "state/michurin_state",
+                "ServantLabel": "bookkeeping"
+            },
+            "OutputQueue": "michurin_events",
+            "RowsProcessor": {
+                "MessageType": "MICHURIN_BOOKKEEPING",
+                "Parser": {
+                    "FromBookkeeping": {
+                        "EventType": "CID_UPDATE"
+                    }
+                },
+                "ShardingAlgorithm": "CryptaId"
+            }
+        },
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "//home/crypta/testing/rtsklejka/consuming_systems/michurin_bookkeeping_tombstone_delete",
+                    "LaunchShardProcessorInFiber": true,
+                    "Shards": {
+                        "AutoResolve": {
+                            "UpdateLocalCachePeriodMs": 30000,
+                            "UpdateYtCachePeriodMs": 600000
+                        }
+                    },
+                    "MaxShardsAutoResolveRatio": 0.661,
+                    "WorkerMinorName": "w_bookkeeping_log",
+                    "ThreadLabelPrefix": "t_bookkeeping_log"
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "Suppliers": [
+                    {
+                        "Alias": "yt_sorted_table",
+                        "YtSortedTableSupplier": {
+                            "Fetcher": {
+                                "ChunkSize": 4000,
+                                "Source": {
+                                    "Clusters": [
+                                        "hahn"
+                                    ],
+                                    "Path": "//home/crypta/testing/rtsklejka/state/michurin_state",
+                                    "Columns": ["Id"]
+                                }
+                            },
+                            "MasterCluster": "hahn",
+                            "ProcessPeriodSeconds": 172800,
+                            "ShardsCount": 128
+                        }
+                    }
+                ],
+
+                "SrcDcLabel": "none",
+                "SrcTopicLabel": "state/michurin_state",
+                "ServantLabel": "bookkeeping_tombstone_delete"
+            },
+            "OutputQueue": "michurin_events",
+            "RowsProcessor": {
+                "MessageType": "MICHURIN_BOOKKEEPING",
+                "Parser": {
+                    "FromBookkeeping": {
+                        "EventType": "TOMBSTONE_DELETE"
+                    }
+                },
+                "ShardingAlgorithm": "CryptaId"
+            }
+        },
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "//home/crypta/testing/rtsklejka/consuming_systems/michurin_bookkeeping_split",
+                    "LaunchShardProcessorInFiber": true,
+                    "Shards": {
+                        "AutoResolve": {
+                            "UpdateLocalCachePeriodMs": 30000,
+                            "UpdateYtCachePeriodMs": 600000
+                        }
+                    },
+                    "MaxShardsAutoResolveRatio": 0.661,
+                    "WorkerMinorName": "w_bookkeeping_log",
+                    "ThreadLabelPrefix": "t_bookkeeping_log"
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "Suppliers": [
+                    {
+                        "Alias": "yt_sorted_table",
+                        "YtSortedTableSupplier": {
+                            "Fetcher": {
+                                "ChunkSize": 4000,
+                                "Source": {
+                                    "Clusters": [
+                                        "hahn"
+                                    ],
+                                    "Path": "//home/crypta/testing/rtsklejka/state/michurin_state",
+                                    "Columns": ["Id"]
+                                }
+                            },
+                            "MasterCluster": "hahn",
+                            "ProcessPeriodSeconds": 604800,
+                            "ShardsCount": 128
+                        }
+                    }
+                ],
+
+                "SrcDcLabel": "none",
+                "SrcTopicLabel": "state/michurin_state",
+                "ServantLabel": "bookkeeping_split"
+            },
+            "OutputQueue": "michurin_events",
+            "RowsProcessor": {
+                "MessageType": "MICHURIN_BOOKKEEPING",
+                "Parser": {
+                    "FromBookkeeping": {
+                        "EventType": "SPLIT"
+                    }
+                },
+                "ShardingAlgorithm": "CryptaId"
+            }
+        }
+    ],
+
+    "SharedTransactionPeriod": 200
+}

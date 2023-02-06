@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug">
+
+    <!-- Don't forget to set system property
+    -Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
+     to make all loggers asynchronous. -->
+
+    <Appenders>
+        <Console name="MAIN" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %-5p [%c{1} %t] %m%n"/>
+        </Console>
+        <Console name="TRACE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%m%n"/>
+        </Console>
+        <Console name="ANTI_FRAUD" target="SYSTEM_OUT">
+            <PatternLayout pattern="%m%n"/>
+        </Console>
+        <Console name="LOYALTY_ANTI_FRAUD" target="SYSTEM_OUT">
+            <PatternLayout pattern="%m%n"/>
+        </Console>
+        <Console name="CHECKOUTER" target="SYSTEM_OUT">
+        </Console>
+        <Console name="LOYALTY" target="SYSTEM_OUT">
+        </Console>
+        <Console name="EXPERIMENTS" target="SYSTEM_OUT">
+        </Console>
+        <Console name="ANTIFRAUD_OFFLINE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %-5p [%c{1} %t] %m%n"/>
+        </Console>
+        <Console name="ANTIFRAUD_OFFLINE_LOGFELLER" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %-5p [%c{1} %t] %m%n"/>
+        </Console>
+        <Console name="KEY_VALUE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%m%n"/>
+        </Console>
+        <Console name="ORDERS_COUNT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%m%n"/>
+        </Console>
+        <Console name="ASYNC_RESULTS" target="SYSTEM_OUT">
+            <PatternLayout pattern="%m%n"/>
+        </Console>
+        <Console name="DETECTOR_STATS" target="SYSTEM_OUT">
+            <PatternLayout pattern="%m%n"/>
+        </Console>
+        <Console name="DETECTOR_ENRICH" target="SYSTEM_OUT">
+            <PatternLayout pattern="%m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="MAIN"/>
+        </Root>
+        <Logger name="requestTrace" level="INFO" additivity="false">
+            <AppenderRef ref="TRACE"/>
+        </Logger>
+        <Logger name="antifraud.log" level="DEBUG">
+            <AppenderRef ref="ANTI_FRAUD"/>
+        </Logger>
+        <Logger name="loyalty-antifraud.log" level="DEBUG">
+            <AppenderRef ref="LOYALTY_ANTI_FRAUD"/>
+        </Logger>
+        <Logger name="checkouter.log" level="DEBUG" additivity="false">
+            <AppenderRef ref="CHECKOUTER"/>
+        </Logger>
+        <Logger name="loyalty.log" level="DEBUG" additivity="false">
+            <AppenderRef ref="LOYALTY"/>
+        </Logger>
+        <Logger name="experiments.log" level="DEBUG" additivity="false">
+            <AppenderRef ref="EXPERIMENTS"/>
+        </Logger>
+        <Logger name="order-cancel-reader.log" level="DEBUG" additivity="false">
+            <AppenderRef ref="ANTIFRAUD_OFFLINE"/>
+        </Logger>
+        <Logger name="offline-orders.log" level="DEBUG" additivity="false">
+            <AppenderRef ref="ANTIFRAUD_OFFLINE_LOGFELLER"/>
+        </Logger>
+        <Logger name="key-value.log" level="DEBUG" additivity="false">
+            <AppenderRef ref="ASYNC_KEY_VALUE"/>
+        </Logger>
+        <Logger name="orders-count.log" level="DEBUG" additivity="false">
+            <AppenderRef ref="ORDERS_COUNT"/>
+        </Logger>
+        <Logger name="async-results.log" level="DEBUG" additivity="false">
+            <AppenderRef ref="ASYNC_RESULTS"/>
+        </Logger>
+        <Logger name="detector-stats.log" level="DEBUG" additivity="false">
+            <AppenderRef ref="DETECTOR_STATS"/>
+        </Logger>
+        <Logger name="detector-enrich.log" level="DEBUG" additivity="false">
+            <AppenderRef ref="DETECTOR_ENRICH"/>
+        </Logger>
+    </Loggers>
+</Configuration>

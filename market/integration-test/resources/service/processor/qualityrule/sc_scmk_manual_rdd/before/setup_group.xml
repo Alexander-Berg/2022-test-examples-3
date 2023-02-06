@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lom_order
+            id="1"
+            barcode="777"
+            platform_client_id="3"
+            status="ENQUEUED"
+            created="2021-11-10"
+    />
+
+    <lom_order
+            id="2"
+            barcode="778"
+            platform_client_id="3"
+            status="ENQUEUED"
+            created="2021-11-10"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="1"
+            external_id="101"
+            partner_id="1"
+            partner_type="SORTING_CENTER"
+            segment_type="SORTING_CENTER"
+            waybill_segment_index="0"
+            shipment_date="2021-11-10"
+            partner_name="Тестовый СЦ 1"
+    />
+
+    <lom_waybill_segment
+            id="2"
+            order_id="1"
+            external_id="102"
+            partner_id="2"
+            partner_type="SORTING_CENTER"
+            segment_type="SORTING_CENTER"
+            waybill_segment_index="1"
+            partner_name="Тестовый СЦ 2"
+    />
+
+    <lom_waybill_segment
+            id="3"
+            order_id="1"
+            external_id="105"
+            partner_id="3"
+            segment_type="COURIER"
+            waybill_segment_index="2"
+            partner_type="DELIVERY"
+            partner_subtype="MARKET_COURIER"
+            partner_name="Тестовый МК"
+    />
+
+
+    <lom_waybill_segment
+            id="4"
+            order_id="2"
+            external_id="103"
+            partner_id="1"
+            partner_type="SORTING_CENTER"
+            segment_type="SORTING_CENTER"
+            waybill_segment_index="0"
+            shipment_date="2021-11-10"
+            partner_name="Тестовый СЦ 1"
+    />
+
+    <lom_waybill_segment
+            id="5"
+            order_id="2"
+            external_id="104"
+            partner_id="2"
+            partner_type="SORTING_CENTER"
+            segment_type="SORTING_CENTER"
+            waybill_segment_index="1"
+            partner_name="Тестовый СЦ 2"
+    />
+
+    <lom_waybill_segment
+            id="6"
+            order_id="2"
+            external_id="105"
+            partner_id="3"
+            segment_type="COURIER"
+            waybill_segment_index="2"
+            partner_type="DELIVERY"
+            partner_subtype="MARKET_COURIER"
+            partner_name="Тестовый МК"
+    />
+
+    <quality_rule
+            enabled="true"
+            expected_status="IN"
+            aggregation_type="MANUAL_RDD"
+            rule_processor="STARTREK"
+            rule='{ "queue": "MONITORINGSNDBX", "_type": ".ScScMkIntakeManualRddPayload" }'
+    />
+
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="2"
+            waybill_segment_type="SORTING_CENTER"
+            expected_status="IN"
+            processing_status="PROCESSED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2021-11-10 10:00:00 +0300"
+            schedule_time="2021-11-10 10:00:00 +0300"
+            data='{
+                "ManualRddRecalculationPlanFactAdditionalData": {
+                    "_type": ".ManualRddRecalculationPlanFactAdditionalData",
+                    "newDeliveryDate": "2022-04-07"
+                }
+            }'
+    />
+
+    <plan_fact
+            id="2"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="4"
+            waybill_segment_type="SORTING_CENTER"
+            expected_status="IN"
+            processing_status="PROCESSED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2021-11-10 10:00:00 +0300"
+            schedule_time="2021-11-10 10:00:00 +0300"
+            data='{
+                "ManualRddRecalculationPlanFactAdditionalData": {
+                    "_type": ".ManualRddRecalculationPlanFactAdditionalData",
+                    "newDeliveryDate": "2022-04-07",
+                    "newScMkIntakeTime": "2022-04-07T10:00:00.000000"
+                }
+            }'
+    />
+
+    <plan_fact_group
+            id="1"
+            aggregation_key="date:2021-11-10;partnerFrom:1;partner:2;"
+            aggregation_type="MANUAL_RDD"
+            processing_status="ENQUEUED"
+            expected_status="IN"
+            schedule_time="2021-11-10 10:00:00 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2021, 11, 10],
+                        "partnerFrom": {
+                            "id": 1,
+                            "name": "Тестовый СЦ 1",
+                            "type": "SORTING_CENTER"
+                        },
+                        "partner": {
+                            "id": 2,
+                            "name": "Тестовый СЦ 2",
+                            "type": "SORTING_CENTER"
+                        }
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="1"
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="2"
+    />
+
+</dataset>

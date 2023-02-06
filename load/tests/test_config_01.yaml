@@ -1,0 +1,30 @@
+neuploader:
+  api_address: http://dev-back.luna.yandex-team.ru
+  db_name: luna_test
+  enabled: true
+  meta:
+    use_tank: matilda.tanks.yandex.net
+    use_tank_port: 8083
+    operator: szypulka
+    some_key: 42
+    task: LUNA-1033
+  package: yandextank.plugins.NeUploader
+  test_name: test firestarter, config 01
+phantom:
+  address: matilda.tanks.yandex.net:8083
+  autocases: 1
+  enabled: true
+  load_profile:
+    load_type: rps
+    schedule: line(1,10, 30s)
+  package: yandextank.plugins.Phantom
+  ssl: true
+  uris:
+  - /status
+  - /start
+telegraf:
+  enabled: false
+  package: yandextank.plugins.Telegraf
+uploader:
+  enabled: false
+  package: yandextank.plugins.DataUploader

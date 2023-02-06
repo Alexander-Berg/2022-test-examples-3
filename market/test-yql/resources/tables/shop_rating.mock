@@ -1,0 +1,56 @@
+# Разбираются следующие ситуации
+# 1. Простая. Магази 1, включен, параметр rating_on_placement дефолтный
+# 2. Магаз отключен. магазин 12 - нет записи в shops, считаем выключенным
+# 3. Явно включен. магазин 17 - явно включен, попадёт в рейтинг
+# 4. Бизнес - есть отключение рейтинга. 2 и 18 - включены, но у 2 явно отключен rating_on_placement. Оба не попадают в рейтинг
+# 5. Бизнес - отключен у отключенного
+#    магазины 20 и 21 (бизнес 104).
+#    У 20 явно выключено отображение рейтинга, но он отключен.
+#    У 21 по дефолту и он включен. Рейтинг должен быть (только у магазина 21)
+
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/tables/shop_rating_full/current
+SCHEMA shop_id:int64, rating_type:int16, rating:double, grade_cnt_verified:int64,
+SCHEMA grade_cnt_total_verified:int64, grade_cnt_total_text_uv:int64, rating:double
+{"shop_id":1, "rating_type":3, "rating":4.8, "grade_cnt_verified": 1, "grade_cnt_total_verified": 1, "grade_cnt_total_text_uv": 1}
+{"shop_id":2, "rating_type":1, "rating":4.5, "grade_cnt_verified": 1, "grade_cnt_total_verified": 1, "grade_cnt_total_text_uv": 1}
+{"shop_id":12, "rating_type":3, "rating":0.0, "grade_cnt_verified": 1, "grade_cnt_total_verified": 1, "grade_cnt_total_text_uv": 1}
+{"shop_id":17, "rating_type":3, "rating":4.9, "grade_cnt_verified": 2, "grade_cnt_total_verified": 4, "grade_cnt_total_text_uv": 1}
+{"shop_id":18, "rating_type":1, "rating":4.5, "grade_cnt_verified": 1, "grade_cnt_total_verified": 1, "grade_cnt_total_text_uv": 1}
+{"shop_id":20, "rating_type":1, "rating":4.5, "grade_cnt_verified": 1, "grade_cnt_total_verified": 1, "grade_cnt_total_text_uv": 1}
+{"shop_id":21, "rating_type":1, "rating":4.5, "grade_cnt_verified": 1, "grade_cnt_total_verified": 1, "grade_cnt_total_text_uv": 1}
+
+MOCK TABLE //home/market/production/mstat/dictionaries/partner_types/latest
+SCHEMA id:int64, business_id:string
+{"id":1, "business_id":"100"}
+{"id":2, "business_id":"101"}
+{"id":12, "business_id":"102"}
+{"id":17, "business_id":"103"}
+{"id":18, "business_id":"101"}
+{"id":20, "business_id":"104"}
+{"id":21, "business_id":"104"}
+
+MOCK TABLE //home/market/production/mstat/dictionaries/shop_param_value/latest
+SCHEMA entity_id:int64, num_value:int64, param_type_id:int64
+{"entity_id":2, "num_value":0, "param_type_id":74}
+{"entity_id":17, "num_value":1, "param_type_id":74}
+{"entity_id":20, "num_value":0, "param_type_id":74}
+
+MOCK TABLE //home/market/production/mstat/dictionaries/shops/latest
+SCHEMA shop_id:int64, is_enabled:bool
+{"shop_id":1, "is_enabled":true}
+{"shop_id":2, "is_enabled":true}
+{"shop_id":17, "is_enabled":true}
+{"shop_id":18, "is_enabled":true}
+{"shop_id":20, "is_enabled":false}
+{"shop_id":21, "is_enabled":true}
+
+MOCK TABLE //home/market/production/mstat/dictionaries/shop_datasource/latest
+SCHEMA id:int64, domain:string
+{"id":1, "domain":"simple_1.ru"}
+{"id":2, "domain":"simple_2.ru"}
+{"id":11, "domain":"simple_11.ru"}
+{"id":12, "domain":"simple_12.ru"}
+{"id":17, "domain":"simple_17.ru"}
+{"id":18, "domain":"simple_18.ru"}
+{"id":20, "domain":"simple_20.ru"}
+{"id":21, "domain":"simple_21.ru"}

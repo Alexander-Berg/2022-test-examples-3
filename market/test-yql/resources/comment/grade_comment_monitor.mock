@@ -1,0 +1,43 @@
+# мониторинг проверяет, что в grade_comment есть записи по всем неудаленным комментам к отзывам на кластеры и модели.
+# не берём слишком новые комменты, могут не успеть доехать
+# в тесте генерирую отзывы на модели и кластеры (1-5), а также магазинные (6-7)
+# генерирую комменты ко всем отзывам.
+# в ответ точно не попадут комменты к магазинным отзывам (6-7), удаленные комменты (4-5), слишком новый коммент (2)
+# 1,3 должны быть в grade_comment, есть только 1,5. не хватает 3, она есть в ответе, а то, что есть в grade_comment, может быть удаленно в комментах
+
+# now = 2021-01-05T00:00:00 = 1609794000000
+MOCK VAR $now
+SET DateTime::FromMilliseconds(1609794000000)
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_grade
+SCHEMA fix_id:int64, type:int16
+# нормальные модельные
+{"fix_id": 1, "type":1}
+{"fix_id": 2, "type":2}
+{"fix_id": 3, "type":2}
+{"fix_id": 4, "type":2}
+{"fix_id": 5, "type":1}
+# магазинные
+{"fix_id": 6, "type":0}
+{"fix_id": 7, "type":0}
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_grade_comment
+SCHEMA grade_id:int64, author_id:int64, type:int16, resource_id:int64
+{"grade_id": 1}
+{"grade_id": 5}
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-qa/tables/com_comment
+SCHEMA id:int64, root_id:int64, project:int32, state:int16, mod_state:int16, cr_time:string
+{"id": 1, "root_id":1, "project":9, "state":0, "mod_state":0, "cr_time":"2021-01-01T00:00:00"}
+{"id": 3, "root_id":3, "project":9, "state":0, "mod_state":1, "cr_time":"2021-01-03T00:00:00"}
+#магазинные отзывы
+{"id": 6, "root_id":6, "project":9, "state":0, "mod_state":0, "cr_time":"2021-01-01T00:00:00"}
+{"id": 7, "root_id":7, "project":9, "state":0, "mod_state":0, "cr_time":"2021-01-01T00:00:00"}
+#new
+{"id": 2, "root_id":2, "project":9, "state":0, "mod_state":0, "cr_time":"2021-01-06T00:00:00"}
+#deleted
+{"id": 4, "root_id":4, "project":9, "state":1, "mod_state":0, "cr_time":"2021-01-05T00:00:00"}
+{"id": 5, "root_id":5, "project":9, "state":0, "mod_state":2, "cr_time":"2021-01-03T00:00:00"}
+#different project
+{"id": 8, "root_id":1, "project":10, "state":0, "mod_state":0, "cr_time":"2021-01-01T00:00:00"}
+

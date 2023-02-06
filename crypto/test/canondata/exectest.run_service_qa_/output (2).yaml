@@ -1,0 +1,88 @@
+service:
+  port: 1234
+
+db:
+  yt:
+    - proxy: hahn.yt.yandex.net
+    - proxy: arnold.yt.yandex.net
+
+  hosts_table: //dir/hosts
+  segments_table: //dir/segments
+  apps_table: //dir/apps
+  update_period_seconds: 3600
+
+solomon:
+  project: crypta_siberia
+  service: custom_audience_suggester
+  cluster: "qa"
+  labels:
+    dc: "sas"
+    host: "localhost"
+  schema: "http"
+  host: "localhost"
+  port: 2345
+  timeout_sec: 10
+
+stats:
+  hist:
+    min: 0
+    max: 10
+    bin_count: 10
+
+  percentile:
+    max: 100000000
+    precision: 3
+    percentiles:
+      - 100
+      - 99.9
+      - 99
+      - 98
+      - 95
+      - 90
+
+logs:
+  main:
+    level: debug
+    targets:
+    - type: stdout
+      deploy_format: true
+    - type: rotating
+      file: "/tmp/main.log"
+      max_file_size: 41943040
+      max_files: 1
+  suggester_server:
+    level: debug
+    targets:
+    - type: stdout
+      deploy_format: true
+    - type: rotating
+      file: "/tmp/suggester_server.log"
+      max_file_size: 41943040
+      max_files: 1
+  suggester_service:
+    level: debug
+    targets:
+    - type: stdout
+      deploy_format: true
+    - type: rotating
+      file: "/tmp/suggester_service.log"
+      max_file_size: 41943040
+      max_files: 1
+  solomon:
+    level: debug
+    targets:
+    - type: stdout
+      deploy_format: true
+    - type: rotating
+      file: "/tmp/solomon.log"
+      max_file_size: 41943040
+      max_files: 1
+  database:
+    level: debug
+    targets:
+    - type: stdout
+      deploy_format: true
+    - type: rotating
+      file: "/tmp/database.log"
+      max_file_size: 41943040
+      max_files: 1

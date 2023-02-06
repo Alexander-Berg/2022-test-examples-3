@@ -1,0 +1,190 @@
+{%- if fixed_scores_with_msku_for_model or fixed_scores_with_msku_for_msku -%}
+    {%- set msku_enriched = True -%}
+{% endif %}
+
+{# Some candiates is nailed. They will be added on top of result and removed from rest #}
+{% set candidates_data_for_model = [
+    ["M1", "A1", "C0", "C1", 1.0, 0.0, 0.5, day, "nail", "MSKU100"],
+    ["M1", "A2", "C0", "C1", 0.0, 0.0, 1.0, day, "nail", "MSKU101"],
+    ["M1", "A3", "C0", "C1", 0.0, 1.0, 0.1, day, "auto", "MSKU102"],
+    ["M1", "A4", "C0", "C2", 0.0, 0.0, 6.6, day, "auto", "MSKU103"],
+    ["M2", "A1", "C0", "C1", 0.0, 0.0, 1.0, day, "auto", ""],
+    ["M3", "A6", "C0", "C1", 0.0, 0.0, 1.0, day, "nail", ""],
+] %}
+
+{% set candidates_data_for_msku = [
+    ["MSKU200", "A1", "C3", "C4", 0.0, 0.0, 1.0, day, "auto", "MSKU306"]
+] %}
+
+{% set candidates_data = candidates_data_for_model + candidates_data_for_msku %}
+
+{%- macro render_inlet_msku_candidates(candidates) -%}
+    {% set render_candidates_zpt = joiner(",") %}
+    {%- for candidate in candidates -%}
+        {{ render_candidates_zpt() }} {{ (candidate[:7] + [candidate[7]|string] + [[]] + [candidate[9]]) | tojson }}
+    {%- endfor -%}
+{%- endmacro -%}
+
+{# Nailed candidates for produsts #}
+{% set nailed_candidates_data = [
+    [
+        ["M1", "A2", "C0", "C1", 0.0, 0.0, 0.3, day],
+        ["M1", "A5", "C0", "C2", 0.0, 0.0, 0.15, day],
+        ["M1", "A1", "C0", "C1", 0.0, 0.0, -0.1, day]
+    ],
+    [
+        ["M2", "A2", "C0", "C1", 0.0, 0.0, 0.1, day]
+    ],
+    [
+        ["M3", "", "", "", 0.0, 0.0, 0.1, day]
+    ]
+] %}
+
+{% set use_nailed = nailed_candidates_sources|length > 0 %}
+
+{% set zpt = joiner(",") %}
+
+{# Item row of scores or sequence table #}
+{% macro item(data, pos_counter=none, is_nailed=none, shop_ids = [0], is_model=True) %}
+    {{ zpt() }}
+    [
+        {% if is_model -%}
+        "{{ data[0] }}",
+        {% else %}
+        "msku{{ data[0] }}",
+        {%- endif %}
+        {% if msku_enriched and data[9] -%}
+        "{{ data[1] }}/{{ data[9] }}",
+        {%- else -%}
+        "{{ data[1] }}",
+        {%- endif %}
+        {% for j in range(2, 4) %}"{{ data[j] }}",{% endfor %}
+        {{ shop_ids }},
+        {% for j in range(4, 7) %}{{ data[j] }},{% endfor %}
+        {% if is_nailed is not none -%}
+        {{ is_nailed }},
+        {% endif -%}
+        {% if pos_counter -%}
+        {{ pos_counter.current_position }},
+        {% set pos_counter.current_position = pos_counter.current_position + 1 %}
+        {% endif -%}
+        "{{ data[7] }}"
+    ]
+{% endmacro %}
+
+{# Macro outputs sequence data. Offsets -- 0-based indices of sequential result items. #}
+{% macro sequence(offsets_list) %}
+    {% for offsets in offsets_list %}
+        {# Count position accross two loops -- nailed candiates and automatical ones. #}
+        {# Variable current_position incremented by item() call #}
+        {% set pos_counter = namespace(current_position=1) %}
+        {% set model_idx = loop.index0 %}
+        {# Nailed top (with positive score) #}
+        {% if use_nailed %}
+            {% for e in nailed_candidates_data[model_idx] %}
+                {% if e[6] >= 0.0 %}
+                    {{ item(e, pos_counter, 1, 0) }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}{# use_nailed #}
+        {# Auto candidates #}
+        {% for i in offsets %}
+            {% if not use_nailed or candidates_data[i][8] != "nail" %}
+                {{ item(candidates_data[i], pos_counter, 0, 0, is_model=i<(candidates_data_for_model|length)) }}
+            {% endif %}
+        {% endfor %}
+        {# Nailed rest (with negative score) #}
+        {% if use_nailed %}
+            {% for e in nailed_candidates_data[model_idx] %}
+                {% if e[6] < 0.0 %}
+                    {{ item(e, pos_counter, 1, 0) }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}{# use_nailed #}
+    {% endfor %}
+{% endmacro %}
+
+{% if table == "sets_model_accessories_sequence" %}
+    {% table table %}
+        {% set _category_rotation, _boost_priority, _boost_rules, _category_limit_1, _msku = true, true, true, true, true -%}
+        {% set _ = false -%}
+        {% set _expected_sequence_dict = {
+            (_category_rotation, _boost_priority, _boost_rules, _category_limit_1, _msku):    [ [2, 3], [4], [5], [6]       ],
+            (_category_rotation, _boost_priority, _boost_rules, _category_limit_1,     _):    [ [2, 3], [4], [5]            ],
+            (_category_rotation, _boost_priority, _boost_rules,                 _, _msku):    [ [2, 3, 0, 1], [4], [5], [6] ],
+            (_category_rotation, _boost_priority, _boost_rules,                 _,     _):    [ [2, 3, 0, 1], [4], [5]      ],
+            (_category_rotation, _boost_priority,            _, _category_limit_1, _msku):    [ [2, 3], [4], [5], [6]       ],
+            (_category_rotation, _boost_priority,            _, _category_limit_1,     _):    [ [2, 3], [4], [5]            ],
+            (_category_rotation, _boost_priority,            _,                 _, _msku):    [ [2, 3, 1, 0], [4], [5], [6] ],
+            (_category_rotation, _boost_priority,            _,                 _,     _):    [ [2, 3, 1, 0], [4], [5]      ],
+            (_category_rotation,               _, _boost_rules, _category_limit_1, _msku):    [ [0, 3], [4], [5], [6]       ],
+            (_category_rotation,               _, _boost_rules, _category_limit_1,     _):    [ [0, 3], [4], [5]            ],
+            (_category_rotation,               _, _boost_rules,                 _, _msku):    [ [0, 3, 1, 2], [4], [5], [6] ],
+            (_category_rotation,               _, _boost_rules,                 _,     _):    [ [0, 3, 1, 2], [4], [5]      ],
+            (_category_rotation,               _,            _, _category_limit_1, _msku):    [ [3, 1], [4], [5], [6]       ],
+            (_category_rotation,               _,            _, _category_limit_1,     _):    [ [3, 1], [4], [5]            ],
+            (_category_rotation,               _,            _,                 _, _msku):    [ [3, 1, 0, 2], [4], [5], [6] ],
+            (_category_rotation,               _,            _,                 _,     _):    [ [3, 1, 0, 2], [4], [5]      ],
+
+            (                 _, _boost_priority, _boost_rules, _category_limit_1, _msku):    [ [2, 3], [4], [5], [6]       ],
+            (                 _, _boost_priority, _boost_rules, _category_limit_1,     _):    [ [2, 3], [4], [5]            ],
+            (                 _, _boost_priority, _boost_rules,                 _, _msku):    [ [2, 0, 3, 1], [4], [5], [6] ],
+            (                 _, _boost_priority, _boost_rules,                 _,     _):    [ [2, 0, 3, 1], [4], [5]      ],
+            (                 _, _boost_priority,            _, _category_limit_1, _msku):    [ [2, 3], [4], [5], [6]       ],
+            (                 _, _boost_priority,            _, _category_limit_1,     _):    [ [2, 3], [4], [5]            ],
+            (                 _, _boost_priority,            _,                 _, _msku):    [ [2, 3, 1, 0], [4], [5], [6] ],
+            (                 _, _boost_priority,            _,                 _,     _):    [ [2, 3, 1, 0], [4], [5]      ],
+            (                 _,               _, _boost_rules, _category_limit_1, _msku):    [ [0, 3], [4], [5], [6]       ],
+            (                 _,               _, _boost_rules, _category_limit_1,     _):    [ [0, 3], [4], [5]            ],
+            (                 _,               _, _boost_rules,                 _, _msku):    [ [0, 3, 1, 2], [4], [5], [6] ],
+            (                 _,               _, _boost_rules,                 _,     _):    [ [0, 3, 1, 2], [4], [5]      ],
+            (                 _,               _,            _, _category_limit_1, _msku):    [ [3, 1], [4], [5], [6]       ],
+            (                 _,               _,            _, _category_limit_1,     _):    [ [3, 1], [4], [5]            ],
+            (                 _,               _,            _,                 _, _msku):    [ [3, 1, 0, 2], [4], [5], [6] ],
+            (                 _,               _,            _,                 _,     _):    [ [3, 1, 0, 2], [4], [5]      ],
+        } %}
+        
+        {{ sequence(
+            _expected_sequence_dict[
+                category_rotation               | default(false),
+                boost_priority_candidates       | default(false),
+                boost_rules                     | default(false),
+                per_category_limit == 1         | default(false),
+                fixed_scores_with_msku_for_msku is defined
+            ]
+        ) }}
+    {% endtable %}
+{% elif table == "sets_model_accessories_scores" %}
+    {% table table %}
+        {% for candidate in candidates_data_for_model %}
+            {{ item(candidate) }}
+        {% endfor %}
+    {% endtable %}
+{% elif table == "items_model_category_id" %}
+    {% table table %}
+            ["M1", "C0", "model", "{{ day }}"],
+            ["M2", "C0", "model", "{{ day }}"],
+            ["A1", "C1", "model", "{{ day }}"],
+            ["A2", "C1", "model", "{{ day }}"],
+            ["A3", "C1", "model", "{{ day }}"],
+            ["A4", "C2", "model", "{{ day }}"],
+            ["A5", "C2", "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "inlet_fixed_model_accessories" %}
+    {% table table %}
+            ["M1", "A1", -0.1],
+            ["M1", "A2", 0.3],
+            ["M1", "A5", 0.15],
+            ["M2", "A2", 0.1],
+            ["M3", "", 0.1],
+            ["M3", "A2", 0.1]
+    {% endtable %}
+{% elif table == "inlet_fixed_model_accessories_with_msku_for_model" %}
+    {% table table %}
+        {{ render_inlet_msku_candidates(candidates_data_for_model) }}
+    {% endtable %}
+{% elif table == "inlet_fixed_model_accessories_with_msku_for_msku" %}
+    {% table table %}
+        {{ render_inlet_msku_candidates(candidates_data_for_msku) }}
+    {% endtable %}
+{% endif %}

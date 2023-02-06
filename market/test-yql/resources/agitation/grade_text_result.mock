@@ -1,0 +1,59 @@
+# Тесты
+# Модель 1 - платная, подходит по лимиту (не указан, несколько плательщиков, выбираем самую дешёвую)
+# Модель 2 - платная, подходит по лимиту (указан)
+# Модель 3 - платная, не подходит по лимиту
+# Модель 4 - бесплатная, порядок указан (у остальных нет)
+# Модель 5 - платная, но нет заказа (поэтому бесплатная)
+# Магазин 1 - для проверки магазина
+# Пользователь 1 - есть задания на все модели
+
+# отзыв - cr_time = 2021-01-01T00:00:00 = 1609459200000
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_grade
+SCHEMA id:int64, author_id:int64, type:int16, resource_id:int64
+SCHEMA state:int16, mod_state:int16, grade_state:int16, has_text:int16, cpa:int16, cr_time:string
+# нормальные модельные
+{"id": 1, "author_id":1, "type":1, "resource_id":1, "state":0, "mod_state":2, "has_text": 0, "cpa": 1, "cr_time":"2021-01-01T00:00:00"}
+{"id": 2, "author_id":1, "type":2, "resource_id":2, "state":0, "mod_state":2, "has_text": 0, "cpa": 1, "cr_time":"2021-01-01T00:00:00"}
+{"id": 3, "author_id":1, "type":1, "resource_id":3, "state":0, "mod_state":2, "has_text": 0, "cpa": 1, "cr_time":"2021-01-01T00:00:00"}
+{"id": 4, "author_id":1, "type":1, "resource_id":4, "state":0, "mod_state":2, "has_text": 0, "cpa": 1, "cr_time":"2021-01-01T00:00:00"}
+{"id": 5, "author_id":1, "type":1, "resource_id":5, "state":0, "mod_state":2, "has_text": 0, "cpa": 0, "cr_time":"2021-01-01T00:00:00"}
+# нормальные магазинные
+{"id": 10, "author_id":1, "type":0, "resource_id":1, "state":0, "mod_state":2, "has_text": 0, "cpa": 1, "cr_time":"2021-01-01T00:00:00"}
+# разные невалидные
+{"id": 50, "author_id":100, "type":1, "resource_id":1, "state":1, "mod_state":3, "has_text": 0, "cpa": 1, "cr_time":"2021-01-01T00:00:00"}
+{"id": 51, "author_id":101, "type":1, "resource_id":1, "state":0, "mod_state":4, "has_text": 0, "cpa": 1, "cr_time":"2021-01-01T00:00:00"}
+{"id": 52, "author_id":102, "type":1, "resource_id":1, "state":0, "mod_state":3, "has_text": 1, "cpa": 1, "cr_time":"2021-01-01T00:00:00"}
+{"id": 53, "author_id":101, "type":1, "resource_id":1, "state":0, "mod_state":1, "has_text": 0, "cpa": 1, "cr_time":"2021-01-01T00:00:00"}
+{"id": 54, "author_id":101, "type":1, "resource_id":1, "state":0, "mod_state":0, "has_text": 0, "cpa": 1, "cr_time":"2021-01-01T00:00:00"}
+
+# доп модельные данные
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_grade_model
+SCHEMA grade_id:int64, sku:int64
+{"grade_id":1, "sku": 42}
+
+# порядок заданий
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/author/agitation_grade_order/current
+SCHEMA agitation_type:int16, resource_id:int64, order:int64, grade_count:int64
+{"agitation_type": 1, "resource_id": 4, "order": 66, "grade_count": 12}
+
+# текущие отзывы моделей
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/tables/pub_model_grades/current
+SCHEMA resource_id:int64, id:int64, photos:yson
+{"id":1, "resource_id":1, "photos": []}
+{"id":20, "resource_id":2, "photos": []}
+{"id":21, "resource_id":2, "photos": []}
+{"id":30, "resource_id":3, "photos": []}
+{"id":31, "resource_id":3, "photos": []}
+
+# платные модели
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/author/current_paid_models/current
+SCHEMA entity_type:int16, model_id:int64, price:int64, target_count:int64, balance:double
+{"entity_type": 1, "model_id":1, "price":1, "balance":10.1}
+{"entity_type": 1, "model_id":1, "price":2, "balance":10.1}
+{"entity_type": 1, "model_id":2, "price":3, "target_count":3, "balance":10.1}
+{"entity_type": 1, "model_id":3, "price":4, "target_count":1, "balance":10.1}
+{"entity_type": 1, "model_id":5, "price":5, "balance":10.1}
+# другие типы платности, не про отзыв
+{"entity_type": 2, "model_id":4, "price":1, "balance":10.1}
+{"entity_type": 3, "model_id":4, "price":1, "balance":10.1}
+{"entity_type": 0, "model_id":4, "price":1, "balance":10.1}

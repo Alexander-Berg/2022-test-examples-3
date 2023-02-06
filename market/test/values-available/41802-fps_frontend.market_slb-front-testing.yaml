@@ -1,0 +1,21 @@
+context:
+  default:
+    service_name: fps_frontend
+    servername_regexp: 'fps-frontend\\.tst\\.vs\\.market\\.yandex\\.net|supplier-test\\.market\\.yandex\\.ru'
+    vs: fps_frontend
+    health_check: '"GET /ping HTTP/1.1\r\nHost: fps-frontend.tst.vs.market.yandex.net\r\n\r\n"'
+    attempts: 1
+    antirobot: True
+    antirobot_service_name: market_other
+    balancing_method: "active"
+    cert: fps-frontend.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+
+servers:
+  default:
+    main:
+      - name: "GREY%fps-frontend.tst.vs.market.yandex.net"
+        timeout: "35s"
+        port: 80
+        plain_http_backend: True

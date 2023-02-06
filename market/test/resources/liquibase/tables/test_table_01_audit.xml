@@ -1,0 +1,55 @@
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="test_table_01_audit" author="d-trepalin">
+        <createSequence sequenceName="test_table_01_audit_id_seq"/>
+        <createTable tableName="test_table_01_audit">
+            <column name="bigint_not_null" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bigint_null" type="bigint"/>
+            <column name="boolean_not_null" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="boolean_null" type="boolean"/>
+            <column name="text_not_null" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text_null" type="text"/>
+            <column name="audit_id" type="bigint" defaultValueComputed="nextval('test_table_01_audit_id_seq')">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="operation_type" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="operation_time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="db_user" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="transaction_id" type="decimal(20,0)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <!--language=PostgreSQL-->
+        <sql>
+            CREATE TRIGGER test_table_01_audit_modified_trigger
+                AFTER INSERT OR UPDATE OR DELETE
+                ON test_table_01
+                FOR EACH ROW
+            EXECUTE PROCEDURE if_modified_table_func('test_table_01');
+        </sql>
+        <!--language=PostgreSQL-->
+        <sql>
+            CREATE TRIGGER test_table_01_audit_truncate_trigger
+                BEFORE TRUNCATE
+                ON test_table_01
+                FOR EACH STATEMENT
+            EXECUTE PROCEDURE if_truncated_table_func('test_table_01');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

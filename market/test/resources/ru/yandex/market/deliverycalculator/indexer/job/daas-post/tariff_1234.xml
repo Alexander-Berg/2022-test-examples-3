@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tariff id="1234" name="ПВЗ" label="ПВЗ" type="MAIL" currency="RUB" carrier-id="35" carrier-name="PickPoint"
+        delivery-method="POST" is-for-customer="1" is-for-shop="0">
+    <parameters>
+        <m3weight>200</m3weight>
+        <programs>
+            <program name-key="DAAS"/>
+        </programs>
+    </parameters>
+    <rules>
+        <offer-rule weight-max="31000" width-max="60" height-max="60" length-max="60" dim-sum-max="180" price-min="1"
+                    price-max="100">
+            <location-rule from="213">
+                <location-rule to="197">
+                    <offer-rule weight-max="15000">
+                        <option cost="300" days-min="2" days-max="3"/>
+                    </offer-rule>
+                    <offer-rule weight-min="15000" weight-max="50000">
+                        <option cost="500" days-min="4" days-max="5"/>
+                    </offer-rule>
+                    <offer-rule weight-max="20000" width-max="72" height-max="56" length-max="58" dim-sum-max="186">
+                        <pickuppoint id="101" code="649220"/>
+                        <pickuppoint id="102" code="649221"/>
+                        <pickuppoint id="103" code="649222"/>
+                        <pickuppoint id="104" code="649223"/>
+                    </offer-rule>
+
+                    <service code="INSURANCE" price-schema-type="FIX" price-schema-value="100000" price-min="0.02"
+                             price-max="20000" enabled="true"/>
+                    <service code="CASH_SERVICE" price-schema-type="PERCENT_CASH" price-schema-value="2.2"
+                             price-min="0.02" price-max="20000" enabled="false"/>
+                </location-rule>
+            </location-rule>
+            <location-rule from="222">
+                <location-rule to="121">
+                    <offer-rule weight-max="15000">
+                        <option cost="400" days-min="3" days-max="5"/>
+                    </offer-rule>
+                    <offer-rule weight-max="20000" width-max="72" height-max="56" length-max="58" dim-sum-max="186">
+                        <pickuppoint id="106" code="649224"/>
+                    </offer-rule>
+                </location-rule>
+            </location-rule>
+        </offer-rule>
+    </rules>
+</tariff>

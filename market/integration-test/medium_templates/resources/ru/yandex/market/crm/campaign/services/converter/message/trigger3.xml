@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:custom="http://lilucrm.market.yandex.ru/schema/1.0/triggers" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+    <bpmn:process id="{triggerKey}" name="Trigster" processType="None" isClosed="false" isExecutable="true" camunda:versionTag="{triggerVersion}">
+        <bpmn:startEvent id="StartEvent_1" camunda:asyncAfter="true" camunda:exclusive="false">
+            <bpmn:outgoing>SequenceFlow_0677ago</bpmn:outgoing>
+            <bpmn:messageEventDefinition messageRef="Message_0nno6ki" />
+        </bpmn:startEvent>
+        <bpmn:serviceTask id="ServiceTask_0gepmpo" implementation="##WebService" camunda:delegateExpression="${externalLogTrigger}" custom:customType="triggerLogging" custom:logEventType="welcome">
+            <bpmn:incoming>SequenceFlow_0677ago</bpmn:incoming>
+            <bpmn:outgoing>SequenceFlow_07dq7c1</bpmn:outgoing>
+        </bpmn:serviceTask>
+        <bpmn:endEvent id="EndEvent_0y55n45">
+            <bpmn:incoming>SequenceFlow_0gxkq96</bpmn:incoming>
+        </bpmn:endEvent>
+        <bpmn:sequenceFlow id="SequenceFlow_0677ago" sourceRef="StartEvent_1" targetRef="ServiceTask_0gepmpo" />
+        <bpmn:serviceTask id="ServiceTask_1h2j2jw" camunda:delegateExpression="${sendSmsTrigger}" custom:customType="sms" custom:templateId="{templateId}">
+            <bpmn:incoming>SequenceFlow_07dq7c1</bpmn:incoming>
+            <bpmn:outgoing>SequenceFlow_0gxkq96</bpmn:outgoing>
+        </bpmn:serviceTask>
+        <bpmn:sequenceFlow id="SequenceFlow_07dq7c1" sourceRef="ServiceTask_0gepmpo" targetRef="ServiceTask_1h2j2jw" />
+        <bpmn:sequenceFlow id="SequenceFlow_0gxkq96" sourceRef="ServiceTask_1h2j2jw" targetRef="EndEvent_0y55n45" />
+    </bpmn:process>
+    <bpmn:message id="Message_0nno6ki" name="coin_created" />
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="{triggerKey}">
+            <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+                <dc:Bounds x="173" y="102" width="36" height="36" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="ServiceTask_0gepmpo_di" bpmnElement="ServiceTask_0gepmpo">
+                <dc:Bounds x="244" y="93" width="72" height="54" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="EndEvent_0y55n45_di" bpmnElement="EndEvent_0y55n45">
+                <dc:Bounds x="469" y="102" width="36" height="36" />
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="442" y="78.5" width="90" height="13" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge id="SequenceFlow_0677ago_di" bpmnElement="SequenceFlow_0677ago">
+                <di:waypoint x="209" y="120" />
+                <di:waypoint x="244" y="120" />
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="226.5" y="98" width="0" height="13" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNShape id="ServiceTask_1h2j2jw_di" bpmnElement="ServiceTask_1h2j2jw">
+                <dc:Bounds x="355" y="93" width="72" height="54" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge id="SequenceFlow_07dq7c1_di" bpmnElement="SequenceFlow_07dq7c1">
+                <di:waypoint x="316" y="120" />
+                <di:waypoint x="355" y="120" />
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="335.5" y="98.5" width="0" height="13" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_0gxkq96_di" bpmnElement="SequenceFlow_0gxkq96">
+                <di:waypoint x="427" y="120" />
+                <di:waypoint x="469" y="120" />
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="448" y="98.5" width="0" height="13" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</bpmn:definitions>

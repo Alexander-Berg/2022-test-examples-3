@@ -1,0 +1,424 @@
+/* stylelint-disable */
+:root {
+    --backdrop-opacity: .7;
+
+    --color-accent: #ff6332;
+    --color-accent2: #ff4c00;
+    --color-accent3: #ffb198;
+}
+
+@define-mixin divider {
+    width: 100%;
+    height: 1px;
+
+    background-color: $color-gray-light;
+}
+
+body > * {
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.AudioPlayerCallRecord {
+    display: flex;
+    align-items: center;
+
+    height: 44px;
+
+    &-ControlIcon {
+        height: 20px;margin-right: 10px;display: flex;justify-content: center;align-items: center;width: 20px;cursor: pointer;
+
+        border-radius: 20px;
+        background-color: $color-true-black;
+
+        &-PlayButton {
+            &-PlayButton {
+                &-PlayButton {
+
+                    svg {
+                        margin-left: 3px;
+                    }
+                }
+            }
+        }
+    }
+
+    &-PlayButton {
+        svg {
+            margin-left: 3px;
+        }
+    }
+
+    &-TimeLineWrapper {
+        height: 24px;
+        margin-right: 10px;
+        position: relative;
+
+        width: 158px;
+    }
+
+    &-TimeLine {
+        cursor: pointer;
+
+        rect:hover {
+            fill: $color-true-black;
+        }
+    }
+
+    &-SpeedControl {
+        height: 16px;
+    }
+
+    &-SpeedControl {
+        height: 16px;
+        padding: 0 2px;
+
+        cursor: pointer;
+
+        border: 1px solid $color-gray-dark;
+        border-radius: 4px;
+
+        &_selected {
+            color: $color-true-black;
+            border-color: $color-true-black;
+        }
+    }
+
+    --adaptive-grid-column-gap: 16px;
+    --adaptive-grid-row-gap: 24px;
+
+    &-Test {
+        ymaps[class*="-ground-pane"] {
+            opacity: 0;
+        }
+    }
+}
+
+.Link {
+
+    display: inline;
+
+
+    cursor: pointer;
+    text-decoration: none;
+
+    color: $color-blue2;
+
+    &_theme_black {
+        color: $color-black;
+
+        &:hover {
+            color: $color-red;
+        }
+    }
+
+    &:hover {
+    color: $color-red;
+    }
+
+    &_withVisited:visited {
+        color: $color-violet;
+    }
+
+
+
+    &_withBlackTitles&_theme_black:hover {
+        opacity: .8;
+        color: $color-black;
+    }
+
+    &_theme_gray {
+        color: $color-gray-dark;
+
+        &:hover {
+            color: $color-black;
+        }
+    }
+
+    &_theme_gray-white {
+        color: $color-gray-dark;
+
+        &:hover {
+            color: $color-white;
+        }
+    }
+
+    &_theme_alpha-white {
+        color: $color-alpha;
+
+        &:hover {
+            color: $color-white;
+        }
+    }
+
+    &_theme_darkGreen {
+        color: $color-green-dark;
+    }
+
+    &_theme_green {
+        color: $color-accent;
+    }
+
+    &_theme_exp-black {
+        color: $color-black;
+
+        &:hover {
+            opacity: .8;
+            color: $color-black;
+        }
+
+        &.Link_withVisited:visited {
+            color: $color-black;
+        }
+    }
+
+    &_theme_exp-gray {
+        color: $color-gray-dark;
+
+        &:hover {
+            color: $color-black;
+        }
+
+        &.Link_withVisited:visited {
+            color: $color-gray-dark;
+        }
+    }
+
+    &_theme_exp-transparent {
+        opacity: .6;
+        color: $color-black;
+
+        &:hover {
+            opacity: 1;
+        }
+
+        &.Link_withVisited:visited {
+            opacity: .6;
+            color: $color-black;
+        }
+    }
+
+    &_theme_inherit {
+        color: inherit;
+    }
+
+    &_disabled {
+        cursor: default;
+        pointer-events: none;
+
+        color: $color-gray-light;
+
+        &:hover {
+            color: $color-gray-light;
+        }
+    }
+}
+
+@media (hover: none) {
+    .Link {
+        &:hover {
+            color: $color-blue2;
+        }
+
+        &_theme_gray:hover {
+            color: $color-gray-dark;
+        }
+
+        &_theme_gray-white:hover {
+            color: $color-gray-dark;
+        }
+
+        &_theme_exp-green:hover {
+            color: $color-accent2;
+        }
+
+        &_theme_exp-gray:hover {
+            color: $color-gray-dark;
+        }
+
+        &_theme_exp-transparent:hover {
+            opacity: 1;
+            color: $color-black;
+        }
+
+        &_theme_black:hover,
+        &_theme_exp-black:hover {
+            color: $color-black;
+        }
+
+        &_theme_inherit {
+            color: inherit;
+        }
+    }
+}
+
+.Button2 {
+    position: relative;
+    z-index: 0;
+
+    color: $color-black;
+
+    animation: .1s button_pressed_out ease-in-out;
+
+    .Button2-Icon {
+        width: 16px;
+
+        &_withOnClick {
+            pointer-events: initial;
+        }
+    }
+
+    .Button2-Text {
+        .Text {
+            line-height: $font-size-m;
+        }
+    }
+
+    &::before,
+    &:focus::before {
+        border-width: 0;
+        border-radius: $rounding-s;
+
+        transition: background-color .1s ease-in-out;
+    }
+
+    &:active {
+        &::before,
+        > * {
+            transform: scale(.97);
+            animation: .1s button_pressed ease-in-out;
+        }
+    }
+
+    &[disabled] {
+        color: $color-black;
+
+        .Button2-Icon {
+            opacity: .5;
+        }
+    }
+}
+
+@keyframes button_pressed {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(.97);
+    }
+}
+
+@keyframes button_pressed_out {
+    from {
+        transform: scale(.97);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+.Button2.Button2_theme_actionYdo {
+    color: $color-white;
+
+    &.Button2_loading {
+        .Button2-Text {
+            animation: 1s button_action_loader ease-in-out infinite;
+        }
+    }
+
+    &::before,
+    &:focus::before {
+        background: $color-accent;
+    }
+
+    &:hover,
+    &:active {
+        &::before {
+            background: $color-accent2;
+        }
+    }
+
+    &[disabled] {
+        color: $color-white;
+
+        .Button2-Text {
+            opacity: 1;
+        }
+
+        .Button2-Icon {
+            opacity: 1;
+        }
+    }
+
+    &.Button2_disabled::before,
+    &[aria-disabled='true']::before {
+        opacity: .5;
+    }
+}
+
+@media (hover: none) {
+    .Button2.Button2_theme_actionYdo {
+        &:hover {
+            &::before {
+                background-color: $color-accent;
+            }
+        }
+
+        &:active {
+            &::before {
+                background-color: $color-accent2;
+            }
+        }
+    }
+}
+
+@keyframes button_action_loader {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.Button2.Button2_theme_blue {
+    position: relative;
+    z-index: 0;
+    color: $color-white;
+
+    transition: transform 200ms linear;
+
+    &::before {
+        border-color: $color-blue;
+        background-color: $color-blue;
+        box-shadow: rgba(0, 78, 255, .73) 0 3px 18px;
+    }
+
+    &:hover,
+    &:active {
+        transform: translateY(-3px);
+
+        &::before {
+            border-color: $color-blue;
+            background-color: $color-blue;
+        }
+    }
+
+    &.Button2_size_xl::before,
+    &.Button2_size_xl:hover::before {
+        box-shadow: rgba(0, 78, 255, .73) 0 3px 18px; /* убрать овверрайд тени по размеру */
+    }
+}
+

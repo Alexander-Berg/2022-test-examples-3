@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<dataset>
+
+    <TASKDETAIL
+            TASKDETAILKEY="TASK01"
+            TASKTYPE="REP_MOVE"
+            FROMID="PLT01"
+            FROMLOC="STAGE01"
+            TOLOC="BUF01"
+            STATUS="9"
+            QTY="0"
+            ORIGINALQTY="0"
+            SKU=""
+            STORERKEY=""
+            SUBTASK="DOWN"
+            GROUPID="123"
+            USERKEY="TEST"
+    />
+
+    <!--  Задание на отбор из ячейки, в которой нет нужного НЗН - будет отменено -->
+    <TASKDETAIL
+            TASKDETAILKEY="TASK02"
+            TASKTYPE="REP_PICK"
+            FROMID="PLT01"
+            FROMLOC="BUF01"
+            TOLOC=""
+            STATUS="0"
+            QTY="5"
+            ORIGINALQTY="5"
+            SKU="ROV0000000000000000360"
+            STORERKEY="465852"
+            GROUPID="123"
+            USERKEY=""
+    />
+
+    <!--  Задание на подъём не отменится, поскольку в ячейке есть другой товар  -->
+    <TASKDETAIL
+            TASKDETAILKEY="TASK04"
+            TASKTYPE="REP_MOVE"
+            FROMID="PLT01"
+            FROMLOC="BUF01"
+            TOLOC="STAGE01"
+            STATUS="S"
+            QTY="0"
+            ORIGINALQTY="0"
+            SKU=""
+            STORERKEY=""
+            SUBTASK="UP"
+            GROUPID="123"
+            USERKEY=""
+    />
+
+    <SERIALINVENTORY ID="PLT01" STORERKEY="465852" SKU="ROV0000000000000000359" LOC="BUF02" LOT="1235" SERIALNUMBER="000101" QTY="10"/>
+    <!--  По балансам в ячейке не тот НЗН, который должен быть по заданию  -->
+    <SERIALINVENTORY ID="PLT02" STORERKEY="465852" SKU="ROV0000000000000000359" LOC="BUF01" LOT="1234" SERIALNUMBER="000101" QTY="10"/>
+
+    <!--  Ячейка не пуста  -->
+    <LOTxLOCxID LOC="BUF01" LOT="1234" ID="PLT02" QTY="10" STORERKEY="465852" SKU="ROV0000000000000000359"/>
+    <LOTxLOCxID LOC="BUF02" LOT="1235" ID="PLT01" QTY="10" STORERKEY="465852" SKU="ROV0000000000000000359"/>
+
+    <SKUXLOC STORERKEY="465852" SKU="ROV0000000000000000359" LOC="BUF01" QTY="10" />
+</dataset>

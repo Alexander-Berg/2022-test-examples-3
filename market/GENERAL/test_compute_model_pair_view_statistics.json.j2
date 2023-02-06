@@ -1,0 +1,36 @@
+{% if table == "features_item_pair_model_model_view_statistics" %}
+    {# Result data. #}
+    {% table table %}
+        ["M1", "M2", 1.0, 2.0, "model", "model", "{{ day }}"],
+        ["M2", "M1", 1.0, 1.0, "model", "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_model_views" %}
+    {% macro view(timestamp, yandexuid, model_id) -%}
+        [
+            {{ timestamp }},
+            {
+                "yandexuid": "{{ yandexuid }}"
+            },
+            "view",
+            "model",
+            {% if model_id %}
+                "{{ model_id }}",
+            {% else %}
+                null,
+            {% endif %}
+            {},
+            "{{ day }}"
+        ]
+    {%- endmacro %}
+    {% table "events" %}
+        {% if shift == 0 %}
+            {{ view(1503225532000, "19275", "M2") }},
+            {{ view(1503225532001, "19275", "M1") }},
+            {{ view(1503225532002, "19275", "M2") }},
+            {{ view(1503225532004, "19275", "M2") }},
+            {{ view(1503225532005, "19278", "M2") }},
+            {{ view(1503225532006, "19278", "M2") }},
+            {{ view(1503225532007, "19279", None) }}
+        {% endif %}
+    {% endtable %}
+{% endif %}

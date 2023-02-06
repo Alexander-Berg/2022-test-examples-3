@@ -1,0 +1,43 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import json
+import sys
+import subprocess
+import os
+import yaml
+
+usage_msg = '''
+Usage:    {0} <conf or host fqdn> <app> <version>
+Examples:
+    {0} devtest intapi 1.1234567-1
+'''.format(sys.argv[0])
+
+if '-h' in sys.argv:
+    print usage_msg
+    sys.exit(0)
+
+conf = None
+if len(sys.argv[1:]) != 3:
+    sys.exit('error: wrong number of arguments\n' + usage_msg)
+
+conf = sys.argv[1]
+app, version = sys.argv[2:]
+
+apps_conf_file = open('/etc/yandex-direct/direct-apps.conf.yaml', 'r')
+apps_conf = yaml.load(apps_conf_file)
+if apps_conf['apps'].get(app, {}).get('deploy_type', '') == 'yadeploy':
+    print u'***\nПриложение переехало в Я.Деплой, для выкладки используй инструкцию: https://docs.yandex-team.ru/direct-dev/jeri/guide/update-yadeploy-stage#apply-new-spec'
+    print u'Стейдж, который нужно обновить: %s\n' % apps_conf['apps'].get(app, {}).get('yadeploy-stages', {}).get(conf, u'не найден в apps-конфиге для среды %s' % conf)
+    sys.exit(2)
+
+if conf and conf == 'test':
+    # отдельная обёртка для ТС для релизов -- отличается как минимум тем, что там есть песочница
+    # + ТС переезжает на новые инстансы, устроенные по другому
+    # имеет смысл сделать наоборот -- логику из direct-java-test-update перетащить сюда, а d-j-t-u сделать тонкой обёрткой над этим скриптом; сделать так, как сейчас, было просто быстрее
+    os.execvp('direct-java-test-update', ['direct-java-test-update', app, version])
+elif conf and (conf in ['dev7', 'devtest']):
+    # самая суть из direct-java-test-update
+    os.execvp('limtest-up', ['limtest-up', '--zk-root', '/direct/np', '--limtest-name', conf, app, version, '--log-filename-prefix', 'java-test-update', '--lock'])
+else:
+    sys.exit('wrong value "conf": {0}. Needed dev7/test/devtest\n'.format(conf))

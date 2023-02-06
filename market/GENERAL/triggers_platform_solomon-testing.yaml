@@ -1,0 +1,48 @@
+juggler:
+  checks:
+
+    # Check engine-messages-errors
+    # https://juggler.yandex-team.ru/check_details/?host=triggers_platform_solomn-testing&service=engine-messages-errors&last=1DAY&mode=edit
+    - children:
+        - EVENTS%(host=triggers_platform-testing&tag=message_errors):all:all
+      service: engine-messages-errors
+
+    # Check lb-messages-errors
+    # https://juggler.yandex-team.ru/check_details/?host=triggers_platform_solomn-testing&service=lb-messages-errors&last=1DAY&mode=edit
+    - children:
+        - EVENTS%(host=triggers_platform-testing&tag=lb_messages_errors):all:all
+      service: lb-messages-errors
+
+    # Check triggers-platform-lb-read-lags
+    # https://juggler.yandex-team.ru/check_details/?host=triggers_platform_solomn-testing&service=triggers-platform-lb-read-lags&last=1DAY&mode=edit
+    - children:
+        - EVENTS%(host=triggers_platform-testing&tag=lb_read_lags):all:all
+      service: triggers-platform-lb-read-lags
+
+    # Check triggers-platform-process-jobs-delay
+    # https://juggler.yandex-team.ru/check_details/?host=triggers_platform_solomn-testing&service=triggers-platform-process-jobs-delay&last=1DAY&mode=edit
+    - children:
+        - EVENTS%(host=triggers_platform-testing&tag=process_jobs_delay):all:all
+      service: triggers-platform-process-jobs-delay
+
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    check_options: {}
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: triggers_platform_solomn-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    tags:
+      - market_testing
+      - market_rtc
+      - markettriggersplatform
+      - testing
+      - market
+      - _market_
+    ttl: 900

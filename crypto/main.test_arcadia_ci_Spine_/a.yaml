@@ -1,0 +1,545 @@
+ci:
+  flows:
+    flow-push-juggler-aggregate-checks:
+      jobs:
+        push-juggler-aggregate-checks:
+          input:
+            config:
+              arc_mount_config:
+                enabled: true
+              cmd_line: '
+
+                ./ya make crypta/spine/pushers/aggregate_checks/bin --stat
+
+                ./ya make contrib/python/juggler_sdk/cli --stat
+
+                crypta/spine/pushers/aggregate_checks/bin/aggregate_checks | contrib/python/juggler_sdk/cli/juggler_cli
+                load
+
+                '
+              secret_environment_variables:
+              - key: JUGGLER_OAUTH_TOKEN
+                secret_spec:
+                  key: token
+                  uuid: sec-01dc2ahekdhey511zd9qq9cp9m
+          needs:
+          - start-run
+          stage: run
+          task: common/misc/run_command
+          title: Push juggler aggregate checks
+        start-run:
+          stage: run
+          task: dummy
+          title: Start run
+    flow-push-sandbox-schedulers:
+      jobs:
+        push-sandbox-schedulers:
+          input:
+            config:
+              arc_mount_config:
+                enabled: true
+              cmd_line: '
+
+                ./ya make crypta/spine/pushers/upload_sandbox_schedulers/bin --stat
+
+                crypta/spine/pushers/upload_sandbox_schedulers/bin/upload_sandbox_schedulers
+
+                '
+              secret_environment_variables:
+              - key: SANDBOX_TOKEN
+                secret_spec:
+                  key: token
+                  uuid: sec-01csvzg7vtpvb7bgrx18ajsscj
+          needs:
+          - start-run
+          stage: run
+          task: common/misc/run_command
+          title: Push sandbox schedulers
+        start-run:
+          stage: run
+          task: dummy
+          title: Start run
+    flow-push-solomon-alerts:
+      jobs:
+        push-solomon-alerts:
+          input:
+            config:
+              arc_mount_config:
+                enabled: true
+              cmd_line: '
+
+                ./ya make crypta/spine/pushers/upload_solomon_alerts/bin --stat
+
+                crypta/spine/pushers/upload_solomon_alerts/bin/upload_solomon_alerts
+
+                '
+              secret_environment_variables:
+              - key: SOLOMON_TOKEN
+                secret_spec:
+                  key: token
+                  uuid: sec-01e63xgmh8g9fj3c542hrw9vqc
+          needs:
+          - start-run
+          stage: run
+          task: common/misc/run_command
+          title: Push solomon alerts
+        start-run:
+          stage: run
+          task: dummy
+          title: Start run
+    flow-push-yasm-dashboards:
+      jobs:
+        push-yasm-dashboards:
+          input:
+            config:
+              arc_mount_config:
+                enabled: true
+              cmd_line: '
+
+                ./ya make crypta/spine/pushers/yasm_dashboards/bin --stat
+
+                crypta/spine/pushers/yasm_dashboards/bin/yasm_dashboards
+
+                '
+              secret_environment_variables: []
+          needs:
+          - start-run
+          stage: run
+          task: common/misc/run_command
+          title: Push YASM dashboards
+        start-run:
+          stage: run
+          task: dummy
+          title: Start run
+    flow-yt-latencies:
+      jobs:
+        build-crypta-yt-latencies:
+          input:
+            package_resource_attrs:
+              name: crypta-yt-latencies
+            packages: crypta/spine/pushers/yt_latencies/bundle/crypta-yt-latencies.json
+            resource_type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package
+          title: Build crypta-yt-latencies
+        release-stable:
+          input:
+            config:
+              common_release_data:
+                sandbox_common_release_data:
+                  release_stage: stable
+              deploy_system: SANDBOX
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-yt-latencies.resources[?type == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-stable
+          stage: stable
+          task: common/releases/simple_releaser
+          title: Release to stable
+        release-testing:
+          input:
+            config:
+              common_release_data:
+                sandbox_common_release_data:
+                  release_stage: testing
+              deploy_system: SANDBOX
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-yt-latencies.resources[?type == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-testing
+          stage: testing
+          task: common/releases/simple_releaser
+          title: Release to testing
+        start-build:
+          stage: build
+          task: dummy
+          title: Start build
+        start-stable:
+          needs:
+          - release-testing
+          stage: stable
+          task: dummy
+          title: Start stable
+        start-testing:
+          needs:
+          - build-crypta-yt-latencies
+          stage: testing
+          task: dummy
+          title: Start testing
+    flow-yt-output-table-latencies:
+      jobs:
+        build-crypta-yt-output-table-latencies:
+          input:
+            package_resource_attrs:
+              name: crypta-yt-output-table-latencies
+            packages: crypta/spine/pushers/yt_output_table_latencies/bundle/crypta-yt-output-table-latencies.json
+            resource_type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package
+          title: Build crypta-yt-output-table-latencies
+        release-stable:
+          input:
+            config:
+              common_release_data:
+                sandbox_common_release_data:
+                  release_stage: stable
+              deploy_system: SANDBOX
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-yt-output-table-latencies.resources[?type
+                  == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-stable
+          stage: stable
+          task: common/releases/simple_releaser
+          title: Release to stable
+        release-testing:
+          input:
+            config:
+              common_release_data:
+                sandbox_common_release_data:
+                  release_stage: testing
+              deploy_system: SANDBOX
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-yt-output-table-latencies.resources[?type
+                  == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-testing
+          stage: testing
+          task: common/releases/simple_releaser
+          title: Release to testing
+        start-build:
+          stage: build
+          task: dummy
+          title: Start build
+        start-stable:
+          needs:
+          - release-testing
+          stage: stable
+          task: dummy
+          title: Start stable
+        start-testing:
+          needs:
+          - build-crypta-yt-output-table-latencies
+          stage: testing
+          task: dummy
+          title: Start testing
+    flow-yt-processed-table-metrics:
+      jobs:
+        build-crypta-yt-processed-tables-metrics:
+          input:
+            package_resource_attrs:
+              name: crypta-yt-processed-tables-metrics
+            packages: crypta/spine/pushers/yt_processed_tables_metrics/bundle/crypta-yt-processed-tables-metrics.json
+            resource_type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package
+          title: Build crypta-yt-processed-tables-metrics
+        release-stable:
+          input:
+            config:
+              common_release_data:
+                sandbox_common_release_data:
+                  release_stage: stable
+              deploy_system: SANDBOX
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-yt-processed-tables-metrics.resources[?type
+                  == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-stable
+          stage: stable
+          task: common/releases/simple_releaser
+          title: Release to stable
+        release-testing:
+          input:
+            config:
+              common_release_data:
+                sandbox_common_release_data:
+                  release_stage: testing
+              deploy_system: SANDBOX
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-yt-processed-tables-metrics.resources[?type
+                  == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-testing
+          stage: testing
+          task: common/releases/simple_releaser
+          title: Release to testing
+        start-build:
+          stage: build
+          task: dummy
+          title: Start build
+        start-stable:
+          needs:
+          - release-testing
+          stage: stable
+          task: dummy
+          title: Start stable
+        start-testing:
+          needs:
+          - build-crypta-yt-processed-tables-metrics
+          stage: testing
+          task: dummy
+          title: Start testing
+    flow-yt-replicated-table-checker:
+      jobs:
+        build-crypta-yt-replicated-table-checker:
+          input:
+            custom_version: ${context.version_info.full}
+            packages: crypta/spine/pushers/yt_replicated_table_checker/docker/crypta-yt-replicated-table-checker.json
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package_docker
+          title: Build crypta-yt-replicated-table-checker
+        release-stable:
+          input:
+            config:
+              common_release_data:
+                sandbox_common_release_data:
+                  release_stage: stable
+              deploy_system: SANDBOX
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-yt-replicated-table-checker.resources[?type
+                  == 'CRYPTA_DOCKER'])[0].id}
+                type: CRYPTA_DOCKER
+          needs:
+          - start-stable
+          stage: stable
+          task: common/releases/simple_releaser
+          title: Release to stable
+        release-testing:
+          input:
+            config:
+              common_release_data:
+                sandbox_common_release_data:
+                  release_stage: testing
+              deploy_system: SANDBOX
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-yt-replicated-table-checker.resources[?type
+                  == 'CRYPTA_DOCKER'])[0].id}
+                type: CRYPTA_DOCKER
+          needs:
+          - start-testing
+          stage: testing
+          task: common/releases/simple_releaser
+          title: Release to testing
+        start-build:
+          stage: build
+          task: dummy
+          title: Start build
+        start-stable:
+          needs:
+          - release-testing
+          stage: stable
+          task: dummy
+          title: Start stable
+        start-testing:
+          needs:
+          - build-crypta-yt-replicated-table-checker
+          stage: testing
+          task: dummy
+          title: Start testing
+    flow-yt-sizes:
+      jobs:
+        build-crypta-yt-sizes:
+          input:
+            package_resource_attrs:
+              name: crypta-yt-sizes
+            packages: crypta/spine/pushers/yt_sizes/bundle/crypta-yt-sizes.json
+            resource_type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package
+          title: Build crypta-yt-sizes
+        release-stable:
+          input:
+            config:
+              common_release_data:
+                sandbox_common_release_data:
+                  release_stage: stable
+              deploy_system: SANDBOX
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-yt-sizes.resources[?type == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-stable
+          stage: stable
+          task: common/releases/simple_releaser
+          title: Release to stable
+        release-testing:
+          input:
+            config:
+              common_release_data:
+                sandbox_common_release_data:
+                  release_stage: testing
+              deploy_system: SANDBOX
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-yt-sizes.resources[?type == 'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-testing
+          stage: testing
+          task: common/releases/simple_releaser
+          title: Release to testing
+        start-build:
+          stage: build
+          task: dummy
+          title: Start build
+        start-stable:
+          needs:
+          - release-testing
+          stage: stable
+          task: dummy
+          title: Start stable
+        start-testing:
+          needs:
+          - build-crypta-yt-sizes
+          stage: testing
+          task: dummy
+          title: Start testing
+  releases:
+    push-juggler-aggregate-checks:
+      auto: true
+      filters:
+      - abs-paths:
+        - crypta/spine/pushers/aggregate_checks/**
+        discovery: dir
+      flow: flow-push-juggler-aggregate-checks
+      stages:
+      - displace: true
+        id: run
+      title: Push juggler aggregate checks
+    push-sandbox-schedulers:
+      auto: true
+      filters:
+      - abs-paths:
+        - crypta/spine/pushers/upload_sandbox_schedulers/**
+        discovery: dir
+      flow: flow-push-sandbox-schedulers
+      stages:
+      - displace: true
+        id: run
+      title: Push sandbox schedulers
+    push-solomon-alerts:
+      auto: true
+      filters:
+      - abs-paths:
+        - crypta/spine/pushers/upload_solomon_alerts/**
+        discovery: dir
+      flow: flow-push-solomon-alerts
+      stages:
+      - displace: true
+        id: run
+      title: Push solomon alerts
+    push-yasm-dashboards:
+      auto: true
+      filters:
+      - abs-paths:
+        - crypta/spine/pushers/yasm_dashboards/**
+        discovery: dir
+      flow: flow-push-yasm-dashboards
+      stages:
+      - displace: true
+        id: run
+      title: Push YASM dashboards
+    yt-latencies:
+      auto: true
+      filters:
+      - abs-paths:
+        - crypta/spine/pushers/yt_latencies/**
+        discovery: dir
+      flow: flow-yt-latencies
+      stages:
+      - displace: true
+        id: build
+      - displace: true
+        id: testing
+      - id: stable
+      title: YT latencies
+    yt-output-table-latencies:
+      auto: true
+      filters:
+      - abs-paths:
+        - crypta/spine/pushers/yt_output_table_latencies/**
+        discovery: dir
+      flow: flow-yt-output-table-latencies
+      stages:
+      - displace: true
+        id: build
+      - displace: true
+        id: testing
+      - id: stable
+      title: YT output table latencies
+    yt-processed-table-metrics:
+      auto: true
+      filters:
+      - abs-paths:
+        - crypta/spine/pushers/yt_processed_tables_metrics/**
+        discovery: dir
+      flow: flow-yt-processed-table-metrics
+      stages:
+      - displace: true
+        id: build
+      - displace: true
+        id: testing
+      - id: stable
+      title: YT processed table metrics
+    yt-replicated-table-checker:
+      auto: true
+      filters:
+      - abs-paths:
+        - crypta/spine/pushers/yt_replicated_table_checker/**
+        - crypta/utils/run_periodic_task/bin/**
+        - crypta/utils/templater/**
+        - yt/python/yt/tools/bin/lock_make/**
+        discovery: dir
+      flow: flow-yt-replicated-table-checker
+      stages:
+      - displace: true
+        id: build
+      - displace: true
+        id: testing
+      - id: stable
+      title: YT replicated table checker
+    yt-sizes:
+      auto: true
+      filters:
+      - abs-paths:
+        - crypta/spine/pushers/yt_sizes/**
+        discovery: dir
+      flow: flow-yt-sizes
+      stages:
+      - displace: true
+        id: build
+      - displace: true
+        id: testing
+      - id: stable
+      title: YT sizes
+  runtime:
+    sandbox-owner: CRYPTA
+  secret: sec-01efps66gnbmejg9wvc9ptvhmc
+service: cryptadev
+title: Spine

@@ -1,0 +1,28 @@
+quota: default  # Common quota
+urls: urls
+
+tvm-service:  # dst tvm id
+  tvm_payments_test: 2001798  # Test
+  tvm_payments_prod: 2001800  # Prod
+
+export:  # Экспорт dst tvm id в секцию квот
+  - tvm_payments_test
+
+router:
+  - map: urls
+    data:
+      - key: "/legacy/wallet-balance"  # Урл ручки
+        router:
+          - map: tvm_payments_test  # dst tvm id
+            data:
+              - key: 2001798  # src tvm id
+                quota: test  # Квота на ручку для src tvm id
+        quota: balance  # Квота на ручку
+
+      - key: "/legacy/payment-methods"
+        router:
+          - map: tvm_payments_test
+            data:
+              - key: 2001798
+                quota: test
+        quota: lpm

@@ -1,0 +1,93 @@
+<html>
+<head>
+<title>Generative music test stand</title>
+<link rel="stylesheet" href="details.css">
+<style>
+.loopDiv{
+  margin: 10px;
+  padding: 3px;
+}
+.trackDiv{
+  margin: 10px;
+  padding: 3px;
+}
+</style>
+<script src="details.js"></script>
+<script>
+function clearChildren(div) {
+  while(div.firstChild) {
+    div.removeChild(div.lastChild)
+  }
+}
+function appendText(div, text) {
+    let txtNode = document.createTextNode(text);
+    let span = document.createElement('span')
+    span.appendChild(txtNode)
+    span.classList.add('loopInfo');
+    div.appendChild(span)
+}
+function fillLoopInfo(obj, targetDivId) {
+    let div = document.getElementById(targetDivId);
+    clearChildren(div)
+    for(let key of Object.getOwnPropertyNames(obj)) {
+        appendText(div, key+":"+obj[key]);
+    }
+}
+function loadObjInfo(url, fnc) {
+  fetch(url, {
+      method: 'GET', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      redirect: 'follow', // manual, *follow, error
+      referrerPolicy: 'no-referrer' // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+  }).then(res=>res.json()).then(obj=>{
+      console.log(obj);
+      if(!obj.error) {
+          fnc(obj);
+      }
+  }).catch(err=>{
+      console.log("error:"+err)
+  });
+}
+function onLoopLoadClick() {
+  let id = document.getElementById('loopId').value;
+  let player = document.getElementById('loopPlayer');
+  player.innerHTML = '<audio autoplay=true loop controls src="/admin/loop/'+id+'"/>';
+
+  loadObjInfo('/admin/loop/info/'+id, obj=>fillLoopInfo(obj, 'loopInfo'))
+}
+function onTrackLoadClick() {
+    let id = document.getElementById('trackId').value;
+    let player = document.getElementById('trackPlayer');
+    player.innerHTML = '<audio autoplay=true controls src="/admin/track/'+id+'"/>';
+    let trackInfo = document.getElementById('trackInfo')
+    clearChildren(trackInfo)
+  loadObjInfo('/admin/track/info/'+id, obj=>displayInfo(obj, 'trackInfo'))
+}
+function onLoad() {
+  if(!window.location.search) {
+    return;
+  }
+  let params = new URLSearchParams(window.location.search.substring(1));
+  let loopId = params.get('loopId');
+  if(loopId) {
+      document.getElementById('loopId').value = loopId;
+      onLoopLoadClick()
+      return;
+  }
+  let trackId = params.get('trackId');
+  if(trackId) {
+      document.getElementById('trackId').value = trackId;
+      onTrackLoadClick()
+  }
+}
+</script>
+</head>
+<body onload="onLoad()">
+<div class="loopDiv">Loop id:<input type="text" id="loopId"/><button onclick=onLoopLoadClick()>Load</button><span id="loopPlayer"></span>
+<div id="loopInfo" class="loopDiv"></div></div>
+<div class="trackDiv">Track id:<input type="text" id="trackId"/><button onclick=onTrackLoadClick()>Load</button><span id="trackPlayer"></span>
+<div id="trackInfo"/></div>
+</body>
+</html>

@@ -1,0 +1,175 @@
+{
+  "owner": "marketinfra",
+  "tableName": "clickphite_testing",
+  "splits": {
+    "period": "period",
+    "table": "table",
+    "query_weight": "query_weight",
+    "config_id": "arrayJoin(config_ids)"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "clickphite.testing.query-timings.TOTAL",
+        "clickphite.testing.query-timings.period.${period}",
+        "clickphite.testing.query-timings.query-weight.${query_weight}",
+        "clickphite.testing.query-timings.table.${table}",
+        "clickphite.testing.query-timings.table.${table}.query-weight.${query_weight}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "query_time_millis",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.sum-query-time-minutes.TOTAL",
+        "clickphite.testing.sum-query-time-minutes.period.${period}",
+        "clickphite.testing.sum-query-time-minutes.table.${table}"
+      ],
+      "period": "HOUR",
+      "metricField": "sum(query_time_millis) / 1000 / 3600",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.metrics-count.TOTAL",
+        "clickphite.testing.metrics-count.period.${period}",
+        "clickphite.testing.metrics-count.table.${table}"
+      ],
+      "periodArray": ["ONE_MIN", "HOUR", "DAY"],
+      "metricField": "sum(length(metric_ids))",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.average-metric-group-size.TOTAL",
+        "clickphite.testing.average-metric-group-size.period.${period}",
+        "clickphite.testing.average-metric-group-size.table.${table}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "avg(length(metric_ids))",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.metric-group-size.TOTAL",
+        "clickphite.testing.metric-group-size.period.${period}",
+        "clickphite.testing.metric-group-size.table.${table}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "length(metric_ids)",
+      "type": "QUANTILE"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.metric-percent-built-in-one-query.TOTAL",
+        "clickphite.testing.metric-percent-built-in-one-query.period.${period}",
+        "clickphite.testing.metric-percent-built-in-one-query.table.${table}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "length(metric_ids) * 100 / total_metrics_count_in_group",
+      "type": "QUANTILE"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.clickhouse-rps.TOTAL",
+        "clickphite.testing.clickhouse-rps.period.${period}",
+        "clickphite.testing.clickhouse-rps.table.${table}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "count() / 60",
+      "type": "SIMPLE"
+    },
+
+    {
+      "metricNameArray": [
+        "clickphite.testing.send-timings.GRAPHITE.TOTAL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "send_time_millis_per_id[arrayJoin(arrayEnumerate(send_time_millis_per_id)) AS i]",
+      "filter": "storage_per_id[i] = 'GRAPHITE' and length(metric_ids) = length(send_time_millis_per_id) = length(storage_per_id)",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.send-timings.STATFACE.TOTAL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "send_time_millis_per_id[arrayJoin(arrayEnumerate(send_time_millis_per_id)) AS i]",
+      "filter": "storage_per_id[i] = 'STATFACE' and length(metric_ids) = length(send_time_millis_per_id) = length(storage_per_id)",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.send-timings.SOLOMON.TOTAL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "send_time_millis_per_id[arrayJoin(arrayEnumerate(send_time_millis_per_id)) AS i]",
+      "filter": "storage_per_id[i] = 'SOLOMON' and length(metric_ids) = length(send_time_millis_per_id) = length(storage_per_id)",
+      "type": "QUANTILE_TIMING"
+    },
+
+    {
+      "metricNameArray": [
+        "clickphite.testing.ignored-invalid.GRAPHITE.TOTAL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "sum(invalid_rows_ignored_per_id[arrayJoin(arrayEnumerate(invalid_rows_ignored_per_id)) AS i])",
+      "filter": "storage_per_id[i] = 'GRAPHITE' and length(metric_ids) = length(invalid_rows_ignored_per_id) = length(storage_per_id)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.ignored-invalid.STATFACE.TOTAL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "sum(invalid_rows_ignored_per_id[arrayJoin(arrayEnumerate(invalid_rows_ignored_per_id)) AS i])",
+      "filter": "storage_per_id[i] = 'STATFACE' and length(metric_ids) = length(invalid_rows_ignored_per_id) = length(storage_per_id)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "clickphite.testing.ignored-invalid.SOLOMON.TOTAL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "sum(invalid_rows_ignored_per_id[arrayJoin(arrayEnumerate(invalid_rows_ignored_per_id)) AS i])",
+      "filter": "storage_per_id[i] = 'SOLOMON' and length(metric_ids) = length(invalid_rows_ignored_per_id) = length(storage_per_id)",
+      "type": "SIMPLE"
+    }
+  ],
+  "commonSolomonLabels": {
+    "project": "market-infra",
+    "service": "clickphite",
+    "cluster": "testing"
+  },
+  "solomonSensors": [
+    {
+      "labelsArray": [
+        {
+          "sensor": "rows_read"
+        },
+        {
+          "config": "${config_id}",
+          "sensor": "rows_read"
+        }
+      ],
+      "period": "ONE_MIN",
+      "metricField": "sum(rows_read)",
+      "type": "SIMPLE"
+    },
+    {
+      "labelsArray": [
+        {
+          "sensor": "rows_ignored"
+        },
+        {
+          "config": "${config_id}",
+          "sensor": "rows_ignored"
+        }
+      ],
+      "period": "ONE_MIN",
+      "metricField": "sum(rows_ignored)",
+      "type": "SIMPLE"
+    }
+  ]
+}

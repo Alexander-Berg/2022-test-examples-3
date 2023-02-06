@@ -1,0 +1,72 @@
+syntax = "proto2";
+
+package NScarabProto.NSplitReqansTest;
+
+import "scarab/api/proto/common/options.proto";
+
+message InnerData {
+    optional uint32 Num  = 1;
+    optional bytes  Data = 2;
+    optional string Str  = 3;
+}
+
+message DataWithKeyField {
+    optional uint32 KeyField = 1 [(_key_field) = true];
+    optional bytes  Data = 2;
+}
+
+message DataWithRtRequiredField {
+    optional string RtRequiredField = 1 [(_rt_required) = true];
+    optional bytes  Data = 2;
+}
+
+message DataWithSplittableField {
+    optional bytes FatLimitedData = 1 [(_split_size_limit) = 10];
+    optional bytes  Data = 2;
+}
+
+message DataWithoutOptions {
+    optional uint32 Num  = 1;
+    optional bytes  Data = 2;
+}
+
+message MessageWithNestedMessage {
+    optional uint32 Num = 1;
+    optional bytes  Data = 2;
+    optional InnerData NestedMsg = 3;
+}
+
+message MarkedMessageWithNestedMessage {
+    optional uint32 Num = 1 [(_key_field) = true];
+    optional bytes  Data = 2 [(_rt_required) = true];
+    optional InnerData NestedMsg = 3 [(_split_size_limit) = 30];
+}
+
+message TestOptions {
+    optional uint32 KeyField = 1 [(_key_field) = true];
+    optional string RtRequiredField = 2 [(_rt_required) = true];
+
+    optional bytes FatLimitedData = 3 [(_split_size_limit) = 10];
+    optional string FatUnLimitedData = 4;
+
+    optional InnerData LimitedMessage = 5 [(_split_size_limit) = 20];
+    repeated bytes FatLimitedDataArray = 6 [(_split_size_limit) = 10];
+    repeated InnerData LimitedMessageArray = 7 [(_split_size_limit) = 50];
+
+    optional DataWithKeyField SplittableData1 = 8;
+    optional DataWithRtRequiredField SplittableData2 = 9;
+    optional DataWithSplittableField SplittableData3 = 10;
+    optional DataWithoutOptions UnsplittableData = 11;
+    repeated DataWithKeyField SplittableDataArray1 = 12;
+    repeated DataWithRtRequiredField SplittableDataArray2 = 13;
+    repeated DataWithSplittableField SplittableDataArray3 = 14;
+    repeated DataWithoutOptions UnsplittableDataArray = 15;
+    repeated uint32 IntArray = 16;
+    repeated string StringArray = 17;
+
+    optional MessageWithNestedMessage MsgWithNested = 18;
+    repeated MessageWithNestedMessage MsgWithNestedArray = 19;
+
+    optional MarkedMessageWithNestedMessage MsgForSplit = 20;
+    repeated MarkedMessageWithNestedMessage MsgForSplitArray = 21;
+}

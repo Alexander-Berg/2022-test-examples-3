@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:custom="http://lilucrm.market.yandex.ru/schema/1.0/triggers"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+    <bpmn:process id="Process_1" name="Push" processType="None" isClosed="false" isExecutable="true">
+        <bpmn:startEvent id="StartEvent_1" camunda:asyncAfter="true">
+            <bpmn:extensionElements>
+                <camunda:executionListener delegateExpression="${cartItemChangeListener}" event="end"/>
+            </bpmn:extensionElements>
+            <bpmn:outgoing>SequenceFlow_0e4o4dw</bpmn:outgoing>
+            <bpmn:messageEventDefinition messageRef="Message_0q1z6ju"/>
+        </bpmn:startEvent>
+        <bpmn:serviceTask id="ServiceTask_1vlc5kg" implementation="##WebService"
+                          custom:customType="push"
+                          custom:templateId="b25a69f8-e9f0-4ca4-9c4d-74cd89f28196:4"
+                          custom:subscriptionType="64"
+                          camunda:delegateExpression="${sendPushTrigger}">
+            <bpmn:incoming>SequenceFlow_0e4o4dw</bpmn:incoming>
+            <bpmn:outgoing>SequenceFlow_1myyg91</bpmn:outgoing>
+        </bpmn:serviceTask>
+        <bpmn:endEvent id="EndEvent_020do8k">
+            <bpmn:incoming>SequenceFlow_1myyg91</bpmn:incoming>
+        </bpmn:endEvent>
+        <bpmn:sequenceFlow id="SequenceFlow_0e4o4dw" sourceRef="StartEvent_1" targetRef="ServiceTask_1vlc5kg"/>
+        <bpmn:sequenceFlow id="SequenceFlow_1myyg91" sourceRef="ServiceTask_1vlc5kg" targetRef="EndEvent_020do8k"/>
+    </bpmn:process>
+    <bpmn:message id="Message_0q1z6ju" name="CART_ITEM_ADDED"/>
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">
+            <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+                <dc:Bounds x="236" y="260" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="209" y="296" width="90" height="20"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="ServiceTask_1vlc5kg_di" bpmnElement="ServiceTask_1vlc5kg">
+                <dc:Bounds x="355" y="251" width="72" height="54"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="EndEvent_020do8k_di" bpmnElement="EndEvent_020do8k">
+                <dc:Bounds x="522" y="260" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="540" y="299" width="0" height="13"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge id="SequenceFlow_0e4o4dw_di" bpmnElement="SequenceFlow_0e4o4dw">
+                <di:waypoint x="272" y="278"/>
+                <di:waypoint x="355" y="278"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="313.5" y="256" width="0" height="13"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_1myyg91_di" bpmnElement="SequenceFlow_1myyg91">
+                <di:waypoint x="427" y="278"/>
+                <di:waypoint x="522" y="278"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="474.5" y="256" width="0" height="13"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</bpmn:definitions>

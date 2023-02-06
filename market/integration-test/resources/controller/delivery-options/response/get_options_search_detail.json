@@ -1,0 +1,185 @@
+{
+  "meta": {
+    "fields": [
+      {
+        "name": "locationFrom",
+        "title": "Идентификатор гео-локации отправления",
+        "type": "NUMBER",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "locationTo",
+        "title": "Идентификатор гео-локации назначения",
+        "type": "NUMBER",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "length",
+        "title": "Длина, см",
+        "type": "NUMBER",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "weight",
+        "title": "Вес, кг",
+        "type": "NUMBER",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "width",
+        "title": "Ширина, см",
+        "type": "NUMBER",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "height",
+        "title": "Высота, см",
+        "type": "NUMBER",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "isPublic",
+        "title": "Является ли прайс-листом, предназначенным для интернет-магазинов",
+        "type": "BOOLEAN",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "tariffIds",
+        "title": "Идентификаторы тарифов",
+        "type": "NUMBER_ARRAY",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": {
+          "optionsSlug": "tariffs",
+          "multiple": true,
+          "authorities": [
+            "ROLE_TARIFFS"
+          ],
+          "titleFieldName": "name",
+          "idFieldName": "id",
+          "hint": "ID/название тарифа",
+          "pageSize": 20,
+          "queryParamName": "searchQuery"
+        },
+        "secret": null
+      },
+      {
+        "name": "date",
+        "title": "Дата/время, на которую необходимо найти варианты доставки",
+        "type": "DATE_TIME",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "tariffTags",
+        "title": "Теги/программы тарифа",
+        "type": "NUMBER_ARRAY",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": {
+          "options": [
+            {
+              "displayName": "Доставка на Белом Маркете",
+              "id": "WHITE_MARKET_DELIVERY",
+              "openNewTab": false,
+              "slug": null
+            },
+            {
+              "displayName": "Доставка на Синем Маркете",
+              "id": "MARKET_DELIVERY",
+              "openNewTab": false,
+              "slug": null
+            },
+            {
+              "displayName": "Доставка как сервис",
+              "id": "DAAS",
+              "openNewTab": false,
+              "slug": null
+            },
+            {
+              "displayName": "Доставка на Маркет.Покупках для кроссдок-поставщиков",
+              "id": "BERU_CROSSDOCK",
+              "openNewTab": false,
+              "slug": null
+            }
+          ],
+          "multiple": true,
+          "authorities": [],
+          "optionsSlug": "",
+          "titleFieldName": "title",
+          "idFieldName": "id",
+          "hint": "",
+          "pageSize": 20
+        },
+        "secret": null
+      }
+    ],
+    "actions": [
+      {
+        "title": "Найти",
+        "description": "Найти опции доставки",
+        "slug": "search",
+        "identifiedBy": [],
+        "type": "ROW_ACTION",
+        "method": "POST_BODY_AND_UPDATE_CONTROLLED",
+        "icon": null,
+        "authorities": []
+      }
+    ],
+    "mode": "SEARCH",
+    "deletable": false,
+    "children": [
+      {
+        "title": "Результаты поиска опций доставки",
+        "slug": "search",
+        "parentSlug": "",
+        "type": "CONTROLLED_GRID",
+        "parentColumn": "priceListFileId",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      }
+    ],
+    "tabs": []
+  },
+  "item": {
+    "id": -1,
+    "values": {
+      "isPublic": false
+    },
+    "title": "Поиск доступных вариантов доставки"
+  }
+}

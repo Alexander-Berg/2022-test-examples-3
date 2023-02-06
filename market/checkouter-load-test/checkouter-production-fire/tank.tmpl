@@ -1,0 +1,94 @@
+phantom: { enabled: false, address: 'https://checkouter.tst.vs.market.yandex.net:39011' }
+uploader:
+    enabled: true
+    api_address: 'https://lunapark.yandex-team.ru/'
+    task: 'MARKETAPI-7422'
+    job_name: 'debug tank fire'
+    operator: 'dimkarp93'
+    meta: { use_tank: 'http://tank01ht.market.yandex.net:8083' }
+    lock_targets: ['http://tank01ht.market.yandex.net:8083/checkout/prod/fire']
+shellexec:
+    catch_out: true
+    enabled: true
+    package: yandextank.plugins.ShellExec
+    prepare: >
+        find /var/lib/tankapi/tests/ -mindepth 1 -maxdepth 1 -cmin +240
+        -not -path "/var/lib/tankapi/tests/stpd-cache"
+        -not -path "/var/lib/tankapi/tests/lunapark"
+        -prune -exec rm -rf {} +
+        && find /var/lib/tankapi/tests/stpd-cache -mindepth 1 -cmin +240 -prune -exec rm -rf {} +
+        && find /tmp/*downloaded_resource  -maxdepth 1 -cmin +240 -prune -exec rm -rf {} +
+        || true
+pandora:
+    enabled: true
+    resources:
+        - src: https://proxy.sandbox.yandex-team.ru/{resource_cb_categories.json}
+          dst: cb_categories.json
+        - src: https://proxy.sandbox.yandex-team.ru/{resource_noncb_categories.json}
+          dst: noncb_categories.json
+    pandora_cmd: https://proxy.sandbox.yandex-team.ru/{resource_app/app}
+    config_content:
+        pools:
+            -   id: Main
+                gun:
+                    type: main_gun
+                    shopId: 431782
+                    cartToReportDegradation: false
+                    deliveryType: DELIVERY
+                    deliveryServices:
+                        fulfillment: "all"
+                        fulfillmentCashback: "all"
+                        dropship: "all" #todo set correct for testing
+                        dropshipCashback: "all" #todo set correct for testing
+                    warehouseIDs:
+                        fulfillment: [172]
+                        fulfillmentCashback: [172]
+                        dropship: [] #todo now set ignore
+                        dropshipCashback: [] #todo now set ignore
+                    environment: testing
+                    shootingDelay: 10s
+                    shipmentDay: -1
+                    regionId: 213
+                    addresses: [{'country': 'Россия','postcode': '346780', 'city': 'Азов', 'street': 'Петровский бульвар', 'house': '40', 'floor': '1','recipient': '000','phone': '+77777777777' },{'country': 'Россия','postcode': '346780', 'city': 'Азов', 'street': 'Московская улица', 'house': '6А','floor':'1','recipient': '000','phone': '+77777777777' },  {'country': 'Россия','postcode': '346780', 'city': 'Азов', 'street': 'улица Толстого', 'house': '19', 'floor': '1','recipient': '000','phone': '+77777777777' },  {'country': 'Россия','postcode': '346780', 'city': 'Азов', 'street': 'улица Пушкина', 'house': '27', 'floor': '1','recipient': '000','phone': '+77777777777' },  {'country': 'Россия','postcode': '346780', 'city': 'Азов', 'street': 'улица Мира', 'house': '24', 'floor': '1','recipient': '000','phone': '+77777777777' }]
+                    distribution: {}
+                    tvmSecret:
+                        type: FILE
+                        file: "/etc/datasources/checkout_order_autofire.properties"
+                        property: "tvm_secret"
+                    yqlToken:
+                        type: FILE
+                        file: "/etc/datasources/checkout_order_autofire.properties"
+                        property: "yql_token"
+                    handlesCommonDelayMs: 100
+                    handles: []
+                    cartsDistribution: [{'internalCarts':1, 'ordersDistribution': 1}]
+                    offersDistribution: [{'offersCount': 1, 'ordersDistribution': 1}]
+                    totalOrders: 10
+                    forceUnfreeze:
+                    stockStorageLimit: 100
+                    onlyInitStocks: false
+                    rps: 1.00
+                    rpsLimiterRate: 3
+                    stocksRequiredRate: 1.00
+                    initCashbackStocks: true
+                    percentOfCashbackOrders: 50
+                    percentOfDropshipOrders: 50
+                ammo:
+                    cartsDistribution: [{'internalCarts':1, 'ordersDistribution': 1}]
+                    offersDistribution: [{'offersCount': 1, 'ordersDistribution': 1}]
+                    type: main_provider
+                    percentOfCashbackOrders: 50
+                    percentOfDropshipOrders: 50
+                result:
+                    type: phout
+                    destination: ./phout.log
+                rps:
+                    - { type: const, duration: 10s, ops: 1.00 }
+                startup:
+                    - { type: once, times: 1000 }
+        log:
+            level: info
+        monitoring:
+            expvar:
+                enabled: true
+                port: 1234

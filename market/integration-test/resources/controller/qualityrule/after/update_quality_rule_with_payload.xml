@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="TRANSIT_COURIER_SEARCH"
+            waybill_segment_type="COURIER"
+            aggregation_type="NONE"
+            rule_processor="STARTREK"
+            rule='{
+                "_type": ".CallCourierPayload",
+                "queue": "MONITORINGSNDBX",
+                "closeTransition": "close",
+                "closeResolution": "fixed"
+            }'
+    />
+
+    <quality_rule
+            id="2"
+            enabled="true"
+            expected_status="TRANSIT_COURIER_SEARCH"
+            waybill_segment_type="MOVEMENT"
+            aggregation_type="NONE"
+            rule_processor="STARTREK"
+            rule='{
+                "_type": ".OrderCreatePayload",
+                "queue": "MQMTESTCREATE",
+                "priorities": {
+                    "1": "blocker",
+                    "3": "critical"
+                },
+                "closeResolution": "canReproduce",
+                "closeTransitions": ["close", "closed"],
+                "numberOfAttempts": 5,
+                "reopenTransition": "reopen",
+                "createTicketEnabled": true,
+                "allowedToCloseAssigned": true,
+                "checkTicketDuplicate": false
+            }'
+    />
+</dataset>

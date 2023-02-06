@@ -1,0 +1,89 @@
+{
+    "YtCluster": "{{yt_cluster}}",
+    "VerboseLevel": 7,
+    "GlobalLog": "{{global_log}}",
+    "Port": {{port}},
+
+    "Suppliers": [
+        {
+            "Alias": "resharded_yt_log",
+            "YtSupplier": {
+                "QueueConsumer": "{{queue_consumer}}",
+                "QueuePath": "{{input_queue_path}}",
+                "Cluster": "{{yt_cluster}}"
+            }
+        }
+    ],
+    "ConsumingSystem": {
+        "MainPath": "{{cs_path}}",
+        "MaxShards": {{shard_count}},
+        "MaxShardsToCheck": {{shard_count}},
+        "WorkerMinorName": "0"
+    },
+    "StatefulShardProcessorConfig": {
+        "MaxEpochsInFlight": 3,
+        "MaxGroupingTasks": 3
+    },
+    "CollectConfig": {
+        "StateTable": "{{state_path}}",
+        "OutputQueue": "{{output_queue_path}}",
+        "ShardCount": {{shard_count}},
+        "CopierQueue": "{{copier_queue_path}}",
+        "CopierQueuesByNamespace": {
+            "copier_separate_namespace": "{{copier_queue_namespace_path}}"
+        }
+    },
+    "MaxInflightBytes": 2000,
+    "StateManagerConfig": {
+        "EpochStatesSizeQuota": 1000000,
+        "StateSizeDummy": 90000
+    },
+    "FactorsConfig": [
+        {
+            "Name": "colorness",
+            "Path": "meta.Colorness"
+        },{
+            "Name": "colorness_avg",
+            "Path": "meta.ColornessAvg"
+        },{
+            "Name": "image2text_v6",
+            "Path": "meta.v6.NNetFeatures.prod_v6_enc_i2t_v8_200_img"
+        },{
+            "Name": "image2clothes_v6",
+            "Path": "meta.v6.NNetFeatures.prod_v6_enc_clothes_96"
+        },{
+            "Name": "image2toloka_v6",
+            "Path": "meta.v6.NNetFeatures.prod_v6_enc_toloka_96"
+        },{
+            "Name": "prod_v10_enc_toloka_192",
+            "Path": "meta.NNetFeatures.prod_v10_enc_toloka_192"
+        },{
+            "Name": "prod_v10_enc_market_96",
+            "Path": "meta.NNetFeatures.prod_v10_enc_market_96"
+        },{
+            "Name": "prod_v10_enc_i2t_v12_200_img",
+            "Path": "meta.NNetFeatures.prod_v10_enc_i2t_v12_200_img"
+        },{
+            "Name": "main_color",
+            "Path": "meta.MainColor"
+        }
+    ],
+    "SamovarConfig": {
+        "SamovarFeed": "data-camp-images",
+        "Installation": "testing",
+        "YaDiskApiUrl": "{{ya_disk_api}}",
+        "FeedNames": {
+            "yabs_performance": "data-camp-images-yabs_performance",
+            "goods_pic": "data-camp-images-goods"
+        }
+    },
+    "Features": {
+        "SendErrors": true
+    },
+    "MdsHostName": "{{mds_host}}",
+    "MdsSettings": {
+        "MdsHost": "{{avatars_hostname}}",
+        "MdsTestingHost": "{{avatars_test_hostname}}"
+    }
+
+}

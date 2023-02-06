@@ -1,0 +1,33 @@
+default:
+  checks:
+    job_success_ratio: '> 0.95'
+  excludes: [
+    # MPFS tasks
+    'Billing.+', 'DeletedStids.+', 'HiddenDataCleanerManager', 'Mpfs.+',
+    'PostgresDeleteExpiredEntries', 'PostgresMigration.+',
+    'ResyncOrganizations', 'ResyncYaTeamUsers', 'StorageCleaner.+', 'stat-mpfs-.+', 'statface_.+'
+  ]
+
+jobs:
+  scheduleWakeUpPushRange:
+    job_success_cnt: {WARN: '> 420', CRIT: '> 260'}
+    job_fail_cnt: '< 340'
+
+  remindPhotos:
+    job_success_cnt:
+      WARN: '> 1850000'
+      CRIT: '> 1700000'
+      SAT: {WARN: '>= 0', CRIT: '>= 0'}
+    job_fail_cnt: '< 1000'
+
+  regenerateImagePreview:
+    job_success_ratio: '> 0.1'
+
+  ytDumpConsistencySupporter.dataapi:
+    job_success_ratio: '> 0.4'
+
+  removeExpiredSnapshot:
+    job_success_ratio: '> 0.5'
+
+  limitBlockedFilesInNextPeriod:
+    job_success_ratio: '> 0.7'

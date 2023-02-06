@@ -1,0 +1,158 @@
+juggler:
+  checks:
+
+  # Check market-utils-unsubscribe-monitoring
+  # https://juggler.yandex-team.ru/check_details/?host=market_utils-testing&service=market-utils-unsubscribe-monitoring&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --kwargs
+      - '{"service": "market-utils-unsubscribe-monitoring", "path": "/api/monitoring/monitor/unsubscribe"}'
+    notifications:
+    - template_kwargs:
+        login: market-java-pers-monitoring
+        method: email
+        status: CRIT
+      template_name: on_status_change
+    service: market-utils-unsubscribe-monitoring
+
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    check_options: {}
+    children:
+    - market-utils:market-utils.5xx-percent
+    service: market-utils.5xx-percent
+    flaps:
+      boost_time: 0
+      critical_time: 1500
+      stable_time: 300
+
+  # Check market-utils.timings
+  # https://juggler.yandex-team.ru/check_details/?host=market_utils-testing&service=market-utils.timings&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    check_options: {}
+    children:
+    - market-utils:market-utils.timings
+    service: market-utils.timings
+    flaps:
+      boost_time: 0
+      critical_time: 1500
+      stable_time: 300
+
+  # Check market-utils.db_hosts_state
+  # https://juggler.yandex-team.ru/check_details/?host=market_utils-testing&service=market-utils.db_hosts_state&last=1DAY
+  # Source: https://solomon.yandex-team.ru/admin/projects/market-lilucrm/alerts/pers_notify_db_hosts_state
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    check_options: {}
+    children:
+      - EVENTS%(host=market-utils&tag=db_hosts_state):all:all
+    service: market-utils-testing.db_hosts_state
+
+  # Check market-utils.db-replica-lag
+  # https://juggler.yandex-team.ru/check_details/?host=market_utils-testing&service=market-utils.db-replica-lag&last=1DAY
+  # Source: https://solomon.yandex-team.ru/admin/projects/market-lilucrm/alerts/pers_notify_db_replica_lag
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    check_options: {}
+    children:
+      - EVENTS%(host=market-utils&tag=db_replica_lag):all:all
+    service: market-utils-testing.db-replica-lag
+
+  # Check market-utils.db-disc-free-space
+  # https://juggler.yandex-team.ru/check_details/?host=market_utils-testing&service=market-utils.db-disc-free-space&last=1DAY
+  # Source: https://solomon.yandex-team.ru/admin/projects/market-lilucrm/alerts/pers_notify_db_disc_free_space
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    check_options: {}
+    children:
+      - EVENTS%(host=market-utils&tag=db_disc_free_space):all:all
+    service: market-utils-testing.db-disc-free-space
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=market_utils-testing&service=disk_free_space&last=1DAY&mode=edit
+  - service: disk_free_space
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=market_utils-testing&service=logrotate&last=1DAY&mode=edit
+  - service: logrotate
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=market_utils-testing&service=ping&last=1DAY&mode=edit
+  - check_options:
+      args:
+      - --kwargs
+      - '{"service": "market-utils-unsubscribe-monitoring", "path": "/api/monitoring/monitor/unsubscribe"}'
+    notifications:
+    - template_kwargs:
+        login:
+        - market-java-pers-monitoring
+        method:
+        - email
+        status:
+        - CRIT
+      template_name: on_status_change
+    check_tags:
+    - market_pers-notify_disaster
+    - market_disaster
+    service: ping
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=market_utils-testing&service=push-client-status&last=1DAY&mode=edit
+  - service: push-client-status
+
+  - service: fresh-core-dumps
+
+  - service: memory_anon_usage
+    check_options:
+      args: [-crit-anon-usage, '90', -warn-anon-usage, '80']
+
+  - service: fresh-hprof-files
+
+  - service: nginx
+
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options: {}
+    children:
+    - NANNY%testing_market_utils_vla
+    - NANNY%testing_market_utils_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_utils-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - marketutils
+    - testing
+    - market
+    - _market_
+    ttl: 900

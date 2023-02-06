@@ -1,0 +1,166 @@
+{
+    "items": [
+      {
+        "action_button_text": null,
+        "schema": {
+          "options": [
+            {
+              "node": "corporate_work_yes",
+              "type": "message",
+              "text": "Ага",
+              "message_text": "yes"
+            },
+            {
+              "node": "corporate_no",
+              "type": "message",
+              "text": "Нет",
+              "message_text": "no"
+            }
+          ],
+          "type": "options"
+        },
+        "action_type": "context_buttons",
+        "next_step": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Компания $promo_dictionary.name хотела бы подключить вам корпоративный способ оплаты поездок. Вы действительно работаете с ними и согласны?"
+          }
+        ],
+        "id": "intro"
+      },
+      {
+        "action_button_text": null,
+        "schema": {
+          "options": [
+            {
+              "node": {
+                "default": "corporate_not_found",
+                "conditions": [
+                  {
+                    "node": "corporate_agreement_yes",
+                    "condition": {
+                      "tag_name": "[[[$promo_dictionary_tag]]]",
+                      "type": "has_tag"
+                    }
+                  }
+                ]
+              },
+              "type": "message",
+              "text": "Хорошо",
+              "message_text": "yes"
+            },
+            {
+              "node": "corporate_no",
+              "type": "message",
+              "text": "Не соглашаюсь",
+              "message_text": "no"
+            }
+          ],
+          "type": "options"
+        },
+        "action_type": "context_buttons",
+        "next_step": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Тогда вы должны знать, что: ваши Ф.И.О., телефон, логин, информация о поездках с корпоративным способом оплаты (время начала и окончания поездки, стоимость, скорость, продолжительность, адрес начала и окончания поездки и другое), а также информация об обращениях в службу поддержки могут передаваться компании $promo_dictionary.name?"
+          }
+        ],
+        "id": "corporate_work_yes"
+      },
+      {
+        "action_button_text": null,
+        "schema": {
+          "options": [
+            {
+              "node": "corporate_finish",
+              "type": "message",
+              "text": "Всё равно здорово"
+            }
+          ],
+          "type": "options"
+        },
+        "action_type": "context_buttons",
+        "next_step": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Теперь можно ездить за счёт работодателя. Всё, что нужно — переключить способ оплаты на корпоративный кошелёк. Однако помните: за штрафы платите вы."
+          },
+          {
+            "type": "image",
+            "text": "https://s3.mdst.yandex.net/carsharing/28.png"
+          }
+        ],
+        "on_entry_actions": [
+          {
+            "env": "testing",
+            "cgi": "",
+            "actor_user_id": "[[[!root_user]]]",
+            "type": "endpoint_call",
+            "route": "api/staff/billing/accounts/link",
+            "post": "{\"user_id\": \"[[[!current_user]]]\", \"name\": \"[[[$promo_dictionary.wallet_name]]]\", \"action\": \"link\", \"active_flag\" : true}"
+          },
+          {
+            "env": "testing",
+            "cgi": "{\"user_id\":\"[[[!current_user]]]\"}",
+            "actor_user_id": "[[[!root_user]]]",
+            "type": "endpoint_call",
+            "route": "api/staff/user/roles/add",
+            "post": "{\"role_id\": \"[[[$promo_dictionary.role_name]]]\", \"deadline\": \"2000000000\", \"active\": \"1\", \"user_id\" : \"[[[!current_user]]]\"}"
+          },
+          {
+            "type": "edit_dictionary",
+            "tag_name": "[[[$promo_dictionary_tag]]]",
+            "field_name": "is_wallet_active",
+            "value": "true"
+          }
+        ],
+        "id": "corporate_agreement_yes"
+      },
+      {
+        "action_button_text": null,
+        "action_type": null,
+        "next_step": null,
+        "pre_action_messages": [
+          
+        ],
+        "id": "corporate_finish"
+      },
+      {
+        "action_button_text": null,
+        "action_type": null,
+        "next_step": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Спасибо за ответы, новый способ оплаты не будет подключен."
+          }
+        ],
+        "on_entry_actions": [
+          {
+            "env": "testing",
+            "cgi": "tag_names=[[[$promo_dictionary_tag]]]",
+            "actor_user_id": "[[[!root_user]]]",
+            "type": "endpoint_call",
+            "route": "api/staff/user_tags/remove",
+            "post": "{\"object_ids\": \"[[[!current_user]]]\"}"
+          }
+        ],
+        "id": "corporate_no"
+      },
+      {
+        "action_button_text": null,
+        "action_type": null,
+        "next_step": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Для вас заявок на подключение корпоративного кошелька не найдено."
+          }
+        ],
+        "id": "corporate_not_found"
+      }
+    ]
+}

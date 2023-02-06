@@ -1,0 +1,21 @@
+{% set master_server = master_server|default("fake-master") %}
+{% set replica_servers = replica_servers | default({"fake-replica-1": {}, "fake-replica-2": {},})%}
+{% set home_path = home_path|default("//home/crypta/qa") %}
+{% set yt_tmp_dir = home_path + "/tmp" -%}
+
+environment_type: "qa"
+
+bundle: "default"
+tablets: 50
+sync: true
+enable_tablet_balancer: true
+
+master:
+  cluster: "{{ master_server }}"
+  path: "{{ home_path }}/master"
+
+replica:
+  pool: "default"
+  clusters: {{ replica_servers }}
+  path: "{{ home_path }}/replica"
+  tmp_dir: "{{ yt_tmp_dir }}"

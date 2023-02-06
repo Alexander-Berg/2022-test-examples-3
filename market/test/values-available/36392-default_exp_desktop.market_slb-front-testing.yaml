@@ -1,0 +1,21 @@
+# -> haproxy:29943-market_front_desktop_testing.market_slb-front-testing.yaml
+# old fslb: 966-market_default.market_slb-front-testing.yaml
+
+context:
+  default:
+    service_name: default_exp_desktop
+    servername_regexp: 'default\\.exp\\.tst\\.market\\.yandex\\.(ru|by|kz|ua|com)'
+    vs: default_exp_desktop
+    antirobot: true
+    antirobot_service_name: market
+    health_check: '"GET /ping HTTP/1.1\r\nHost: default.exp.tst.market.yandex.ru\r\n\r\n"'
+    priority: 1000
+    cert: default.exp-desktop.tst.vs.market.yandex.net
+
+servers:
+  default:
+    main:
+    - name: "GREY%market-front-desktop-testing.tst.vs.market.yandex.net"
+      plain_http_backend: True
+      port: 9080
+      timeout: "35s"

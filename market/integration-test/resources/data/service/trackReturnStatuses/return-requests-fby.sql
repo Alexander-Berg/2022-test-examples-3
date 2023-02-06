@@ -1,0 +1,26 @@
+INSERT
+INTO return_request(return_id,
+                    barcode,
+                    external_order_id,
+                    buyer_name,
+                    client_type,
+                    request_date,
+                    destination_sc_partner,
+                    state)
+VALUES (123,
+        'VOZVRAT_SF_456',
+        1,
+        '',
+        'CLIENT',
+        '2021-09-01',
+        2,
+        'FINAL'),
+
+       (1232,
+        'VOZVRAT_SF_4562',
+        3,
+        '',
+        'CLIENT',
+        '2021-09-01',
+        3,
+        'AWAITING_FOR_DATA');

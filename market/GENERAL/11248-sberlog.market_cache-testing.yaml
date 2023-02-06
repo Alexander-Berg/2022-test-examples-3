@@ -1,0 +1,25 @@
+# Параметры обработки
+params:
+  default:
+    templates:
+      - get_localhost.tpl
+
+values:
+  default:
+    defaults:
+      mcrouter_port: 11248
+      memcached_port: 21248
+      env: production
+      cache_name: sberlog
+      memory: 64
+  testing:
+    defaults:
+      env: testing
+      
+  
+servers:
+  testing:
+    main:
+      - name: "%market_cache-testing@local"
+    global:
+      - name: "%market_cache-testing"

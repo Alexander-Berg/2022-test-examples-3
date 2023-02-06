@@ -1,0 +1,1 @@
+update tablea a inner join (select family, id, name from table2) as b on a.name_a = b.name_b set family = b.family, validation_check = if(start_dts > end_dts, ?, ?)

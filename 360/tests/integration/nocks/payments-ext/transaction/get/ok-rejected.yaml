@@ -1,0 +1,26 @@
+$schema: ../../../_schemas/nock.yaml
+
+scope: 'http://payments'
+method: GET
+path: /ext/order_hash:abcdefghijklmnopqrstuvwxyz
+
+reqheaders:
+  $include: ../../../_samples/reqheaders.yaml
+  user-agent: TEST_USER_AGENT
+  x-referer: test_ref
+
+query:
+  poll: 'false'
+
+status: 200
+
+response:
+  code: 200
+  status: success
+  data:
+    order:
+      $include: ../../../_samples/order.yaml
+      pay_status: rejected
+    merchant:
+      $include: ../../../_samples/merchant.yaml
+    transaction: null

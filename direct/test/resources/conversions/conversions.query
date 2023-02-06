@@ -1,0 +1,19 @@
+SELECT
+  GS.ExportID AS effectiveCampaignId,
+  GS.UpdateTime AS UpdateTime,
+  IF(is_null(IF(sum(IF(GS.CampaignGoalType = 1, GS.GoalsNum, NULL)) > 0, sum(IF(GS.CampaignGoalType = 1, GS.GoalsNum, NULL)), sum(IF(GS.CampaignGoalType = 2, GS.GoalsNum, NULL)))), 0, IF(sum(IF(GS.CampaignGoalType = 1, GS.GoalsNum, NULL)) > 0, sum(IF(GS.CampaignGoalType = 1, GS.GoalsNum, NULL)), sum(IF(GS.CampaignGoalType = 2, GS.GoalsNum, NULL)))) AS GoalsNum,
+  IF(is_null(IF(sum(IF(GS.CampaignGoalType = 1, (GS.PriceCur / 1000000), NULL)) > 0, sum(IF(GS.CampaignGoalType = 1, (GS.PriceCur / 1000000), NULL)), sum(IF(GS.CampaignGoalType = 2, (GS.PriceCur / 1000000), NULL)))), 0, IF(sum(IF(GS.CampaignGoalType = 1, (GS.PriceCur / 1000000), NULL)) > 0, sum(IF(GS.CampaignGoalType = 1, (GS.PriceCur / 1000000), NULL)), sum(IF(GS.CampaignGoalType = 2, (GS.PriceCur / 1000000), NULL)))) AS PriceCur
+FROM yt.DirectGridGoalsStat_bs AS GS
+WHERE (
+  GS.ExportID IN (
+    1, 2
+  )
+  AND UpdateTime IN (
+    1646686800, 1646773200, 1646859600, 1646946000, 1647032400, 1647118800, 1647205200,
+    1647291600
+  )
+  AND GS.CampaignGoalType > 0
+)
+GROUP BY
+  effectiveCampaignId,
+  UpdateTime

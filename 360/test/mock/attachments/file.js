@@ -1,0 +1,23 @@
+module.exports = {
+    "hid": "1.6",
+    "subtype": "pdf",
+    "type": "application",
+    "inline": false,
+    "disposition_value": "attachment",
+    "content_id": "",
+    "content_location": "",
+    "disposition_filename": "readme.pdf",
+    "name": "readme.pdf",
+    "name-uri-encoded": "readme.pdf",
+    "filename": "readme",
+    "fileext": ".pdf",
+    "class": "pdf",
+    "preview-supported": false,
+    "docviewer": true,
+    "browser-supports": false,
+    "size": 467830,
+    "external_transformer": "pdf",
+    "external_transformer_filetype": "pdf",
+    "narod": false,
+    "message": false
+};

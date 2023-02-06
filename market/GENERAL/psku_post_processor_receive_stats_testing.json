@@ -1,0 +1,140 @@
+{
+  "owner": "marketir",
+  "statfaceReports": [
+    {
+      "title": "Good content удаление дублей(Тестинг)",
+      "report": "Market/Content/PskuReceiveStatsTesting",
+      "tableName": "psku_post_processor_receive_stat_testing",
+      "periodArray": [
+        "DAY",
+        "WEEK",
+        "MONTH",
+        "QUARTER"
+      ],
+      "splits": [
+        {
+          "name": "category",
+          "title": "Категория",
+          "splitField": "dictGetString('category', 'full_name', arrayJoin(dictGetHierarchy('category', toUInt64(msku_category_id))))",
+          "tree": true
+        }      ],
+      "fields": [
+        {
+          "name": "total_pairs",
+          "title": "Количество выданных гипотез",
+          "metricField": "count(*)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "total_pairs_uc",
+          "title": "Количество выданных гипотез от УК",
+          "metricField": "countIf(pair_type = 'UC')",
+          "viewType": "Integer"
+        },
+        {
+          "name": "total_pairs_report",
+          "title": "Количество выданных гипотез от репорта",
+          "metricField": "countIf(pair_type = 'REPORT')",
+          "viewType": "Integer"
+        },
+        {
+          "name": "approved_pairs",
+          "title": "Количество подтвержденных гипотез",
+          "metricField": "countIf(pair_state = 'APPROVED')",
+          "viewType": "Integer"
+        },
+        {
+          "name": "need_info_pairs",
+          "title": "Количество гипотез в NEED_INFO",
+          "metricField": "countIf(pair_state = 'NEED_INFO')",
+          "viewType": "Integer"
+        },
+        {
+          "name": "failed_pairs",
+          "title": "Количество отклоненных гипотез",
+          "metricField": "countIf(pair_state = 'FAILED')",
+          "viewType": "Integer"
+        },
+        {
+          "name": "approved_pairs_uc",
+          "title": "Количество подтвержденных гипотез от УК",
+          "metricField": "countIf(pair_state = 'APPROVED' and pair_type = 'UC')",
+          "viewType": "Integer"
+        },
+        {
+          "name": "need_info_pairs_uc",
+          "title": "Количество гипотез в NEED_INFO от УК",
+          "metricField": "countIf(pair_state = 'NEED_INFO' and pair_type = 'UC')",
+          "viewType": "Integer"
+        },
+        {
+          "name": "failed_pairs_uc",
+          "title": "Количество отклоненных гипотез от УК",
+          "metricField": "countIf(pair_state = 'FAILED' and pair_type = 'UC')",
+          "viewType": "Integer"
+        },
+        {
+          "name": "approved_pairs_report",
+          "title": "Количество подтвержденных гипотез от репорта",
+          "metricField": "countIf(pair_state = 'APPROVED' and pair_type = 'REPORT')",
+          "viewType": "Integer"
+        },
+        {
+          "name": "need_info_pairs_report",
+          "title": "Количество гипотез в NEED_INFO от репорта",
+          "metricField": "countIf(pair_state = 'NEED_INFO' and pair_type = 'REPORT')",
+          "viewType": "Integer"
+        },
+        {
+          "name": "failed_pairs_report",
+          "title": "Количество отклоненных гипотез от репорта",
+          "metricField": "countIf(pair_state = 'FAILED' and pair_type = 'REPORT')",
+          "viewType": "Integer"
+        }
+      ],
+      "graphs": [
+        {
+          "title": "Количество выданных гипотез по источнику",
+          "fields": [
+            "total_pairs",
+            "total_pairs_uc",
+            "total_pairs_report"
+          ]
+        },
+        {
+          "title": "Количество выданных гипотез по состоянию",
+          "fields": [
+            "total_pairs",
+            "approved_pairs",
+            "need_info_pairs",
+            "failed_pairs"
+          ]
+        },
+        {
+          "title": "Количество подтвержденных гипотез",
+          "fields": [
+            "approved_pairs",
+            "approved_pairs_uc",
+            "approved_pairs_report"
+          ]
+        },
+        {
+          "title": "Количество гипотез в NEED_INFO",
+          "fields": [
+            "need_info_pairs",
+            "need_info_pairs_uc",
+            "need_info_pairs_report"
+          ]
+        },
+        {
+          "title": "Количество отклоненных гипотез",
+          "fields": [
+            "failed_pairs",
+            "failed_pairs_uc",
+            "failed_pairs_report"
+          ]
+        }
+      ]
+    }
+  ]
+}

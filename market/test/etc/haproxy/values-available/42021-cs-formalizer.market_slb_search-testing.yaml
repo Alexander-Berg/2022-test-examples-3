@@ -1,0 +1,34 @@
+# Параметры обработки
+params:
+  default:
+    resolve: yes
+    templates:
+      - user_mslb_http.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          check observe layer7
+      downinter:      3000
+      fall:           2
+      inter:          1000
+      on_error:       mark-down
+      slowstart:      60000
+    globals:
+      min_nbsrv:      2
+      ping_expect:    status 200
+      service_name:   cs-formalizer.tst.vs.market.yandex.net
+      service_port:   34512
+      timeout_server: 4h
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+    - name: YP@testing_market_formalizer_yp_vla
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing_market_formalizer_yp_sas
+      dns_resolvers: yandex-ns
+      resolve: false

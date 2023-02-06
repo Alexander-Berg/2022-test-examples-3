@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <orders
+            id="1"
+            barcode="LOinttest-1"
+            platform_client_id="1"
+            return_sorting_center_id="1"
+            sender_id="1"
+            status="CANCELLED"
+    />
+
+    <waybill_segment
+            order_id="1"
+            partner_id="1"
+            external_id="[null]"
+            waybill_segment_index="0"
+            partner_type="SORTING_CENTER"
+            segment_type="SORTING_CENTER"
+            segment_status="ERROR"
+    />
+
+    <waybill_segment
+            order_id="1"
+            partner_id="2"
+            external_id="ds_external_id"
+            waybill_segment_index="1"
+            partner_type="DELIVERY"
+            segment_type="COURIER"
+            segment_status="TRACK_RECEIVED"
+    />
+
+    <waybill_segment_status_history
+            waybill_segment_id="2"
+            status="STARTED"
+            date="2019-06-09 03:00:00 +0300"
+            created="2019-06-09 03:00:00 +0300"
+    />
+
+    <waybill_segment_status_history
+            waybill_segment_id="2"
+            status="TRACK_RECEIVED"
+            date="2019-06-10 03:00:00 +0300"
+            created="2019-06-10 03:00:00 +0300"
+    />
+
+    <waybill_segment_status_history
+            waybill_segment_id="1"
+            status="STARTED"
+            date="2019-06-12 03:00:00 +0300"
+            created="2019-06-12 03:00:00 +0300"
+    />
+
+    <waybill_segment_status_history
+            waybill_segment_id="1"
+            status="ERROR"
+            date="2019-06-12 04:00:00 +0300"
+            created="2019-06-12 04:00:00 +0300"
+    />
+
+    <order_history_event
+            id="1"
+            order_id="1"
+            diff='[{
+                "op": "replace",
+                "path": "/waybill/0/segmentStatus",
+                "value": "STARTED",
+                "fromValue": null
+            },
+            {
+                "op": "add",
+                "path": "/waybill/0/segmentStatusHistory/0",
+                "value": {
+                    "id": 3,
+                    "status": "STARTED",
+                    "statusDate": "2019-06-12T00:00:00Z",
+                    "partnerStatusDate": "2019-06-12T00:00:00Z"
+                }
+            }]'
+    />
+
+    <order_history_event
+            id="2"
+            order_id="1"
+            diff='[{
+                "op": "replace",
+                "path": "/status",
+                "value": "PROCESSING_ERROR",
+                "fromValue": "PROCESSING"
+            },
+            {
+                "op": "replace",
+                "path": "/waybill/0/segmentStatus",
+                "value": "ERROR",
+                "fromValue": "STARTED"
+            },
+            {
+                "op": "add",
+                "path": "/waybill/0/segmentStatusHistory/1",
+                "value": {
+                    "id": 4,
+                    "status": "ERROR",
+                    "statusDate": "2019-06-12T01:00:00Z",
+                    "partnerStatusDate": "2019-06-12T01:00:00Z"
+                }
+            },
+            {
+                "op": "add",
+                "path": "/orderStatusHistory/0",
+                "value": {
+                   "id": 1,
+                   "status": "PROCESSING_ERROR",
+                   "datetime": "2019-06-12T01:00:00Z"
+                }
+            }]'
+    />
+</dataset>

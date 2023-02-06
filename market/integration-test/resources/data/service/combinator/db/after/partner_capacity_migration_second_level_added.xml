@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <platform_client id="1" name="Beru"/>
+
+    <partner
+            id="1"
+            name="Delivery service 1"
+            readable_name="first Delivery"
+            status="active"
+            type="DELIVERY"
+            billing_client_id="123"
+            rating="1"
+    />
+
+    <partner
+            id="2"
+            name="Fulfillment service 1"
+            readable_name="first FF"
+            status="active"
+            type="FULFILLMENT"
+            billing_client_id="123"
+            rating="1"
+    />
+
+    <partner_capacity
+            id="1"
+            partner_id="1"
+            location_from="1"
+            location_to="225"
+            platform_client_id="1"
+            value="5600"
+            type="regular"
+            counting_type="order"
+            service_type="delivery"
+            delivery_type="courier"
+    />
+
+    <partner_capacity
+            id="2"
+            partner_id="1"
+            location_from="21651"
+            location_to="225"
+            platform_client_id="1"
+            value="200"
+            type="regular"
+            counting_type="order"
+            service_type="delivery"
+            delivery_type="courier"
+    />
+
+    <service_capacity
+            id="1"
+            path="1"
+            name="1 root"
+    />
+
+    <service_capacity
+            id="2"
+            parent_id="1"
+            path="1.2"
+            name="1 location"
+    />
+
+    <service_capacity
+            id="3"
+            parent_id="2"
+            path="1.2.3"
+            name="from 1 to 225 courier"
+    />
+
+    <service_capacity_value
+            capacity_id="3"
+            unit_type="order"
+            value="5600"
+            partner_capacity_id="1"
+    />
+
+    <service_capacity
+            id="4"
+            parent_id="2"
+            path="1.2.4"
+            name="21651 location"
+    />
+
+    <service_capacity
+            id="5"
+            parent_id="4"
+            path="1.2.4.5"
+            name="from 21651 to 225 courier"
+    />
+
+    <service_capacity_value
+            capacity_id="5"
+            unit_type="order"
+            value="200"
+            partner_capacity_id="2"
+    />
+
+    <logistic_segments
+            id="1001"
+            partner_id="1"
+            type="movement"
+            name="забор откуда-то из 1 региона"
+    />
+
+    <logistic_segments_services
+            id="10001"
+            segment_id="1001"
+            status="active"
+            code="554"
+            duration="0"
+            duration_delta="0"
+            price="0"
+            delivery_type="courier"
+            capacity_id="5"
+    />
+
+    <logistic_segments_services
+            id="10002"
+            segment_id="1001"
+            status="active"
+            code="554"
+            duration="0"
+            duration_delta="0"
+            price="0"
+            delivery_type="pickup"
+    />
+
+    <logistic_segments
+            id="1006"
+            partner_id="2"
+            type="warehouse"
+            location_id="21651"
+    />
+
+    <logistic_segments_services
+            id="10009"
+            segment_id="1006"
+            status="active"
+            code="551"
+            duration="0"
+            duration_delta="0"
+            price="0"
+    />
+
+    <logistic_segments_services
+            id="10019"
+            segment_id="1006"
+            status="active"
+            code="552"
+            duration="0"
+            duration_delta="0"
+            price="0"
+    />
+
+    <logistic_edges
+            from_segment_id="1006"
+            to_segment_id="1001"
+    />
+
+</dataset>
+
+

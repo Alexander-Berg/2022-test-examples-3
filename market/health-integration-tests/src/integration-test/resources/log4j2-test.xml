@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info" packages="ru.yandex.market.log4j2">
+    <Appenders>
+        <Async name="ASYNC">
+            <!--<AppenderRef ref="MAIN"/>-->
+            <AppenderRef ref="FILE"/>
+        </Async>
+        <Console name="MAIN" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %-5p [%c{1} %t] %m%n"/>
+        </Console>
+
+        <LogRotateFile name="FILE" fileName="/tmp/log/logshatter.log">
+            <!--<PatternLayout pattern="%m%n"/>-->
+            <PatternLayout pattern="%d %-5p [%c{1} %t] %m%n"/>
+
+        </LogRotateFile>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+        <!--<Root level="debug">-->
+            <!--<AppenderRef ref="FILE"/>-->
+            <AppenderRef ref="MAIN"/>
+        </Root>
+    </Loggers>
+</Configuration>

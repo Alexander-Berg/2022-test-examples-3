@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -e
+
+/home/container/unified_agent/config_generator -f /home/container/conf/unified_agent/unified_agent.yml -c /home/container/conf/unified_agent/config_generator.conf
+
+export UA_TOKEN=$(jq -r '.clients["market-report"].secret'  /home/container/conf/tvmtool.conf)
+
+exec /home/container/bin/unified_agent/agent --config /home/container/conf/unified_agent/unified_agent.yml

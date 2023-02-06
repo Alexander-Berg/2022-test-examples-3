@@ -1,0 +1,43 @@
+base: app/config/base.yml
+default_logging_settings: &default_logging_settings
+    AutoFlush: true
+config:
+    modules:
+        module:
+        -   _name: web_server
+            configuration:
+                ssl:
+                    cert_file: app/secrets/xivamob-tst.mail.yandex.net.pem
+                    key_file: app/secrets/xivamob-tst.mail.yandex.net.pem
+                default_ep: &default_ep
+                    default_host: xivamob-sandbox.mail.yandex.net
+                endpoints:
+                    listen:
+                    -   _addr: '::'
+                        _port: 80
+                        <<: *default_ep
+                        ssl: off
+                    -   _addr: '::'
+                        _port: 443
+                        <<: *default_ep
+                        ssl: on
+                    -   _addr: '::'
+                        _port: 8080
+                        <<: *default_ep
+                        ssl: off
+        -   _name: apns_pusher
+            configuration:
+                url: https://api.push.apple.com:443/3/device/
+                sandbox_url: https://api.development.push.apple.com:443/3/device/
+        -   _name: fcm_http_pusher
+            configuration:
+                host_push: https://fcm.googleapis.com
+                host_check: https://iid.googleapis.com
+        -   _name: xconf
+            configuration:
+                host: 'https://xivaconf-sandbox.mail.yandex.net:443'
+        -   _name: tvm
+            configuration:
+                destinations: [conf-sandbox]
+                secret_file: /app/secrets/tvm_secret
+

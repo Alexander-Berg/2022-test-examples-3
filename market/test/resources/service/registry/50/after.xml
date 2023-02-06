@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <FULFILLMENT_SERVICE
+        ID="100"
+        NAME="test"
+        STATUS="1"
+        TYPE="1"
+    />
+
+    <SUPPLIER
+        ID="2"
+        NAME="supplier2"
+        TYPE="1"
+    />
+
+    <LOGISTICS_POINT
+        ID="222"
+        EXTERNAL_ID="a-b2"
+        PARTNER_ID="100"
+        ACTIVE="true"
+        ADDRESS='{"settlement":"Котельники","street":"Яничкин проезд","house":"7","comment":"терминал БД-6"}'
+        FOUND="true"
+    />
+
+    <SHOP_REQUEST ID="1"
+                  SERVICE_ID="100"
+                  LOGISTICS_POINT_ID="222"
+                  TYPE="7"
+                  ITEMS_TOTAL_COUNT="0"
+                  SUBTYPE="CUSTOMER_RETURN_ENRICHMENT"
+                  STATUS="13"
+    />
+
+    <SHOP_REQUEST ID="5"
+                  SUPPLIER_ID="2"
+                  SERVICE_ID="100"
+                  LOGISTICS_POINT_ID="222"
+                  STATUS="52"
+                  TYPE="7"
+                  ITEMS_TOTAL_COUNT="0"
+                  CALENDARING_MODE="0"
+                  DETAILS_LOADED="false"
+                  SUBTYPE="UPDATABLE_CUSTOMER_RETURN"
+    />
+
+    <logistic_unit
+        ID="101"
+        BOX_ID="BOX1"
+        ORDER_ID="32940882"
+        SHOULD_BE_ACCEPTED="true"
+        ACCEPTED_AT="[null]"
+        REQUEST_ID="5"
+        INITIALLY_ACCEPTED="true"
+    />
+
+    <logistic_unit
+        ID="102"
+        BOX_ID="BOX1"
+        ORDER_ID="1717171"
+        SHOULD_BE_ACCEPTED="true"
+        ACCEPTED_AT="[null]"
+        REQUEST_ID="5"
+        INITIALLY_ACCEPTED="false"
+    />
+
+    <logistic_unit
+        ID="103"
+        BOX_ID="BOX2"
+        ORDER_ID="32940882"
+        SHOULD_BE_ACCEPTED="true"
+        ACCEPTED_AT="[null]"
+        REQUEST_ID="5"
+        INITIALLY_ACCEPTED="true"
+    />
+
+    <logistic_unit
+        ID="1"
+        BOX_ID="[null]"
+        ORDER_ID="32940882"
+        SHOULD_BE_ACCEPTED="true"
+        ACCEPTED_AT="[null]"
+        REQUEST_ID="5"
+        INITIALLY_ACCEPTED="true"
+    />
+
+    <request_status_history
+        REQUEST_ID="5"
+        STATUS="0"
+    />
+    <request_status_history
+        REQUEST_ID="5"
+        STATUS="1"
+    />
+    <request_status_history
+        REQUEST_ID="5"
+        STATUS="2"
+    />
+    <request_status_history
+        REQUEST_ID="5"
+        STATUS="3"
+    />
+    <request_status_history
+        REQUEST_ID="5"
+        STATUS="9"
+    />
+    <request_status_history
+        REQUEST_ID="5"
+        STATUS="51"
+    />
+    <request_status_history
+        REQUEST_ID="5"
+        STATUS="52"
+    />
+
+    <queue_tasks
+        queue_name="PUBLISH_REQUEST_STATUS_CHANGE"
+        task='{"requestId":5,"requestType":1210,"detailsLoaded":false,"preparedDetailsLoaded":false,"changedAt":"2018-01-01T10:10:10","oldStatus":51,"newStatus":52,"receivedChangeAt":"2018-01-01T10:10:10","topic":"REQUEST_STATUS_EVENTS"}'
+        attempt="0"
+    />
+
+    <registry
+        id="1"
+        REQUEST_ID="5"
+        type="12"
+    />
+
+    <registry_unit registry_id="1" type="0"
+                   identifiers='{"parts": [{"type": "PALLET_ID", "value": "PL1001"}]}'
+                   parents='[]' meta='{"description": "Some pallet"}'
+                   unit_counts='{"unitCounts": [{"type": "ANOMALY", "count": 1, "relatedUnitIds": [{}]}]}'
+    />
+
+    <registry_unit registry_id="2" type="0"
+                   identifiers='{"parts": [{"type": "PALLET_ID", "value": "PL1001"}]}'
+                   parents='[]' meta='{"description": "Some pallet"}'
+                   unit_counts='{"unitCounts": [{"type": "ANOMALY", "count": 1, "relatedUnitIds": [{}]}]}'
+    />
+
+    <registry
+        id="2"
+        REQUEST_ID="1"
+        type="8"
+    />
+
+    <registry_unit registry_id="5" type="10"
+                   identifiers='{"parts": [{"type": "ORDER_ID", "value": "32940882"},{"type": "BOX_ID", "value": "BOX1"}, {"type": "PALLET_ID", "value": "PL1001"}, {"type": "PALLET_ID", "value": "PL2002"}]}'
+                   parents='[]' meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 1, "relatedUnitIds": [{}]}]}'
+    />
+    <registry_unit registry_id="5" type="10"
+                   identifiers='{"parts": [{"type": "ORDER_ID", "value": "32940882"},{"type": "BOX_ID", "value": "BOX2"}, {"type": "PALLET_ID", "value": "PL1001"}, {"type": "PALLET_ID", "value": "PL2002"}]}'
+                   parents='[]' meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 1, "relatedUnitIds": [{}]}]}'
+    />
+
+    <request_status_history
+        REQUEST_ID="1"
+        STATUS="13"
+    />
+
+    <queue_tasks
+        queue_name="ENRICH_RETURN_REGISTRY"
+        task='{"requestId":1}'
+        attempt="0"
+    />
+
+    <registry
+        id="5"
+        request_id="5"
+        type="8"
+    />
+
+</dataset>

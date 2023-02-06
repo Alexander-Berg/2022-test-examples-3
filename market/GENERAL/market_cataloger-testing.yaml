@@ -1,0 +1,57 @@
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=market_cataloger-testing&service=disk_free_space&last=1DAY&mode=edit
+  - service: disk_free_space
+    nodata_mode: force_ok
+
+  # Check memory_anon_usage
+  # https://juggler.yandex-team.ru/check_details/?host=market_cataloger-testing&service=memory_anon_usage&last=1DAY&mode=edit
+  - service: memory_anon_usage
+
+  # Check fresh-core-dumps
+  # https://juggler.yandex-team.ru/check_details/?host=market_cataloger-testing&service=fresh-core-dumps&last=1DAY&mode=edit
+  - service: fresh-core-dumps
+    nodata_mode: force_ok
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=market_cataloger-testing&service=logrotate&last=1DAY&mode=edit
+  - service: logrotate
+    nodata_mode: force_ok
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=market_cataloger-testing&service=ping&last=1DAY&mode=edit
+  - service: ping
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=market_cataloger-testing&service=push-client-status&last=1DAY&mode=edit
+  - service: push-client-status
+    nodata_mode: force_ok
+
+  default:
+    aggregator: logic_or
+    children:
+    - NANNY%testing_market_cataloger_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications:
+    - template_kwargs:
+        login: market_users_backend_tg
+        method: telegram
+        status:
+        - CRIT
+      template_name: on_status_change
+    host: market_cataloger-testing
+    namespace: market.common
+    refresh_time: 60
+    ttl: 900
+    tags:
+    - market_testing
+    - market_rtc
+    - marketcataloger
+    - testing
+    - market
+    - _market_

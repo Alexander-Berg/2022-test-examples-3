@@ -1,0 +1,69 @@
+use hahn;
+
+$ReduceSnippet = Python3::ReduceSnippet(Callable<(String?, String?)->Json?>,
+@@
+
+def ReduceSnippet(xml_doc, geo_id):
+    def json_extract_safe(data, path):
+        for key in path.split("/"):
+            if key in data:
+                data = data[key]
+            else:
+                return None
+        return data
+
+    import xmltodict, json
+    data = xmltodict.parse(xml_doc)
+    new_stops = []
+    if "NearbyStopsMetadata" in data and "NearbyStop" in data["NearbyStopsMetadata"]:
+        if isinstance(data["NearbyStopsMetadata"]["NearbyStop"], dict):
+            data["NearbyStopsMetadata"]["NearbyStop"] = [data["NearbyStopsMetadata"]["NearbyStop"]]
+        for stop in data["NearbyStopsMetadata"]["NearbyStop"]:
+            if "LineAtStop" not in stop:
+                continue
+            if isinstance(stop["LineAtStop"] , dict):
+                stop["LineAtStop"] = [stop["LineAtStop"]]
+            for line in stop["LineAtStop"]:
+                if json_extract_safe(line, "Line/Types/tag") == "underground":
+                    new_stops.append({
+                        "Distance" : {
+                            "text" : json_extract_safe(stop, "Distance/text")
+                        },
+                        "LineAtStop" : {
+                            "Line" : {
+                                "Style" : {
+                                    "color" : json_extract_safe(line, "Line/Style/color")
+                                },
+                                "Types" : {
+                                    "tag" : json_extract_safe(line, "Line/Types/tag")
+                                }
+                            }
+                        },
+                        "Stop" : {
+                            "name" : json_extract_safe(stop, "Stop/name")
+                        },
+                        "GeoId" : geo_id.decode("utf-8"),
+                        "Pos": json_extract_safe(stop, "gml:Point/gml:pos")
+                    })
+                    break
+    else:
+        return None
+    if len(new_stops) > 0:
+        return json.dumps({
+            "NearbyStopsMetadata" : {
+                "NearbyStop" : new_stops
+            }
+        })
+    else:
+        return None
+@@);
+
+insert into `{{ pre_processing_out }}`
+with truncate
+select *
+from (
+    select $ReduceSnippet(snippet, id) as value, id as key
+    from `//home/yatransport-prod/production/snippets/latest/snippets`
+)
+where value is not null;
+

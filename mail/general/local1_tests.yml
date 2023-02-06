@@ -1,0 +1,25 @@
+base: etc/xivahub/local1.yml
+config:
+    modules:
+        module:
+        -   _name: exhaust
+            configuration:
+                mobile_gate: 'localhost:9995'
+        -   _name: xivahub
+            configuration:
+                xtasks_service_job:
+                    cleanup_interval: 1s
+                    cleanup_workers_interval: 1s
+                    wakeup_interval: 1s
+                    task_exec: 10s
+                    worker_alive: 1s
+                xtasks_worker:
+                    xstore_read_limit: 10
+                    exec_interval: 0.1
+                    retry:
+                        http: &default_worker_retry
+                            start_interval: 1
+                            backoff_coefficient: 2
+                            end_interval: 16
+                        mobile: *default_worker_retry
+                        webpush: *default_worker_retry

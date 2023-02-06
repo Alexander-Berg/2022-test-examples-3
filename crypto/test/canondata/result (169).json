@@ -1,0 +1,211 @@
+{
+    "main.test_drop_history": {
+        "logbroker": [
+            "{\"DropHistoryCommand\":{\"HistoryId\":\"id\"}}",
+            "{\"DropHistoryCommand\":{\"HistoryId\":\"id\"}}"
+        ],
+        "response": {
+            "Message": "Ok"
+        }
+    },
+    "main.test_expire": {
+        "logbroker": [
+            "{\"ExpireCommand\":{\"TTLSeconds\":30}}"
+        ],
+        "response": {
+            "Message": "Ok"
+        }
+    },
+    "main.test_get_history": {
+        "logbroker": [
+            "{\"PreloadHistoryCommand\":{\"Id\":{\"Type\":\"yuid\",\"Value\":\"1\"},\"Owner\":\"owner\",\"FromDate\":\"\",\"ToDate\":\"\"}}"
+        ],
+        "response": {
+            "Items": [
+                {
+                    "AdditionalDescription": "additional_description",
+                    "Description": "description",
+                    "EventTime": 1600000000,
+                    "Id": "1",
+                    "IdType": "yuid",
+                    "SourceType": "TxLog"
+                },
+                {
+                    "AdditionalDescription": "additional_description",
+                    "Description": "description",
+                    "EventTime": 1600000000,
+                    "Id": "1",
+                    "IdType": "yuid",
+                    "SourceType": "WatchLog"
+                },
+                {
+                    "AdditionalDescription": "additional_description2",
+                    "Description": "description2",
+                    "EventTime": 1600000002,
+                    "Id": "1",
+                    "IdType": "yuid",
+                    "SourceType": "WatchLog"
+                },
+                {
+                    "AdditionalDescription": "additional_description2",
+                    "Description": "description2",
+                    "EventTime": 1600000002,
+                    "Id": "1",
+                    "IdType": "yuid",
+                    "SourceType": "TxLog"
+                },
+                {
+                    "AdditionalDescription": "additional_description3",
+                    "Description": "description3",
+                    "EventTime": 1600000003,
+                    "Id": "1",
+                    "IdType": "yuid",
+                    "SourceType": "TxLog"
+                },
+                {
+                    "AdditionalDescription": "additional_description3",
+                    "Description": "description3",
+                    "EventTime": 1600000003,
+                    "Id": "1",
+                    "IdType": "yuid",
+                    "SourceType": "WatchLog"
+                }
+            ],
+            "Total": 6
+        }
+    },
+    "main.test_get_history_dated": {
+        "logbroker": [
+            "{\"PreloadHistoryCommand\":{\"Id\":{\"Type\":\"yuid\",\"Value\":\"1\"},\"Owner\":\"owner\",\"FromDate\":\"2020-09-10\",\"ToDate\":\"2020-09-20\"}}"
+        ],
+        "response": {
+            "Items": [
+                {
+                    "AdditionalDescription": "additional_description",
+                    "Description": "description",
+                    "EventTime": 1600000000,
+                    "Id": "1",
+                    "IdType": "yuid",
+                    "SourceType": "TxLog"
+                },
+                {
+                    "AdditionalDescription": "additional_description",
+                    "Description": "description",
+                    "EventTime": 1600000000,
+                    "Id": "1",
+                    "IdType": "yuid",
+                    "SourceType": "WatchLog"
+                },
+                {
+                    "AdditionalDescription": "additional_description2",
+                    "Description": "description2",
+                    "EventTime": 1600000002,
+                    "Id": "1",
+                    "IdType": "yuid",
+                    "SourceType": "WatchLog"
+                },
+                {
+                    "AdditionalDescription": "additional_description2",
+                    "Description": "description2",
+                    "EventTime": 1600000002,
+                    "Id": "1",
+                    "IdType": "yuid",
+                    "SourceType": "TxLog"
+                },
+                {
+                    "AdditionalDescription": "additional_description3",
+                    "Description": "description3",
+                    "EventTime": 1600000003,
+                    "Id": "1",
+                    "IdType": "yuid",
+                    "SourceType": "TxLog"
+                },
+                {
+                    "AdditionalDescription": "additional_description3",
+                    "Description": "description3",
+                    "EventTime": 1600000003,
+                    "Id": "1",
+                    "IdType": "yuid",
+                    "SourceType": "WatchLog"
+                }
+            ],
+            "Total": 6
+        }
+    },
+    "main.test_get_progress": {
+        "logbroker": [],
+        "response": {
+            "Scheduled": true,
+            "Stats": {
+                "Completed": 2,
+                "Failed": 1,
+                "Total": 4
+            },
+            "StatsByDate": {
+                "2020-10-01": {
+                    "Failed": 1,
+                    "Total": 1
+                },
+                "2020-10-03": {
+                    "Total": 1
+                },
+                "2020-10-04": {
+                    "Completed": 1,
+                    "Total": 1
+                },
+                "2020-10-05": {
+                    "Completed": 1,
+                    "Total": 1
+                }
+            }
+        }
+    },
+    "main.test_get_progress_missing": {
+        "logbroker": [],
+        "response": {
+            "Scheduled": false
+        }
+    },
+    "main.test_get_user_queries": {
+        "logbroker": [],
+        "response": {
+            "Queries": [
+                {
+                    "FromDate": "",
+                    "Id": {
+                        "Type": "yuid",
+                        "Value": "1"
+                    },
+                    "Ready": false,
+                    "ToDate": ""
+                },
+                {
+                    "FromDate": "2021-01-20",
+                    "Id": {
+                        "Type": "yuid",
+                        "Value": "2"
+                    },
+                    "Ready": true,
+                    "ToDate": "2021-01-23"
+                }
+            ]
+        }
+    },
+    "main.test_preload_history": {
+        "logbroker": [
+            "{\"PreloadHistoryCommand\":{\"Id\":{\"Type\":\"yandexuid\",\"Value\":\"12345\"},\"Owner\":\"owner\"}}"
+        ],
+        "response": {
+            "Message": "Ok"
+        }
+    },
+    "main.test_preload_history_chunk": {
+        "logbroker": [
+            "{\"PreloadHistoryChunkCommand\":{\"Id\":{\"Type\":\"yandexuid\",\"Value\":\"12345\"},\"Log\":0,\"Date\":\"2020-01-01\"}}",
+            "{\"PreloadHistoryChunkCommand\":{\"Id\":{\"Type\":\"yandexuid\",\"Value\":\"12345\"},\"Log\":0,\"Date\":\"2020-01-01\"}}"
+        ],
+        "response": {
+            "Message": "Ok"
+        }
+    }
+}

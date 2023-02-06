@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug" packages="ru.yandex.market.log4j2">
+    <Appenders>
+        <Null name="NULL"/>
+        <Console name="MAIN" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %-5p [%c{1} %t] %m%n"/>
+        </Console>
+        <Async name="ASYNC">
+            <AppenderRef ref="MAIN"/>
+        </Async>
+        <Routing name="ROUTING">
+            <Routes pattern="${env:CI_RUN:-false}">
+                <Route key="true" ref="NULL"/>
+                <Route ref="ASYNC"/>
+            </Routes>
+        </Routing>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="ROUTING"/>
+        </Root>
+        <Logger name="ru.yandex" level="DEBUG"/>
+        <Logger name="de.flapdoodle" level="DEBUG"/>
+
+        <Logger name="org.apache" level="WARN"/>
+        <Logger name="org.hibernate" level="WARN"/>
+        <Logger name="org.springframework" level="WARN"/>
+        <Logger name="com.mchange" level="WARN"/>
+
+        <Logger name="org.eclipse" level="WARN"/>
+        <Logger name="com.google" level="WARN"/>
+        <Logger name="httpclient" level="WARN"/>
+        <Logger name="ru.yandex.market.loyalty.core.config.SwitchingDatasource" level="WARN"/>
+        <Logger name="requestTrace" level="DEBUG" additivity="false"/>
+    </Loggers>
+</Configuration>

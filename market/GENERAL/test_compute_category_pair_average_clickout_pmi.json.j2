@@ -1,0 +1,33 @@
+{% if table == "features_item_pair_category_category_average_clickout_pmi" %}
+    {# Result data. #}
+    {% table table %}
+        [
+            "C1", "C2",
+            {{ (2.0 + 1.0) / 2.0 }},
+            {{ (10.0 + 20.0) / 2.0 }},
+            {{ (2.0 / (4.0 * 8.0) + 1.0 / (2.0 * 2.0)) / 2.0 }},
+            {{ (10.0 / (40.0 * 20.0) + 20.0 / (10.0 * 10.0)) / 2.0 }},
+            "category", "category",
+            "{{ day }}"
+        ]
+    {% endtable %}
+{% elif table == "features_item_pair_category_category_clickout_statistics" %}
+    {% table table %}
+        {% if shift == 0 %}
+            ["C1", "C2", 2.0, 10.0, "category", "category", "{{ day }}"]
+        {% elif shift == 1 %}
+            ["C1", "C2", 1.0, 20.0, "category", "category", "{{ day }}"]
+        {% endif %}
+    {% endtable %}
+{% elif table == "features_item_category_clickout_statistics" %}
+    {% table table %}
+        {# Note that here clickout count goes before clickouter count. #}
+        {% if shift == 0 %}
+            ["C1", 40.0, 4.0, 0.6666666, "category", "{{ day }}"],
+            ["C2", 20.0, 8.0, 0.3333333, "category", "{{ day }}"]
+        {% elif shift == 1 %}
+            ["C1", 10.0, 2.0, 0.5, "category", "{{ day }}"],
+            ["C2", 10.0, 2.0, 0.5, "category", "{{ day }}"]
+        {% endif %}
+    {% endtable %}
+{% endif %}

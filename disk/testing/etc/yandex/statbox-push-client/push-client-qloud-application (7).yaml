@@ -1,0 +1,27 @@
+---
+ident: disk-docviewer
+logger-mode: file
+logger-file: /var/log/statbox/watcher.log
+logger-level: 5
+
+watcher-method: tpoll
+watcher-state: "/var/spool/push-client"
+watcher-drop_on_error: 1
+
+network-master-addr: "logbroker-pre.yandex.net"
+network-transport: ipv6
+network-proto: rt
+
+files:
+  - name: /var/log/yandex/docviewer/web-access-tskv.log
+    log_type: ydisk-java-access-log
+  - name: /var/log/yandex/docviewer/web-tskv.log
+    log_type: ydisk-docviewer-web-log
+  - name: /var/log/yandex/docviewer/web-events-tskv.log
+    log_type: ydisk-docviewer-web-events-log
+  - name: /var/log/nginx/access-tskv.log
+    log_type: ydisk-nginx-access-log
+  - name: /var/log/nginx/error.log
+    pipe: /usr/local/bin/nginx-error2tskv.pl ydisk-nginx-error-log-dv
+    log_type: ydisk-nginx-error-log
+

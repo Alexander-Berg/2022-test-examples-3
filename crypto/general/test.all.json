@@ -1,0 +1,108 @@
+{
+    "TvmConfig": {
+        "CacheDir": "./tvm_cache/",
+        "DstServices": [
+            {
+                "Alias": "logbroker",
+                "Id": 2001059
+            }
+        ],
+        "SrcIdEnvName": "CRYPTA_TVM_ID",
+        "SrcSecretEnvName": "CRYPTA_TVM_SECRET"
+    },
+    "YtCluster": "arnold",
+
+    "HttpServer": {
+        "Port": 80
+    },
+    "Logs": {
+        "Rules": [
+            {
+                "FilePath": "/dev/stderr",
+                "MinLevel": "Info"
+            },
+            {
+                "FilePath": "./resharder.log",
+                "MinLevel": "Warning"
+            }
+        ]
+    },
+
+    "HeavyWorkerThreads": 4,
+
+    "Destinations": [
+        {
+            "Name": "herschel_events",
+            "ShardsCount": 128,
+            "QytWriter": {
+                "Queues": [
+                    {
+                        "Cluster": "arnold",
+                        "Path": "//home/crypta/production/rtsklejka/qyt/herschel_events"
+                    }
+                ]
+            }
+        }
+    ],
+
+    "Instances": [
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "//home/crypta/production/rtsklejka/consuming_systems/vla/yabs-rt_bs-rtb-log/main",
+                    "OffsetsTable": "//home/crypta/production/rtsklejka/consuming_systems/vla/yabs-rt_bs-rtb-log/offsets",
+                    "LaunchShardProcessorInFiber": true,
+                    "MasterBalancing": {
+                        "MasterPath": "//home/crypta/production/rtsklejka/consuming_systems/vla/yabs-rt_bs-rtb-log/master"
+                    },
+                    "Shards": {
+                        "AutoResolve": {
+                            "ShardsCachePath": "//home/crypta/production/rtsklejka/consuming_systems/vla/yabs-rt_bs-rtb-log/shards_count_cache",
+                            "UpdateLocalCachePeriodMs": 30000,
+                            "UpdateYtCachePeriodMs": 600000
+                        }
+                    },
+                    "MaxShardsAutoResolveRatio": 0.661,
+                    "WorkerMinorName": "w_rtb-log",
+                    "ThreadLabelPrefix": "t_rtb-log"
+                },
+
+                "MaxMemoryUsage": 500000000,
+                "OutputCodec": "zstd_6",
+
+                "Suppliers": [
+                    {
+                        "Alias": "vla_yabs-rt_bs-rtb-log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/crypta/prod/graph/reader",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "vla.logbroker.yandex.net",
+                            "SrcTopic": "/yabs-rt/bs-rtb-log"
+                        }
+                    }
+                ],
+
+                "SrcDcLabel": "vla",
+                "SrcTopicLabel": "yabs-rt/bs-rtb-log",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "herschel_events",
+            "RowsProcessor": {
+                "MessageType": "FP",
+                "Parser": {
+                    "FromBsRtbLog": {
+                        "DebounceCfg": {
+                            "Lifetime": 605
+                        },
+                        "Lifetime": 600,
+                        "Sampling": 700
+                    }
+                },
+                "ShardingAlgorithm": "Fingerprint"
+            }
+        }
+    ],
+
+    "SharedTransactionPeriod": 200
+}

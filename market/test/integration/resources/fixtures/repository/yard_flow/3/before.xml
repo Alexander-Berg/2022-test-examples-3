@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <service
+        id="1"
+        name="service"
+    />
+
+    <capacity
+        id="100"
+        name="capacity"
+        value="2"
+    />
+
+    <state
+        id="1000"
+        name="state"
+        service_id="1"
+        capacity_id="100"
+    />
+
+    <state
+        id="1001"
+        name="state2"
+        service_id="1"
+        capacity_id="100"
+    />
+
+    <edge
+        id="1"
+        from_state_id="1000"
+        to_state_id="1001"/>
+
+
+    <priority_function
+        id="10"
+        type="DEFAULT"
+    />
+
+    <edge_action
+        id="2"
+        edge_id="1"
+        type="SEND_NOTIFICATION"/>
+
+    <edge_restriction
+        id="3"
+        type="EVENT_REQUIRED"
+        edge_id="1"/>
+
+    <restriction_param
+        id="5"
+        edge_restriction_id="3"
+        name="EVENT_TYPE"
+        value="SOME_EVENT"/>
+
+
+    <yard_client
+        id="0"
+        name="client"
+        external_id="extClient0"
+        phone="123123123"
+        service_id="1"
+        created_at="2021-05-01 10:00:00"
+        state_id="1000"
+    />
+
+    <yard_client
+        id="1"
+        name="client"
+        external_id="extClient1"
+        phone="123123123"
+        service_id="1"
+        created_at="2021-05-01 10:00:00"
+        state_id="1001"
+    />
+
+    <yard_client_event
+        id="1"
+        type="SOME_EVENT"
+        yard_client_id="0"
+        created_at="2021-05-01 10:00:00"
+        event_date="2021-06-01 10:00:00"
+        processed="false"
+    />
+
+    <yard_client_event
+        id="2"
+        type="SOME_OTHER_EVENT"
+        yard_client_id="0"
+        created_at="2021-05-01 10:00:00"
+        event_date="2021-06-01 10:00:00"
+        processed="false"
+    />
+
+    <client_queue
+        id="1"
+        to_state_id="1001"
+        client_id="0"
+        priority="0"
+        current_edge_id="1"
+    />
+</dataset>

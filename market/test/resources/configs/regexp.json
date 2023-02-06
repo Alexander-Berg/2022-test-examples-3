@@ -1,0 +1,30 @@
+{
+  "logHosts": "kgb*",
+  "logPath": "/var/log/yandex/guruassistant/guruassistant.log",
+  "clickhouseTable": "guruassistant",
+
+  "parser": {
+    "dateFormat": "yyyy-MM-dd HH:mm:ss Z",
+    "patterns": {
+      "message": "^PROFILE +\\[%{date}\\] %{method} %{resptime_ms}"
+    },
+    "ignoreNoMatches" : true,
+    "columns": {
+      "host": {
+        "type": "String"
+      },
+      "code": {
+        "type": "UInt16",
+        "default": "0"
+      },
+      "method": {
+        "type": "String",
+        "default": "Get"
+      },
+      "resptime_ms": {
+        "type": "Int32",
+        "default": "-1"
+      }
+    }
+  }
+}

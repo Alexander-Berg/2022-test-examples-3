@@ -1,0 +1,322 @@
+{
+  "meta": {
+    "fields": [
+      {
+        "name": "partnerFrom",
+        "title": "Партнер-источник",
+        "type": "REFERENCE",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "partnerTo",
+        "title": "Партнер-назначение",
+        "type": "REFERENCE",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "handlingTime",
+        "title": "Срок обработки",
+        "type": "NUMBER",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "toPartnerLogisticsPointId",
+        "title": "Склад партнера-назначения",
+        "type": "NUMBER",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": {
+          "authorities": [
+            "ROLE_LOGISTICS_POINT"
+          ],
+          "hint": "Склад партнера-назначения",
+          "idFieldName": "id",
+          "multiple": false,
+          "optionsSlug": "lms/logistics-point",
+          "pageSize": 20,
+          "queryParamName": "searchQuery",
+          "titleFieldName": "name"
+        },
+        "secret": null
+      },
+      {
+        "name": "importSchedule",
+        "title": "importSchedule",
+        "type": "NUMBER",
+        "editable": false,
+        "options": [],
+        "hidden": true,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "intakeSchedule",
+        "title": "intakeSchedule",
+        "type": "NUMBER",
+        "editable": false,
+        "options": [],
+        "hidden": true,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "registerSchedule",
+        "title": "registerSchedule",
+        "type": "NUMBER",
+        "editable": false,
+        "options": [],
+        "hidden": true,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "created",
+        "title": "Создано",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "updated",
+        "title": "Обновлено",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "active",
+        "title": "Активность",
+        "type": "BOOLEAN",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "reasons",
+        "title": "Ошибки валидации",
+        "type": "TEXT",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "shipmentType",
+        "title": "Способ отгрузки",
+        "type": "LIST",
+        "editable": true,
+        "options": [
+          {
+            "id": "IMPORT",
+            "openNewTab": false,
+            "displayName": "Самопривоз",
+            "slug": null
+          },
+          {
+            "id": "WITHDRAW",
+            "openNewTab": false,
+            "displayName": "Забор",
+            "slug": null
+          },
+          {
+            "displayName": "3PL",
+            "id": "TPL",
+            "openNewTab": false,
+            "slug": null
+          }
+        ],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "movingPartnerId",
+        "title": "Перемещающий партнер",
+        "type": "NUMBER",
+        "editable": true,
+        "hidden": false,
+        "options": [],
+        "autocomplete": {
+          "authorities": [
+            "ROLE_PARTNER"
+          ],
+          "hint": "Перемещающий партнер",
+          "idFieldName": "id",
+          "multiple": false,
+          "optionsSlug": "lms/partner",
+          "pageSize": 20,
+          "queryParamName": "searchQuery",
+          "titleFieldName": "name"
+        },
+        "secret": null
+      },
+      {
+        "name": "transferTime",
+        "title": "Время трансфера со склада поставщика на наш склад (чч:мм)",
+        "type": "STRING",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "inboundTime",
+        "title": "Время на приёмку на нашем складе (чч:мм)",
+        "type": "STRING",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "autocomplete": null,
+        "editable": true,
+        "hidden": false,
+        "name": "intakeDeadline",
+        "options": [],
+        "secret": null,
+        "title": "Дельта дедлайна приемки (чч:мм)",
+        "type": "STRING"
+      },
+      {
+        "editable": true,
+        "name": "partnerReturnId",
+        "options": [],
+        "hidden": false,
+        "autocomplete": {
+          "authorities": [
+            "ROLE_PARTNER"
+          ],
+          "hint": "Партнер-возвратный склад",
+          "idFieldName": "id",
+          "multiple": false,
+          "optionsSlug": "lms/partner",
+          "pageSize": 20,
+          "queryParamName": "searchQuery",
+          "titleFieldName": "name"
+        },
+        "secret": null,
+        "title": "Партнер-возвратный склад",
+        "type": "NUMBER"
+      }
+    ],
+    "mode": "VIEW",
+    "deletable": false,
+    "children": [
+      {
+        "title": "Расписание самопривозов",
+        "slug": "schedule",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "scheduleId",
+        "idFieldName": "importSchedule",
+        "pageSize": 7,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "Расписание заборов / 3PL",
+        "slug": "schedule",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "scheduleId",
+        "idFieldName": "intakeSchedule",
+        "pageSize": 7,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "Расписание межскладских перемещений",
+        "slug": "interwarehouse-schedule",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "partnerRelationId",
+        "idFieldName": "id",
+        "pageSize": 7,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "Расписание реестров",
+        "slug": "schedule",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "scheduleId",
+        "idFieldName": "registerSchedule",
+        "pageSize": 7,
+        "isCrossPluginSlug": false
+      },
+      {
+        "idFieldName": "id",
+        "isCrossPluginSlug": false,
+        "pageSize": 5,
+        "parentColumn": "partnerRelation",
+        "slug": "cut-off",
+        "parentSlug":"",
+        "title": "Cut Off'ы",
+        "type": "GRID"
+      },
+      {
+        "idFieldName": "id",
+        "isCrossPluginSlug": false,
+        "pageSize": 5,
+        "parentColumn": "partnerRelation",
+        "slug": "rating",
+        "parentSlug":"",
+        "title": "Рейтинги",
+        "type": "GRID"
+      }
+    ],
+    "actions": [],
+    "tabs": []
+  },
+  "item": {
+    "id": 2,
+    "title": "Fulfillment service 2 → Delivery service 2",
+    "values": {
+      "partnerFrom": {
+        "openNewTab": false,
+        "displayName": "Fulfillment service 2",
+        "id": "3",
+        "slug": "lms/partner"
+      },
+      "partnerTo": {
+        "openNewTab": false,
+        "displayName": "Delivery service 2",
+        "id": "4",
+        "slug": "lms/partner"
+      },
+      "partnerReturnId": 3,
+      "handlingTime": 2,
+      "active": true,
+      "shipmentType": "WITHDRAW",
+      "created": "14 февр. 2019 18:09",
+      "updated": "14 февр. 2019 19:09",
+      "reasons": {
+        "text": "failed platform 2, relation 2"
+      },
+      "intakeDeadline": "10:00"
+    }
+  }
+}

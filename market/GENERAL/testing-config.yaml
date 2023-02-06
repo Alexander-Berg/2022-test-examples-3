@@ -1,0 +1,154 @@
+monitoring:
+  port: 16309
+status:
+  port: 16310
+storages:
+  - name: storage_trace_log
+    plugin: fs
+    config:
+      directory: /var/log/yandex/unified_agent/storage/trace_log
+      max_partition_size: 1GB
+  - name: storage_feature_log
+    plugin: fs
+    config:
+      directory: /var/log/yandex/unified_agent/storage/feature_log
+      max_partition_size: 1GB
+  - name: storage_dsp_recommendation_log
+    plugin: fs
+    config:
+      directory: /var/log/yandex/unified_agent/storage/recom_log
+      max_partition_size: 1GB
+  - name: storage_promo_triggers
+    plugin: fs
+    config:
+      directory: /var/log/yandex/unified_agent/storage/promo_triggers
+      max_partition_size: 1GB
+  - name: storage_recommendation_log
+    plugin: fs
+    config:
+      directory: /var/log/yandex/unified_agent/storage/recommendation_log
+      max_partition_size: 1GB
+routes:
+  # debug: log to stdout
+  - input:
+      plugin: grpc
+      config:
+        uri: localhost:16311
+    channel:
+      output:
+        plugin: debug
+        config:
+          file_name: /dev/stdout
+          delimiter: "\n"
+  # testing: trace-log
+  - input:
+      plugin: grpc
+      config:
+        uri: localhost:16312
+    channel:
+      pipe:
+        - storage_ref:
+            storage: storage_trace_log
+        - filter:
+            plugin: assign
+            config:
+              session:
+              - server: "{$host_name}"
+              - file: "/var/log/yandex/mars-server/lb/mars-server-trace.log"
+      output:
+        plugin: logbroker
+        config:
+          endpoint: logbroker.yandex.net
+          port: 2135
+          topic: market-dj/mars/testing/trace-log
+          export_session_meta_keys:
+            - file
+            - server
+          tvm:
+            client_id: 2014380
+            destination_id: logbroker
+            secret:
+              file: "/app/secrets/push-client-tvm-secret"
+  # testing: feature-log
+  - input:
+      plugin: grpc
+      config:
+        uri: localhost:16313
+    channel:
+      pipe:
+        - storage_ref:
+            storage: storage_feature_log
+      output:
+        plugin: logbroker
+        config:
+          endpoint: logbroker.yandex.net
+          port: 2135
+          topic: market-dj/mars/testing/feature-log
+          tvm:
+            client_id: 2014380
+            destination_id: logbroker
+            secret:
+              file: "/app/secrets/push-client-tvm-secret"
+  # testing: dsp-recommendation-log
+  - input:
+      plugin: grpc
+      config:
+        uri: localhost:16314
+    channel:
+      pipe:
+        - storage_ref:
+            storage: storage_dsp_recommendation_log
+      output:
+        plugin: logbroker
+        config:
+          endpoint: logbroker.yandex.net
+          port: 2135
+          topic: market-dj/mars/testing/dsp-recommendation-log
+          tvm:
+            client_id: 2014380
+            destination_id: logbroker
+            secret:
+              file: "/app/secrets/push-client-tvm-secret"
+  # testing: promo-triggers
+  - input:
+      plugin: grpc
+      config:
+        uri: localhost:16315
+    channel:
+      pipe:
+        - storage_ref:
+            storage: storage_promo_triggers
+      output:
+        plugin: logbroker
+        config:
+          endpoint: logbroker.yandex.net
+          port: 2135
+          topic: market-dj/mars/testing/promo-triggers
+          codec: raw
+          tvm:
+            client_id: 2014380
+            destination_id: logbroker
+            secret:
+              file: "/app/secrets/push-client-tvm-secret"
+  # testing: recommendation-proto-log
+  - input:
+      plugin: grpc
+      config:
+        uri: localhost:16316
+    channel:
+      pipe:
+        - storage_ref:
+            storage: storage_recommendation_log
+      output:
+        plugin: logbroker
+        config:
+          endpoint: logbroker.yandex.net
+          port: 2135
+          topic: market-dj/mars/testing/recommendation-proto-log
+          codec: raw
+          tvm:
+            client_id: 2014380
+            destination_id: logbroker
+            secret:
+              file: "/app/secrets/push-client-tvm-secret"
+

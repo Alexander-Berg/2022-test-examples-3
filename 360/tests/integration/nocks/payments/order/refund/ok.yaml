@@ -1,0 +1,25 @@
+$schema: ../../../_schemas/nock.yaml
+
+scope: 'http://payments'
+method: POST
+path: /v1/order/1234567890/1/refund
+
+reqheaders:
+  $include: ../../../_samples/reqheaders.yaml
+
+body:
+  caption: order
+  currency: RUB
+  price: 1500
+  items:
+    - $include: ../../../_samples/product.yaml
+      product_id: 1
+
+status: 200
+
+response:
+  code: 200
+  status: success
+  data:
+    $include: ../../../_samples/order.yaml
+    active: true

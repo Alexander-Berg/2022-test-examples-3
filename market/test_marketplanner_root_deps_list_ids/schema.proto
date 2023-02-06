@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package market_planner_settings;
+
+import "google/protobuf/descriptor.proto";
+extend google.protobuf.FileOptions {
+    optional string exp3_config_name = 51234;
+};
+option (exp3_config_name) = "test_marketplanner_root_deps_list_ids";
+
+option java_package = "ru.yandex.market.mstat.planner.exp3configs";
+option java_outer_classname = "Exp3Configs";
+option go_package = "a.yandex-team.ru/market/infra/market-planner/exp3_configs/test_marketplanner_root_deps_list_ids";
+
+message Settings {
+    required Content content = 1;
+    required bool enabled = 2;
+}
+
+message Content {
+    repeated int32 ids = 1;
+}

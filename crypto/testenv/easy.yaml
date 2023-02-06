@@ -1,0 +1,50 @@
+BUILD_CRYPTA_EASY:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/junk/zheglov/easy
+    check_task:
+        name: CRYPTA_BUILD_AND_RELEASE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                sandbox_container: 773239891
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                packages: junk/zheglov/easy/package.json
+                resource_type: CRYPTA_DOCKER
+                strip_binaries: false
+                compress_package_archive: true
+                package_type: docker
+                docker_registry: registry.yandex.net
+                docker_image_repository: crypta
+                docker_user: robot-crypta
+                docker_token_vault_name: CRYPTA_DOCKER_REGISTRY_TOKEN
+                docker_push_image: true
+                run_tests: true
+                run_long_tests: true
+                ignore_fail_tests: false
+                ya_yt_store: true
+                auto_release: true
+                auto_release_env: testing
+                release_to_ya_deploy: true
+                yp_token_vault: yp_token

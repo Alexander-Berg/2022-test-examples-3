@@ -1,0 +1,293 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "im",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--date-from", "2020-01-01",
+    "--date-to", "2020-01-01",
+]
+
+checkers = [
+    "lb",
+    "partner",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "apllication/json"
+
+[[partner.responses]]
+    path = "/orders/"
+    args = {format="json", utc_from="2020-01-01 00:00:00", utc_to="2020-01-02 00:00:00", flat="False"}
+    data_file = "partner_response_0.json"
+
+[[partner.responses]]
+    path = "/orders/"
+    args = {format="json", limit="2", offset="2", flat="False"}
+    data_file = "partner_response_1.json"
+
+[[partner.responses]]
+    path = "/orders-with-refunds/"
+    args = {format="json", utc_from="2020-01-01 00:00:00", utc_to="2020-01-02 00:00:00", flat="False"}
+    data_file = "partner_response_refunds.json"
+
+[lb]
+    topic = "topic-im"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+# idex 0
+[[lb.expected]]
+    partner_name = "im"
+    travel_order_id = "im:990000"
+    partner_order_id = "990000"
+    partner_data_im_order_id = 990000
+    created_at = 234567891
+    status = "cancelled"
+    item_state = "cancelled"
+    currency_code = "RUB"
+    category = "train"
+    snapshot_source = "collectors"
+    order_amount = 0.0
+    profit_amount = 0.0
+
+    arrival = 123456789
+    coach_number = "coach_number_0"
+    coach_owner = "coach_owner_0"
+    coach_type = "coach_type_0"
+    scheme_id = "77"
+    departure = 123456789
+    orders_created = "orders_created_0"
+    partner_data_operation_id = "partner_data_operation_id_0"
+    payment_uid = "payment_uid_0"
+    payment_purchase_token = "payment_purchase_token0"
+    payment_use_deferred_clearing = true
+    rebooked = false
+    rebooking_available = true
+    refunds_count = 1
+    station_from_id = 2
+    station_to_id = 3
+    tickets_with_places_count = 1
+    tickets_without_places_count = 2
+    train_internal_status = "status_0"
+    train_number = "train_number_0"
+    train_ticket_number = "train_ticket_number_0"
+    two_storey = true
+    uid = "uid_0"
+    boy_order_id = "uid_0"
+    user_ip = "user_ip_0"
+    user_is_mobile = true
+    user_region_id = 0
+
+    adult_passengers_count = 1
+    bought_insurance_count = 0
+    children_with_seats_count = 1
+    children_without_seats_count = 0
+    insurance_auto_return = false
+    payment_attempts = 1
+    refunded_ticket_count = 0
+    requested_ticket_count = 2
+    total_fee_amount = 847.63
+    total_insurance_amount = 0
+    total_insurance_profit_amount = 0
+    total_partner_fee_amount = 63.4
+    total_partner_refund_fee_amount = 0
+    total_refund_fee_amount = 0
+    total_refund_insurance_amount = 0
+    total_refund_ticket_amount = 0
+    total_service_amount = 1532
+    total_tariff_amount = 6173.7
+    total_ticket_count = 0
+    active_ticket_count = 0
+    source_is_transfer = true
+    non_refundable_tickets_count = 0
+
+# idex 1
+[[lb.expected]]
+    partner_name = "im"
+    travel_order_id = "im:990001"
+    partner_order_id = "990001"
+    partner_data_im_order_id = 990001
+    created_at = 234567891
+    status = "cancelled"
+    item_state = "cancelled"
+    currency_code = "RUB"
+    category = "train"
+    snapshot_source = "collectors"
+    order_amount = 0.0
+    profit_amount = 0.0
+
+    arrival = 123456789
+    coach_number = "coach_number_1"
+    coach_owner = "coach_owner_1"
+    coach_type = "coach_type_1"
+    departure = 123456789
+    orders_created = "orders_created_1"
+    partner_data_operation_id = "partner_data_operation_id_1"
+    payment_uid = "payment_uid_1"
+    payment_use_deferred_clearing = true
+    rebooked = false
+    rebooking_available = true
+    refunds_count = 1
+    station_from_id = 2
+    station_to_id = 3
+    tickets_with_places_count = 1
+    tickets_without_places_count = 2
+    train_internal_status = "status_4"
+    train_number = "train_number_1"
+    train_ticket_number = "train_ticket_number_1"
+    two_storey = true
+    uid = "uid_1"
+    boy_order_id = "uid_1"
+    user_ip = "user_ip_1"
+    user_is_mobile = true
+    user_region_id = 0
+
+    adult_passengers_count = 1
+    bought_insurance_count = 2
+    children_with_seats_count = 0
+    children_without_seats_count = 2
+    insurance_auto_return = true
+    payment_attempts = 3
+    refunded_ticket_count = 1
+    requested_ticket_count = 2
+    total_fee_amount = 847.63
+    total_insurance_amount = 100.0
+    total_insurance_profit_amount = 65.0
+    total_partner_fee_amount = 63.4
+    total_partner_refund_fee_amount = 0
+    total_refund_fee_amount = 0
+    total_refund_insurance_amount = 100
+    total_refund_ticket_amount = 0
+    total_service_amount = 1532
+    total_tariff_amount = 6173.7
+    total_ticket_count = 3
+    active_ticket_count = 2
+    non_refundable_tickets_count = 0
+
+# idex 2
+[[lb.expected]]
+    partner_name = "im"
+    travel_order_id = "im:990002"
+    partner_order_id = "990002"
+    partner_data_im_order_id = 990002
+    created_at = 234567891
+    status = "paid"
+    item_state = "pending"
+    currency_code = "RUB"
+    category = "train"
+    snapshot_source = "collectors"
+    order_amount = 1030.0
+    profit_amount = 10.0
+
+    arrival = 123456789
+    coach_number = "coach_number_2"
+    coach_owner = "coach_owner_2"
+    coach_type = "coach_type_2"
+    departure = 123456789
+    orders_created = "orders_created_2"
+    partner_data_operation_id = "partner_data_operation_id_2"
+    payment_uid = "payment_uid_2"
+    payment_use_deferred_clearing = true
+    rebooked = false
+    rebooking_available = true
+    refunds_count = 1
+    station_from_id = 2
+    station_to_id = 3
+    tickets_with_places_count = 1
+    tickets_without_places_count = 2
+    train_internal_status = "status_2"
+    train_number = "train_number_2"
+    train_ticket_number = "train_ticket_number_2"
+    two_storey = true
+    uid = "uid_2"
+    boy_order_id = "uid_2"
+    user_ip = "user_ip_2"
+    user_is_mobile = true
+    user_region_id = 0
+    adult_passengers_count = 1
+    bought_insurance_count = 0
+    children_with_seats_count = 0
+    children_without_seats_count = 0
+    insurance_auto_return = false
+    payment_attempts = 1
+    refunded_ticket_count = 0
+    requested_ticket_count = 1
+    total_fee_amount = 10.0
+    total_insurance_amount = 0
+    total_insurance_profit_amount = 0
+    total_partner_fee_amount = 4.4
+    total_partner_refund_fee_amount = 0
+    total_refund_fee_amount = 0
+    total_refund_insurance_amount = 0
+    total_refund_ticket_amount = 0
+    total_service_amount = 20
+    total_tariff_amount = 1000
+    total_ticket_count = 0
+    active_ticket_count = 0
+    non_refundable_tickets_count = 0
+
+# idex 3
+[[lb.expected]]
+    partner_name = "im"
+    travel_order_id = "im:990003"
+    partner_order_id = "990003"
+    partner_data_im_order_id = 990003
+    created_at = 234567891
+    status = "pending"
+    item_state = "reserved"
+    currency_code = "RUB"
+    category = "train"
+    snapshot_source = "collectors"
+    order_amount = 0.0
+    profit_amount = 0.0
+
+    arrival = 123456789
+    coach_number = "coach_number_3"
+    coach_owner = "coach_owner_3"
+    coach_type = "coach_type_3"
+    departure = 123456789
+    orders_created = "orders_created_3"
+    partner_data_operation_id = "partner_data_operation_id_3"
+    payment_uid = "payment_uid_3"
+    payment_use_deferred_clearing = true
+    rebooked = false
+    rebooking_available = true
+    refunds_count = 1
+    station_from_id = 2
+    station_to_id = 3
+    tickets_with_places_count = 1
+    tickets_without_places_count = 2
+    train_internal_status = "status_3"
+    train_number = "train_number_3"
+    train_ticket_number = "train_ticket_number_3"
+    two_storey = true
+    uid = "uid_3"
+    boy_order_id = "uid_3"
+    user_ip = "user_ip_3"
+    user_is_mobile = true
+    user_region_id = 0
+    adult_passengers_count = 1
+    bought_insurance_count = 0
+    children_with_seats_count = 0
+    children_without_seats_count = 0
+    insurance_auto_return = false
+    payment_attempts = 0
+    refunded_ticket_count = 0
+    requested_ticket_count = 1
+    total_fee_amount = 10.0
+    total_insurance_amount = 0
+    total_insurance_profit_amount = 0
+    total_partner_fee_amount = 4.4
+    total_partner_refund_fee_amount = 0
+    total_refund_fee_amount = 0
+    total_refund_insurance_amount = 0
+    total_refund_ticket_amount = 0
+    total_service_amount = 20
+    total_tariff_amount = 1000
+    total_ticket_count = 0
+    active_ticket_count = 0
+    non_refundable_tickets_count = 0

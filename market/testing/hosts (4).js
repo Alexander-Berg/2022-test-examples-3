@@ -1,0 +1,37 @@
+// Убрали в рамках MARKETPARTNER-24213, чтобы в БТ не зависеть от betastatic
+// const STATIC_SELF = Boolean(process.env.STATIC_SELF);
+const STATIC_SELF = true;
+
+module.exports = {
+    avatarsHost: 'avatars.mds.yandex.net',
+    self: 'partner.market.yandex.ru',
+    balance: 'user-balance.greed-ts.paysys.yandex.ru',
+    balancePayPreview: 'user-balance.greed-tc.paysys.yandex.ru',
+    adminBalance: 'admin-balance.greed-ts.paysys.yandex.ru',
+    passport: 'passport.yandex.ru',
+    tune: 'tune.yandex.ru',
+    social: 'social-test.yandex.ru',
+    market: 'desktop.market.fslb.yandex.ru',
+    marketplace: 'desktop.pokupki.fslb.market.yandex.ru',
+    pricelabs: 'dev.pricelabs.yandex.ru',
+    yandex: 'yandex.ru',
+    suggest: 'yandex.ru',
+    static: STATIC_SELF ? null : 'yastat.net',
+    csp: 'csp.yandex.net',
+    ct: 'ct-testing.market.yandex.ru',
+    clck: 'clck.yandex.ru',
+    tech: 'tech.yandex.ru',
+    exportStatic: 'yastatic.net',
+    tsum: 'tsum.yandex-team.ru',
+    bringly: 'testing.bringly.ru',
+    geoSuggest: 'suggest-maps-test.n.yandex-team.ru',
+    marketStatic: 'market-static.s3.yandex.net',
+    partnermarket: 'billing-admin-mono.tst.vs.market.yandex.ru',
+    rupost: 'passport.test.russianpost.ru',
+    tplTracking: 'touch.pokupki.fslb.market.yandex.ru',
+    owOrder: 'ow.tst.market.yandex-team.ru',
+    rupostLanding: 'otpravka.pochta.ru',
+    tanker: 'tanker-beta.yandex-team.ru',
+    bunker: 'bunker.yandex-team.ru',
+    marketAnalytics: 'front-analytics.tst.market.yandex.ru',
+};

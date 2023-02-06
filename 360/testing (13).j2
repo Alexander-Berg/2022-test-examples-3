@@ -1,0 +1,22 @@
+{% extends "base.yaml" %}
+{% from "secrets/testing.j2" import secrets %}
+{% from "tvm/testing.j2" import tvm %}
+
+{% block network_macro %}_MAILTESTNETS_{% endblock %}
+
+{% set ENVIRONMENT_TYPE = "testing" %}
+{% set ENVIRONMENT = "testing" %}
+
+{%
+set deploy_units = {
+    "lite": {
+        "per_cluster": False,
+        "max_unavailable": 1,
+        "clusters": {
+            "sas": 1,
+            "iva": 1,
+        },
+        "disk_capacity": 5,
+    },
+}
+%}

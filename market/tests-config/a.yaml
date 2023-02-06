@@ -1,0 +1,134 @@
+service: yandexmarketfrontend
+title: Market Frontend Hermione Tests Skip Config
+
+arcanum:
+  review:
+    required: false
+    skip_review_for: "virtual, robots, robot"
+    min_approvers_count: 0
+  auto_merge:
+    enabled: true
+    requirements:
+      - system: CI
+        type: 'market/front/apps/marketfront/configs/hermione/tests-config: pr checks'
+        disabling_policy: denied
+
+shared:
+  settings:
+    requirements: &requirements
+      cores: 1
+      sandbox:
+        client_tags: MULTISLOT | GENERIC
+        container_resource: 2864846541
+        dns: dns64
+        priority:
+          class: SERVICE
+          subclass: NORMAL
+        semaphores:
+          acquires:
+            - name: market_front_ci_semaphore
+
+    logs_config: &logs_config
+      redirect_stderr_to_stdout: true
+      stdout_ci_badge: true
+
+  jobs:
+    deploy-statics: &deploy-statics-job
+      title: Deploy Statistics
+      task: common/misc/run_command
+      requirements:
+        <<: *requirements
+        cores: 4
+      input:
+        config:
+          arc_mount_config:
+            enabled: true
+          logs_config: *logs_config
+          secret_environment_variables:
+            - key: AWS_ACCESS_KEY_ID
+              secret_spec:
+                key: 'robot-metatron-s3-keyid'
+            - key: AWS_SECRET_ACCESS_KEY
+              secret_spec:
+                key: 'robot-metatron-s3-secretkey'
+            - key: ST_OAUTH_TOKEN
+              secret_spec:
+                key: 'robot-metatron-st-token'
+          cmd_line: |
+            set -ex
+            export PATH=$PATH:/opt/nodejs/16/bin
+            cd ${context.config_info.dir}
+
+            ya tool aws --endpoint-url=https://s3.mds.yandex.net s3 cp --recursive skipped s3://marketfront/test-skips
+
+            mkdir -p $RESULT_RESOURCES_PATH/html_reports
+            echo "<script>document.location = \"https://yc.yandex-team.ru/folders/foo5f57q0f9ge10rlrcc/storage/buckets/marketfront?key=test-skips%2F\"</script>" > $RESULT_RESOURCES_PATH/html_reports/index.html
+          result_resources:
+            - path: html_reports
+              description: html result
+              type: OTHER_RESOURCE
+              compression_type: none
+              optional: false
+              ci_badge: true
+              ci_badge_path: index.html
+
+    check-eslint: &check-eslint-job
+      title: Codestyle
+      task: common/misc/run_command
+      requirements: *requirements
+      input:
+        config:
+          arc_mount_config:
+            enabled: true
+          logs_config: *logs_config
+          cmd_line: |
+            export PATH=$PATH:/opt/nodejs/16/bin
+            cd ${context.config_info.dir}
+            npm run arc-ci:eslint
+            statusCode=$?
+            mkdir -p $RESULT_RESOURCES_PATH/html_reports
+            mv html_reports/* $RESULT_RESOURCES_PATH/html_reports
+            exit $statusCode
+          result_resources:
+            - path: html_reports
+              description: Codestyle
+              type: OTHER_RESOURCE
+              compression_type: none
+              optional: false
+              ci_badge: true
+              ci_badge_path: index.html
+  flows:
+    pr-jobs: &pr-base-jobs
+      check-eslint: *check-eslint-job
+
+
+ci:
+  release-title-source: flow
+  secret: sec-01cv39yy683mvszy5yt550amgq
+  runtime:
+    sandbox-owner: MARKET
+
+  flows:
+    pr-jobs:
+      title: PR common flow
+      jobs:
+        <<: *pr-base-jobs
+
+    s3-deploy:
+      title: Deploy S3 statics
+      jobs:
+        deploy-statics: *deploy-statics-job
+
+  actions:
+    pr-src:
+      title: pr checks
+      flow: pr-jobs
+      triggers:
+        - on: pr
+          into: trunk
+
+  releases:
+    my-main-release:
+      title: Deploy configs
+      flow: s3-deploy
+      auto: true

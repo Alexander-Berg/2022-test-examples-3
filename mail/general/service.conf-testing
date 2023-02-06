@@ -1,0 +1,109 @@
+include /etc/nginx/sites-enabled/service.include;
+
+server {
+	listen [::]:80 default ipv6only=on;
+    server_name mbody.mail.yandex.net;
+
+    underscores_in_headers on;
+    request_id_from_header on;
+
+    location / {
+        access_by_lua '
+            local tvm2_ticket_string = ngx.req.get_headers().x_ya_service_ticket
+            if tvm2_ticket_string ~= nil then
+                -- ngx.say("TVM2 ticket was passed")
+                ngx.req.set_header("Ticket", " ")
+                return
+            end
+                    
+            local uid = ngx.var.arg_uid
+
+            local ticket_string = ngx.req.get_headers().ticket
+            if ticket_string == nil then
+                -- ngx.say("No ticket was passed")
+                ngx.exit(401)
+            end
+
+            local ticket, error = tvm.check_ticket(ticket_string)
+            if error then
+                -- ngx.say("Error while checking ticket: ", error)
+                ngx.exit(403)
+            end
+        ';
+
+        proxy_connect_timeout 3;
+        proxy_read_timeout 10;
+        proxy_send_timeout 5;
+
+        proxy_set_header X-Request-Id $request_id;
+        
+        proxy_pass http://service-backend;
+
+        include /etc/nginx/sites-enabled/log_by_lua.include;
+    }
+
+    include /etc/nginx/sites-enabled/ping.include;
+
+    tskv_log /var/log/nginx/application/access.tskv mail-nginx-access-log;
+    access_log off;
+    error_log /var/log/nginx/application/error.log crit;
+}
+
+server {
+    listen [::]:443 default ssl ipv6only=on;
+    server_name mbody.mail.yandex.net;
+
+    underscores_in_headers on;
+    request_id_from_header on;
+
+    location / {
+        access_by_lua '
+            local tvm2_ticket_string = ngx.req.get_headers().x_ya_service_ticket
+            if tvm2_ticket_string ~= nil then
+                -- ngx.say("TVM2 ticket was passed")
+                ngx.req.set_header("Ticket", " ")
+                return
+            end
+                    
+            local uid = ngx.var.arg_uid
+
+            local ticket_string = ngx.req.get_headers().ticket
+            if ticket_string == nil then
+                -- ngx.say("No ticket was passed")
+                ngx.exit(401)
+            end
+
+            local ticket, error = tvm.check_ticket(ticket_string)
+            if error then
+                -- ngx.say("Error while checking ticket: ", error)
+                ngx.exit(403)
+            end
+        ';
+
+        proxy_connect_timeout 3;
+        proxy_read_timeout 10;
+        proxy_send_timeout 5;
+
+        proxy_set_header X-Request-Id $request_id;
+        
+        proxy_pass http://service-backend;
+
+        include /etc/nginx/sites-enabled/log_by_lua.include;
+    }
+
+    include /etc/nginx/sites-enabled/ping.include;
+
+    ssl_certificate /app/secrets/ssl_cert.pem;
+    ssl_certificate_key /app/secrets/ssl_cert.pem;
+
+    ssl_protocols TLSv1.2 TLSv1.1 TLSv1;
+    ssl_ciphers kEECDH+AESGCM+AES128:kEECDH+AES128:kRSA+AESGCM+AES128:kRSA+AES128:DES-CBC3-SHA:!RC4:!aNULL:!eNULL:!MD5:!EXPORT:!LOW:!SEED:!CAMELLIA:!IDEA:!PSK:!SRP:!SSLv2;
+    ssl_prefer_server_ciphers on;
+
+    ssl_session_cache   shared:SSL:128m;
+    ssl_session_timeout 28h;
+
+    tskv_log /var/log/nginx/application/access.tskv mail-nginx-access-log;
+    access_log off;
+    error_log /var/log/nginx/application/error.log crit;
+}

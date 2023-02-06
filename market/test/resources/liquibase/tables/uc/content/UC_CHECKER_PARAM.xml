@@ -1,0 +1,33 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+			http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <changeSet id="uc_checker_param" author="imelnikov" context="tables" runOnChange="true">
+        <createTable tableName="UC_CHECKER_PARAM"
+                     remarks="В данной таблице содержатся параметры для алгоритмов, записанных в базе uc_content_checker">
+            <column name="ID" type="NUMBER">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="CHECKER_ID" type="NUMBER">
+                <constraints foreignKeyName="IDX_UC_CHECKER_PARAM_C_ID" references="UC_CONTENT_CHECKER(ID)"/>
+            </column>
+            <column name="NAME" type="VARCHAR2(4000 BYTE)"/>
+            <column name="VALUE" type="VARCHAR2(4000 BYTE)"/>
+        </createTable>
+
+        <createSequence sequenceName="sq_uc_checker_param" startValue="2"/>
+    </changeSet>
+
+    <changeSet id="uc_checker_param_data" author="imelnikov" runOnChange="true" context="tables-data">
+        <loadUpdateData tableName="UC_CHECKER_PARAM" primaryKey="ID"
+                        file="UC_CHECKER_PARAM.csv" relativeToChangelogFile="true" quotchar="&quot;" >
+            <column name="ID" type="NUMERIC"/>
+            <column name="CHECKER_ID" type="NUMERIC"/>
+            <column name="NAME" type="STRING"/>
+            <column name="VALUE" type="STRING"/>
+        </loadUpdateData>
+    </changeSet>
+
+</databaseChangeLog>

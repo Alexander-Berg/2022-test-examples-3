@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <business_process_state
+            id="1"
+            queue_type="PROCESS_SEGMENT_CHECKPOINTS"
+            status="SYNC_PROCESS_SUCCEEDED"
+            sequence_id="1"
+            save_to_yt_only="true"
+            comment="Processing result: Successfully processed TRANSIT_CHANGE_OUTBOUND_VERIFICATION_CODE_REQUESTED status."
+    />
+    <business_process_state_entity_id
+            business_process_state_id="1"
+            entity_type="WAYBILL_SEGMENT"
+            entity_id="2"
+    />
+
+    <change_order_request
+            id="1"
+            order_id="1"
+            status="PROCESSING"
+            request_type="UPDATE_TRANSFER_CODES"
+            waybill_segment_id="2"
+    />
+
+    <change_order_segment_request
+            change_order_request_id="1"
+            segment_id="2"
+            required="true"
+            status="PROCESSING"
+    />
+    <change_order_segment_request
+            change_order_request_id="1"
+            segment_id="3"
+            required="true"
+            status="PROCESSING"
+    />
+
+    <business_process_state
+            id="2"
+            queue_type="CHANGE_ORDER_REQUEST"
+            status="SYNC_PROCESS_SUCCEEDED"
+            sequence_id="2"
+            save_to_yt_only="true"
+    />
+    <business_process_state
+            id="3"
+            queue_type="CREATE_BILLING_TRANSACTION_BY_SEGMENT_STATUSES"
+            status="ENQUEUED"
+            sequence_id="3"
+    />
+    <business_process_state
+            id="4"
+            queue_type="PROCESS_WAYBILL_SEGMENT_UPDATE_TRANSFER_CODES"
+            status="ASYNC_REQUEST_SENT"
+            sequence_id="4"
+    />
+    <business_process_state
+            id="5"
+            queue_type="PROCESS_WAYBILL_SEGMENT_UPDATE_TRANSFER_CODES"
+            status="ASYNC_REQUEST_SENT"
+            sequence_id="5"
+    />
+
+    <business_process_state_entity_id
+            business_process_state_id="2"
+            entity_type="CHANGE_ORDER_REQUEST"
+            entity_id="1"
+    />
+    <business_process_state_entity_id
+            business_process_state_id="3"
+            entity_type="ORDER"
+            entity_id="1"
+    />
+    <business_process_state_entity_id
+            business_process_state_id="4"
+            entity_type="CHANGE_ORDER_SEGMENT_REQUEST"
+            entity_id="1"
+    />
+    <business_process_state_entity_id
+            business_process_state_id="5"
+            entity_type="CHANGE_ORDER_SEGMENT_REQUEST"
+            entity_id="2"
+    />
+
+    <waybill_segment
+            id="1"
+    />
+    <waybill_segment
+            id="2"
+            transfer_codes='{
+                "inbound": null,
+                "outbound": {
+                    "verification": "54321",
+                    "electronicAcceptanceCertificate": null
+                },
+                "returnOutbound": null
+            }'
+    />
+    <waybill_segment
+            id="3"
+            transfer_codes='{
+                "inbound": {
+                    "verification": "54321",
+                    "electronicAcceptanceCertificate": null
+                },
+                "outbound": null,
+                "returnOutbound": null
+            }'
+    />
+    <waybill_segment
+            id="4"
+            transfer_codes='{
+                "inbound": null,
+                "outbound": {
+                    "verification": "12345",
+                    "electronicAcceptanceCertificate": null
+                },
+                "returnOutbound": null
+            }'
+    />
+
+    <waybill_segment
+            id="5"
+            transfer_codes='{
+                "inbound": null,
+                "outbound": {
+                    "verification": "12345",
+                    "electronicAcceptanceCertificate": null
+                },
+                "returnOutbound": null
+            }'
+    />
+
+    <order_history_event
+            order_id="1"
+            diff='[{"op": "replace", "path": "/waybill/1/segmentStatus", "value": "TRANSIT_CHANGE_OUTBOUND_VERIFICATION_CODE_REQUESTED", "fromValue": "PENDING"}, {"op": "add", "path": "/waybill/1/segmentStatusHistory/0", "value": {"id": 1, "status": "TRANSIT_CHANGE_OUTBOUND_VERIFICATION_CODE_REQUESTED", "statusDate": "2019-06-12T00:00:00Z", "partnerStatusDate": "2019-08-06T13:40:00Z"}}]'
+    />
+    <order_history_event
+            order_id="1"
+            diff='[{"op": "add", "path": "/changeOrderRequests/0", "value": {"id": 1, "reason": null, "status": "PROCESSING", "comment": null, "requestType": "UPDATE_TRANSFER_CODES", "changeOrderRequestPayloads": []}}]'
+    />
+    <order_history_event
+            order_id="1"
+            diff='[{"op": "replace", "path": "/waybill/1/transferCodes/outbound/verification", "value": "54321", "fromValue": "12345"}, {"op": "replace", "path": "/waybill/2/transferCodes/inbound/verification", "value": "54321", "fromValue": "12345"}]'
+    />
+</dataset>

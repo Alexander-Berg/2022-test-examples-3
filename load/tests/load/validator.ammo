@@ -1,0 +1,35 @@
+[Host: tank-validator.test.in.yandex-team.ru]
+997 /config/validate.json
+autostop:
+    autostop: ['time(5000,20)', 'http(4xx,30%,5)', 'http(5xx,10%,3)', 'net(1xx,10,5)']
+bfg:
+    package: yandextank.plugins.Bfg
+console:
+    enabled: false
+phantom:
+    address: '[tank05y.load.yandex.net]:8080'
+    ammo_type: phantom
+    ammofile: 'url.ammo'
+    header_http: '1.1'
+    headers:
+      - "[Host: tank05y.load.yandex.net]"
+      - "[Connection: Keep-Alive]"
+    instances: 10000
+#    load_profile: {load_type: instances, schedule: 'line(1,50,1m) step(50,3000,50,1m)'}
+    load_profile: {load_type: rps, schedule: 'const(1, 5m)'}
+    package: yandextank.plugins.Phantom
+    phantom_http_entity: 30M
+    timeout: '120'
+    writelog: proto_warning
+telegraf: {enabled: false, package: yandextank.plugins.Telegraf}
+uploader:
+    ignore_target_lock: true
+    enabled: true
+    operator: ligreen
+    package: yandextank.plugins.DataUploader
+    task: LOAD-847
+neuploader:
+  enabled: true
+  package: yandextank.plugins.NeUploader
+  api_address: https://volta-back.yandex-team.ru/
+

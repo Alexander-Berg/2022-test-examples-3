@@ -1,0 +1,278 @@
+<dataset>
+    <booked_time_slot
+            id="1"
+            calendaring_service_id="1000"
+            gate_id="1"
+            from_date="2021-08-02 10:00:00.000000"
+            to_date="2021-08-02 11:00:00.000000"/>
+    <booked_time_slot
+            id="2"
+            calendaring_service_id="2000"
+            gate_id="2"
+            from_date="2021-08-01 22:00:00.000000"
+            to_date="2021-08-01 23:00:00.000000"/>
+
+    <!--partner-FF-->
+    <transportation_unit id="3" status="DO_NOT_NEED_TO_SEND" type='OUTBOUND' market_id="147" logistic_point_id="0"/>
+    <transportation_unit id="4" status="ARRIVED" type='INBOUND' partner_id="4" logistic_point_id="2"
+                         planned_interval_end="2021-08-10 22:00:00.000000" request_id="1" external_id="0000000623"/>
+
+    <transportation_unit id="9" status="DO_NOT_NEED_TO_SEND" type='OUTBOUND' market_id="134" logistic_point_id="0"/>
+    <transportation_unit id="10" status="ACCEPTED" type='INBOUND' partner_id="4" logistic_point_id="2"
+                         planned_interval_end="2021-07-31 22:00:00.000000" request_id="2" external_id="0000000624"/>
+
+    <transportation_unit id="13" status="ACCEPTED" type='OUTBOUND' market_id="147" partner_id="3"
+                         logistic_point_id="64033" request_id="5" external_id="0000000625"
+                         planned_interval_end="2021-07-31 22:00:00.000000"/>
+    <transportation_unit id="14" status="DO_NOT_NEED_TO_SEND" type='INBOUND' partner_id="4" logistic_point_id="2"
+                         planned_interval_end="2021-08-01 22:00:00.000000" request_id="6"/>
+
+    <status_history id="1" type="TRANSPORTATION_UNIT" entity_id="4" new_status="ARRIVED" old_status="ACCEPTED"
+                    changed_at="2022-07-22 12:05:00"/>
+
+    <movement id="4" status="DRAFT"/>
+    <movement id="5" status="DRAFT"/>
+    <movement id="10" status="DRAFT"/>
+
+    <transportation id="1" status="INBOUND_SENT" outbound_unit_id="3" inbound_unit_id="4" movement_id="4"
+                    transportation_source="FFWF" transportation_type="XDOC_PARTNER_SUPPLY_TO_FF" regular="false"
+                    created="2021-07-23 12:00:00.000000"/>
+
+    <transportation id="3" status="INBOUND_SENT" outbound_unit_id="9" inbound_unit_id="10" movement_id="5"
+                    transportation_source="FFWF" transportation_type="XDOC_PARTNER_SUPPLY_TO_FF" regular="false"
+                    created="2021-07-23 13:00:00.000000"/>
+
+    <transportation id="5" status="INBOUND_SENT" outbound_unit_id="13" inbound_unit_id="14" movement_id="10"
+                    transportation_source="FFWF" transportation_type="XDOC_PARTNER_SUPPLY_TO_FF" regular="false"
+                    subtype="BREAK_BULK_XDOCK" created="2021-07-23 13:00:00.000000"/>
+
+
+    <!--partner-DC-->
+    <transportation_unit id="5" status="DO_NOT_NEED_TO_SEND" type='OUTBOUND' market_id="147" logistic_point_id="0"/>
+    <transportation_unit id="6" status="PROCESSED" type='INBOUND' partner_id="3" logistic_point_id="1"
+                         planned_interval_start="2021-07-31 22:00:00.000000" external_id="0000064030" request_id="3"
+                         actual_date_time="2021-07-26 23:10:00.000000"/>
+
+    <transportation_unit id="11" status="DO_NOT_NEED_TO_SEND" type='OUTBOUND' market_id="134" logistic_point_id="0"/>
+    <transportation_unit id="12" status="PROCESSED" type='INBOUND' partner_id="3" logistic_point_id="1"
+                         planned_interval_start="2021-07-30 22:00:00.000000" external_id="0000064031" request_id="4"
+                         actual_date_time="2021-07-26 23:20:00.000000"/>
+
+    <movement id="6" status="DO_NOT_NEED_TO_SEND" market_id="147"/>
+    <movement id="7" status="DO_NOT_NEED_TO_SEND" market_id="134"/>
+
+    <transportation id="2" status="RECEIVED" outbound_unit_id="5" inbound_unit_id="6" movement_id="6"
+                    transportation_source="FFWF" transportation_type="XDOC_PARTNER_SUPPLY_TO_DISTRIBUTION_CENTER"
+                    regular="false" created="2021-07-23 12:15:00.000000"/>
+    <transportation id="4" status="WAITING_DEPARTURE" outbound_unit_id="11" inbound_unit_id="12" movement_id="7"
+                    transportation_source="FFWF" transportation_type="XDOC_PARTNER_SUPPLY_TO_DISTRIBUTION_CENTER"
+                    regular="false" created="2021-07-23 13:30:00.000000"/>
+
+    <!--    DC-FF-->
+    <transportation_unit id="7" status="PROCESSED" type='OUTBOUND' partner_id="3" logistic_point_id="1"
+                         planned_interval_start="2021-07-30 21:00:00.000000"
+                         planned_interval_end="2021-07-30 22:00:00.000000"
+                         actual_date_time="2021-07-30 23:00:00.000000"/>
+    <transportation_unit id="8" status="ACCEPTED" type='INBOUND' partner_id="4" logistic_point_id="2"
+                         planned_interval_start="2021-07-31 21:00:00.000000"
+                         planned_interval_end="2021-07-31 22:00:00.000000"/>
+
+    <movement id="8" status="CONFIRMED" partner_id="5" arrived_at="2022-07-22 12:00:00"/>
+    <transportation id="50" status="DEPARTED" outbound_unit_id="7" inbound_unit_id="8" movement_id="8"
+                    transportation_source="LMS_TM_MOVEMENT" transportation_type="XDOC_TRANSPORT" regular="false"
+                    created="2021-07-10 12:30:00.000000"/>
+
+    <movement_courier id="1" movement_id="8" car_number="A123BC777" status="NEW"/>
+
+    <!--    DC-FF BBXD-->
+    <transportation_unit id="70" status="PROCESSED" type='OUTBOUND' partner_id="3" logistic_point_id="1"
+                         external_id="000000002"
+                         planned_interval_end="2021-07-30 22:00:00.000000"
+                         actual_date_time="2021-08-01 23:00:00.000000"
+                         booked_time_slot_id="2"/>
+    <transportation_unit id="80" status="ACCEPTED" type='INBOUND' partner_id="4" logistic_point_id="2"
+                         external_id="000000003"
+                         planned_interval_start="2021-08-01 20:00:00.000000"
+                         planned_interval_end="2021-08-02 22:00:00.000000"
+                         booked_time_slot_id="1"/>
+
+    <movement id="9" status="CONFIRMED" partner_id="5"/>
+    <transportation id="60" status="DEPARTED" outbound_unit_id="70" inbound_unit_id="80" movement_id="9"
+                    transportation_source="TM_MANUAL" transportation_type="XDOC_TRANSPORT" regular="false"
+                    subtype="BREAK_BULK_XDOCK" created="2021-07-10 12:30:00.000000"/>
+
+    <!--tags-->
+    <tag transportation_id="1" code="AXAPTA_ID" value="Зп-370098316"/>
+
+    <tag transportation_id="1" code="SUPPLIER_ID" value="111"/>
+    <tag transportation_id="3" code="SUPPLIER_ID" value="222"/>
+    <tag transportation_id="5" code="SUPPLIER_ID" value="333"/>
+
+    <tag transportation_id="50" code="FFWF_INCLUDED_REQUEST_ID_FACT" value="1"/>
+    <tag transportation_id="50" code="FFWF_INCLUDED_REQUEST_ID_FACT" value="2"/>
+
+    <tag transportation_id="60" code="FFWF_INCLUDED_REQUEST_ID_FACT" value="6"/>
+
+    <tag transportation_id="1" code="FFWF_ROOT_REQUEST_ID" value="1"/>
+    <tag transportation_id="2" code="FFWF_ROOT_REQUEST_ID" value="1"/>
+
+    <tag transportation_id="3" code="FFWF_ROOT_REQUEST_ID" value="2"/>
+    <tag transportation_id="4" code="FFWF_ROOT_REQUEST_ID" value="2"/>
+
+    <tag transportation_id="2" code="AXAPTA_MOVEMENT_ORDER_ID" value="ЗПер0011951"/>
+
+    <tag transportation_id="5" code="FFWF_OUTBOUND_PARENT_SERVICE_REQUEST_ID" value="000000001"/>
+
+    <!--info-->
+
+    <!--1p-->
+    <transportation_legal_info transportation_id="1" market_id="147" inn="INN1" legal_name="Yandex"
+                               ogrn="ogrn1" legal_type="legal_type" legal_address="legal_address1" url="url"/>
+    <transportation_legal_info transportation_id="2" market_id="147" inn="INN1" legal_name="Yandex"
+                               ogrn="ogrn1" legal_type="legal_type" legal_address="legal_address1" url="url"/>
+    <!--3p-->
+    <transportation_legal_info transportation_id="3" market_id="134" inn="INN2" legal_name="Romashka"
+                               ogrn="ogrn2" legal_type="legal_type" legal_address="legal_address2" url="url"/>
+    <transportation_legal_info transportation_id="4" market_id="134" inn="INN2" legal_name="Romashka"
+                               ogrn="ogrn2" legal_type="legal_type" legal_address="legal_address2" url="url"/>
+    <!--BBXD-->
+    <transportation_legal_info transportation_id="5" market_id="147" inn="INN1" legal_name="Yandex"
+                               ogrn="ogrn1" legal_type="legal_type" legal_address="legal_address1" url="url"/>
+
+    <logistics_point_metadata transportation_unit_id="6" logistics_point_id="1" name="РЦ1"/>
+    <logistics_point_metadata transportation_unit_id="12" logistics_point_id="1" name="РЦ1"/>
+
+    <logistics_point_metadata transportation_unit_id="4" logistics_point_id="2" name="Томилино"/>
+    <logistics_point_metadata transportation_unit_id="10" logistics_point_id="2" name="Томилино"/>
+
+    <transportation_partner_info transportation_id="50" partner_id="5" partner_name="Перевозчик"/>
+    <transportation_partner_info transportation_id="60" partner_id="5" partner_name="Перевозчик"/>
+    <transportation_partner_info transportation_id="2" partner_id="3" partner_name="РЦ1"/>
+    <transportation_partner_info transportation_id="4" partner_id="3" partner_name="РЦ1"/>
+    <transportation_partner_info transportation_id="1" partner_id="4" partner_name="Томилино"/>
+    <transportation_partner_info transportation_id="3" partner_id="4" partner_name="Томилино"/>
+
+    <!--registers-->
+    <register id="7" type="FACT" status="NEW" date="2021-07-26 23:10:00.000000 +0000"/>
+    <register id="8" type="FACT" status="NEW" date="2021-07-26 23:10:00.000000 +0000"/>
+    <register id="9" type="PLAN" status="SENT" date="2021-07-23 15:00:00.000000 +0000"/>
+    <register id="10" type="PLAN" status="SENT" date="2021-07-23 15:00:00.000000 +0000"/>
+    <register id="11" type="PLAN" status="DO_NOT_NEED_TO_SEND" date="2021-07-23 15:00:00.000000 +0000"/>
+    <register id="12" type="PLAN" status="ACCEPTED" date="2021-07-23 15:00:00.000000 +0000"/>
+    <register id="13" type="FACT" status="DO_NOT_NEED_TO_SEND" date="2021-07-23 15:00:00.000000 +0000"/>
+
+    <transportation_unit_register register_id="7" transportation_unit_id="6"/>
+    <transportation_unit_register register_id="8" transportation_unit_id="12"/>
+    <transportation_unit_register register_id="9" transportation_unit_id="4"/>
+    <transportation_unit_register register_id="10" transportation_unit_id="10"/>
+    <transportation_unit_register register_id="11" transportation_unit_id="14"/>
+    <transportation_unit_register register_id="12" transportation_unit_id="13"/>
+    <transportation_unit_register register_id="13" transportation_unit_id="13"/>
+
+    <register_unit register_id="7" type="BOX"/>
+    <register_unit register_id="7" type="BOX"/>
+    <register_unit register_id="7" type="BOX"/>
+    <register_unit register_id="7" type="BOX"/>
+
+    <register_unit register_id="8" type="PALLET"/>
+    <register_unit register_id="8" type="PALLET"/>
+    <register_unit register_id="8" type="PALLET"/>
+
+    <register_unit register_id="9" type="ITEM" unit_meta='{"contractor":{"id":777, "name":"Oduvanchik"}}'
+                   counts='[{"quantity": 5, "countType": "FIT"}]'/>
+    <register_unit register_id="9" type="ITEM" unit_meta='{"contractor":{"id":777, "name":"Oduvanchik"}}'
+                   counts='[{"quantity": 20, "countType": "FIT"}]'/>
+    <register_unit register_id="9" type="ITEM" unit_meta='{"contractor":{"id":777, "name":"Oduvanchik"}, "cargoTypes": ["CHILLED_FOOD"]}'/>
+    <register_unit register_id="9" type="ITEM" unit_meta='{"contractor":{"id":777, "name":"Oduvanchik"}}'/>
+    <register_unit register_id="9" type="ITEM" unit_meta='{"contractor":{"id":777, "name":"Oduvanchik"}}'/>
+    <register_unit register_id="9" type="ITEM" unit_meta='{"contractor":{"id":777, "name":"Oduvanchik"}}'/>
+    <register_unit register_id="9" type="ITEM" unit_meta='{"contractor":{"id":777, "name":"Oduvanchik"}, "cargoTypes": ["VALUABLE", "JEWELRY"]}'/>
+
+    <register_unit register_id="10" type="ITEM" counts='[{"quantity": 10, "countType": "FIT"}]'/>
+    <register_unit register_id="10" type="ITEM" counts='[{"quantity": 2, "countType": "FIT"}]'/>
+    <register_unit register_id="10" type="ITEM" counts='[{"quantity": 3, "countType": "FIT"}]'/>
+    <register_unit register_id="10" type="ITEM"/>
+    <register_unit register_id="10" type="ITEM"/>
+    <register_unit register_id="10" type="ITEM" counts='[{"quantity": 15, "countType": "FIT"}]'/>
+    <register_unit register_id="10" type="ITEM"/>
+    <register_unit register_id="10" type="ITEM"/>
+    <register_unit register_id="10" type="ITEM"/>
+    <register_unit register_id="10" type="ITEM"/>
+
+    <register_unit register_id="11" type="ITEM" counts='[{"quantity": 10, "countType": "FIT"}]'/>
+    <register_unit register_id="11" type="ITEM" counts='[{"quantity": 2, "countType": "FIT"}]'/>
+    <register_unit register_id="11" type="ITEM" counts='[{"quantity": 3, "countType": "FIT"}]'/>
+    <register_unit register_id="11" type="ITEM"/>
+    <register_unit register_id="11" type="ITEM"/>
+    <register_unit register_id="11" type="ITEM" counts='[{"quantity": 15, "countType": "FIT"}]'/>
+    <register_unit register_id="11" type="ITEM"/>
+    <register_unit register_id="11" type="ITEM"/>
+    <register_unit register_id="11" type="ITEM"/>
+    <register_unit register_id="11" type="ITEM"/>
+
+    <register_unit register_id="12" type="ITEM" counts='[{"quantity": 10, "countType": "FIT"}]'/>
+    <register_unit register_id="12" type="ITEM" counts='[{"quantity": 2, "countType": "FIT"}]'/>
+    <register_unit register_id="12" type="ITEM" counts='[{"quantity": 3, "countType": "FIT"}]'/>
+    <register_unit register_id="12" type="ITEM"/>
+    <register_unit register_id="12" type="ITEM"/>
+    <register_unit register_id="12" type="ITEM" counts='[{"quantity": 15, "countType": "FIT"}]'/>
+    <register_unit register_id="12" type="ITEM"/>
+    <register_unit register_id="12" type="ITEM"/>
+    <register_unit register_id="12" type="ITEM"/>
+    <register_unit register_id="12" type="ITEM"/>
+
+    <register_unit register_id="13" type="PALLET"/>
+    <register_unit register_id="13" type="PALLET"/>
+    <register_unit register_id="13" type="PALLET"/>
+
+    <distribution_center_unit
+            logistic_point_from_id="1"
+            logistic_point_to_id="2"
+            dc_unit_id="mix-1"
+            type="PALLET"
+            frozen="true"
+            center_type="DISTRIBUTION_CENTER"
+    />
+    <distribution_center_unit
+            logistic_point_from_id="1"
+            logistic_point_to_id="2"
+            dc_unit_id="mix-2"
+            type="PALLET"
+            frozen="false"
+            center_type="DISTRIBUTION_CENTER"
+    />
+    <distribution_center_unit
+            logistic_point_from_id="1"
+            logistic_point_to_id="2"
+            dc_unit_id="pallet-for-tmu2"
+            type="PALLET"
+            inbound_external_id="TMU2"
+            frozen="false"
+            center_type="DISTRIBUTION_CENTER"
+    />
+    <distribution_center_unit
+            logistic_point_from_id="64033"
+            logistic_point_to_id="2"
+            dc_unit_id="mix-3"
+            type="PALLET"
+            frozen="true"
+            center_type="DISTRIBUTION_CENTER_WMS"
+    />
+    <distribution_center_unit
+            logistic_point_from_id="64033"
+            logistic_point_to_id="2"
+            dc_unit_id="mix-4"
+            type="PALLET"
+            frozen="false"
+            center_type="DISTRIBUTION_CENTER_WMS"
+    />
+    <distribution_center_unit
+            logistic_point_from_id="64033"
+            logistic_point_to_id="2"
+            dc_unit_id="mix-5"
+            type="PALLET"
+            frozen="false"
+            center_type="DISTRIBUTION_CENTER_WMS"
+    />
+
+</dataset>

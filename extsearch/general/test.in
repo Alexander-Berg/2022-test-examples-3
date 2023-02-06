@@ -1,0 +1,1741 @@
+Type {
+  Object {
+    Name: "NCommon"
+    ExternalInclude: "<extsearch/geo/kernel/common/kind.h>"
+    Enums {
+      Name: "EKind"
+      BaseType: "ui32"
+      Elements {
+        Name: "Unknown"
+        Value: 0
+      }
+      Elements {
+        Name: "Planet"
+        Value: 0
+        SingleBit: true
+      }
+      Elements {
+        Name: "Country"
+        Value: 1
+        SingleBit: true
+      }
+      Elements {
+        Name: "Province"
+        Value: 2
+        SingleBit: true
+      }
+      Elements {
+        Name: "Area"
+        Value: 3
+        SingleBit: true
+      }
+      Elements {
+        Name: "Locality"
+        Value: 4
+        SingleBit: true
+      }
+      Elements {
+        Name: "District"
+        Value: 5
+        SingleBit: true
+      }
+      Elements {
+        Name: "Street"
+        Value: 6
+        SingleBit: true
+      }
+      Elements {
+        Name: "Km"
+        Value: 7
+        SingleBit: true
+      }
+      Elements {
+        Name: "Route"
+        Value: 8
+        SingleBit: true
+      }
+      Elements {
+        Name: "Railway"
+        Value: 9
+        SingleBit: true
+      }
+      Elements {
+        Name: "Vegetation"
+        Value: 10
+        SingleBit: true
+      }
+      Elements {
+        Name: "Cemetery"
+        Value: 11
+        SingleBit: true
+      }
+      Elements {
+        Name: "Bridge"
+        Value: 12
+        SingleBit: true
+      }
+      Elements {
+        Name: "Metro"
+        Value: 13
+        SingleBit: true
+      }
+      Elements {
+        Name: "Hydro"
+        Value: 14
+        SingleBit: true
+      }
+      Elements {
+        Name: "Other"
+        Value: 15
+        SingleBit: true
+      }
+      Elements {
+        Name: "House"
+        Value: 16
+        SingleBit: true
+      }
+      Elements {
+        Name: "Airport"
+        Value: 17
+        SingleBit: true
+      }
+      Elements {
+        Name: "Region"
+        Value: 18
+        SingleBit: true
+      }
+      Elements {
+        Name: "Station"
+        Value: 19
+        SingleBit: true
+      }
+    }
+  }
+}
+Type {
+  Enum {
+    Name: "EPrecision"
+    BaseType: "ui8"
+    Elements {
+      Name: "Other"
+      Value: 0
+      TextValue: "other"
+    }
+    Elements {
+      Name: "Street"
+      Value: 1
+      TextValue: "street"
+    }
+    Elements {
+      Name: "Near"
+      Value: 2
+      TextValue: "near"
+    }
+    Elements {
+      Name: "Number"
+      Value: 3
+      TextValue: "number"
+    }
+    Elements {
+      Name: "Exact"
+      Value: 4
+      TextValue: "exact"
+    }
+  }
+}
+Type {
+  Enum {
+    Name: "EPhoneType"
+    BaseType: "ui8"
+    Elements {
+      Name: "Phone"
+      Value: 0
+      TextValue: "phone"
+    }
+    Elements {
+      Name: "Fax"
+      Value: 1
+      TextValue: "fax"
+    }
+    Elements {
+      Name: "PhoneFax"
+      Value: 2
+      TextValue: "phone_fax"
+    }
+  }
+}
+Type {
+  Alias {
+    Name: "TRubricId"
+    Type {
+      Name: "int64"
+    }
+  }
+}
+Type {
+  Alias {
+    Name: "TChainId"
+    Type {
+      Name: "int64"
+    }
+  }
+}
+Type {
+  Alias {
+    Name: "TGeoId"
+    Type {
+      Name: "int64"
+    }
+  }
+}
+Type {
+  Alias {
+    Name: "TOwnerId"
+    Type {
+      Name: "int64"
+    }
+  }
+}
+Type {
+  Alias {
+    Name: "TAddressFragmentId"
+    ExternalInclude: "<extsearch/geo/kernel/mmstypes/common/address_fragment_id.h>"
+    Type {
+      Name: "uint32"
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TLink"
+    Fields {
+      Name: "Type"
+      Index: 1
+      Type {
+        Name: "string"
+      }
+    }
+    Fields {
+      Name: "Aref"
+      Index: 2
+      Type {
+        Name: "string"
+      }
+    }
+    Fields {
+      Name: "Url"
+      Index: 3
+      Type {
+        Name: "string"
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TRating"
+    Fields {
+      Name: "Score"
+      Index: 1
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "Ratings"
+      Index: 2
+      Type {
+        Name: "uint32"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "Reviews"
+      Index: 3
+      Type {
+        Name: "uint32"
+      }
+      DefaultValue: "0"
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TMarketFeed"
+    Fields {
+      Name: "Id"
+      Index: 1
+      Type {
+        Name: "string"
+      }
+    }
+    Fields {
+      Name: "HasMarketPoint"
+      Index: 2
+      Type {
+        Name: "bool"
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TLocalizedString"
+    ExternalInclude: "<extsearch/geo/kernel/mmstypes/common/i18n.h>"
+    Fields {
+      Name: "LocaleToData"
+      MmsName: "GetImpl()"
+      Index: 1
+      Type {
+        Name: "map"
+        Map {
+          KeyType: "uint64"
+          ValueType: "string"
+        }
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "NGeolib_TPoint2"
+    MmsName: "NGeosearch::NGeolib::TPoint2"
+    ProtoName: "TPoint"
+    ExternalInclude: "<extsearch/geo/kernel/geolib/point.h>"
+    Fields {
+      Name: "X"
+      Required: true
+      Index: 1
+      Type {
+        Name: "double"
+      }
+    }
+    Fields {
+      Name: "Y"
+      Required: true
+      Index: 2
+      Type {
+        Name: "double"
+      }
+    }
+  }
+}
+Type {
+  Alias {
+    Name: "TPoint"
+    Type {
+      Name: "NGeolib_TPoint2"
+    }
+  }
+}
+Type {
+  Object {
+    Name: "NGeolib_TBoundingBox"
+    MmsName: "NGeosearch::NGeolib::TBoundingBox"
+    ProtoName: "TSpan"
+    ExternalInclude: "<extsearch/geo/kernel/geolib/bounding_box.h>"
+    Fields {
+      Name: "LowerCorner"
+      MmsName: "GetLowerCorner()"
+      Required: true
+      Index: 1
+      Type {
+        Name: "TPoint"
+      }
+    }
+    Fields {
+      Name: "UpperCorner"
+      MmsName: "GetUpperCorner()"
+      Required: true
+      Index: 2
+      Type {
+        Name: "TPoint"
+      }
+    }
+  }
+}
+Type {
+  Alias {
+    Name: "TSpan"
+    Type {
+      Name: "NGeolib_TBoundingBox"
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TTimeInterval"
+    Aliases {
+      Name: "TMinutesFromWeekStart"
+      Type {
+        Name: "uint16"
+      }
+    }
+    Fields {
+      Name: "From"
+      Required: true
+      Index: 1
+      Type {
+        Name: "TMinutesFromWeekStart"
+      }
+    }
+    Fields {
+      Name: "To"
+      Required: true
+      Index: 2
+      Type {
+        Name: "TMinutesFromWeekStart"
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "THours"
+    Aliases {
+      Name: "TTimezoneOffsetMinutes"
+      Type {
+        Name: "int16"
+      }
+    }
+    Fields {
+      Name: "Intervals"
+      Index: 1
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TTimeInterval"
+        }
+      }
+    }
+    Fields {
+      Name: "TimezoneOffset"
+      Index: 2
+      Type {
+        Name: "TTimezoneOffsetMinutes"
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TPhone"
+    Fields {
+      Name: "Formatted"
+      Index: 1
+      Type {
+        Name: "string"
+      }
+    }
+    Fields {
+      Name: "Country"
+      Index: 2
+      Type {
+        Name: "string"
+      }
+    }
+    Fields {
+      Name: "Prefix"
+      Index: 3
+      Type {
+        Name: "string"
+      }
+    }
+    Fields {
+      Name: "Number"
+      Index: 4
+      Type {
+        Name: "string"
+      }
+    }
+    Fields {
+      Name: "Ext"
+      Index: 5
+      Type {
+        Name: "string"
+      }
+    }
+    Fields {
+      Name: "Info"
+      Index: 6
+      Type {
+        Name: "TLocalizedString"
+      }
+    }
+    Fields {
+      Name: "Type"
+      Index: 7
+      Type {
+        Name: "EPhoneType"
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TFeatureData"
+    Aliases {
+      Name: "TFeatureValues"
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "string"
+        }
+      }
+    }
+    Fields {
+      Name: "Id"
+      Index: 1
+      Type: {
+        Name: "string"
+      }
+    }
+    Fields {
+      Name: "Values"
+      Index: 2
+      Type: {
+        Name: "TFeatureValues"
+      }
+    }
+    Fields {
+      Name: "Aref"
+      Index: 3
+      Type: {
+        Name: "string"
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TCompany"
+    Aliases {
+      Name: "TPhones"
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TPhone"
+        }
+      }
+    }
+    Aliases {
+      Name: "TLinks"
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TLink"
+        }
+      }
+    }
+    Aliases {
+      Name: "TRubrics"
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TRubricId"
+        }
+      }
+    }
+    Aliases {
+      Name: "TFeatures"
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TFeatureData"
+        }
+      }
+    }
+    Aliases {
+      Name: "TMarketFeeds"
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TMarketFeed"
+        }
+      }
+    }
+    Aliases {
+      Name: "TGeoIds"
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TGeoId"
+        }
+      }
+    }
+    Fields {
+      Name: "Ids"
+      Index: 1
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "string"
+        }
+      }
+    }
+    Fields {
+      Name: "Name"
+      Index: 2
+      Type {
+        Name: "TLocalizedString"
+      }
+    }
+    Fields {
+      Name: "Shortname"
+      Index: 3
+      Type {
+        Name: "TLocalizedString"
+      }
+    }
+    Fields {
+      Name: "Synonyms"
+      Index: 4
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "string"
+        }
+      }
+    }
+    Fields {
+      Name: "Urls"
+      Index: 5
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "string"
+        }
+      }
+    }
+    Fields {
+      Name: "Emails"
+      Index: 6
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "string"
+        }
+      }
+    }
+    Fields {
+      Name: "Rubrics"
+      Index: 7
+      Type {
+        Name: "TRubrics"
+      }
+    }
+    Fields {
+      Name: "ChainId"
+      MmsName: ""
+      Index: 8
+      Type {
+        Name: "TChainId"
+      }
+    }
+    Fields {
+      Name: "Providers"
+      Index: 9
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "string"
+        }
+      }
+    }
+    Fields {
+      Name: "Owners"
+      Index: 10
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TOwnerId"
+        }
+      }
+    }
+    Fields {
+      Name: "MarketFeeds"
+      Index: 11
+      Type {
+        Name: "TMarketFeeds"
+      }
+    }
+    Fields {
+      Name: "Address"
+      Index: 12
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TAddressFragmentId"
+        }
+      }
+    }
+    Fields {
+      Name: "AddressLine"
+      Index: 13
+      Type {
+        Name: "TLocalizedString"
+      }
+    }
+    Fields {
+      Name: "Kind"
+      Index: 14
+      Type {
+        Name: "NCommon/EKind"
+      }
+      DefaultValue: "Unknown"
+      DefaultValueMms: "NCommon::EKind::Unknown"
+    }
+    Fields {
+      Name: "Precision"
+      Index: 15
+      Type {
+        Name: "EPrecision"
+      }
+      DefaultValue: "Other"
+      DefaultValueMms: "EPrecision::Other"
+    }
+    Fields {
+      Name: "GeoIds"
+      Index: 16
+      Type {
+        Name: "TGeoIds"
+      }
+    }
+    Fields {
+      Name: "CityGeoId"
+      Index: 17
+      Type {
+        Name: "TGeoId"
+      }
+    }
+    Fields {
+      Name: "Point"
+      Index: 18
+      Type {
+        Name: "TPoint"
+      }
+    }
+    Fields {
+      Name: "Span"
+      Index: 19
+      Type {
+        Name: "TSpan"
+      }
+    }
+    Fields {
+      Name: "Hours"
+      Index: 20
+      Type {
+        Name: "THours"
+      }
+    }
+    Fields {
+      Name: "Phones"
+      Index: 21
+      Type {
+        Name: "TPhones"
+      }
+    }
+    Fields {
+      Name: "Links"
+      Index: 22
+      Type {
+        Name: "TLinks"
+      }
+    }
+    Fields {
+      Name: "Features"
+      Index: 23
+      Type {
+        Name: "TFeatures"
+      }
+    }
+    Fields {
+      Name: "FeatureData"
+      Index: 24
+      Type {
+        Name: "string"
+      }
+    }
+    Fields {
+      Name: "FastFeaturesGroups"
+      Index: 25
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "string"
+        }
+      }
+    }
+    Fields {
+      Name: "Timestamp"
+      Index: 26
+      Type {
+        Name: "uint32"
+      }
+    }
+    Fields {
+      Name: "Rating"
+      Index: 27
+      Type {
+        Name: "TRating"
+      }
+      OptionalMms: true
+    }
+    Fields {
+      Name: "SnippetRubric"
+      Index: 28
+      Type {
+        Name: "TRubricId"
+      }
+      OptionalMms: true
+    }
+    Fields {
+      Name: "Flags"
+      Index: 29
+      Type {
+        Name: "int32"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "MainRubricCount"
+      Index: 30
+      Type {
+        Name: "uint8"
+      }
+      DefaultValue: "0"
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TAddressFragment"
+    Fields {
+      Name: "Kind"
+      Required: true
+      Index: 1
+      Type {
+        Name: "uint32"
+      }
+    }
+    Fields {
+      Name: "Names"
+      Index: 2
+      Type {
+        Name: "map"
+        Map {
+          KeyType: "uint64"
+          ValueType: "string"
+        }
+      }
+    }
+    Fields {
+      Name: "CountryCode"
+      Required: true
+      Index: 3
+      Type {
+        Name: "string"
+      }
+    }
+    Fields {
+      Name: "PostalCode"
+      Required: true
+      Index: 4
+      Type {
+        Name: "string"
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TAddressFragments"
+    Fields {
+      Name: "Items"
+      Index: 1
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TAddressFragment"
+        }
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TGeoOwner"
+    Fields {
+      Name: "geoId"
+      Required: true
+      Index: 1
+      Type {
+        Name: "TGeoId"
+      }
+    }
+    Fields {
+      Name: "ownerId"
+      Required: true
+      Index: 2
+      Type {
+        Name: "TOwnerId"
+      }
+    }
+    Enums {
+      Name: "Const"
+      Elements {
+        Name: "ANY_GEOID"
+        Value: -1
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TMmsI18nString"
+    ExternalInclude: "<extsearch/geo/kernel/mmstypes/common/i18n.h>"
+    Fields {
+      Name: "Value"
+      Required: true
+      Index: 1
+      Type: {
+        Name: "string"
+      }
+    }
+    Fields {
+      Name: "Locale"
+      Required: true
+      Index: 2
+      Type: {
+        Name: "string"
+      }
+    }
+  }
+}
+Type {
+  Alias {
+    Name: "TMmsI18nStringSeq"
+    ExternalInclude: "<extsearch/geo/kernel/mmstypes/common/i18n.h>"
+    Type {
+      Name: "vector"
+      Sequence {
+        ElementType: "TMmsI18nString"
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TChainNames"
+    Fields {
+      Name: "Items"
+      Index: 1
+      Type: {
+        Name: "TMmsI18nStringSeq"
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TChainImpl"
+    Aliases {
+      Name: "TOwners"
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TGeoOwner"
+        }
+      }
+    }
+    Fields {
+      Name: "Id"
+      Required: true
+      Index: 1
+      Type {
+        Name: "TChainId"
+      }
+    }
+    Fields {
+      Name: "Name"
+      Index: 2
+      Type {
+        Name: "TLocalizedString"
+      }
+    }
+    Fields {
+      Name: "Rubrics"
+      Index: 3
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TRubricId"
+        }
+      }
+    }
+    Fields {
+      Name: "Phones"
+      Index: 4
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TPhone"
+        }
+      }
+    }
+    Fields {
+      Name: "Urls"
+      Index: 5
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "string"
+        }
+      }
+    }
+    Fields {
+      Name: "Emails"
+      Index: 6
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "string"
+        }
+      }
+    }
+    Fields {
+      Name: "Owners"
+      Index: 7
+      Type {
+        Name: "TOwners"
+      }
+    }
+    Fields {
+      Name: "Children"
+      Index: 8
+      Type {
+        Name: "uint32"
+      }
+    }
+  }
+}
+Type {
+  Enum {
+    Name: "EFeatureType"
+    BaseType: "ui8"
+    Elements {
+      Name: "Bool"
+      Value: 0
+      TextValue: "bool"
+    }
+    Elements {
+      Name: "Enum"
+      Value: 1
+      TextValue: "enum"
+    }
+    Elements {
+      Name: "Text"
+      Value: 2
+      TextValue: "text"
+    }
+  }
+}
+Type {
+  Enum {
+    Name: "EFeatureDisplayMode"
+    BaseType: "ui8"
+    Elements {
+      Name: "AlwaysHide"
+      Value: 0
+      TextValue: "hide"
+    }
+    Elements {
+      Name: "AlwaysShow"
+      Value: 1
+      TextValue: "always"
+    }
+    Elements {
+      Name: "ShowOnSearchRequest"
+      Value: 2
+      TextValue: "search-request"
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TFeatureImpl"
+    Aliases {
+      Name: "TId"
+      Type {
+        Name: "string"
+      }
+    }
+    Aliases {
+      Name: "TValueId"
+      Type {
+        Name: "string"
+      }
+    }
+    Aliases {
+      Name: "TValueText"
+      Type {
+        Name: "TLocalizedString"
+      }
+    }
+    Aliases {
+      Name: "TEnumValues"
+      Type {
+        Name: "map"
+        Map {
+          KeyType: "TValueId"
+          ValueType: "TValueText"
+        }
+      }
+    }
+    Fields {
+      Name: "Id"
+      Required: true
+      Index: 1
+      Type {
+        Name: "TId"
+      }
+    }
+    Fields {
+      Name: "Type"
+      Index: 2
+      Type {
+        Name: "EFeatureType"
+      }
+    }
+    Fields {
+      Name: "Name"
+      Index: 3
+      Type {
+        Name: "TLocalizedString"
+      }
+    }
+    Fields {
+      Name: "IsNameHidden"
+      Index: 4
+      Type {
+        Name: "bool"
+      }
+    }
+    Fields {
+      Name: "EnumValues"
+      Index: 5
+      Type {
+        Name: "TEnumValues"
+      }
+    }
+    Fields {
+      Name: "FastFeaturesGroup"
+      Index: 6
+      Type {
+        Name: "string"
+      }
+    }
+    Fields {
+      Name: "DisplayMode"
+      Index: 7
+      Type {
+        Name: "EFeatureDisplayMode"
+      }
+      DefaultValue: "AlwaysShow"
+      DefaultValueMms: "EFeatureDisplayMode::AlwaysShow"
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TFeatures"
+    Fields {
+      Name: "Items"
+      Index: 1
+      Type: {
+        Name: "vector"
+        Sequence {
+          ElementType: "TFeatureImpl"
+        }
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TFactors"
+    Fields {
+      Name: "CompanyId"
+      Required: true
+      Index: 1
+      Type {
+        Name: "string"
+      }
+    }
+    Fields {
+      Name: "X"
+      Index: 2
+      Type {
+        Name: "uint32"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "Y"
+      Index: 3
+      Type {
+        Name: "uint32"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "Reserved1"
+      Index: 4
+      Type: {
+        Name: "uint32"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "DynamicBooking"
+      Index: 5
+      Type {
+        Name: "uint32"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "Foursquare"
+      Index: 6
+      Type {
+        Name: "uint32"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "FeatureCount"
+      Index: 7
+      Type {
+        Name: "uint16"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "SiblingCount"
+      Index: 8
+      Type {
+        Name: "uint16"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "Flags"
+      Index: 9
+      Type {
+        Name: "uint16"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "PhotoCount"
+      Index: 10
+      Type {
+        Name: "uint16"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "Precision"
+      Index: 11
+      Type {
+        Name: "EPrecision"
+      }
+      DefaultValue: "Other"
+      DefaultValueMms: "EPrecision::Other"
+    }
+    Fields {
+      Name: "HostRank"
+      Index: 12
+      Type {
+        Name: "uint8"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "SearchYaBar"
+      Index: 13
+      Type {
+        Name: "uint8"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "SearchYaBarCoreHost"
+      Index: 14
+      Type {
+        Name: "uint8"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "SearchOwnerClicksPCTR"
+      Index: 15
+      Type {
+        Name: "uint8"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgShows"
+      Index: 16
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgClicks"
+      Index: 17
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgPCTR"
+      Index: 18
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgShowsOrg1Query"
+      Index: 19
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgClicksOrg1Query"
+      Index: 20
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgPCTROrg1Query"
+      Index: 21
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgShowsRubricQuery"
+      Index: 22
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgClicksRubricQuery"
+      Index: 23
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgPCTRRubricQuery"
+      Index: 24
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgShowsFixed"
+      Index: 25
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgDeepClicks"
+      Index: 26
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgUrlShows"
+      Index: 27
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgUrlDeepClicks"
+      Index: 28
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgRubricShows"
+      Index: 29
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgRubricShortClicks"
+      Index: 30
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgRubricSuperLongClicks"
+      Index: 31
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgRubricDeepClicks"
+      Index: 32
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgRegionSuperLongClicks"
+      Index: 33
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "OrgRegionDeepClicks"
+      Index: 34
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "GoodReviewRatio"
+      Index: 35
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "FreshReviewRatio"
+      Index: 36
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "GoodFreshReviewRatio"
+      Index: 37
+      Type {
+        Name: "float"
+      }
+      DefaultValue: "0"
+    }
+    Fields {
+      Name: "ExpFactors"
+      Index: 38
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "float"
+        }
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TProvider"
+    Fields {
+      Name: "Id"
+      Required: true
+      Index: 1
+      Type {
+        Name: "string"
+      }
+    }
+    Fields {
+      Name: "Name"
+      Index: 2
+      Type {
+        Name: "TLocalizedString"
+      }
+    }
+    Fields {
+      Name: "Uri"
+      Index: 3
+      Type {
+        Name: "TLocalizedString"
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TProviders"
+    Fields {
+      Name: "Items"
+      Index: 1
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TProvider"
+        }
+      }
+    }
+  }
+}
+Type {
+  Enum {
+    Name: "EFilterType"
+    BaseType: "i8"
+    Elements {
+      Name: "Special"
+      Value: 0
+      TextValue: "special"
+    }
+    Elements {
+      Name: "Feature"
+      Value: 1
+      TextValue: "feature"
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TFilterImpl"
+    Fields {
+      Name: "Type"
+      Index: 1
+      Type {
+        Name: "EFilterType"
+      }
+    }
+    Fields {
+      Name: "Id"
+      Required: true
+      Index: 2
+      Type {
+        Name: "string"
+      }
+    }
+  }
+}
+Type {
+  Enum {
+    Name: "ESerpDataType"
+    BaseType: "ui8"
+    Elements {
+      Name: "None"
+      Value: 0
+      TextValue: ""
+    }
+    Elements {
+      Name: "Link"
+      Value: 1
+      TextValue: "link"
+    }
+    Elements {
+      Name: "Map"
+      Value: 2
+      TextValue: "map"
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TRubricImpl"
+    Aliases {
+      Name: "TFeature"
+      Type {
+        Name: "string"
+      }
+    }
+    Aliases {
+      Name: "TSnippetFeatures"
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TFeature"
+        }
+      }
+    }
+    Aliases {
+      Name: "TAppleRubricId"
+      Type {
+        Name: "string"
+      }
+    }
+    Aliases {
+      Name: "TAppleRubrics"
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TAppleRubricId"
+        }
+      }
+    }
+    Aliases {
+      Name: "TFilterList"
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TFilterImpl"
+        }
+      }
+    }
+    Fields {
+      Name: "Id"
+      Required: true
+      Index: 1
+      Type {
+        Name: "TRubricId"
+      }
+    }
+    Fields {
+      Name: "ParentId"
+      Index: 2
+      Type {
+        Name: "TRubricId"
+      }
+    }
+    Fields {
+      Name: "Level"
+      Index: 3
+      Type {
+        Name: "int32"
+      }
+    }
+    Fields {
+      Name: "RubricClass"
+      Index: 4
+      Type {
+        Name: "string"
+      }
+    }
+    Fields {
+      Name: "Name"
+      Index: 5
+      Type {
+        Name: "TLocalizedString"
+      }
+    }
+    Fields {
+      Name: "Filters"
+      Index: 6
+      Type {
+        Name: "TFilterList"
+      }
+    }
+    Fields {
+      Name: "SnippetFeatures"
+      Index: 7
+      Type {
+        Name: "TSnippetFeatures"
+      }
+    }
+    Fields {
+      Name: "AppleRubrics"
+      Index: 8
+      Type {
+        Name: "TAppleRubrics"
+      }
+    }
+    Fields {
+      Name: "SerpData"
+      Index: 9
+      Type {
+        Name: "ESerpDataType"
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TRubrics"
+    Fields {
+      Name: "Items"
+      Index: 1
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TRubricImpl"
+        }
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TRubricEx"
+    Fields {
+      Name: "Id"
+      Required: true
+      Index: 1
+      Type {
+        Name: "TRubricId"
+      }
+    }
+    Fields {
+      Name: "Names"
+      Index: 2
+      Type {
+        Name: "TMmsI18nStringSeq"
+      }
+    }
+    Fields {
+      Name: "Keywords"
+      Index: 3
+      Type {
+        Name: "TMmsI18nStringSeq"
+      }
+    }
+  }
+}
+Type {
+  Object {
+    Name: "TRubricExes"
+    Fields {
+      Name: "Items"
+      Index: 1
+      Type {
+        Name: "vector"
+        Sequence {
+          ElementType: "TRubricEx"
+        }
+      }
+    }
+  }
+}

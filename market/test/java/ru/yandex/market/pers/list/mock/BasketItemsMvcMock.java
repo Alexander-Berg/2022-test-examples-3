@@ -1,0 +1,202 @@
+package ru.yandex.market.pers.list.mock;
+
+import java.util.List;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+import org.springframework.test.web.servlet.ResultMatcher;
+
+import ru.yandex.market.pers.basket.model.BasketCrTimeToken;
+import ru.yandex.market.pers.basket.model.BasketItemsDtoList;
+import ru.yandex.market.pers.basket.model.BasketReferenceItem;
+import ru.yandex.market.pers.basket.model.DtoList;
+import ru.yandex.market.pers.basket.model.DtoListWithToken;
+import ru.yandex.market.pers.basket.model.ItemReference;
+import ru.yandex.market.pers.basket.model.ResultDto;
+import ru.yandex.market.pers.list.BasketClientParams;
+import ru.yandex.market.pers.list.model.BasketOwner;
+import ru.yandex.market.pers.list.model.v2.enums.MarketplaceColor;
+import ru.yandex.market.pers.test.common.AbstractMvcMocks;
+import ru.yandex.market.util.FormatUtils;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+/**
+ * @author Ilya Kislitsyn / ilyakis@ / 04.09.2020
+ */
+@Service
+public class BasketItemsMvcMock extends AbstractMvcMocks {
+
+    public List<BasketReferenceItem> getItems(BasketOwner owner, int pageSize) {
+        return getItemsFull(owner, null, pageSize).getItems();
+    }
+
+    public DtoListWithToken<BasketReferenceItem, BasketCrTimeToken> getItemsFull(BasketOwner owner, BasketCrTimeToken token, int pageSize) {
+        DtoListWithToken<BasketReferenceItem, BasketCrTimeToken> response = parseValue(
+            getItemsMvc(owner, token, pageSize, status().is2xxSuccessful()),
+            new TypeReference<>() {
+            });
+        return response;
+    }
+
+    public String getItemsMvc(BasketOwner owner, BasketCrTimeToken token, int pageSize, ResultMatcher resultMatcher) {
+        return invokeAndGet(
+            get(String.format("/items/%s/%s", owner.getUserIdType().name(), owner.getId()))
+                .param(BasketClientParams.LAST_CR_TIME, token != null && token.getLastCrTime() != null ? String.valueOf(token.getLastCrTime()) : null)
+                .param(BasketClientParams.LAST_ID, token != null && token.getLastId() != null ? String.valueOf(token.getLastId()) : null)
+                .param(BasketClientParams.PAGE_SIZE, String.valueOf(pageSize))
+                .contentType(MediaType.APPLICATION_JSON),
+            resultMatcher);
+    }
+
+    public List<ItemReference> getItemsRefs(BasketOwner owner) {
+        DtoList<ItemReference> response = parseValue(invokeAndGet(
+            get(String.format("/items/%s/%s/reflist", owner.getUserIdType().name(), owner.getId()))
+                .contentType(MediaType.APPLICATION_JSON),
+            status().is2xxSuccessful()), new TypeReference<>() {
+        });
+        return response.getItems();
+    }
+
+    public int getItemsCount(BasketOwner owner) {
+        ResultDto<Integer> result = parseValue(invokeAndGet(
+            get(String.format("/items/%s/%s/count", owner.getUserIdType().name(), owner.getId()))
+                .contentType(MediaType.APPLICATION_JSON),
+            status().is2xxSuccessful()),
+            new TypeReference<>() {
+            });
+        return result.getResult();
+    }
+
+    public List<BasketReferenceItem> getExistingItemsNoCache(BasketOwner owner,
+                                                      MarketplaceColor color,
+                                                      List<ItemReference> items) {
+        BasketItemsDtoList response = parseValue(getExistingItemsMvc(owner, color, items, true),
+            new TypeReference<>() {
+            });
+        return response.getItems();
+    }
+
+    public List<BasketReferenceItem> getExistingItems(BasketOwner owner,
+                                                      MarketplaceColor color,
+                                                      List<ItemReference> items) {
+        return getExistingItemsDto(owner, color, items).getItems();
+    }
+
+    public BasketItemsDtoList getExistingItemsDto(BasketOwner owner,
+                                                      MarketplaceColor color,
+                                                      List<ItemReference> items) {
+        return parseValue(getExistingItemsMvc(owner, color, items, null),
+            new TypeReference<>() {
+            });
+    }
+
+    public String getExistingItemsMvc(BasketOwner owner, MarketplaceColor color, List<ItemReference> items, Boolean noCache) {
+        return invokeAndGet(
+            post(String
+                .format("/items/%s/%s/existing", owner.getUserIdType().name(), owner.getId()))
+                .param(BasketClientParams.PARAM_RGB, color == null ? null : color.getName())
+                .param("noCache", noCache == null ? null : noCache.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(FormatUtils.toJson(items)),
+            status().is2xxSuccessful());
+    }
+
+    public BasketReferenceItem addItem(BasketOwner owner, BasketReferenceItem item) {
+        return addItem(owner, item, null, null);
+    }
+
+    public BasketReferenceItem addItem(BasketOwner owner, BasketReferenceItem item, Integer regionId) {
+        return addItem(owner, item, regionId, null);
+    }
+
+    public BasketReferenceItem addItem(BasketOwner owner, BasketReferenceItem item, Integer regionId, String src) {
+        ResultDto<BasketReferenceItem> response = parseValue(
+            addItemsMvc(owner, item, regionId, src, status().is2xxSuccessful()),
+            new TypeReference<>() {
+            });
+        return response.getResult();
+    }
+
+    public String addItemsMvc(BasketOwner owner,
+                              BasketReferenceItem item,
+                              Integer regionId,
+                              String src,
+                              ResultMatcher resultMatcher) {
+        return invokeAndGet(
+            post(String
+                .format("/items/%s/%s", owner.getUserIdType().name(), owner.getId()))
+                .param(BasketClientParams.REGION_ID, regionId != null ? String.valueOf(regionId) : null)
+                .param(BasketClientParams.SOURCE, src)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(FormatUtils.toJson(item)),
+            resultMatcher);
+    }
+
+    public String addItemsMvc(BasketOwner owner,
+                              String json,
+                              Integer regionId,
+                              String src,
+                              ResultMatcher resultMatcher) {
+        return invokeAndGet(
+                post(String
+                        .format("/items/%s/%s", owner.getUserIdType().name(), owner.getId()))
+                        .param(BasketClientParams.REGION_ID, regionId != null ? String.valueOf(regionId) : null)
+                        .param(BasketClientParams.SOURCE, src)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json).characterEncoding("utf-8"),
+                resultMatcher);
+    }
+
+    public String addItemsMvc(BasketOwner owner,
+                              BasketReferenceItem item,
+                              Integer regionId,
+                              ResultMatcher resultMatcher) {
+        return invokeAndGet(
+                post(String
+                        .format("/items/%s/%s", owner.getUserIdType().name(), owner.getId()))
+                        .param(BasketClientParams.REGION_ID, regionId != null ? String.valueOf(regionId) : null)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(FormatUtils.toJson(item)),
+                resultMatcher);
+    }
+
+    public String deleteItemsMvc(BasketOwner owner, long itemId) {
+        return deleteItemsMvc(owner, itemId, null);
+    }
+
+    public String deleteItemsMvc(BasketOwner owner, long itemId, Integer regionId) {
+        return invokeAndGet(
+            delete(String.format("/items/%s/%s/%s", owner.getUserIdType().name(), owner.getId(), itemId))
+                .param(BasketClientParams.REGION_ID, regionId != null ? String.valueOf(regionId) : null)
+                .contentType(MediaType.APPLICATION_JSON),
+            status().is2xxSuccessful()
+        );
+    }
+
+    public void mergeItems(BasketOwner ownerFrom, BasketOwner ownerTo) {
+        mergeItems(ownerFrom, ownerTo, null);
+    }
+
+    public void mergeItems(BasketOwner ownerFrom, BasketOwner ownerTo, Integer regionId) {
+        mergeItemsMvc(ownerFrom, ownerTo, regionId, status().is2xxSuccessful());
+    }
+
+    public String mergeItemsMvc(BasketOwner ownerFrom,
+                                BasketOwner ownerTo,
+                                Integer regionId,
+                                ResultMatcher resultMatcher) {
+        return invokeAndGet(
+            post(String.format("/accounts/merge/%s/%s/to/%s/%s",
+                ownerFrom.getUserIdType().name(), ownerFrom.getId(),
+                ownerTo.getUserIdType().name(), ownerTo.getId()))
+                .param(BasketClientParams.REGION_ID, regionId != null ? String.valueOf(regionId) : null)
+                .contentType(MediaType.APPLICATION_JSON),
+            resultMatcher
+        );
+    }
+}

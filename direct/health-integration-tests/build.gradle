@@ -1,0 +1,49 @@
+def springVersion = '4.3.12.RELEASE'
+
+dependencies {
+    compile project(':logshatter')
+    compile project(':clickphite')
+    compile project(':config-cs-logshatter')
+    compile project(':config-cs-clickphite')
+
+    testCompile 'junit:junit:4.12'
+    testCompile "org.springframework:spring-test:$springVersion"
+    testCompile project(path: ':logshatter', configuration: 'testCompile')
+}
+
+sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/java')
+        }
+
+        resources.srcDir file('src/integration-test/resources')
+    }
+}
+
+def logshatterConfigs = project(':config-cs-logshatter').projectDir.toPath().resolve("src/configs")
+def clickphiteConfigs = project(':config-cs-clickphite').projectDir.toPath().resolve("src/configs")
+def clickphiteDictsConfig = project(':clickphite').projectDir.toPath().resolve("src/main/script/dictionaries.xml")
+
+def testsJvmArgs = [
+        "-Dlogshatter.conf.dir=${logshatterConfigs}",
+        "-Dclickphite.conf.dir=${clickphiteConfigs}",
+        "-Dclickphite.dicts-config=${clickphiteDictsConfig}"
+
+]
+
+def dockerHost = System.getenv("DOCKER_HOSTNAME")
+if (dockerHost != null) {
+    testsJvmArgs += [
+            "-Dclickhouse.host=${dockerHost}",
+            "-Dlogshatter.zookeeper-quorum=${dockerHost}:2181",
+    ]
+}
+
+integrationTest {
+    jvmArgs += testsJvmArgs
+    testLogging.showStandardStreams = true
+}
+

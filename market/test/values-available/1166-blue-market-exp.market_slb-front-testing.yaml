@@ -1,0 +1,21 @@
+context:
+  default:
+    service_name: market_blue_desktop_exp
+    servername_regexp: '[a-z0-9-_]+\\.bluemarket-exp\\.(fslb([\\d\\w]+)?\\.)?beru\\.(ru|ua|kz|by|com)'
+    vs: market_exp
+    antirobot: true
+    antirobot_service_name: market
+    priority: 1
+    exp_getter: true
+    testid_from_host: true
+    health_check: '"GET /ping HTTP/1.1\r\nHost: heartbeat-blue-desktop-exp.market.yandex.ru\r\n\r\n"'
+    uaas_service_name: blue-market
+    cert: bluemarket
+
+servers:
+  default:
+    main:
+    - name: GREY%market-front-blue-desktop.tst.vs.market.yandex.net
+      plain_http_backend: true
+      timeout: 35s
+      port: 9080

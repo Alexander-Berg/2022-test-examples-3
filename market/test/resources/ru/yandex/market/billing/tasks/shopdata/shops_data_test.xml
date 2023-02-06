@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<query>
+
+    <description>
+        <![CDATA[
+        Основная выгрузка информации по магазинам.
+        Файл с информацией о магазинах - выгружается в разрезе фидов (Т.е. магазин, у которого несколько фидов в файле оказывается несколько раз)
+
+        **Известные потребители:**
+        <ul>
+            <li>INDEXER</li>
+            <li>MBO</li>
+            <li>MSTAT</li>
+        </ul>
+        **online && offline**
+        <ul>
+            <li>is_offline = false — чистый онлайн. Размещается исключительно в интернете, товары доставляет, кхм, доставкой. Или товары "скачиваемые". В общем, не существует в оффлайне.</li>
+            <li>is_offline = true — гибрид. Размещается в интернете, но есть точки продаж, либо пункты самовывоза, то есть, в оффлайне магазин как-то представлен.</li>
+        </ul>
+        ]]>
+    </description>
+
+    <aliases>
+        <alias name="TAB">chr(9)</alias>
+        <alias name="NEW_LINE_REGEXP_TO_REPLACE">'(' || chr(13) || chr(10) || ')|(' || chr(10) || chr(13) || ')|' || chr(10) || '|' || chr(13)</alias>
+        <alias name="NEW_LINE_REGEXP_TO_REMOVE">'[' || chr(10) || chr(13) || ']'</alias>
+        <alias name="QUOTE_MARK">chr(148)</alias>
+
+        <alias name="DATAFEED">dfeed</alias>
+        <alias name="DATASOURCE">SHOPS_WEB.DATASOURCE</alias>
+        <alias name="V_DATASOURCE">v_dsource</alias>
+
+        <alias name="DATAFEED_DS_ID">${DATAFEED}.datasource_id</alias>
+        <alias name="DATASOURCE_DS_ID">${DATASOURCE}.id</alias>
+        <alias name="V_DATASOURCE_DS_ID">${V_DATASOURCE}.id</alias>
+        <alias name="PARTNER_FF_LINK">partner_ff_link</alias>
+
+        <alias name="BUSINESS_SERVICE">bservice</alias>
+        <alias name="BUSINESS_DS_ID">${BUSINESS_SERVICE}.business_id</alias>
+    </aliases>
+
+    <base>
+        SELECT ${SYS_PARAM_NAMES_BLOCK}
+        FROM SHOPS_WEB.V_SHOPDATA_DATAFEED ${DATAFEED}
+        INNER JOIN SHOPS_WEB.V_DATASOURCE ${V_DATASOURCE}
+        ON ${DATAFEED_DS_ID} = ${V_DATASOURCE_DS_ID}
+        INNER JOIN SHOPS_WEB.BUSINESS_SERVICE ${BUSINESS_SERVICE}
+        ON ${BUSINESS_SERVICE}.service_id = ${V_DATASOURCE_DS_ID}
+        LEFT OUTER JOIN SHOPS_WEB.PARTNER_FF_SERVICE_LINK ${PARTNER_FF_LINK}
+        ON ${DATAFEED_DS_ID} = ${PARTNER_FF_LINK}.partner_id
+        ${SYS_PARAM_QUERIES_BLOCK}
+    </base>
+
+    <orders>
+        <order parameter="SHOP_ID" type="DESC"/>
+        <order parameter="DATAFEED_ID" type="DESC"/>
+    </orders>
+
+    <templates>
+
+        <template name="VALUE_PARAM">
+            <sql>
+                SELECT
+                ${PARAM_SELECT},
+                entity_id
+                FROM
+                SHOPS_WEB.PARAM_VALUE WHERE param_type_id = ${PARAM_TYPE_ID}
+            </sql>
+            <condition>${SYS_QUERY_NAME}.entity_id = ${V_DATASOURCE_DS_ID}</condition>
+        </template>
+
+        <template name="FEATURE_STATUS">
+            <sql>
+                SELECT
+                status,
+                datasource_id
+                FROM
+                SHOPS_WEB.FEATURE
+            </sql>
+            <condition>${SYS_QUERY_NAME}.datasource_id = ${V_DATASOURCE_DS_ID}</condition>
+        </template>
+
+        <template name="SHOP_LOGO">
+            <sql>
+                SELECT
+                partner_id,
+                url,
+                height || ':' || width as sizes,
+                image_type
+                FROM
+                SHOPS_WEB.SHOP_LOGO INNER JOIN SHOPS_WEB.FEATURE
+                ON partner_id = datasource_id
+                WHERE is_retina = ${PARAM_IS_RETINA} AND feature_type = 126 AND (status = 'NEW' OR status = 'SUCCESS')
+                AND logo_type = 'SHOP_LOGO'
+            </sql>
+            <condition>${SYS_QUERY_NAME}.partner_id = ${BUSINESS_DS_ID}</condition>
+        </template>
+
+    </templates>
+
+    <parameters>
+
+        <parameter name="prepay_requires_vat" type="NUMBER(1)" description="Признак обязательности наличия налоговых данных у оффера для возможности заказа по предоплате">
+            <value>decode(${SYS_QUERY_NAME}.prepay_type, 1, 1, 0)</value>
+            <sql>select datasource_id, prepay_type from shops_web.v_partner_app_business where status = 2</sql>
+            <condition>${SYS_QUERY_NAME}.datasource_id = ${V_DATASOURCE_DS_ID}</condition>
+        </parameter>
+
+        <parameter name="datafeed_id" value="${DATAFEED}.id">
+            <description>
+                Уникальный идентификатор фида, число с десятичной точкой.
+                Значение берется из datafeed#id.
+            </description>
+        </parameter>
+        <parameter name="shop_id" value="${DATAFEED_DS_ID}">
+            <description>
+                Идентификатор магазина (целое число).
+                # перед параметром означает, что магазин сейчас не размещается на маркете.
+                Целочисленное значение, берется из datasource#id.
+            </description>
+        </parameter>
+
+        <parameter name="cashback_status" template="FEATURE_STATUS">
+            <description>
+                <![CDATA[
+                Статус участия магазина в программе "Cashback" на Белом Маркете.
+                Параметр изменяется в админке АБО.
+                Вручную изменить можно через ручку mbi-api <a href="https://wiki.yandex-team.ru/MBI/NewDesign/components/mbi-api/feature-check-result/">/feature/check/result</a>
+                ]]>
+            </description>
+            <value>
+                CASE WHEN ${SYS_QUERY_NAME}.status = 'SUCCESS' THEN 'REAL'
+                WHEN ${SYS_QUERY_NAME}.status = 'NEW' THEN 'SBX'
+                ELSE 'NO'
+                END
+            </value>
+            <argument name="FEATURE_TYPE">1001</argument>
+        </parameter>
+
+        <parameter name="is_enabled" value="is_enabled" type="NUMBER(1)">
+            <description>
+                Включенность (актуальность) фида.
+                Считается очень сложно. См. view shops_web.v_shopdata_is_enabled.
+                Логическое значение, возможные значения: true / false.
+            </description>
+            <sql>select is_enabled, datafeed_id from shops_web.v_shopdata_is_enabled</sql>
+            <condition>${SYS_QUERY_NAME}.datafeed_id = ${DATAFEED}.id</condition>
+        </parameter>
+
+        <parameter name="is_offline" type="NUMBER(1)">
+            <description>
+                Признак того, что у магазина есть точки продаж, либо пункты самовывоза, булево значение (0 по-умолчанию).
+            </description>
+            <value>nvl2(${SYS_QUERY_NAME}.datasource_id, 1, 0)</value>
+            <sql>SELECT DISTINCT datasource_id FROM SHOPS_WEB.OUTLET_INFO WHERE status != 5 AND hidden = 0</sql>
+            <condition>${SYS_QUERY_NAME}.datasource_id = ${V_DATASOURCE_DS_ID}</condition>
+        </parameter>
+
+        <parameter name="delivery_vat" value="delivery_vat" description="Ставка НДС доставки магазина">
+            <sql>select decode(delivery_vat, 1, 7, 3, 8, delivery_vat) delivery_vat, datasource_id from shops_web.shop_vat</sql>
+            <condition>${SYS_QUERY_NAME}.datasource_id = ${V_DATASOURCE_DS_ID}</condition>
+        </parameter>
+
+        <parameter name="phone" value="str_value" template="VALUE_PARAM">
+            <description>
+                Контактный телефон магазина.
+                Стороковое значение берется из param_value#2.
+            </description>
+            <argument name="SELECT">str_value</argument>
+            <argument name="TYPE_ID">2</argument>
+        </parameter>
+
+    </parameters>
+</query>

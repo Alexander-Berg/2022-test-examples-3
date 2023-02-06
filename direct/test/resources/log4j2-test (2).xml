@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" xmlns:xi="http://www.w3.org/2001/XInclude"
+               xmlns="http://logging.apache.org/log4j/2.0/config">
+    <Properties>
+        <Property name="LOG_ROOT">./logs</Property>
+    </Properties>
+    <xi:include href="log4j2-common-appenders.xml"/>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="MESSAGES"/>
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+        <!--
+        <Logger name="org.jooq" level="debug"/>
+        <Logger name="org.jooq.Constants" level="debug"/>
+        <Logger name="ru.yandex.direct" level="debug"/>
+        -->
+        <!--For UrlCheckerManualTest-->
+        <!--<Logger name="ru.yandex.direct.core.service.urlchecker" level="debug"/>-->
+        <Logger name="ru.yandex.direct.common.liveresource.LiveResourceWatcher" level="info"/>
+        <Logger name="TRACE.log" level="info" additivity="false">
+            <AppenderRef ref="TRACE"/>
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+        <Logger name="LOGAPI.data" level="info" additivity="false">
+            <AppenderRef ref="LOGAPI"/>
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+        <Logger name="ACCESS_LOG.log" level="info" additivity="false">
+            <AppenderRef ref="ACCESS_LOG"/>
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+        <!-- Intapi request/response logging -->
+        <Logger name="INTAPI.log" level="info" additivity="false">
+            <AppenderRef ref="LOGINTAPI"/>
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+        <Logger name="WEB-API.log" level="info" additivity="false">
+            <AppenderRef ref="LOGWEBAPI"/>
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+    </Loggers>
+</Configuration>

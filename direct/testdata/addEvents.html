@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Добавить события</title>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/x-icon" href="../resources/images/favicon.png"/>
+    <link rel="shortcut icon" type="image/x-icon" href="../resources/images/favicon.png"/>
+    <link rel="stylesheet" href="../resources/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../resources/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="../resources/css/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" href="../resources/css/style.css"/>
+    <script type="text/javascript" src="../resources/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../resources/js/requestHelper.js"></script>
+    <script type="text/javascript" src="../resources/js/constants.js"></script>
+    <script type="text/javascript" src="../resources/js/stageSelection.js"></script>
+    <script type="text/javascript" src="../resources/js/viewHelper.js"></script>
+    <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../resources/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript">
+        var serviceName = "add-events/add";
+        $(document).ready(function () {
+            generateHeaderFooter();
+            $('#eventType').val('MONEY_OUT');
+            $('#results').hide();
+            $('.param').hide();
+            clearParams();
+            showMoneyOut();
+            $('#finishDatePicker').datetimepicker({
+                format: 'dd MM yyyy  hh:mm:ss'
+            });
+            $('#stopTimePicker').datetimepicker({
+                format: 'dd MM yyyy  hh:mm:ss'
+            });
+        });
+
+        function send() {
+            sendPutRequest(serviceName,
+                {
+                    stage: getStageType()
+                    , type: $('#eventType').val()
+                    , accountId: parseInt($('#accountId').val())
+                    , campaignId: parseInt($('#campaignId').val())
+                    , bannerId: parseInt($('#bannerId').val())
+                    , phraseId: parseInt($('#phraseId').val())
+                    , currency: $('#currency').val()
+                    , moderationResult: $('#moderationResult').val()
+                    , isEditedByModerator: $('#isEditedByModerator').val()
+                    , oldPlace: parseInt($('#oldPlace').val())
+                    , finishDate: getDateTime('#finishDate')
+                    , stopTime: getDateTime('#stopTime')
+                    , minPrice: parseFloat($('#minPrice').val())
+                    , payed: parseFloat($('#payed').val())
+                    , rest: parseFloat($('#rest').val())
+                }
+                , appendResult);
+        };
+
+        function appendResult() {
+            $('#results').html("Событие успешно добавлено");
+            $('#results').show();
+        };
+
+        function updateForm(value) {
+            $('#results').hide();
+            $('.param').hide();
+            switch (value) {
+                case "MONEY_IN":
+                    showMoneyIn();
+                    break;
+                case "MONEY_IN_ACCOUNT":
+                    showMoneyInAccount();
+                    break;
+                case "MONEY_WARNING":
+                    showMoneyWarn();
+                    break;
+                case "MONEY_WARNING_ACCOUNT":
+                    showMoneyWarnAccount();
+                    break;
+                case "MONEY_OUT" :
+                    showMoneyOut();
+                    break;
+                case "MONEY_OUT_ACCOUNT" :
+                    showMoneyOutAccount();
+                    break;
+                case "BANNER_MODERATED":
+                    showBannerModerated();
+                    break;
+                case "WARN_PLACE":
+                    showWarnPlace();
+                    break;
+                case "CAMPAIGN_FINISHED":
+                    showCampFinished();
+                    break;
+                case "PAUSED_BY_DAY_BUDGET":
+                    showPausedByBudget();
+                    break;
+                case "PAUSED_BY_DAY_BUDGET_ACCOUNT":
+                    showPausedByBudgetAccount();
+                    break;
+            }
+            clearParams();
+        }
+
+        function clearParams() {
+            if (!$('#campaignId').is(':visible')) {
+                $('#campaignId').val(null);
+            }
+            if (!$('#bannerId').is(':visible')) {
+                $('#bannerId').val(null);
+            }
+            if (!$('#phraseId').is(':visible')) {
+                $('#phraseId').val(null);
+            }
+            if (!$('#currency').is(':visible')) {
+                $('#currency').val(null);
+            }
+            if (!$('#moderationResult').is(':visible')) {
+                $('#moderationResult').val(null);
+            }
+            if (!$('#isEditedByModerator').is(':visible')) {
+                $('#isEditedByModerator').val(null);
+            }
+            if (!$('#oldPlace').is(':visible')) {
+                $('#oldPlace').val(null);
+            }
+            if (!$('#finishDate').is(':visible')) {
+                $('#finishDate').val(null);
+            }
+            if (!$('#stopTime').is(':visible')) {
+                $('#stopTime').val(null);
+            }
+            if (!$('#minPrice').is(':visible')) {
+                $('#minPrice').val(null);
+            }
+            if (!$('#payed').is(':visible')) {
+                $('#payed').val(null);
+            }
+            if (!$('#rest').is(':visible')) {
+                $('#rest').val(null);
+            }
+        };
+
+        function showBannerModerated() {
+            $('#campaignIdGroup').show();
+            $('#bannerIdGroup').show();
+            $('#modResultGroup').show();
+            $('#isEditedGroup').show();
+        };
+
+        function showWarnPlace() {
+            $('#campaignIdGroup').show();
+            $('#bannerIdGroup').show();
+            $('#phraseIdGroup').show();
+            $('#oldPlaceGroup').show();
+        };
+
+        function showMoneyIn() {
+            $('#campaignIdGroup').show();
+            $('#currencyGroup').show();
+            $('#payedGroup').show();
+        };
+
+        function showMoneyWarn() {
+            $('#campaignIdGroup').show();
+            $('#currencyGroup').show();
+            $('#restGroup').show();
+        };
+
+        function showMoneyOut() {
+            $('#campaignIdGroup').show();
+        };
+
+        function showMoneyInAccount() {
+            $('#accountIdGroup').show();
+            $('#currencyGroup').show();
+            $('#payedGroup').show();
+        };
+
+        function showMoneyWarnAccount() {
+            $('#accountIdGroup').show();
+            $('#currencyGroup').show();
+            $('#restGroup').show();
+        };
+
+        function showMoneyOutAccount() {
+            $('#accountIdGroup').show();
+        };
+
+        function showCampFinished() {
+            $('#campaignIdGroup').show();
+            $('#finishDateGroup').show();
+        };
+
+        function showPausedByBudget() {
+            $('#campaignIdGroup').show();
+            $('#stopTimeGroup').show();
+        };
+
+        function showPausedByBudgetAccount() {
+            $('#accountIdGroup').show();
+            $('#stopTimeGroup').show();
+        };
+
+        function getDateTime(id) {
+            return new Date($(id).val()).getTime();
+        }
+    </script>
+</head>
+<body>
+<div id="spinner">
+    <img src="../resources/images/spinner.gif" id="spinner_img">
+</div>
+<div id="menu"></div>
+<div id="content">
+    <h1>
+        <small>Добавить событие</small>
+    </h1>
+    <div class="alert alert-dismissable alert-danger" id="alert" style="display:none">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <span id="error"></span>
+    </div>
+    <form id="mainForm" class="form-horizontal">
+        <div class="form-group">
+            <label for="stage" class="col-lg-2 control-label">URL Директа</label>
+            <div class="col-lg-6">
+                <div class="btn-group" data-toggle="buttons-radio">
+                    <button type="button" id="ts" name="stageRadioGroup"
+                            class="btn btn-default active" data-toggle="button"
+                            onclick="$('#stage').val(0); activateStageButton(this.id);">
+                        ТS
+                    </button>
+                    <button type="button" id="ts2" name="stageRadioGroup"
+                            class="btn btn-default" data-toggle="button"
+                            onclick="$('#stage').val(1); activateStageButton(this.id);">
+                        ТS2
+                    </button>
+                    <button type="button" id="beta" name="stageRadioGroup"
+                            class="btn btn-default" data-toggle="button"
+                            onclick="$('#stage').val(3); activateStageButton(this.id);">
+                        BETA
+                    </button>
+                </div>
+                <input type="hidden" id="stage" value="0"/>
+            </div>
+        </div>
+        <div class="form-group" style="display:none" id="portInputGroup">
+            <label for="port" class="col-lg-2 control-label">Порт</label>
+            <div class="col-lg-1">
+                <input type="text" id="port" placeholder="Порт" class="form-control" value="0"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="eventType" class="col-lg-2 control-label">Тип события</label>
+            <div class="col-lg-3">
+                <select id="eventType" class="form-control" onchange="updateForm(this.value)">
+                    <option value="MONEY_OUT" selected="selected">Исчерпание средств</option>
+                    <option value="MONEY_WARNING">Счёт близок к истощению</option>
+                    <option value="PAUSED_BY_DAY_BUDGET">Исчерпание бюджета на день</option>
+                    <option value="MONEY_IN">Пополнение кампании</option>
+                    <option value="WARN_MIN_PRICE">Повышение цены клика</option>
+                    <option value="CAMPAIGN_FINISHED">Остановка кампании</option>
+                    <option value="WARN_PLACE">Изменение объёма трафика</option>
+                    <option value="BANNER_MODERATED">Результаты модерации</option>
+                    <option value="MONEY_OUT_ACCOUNT">Исчерпание средств (на ОС)</option>
+                    <option value="MONEY_WARNING_ACCOUNT">Счёт близок к истощению (ОС)</option>
+                    <option value="MONEY_IN_ACCOUNT">Пополнение общего счёта</option>
+                    <option value="PAUSED_BY_DAY_BUDGET_ACCOUNT">Исчерпание бюджета на день (ОС)</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group param" id="accountIdGroup">
+            <label for="accountId" class="col-lg-2 control-label">Номер общего счёта</label>
+            <div class="col-lg-2">
+                <input type="number" id="accountId" placeholder="ID" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group param" id="campaignIdGroup">
+            <label for="campaignId" class="col-lg-2 control-label">Кампания</label>
+            <div class="col-lg-2">
+                <input type="number" id="campaignId" placeholder="ID" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group param" id="bannerIdGroup">
+            <label for="bannerId" class="col-lg-2 control-label">Объявление</label>
+            <div class="col-lg-2">
+                <input type="number" id="bannerId" placeholder="ID" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group param" id="phraseIdGroup">
+            <label for="phraseId" class="col-lg-2 control-label">Фраза</label>
+            <div class="col-lg-2">
+                <input type="number" id="phraseId" placeholder="ID" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group param" id="currencyGroup">
+            <label for="currency" class="col-lg-2 control-label">Валюта</label>
+            <div class="col-lg-3">
+                <select id="currency" class="form-control">
+                    <option selected="selected" value="YND_FIXED">у.е.</option>
+                    <option value="RUB">Рубль (RUB)</option>
+                    <option value="EUR">Евро (EUR)</option>
+                    <option value="USD">Доллар США (USD)</option>
+                    <option value="KZT">Тенге (KZT)</option>
+                    <option value="UAH">Гривна (UAH)</option>
+                    <option value="CHF">Франк (CHF)</option>
+                    <option value="TRY">Лира (TRY)</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group param" id="modResultGroup">
+            <label for="currency" class="col-lg-2 control-label">Результат модерации</label>
+            <div class="col-lg-3">
+                <select id="moderationResult" class="form-control">
+                    <option selected="selected" value="Accepted">Принято</option>
+                    <option value="Declined">Отклонено</option>
+                    <option value="DeclinedPartly">Частично отклонено</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group param" id="isEditedGroup">
+            <label for="isEditedByModerator" class="col-lg-2 control-label">Отредактировано модератором</label>
+            <div class="col-lg-3">
+                <select id="isEditedByModerator" class="form-control">
+                    <option selected="selected" value="No">Нет</option>
+                    <option value="Yes">Да</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group param" id="oldPlaceGroup">
+            <label for="oldPlace" class="col-lg-2 control-label">Предыдущая позиция</label>
+            <div class="col-lg-2">
+                <input type="number" id="oldPlace" placeholder="Предыдущая позиция" value="11" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group param" id="finishDateGroup">
+            <label for="finishDatePicker" class="col-lg-2 control-label">Дата окончания</label>
+            <div class="col-lg-2">
+                <div id="finishDatePicker" class="input-group date">
+                    <input class="form-control" id="finishDate" type="text">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group param" id="stopTimeGroup">
+            <label for="stopTimePicker" class="col-lg-2 control-label">Время остановки</label>
+            <div class="col-lg-2">
+                <div id="stopTimePicker" class="input-group date">
+                    <input class="form-control" id="stopTime" type="text">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group param" id="payedGroup">
+            <label for="payed" class="col-lg-2 control-label">Сумма</label>
+            <div class="col-lg-2">
+                <input type="text" id="payed" placeholder="Сумма" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group param" id="restGroup">
+            <label for="rest" class="col-lg-2 control-label">Остаток средств</label>
+            <div class="col-lg-2">
+                <input type="text" id="rest" placeholder="Остаток средств" class="form-control"/>
+            </div>
+        </div>
+        <input type="button" onclick="send()" class="btn btn-default" value="Создать событие"/>
+    </form>
+</div>
+<div id="results" class="well"></div>
+<div id="footer"></div>
+</body>
+</html>

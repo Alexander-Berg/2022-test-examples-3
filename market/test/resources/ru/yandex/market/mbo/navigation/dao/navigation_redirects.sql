@@ -1,0 +1,9 @@
+SET MODE Oracle;
+
+CREATE TABLE "NAVIGATION_TREE_NODE_REDIRECT" (
+  tree_code VARCHAR (500) NOT NULL,
+  from_nid NUMBER(14, 0) NOT NULL,
+  to_nid NUMBER(14, 0) NOT NULL,
+  regenerate_on_publish NUMBER(1, 0) DEFAULT 0 NOT NULL,
+  CONSTRAINT "NAVIGATION_NODE_REDIRECT_U" UNIQUE (tree_code, from_nid)
+);

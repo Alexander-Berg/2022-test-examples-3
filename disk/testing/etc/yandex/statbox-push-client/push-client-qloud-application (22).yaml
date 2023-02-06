@@ -1,0 +1,21 @@
+---
+ident: disk-webdav-java
+logger-mode: file
+logger-file: /var/log/statbox/watcher.log
+logger-level: 5
+
+watcher-method: inotify
+watcher-state: "/var/spool/push-client"
+watcher-drop_on_error: 1
+
+network-master-addr: "logbroker-pre.yandex.net"
+network-transport: ipv6
+network-proto: rt
+
+files:
+  - name: /var/log/yandex/disk/webdav-tskv.log
+    log_type: ydisk-webdav-log
+  - name: /var/log/yandex/disk/webdav-access-tskv.log
+    log_type: ydisk-java-webdav-access-log
+  - name: /var/log/yandex/disk/webdav-api-tskv.log
+    log_type: ydisk-java-webdav-api-log

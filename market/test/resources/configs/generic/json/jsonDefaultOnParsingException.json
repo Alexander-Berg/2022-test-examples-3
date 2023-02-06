@@ -1,0 +1,25 @@
+{
+  "logHosts": "test*",
+  "logPath": "test.log",
+  "clickhouseTable": "test",
+  "jsonParser": {
+    "dateFormat": "yyyy-MM-dd HH:mm:ss",
+    "dateField": "date",
+    "useDefaultOnParsingException": true,
+    "columns": {
+      "int": {
+        "type": "Int32",
+        "defaultValue": 42
+      }
+    },
+    "engine": {
+      "type": "MergeTree",
+      "partitionBy": "toYYYYMM(date)",
+      "indexGranularity": 8000,
+      "orderBy": [
+        "field1",
+        "field2"
+      ]
+    }
+  }
+}

@@ -1,0 +1,97 @@
+{
+    "test_one_result_record": {
+        "record": {
+            "key": {"msku": 1, "warehouse_id": 1, "supplier_id": 1},
+            "rec": [
+                {
+                    "type": "normal", "ax_id": "RPL-1", "in_transit": 10, "date": "2021-06-10"
+                },
+                {
+                    "type": "normal", "ax_id": "RPL-1,RPL-2", "in_transit": 15, "date": "2021-06-10"
+                },
+                {
+                    "type": "virtual", "ax_id": "RPL-1", "in_transit": 20, "date": "2021-06-10"
+                },
+                {
+                    "type": "virtual", "ax_id": "RPL-2", "in_transit": 20, "date": "2021-06-10"
+                }
+            ]
+
+        },
+        "expected": [
+            {
+                "msku": 1,
+                "warehouse_id": 1,
+                "supplier_id": 1,
+                "type": "virtual",
+                "ax_id": "RPL-2",
+                "in_transit": 15,
+                "date": "2021-06-10"
+            }
+        ]
+    },
+    "test_two_result_record": {
+        "record": {
+            "key": {"msku": 1, "warehouse_id": 1, "supplier_id": 1},
+            "rec": [
+                {
+                    "type": "normal", "ax_id": "RPL-1", "in_transit": 10, "date": "2021-06-10"
+                },
+                {
+                    "type": "normal", "ax_id": "RPL-2", "in_transit": 10, "date": "2021-06-10"
+                },
+                {
+                    "type": "normal", "ax_id": "RPL-1,RPL-2", "in_transit": 5, "date": "2021-06-10"
+                },
+                {
+                    "type": "virtual", "ax_id": "RPL-1", "in_transit": 20, "date": "2021-06-10"
+                },
+                {
+                    "type": "virtual", "ax_id": "RPL-2", "in_transit": 20, "date": "2021-06-10"
+                }
+            ]
+
+        },
+        "expected": [
+            {
+                "msku": 1,
+                "warehouse_id": 1,
+                "supplier_id": 1,
+                "type": "virtual",
+                "ax_id": "RPL-1",
+                "in_transit": 5,
+                "date": "2021-06-10"
+            },
+            {
+                "msku": 1,
+                "warehouse_id": 1,
+                "supplier_id": 1,
+                "type": "virtual",
+                "ax_id": "RPL-2",
+                "in_transit": 10,
+                "date": "2021-06-10"
+            }
+        ]
+    },
+    "test_without_result_record": {
+        "record": {
+            "key": {"msku": 1, "warehouse_id": 1, "supplier_id": 1},
+            "rec": [
+                {
+                    "type": "normal", "ax_id": "RPL-2", "in_transit": 10, "date": "2021-06-10"
+                },
+                {
+                    "type": "normal", "ax_id": "RPL-1,RPL-2", "in_transit": 10, "date": "2021-06-10"
+                },
+                {
+                    "type": "virtual", "ax_id": "RPL-1", "in_transit": 10, "date": "2021-06-10"
+                },
+                {
+                    "type": "virtual", "ax_id": "RPL-2", "in_transit": 10, "date": "2021-06-10"
+                }
+            ]
+
+        },
+        "expected": []
+    }
+}

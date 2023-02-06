@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Генерация токена для пользователя</title>
+        <meta charset="utf-8">
+        <link rel="icon" type="image/x-icon" href="../resources/images/favicon.png"/>
+        <link rel="shortcut icon" type="image/x-icon" href="../resources/images/favicon.png"/>
+        <link rel="stylesheet" href="../resources/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../resources/css/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="../resources/css/style.css"/>
+        <script type="text/javascript" src="../resources/js/jquery.min.js"></script>
+        <script type="text/javascript" src="../resources/js/requestHelper.js"></script>
+    <script type="text/javascript" src="../resources/js/constants.js"></script>
+        <script type="text/javascript" src="../resources/js/viewHelper.js"></script>
+        <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            var serviceName = "mongo-user/generate-token";
+            $(document).ready(function(){
+                generateHeaderFooter();
+                $("#footer").html("");
+                if(parseGetParams()["login"].length != undefined && parseGetParams()["login"].length > 0){
+                    $('#login').val(parseGetParams()["login"]);
+                    generateToken(parseGetParams()["login"]);
+                };
+
+            });
+            function generateToken(login) {
+                serviceName = "mongo-user/generate-token?login=" + login;
+                result = sendGetRequest(serviceName, appendResult);
+            };
+            function appendResult(result){
+                $('.results').html("<a href='http://" + window.location.hostname + "/testdata/userActions.html?login="
+                        + $('#login').val() + "'>" + $('#login').val() + "</a>");
+            };
+        </script>
+    </head>
+    <body>
+        <div id="spinner">
+            <img src="../resources/images/spinner.gif" id="spinner_img">
+        </div>
+        <div id="menu"></div>
+        <div id="content">
+            <h1><small>Генерация токена для пользователя</small></h1>
+            <div class="alert alert-dismissable alert-danger" id="alert" style="display:none">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <span id="error"></span>
+            </div>
+            <form id="mainForm" class="form-horizontal">
+                <div class="form-group">
+                    <label for="login" class="col-lg-2 control-label">Логин</label>
+                    <div class="col-lg-2">
+                        <input type="text" id="login" placeholder="Логин" class="form-control"/>
+                    </div>
+                </div>
+                <input type="button" onclick="generateToken($('#login').val())" class="btn btn-primary"
+                       value="Сгенерировать токен"/>
+            </form>
+        </div>
+        <div class="results"></div>
+        <div id="footer"></div>
+    </body>
+</html>

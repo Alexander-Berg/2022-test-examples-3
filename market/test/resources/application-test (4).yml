@@ -1,0 +1,61 @@
+warehouse-timezone: Europe/Moscow
+spring.datasource.url: jdbc:h2:mem:SCPRD;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1
+
+AppServer: localhost
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms: info
+    org.springframework.jdbc.core: info
+    root: info
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    transaction.default-timeout: 30s
+  config:
+    import:
+      - application-fragment-mq-test.yml
+      - application-fragment-common-test.yml
+  liquibase:
+    enabled: true
+
+token: xxxxxxxxxxxxxxxxxxxxxxmarschrouteT.T.Tokenxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+oltp:
+  url: http://localhost:8383
+
+consolidation:
+  api:
+    host: http://localhost:4443
+
+wms:
+  transportation:
+    moduleName: transportation
+    host: 'http://localhost:1231/transportation'
+    tvm:
+      serviceId: 0
+  picking:
+    moduleName: picking
+    host: 'http://localhost:1231/picking'
+    tvm:
+      serviceId: 0
+  consolidation:
+    tvm:
+      serviceId: 0
+      secret: xxxxxx
+      log-only-mode: false
+      check-user-ticket: false
+      cache:
+        dir: /var/cache/tvm
+  pick-by-light:
+    host: localhost
+    websocket: localhost
+    tvm:
+      serviceId: 0
+
+check:
+  authentication: 'no'
+
+s3.use: false

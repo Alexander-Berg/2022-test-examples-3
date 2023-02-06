@@ -1,0 +1,73 @@
+{% if table == "items_model_factors" %}
+    {% table table %}
+        ["111", {"1": 4.5, "2": 3.0, "6": 4.3}, "model", "{{ day }}"],
+        ["222", {"1": 3.7, "6": 3.5}, "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "pers_v_model_summary_result" %}
+    {
+        "schema": [
+            {
+                "name": "model_id",
+                "type": "Int64?"
+            },
+            {
+                "name": "factors",
+                "type": "Yson?"
+            }
+        ],
+        "records": [
+            [
+                222,
+                [
+                    {
+                        "factor_id": 6,
+                        "value": 3.5,
+                        "count": 2,
+                        "factor_name": "Factor6",
+                        "published": true
+                    },
+                    {
+                        "factor_id": 1,
+                        "value": 3.7,
+                        "count": 13,
+                        "factor_name": "Factor1",
+                        "published": true
+                    }
+                ]
+            ],
+            [
+                111,
+                [
+                    {
+                        "factor_id": 6,
+                        "value": 4.3,
+                        "count": 3,
+                        "factor_name": "Factor6",
+                        "published": true
+                    },
+                    {
+                        "factor_id": 1,
+                        "value": 4.5,
+                        "count": 5,
+                        "factor_name": "Factor1",
+                        "published": true
+                    },
+                    {
+                        "factor_id": 3,
+                        "value": 4.5,
+                        "count": 5,
+                        "factor_name": "Factor3",
+                        "published": false
+                    },
+                    {
+                        "factor_id": 2,
+                        "value": 3.0,
+                        "count": 8,
+                        "factor_name": "Factor2",
+                        "published": true
+                    }
+                ]
+            ]
+        ]
+    }
+{% endif %}

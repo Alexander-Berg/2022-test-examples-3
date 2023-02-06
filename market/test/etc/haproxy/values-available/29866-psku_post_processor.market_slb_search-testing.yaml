@@ -1,0 +1,46 @@
+# Параметры обработки
+params:
+  default:
+    resolve: true
+    templates:
+      - user_mslb_triple_waterfall.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    be_defaults:
+      check:          check observe layer7
+      on_error:       fastinter
+
+    grpc_be_defaults:
+      grpc_port_offset: 2
+
+    be1_globals:
+      timeout_connect: 25
+
+    globals:
+      grpc:           true
+      ping_expect:    status 200
+      service_name:   psku-post-processor.tst.vs.market.yandex.net
+      service_port:   80
+
+    meta:
+      monrun_ignore:  yes
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    be1:
+    - name: YP@testing-market-psku-post-processor-sas@local
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing-market-psku-post-processor-vla@local
+      dns_resolvers: yandex-ns
+      resolve: false
+    be3:
+    - name: YP@testing-market-psku-post-processor-sas
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing-market-psku-post-processor-vla
+      dns_resolvers: yandex-ns
+      resolve: false

@@ -1,0 +1,20 @@
+module: oevent-pipeline
+operators:
+- id: oevent-pipeline
+  visibility: public
+  value#processing-pipeline:
+    id: update-order-status-pipeline
+    conditions:
+    - key: default_key
+    shared-state-init: {}
+    stages:
+    - id: send-event-lb
+      handlers:
+      - value#xget: /external/lb_checkouter_event/lb_checkouter_event_push
+    - id: testic_send_event
+      handlers:
+      - id: testic_send_event
+        logbrokers:
+        - id: testic_send_event
+          alies: testic-topic
+          args#xget: /event/payload

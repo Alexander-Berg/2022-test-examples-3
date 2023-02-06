@@ -1,0 +1,216 @@
+vars:
+  - &kwargs_with_service_api_points
+    args:
+      - --kwargs
+      - '[{"service": "logbroker_reading", "path": "/health/logbroker-reading"},
+        {"service": "unprocessed_meta_changes", "path": "/health/unprocessed-meta-changes"},
+        {"service": "clean_old_change_events_hang_check", "path": "/health/hangingJobs/cleanOldChangeEvents"},
+        {"service": "clean_old_change_events_fail_check", "path": "/health/failedJobs/cleanOldChangeEvents"}]'
+
+juggler:
+  default:
+    host: calendaring_service-testing
+    namespace: market.ff
+    refresh_time: 60
+    ttl: 900
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+        - crit: 50%
+          day_end: 7
+          day_start: 1
+          time_end: 20
+          time_start: 12
+          warn: '0'
+        - crit: 50%
+          day_end: 7
+          day_start: 1
+          time_end: 11
+          time_start: 21
+          warn: '0'
+      nodata_mode: force_crit
+    check_options: {}
+    flaps:
+      stable_time: 600
+      critical_time: 3000
+      boost_time: 0
+    tags:
+      - market_testing
+      - market_rtc
+      - marketcalendaringservice
+      - market
+      - testing
+      - market
+      - _market_
+    children:
+      - 'NANNY%testing_market_calendaring_service_vla'
+      - 'NANNY%testing_market_calendaring_service_sas'
+
+  checks:
+  - service: ping
+    check_options:
+      *kwargs_with_service_api_points
+
+  - service: disk_free_space
+
+  - service: logrotate
+
+  - service: push-client-status
+
+  - service: monitoring
+    check_options:
+      *kwargs_with_service_api_points
+
+  - service: fresh-hprof-files
+
+  - children:
+    - EVENTS%host=calendaring-service-solomon-testing & service=calendaring-service-gc-pause-testing:all:all
+    service: calendaring-service-gc-pause
+
+  - children:
+    - EVENTS%host=calendaring-service-solomon-testing & service=calendaring-service-many-jdbc-connection-testing:all:all
+    service: calendaring-service-many-jdbc-connections
+
+  - children:
+    - EVENTS%host=calendaring-service-solomon-testing & service=calendaring-service-many-jetty-connections-testing:all:all
+    service: calendaring-service-many-jetty-connections
+
+  - children:
+    - EVENTS%host=calendaring-service-solomon-testing & service=calendaring-service-error-log-events-percent-testing:all:all
+    service: calendaring-service-error-log-events-percent
+
+  - aggregator_kwargs:
+      limits:
+        - crit: 0%
+          day_end: 7
+          day_start: 1
+          time_end: 20
+          time_start: 12
+          warn: '0'
+        - crit: 0%
+          day_end: 7
+          day_start: 1
+          time_end: 11
+          time_start: 21
+          warn: '0'
+    children:
+    - EVENTS%host=calendaring-service-solomon-testing & service=calendaring-service-queue-tasks-few-attempts-number-testing-*:all:all
+    service: calendaring-service-queue-tasks-few-attempts-number
+
+  - service: logbroker_reading
+    check_options:
+      *kwargs_with_service_api_points
+
+  - service: unprocessed_meta_changes
+    check_options:
+      *kwargs_with_service_api_points
+
+  - aggregator_kwargs:
+      limits:
+        - crit: 0%
+          day_end: 7
+          day_start: 1
+          time_end: 20
+          time_start: 12
+          warn: '0'
+        - crit: 0%
+          day_end: 7
+          day_start: 1
+          time_end: 11
+          time_start: 21
+          warn: '0'
+    children:
+    - EVENTS%host=calendaring-service-solomon-testing & service=calendaring-service-queue-tasks-many-attempts-number-testing-*:all:all
+    service: calendaring-service-queue-tasks-many-attempts-number
+
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+    check_options:
+      *kwargs_with_service_api_points
+    service: clean_old_change_events_hang_check
+
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+    check_options:
+      *kwargs_with_service_api_points
+    service: clean_old_change_events_fail_check   
+
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - EVENTS%host=calendaring-service-solomon-testing & service=calendaring-service-testing-http-4xx-percent:all:all
+    service: calendaring-service-http-code-4xx-percent
+
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - EVENTS%host=calendaring-service-solomon-testing & service=calendaring-service-testing-http-5xx-percent:all:all
+    service: calendaring-service-http-code-5xx-percent  
+
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+    children:
+    - EVENTS%host=calendaring-service-solomon-testing & service=calendaring-service-meta-mapper-errors-number-testing*:all:all
+    service: calendaring-service-meta-mapper-errors-number-testing

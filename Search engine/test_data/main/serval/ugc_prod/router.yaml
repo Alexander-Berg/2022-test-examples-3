@@ -1,0 +1,22 @@
+quota: prod
+urls: urls
+
+router:
+  - regexp: urls
+    data:
+      - key: "/ugc/user/\\d+/poll.*"
+        quota: old_poll_handler_prod
+      - key: "/ugcpub/generate_poll.*"
+        quota: ugcpub_generatepoll_prod
+      - key: "/api/v1/users/\\d+/searchapp-status.*"
+        quota: user_status_handler_prod
+      - key: "/ugcpub/cabinet.*"
+        quota: ugcpub_cabinet_prod
+      - key: "/api/users/.*/polls.*"
+        quota: new_poll_handler_prod
+  - map: urls
+    data:
+      - key: /ugcpub/iznanka
+        quota: iznanka_prod
+      - key: /ugcpub/upload-photo
+        quota: ugcpub_upload_photo_prod

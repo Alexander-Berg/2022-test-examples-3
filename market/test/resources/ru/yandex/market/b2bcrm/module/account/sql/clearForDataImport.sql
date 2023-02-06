@@ -1,0 +1,5 @@
+SET LOCAL LOCK_TIMEOUT TO '1min';
+SET LOCAL STATEMENT_TIMEOUT TO '3min';
+TRUNCATE TABLE tbl_account;
+TRUNCATE TABLE tbl_b2bcontact;
+TRUNCATE TABLE tbl_b2baccountcontactrelation;

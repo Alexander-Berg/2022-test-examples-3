@@ -1,0 +1,43 @@
+{% extends "base.yaml" %}
+{% from "secrets/testing.j2" import secrets %}
+
+{% block environment %}testing{% endblock %}
+{% block network_macro %}_MAILTESTNETS_{% endblock %}
+
+
+{% set ENVIRONMENT_TYPE = "testing" %}
+{% set ENVIRONMENT = "testing" %}
+
+{% set nginx_env = {
+    "components_list": "api,compose,homer,lite,mobile-api,subscriptions,quinn,u2709,web-api",
+    "api_es": "mail_extapi_testing.extapi",
+    "compose_es": "mail_compose_testing.compose",
+    "homer_es": "mail_homer_testing.homer",
+    "lite_es": "mail_lite_testing.lite",
+    "mobile_api_es": "mail_mobapi_testing.mobapi",
+    "subscriptions_es": "mail_subscriptions_testing.subscriptions",
+    "quinn_es": "mail_quinn_testing.quinn",
+    "u2709_es": "mail_liza_testing.liza",
+    "web_api_es": "mail_webapi_testing.webapi",
+} %}
+{%
+set deploy_units = {
+    "nginx": {
+        "##settings": "sbr:2764680622",
+        "per_cluster": False,
+        "max_unavailable": 1,
+        "max_pods": 1,
+        "clusters": {
+            "iva": 1,
+            "sas": 1,
+        },
+        "memory_guarantee": 1,
+        "vcpu_guarantee": 1000,
+        "network_bandwidth_guarantee": 1,
+        "disk_capacity": 10,
+        "disk_bandwidth_guarantee": 1,
+        "disk_bandwidth_limit": 2,
+        "nginx_env": nginx_env,
+    },
+}
+%}

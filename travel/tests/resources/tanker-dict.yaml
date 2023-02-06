@@ -1,0 +1,95 @@
+region.block.text.faq_default: |
+  <div class="section">
+    <h2>Лучшие отели в городе {{city}}</h2>
+    <p>Какой-то хитрый <i>текст</i> про то какой {{top_hotels_1.link}} лучший{% if top_hotels_2 %}, а какой отель {{top_hotels_2}} нет.{% endif %}</p>
+  </div>
+
+region.block.faq.tophotels: |
+  <div>
+    <h2>Частые вопросы об отелях в городе {{city}}</h2>
+    <div class="question">
+      <h3>Какие лучшие отели?</h3>
+      <p>Все хорошие</p>
+    </div>
+  </div>
+
+region.block.hotel_list.breakfast: |
+  title: Отели {{city|locative}} с завтраком
+  buttonText: Отели {{city|locative}} с завтраком
+  geoSearchRequestData:
+    limit: 4
+    filters:
+      - hotel_pansion_with_offerdata:hotel_pansion_breakfast_included
+    sortType: relevant-first
+
+region.block.hotel_list.center: |
+  title: Отели {{city|locative}} в центре
+  buttonText: Отели {{city|locative}} в центре
+  geoSearchRequestData:
+    limit: 4
+    filters:
+      - hotel_city_center_dist_category:hotel_city_center_dist_category_less_3
+
+region.block.hotel_list.top: |
+  title: Топ отелей {{city|locative}}
+  buttonText: Топ отелей {{city|locative}}
+  geoSearchRequestData:
+    limit: 4
+
+region.block.search_form.default: |
+  title: Поиск отелей {{city|locative}}
+  isCalendarOpen: true
+
+region.block.seo.default: |
+  title: Отели {{city|locative}}
+  description: >
+    Отели {{city|locative}}, забронировать отель,
+    лучшие отели {{city|locative}}
+  openGraph:
+    title: Отели {{city|locative}}
+    description: >
+      Отели {{city|locative}}, забронировать отель,
+      лучшие отели {{city|locative}}
+
+region.block.text.default: |
+  <div class="section">
+    <p>Найдите идеальный вариант размещения от {{city.min_price}} рублей за ночь, выбрав среди {{hotels.count}} отелей, гостиниц и других объектов {{city|locative}}. Яндекс.Путешествия сравнивает цены на номера напрямую от поставщиков и предлагает лучшие варианты для бронирования онлайн без комиссии.</p>
+  </div>
+
+region.page.type-other: |
+  seo: region.block.seo.default
+  content:
+    - region.block.search_form.default
+
+region.page.default: |
+  seo: region.block.seo.default
+  content:
+    - region.block.search_form.default
+    - region.block.hotel_list.top
+    - region.block.hotel_list.center
+    - region.block.hotel_list.breakfast
+    - region.block.faq.tophotels
+    - region.block.text.faq_default
+    - region.block.text.with_price
+    - region.block.cross_links.default
+
+
+region.block.text.with_price: |
+  <div class="section">
+    <p>Найдите идеальный вариант размещения от {{city.min_price}} рублей за ночь.</p>
+  </div>
+
+region.cross_links: |
+  regions:
+    moscow:
+      incomingLinksCount: 20
+      fixedLinks:
+      - yekaterinburg
+    yekaterinburg:
+      incomingLinksCount: 10
+    new-york:
+      fixedLinks:
+      - moscow
+
+region.block.cross_links.default: |
+  title: Популярные направления

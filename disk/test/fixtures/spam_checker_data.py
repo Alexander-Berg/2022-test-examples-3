@@ -1,0 +1,4 @@
+# -*- coding: utf-8 -*-
+class SpamCheckerData:
+    DEFAULT = '<spam receipt="777777777777777777777777777777777777777777777777">0</spam>'
+    SPAM = '<spam receipt="666666666666666666666666666666666666666666666666">1</spam>'

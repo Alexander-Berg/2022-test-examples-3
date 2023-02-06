@@ -1,0 +1,107 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "booking",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--username", "username",
+    "--password", "password",
+    "--date-from", "2019-01-01",
+    "--date-to", "2019-01-01",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+]
+
+checkers = [
+    "lb",
+    "partner",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "apllication/json"
+
+[[partner.responses]]
+    method = "POST"
+    form = {created_from="2019-01-01", created_until="2019-01-02", offset="0"}
+    data_file = "partner_response_2019_01_01.json"
+
+[[partner.responses]]
+    method = "POST"
+    form = {created_from="2019-01-01", created_until="2019-01-02", offset="1000"}
+    data_file = "partner_response_2019_01_01_1000.json"
+
+
+[lb]
+    topic = "topic-booking"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+[[lb.expected]]
+    partner_name = "booking"
+    travel_order_id = "booking:0"
+    partner_order_id = "0"
+    created_at = 1546300800
+    status = "pending"
+    partner_status = "booked"
+    label = "label_0_0"
+    currency_code = "EUR"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-01-01"
+    check_out = "2019-01-02"
+    order_amount = 1000.0
+    profit_amount = 9.5
+    hotel_name = "hotel_name_0_0"
+    hotel_country = "hotel_country_0_0"
+    hotel_city = "hotel_city_0_0"
+    deferred_payment_eligibility = "unknown"
+    partner_hotel_id = "7010947"
+    post_pay_eligible = false
+    post_pay_used = false
+
+[[lb.expected]]
+    partner_name = "booking"
+    travel_order_id = "booking:1"
+    partner_order_id = "1"
+    created_at = 1546387200
+    status = "refunded"
+    partner_status = "cancelled"
+    label = "label_0_1"
+    currency_code = "EUR"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-01-02"
+    check_out = "2019-01-03"
+    order_amount = 1000.0
+    profit_amount = 9.5
+    hotel_name = "hotel_name_0_1"
+    hotel_country = "hotel_country_0_1"
+    hotel_city = "hotel_city_0_1"
+    deferred_payment_eligibility = "unknown"
+    partner_hotel_id = "7010947"
+    post_pay_eligible = false
+    post_pay_used = false
+
+[[lb.expected]]
+    partner_name = "booking"
+    travel_order_id = "booking:2"
+    partner_order_id = "2"
+    created_at = 1546473600
+    status = "confirmed"
+    partner_status = "stayed"
+    label = "label_0_2"
+    currency_code = "EUR"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-01-03"
+    check_out = "2019-01-04"
+    order_amount = 1000.0
+    profit_amount = 9.5
+    hotel_name = "hotel_name_0_2"
+    hotel_country = "hotel_country_0_2"
+    hotel_city = "hotel_city_0_2"
+    deferred_payment_eligibility = "unknown"
+    partner_hotel_id = "7010947"
+    post_pay_eligible = false
+    post_pay_used = false

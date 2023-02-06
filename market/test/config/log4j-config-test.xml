@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+    <appender name="ASYNC" class="org.apache.log4j.AsyncAppender">
+        <param name="BufferSize" value="1024"/>
+        <appender-ref ref="CONSOLE"/>
+    </appender>
+
+    <appender name="ASYNC_EMAIL" class="org.apache.log4j.AsyncAppender">
+        <param name="BufferSize" value="1024"/>
+        <appender-ref ref="EVENT_SMTP"/>
+    </appender>
+
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p %x [%c{1} %t] %m%n"/>
+        </layout>
+    </appender>
+
+    <logger name="org.apache">
+        <level value="WARN"/>
+    </logger>
+
+    <logger name="org.hibernate">
+        <level value="WARN"/>
+    </logger>
+
+    <logger name="org.springframework">
+        <level value="WARN"/>
+    </logger>
+
+    <logger name="ru.yandex">
+        <level value="DEBUG"/>
+    </logger>
+
+    <logger name="com.mchange">
+        <level value="WARN"/>
+    </logger>
+
+    <root>
+        <priority value="ALL"/>
+        <appender-ref ref="ASYNC"/>
+    </root>
+</log4j:configuration>

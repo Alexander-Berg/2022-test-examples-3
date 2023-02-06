@@ -1,0 +1,53 @@
+{#
+    What are we testing:
+      * extrapolated (for market.yandex.ru) order statistics are accumulated over history (>= 2 days)
+      * models with too few orders are ignored
+      * group models borrow statistics from modifications (only market.yandex.ru)
+#}
+{% if table == "sets_reasons_to_buy_bought_n_times" %}
+    {# Result data. #}
+    {% table "sets_reasons_to_buy" %}
+        ["M0_NEW", "model", "bought_n_times", "statFactor", 71.0, {}, "{{ day }}"],
+        ["M1", "model", "bought_n_times", "statFactor", 24.0, {}, "{{ day }}"],
+        ["M1_NEW", "model", "bought_n_times", "statFactor", 24.0, {}, "{{ day }}"]
+        {% if not version.startswith("blue") %}
+            ,["G", "model", "bought_n_times", "statFactor", 33.0, {}, "{{ day }}"]
+        {% endif %}
+    {% endtable %}
+{% elif table == "features_item_model_extrapolated_order_statistics" %}
+    {% table table %}
+        {% if shift == 0 %}
+            ["M0", 69.0, "model", "{{ day }}"],
+            ["M01", 2.0, "model", "{{ day }}"],
+            ["fake_model_for_test", 69.0, "model", "{{ day }}"],
+            ["M1", 5.0, "model", "{{ day }}"],
+            ["M2", 8.0, "model", "{{ day }}"]
+        {% elif shift == 1 %}
+            ["M1", 19.0, "model", "{{ day }}"],
+            ["G", 1.0, "model", "{{ day }}"]
+        {% endif %}
+    {% endtable %}
+{% elif table == "features_item_model_order_statistics" %}
+    {% table table %}
+        {% if shift == 0 %}
+            ["M0", 69.0, 69.0, 69.0, 69.0,  69.0, 69.0, 69.0, 69.0,  69.0, 69.0, 69.0, 69.0,  69.0, 69.0, "model", "{{ day }}"],
+            ["M01", 2.0, 2.0, 2.0, 2.0,  2.0, 2.0, 2.0, 2.0,  2.0, 2.0, 2.0, 2.0,  2.0, 2.0, "model", "{{ day }}"],
+            ["M1", 5.0, 5.0, 5.0, 5.0,  5.0, 5.0, 5.0, 5.0,  5.0, 5.0, 5.0, 5.0,  5.0, 5.0, "model", "{{ day }}"],
+            ["M2", 8.0, 8.0, 8.0, 8.0,  8.0, 8.0, 8.0, 8.0,  8.0, 8.0, 8.0, 8.0,  8.0, 8.0, "model", "{{ day }}"]
+        {% elif shift == 1 %}
+            ["M1", 19.0, 19.0, 19.0, 19.0,  19.0, 19.0, 19.0, 19.0,  19.0, 19.0, 19.0, 19.0,  19.0, 19.0, "model", "{{ day }}"]
+        {% endif %}
+    {% endtable %}
+{% elif table == "items_model_group" %}
+    {% table table %}
+        ["M1", "G", "model", "{{ day }}"],
+        ["M2", "G", "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "outlet_model_transitions" %}
+    {% table table %}
+        ["M0", "M0_NEW", "{{ day }}"],
+        ["M01", "M0_NEW", "{{ day }}"],
+        ["M1", "M1", "{{ day }}"],
+        ["M1", "M1_NEW", "{{ day }}"]
+    {% endtable %}
+{% endif %}

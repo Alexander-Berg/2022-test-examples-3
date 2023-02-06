@@ -1,0 +1,30 @@
+extends: config/base.yml
+
+directory:
+    host: http://api-internal-test.directory.ws.yandex.net
+
+blackbox:
+    host: http://pass-test.yandex.ru/blackbox
+
+yandex_disk:
+    host: http://cloud-api.dst.yandex.net:8080
+    verify_ssl_on_upload: False
+
+sync:
+    validate_domain: False
+
+tractor_db:
+    conninfo: "host=sas-kdlags2lmj301mm3.db.yandex.net,vla-cj9nkmu93xvqm1cy.db.yandex.net port=6432 dbname=tractor_disk_db user=tractor_disk target_session_attrs=read-write"
+
+mds:
+    read_url: https://storage-int.mdst.yandex.net
+    write_url: https://storage-int.mdst.yandex.net:1443
+    namespace: pdd-ipa
+    expire: 30d
+    retrying:
+        base_delay_in_seconds: 0.0
+        count: 3
+
+versioned_keys:
+    data:
+        "1": dHJhY3Rvcl9fX3NlY3JldA== # b64encode("tractor___secret".encode())

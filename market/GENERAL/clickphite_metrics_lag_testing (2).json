@@ -1,0 +1,49 @@
+{
+  "logHosts": "*",
+  "logPath": "**/clickphite-metric-lag.log",
+  "clickhouseTable": "clickphite_metric_lag_testing",
+  "parser": {
+    "dateFormat": "[dd/MMM/yyyy:HH:mm:ss Z]",
+    "separator": "\t",
+    "tskvMatch": {},
+
+    "columns": {
+      "host": {
+        "type": "String"
+      },
+      "table": {
+        "type": "String"
+      },
+      "metricId": {
+        "type": "String"
+      },
+      "storage": {
+        "type": "String"
+      },
+      "period": {
+        "type": "String"
+      },
+      "fullLagSeconds": {
+        "type": "Int32"
+      },
+      "fullQueuePeriods": {
+        "type": "Int32"
+      },
+      "fullQueueSeconds": {
+        "type": "Int32"
+      },
+      "realTimeLagSeconds": {
+        "type": "Int32"
+      },
+      "realTimeQueuePeriods": {
+        "type": "Int32"
+      },
+      "realTimeQueueSeconds": {
+        "type": "Int32"
+      }
+    }
+  },
+  "sources": [
+    "logbroker://market-health-testing--other"
+  ]
+}

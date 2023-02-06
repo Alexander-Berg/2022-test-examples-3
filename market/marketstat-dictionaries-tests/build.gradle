@@ -1,0 +1,22 @@
+description = 'Autotests for marketstat dictionaries'
+version = '2.7-SNAPSHOT'
+
+apply plugin: 'gradle-aqua-plugin'
+apply plugin: "org.inferred.processors"
+
+dependencies {
+    compile project(':mstat-tests-common')
+    compile 'com.google.guava:guava:23.0'
+    compile ('org.reflections:reflections:0.9.11') {
+        exclude(module: 'guava')
+    }
+    compile('ru.yandex:iceberg-inside-yt:latest.release') {
+        exclude(module: 'jmh-generator-annprocess')
+        exclude(module: 'xml-apis')
+    }
+
+    compile group: 'xml-apis', name: 'xml-apis', version: '1.4.01'
+    compile group: 'com.jayway.restassured', name: 'rest-assured', version: '2.4.1'
+    processor 'org.projectlombok:lombok:1.16.20'
+    processor 'ru.yandex.aqua:aqua-gradle-plugin:2.5.2'
+}

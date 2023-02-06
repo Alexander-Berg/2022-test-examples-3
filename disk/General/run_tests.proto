@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package disk.tasklets.teamcity.run_tests;
+
+import "ci/tasklet/common/proto/service.proto";
+import "tasklet/api/tasklet.proto";
+import "tasklet/services/ci/proto/ci.proto";
+import "tasklet/services/yav/proto/yav.proto";
+
+message Context {
+    option (tasklet.context) = true;
+    option (tasklet.py_adapter) = "tasklet.domain.adapter:Context";
+
+    ci.CiService ci = 1 [(tasklet.inject) = true];
+    yav_service.YavService yav = 2 [(tasklet.inject) = true];
+}
+
+message Build {
+    string arcanum_review_id = 1;
+    string build_type = 2;
+    string release_branch = 3;
+    string flow_type = 4;
+}
+
+message CheckResult {
+    string msg = 1;
+}
+
+message Output {
+    CheckResult result = 1;
+}
+
+message Input {
+    ci.TaskletContext context = 1;
+    Build build = 2;
+}
+message RunTests {
+    option (tasklet.tasklet_interface) = true;
+
+    Input input = 1 [(tasklet.input) = true];
+    Output output = 2 [(tasklet.output) = true];
+    Context ctx = 3;
+}

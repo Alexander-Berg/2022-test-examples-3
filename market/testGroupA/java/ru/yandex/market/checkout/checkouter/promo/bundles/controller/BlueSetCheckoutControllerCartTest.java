@@ -1,0 +1,315 @@
+package ru.yandex.market.checkout.checkouter.promo.bundles.controller;
+
+import java.math.BigDecimal;
+
+import org.junit.jupiter.api.Test;
+
+import ru.yandex.market.checkout.checkouter.cart.ItemChange;
+import ru.yandex.market.checkout.checkouter.cart.MultiCart;
+import ru.yandex.market.checkout.checkouter.promo.bundles.utils.BlueGiftsOrderUtils;
+import ru.yandex.market.checkout.checkouter.promo.bundles.utils.BlueSetTestBase;
+import ru.yandex.market.checkout.providers.MultiCartProvider;
+import ru.yandex.market.loyalty.api.model.ItemPromoResponse;
+import ru.yandex.market.loyalty.api.model.PromoType;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.comparesEqualTo;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static ru.yandex.market.checkout.checkouter.order.promo.PromoType.BLUE_SET;
+import static ru.yandex.market.checkout.checkouter.promo.PromoConfigurer.FIRST_OFFER;
+import static ru.yandex.market.checkout.checkouter.promo.PromoConfigurer.PROMO_KEY;
+import static ru.yandex.market.checkout.checkouter.promo.PromoConfigurer.SECOND_OFFER;
+import static ru.yandex.market.checkout.checkouter.promo.PromoConfigurer.SHOP_PROMO_KEY;
+import static ru.yandex.market.checkout.checkouter.promo.PromoConfigurer.THIRD_OFFER;
+import static ru.yandex.market.checkout.checkouter.promo.bundles.utils.BlueGiftsOrderUtils.fbyRequestFor;
+import static ru.yandex.market.checkout.checkouter.promo.bundles.utils.BlueGiftsOrderUtils.orderWithYandexDelivery;
+import static ru.yandex.market.checkout.util.OrderUtils.firstOrder;
+import static ru.yandex.market.checkout.util.items.OrderItemUtils.itemResponseFor;
+import static ru.yandex.market.checkout.util.items.OrderItemUtils.similar;
+
+public class BlueSetCheckoutControllerCartTest extends BlueSetTestBase {
+
+    @Test
+    public void shouldBeNoChangesOnValidPromo() {
+        MultiCart cart = MultiCartProvider.single(orderWithYandexDelivery()
+                .itemBuilder(similar(firstOffer).price(900))
+                .itemBuilder(similar(secondOffer).price(1800))
+                .itemBuilder(similar(thirdOffer).price(2700))
+        );
+
+        MultiCart multiCart = orderCreateHelper.cart(BlueGiftsOrderUtils.fbyRequestFor(cart, reportOffers, config ->
+                config.expectResponseItems(
+                        itemResponseFor(firstOffer)
+                                .quantity(2)
+                                .promo(new ItemPromoResponse(
+                                        BigDecimal.valueOf(100),
+                                        PromoType.BLUE_SET,
+                                        null,
+                                        PROMO_KEY,
+                                        SHOP_PROMO_KEY,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null
+                                )),
+                        itemResponseFor(secondOffer)
+                                .quantity(2)
+                                .promo(new ItemPromoResponse(
+                                        BigDecimal.valueOf(200),
+                                        PromoType.BLUE_SET,
+                                        null,
+                                        PROMO_KEY,
+                                        SHOP_PROMO_KEY,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null
+                                )),
+                        itemResponseFor(thirdOffer)
+                                .quantity(2)
+                                .promo(new ItemPromoResponse(
+                                        BigDecimal.valueOf(300),
+                                        PromoType.BLUE_SET,
+                                        null,
+                                        PROMO_KEY,
+                                        SHOP_PROMO_KEY,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null
+                                ))
+                )));
+
+        assertThat(multiCart, hasProperty("valid", is(true)));
+        assertThat(firstOrder(multiCart), hasProperty("changes", nullValue()));
+        assertThat(firstOrder(multiCart), hasProperty("validationErrors", nullValue()));
+        assertThat(firstOrder(multiCart).getItems(), hasItems(
+                allOf(
+                        hasProperty("offerId", is(FIRST_OFFER)),
+                        hasProperty("bundleId", nullValue()),
+                        hasProperty("changes", nullValue()),
+                        hasProperty("promos", hasItem(allOf(
+                                hasProperty("promoDefinition", allOf(
+                                        hasProperty("type", is(BLUE_SET)),
+                                        hasProperty("marketPromoId", is(PROMO_KEY)),
+                                        hasProperty("shopPromoId", is(SHOP_PROMO_KEY))
+                                )),
+                                hasProperty("buyerDiscount", comparesEqualTo(BigDecimal.valueOf(100)))
+                        )))
+                ),
+                allOf(
+                        hasProperty("offerId", is(SECOND_OFFER)),
+                        hasProperty("bundleId", nullValue()),
+                        hasProperty("changes", nullValue()),
+                        hasProperty("promos", hasItem(allOf(
+                                hasProperty("promoDefinition", allOf(
+                                        hasProperty("type", is(BLUE_SET)),
+                                        hasProperty("marketPromoId", is(PROMO_KEY)),
+                                        hasProperty("shopPromoId", is(SHOP_PROMO_KEY))
+                                )),
+                                hasProperty("buyerDiscount", comparesEqualTo(BigDecimal.valueOf(200)))
+                        )))
+                ),
+                allOf(
+                        hasProperty("offerId", is(THIRD_OFFER)),
+                        hasProperty("bundleId", nullValue()),
+                        hasProperty("changes", nullValue()),
+                        hasProperty("promos", hasItem(allOf(
+                                hasProperty("promoDefinition", allOf(
+                                        hasProperty("type", is(BLUE_SET)),
+                                        hasProperty("marketPromoId", is(PROMO_KEY)),
+                                        hasProperty("shopPromoId", is(SHOP_PROMO_KEY))
+                                )),
+                                hasProperty("buyerDiscount", comparesEqualTo(BigDecimal.valueOf(300)))
+                        )))
+                )
+        ));
+    }
+
+    @Test
+    public void shouldBePriceChangeIfNoLoyaltyDiscount() {
+        MultiCart cart = MultiCartProvider.single(orderWithYandexDelivery()
+                .itemBuilder(similar(firstOffer).price(900))
+                .itemBuilder(similar(secondOffer).price(1800))
+                .itemBuilder(similar(thirdOffer).price(2700))
+        );
+
+        MultiCart multiCart = orderCreateHelper.cart(fbyRequestFor(cart, reportOffers, config ->
+                config.expectResponseItems(
+                        itemResponseFor(firstOffer)
+                                .quantity(2),
+                        itemResponseFor(secondOffer)
+                                .quantity(2),
+                        itemResponseFor(thirdOffer)
+                                .quantity(2)
+                )));
+
+        assertThat(multiCart, hasProperty("valid", is(true)));
+        assertThat(firstOrder(multiCart), hasProperty("changes", nullValue()));
+        assertThat(firstOrder(multiCart), hasProperty("validationErrors", nullValue()));
+        assertThat(firstOrder(multiCart).getItems(), everyItem(allOf(
+                hasProperty("bundleId", nullValue()),
+                hasProperty("changes", hasItem(ItemChange.PRICE)),
+                hasProperty("promos", empty())
+        )));
+    }
+
+    @Test
+    public void shouldBePriceChangeOnInvalidClientPrice() {
+        MultiCart cart = MultiCartProvider.single(orderWithYandexDelivery()
+                .itemBuilder(similar(firstOffer).price(1000))
+                .itemBuilder(similar(secondOffer).price(2000))
+                .itemBuilder(similar(thirdOffer).price(3000))
+        );
+
+        MultiCart multiCart = orderCreateHelper.cart(fbyRequestFor(cart, reportOffers, config ->
+                config.expectResponseItems(
+                        itemResponseFor(firstOffer)
+                                .quantity(2)
+                                .promo(new ItemPromoResponse(
+                                        BigDecimal.valueOf(100),
+                                        PromoType.BLUE_SET,
+                                        null,
+                                        PROMO_KEY,
+                                        SHOP_PROMO_KEY,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null
+                                )),
+                        itemResponseFor(secondOffer)
+                                .quantity(2)
+                                .promo(new ItemPromoResponse(
+                                        BigDecimal.valueOf(200),
+                                        PromoType.BLUE_SET,
+                                        null,
+                                        PROMO_KEY,
+                                        SHOP_PROMO_KEY,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null
+                                )),
+                        itemResponseFor(thirdOffer)
+                                .quantity(2)
+                                .promo(new ItemPromoResponse(
+                                        BigDecimal.valueOf(300),
+                                        PromoType.BLUE_SET,
+                                        null,
+                                        PROMO_KEY,
+                                        SHOP_PROMO_KEY,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null
+                                ))
+                )));
+
+        assertThat(multiCart, hasProperty("valid", is(true)));
+        assertThat(firstOrder(multiCart), hasProperty("changes", nullValue()));
+        assertThat(firstOrder(multiCart), hasProperty("validationErrors", nullValue()));
+        assertThat(firstOrder(multiCart).getItems(), everyItem(allOf(
+                hasProperty("bundleId", nullValue()),
+                hasProperty("changes", hasItem(ItemChange.PRICE)),
+                hasProperty("promos", hasItem(
+                        hasProperty("promoDefinition", hasProperty("type", is(BLUE_SET)))
+                ))
+        )));
+    }
+
+    @Test
+    public void shouldProcessDetachedSetWithSecondaryItems() {
+        MultiCart cart = MultiCartProvider.single(orderWithYandexDelivery()
+                .itemBuilder(similar(firstOffer).price(900))
+                .itemBuilder(similar(secondOffer).price(1800))
+                .itemBuilder(similar(fourthOffer).price(3000))
+        );
+
+        MultiCart multiCart = orderCreateHelper.cart(fbyRequestFor(cart, reportOffers, config ->
+                config.expectResponseItems(
+                        itemResponseFor(firstOffer)
+                                .quantity(2)
+                                .promo(new ItemPromoResponse(
+                                        BigDecimal.valueOf(100),
+                                        PromoType.BLUE_SET,
+                                        null,
+                                        PROMO_KEY,
+                                        SHOP_PROMO_KEY,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null
+                                )),
+                        itemResponseFor(secondOffer)
+                                .quantity(2)
+                                .promo(new ItemPromoResponse(
+                                        BigDecimal.valueOf(200),
+                                        PromoType.BLUE_SET,
+                                        null,
+                                        PROMO_KEY,
+                                        SHOP_PROMO_KEY,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null
+                                )),
+                        itemResponseFor(fourthOffer)
+                                .quantity(2)
+                                .promo(new ItemPromoResponse(
+                                        BigDecimal.valueOf(1000),
+                                        PromoType.BLUE_SET,
+                                        null,
+                                        PROMO_KEY,
+                                        SHOP_PROMO_KEY,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null
+                                ))
+                )));
+
+        assertThat(multiCart, hasProperty("valid", is(true)));
+        assertThat(firstOrder(multiCart), hasProperty("changes", nullValue()));
+        assertThat(firstOrder(multiCart), hasProperty("validationErrors", nullValue()));
+        assertThat(firstOrder(multiCart).getItems(), everyItem(allOf(
+                hasProperty("bundleId", nullValue()),
+                hasProperty("promos", hasItem(
+                        hasProperty("promoDefinition", hasProperty("type", is(BLUE_SET)))
+                ))
+        )));
+    }
+}

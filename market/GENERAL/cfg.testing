@@ -1,0 +1,134 @@
+Core {
+    Log {
+        Level: DEBUG
+        Target {
+            FilePath: "logs/content-storage/content-storage.log"
+        }
+    }
+
+    Identity {
+        Name: "market_content_storage"
+    }
+
+    Feature {
+        IncludeServerNameInSignals: true
+    }
+
+    TraceLog {
+        Target {
+            FilePath: "/var/log/yandex/market-content-storage/market-content-storage-trace.log"
+        }
+    }
+
+    Server {
+        ListenThreads: 15
+        RequestQueueSize: 0
+    }
+
+    GrpcServer {
+        Port: 2555
+    }
+}
+
+DataReaderCfg {
+    VendorsFile:    "/app/data/mbo/vendors.csv"
+    HidsFile:       "/app/data/mbo/hids.csv"
+    NidsFile:       "/app/data/mbo/nids.csv"
+    ParamsFile:     "/app/data/mbo/gl_params.csv"
+    GumofulTemplatesFile: "/app/data/mbo/gumoful.csv"
+    PersFile:       "/app/data/pers/pers.csv"
+    MboDataTsFile:  "/app/data/mbo/ts.txt"
+    PersDataTsFile:  "/app/data/pers/ts.txt"
+    RecomDataTsFile:  "/app/data/recom/ts.txt"
+}
+
+SaasConfig {
+    Name: "content_storage"
+    Host: "prestable-market.saas.yandex.net"
+    Port: 80
+    Tvm {
+        SelfId: 2031711
+        RemoteId: 2025662
+        SecretEnvName: "TVM_SECRET"
+    }
+    Timeout: 500
+    RetryCount: 3
+}
+
+ReportConfig {
+    Http {
+        TimeoutDisabled: false
+        Timeout: 500
+        RetryCount: 3
+        RetryDelay: 0
+    }
+    Name: "content_storage"
+    Host: "http://report.tst.vs.market.yandex.net:17051"
+}
+
+MinVirtualId: 2000000000000
+MaxVirtualId: 1002000000000000
+
+IsAsyncRequester: false
+
+IsTesting: true
+
+CsTraceLog {
+    Target {
+        FilePath: "/var/log/yandex/market-content-storage/market-content-storage-trace.log"
+    }
+}
+
+ForceGumofulRealTime: false
+
+RecomDataCfg {
+    ReasonsToBuyFile:  "/app/data/recom/reasons_to_buy"
+}
+
+PostgresCfg {
+    PgaasCfg {
+        RootCA: "/app/data/postgre/root.crt"
+        Host: "sas-qv5667261v8o2r1e.db.yandex.net,vla-c26vk7vhsg3z3qcj.db.yandex.net"
+        Port: 6432
+        Database: "content_storage_fast_mappings_testing"
+        User: "content_storage_fast_mappings_testing"
+        WithLog: true
+    }
+    PasswordEnvName: "POSTGRES_PASSWORD"
+}
+
+FastSettingsFile: "/app/data/fast_data/fast_settings"
+
+SandboxConfig {
+    Http {
+        TimeoutDisabled: false
+        Timeout: 3000
+        RetryCount: 3
+        RetryDelay: 0
+    }
+    Name: "content_storage"
+    Host: "https://sandbox.yandex-team.ru/api/v1.0"
+    SecretEnvName: "SANDBOX_OAUTH"
+}
+
+DefaultExperimentsFile: "/app/dynamic-data/default_experiments/recent"
+ExpUpdaterPeriod: 5
+
+RedisCfg {
+    Hosts: "sas-55382sjz905xlwii.db.yandex.net"
+    Port: 6379
+    DatabaseNumber: 16
+    PasswordEnvName: "REDIS_PASSWORD";
+
+    ConnectTimeout: 100
+    DefaultTimeout: 500
+
+    DefaultExpiration: 300
+}
+
+EnableRedisCache: false
+
+NavigationCfg {
+    NavigationFile: "/app/dynamic-data/navigation/recent"
+    UpdaterPeriod: 3
+}

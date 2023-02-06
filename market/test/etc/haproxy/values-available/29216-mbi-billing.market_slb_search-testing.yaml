@@ -1,0 +1,43 @@
+# Параметры обработки
+params:
+  default:
+    resolve: yes
+    templates:
+      - user_mslb_tcp.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          check
+      inter:          2s
+      rise:           3
+      weight:         1
+    globals:
+      addr_fdee:
+      service_name:   mbi-billing.tst.vs.market.yandex.net
+      service_port:   12346
+      timeout_server: 1h
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+    - name: YP@testing-market-mbi-billing-sas@local
+      port_offset: 3
+      weight: 100
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing-market-mbi-billing-vla@local
+      port_offset: 3
+      weight: 100
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing-market-mbi-billing-sas
+      port_offset: 3
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing-market-mbi-billing-vla
+      port_offset: 3
+      dns_resolvers: yandex-ns
+      resolve: false

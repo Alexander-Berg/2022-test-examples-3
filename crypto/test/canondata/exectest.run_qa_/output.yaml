@@ -1,0 +1,95 @@
+port: 1234
+update_interval_sec: 60
+solomon_data_request_timeout_sec: 10
+
+solomon:
+  project: crypta_cm
+  service: quoter
+  cluster: "qa"
+  schema: "http"
+  host: "localhost"
+  port: 2345
+  timeout_sec: 10
+
+stats:
+  hist:
+    min: 0
+    max: 10
+    bin_count: 10
+
+  percentile:
+    max: 100000000
+    precision: 3
+    percentiles:
+      - 100
+      - 99.9
+      - 99
+      - 98
+      - 95
+      - 90
+
+dyntables_policy:
+  aggregation_window_sec: 1800
+  aggregation_function: "avg"
+  sensor_current: "tablet_static_memory_in_gb"
+  sensor_limit: "tablet_static_memory_limit_in_gb"
+
+  environment_types:
+    "qa_crypta":
+      min_gb_left: 50
+      clusters:
+        - labels:
+            project: "yt"
+            cluster: "yt-cluster-1"
+            service: "accounts"
+            account: "crypta"
+        - labels:
+            project: "yt"
+            cluster: "yt-cluster-2"
+            service: "accounts"
+            account: "crypta"
+    "qa_bigb":
+      min_gb_left: 50
+      clusters:
+        - labels:
+            project: "yt"
+            cluster: "yt-cluster-1"
+            service: "accounts"
+            account: "bigb"
+        - labels:
+            project: "yt"
+            cluster: "yt-cluster-2"
+            service: "accounts"
+            account: "bigb"
+
+logs:
+  main:
+    level: debug
+    targets:
+      - type: stdout
+      - type: rotating
+        file: "/tmp/main.log"
+        max_file_size: 41943040
+        max_files: 1
+
+  quoter_server:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/quoter_server.log"
+      max_file_size: 41943040
+      max_files: 1
+  state_updater:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/state_updater.log"
+      max_file_size: 41943040
+      max_files: 1
+  solomon:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/solomon.log"
+      max_file_size: 41943040
+      max_files: 1

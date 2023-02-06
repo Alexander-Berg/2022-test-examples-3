@@ -1,0 +1,331 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый mstat_dictionaries-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmstat_dictionaries-testing
+
+juggler:
+  checks:
+
+  # Check dictionaries-check-db-crit
+  # https://juggler.yandex-team.ru/check_details/?host=mstat_dictionaries-testing&service=dictionaries-check-db-crit&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /check_db
+      regexp: ^0;.*
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 99%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_mstat_dictionaries_sas:dictionaries-check-db-crit:all
+    - NANNY%testing_market_mstat_dictionaries_vla:dictionaries-check-db-crit:all
+    flaps:
+      boost_time: 0
+      critical_time: 1800
+      stable_time: 1200
+    notifications:
+    - template_kwargs:
+        login:
+        - kateleb
+        method:
+        - email
+        status:
+        - CRIT
+        - WARN
+      template_name: on_status_change
+    refresh_time: 300
+    service: dictionaries-check-db-crit
+    tags:
+    - marketstat_testing
+    - marketstat_testing_bsi
+    - market_testing
+    - market_rtc
+    - mstatdictionaries
+    - testing
+    - market
+    - _market_
+    ttl: 700
+
+  # Check dictionaries-ping
+  # https://juggler.yandex-team.ru/check_details/?host=mstat_dictionaries-testing&service=dictionaries-ping&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /ping
+      regexp: ^0;.*
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 100%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_mstat_dictionaries_sas:dictionaries-ping:all
+    - NANNY%testing_market_mstat_dictionaries_vla:dictionaries-ping:all
+    notifications:
+    - template_kwargs:
+        login:
+        - kateleb
+        method:
+        - email
+        status:
+        - CRIT
+        - WARN
+      template_name: on_status_change
+    refresh_time: 100
+    service: dictionaries-ping
+    tags:
+    - marketstat_testing
+    - marketstat_testing_bsi
+    - market_testing
+    - market_rtc
+    - mstatdictionaries
+    - testing
+    - market
+    - _market_
+    - ping
+    ttl: 900
+
+  # Check dictionaries-sla
+  # https://juggler.yandex-team.ru/check_details/?host=mstat_dictionaries-testing&service=dictionaries-sla&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /sla
+      regexp: ^0;.*
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 100%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_mstat_dictionaries_sas:dictionaries-sla:all
+    - NANNY%testing_market_mstat_dictionaries_vla:dictionaries-sla:all
+    notifications:
+    - template_kwargs:
+        login:
+        - kateleb
+        method:
+        - email
+        status:
+        - CRIT
+        - WARN
+      template_name: on_status_change
+    refresh_time: 600
+    service: dictionaries-sla
+    tags:
+    - marketstat_testing
+    - marketstat_testing_bsi
+    - market_testing
+    - market_rtc
+    - mstatdictionaries
+    - testing
+    - market
+    - _market_
+    ttl: 1250
+
+  # Check dictionaries-tasks
+  # https://juggler.yandex-team.ru/check_details/?host=mstat_dictionaries-testing&service=dictionaries-tasks&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /tms
+      regexp: ^0;.*
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 100%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_mstat_dictionaries_sas:dictionaries-tasks:all
+    - NANNY%testing_market_mstat_dictionaries_vla:dictionaries-tasks:all
+    notifications:
+    - template_kwargs:
+        login:
+        - kateleb
+        method:
+        - email
+        status:
+        - CRIT
+        - WARN
+      template_name: on_status_change
+    refresh_time: 600
+    service: dictionaries-tasks
+    tags:
+    - marketstat_testing
+    - marketstat_testing_bsi
+    - market_testing
+    - market_rtc
+    - mstatdictionaries
+    - testing
+    - market
+    - _market_
+    ttl: 1250
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=mstat_dictionaries-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 100%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_mstat_dictionaries_sas
+    - NANNY%testing_market_mstat_dictionaries_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications: []
+    refresh_time: 60
+    service: disk_free_space
+    tags:
+    - marketstat_testing
+    - marketstat_testing_bsi
+    - market_testing
+    - market_rtc
+    - mstatdictionaries
+    - testing
+    - market
+    - _market_
+    ttl: 900
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=mstat_dictionaries-testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 100%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_mstat_dictionaries_sas
+    - NANNY%testing_market_mstat_dictionaries_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications: []
+    refresh_time: 60
+    service: logrotate
+    tags:
+    - marketstat_testing
+    - marketstat_testing_bsi
+    - market_testing
+    - market_rtc
+    - mstatdictionaries
+    - testing
+    - market
+    - _market_
+    ttl: 900
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=mstat_dictionaries-testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 100%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_mstat_dictionaries_sas
+    - NANNY%testing_market_mstat_dictionaries_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications: []
+    refresh_time: 60
+    service: push-client-status
+    tags:
+    - marketstat_testing
+    - marketstat_testing_bsi
+    - market_testing
+    - market_rtc
+    - mstatdictionaries
+    - testing
+    - market
+    - _market_
+    ttl: 900
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    check_options: {}
+    host: mstat_dictionaries-testing
+    namespace: market.mstat_platform

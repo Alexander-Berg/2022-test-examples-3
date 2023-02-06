@@ -1,0 +1,110 @@
+{
+  "owner": "mbo",
+  "statfaceReports": [
+    {
+      "title": "Категории - офферы, sku, матчинг (Тестинг)",
+      "report": "Market/Content/GuruCategoryModelsAndSkusTesting",
+      "tableName": "mbo_category_misc_stats_testing",
+      "period": "DAY",
+      "subAggregate": {
+        "keys": [
+          "hid"
+        ],
+        "aggregateExpressions": [
+          {
+            "expression": "argMax(show_models, timestamp)",
+            "name": "show_models"
+          },
+          {
+            "expression": "argMax(guru_knowledge, timestamp)",
+            "name": "guru_knowledge"
+          },
+          {
+            "expression": "argMax(show_offers, timestamp)",
+            "name": "show_offers"
+          },
+          {
+            "expression": "argMax(filter_parameters_count, timestamp)",
+            "name": "filter_parameters_count"
+          },
+          {
+            "expression": "argMax(models_count, timestamp)",
+            "name": "models_count"
+          },
+          {
+            "expression": "argMax(sku_count, timestamp)",
+            "name": "sku_count"
+          },
+          {
+            "expression": "argMax(sku_in_stock, timestamp)",
+            "name": "sku_in_stock"
+          },
+          {
+            "expression": "argMax(offers_count, timestamp)",
+            "name": "offers_count"
+          },
+          {
+            "expression": "argMax(offers_matched, timestamp)",
+            "name": "offers_matched"
+          },
+          {
+            "expression": "dictGetString('category', 'full_name', toUInt64(hid))",
+            "name": "leaf_name"
+          }
+        ]
+      },
+      "splits": [
+        {
+          "name": "category",
+          "title": "Категория",
+          "splitField": "dictGetString('category', 'full_name', arrayJoin(dictGetHierarchy('category', toUInt64(hid))))",
+          "tree": true
+        }
+      ],
+      "fields": [
+        {
+          "name": "is_leaf",
+          "title": "Листовая",
+          "metricField": "has(groupArray(leaf_name), category)"
+        }, {
+          "name": "hid",
+          "title": "hid",
+          "metricField": "if(is_leaf, any(hid), -1)"
+        }, {
+          "name": "show_models",
+          "title": "Модели",
+          "metricField": "bit_or(show_models)"
+        }, {
+          "name": "guru_knowledge",
+          "title": "Знания GURU",
+          "metricField": "if(is_leaf, min(guru_knowledge), 0)"
+        }, {
+          "name": "show_offers",
+          "title": "Офферы",
+          "metricField": "max(show_offers)"
+        }, {
+          "name": "filter_parameters_count",
+          "title": "Количество фильтров",
+          "metricField": "sum(filter_parameters_count)"
+        }, {
+          "name": "models_count",
+          "title": "Количество моделей (на Маркете)",
+          "metricField": "sum(models_count)"
+        }, {
+          "name": "sku_count",
+          "title": "Количество SKU (на Маркете)",
+          "metricField": "sum(sku_count)"
+        }, {
+          "name": "sku_in_stock",
+          "title": "Количество SKU на складе",
+          "metricField": "sum(sku_in_stock)"
+        }, {
+          "name": "offers_matched",
+          "title": "Процент сматченных",
+          "metricField": "if(sum(offers_count) > 0, sum(offers_matched) * 100  / sum(offers_count), 0)",
+          "viewType": "Percent"
+        }
+      ]
+    }
+  ]
+}

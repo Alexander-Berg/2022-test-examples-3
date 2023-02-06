@@ -1,0 +1,57 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "biletikaeroag_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 1019
+    confirm_dt = ""
+    created_at = "2020-01-31 00:53:45"
+    currency = "RUB"
+    from = "MOW"
+    marker = "1857c706-a5e969-a3aa-4651-91f5-47301d1ac8611"
+    order_id = "WT8JUJ"
+    partner = "biletikaeroag"
+    partner_id = 102
+    price = 2943.0
+    source = "biletikaeroag"
+    status = "paid"
+    ticket_number = ""
+    to = "BUD"
+    trip_type = "oneway"
+    unixtime = 1581328909
+
+[lb]
+    topic = "topic-biletikaeroag_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "partner_profit", "updated_at"]
+
+[[lb.expected]]
+    status = "confirmed"
+    category = "avia"
+    partner_id = 102
+    created_at = 1580432025
+    origin = "MOW"
+    partner_order_id = "WT8JUJ"
+    label = "1857c706-a5e969-a3aa-4651-91f5-47301d1ac8611"
+    source = "history"
+    destination = "BUD"
+    partner_name = "biletikaeroag"
+    trip_type = "oneway"
+    billing_order_id = 1019
+    order_amount = 2943.0
+    travel_order_id = "biletikaeroag:WT8JUJ"
+    currency_code = "RUB"

@@ -1,0 +1,94 @@
+annotations:
+  stagectl_epoch: 630
+  stagectl_vcs:
+    svn_branch: stage_controller/stable-119-1
+    svn_revision: 8249430
+    svn_tag: stage_controller/stable-119-1
+labels:
+  deploy_engine: env_controller
+  notifications_last_timestamp: 1623174007483316000
+  tags: []
+meta:
+  account_id: abc:service:587
+  acl:
+  - action: allow
+    permissions:
+    - read
+    - read_secrets
+    - write
+    - create
+    - ssh_access
+    - root_ssh_access
+    subjects:
+    - robot-drug-deploy
+  effective_account_id: null
+  id: avia-partners-proxy-lite-testing
+  inherit_acl: true
+  project_id: avia-partners-proxy-lite
+spec:
+  deploy_units:
+    partner-proxy:
+      endpoint_sets:
+      - port: 80
+      images_for_boxes:
+        nginx:
+          digest: EMPTY
+          name: avia/partners-proxy-lite
+          registry_host: registry.yandex.net
+          tag: stable-6-1.8243541.988916224
+      network_defaults:
+        network_id: _AVIA_TEST_NETS_
+      replica_set:
+        replica_set_template:
+          constraints:
+            antiaffinity_constraints:
+            - key: rack
+              max_pods: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+              - id: disk-0
+                labels:
+                  used_by_infra: true
+                quota_policy:
+                  bandwidth_guarantee: 15728640
+                  bandwidth_limit: 31457280
+                  capacity: 3221225472
+                storage_class: hdd
+              ip6_address_requests:
+              - enable_dns: true
+                network_id: _AVIA_TEST_NETS_
+                vlan_id: backbone
+              - enable_dns: true
+                network_id: _AVIA_TEST_NETS_
+                vlan_id: fastbone
+              pod_agent_payload:
+                spec:
+                  boxes:
+                  - id: nginx
+                    rootfs:
+                      layer_refs:
+                      - nginx
+                  mutable_workloads:
+                  - workload_ref: nginx
+                  resources:
+                    layers:
+                    - checksum: 'EMPTY:'
+                      id: nginx
+                      url: rbtorrent:ce8260f5f8bf350b1885563bafd5a657dba18001
+                  workloads:
+                  - box_ref: nginx
+                    id: nginx
+                    readiness_check:
+                      tcp_check:
+                        port: 80
+                    start:
+                      command_line: /usr/sbin/nginx
+                    transmit_logs: true
+              resource_requests:
+                memory_guarantee: 1073741824
+                memory_limit: 1073741824
+                vcpu_guarantee: 1000
+                vcpu_limit: 1000
+      revision: 16
+  revision: 17

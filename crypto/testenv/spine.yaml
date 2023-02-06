@@ -1,0 +1,335 @@
+BUILD_DOCKER:
+  multiple_jobs:
+    BUILD_CRYPTA_YT_REPLICATED_TABLE_CHECKER_DOCKER:
+      filter:
+        commit_path_prefixes:
+        - /trunk/arcadia/crypta/
+        observed_paths:
+        - ^arcadia/crypta/spine/pushers/yt_replicated_table_checker/config
+        - ^arcadia/crypta/spine/pushers/yt_replicated_table_checker/docker/Dockerfile
+        - ^arcadia/crypta/spine/pushers/yt_replicated_table_checker/docker/crypta-yt-replicated-table-checker.json
+        - ^arcadia/crypta/spine/pushers/yt_replicated_table_checker/docker/entrypoint.sh
+        - ^arcadia/crypta/spine/pushers/yt_replicated_table_checker/docker/supervisor
+        targets:
+        - crypta/spine/pushers/yt_replicated_table_checker/bin
+        - crypta/utils/run_periodic_task/bin
+        - crypta/utils/templater
+        - yt/python/yt/tools/bin/lock_make
+      packages: crypta/spine/pushers/yt_replicated_table_checker/docker/crypta-yt-replicated-table-checker.json
+      auto_release: true
+      auto_release_env: stable
+      release_to_ya_deploy: true
+
+  owners:
+  - g:crypta
+  type: CHECK
+  filter: gen:filter
+  check_task:
+    name: CRYPTA_BUILD_AND_RELEASE
+    priority: SERVICE:LOW
+    params:
+      apiargs:
+        requirements:
+          platform: linux
+        notifications:
+        - recipients:
+          - '{commit_author}'
+          - crypta-ci
+          statuses:
+          - SUCCESS
+          - FAILURE
+          - EXCEPTION
+          transport: email
+      ctx:
+        kill_timeout: 6300
+        build_type: relwithdebinfo
+        build_system: semi_distbuild
+        sandbox_container: 773239891
+        checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+        use_aapi_fuse: true
+        use_arc_instead_of_aapi: true
+        aapi_fallback: true
+        checkout: false
+        resource_type: CRYPTA_DOCKER
+        strip_binaries: false
+        compress_package_archive: true
+        package_type: docker
+        packages: gen:packages
+        docker_registry: registry.yandex.net
+        docker_image_repository: crypta
+        docker_user: robot-crypta
+        docker_token_vault_name: CRYPTA_DOCKER_REGISTRY_TOKEN
+        docker_push_image: true
+        run_tests: false
+        run_long_tests: false
+        ignore_fail_tests: false
+        ya_yt_store: true
+        auto_release: gen:auto_release
+        auto_release_env: gen:auto_release_env
+        auto_release_author: '{commit_author}'
+        release_to_ya_deploy: gen:release_to_ya_deploy
+        yp_token_vault: yp_token
+
+BUILD_BUNDLES:
+  multiple_jobs:
+    BUILD_CRYPTA_UPLOAD_AGGREGATE_CHECKS_BUNDLE:
+      packages: crypta/spine/pushers/aggregate_checks/task/crypta-upload-aggregate-checks-bundle.json
+      resource_type: CRYPTA_UPLOAD_AGGREGATE_CHECKS_BUNDLE
+      name: upload-aggregate-checks
+      released: stable
+      ttl: 30
+
+    BUILD_CRYPTA_UPLOAD_SOLOMON_ALERTS_BUNDLE:
+      packages: crypta/spine/pushers/upload_solomon_alerts/bundle/crypta-upload-solomon-alerts-bundle.json
+      resource_type: CRYPTA_UPLOAD_SOLOMON_ALERTS_BUNDLE
+      name: upload-solomon-alerts
+      released: stable
+      ttl: 30
+
+    BUILD_CRYPTA_UPLOAD_SANDBOX_SCHEDULERS_BUNDLE:
+      packages: crypta/spine/pushers/upload_sandbox_schedulers/bundle/crypta-upload-sandbox-schedulers-bundle.json
+      resource_type: CRYPTA_UPLOAD_SANDBOX_SCHEDULERS_BUNDLE
+      name: upload-sandbox-schedulers
+      released: stable
+      ttl: 30
+
+    BUILD_CRYPTA_YT_SIZES_BUNDLE:
+      filter:
+        commit_path_prefixes:
+        - /trunk/arcadia/crypta/
+        observed_paths:
+        - ^arcadia/crypta/spine/pushers/yt_sizes/bundle/crypta-yt-sizes.json
+        - ^arcadia/crypta/spine/pushers/yt_sizes/config/config.yaml
+        targets:
+        - crypta/spine/pushers/yt_sizes/bin
+      packages: crypta/spine/pushers/yt_sizes/bundle/crypta-yt-sizes.json
+      resource_type: CRYPTA_YT_SIZES_BUNDLE
+      name: yt-sizes
+      released: stable
+      ttl: inf
+
+    BUILD_CRYPTA_YT_PROCESSED_TABLES_METRICS_BUNDLE:
+      filter:
+        commit_path_prefixes:
+        - /trunk/arcadia/crypta/
+        observed_paths:
+        - ^arcadia/crypta/spine/pushers/yt_processed_tables_metrics/bundle/crypta-yt-processed-tables-metrics.json
+        - ^arcadia/crypta/spine/pushers/yt_processed_tables_metrics/config/config.yaml
+        targets:
+        - crypta/spine/pushers/yt_processed_tables_metrics/bin
+      packages: crypta/spine/pushers/yt_processed_tables_metrics/bundle/crypta-yt-processed-tables-metrics.json
+      resource_type: CRYPTA_YT_PROCESSED_TABLES_METRICS_BUNDLE
+      name: yt-processed-tables-metrics
+      released: stable
+      ttl: inf
+
+    BUILD_CRYPTA_YT_LATENCIES_BUNDLE:
+      filter:
+        commit_path_prefixes:
+        - /trunk/arcadia/crypta/
+        observed_paths:
+        - ^arcadia/crypta/spine/pushers/yt_latencies/bundle/crypta-yt-latencies.json
+        - ^arcadia/crypta/spine/pushers/yt_latencies/config/config.yaml
+        targets:
+        - crypta/spine/pushers/yt_latencies/bin
+      packages: crypta/spine/pushers/yt_latencies/bundle/crypta-yt-latencies.json
+      resource_type: CRYPTA_YT_LATENCIES_BUNDLE
+      name: yt-latencies
+      released: stable
+      ttl: inf
+
+    BUILD_CRYPTA_YT_OUTPUT_TABLE_LATENCIES_BUNDLE:
+      filter:
+        commit_path_prefixes:
+        - /trunk/arcadia/crypta/
+        observed_paths:
+        - ^arcadia/crypta/spine/pushers/yt_output_table_latencies/bundle/crypta-yt-output-table-latencies.json
+        - ^arcadia/crypta/spine/pushers/yt_output_table_latencies/config/config.yaml
+        targets:
+        - crypta/spine/pushers/yt_output_table_latencies/bin
+      packages: crypta/spine/pushers/yt_output_table_latencies/bundle/crypta-yt-output-table-latencies.json
+      resource_type: CRYPTA_UNIVERSAL_BUNDLE
+      name: yt-output-table-latencies
+      released: stable
+      ttl: inf
+
+    BUILD_CRYPTA_UPLOAD_YASM_DASHBOARDS_BUNDLE:
+      packages: crypta/spine/pushers/yasm_dashboards/bundle/crypta-upload-yasm-dashboards-bundle.json
+      resource_type: CRYPTA_UPLOAD_YASM_DASHBOARDS_BUNDLE
+      name: upload-yasm-dashboards
+      released: stable
+      ttl: 30
+
+  owners:
+  - g:crypta
+  type: CHECK
+  filter: gen:filter
+  check_task:
+    name: YA_PACKAGE
+    priority: SERVICE:LOW
+    params:
+      apiargs:
+        requirements:
+          platform: linux
+        notifications:
+        - recipients:
+          - '{commit_author}'
+          - crypta-ci
+          statuses:
+          - SUCCESS
+          - FAILURE
+          - EXCEPTION
+          transport: email
+      ctx:
+        packages: gen:packages
+        resource_type: gen:resource_type
+        package_resource_attrs:
+          name: gen:name
+          released: gen:released
+        kill_timeout: 6300
+        build_type: relwithdebinfo
+        build_system: semi_distbuild
+        checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+        use_aapi_fuse: true
+        use_arc_instead_of_aapi: true
+        aapi_fallback: true
+        checkout: false
+        strip_binaries: false
+        compress_package_archive: true
+        package_type: tarball
+        run_tests: false
+        run_long_tests: false
+        ignore_fail_tests: false
+        ya_yt_store: true
+    output_resources:
+      gen:resource_type: gen:ttl
+
+RUN_CRYPTA_UPLOAD_AGGREGATE_CHECKS_BUNDLE:
+  parent_tests:
+  - BUILD_CRYPTA_UPLOAD_AGGREGATE_CHECKS_BUNDLE
+  owners:
+  - g:crypta
+  type: CHECK
+  filter:
+    commit_path_prefixes:
+    - /trunk/arcadia/crypta/
+    observed_paths:
+    - ^arcadia/crypta/spine/pushers/aggregate_checks/task/crypta-upload-aggregate-checks-bundle.json
+    targets:
+    - contrib/python/juggler_sdk/cli
+    - crypta/spine/pushers/aggregate_checks/bin
+    - crypta/spine/pushers/aggregate_checks/task/bin
+  check_task:
+    name: CRYPTA_UPLOAD_AGGREGATE_CHECKS_TASK
+    priority: SERVICE:LOW
+    params:
+      apiargs:
+        notifications:
+        - recipients:
+          - '{commit_author}'
+          - crypta-ci
+          statuses:
+          - SUCCESS
+          - FAILURE
+          - EXCEPTION
+          transport: email
+      custom_fields:
+        environment: stable
+      ctx:
+        kill_timeout: 6300
+
+RUN_CRYPTA_UPLOAD_SOLOMON_ALERTS:
+  parent_tests:
+  - BUILD_CRYPTA_UPLOAD_SOLOMON_ALERTS_BUNDLE
+  owners:
+  - g:crypta
+  type: CHECK
+  filter:
+    commit_path_prefixes:
+    - /trunk/arcadia/crypta/
+    observed_paths:
+    - ^arcadia/crypta/spine/pushers/upload_solomon_alerts/bundle/crypta-upload-solomon-alerts-bundle.json
+    targets:
+    - crypta/spine/pushers/upload_solomon_alerts/bin
+  check_task:
+    name: CRYPTA_UPLOAD_SOLOMON_ALERTS_TASK
+    priority: SERVICE:LOW
+    params:
+      apiargs:
+        notifications:
+        - recipients:
+          - '{commit_author}'
+          - crypta-ci
+          statuses:
+          - SUCCESS
+          - FAILURE
+          - EXCEPTION
+          transport: email
+      custom_fields:
+        environment: stable
+      ctx:
+        kill_timeout: 6300
+
+RUN_CRYPTA_UPLOAD_SANDBOX_SCHEDULERS:
+  parent_tests:
+  - BUILD_CRYPTA_UPLOAD_SANDBOX_SCHEDULERS_BUNDLE
+  owners:
+  - g:crypta
+  type: CHECK
+  filter:
+    commit_path_prefixes:
+    - /trunk/arcadia/crypta/
+    observed_paths:
+    - ^arcadia/crypta/spine/pushers/upload_sandbox_schedulers/bundle/crypta-upload-sandbox-schedulers-bundle.json
+    targets:
+    - crypta/spine/pushers/upload_sandbox_schedulers/bin
+  check_task:
+    name: CRYPTA_UPLOAD_SANDBOX_SCHEDULERS_TASK
+    priority: SERVICE:LOW
+    params:
+      apiargs:
+        notifications:
+        - recipients:
+          - '{commit_author}'
+          - crypta-ci
+          statuses:
+          - SUCCESS
+          - FAILURE
+          - EXCEPTION
+          transport: email
+      custom_fields:
+        environment: stable
+      ctx:
+        kill_timeout: 6300
+
+RUN_CRYPTA_UPLOAD_YASM_DASHBOARDS:
+  parent_tests:
+  - BUILD_CRYPTA_UPLOAD_YASM_DASHBOARDS_BUNDLE
+  owners:
+  - g:crypta
+  type: CHECK
+  filter:
+    commit_path_prefixes:
+    - /trunk/arcadia/crypta/
+    observed_paths:
+    - ^arcadia/crypta/spine/pushers/yasm_dashboards/bundle/crypta-upload-yasm-dashboards-bundle.json
+    targets:
+    - crypta/spine/pushers/yasm_dashboards/bin
+  check_task:
+    name: CRYPTA_UPLOAD_YASM_DASHBOARDS_TASK
+    priority: SERVICE:LOW
+    params:
+      apiargs:
+        notifications:
+        - recipients:
+          - '{commit_author}'
+          - crypta-ci
+          statuses:
+          - SUCCESS
+          - FAILURE
+          - EXCEPTION
+          transport: email
+      custom_fields:
+        environment: stable
+      ctx:
+        kill_timeout: 6300

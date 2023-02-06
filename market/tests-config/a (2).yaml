@@ -1,0 +1,140 @@
+service: marketpartnerfront
+title: Partner Market Frontend Hermione Tests Skip Config
+
+arcanum:
+  review:
+    required: false
+    skip_review_for: "virtual, robots, robot"
+    min_approvers_count: 0
+  auto_merge:
+    enabled: false
+    requirements:
+      - system: CI
+        type: 'market/front/apps/partner/configs/hermione/tests-config: 🔒 Checks'
+        disabling_policy: denied
+
+shared:
+  settings:
+    requirements: &requirements
+      cores: 1
+      sandbox:
+        client_tags: MULTISLOT | GENERIC
+        container_resource: 2864846541
+        dns: dns64
+        priority:
+          class: SERVICE
+          subclass: NORMAL
+        semaphores:
+          acquires:
+            - name: market_front_ci_semaphore
+
+    logs_config: &logs_config
+      redirect_stderr_to_stdout: true
+      stdout_ci_badge: true
+
+    metatron-env:
+      secret_environment_variables: &metatron-env-vars
+        - key: AWS_ACCESS_KEY_ID
+          secret_spec:
+            key: 'robot-metatron-s3-keyid'
+        - key: AWS_SECRET_ACCESS_KEY
+          secret_spec:
+            key: 'robot-metatron-s3-secretkey'
+        - key: ST_OAUTH_TOKEN
+          secret_spec:
+            key: 'robot-metatron-st-token'
+        - key: TESTPALM_OAUTH_API_TOKEN
+          secret_spec:
+            key: 'robot-metatron-testpalm-api-token'
+
+    common-run-command-config: &common-run-command-config
+      arc_mount_config:
+        enabled: true
+      logs_config: *logs_config
+      secret_environment_variables: *metatron-env-vars
+
+    txt_result_resources: &txt_result_resource
+      - path: txt_reports
+        description: txt result
+        type: OTHER_RESOURCE
+        compression_type: none
+        optional: false
+        ci_badge: true
+        ci_badge_path: report.txt
+
+  jobs:
+    check-config-validation: &check-config-validation-job
+      title: Config validation
+      task: common/misc/run_command
+      kill-timeout: 5m
+      requirements: *requirements
+      input:
+        config:
+          <<: *common-run-command-config
+          cmd_line: |
+            export PATH=$PATH:/opt/nodejs/16/bin && cd ${context.config_info.dir}
+            npm install && npm run test:report
+            statusCode=$?
+
+            mv txt_reports $RESULT_RESOURCES_PATH
+            exit $statusCode
+          result_resources: *txt_result_resource
+
+    check-config-format: &check-config-format-job
+      title: Config format
+      task: common/misc/run_command
+      requirements: *requirements
+      input:
+        config:
+          <<: *common-run-command-config
+          cmd_line: |
+            export PATH=$PATH:/opt/nodejs/16/bin && cd ${context.config_info.dir}
+            npm install && npm run lint:skipped:report
+            statusCode=$?
+
+            mv txt_reports $RESULT_RESOURCES_PATH
+            exit $statusCode
+          result_resources: *txt_result_resource
+
+    check-closed-st-issues: &check-closed-st-issues-job
+      title: Check for closed ST issues
+      task: common/misc/run_command
+      requirements: *requirements
+      input:
+        config:
+          <<: *common-run-command-config
+          cmd_line: |
+            export PATH=$PATH:/opt/nodejs/16/bin && cd ${context.config_info.dir}
+            npm install && npm run tickets:closed:report
+            statusCode=$?
+
+            mv txt_reports $RESULT_RESOURCES_PATH
+            exit $statusCode
+          result_resources: *txt_result_resource
+
+  flows:
+    pr-jobs: &pr-base-jobs
+      check-config-validation: *check-config-validation-job
+      check-config-format: *check-config-format-job
+      check-closed-st-issues: *check-closed-st-issues-job
+
+
+ci:
+  release-title-source: flow
+  secret: sec-01cv39yy683mvszy5yt550amgq
+  runtime:
+    sandbox-owner: MARKET
+
+  flows:
+    pr-jobs:
+      title: PR common flow
+      jobs:
+        <<: *pr-base-jobs
+
+  actions:
+    pr-src:
+      title: 🔒 Checks
+      flow: pr-jobs
+      triggers:
+        - on: pr
+          into: trunk

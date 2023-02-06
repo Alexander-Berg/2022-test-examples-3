@@ -1,0 +1,98 @@
+# Cases
+# 1 - wrong feedback type
+# 2 - date filter - old feedback, correct order
+# 3 - date filter - correct feedback, old order
+# 4 - correct feedback simplest (no answers, nothing more)
+# 5 - positive full: feedback with order and answers (some with sku, some with incorrect)
+#     - supplier 1: model 1 - no ans, model 2 - has ans
+#     - supplier 2: model 1 - no ans
+# 6 - multiple suppliers (ok, late and blamed, late not blamed, blame_shop, unknown)
+# 7 - test order feedback with wrong puid
+# 8 - correct OLD feedback (as 4, but type=0)
+# notes:
+# - orderId = 1000||feedback_id to simplify tests)
+# - uid is always same, it should not matter = 1
+# - answerId = feedbackId||0||questionId
+# - supplier = orderId||0||supplierNumInOrder
+# - sku = supplierId||supplierNumInOrder
+
+
+# now = 2021-01-01T00:00:00 = 1609459200000
+# use 2021-01-02T00:00:00 - for correct records
+# use 2020-12-31T00:00:00 - for old records
+MOCK VAR $last_executed_time_ms
+SET 1609459200000
+
+# feedback records
+MOCK TABLE //home/market/production/market-pers-feedback-production/cdc/order_feedback
+SCHEMA feedback_type:int16, user_id:int64, id:int64, order_id:int64
+SCHEMA comment:utf8, grade:int32
+SCHEMA updated_at:string
+{"feedback_type": 1, "user_id": 1, "id": 1, "order_id": 10001, "comment": "test", "grade": 5, "updated_at": "2021-01-02T00:00:00"}
+{"feedback_type": 2, "user_id": 1, "id": 2, "order_id": 10002, "comment": "test", "grade": 5, "updated_at": "2020-12-31T00:00:00"}
+{"feedback_type": 2, "user_id": 1, "id": 3, "order_id": 10003, "comment": "test", "grade": 5, "updated_at": "2021-01-02T00:00:00"}
+{"feedback_type": 2, "user_id": 1, "id": 4, "order_id": 10004, "comment": "test", "grade": 5, "updated_at": "2021-01-02T00:00:00"}
+{"feedback_type": 2, "user_id": 1, "id": 5, "order_id": 10005, "comment": "test", "grade": 5, "updated_at": "2021-01-02T00:00:00"}
+{"feedback_type": 2, "user_id": 1, "id": 6, "order_id": 10006, "comment": null,   "grade": 5, "updated_at": "2021-01-02T00:00:00"}
+{"feedback_type": 0, "user_id": 1, "id": 8, "order_id": 10008, "comment": "test", "grade": 5, "updated_at": "2021-01-02T00:00:00"}
+
+MOCK TABLE //home/market/production/market-pers-feedback-production/cdc/security_data
+SCHEMA feedback_id:int64, ip:string, port:int16, headers:string
+{"feedback_id":4, "ip":"some_ip", "port":42, "headers":"{\"headerKey\":\"value\"}"}
+
+# marked questions for each feedback
+MOCK TABLE //home/market/production/market-pers-feedback-production/cdc/order_answer
+SCHEMA id:int64, order_feedback_id:int64, order_question_id:int64
+{"id":1000501, "order_feedback_id": 5, "order_question_id": 1}
+{"id":1000502, "order_feedback_id": 5, "order_question_id": 2}
+{"id":1000503, "order_feedback_id": 5, "order_question_id": 3}
+
+# items, linked to feedback
+MOCK TABLE //home/market/production/market-pers-feedback-production/cdc/order_answer_item
+SCHEMA order_answer_id:int64, sku_id:int64, supplier_id:int64
+# ok, other supplier, incorrect order
+{"order_answer_id": 1000502, "supplier_id": 1000501, "sku_id": 10005012}
+{"order_answer_id": 1000502, "supplier_id": 1000501, "sku_id": 10005021}
+{"order_answer_id": 1000503, "supplier_id": 1000502, "sku_id": 123456}
+
+MOCK VAR $order_range_start
+SET '42'
+
+# these orders are too old to process
+MOCK DIR_TABLE //home/market/production/mstat/analyst/regular/cubes_vertica/cube_order_item_dict
+NAME 41
+SCHEMA order_id:int64, supplier_id:int64
+SCHEMA order_puid:int64, order_yandexuid:string
+SCHEMA market_sku_actual:int64, item_business_scheme_name:string
+{"order_id": 10003, "supplier_id": 1000301, "order_puid": 1, "market_sku_actual": 10003011, "item_business_scheme_name": "dsbs"}
+
+# correct orders
+MOCK DIR_TABLE //home/market/production/mstat/analyst/regular/cubes_vertica/cube_order_item_dict
+NAME 43
+SCHEMA order_id:int64, supplier_id:int64
+SCHEMA order_puid:int64, order_yandexuid:string
+SCHEMA market_sku_actual:int64, item_business_scheme_name:string
+{"order_id": 10001, "supplier_id": 1000101, "order_puid": 1, "market_sku_actual": 10001011, "item_business_scheme_name": "dropship"}
+{"order_id": 10002, "supplier_id": 1000201, "order_puid": 1, "market_sku_actual": 10002011, "item_business_scheme_name": "dropship"}
+{"order_id": 10004, "supplier_id": 1000401, "order_puid": 1, "market_sku_actual": 10004011, "item_business_scheme_name": "dropship"}
+{"order_id": 10005, "supplier_id": 1000501, "order_puid": 1, "market_sku_actual": 10005011, "item_business_scheme_name": "dropship"}
+{"order_id": 10005, "supplier_id": 1000501, "order_puid": 1, "market_sku_actual": 10005012, "item_business_scheme_name": "фулфилмент 1p/3p"}
+{"order_id": 10005, "supplier_id": 1000502, "order_puid": 1, "market_sku_actual": 10005021, "item_business_scheme_name": "click&collect"}
+{"order_id": 10008, "supplier_id": 1000801, "order_puid": 1, "market_sku_actual": 10008011, "item_business_scheme_name": "dropship"}
+# order 6: late: blameable, excluded, and not blameable
+{"order_id": 10006, "supplier_id": 1000601, "order_puid": 1, "market_sku_actual": 10006011, "item_business_scheme_name": "dropship"}
+{"order_id": 10006, "supplier_id": 1000602, "order_puid": 1, "market_sku_actual": 10006021, "item_business_scheme_name": "dropship"}
+{"order_id": 10006, "supplier_id": 1000603, "order_puid": 1, "market_sku_actual": 10006031, "item_business_scheme_name": "crossdock"}
+# order 6: blame_shop, unknown
+{"order_id": 10006, "supplier_id": 1000604, "order_puid": 1, "market_sku_actual": 10006041, "item_business_scheme_name": "click&collect"}
+{"order_id": 10006, "supplier_id": 1000605, "order_puid": 1, "market_sku_actual": 10006051, "item_business_scheme_name": "unknown"}
+
+MOCK TABLE //home/market/production/mstat/dictionaries/abo2/late_orders/latest
+SCHEMA order_id:int64, partner_id:int64, partner_model:string
+{"order_id": 10006, "partner_id": 1000601, "partner_model":"test"}
+{"order_id": 10006, "partner_id": 1000602, "partner_model":"test"}
+{"order_id": 10006, "partner_id": 1000603, "partner_model":"test"}
+
+MOCK TABLE //home/market/production/mstat/dictionaries/abo2/partner_rating_exclusion/latest
+SCHEMA order_id:int64, partner_id:int64, id:int64
+{"order_id": 10006, "partner_id": 1000602, "id":1}

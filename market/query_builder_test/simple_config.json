@@ -1,0 +1,37 @@
+{
+  "owner": "some_owner",
+  "statfaceReports": [
+    {
+      "title": "Простой конфиг для отображения суммы двух значений",
+      "report": "Market/QueryBuilderTest/SimpleConfig",
+      "tableName": "simple_test_table",
+      "period": "DAY",
+      "fields": [
+        {
+          "name": "sum",
+          "title": "Сумма",
+          "metricField": "max(x)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "max",
+          "title": "Максимум",
+          "metricField": "max(y)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "sum_plus_max",
+          "title": "Сумма + Максимум",
+          "metricField": "sum + max",
+          "viewType": "Integer"
+        },
+        {
+          "name": "sum_plus_max_q99",
+          "title": "Сумма + Максимум",
+          "metricField": "quantileTDigestIf(0.99)(sum + max, type = 'sum_plus_max')",
+          "viewType": "Integer"
+        }
+      ]
+    }
+  ]
+}

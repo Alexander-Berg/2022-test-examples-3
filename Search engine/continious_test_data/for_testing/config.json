@@ -1,0 +1,69 @@
+{
+  "config": [
+    {
+      "name": "check_market_prices",
+      "path": "https://hamster.yandex.ru/search",
+      "box": "market_top_20.csv",
+      "flags": "json_dump=searchdata.docs_right",
+      "map": [
+         {
+          "path": "methods.py",
+          "name": "is_contains",
+          "args": {
+            "path": "searchdata.docs_right/0/construct/0/counter/path"
+          },
+          "output": "is_market_wizard"
+        },
+        {
+          "path": "methods.py",
+          "name": "get_prices",
+          "output": "prices"
+        }
+      ],
+      "reduce": [
+        {
+          "path": "methods.py",
+          "name": "get_average_list_field",
+          "args": {
+            "field": "prices"
+          },
+          "sensor_name": "average_market_price_20"
+        },
+        {
+           "path": "methods.py",
+           "name": "get_sum",
+           "args": {
+              "field": "is_market_wizard"
+           },
+           "sensor_name": "market_wizards_count"
+        }
+      ]
+    },
+    {
+      "name": "check_company_wisards",
+      "path": "https://hamster.yandex.ru/search",
+      "box": "company_top_20.csv",
+      "flags": "json_dump=searchdata.docs_right",
+      "map": [
+        {
+          "path": "methods.py",
+          "name": "is_contains",
+          "args": {
+            "path": "searchdata.docs_right/0/snippets/full/counter_prefix/path"
+          },
+          "output": "is_company_wizard"
+        }
+      ],
+      "reduce": [
+         {
+          "path": "methods.py",
+          "name": "get_sum",
+          "args": {
+            "field": "is_company_wizard"
+          },
+          "sensor_name": "company_wizards_count"
+        }
+      ]
+    }
+  ]
+}

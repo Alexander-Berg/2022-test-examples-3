@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d] %-5p [%t] %c{0}: %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="CONSOLE"/>
+    </appender>
+
+    <appender name="FACT_PROCESSING_LOG" class="ch.qos.logback.core.helpers.NOPAppender"/>
+
+    <appender name="LB_PROCESSING_LOG" class="ch.qos.logback.core.helpers.NOPAppender"/>
+
+    <appender name="TRIGGERS_GENERAL_METRICS_LOG" class="ch.qos.logback.core.helpers.NOPAppender"/>
+
+    <appender name="MESSAGES_QUEUES_LOG" class="ch.qos.logback.core.helpers.NOPAppender"/>
+
+    <logger name="ACCESS_LOG" additivity="false">
+        <level value="TRACE"/>
+        <appender-ref ref="ASYNC"/>
+    </logger>
+
+    <logger name="ru.yandex.market.mcrm.queue.retry.internal.RetryTaskServiceImpl">
+        <level value="INFO"/>
+        <appender-ref ref="ASYNC"/>
+    </logger>
+
+    <logger name="ru.yandex.market.mcrm.lock.impl.DbLockService">
+        <level value="INFO"/>
+        <appender-ref ref="ASYNC"/>
+    </logger>
+
+    <logger name="ru.yandex.market.crm" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="ASYNC"/>
+    </logger>
+
+    <logger name="ru.yandex" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="ASYNC"/>
+    </logger>
+
+    <logger name="FACT_PROCESSING_LOG" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="FACT_PROCESSING_LOG"/>
+    </logger>
+
+    <logger name="LB_PROCESSING_LOG" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="LB_PROCESSING_LOG"/>
+    </logger>
+
+    <logger name="TRIGGERS_GENERAL_METRICS_LOG" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="TRIGGERS_GENERAL_METRICS_LOG"/>
+    </logger>
+
+    <logger name="MESSAGES_QUEUES_LOG" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="MESSAGES_QUEUES_LOG"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="ASYNC"/>
+    </root>
+
+</configuration>

@@ -1,0 +1,40 @@
+module: market-orders
+operators:
+- id: main
+  visibility: public
+  value#processing-queue:
+    scope: market
+    queue: orders
+    stq-queue: market_orders_processing
+    stq-starter: market_procaas_starter
+    enable-cold-store: false
+    static-event-traits:
+      is-create: true
+    keys-mapping:
+      rules: []
+      default-keys: [default_key]
+    state-manager#xget: /external/state-manager/the-state-manager-itself
+    dynamic-event-traits:
+      reason#xget: /event/payload/kind
+    # Нужно удалить отсюда
+    resources:
+      - id: get-order
+        url: $get-order-url
+        method: get
+        max-retries: 1
+        caching-enabled: false
+      - id: update-order-status
+        url: $update-order-status-url-2
+        method: post
+        max-retries: 1
+        caching-enabled: false
+      - id: persist-order
+        url: $persist-order-url
+        method: post
+        max-retries: 1
+        caching-enabled: false
+    event-processor: # Описывается какие вообще бывают пайплайны.
+      - value#xget: /external/orders-pipelines/update-order-status-pipeline
+      - value#xget: /external/orders-pipelines/update-order-one-item-instances-pipeline
+      - value#xget: /external/orders-pipelines/update-order-item-instances-pipeline
+      - value#xget: /external/orders-pipelines/order-created-pipeline

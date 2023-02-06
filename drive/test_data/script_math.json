@@ -1,0 +1,344 @@
+{
+    "items": [
+        {
+            "id": "intro",
+            "comment": "this is a test comment",
+            "pre_action_messages":[],
+            "action_type": "tree",
+            "action_button_text": null,
+            "schema": {
+                "type": "options",
+                "options": [
+                    {
+                        "text": "Хочу сложить два числа",
+                        "type": "message",
+                        "message_text": "add_two_numbers",
+                        "node": "add_two_numbers"
+                    },
+                    {
+                        "text": "Хочу проверить порядок исполнения",
+                        "type": "message",
+                        "message_text": "order",
+                        "node": "order"
+                    },
+                    {
+                        "text": "Хочу проверить счетчик",
+                        "type": "message",
+                        "message_text": "counter",
+                        "node": "init_counter"
+                    },
+                    {
+                        "text": "Хочу посчитать интеграл",
+                        "type": "message",
+                        "message_text": "integral",
+                        "node": "init_integral"
+                    },
+                    {
+                        "text": "Хочу посчитать сумму убывающей геометрической последовательности",
+                        "type": "message",
+                        "message_text": "series",
+                        "node": "init_series"
+                    }
+                ]
+            },
+            "next_step": null
+        },
+        {
+            "context_map": [
+                {"key": "a", "value": "5"},
+                {"key": "b", "value": "3"},
+                {"key": "c", "value": "0"},
+                {"key": "c", "value": "${custom.b}+${custom.a}", "type": "math_expression"}
+            ],
+            "action_button_text": null,
+            "action_type": "skip_action",
+            "pre_action_messages": [],
+            "id": "add_two_numbers",
+            "next_step": {
+                "default": "fail",
+                "conditions": [{
+                    "node":"success",
+                    "condition": {
+                        "type": "and",
+                        "subconditions": [
+                            {
+                                "type": "context_map_compare",
+                                "limit": 8,
+                                "compare_type": "ge",
+                                "value": "custom.c"
+                            },
+                            {
+                                "type": "context_map_compare",
+                                "limit": 8,
+                                "compare_type": "le",
+                                "value": "custom.c"
+                            }
+                        ]
+                    }
+                }]
+            }
+        },
+        {
+            "context_map": [
+                {"key": "a", "value": "2"},
+                {"key": "b", "value": "5"},
+                {"key": "c", "value": "0"},
+                {"key": "c", "value": "${custom.b}/${custom.a}", "type": "math_expression"},
+                {"key": "c", "value": "${custom.c}+1", "type": "math_expression"}
+            ],
+            "action_button_text": null,
+            "action_type": "skip_action",
+            "pre_action_messages": [],
+            "id": "order",
+            "next_step": {
+                "default": "fail",
+                "conditions": [{
+                    "node":"success",
+                    "condition": {
+                        "type": "and",
+                        "subconditions": [
+                            {
+                                "type": "context_map_compare",
+                                "use_float": true,
+                                "limit": 3.49,
+                                "compare_type": "ge",
+                                "value": "custom.c"
+                            },
+                            {
+                                "type": "context_map_compare",
+                                "use_float": true,
+                                "limit": 3.51,
+                                "compare_type": "le",
+                                "value": "custom.c"
+                            }
+                        ]
+                    }
+                }]
+            }
+        },
+        {
+            "context_map": [
+                {"key": "i", "value" : "0"}
+            ],
+            "action_button_text": null,
+            "action_type": "skip_action",
+            "pre_action_messages": [],
+            "id": "init_counter",
+            "next_step": "count"
+        },
+        {
+            "context_map": [
+                {"key": "i", "value" : "${custom.i}+1", "type": "math_expression"}
+            ],
+            "action_button_text": null,
+            "action_type": "skip_action",
+            "pre_action_messages": [],
+            "id": "count",
+            "next_step": {
+                "default": "fail",
+                "conditions": [
+                    {
+                        "node": "repeat_count",
+                        "condition": {
+                            "type": "context_map_compare",
+                            "use_float": false,
+                            "limit": 46,
+                            "compare_type": "le",
+                            "value": "custom.i"
+                        }
+                    },
+                    {
+                        "node":"success",
+                        "condition": {
+                            "type": "and",
+                            "subconditions": [
+                                {
+                                    "type": "context_map_compare",
+                                    "use_float": false,
+                                    "limit": 47,
+                                    "compare_type": "ge",
+                                    "value": "custom.i"
+                                },
+                                {
+                                    "type": "context_map_compare",
+                                    "use_float": false,
+                                    "limit": 48,
+                                    "compare_type": "lt",
+                                    "value": "custom.i"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "action_button_text": null,
+            "action_type": "skip_action",
+            "pre_action_messages": [],
+            "id": "repeat_count",
+            "next_step": "count"
+        },
+        {
+            "comment": "For the love of god don't build following schemes. The only purpose they are here is to fool around with these shenanigans. Well, they do show chats flexibility, but such practices may possibly result in stack overflow or double error accumulation. So please don't",
+            "context_map": [
+                {"key": "x", "value" : "0.1"},
+                {"key": "S", "value" : "0"},
+                {"key": "dx", "value" : "0.01"}
+            ],
+            "action_button_text": null,
+            "action_type": "skip_action",
+            "pre_action_messages": [],
+            "id": "init_integral",
+            "next_step": "integral"
+        },
+        {
+            "context_map": [
+                {"key": "x", "value" : "${custom.x}+${custom.dx}", "type":"math_expression"},
+                {"key": "S", "value" : "${custom.S}+${custom.dx}/${custom.x}", "type":"math_expression"}
+            ],
+            "action_button_text": null,
+            "action_type": "skip_action",
+            "pre_action_messages": [],
+            "id": "integral",
+            "next_step": {
+                "default": "fail",
+                "conditions": [
+                    {
+                        "node": "repeat_integral",
+                        "condition": {
+                            "type": "context_map_compare",
+                            "use_float": true,
+                            "limit": 0.51,
+                            "compare_type": "le",
+                            "value": "custom.x"
+                        }
+                    },
+                    {
+                        "node":"success",
+                        "condition": {
+                            "type": "and",
+                            "subconditions": [
+                                {
+                                    "type": "context_map_compare",
+                                    "use_float": true,
+                                    "limit": 1.609,
+                                    "compare_type": "gt",
+                                    "value": "custom.S"
+                                },
+                                {
+                                    "type": "context_map_compare",
+                                    "use_float": true,
+                                    "limit": 1.61,
+                                    "compare_type": "lt",
+                                    "value": "custom.S"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "action_button_text": null,
+            "action_type": "skip_action",
+            "pre_action_messages": [],
+            "id": "repeat_integral",
+            "next_step": "integral"
+        },
+        {
+            "context_map": [
+                {"key": "q", "value" : "0.95"},
+                {"key": "b", "value" : "1"},
+                {"key": "Sn", "value" : "0"},
+                {"key": "i", "value" : "0"}
+            ],
+            "action_button_text": null,
+            "action_type": "skip_action",
+            "pre_action_messages": [],
+            "id": "init_series",
+            "next_step": "series"
+        },
+        {
+            "context_map": [
+                {"key": "b", "value" : "${custom.b}*${custom.q}", "type": "math_expression"},
+                {"key": "Sn", "value" : "${custom.Sn}+${custom.b}*${custom.q}", "type": "math_expression"},
+                {"key": "i", "value" : "${custom.i}+1", "type": "math_expression"}
+            ],
+            "action_button_text": null,
+            "action_type": "skip_action",
+            "pre_action_messages": [],
+            "id": "series",
+            "next_step": {
+                "default": "fail",
+                "conditions": [
+                    {
+                        "node": "repeat_series",
+                        "condition": {
+                            "type": "context_map_compare",
+                            "use_float": false,
+                            "limit": 50,
+                            "compare_type": "le",
+                            "value": "custom.i"
+                        }
+                    },
+                    {
+                        "node":"success",
+                        "condition": {
+                            "type": "and",
+                            "subconditions": [
+                                {
+                                    "type": "context_map_compare",
+                                    "use_float": true,
+                                    "limit": 16,
+                                    "compare_type": "gt",
+                                    "value": "custom.Sn"
+                                },
+                                {
+                                    "type": "context_map_compare",
+                                    "use_float": true,
+                                    "limit": 18,
+                                    "compare_type": "lt",
+                                    "value": "custom.Sn"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "action_button_text": null,
+            "action_type": "skip_action",
+            "pre_action_messages": [],
+            "id": "repeat_series",
+            "next_step": "series"
+        },
+        {
+            "pre_action_messages": [
+                {
+                  "type": "plaintext",
+                  "text": "Fail"
+                }
+            ],
+            "action_button_text": null,
+            "action_type": "skip_action",
+            "id": "fail",
+            "next_step": null
+        },
+        {
+            "pre_action_messages": [
+                {
+                  "type": "plaintext",
+                  "text": "Success"
+                }
+            ],
+            "action_button_text": null,
+            "action_type": "skip_action",
+            "id": "success",
+            "next_step": "intro"
+        }
+    ],
+    "faq_url": null,
+    "support_url": null
+}

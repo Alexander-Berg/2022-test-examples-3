@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns:x="http://www.yandex.ru/xscript">
+    <x:js>
+        var c = new xscript.cookie('test', xscript.request.argArrays['id']);
+        c.path('/test');
+        c.domain('yandex.ru');
+        var current=new Date();
+        current.setDate(current.getDate()+1);
+        xscript.state.current=current.getTime()/1000 | 0;
+        c.expires(current.getTime()/1000);
+        xscript.response.setCookie(c);
+    </x:js>
+</root>

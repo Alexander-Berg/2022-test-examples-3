@@ -1,0 +1,441 @@
+#!/usr/bin/perl
+
+=head1 DESCRIPTION
+
+Автосоставитель плана тестирования. 
+Может определить, какие крупные части Директа затронуты или не затронуты изменением кода (диффом).
+
+Примеры использования: 
+
+   svn diff -c 61113 $DT |auto-testplan
+
+=head TODO
+
+=cut
+
+use strict;
+use warnings;
+
+use Text::Diff::Parser;
+use List::MoreUtils qw/uniq/;
+use Getopt::Long;
+use YAML;
+use Data::Dumper;
+
+use utf8;
+use open ':std' => ':utf8';
+
+
+my %status = (
+    affected => {
+        weight => 20,
+        text => 'affected',
+    },
+    relevant => {
+        weight => 10,
+        text => 'relevant',
+    },
+    not_affected => {
+        weight => 10,
+        text => 'intact',
+    },
+    unknown => {
+        weight => 5,
+        text => 'n/a',
+    },
+);
+
+
+run() unless caller();
+
+
+sub run
+{
+    my %O = ();
+    GetOptions(
+        "v|verbose"  => \$O{verbose},
+        "h|help"     => sub {system("podselect -section NAME -section DESCRIPTION $0 | pod2text-utf8"); exit 0;},
+    ) or die "can't parse options, stop\n";
+
+    my $conf = load_conf();
+
+    my $files = get_affected_files();
+
+    my $plan = make_testplan(
+        aspects => $conf->{aspects},
+        files => $files,
+        rules => $conf->{rules},
+    );
+
+    print_result(
+        aspects => $conf->{aspects},
+        files => $files, 
+        plan => $plan, 
+        verbose => $O{verbose},
+    );
+}
+
+
+=head2 make_testplan
+
+    получает списки затронутых файлов, правила, 
+    возвращает хеш: какие аспекты надо тестировать, какие нет
+
+=cut
+sub make_testplan
+{
+    my %O = @_;
+
+    my %plan;
+    for my $asp (keys %{$O{aspects}}){
+        $plan{$asp} = 'unknown';
+    }
+    for my $r ( @{$O{rules}} ){
+        next unless match($r->{cond}, $O{files});
+        for my $desicion ( @{$r->{resolutions}} ){
+            next unless weight($desicion->{status}) > weight($plan{$desicion->{aspect}});
+            $plan{$desicion->{aspect}} = $desicion->{status};
+        }
+    }
+
+    return \%plan;
+}
+
+
+=head2 get_affected_files
+
+    Читает с stdin дифф, возвращает ссылку на список затронутых файлов.
+
+=cut
+sub get_affected_files
+{
+    my $diff_text = join "", <>;
+    my $diff = Text::Diff::Parser->new( Diff => $diff_text );
+    
+    my @files = uniq map { $_->filename1 } $diff->changes;
+    @files = sort @files;
+    return \@files;
+}
+
+
+=head2 load_conf
+
+    Читает все необходимые настройки и правила, 
+    раскрывает ссылки на списки файлов.
+
+=cut
+sub load_conf
+{
+    my $conf = YAML::Load(join "", <DATA>);
+
+    for my $r (@{$conf->{rules}}){
+        for my $type (qw/any only/){
+            next unless exists $r->{cond}->{$type};
+            my @cond;
+            for my $pattern ( @{$r->{cond}->{$type}} ){
+                if ( $pattern =~ /^list:(.*)$/ ) {
+                    push @cond, @{ $conf->{lists}->{$1} || die };
+                } else {
+                    push @cond, $pattern;
+                }
+            }
+            $r->{cond}->{$type} = \@cond;
+        }
+    }
+
+    return $conf;
+}
+
+
+=head2 print_result
+
+    красиво выводит план тестирования
+
+=cut
+sub print_result
+{
+    my %O = @_;
+    my $aspects = $O{aspects};
+
+    if ( $O{verbose} ){
+        print "### affected files\n".join( "\n", @{$O{files}} )."\n\n";
+    }
+
+    print "### Test plan\n";
+    my $plan = $O{plan};
+    for my $asp ( sort { $aspects->{$a}->{order} <=> $aspects->{$b}->{order} } keys %$plan ){
+        my $title = $aspects->{$asp}->{title} || $asp;
+        print "$title ".("." x (40 - length($title)))." $status{$plan->{$asp}}->{text}\n";
+    }
+
+    return;
+}
+
+
+=head2 weight
+
+    возвращает "вес" резолции
+
+=cut
+sub weight
+{
+    my ($st) = @_;
+    return $status{$st}->{weight} or die;
+}
+
+
+
+=head2 match
+
+    проверяет, выполняется ли условие из правила для заданного списка файлов
+
+=cut
+sub match 
+{
+    my ($cond, $files) = @_;
+
+    if ( exists $cond->{any} ){
+        return 1 if @{$cond->{any}} == 0;
+        for my $pattern ( @{$cond->{any}} ) {
+            return 1 if grep { /^$pattern$/i } @$files;
+        }
+        return 0;
+    } elsif ( $cond->{only} ){
+        for my $file ( @$files ){
+            return 0 unless grep { $file =~ /^$_$/i } @{$cond->{only}};
+        }
+        return 1;
+    }
+
+    return 0;
+}
+
+
+__DATA__
+---
+aspects:
+  unit_tests:
+    order: 0
+    title: Юнит-тесты
+  api:
+    order: 1
+    title: API
+  sandbox:
+    order: 2
+    title: Песочница
+  web:
+    order: 5
+    title: Веб-интерфейс
+  easy:
+    order: 6
+    title: Лёгкий
+  mcb:
+    order: 9
+    title: Баян
+  mediaplan:
+    order: 15
+    title: Медиапланы
+  cross_browser:
+    order: 20
+    title: Поведение в различных браузерах
+  intapi:
+    order: 30
+    title: Intapi
+  scripts:
+    order: 40
+    title: Скрипты
+  export_bs:
+    order: 50
+    title: Экспорт в БК
+  export_mod:
+    order: 60
+    title: Экспорт на Модерацию
+  packaging:
+    order: 69
+    title: Сборка пакетов
+  ts_specific:
+    order: 70
+    title: Поведение на ТС в отличие от бет
+
+lists:
+  api_files:
+    - protected/API/.*\.pm
+    - protected/APICommon\.pm
+    - protected/APIMethods\.pm
+    - protected/API\.pm
+    - protected/APIUnits\.pm
+  sandbox_files:
+    - protected/Sandbox.*\.pm
+    - protected/protected/Sandbox/.*\.pm
+  intapi_files:
+    - protected/Intapi.*\.pm
+    - etc/intapi/.*
+  docmd_files:
+    - protected/DoCmd.*\.pm
+  export_mod_files:
+    - .*Moderat.*
+  frontend_files:
+    - data/.*
+    - data2/.*
+  packaging_files:
+    - packages/.*
+  perl_files:
+    - .*\.pm
+    - .*\.pl
+  scripts_files:
+    - .*\.pl
+  rbac_files: 
+    - .*RBAC.*.pm 
+  web_server_configs:
+    - etc/frontend/.*
+    - etc/intapi/.*
+
+rules:
+  - cond:
+      any: []
+    resolutions:
+      - aspect: unit_tests
+        status: relevant
+
+  - cond:
+      any:
+        - protected/Common.pm
+    resolutions:
+      - aspect: web
+        status: affected
+      - aspect: api
+        status: affected
+      - aspect: mcb
+        status: affected
+      - aspect: intapi
+        status: affected
+      - aspect: scripts
+        status: affected
+      - aspect: easy
+        status: affected
+      - aspect: mediaplan
+        status: affected
+      - aspect: export_mod
+        status: affected
+      - aspect: export_bs
+        status: affected
+
+  - cond:
+      any:
+        - list:rbac_files
+    resolutions:
+      - aspect: web
+        status: affected
+      - aspect: api
+        status: affected
+      - aspect: mcb
+        status: affected
+      - aspect: scripts
+        status: affected
+      - aspect: easy
+        status: affected
+      - aspect: mediaplan
+        status: affected
+
+  - cond:
+      any: 
+        - list:docmd_files
+    resolutions:
+      - aspect: web
+        status: affected
+
+  - cond:
+      only:
+        - list:docmd_files
+    resolutions:
+      - aspect: api
+        status: not_affected
+
+  - cond:
+      any: 
+        - list:api_files
+    resolutions:
+      - aspect: api
+        status: affected
+
+  - cond:
+      any: 
+        - list:sandbox_files
+    resolutions:
+      - aspect: sandbox
+        status: affected
+
+  - cond:
+      any: 
+        - list:intapi_files
+    resolutions:
+      - aspect: intapi
+        status: affected
+
+  - cond:
+      only:
+        - list:api_files
+    resolutions:
+      - aspect: web
+        status: not_affected
+
+  - cond:
+      any:
+        - list:export_mod_files
+    resolutions:
+      - aspect: export_mod
+        status: affected
+
+  - cond:
+      any:
+        - list:scripts_files
+    resolutions:
+      - aspect: scripts
+        status: affected
+
+  - cond:
+      only:
+        - list:perl_files
+    resolutions:
+      - aspect: cross_browser
+        status: not_affected
+
+  - cond:
+      any:
+        - list:frontend_files
+    resolutions:
+      - aspect: cross_browser
+        status: affected
+      - aspect: web
+        status: affected
+
+  - cond:
+      only:
+        - list:frontend_files
+    resolutions:
+      - aspect: api
+        status: not_affected
+      - aspect: intapi
+        status: not_affected
+      - aspect: scripts
+        status: not_affected
+      - aspect: export_mod
+        status: not_affected
+      - aspect: export_bs
+        status: not_affected
+
+  - cond:
+      any:
+        - list:web_server_configs
+    resolutions:
+      - aspect: ts_specific
+        status: affected
+
+  - cond:
+      any:
+        - list:packaging_files
+    resolutions:
+      - aspect: packaging
+        status: affected
+
+

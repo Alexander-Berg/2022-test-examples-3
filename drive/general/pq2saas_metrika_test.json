@@ -1,0 +1,123 @@
+{
+  "PQ": {
+    "Server": "sas.logbroker.yandex.net",
+    "Topic": "yabs-rt",
+    "LogType": "bs-mobile-log",
+    "ClientId": "extmaps",
+    "EnableIPv6": true,
+    "UseMirroredPartitions": true,
+    "ChunkSize": 10,
+    "MaxPartitions": 100,
+    "TimeLag": 1000,
+    "TimeSleep": 1000,
+    "MaxReservedBufferSize": 2560
+  },
+  "Destinations": [
+    {
+      "Name": "maps_navigator--prestable--indexing",
+      "DestinationType": "INDEX",
+      "Server": "saas-indexerproxy-prestable.yandex.net",
+      "Port": 80,
+      "ServiceName": "maps_navigator",
+      "Token": "3f2954538baa7bed4fbf14b9405e4c14",
+      "MaxRetries": 5
+    },
+    {
+      "Name": "maps_navigator_account--prestable--search",
+      "DestinationType": "SEARCH",
+      "Server": "saas-searchproxy-kv.yandex.net",
+      "Port": 17000,
+      "ServiceName": "maps_navigator_account",
+      "MaxRetries": 5
+    },
+    {
+      "Name": "maps_navigator_account--stable--indexing",
+      "DestinationType": "INDEX",
+      "Server": "saas-indexerproxy-kv.yandex.net",
+      "Port": 80,
+      "ServiceName": "maps_navigator_account",
+      "Token": "929721b3b8c7df82350f42c23acfa05f",
+      "MaxRetries": 5
+    }
+  ],
+  "Deliveries": [
+    {
+      "DeliveryName": "maps_navigator--bs_mobile--prestable",
+      "HandlerConfig": {
+        "HandlerType": "BS_MOBILE",
+        "Common": {
+          "SpyByUUID": {
+            "FullMatches": [
+              "6a3330d3a6e9da0c3810a6cac96cf0cf"
+            ],
+            "PrefixMatches": []
+          },
+          "Filtering": {
+            "EventInitialLagThreshold": 1440,
+            "AcceptedAppIds": [
+              "ru.yandex.yandexnavi",
+              "ru.yandex.yandexnavi.inhouse",
+              "ru.yandex.yandexnavi.sandbox",
+              "ru.yandex.mobile.navigator",
+              "ru.yandex.mobile.navigator.inhouse",
+              "ru.yandex.mobile.navigator.sandbox"
+            ],
+            "AcceptedEventNames": [
+              "guidance.set_route",
+              "guidance.reroute",
+              "guidance.ping",
+              "guidance.route_finish",
+              "guidance.reset_route",
+              "guidance.route_lost",
+              "guidance.return_to_route",
+              "guidance.not_on_route",
+              "guidance.on_route"
+            ]
+          }
+        },
+        "BsMobile": {
+          "DestinationName": "maps_navigator--prestable--indexing",
+          "ReadUserMetaKVName": "maps_navigator_account--prestable--search",
+          "WriteUserMetaKVName": "maps_navigator_account--stable--indexing"
+        }
+      }
+    },
+    {
+      "DeliveryName": "maps_navigator--bs_mobile_feedback--test",
+      "HandlerConfig": {
+        "HandlerType": "BS_MOBILE_FEEDBACK",
+        "Common": {
+          "Filtering": {
+            "EventInitialLagThreshold": 1440,
+            "AcceptedAppIds": [
+              "ru.yandex.service42.Trafficator"
+            ],
+            "AcceptedEventNames": [
+              "Like",
+              "Dislike"
+            ]
+          }
+        },
+        "BsMobileFeedback": {
+          "FeedbackBackends": [
+            "man1-7393.search.yandex.net:1032",
+            "sas1-5285.search.yandex.net:1029",
+            "ws34-556.search.yandex.net:1046"
+          ]
+        }
+      }
+    }
+  ],
+  "Queues": {
+    "Parsing": {
+      "WorkersCount": 4,
+      "MaxInFlight": 16,
+      "WaitQueueAvailableTimeout": 300
+    },
+    "Sending": {
+      "WorkersCount": 1024,
+      "MaxInFlight": 4000,
+      "WaitQueueAvailableTimeout": 300
+    }
+  }
+}

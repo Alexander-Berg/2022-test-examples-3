@@ -1,0 +1,594 @@
+# GENERATED FILE DO NOT MODIFY DIRECTLY
+# See https://a.yandex-team.ru/arc/trunk/arcadia/market/tools/develop/dashboards/generate_juggler_checks/generate_juggler_checks.py
+
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_report_testing
+
+juggler:
+  checks:
+
+  # Check fresh-report-core-dumps
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=fresh-report-core-dumps&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_mbo_vla
+    - NANNY%test_report_planeshift_sas
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    notifications:
+    - template_kwargs:
+        login:
+        - market_infrasearch_alerts
+        method:
+        - telegram
+        min_interval: 3600
+        repeat: 86400
+        status:
+        - CRIT
+      template_name: on_status_change
+    - template_kwargs:
+        delay: 60
+        login:
+        - market_report_incidents
+        method:
+        - telegram
+        status:
+        - CRIT
+      template_name: on_status_change
+    service: fresh-report-core-dumps
+    ttl: 900
+
+  # Check fresh-report-core-dumps-silent
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=fresh-report-core-dumps-silent&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_mbo_vla
+    - NANNY%test_report_planeshift_sas
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    service: fresh-report-core-dumps-silent
+    ttl: 180
+
+  # Check many-fresh-report-core-dumps
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=many-fresh-report-core-dumps&last=1DAY&mode=edit
+  - aggregator: more_than_limit_is_crit
+    aggregator_kwargs:
+      limit: 3
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva:fresh-report-core-dumps-silent
+    - NANNY%test_report_market_sas:fresh-report-core-dumps-silent
+    - NANNY%test_report_market_vla:fresh-report-core-dumps-silent
+    - NANNY%test_report_meta_market_vla:fresh-report-core-dumps-silent
+    - NANNY%test_report_mbo_vla:fresh-report-core-dumps-silent
+    - NANNY%test_report_planeshift_sas:fresh-report-core-dumps-silent
+    - NANNY%test_report_fresh_base_sas:fresh-report-core-dumps-silent
+    - NANNY%test_report_fresh_base_vla:fresh-report-core-dumps-silent
+    notifications:
+    - template_kwargs:
+        login:
+        - market_infrasearch_alerts
+        method:
+        - telegram
+        min_interval: 3600
+        repeat: 86400
+        status:
+        - CRIT
+      template_name: on_status_change
+    - template_kwargs:
+        delay: 60
+        login:
+        - market_report_incidents
+        method:
+        - telegram
+        status:
+        - CRIT
+      template_name: on_status_change
+    service: many-fresh-report-core-dumps
+    ttl: 180
+
+  # Check market-reanimator-core-dumps
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=market-reanimator-core-dumps&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_mbo_vla
+    - NANNY%test_report_planeshift_sas
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    notifications:
+    - template_kwargs:
+        login:
+        - market_infrasearch_alerts
+        method:
+        - telegram
+        min_interval: 3600
+        repeat: 86400
+        status:
+        - CRIT
+      template_name: on_status_change
+    - template_kwargs:
+        delay: 60
+        login:
+        - market_report_incidents
+        method:
+        - telegram
+        status:
+        - CRIT
+      template_name: on_status_change
+    service: market-reanimator-core-dumps
+    ttl: 900
+
+  # Check market-report-free-space-pdata
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=market-report-free-space-pdata&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      hold_crit: 3600
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_mbo_vla
+    - NANNY%test_report_planeshift_sas
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    notifications:
+    - template_kwargs:
+        login:
+        - market_infrasearch_alerts
+        method:
+        - telegram
+        min_interval: 3600
+        repeat: 86400
+        status:
+        - CRIT
+      template_name: on_status_change
+    service: market-report-free-space-pdata
+    ttl: 900
+
+  # Check market-report-free-space-ssd
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=market-report-free-space-ssd&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      hold_crit: 3600
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_mbo_vla
+    - NANNY%test_report_planeshift_sas
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    notifications:
+    - template_kwargs:
+        login:
+        - market_infrasearch_alerts
+        method:
+        - telegram
+        min_interval: 3600
+        repeat: 86400
+        status:
+        - CRIT
+      template_name: on_status_change
+    service: market-report-free-space-ssd
+    ttl: 900
+
+  # Check market-report-generation-size-pdata
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=market-report-generation-size-pdata&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      hold_crit: 3600
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_mbo_vla
+    - NANNY%test_report_planeshift_sas
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    notifications:
+    - template_kwargs:
+        login:
+        - market_infrasearch_alerts
+        method:
+        - telegram
+        min_interval: 3600
+        repeat: 86400
+        status:
+        - CRIT
+      template_name: on_status_change
+    service: market-report-generation-size-pdata
+    ttl: 900
+
+  # Check market-report-is-dead
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=market-report-is-dead&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_mbo_vla
+    - NANNY%test_report_planeshift_sas
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    notifications:
+    - template_kwargs:
+        login:
+        - market_infrasearch_alerts
+        method:
+        - telegram
+        min_interval: 3600
+        repeat: 86400
+        status:
+        - CRIT
+      template_name: on_status_change
+    - template_kwargs:
+        delay: 60
+        login:
+        - market_report_incidents
+        method:
+        - telegram
+        status:
+        - CRIT
+      template_name: on_status_change
+    service: market-report-is-dead
+    ttl: 3600
+
+  # Check market-report-file-owner
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=market-report-file-owner&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_mbo_vla
+    - NANNY%test_report_planeshift_sas
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    notifications:
+    - template_kwargs:
+        login:
+        - market_infrasearch_alerts
+        method:
+        - telegram
+        min_interval: 3600
+        repeat: 86400
+        status:
+        - CRIT
+      template_name: on_status_change
+    service: market-report-file-owner
+    ttl: 3600
+
+  # Check market-report-folders-consistency
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=market-report-folders-consistency&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    notifications:
+    - template_kwargs:
+        login:
+        - market_infrasearch_alerts
+        method:
+        - telegram
+        min_interval: 3600
+        repeat: 86400
+        status:
+        - CRIT
+      template_name: on_status_change
+    service: market-report-folders-consistency
+    ttl: 3600
+
+  # Check market-report-logrotate-status
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=market-report-logrotate-status&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_mbo_vla
+    - NANNY%test_report_planeshift_sas
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    notifications:
+    - template_kwargs:
+        login:
+        - market_infrasearch_alerts
+        method:
+        - telegram
+        min_interval: 3600
+        repeat: 86400
+        status:
+        - CRIT
+      template_name: on_status_change
+    - template_kwargs:
+        delay: 60
+        login:
+        - market_report_incidents
+        method:
+        - telegram
+        status:
+        - CRIT
+      template_name: on_status_change
+    service: market-report-logrotate-status
+    ttl: 900
+
+  # Check market-report-mount-points
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=market-report-mount-points&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_mbo_vla
+    - NANNY%test_report_planeshift_sas
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    notifications:
+    - template_kwargs:
+        login:
+        - market_infrasearch_alerts
+        method:
+        - telegram
+        min_interval: 3600
+        repeat: 86400
+        status:
+        - CRIT
+      template_name: on_status_change
+    - template_kwargs:
+        delay: 60
+        login:
+        - market_report_incidents
+        method:
+        - telegram
+        status:
+        - CRIT
+      template_name: on_status_change
+    service: market-report-mount-points
+    ttl: 900
+
+  # Check market-report-porto-memory-usage
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=market-report-porto-memory-usage&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      hold_crit: 3600
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_mbo_vla
+    - NANNY%test_report_planeshift_sas
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    notifications:
+    - template_kwargs:
+        login:
+        - market_infrasearch_alerts
+        method:
+        - telegram
+        min_interval: 3600
+        repeat: 86400
+        status:
+        - CRIT
+      template_name: on_status_change
+    service: market-report-porto-memory-usage
+    ttl: 900
+
+  # Check market-report-premature-exit
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=market-report-premature-exit&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_mbo_vla
+    - NANNY%test_report_planeshift_sas
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    notifications:
+    - template_kwargs:
+        login:
+        - market_infrasearch_alerts
+        method:
+        - telegram
+        min_interval: 3600
+        repeat: 86400
+        status:
+        - CRIT
+      template_name: on_status_change
+    service: market-report-premature-exit
+    ttl: 900
+
+  # Check market-report-heartbeat
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=market-report-heartbeat&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_mbo_vla
+    - NANNY%test_report_planeshift_sas
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    service: market-report-heartbeat
+    ttl: 120
+
+  # Check market-report-push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=market-report-push-client-status&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_mbo_vla
+    - NANNY%test_report_planeshift_sas
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3600
+      stable_time: 900
+    notifications:
+    - template_kwargs:
+        login:
+        - market_infrasearch_alerts
+        method:
+        - telegram
+        min_interval: 3600
+        repeat: 86400
+        status:
+        - CRIT
+      template_name: on_status_change
+    service: market-report-push-client-status
+    ttl: 900
+
+  # Check market-report-tmpfs-free-memory
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=market-report-tmpfs-free-memory&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      hold_crit: 3600
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_mbo_vla
+    - NANNY%test_report_planeshift_sas
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    notifications:
+    - template_kwargs:
+        login:
+        - market_infrasearch_alerts
+        method:
+        - telegram
+        min_interval: 3600
+        repeat: 86400
+        status:
+        - CRIT
+      template_name: on_status_change
+    service: market-report-tmpfs-free-memory
+    ttl: 900
+
+  # Check market-report-rty-quota-overflow
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=market-report-rty-quota-overflow&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      hold_crit: 3600
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_mbo_vla
+    - NANNY%test_report_planeshift_sas
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    notifications:
+    - template_kwargs:
+        login:
+        - market_infrasearch_alerts
+        method:
+        - telegram
+        min_interval: 3600
+        repeat: 86400
+        status:
+        - CRIT
+      template_name: on_status_change
+    service: market-report-rty-quota-overflow
+    ttl: 900
+
+  # Check market-report-rty-quota-errors
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=market-report-rty-quota-errors&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%test_report_market_iva
+    - NANNY%test_report_market_sas
+    - NANNY%test_report_market_vla
+    - NANNY%test_report_meta_market_vla
+    - NANNY%test_report_mbo_vla
+    - NANNY%test_report_planeshift_sas
+    - NANNY%test_report_fresh_base_sas
+    - NANNY%test_report_fresh_base_vla
+    service: market-report-rty-quota-errors
+    ttl: 900
+
+  # Check market-report-collapse
+  # https://juggler.yandex-team.ru/check_details/?host=market_report_testing&service=market-report-collapse&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - CGROUP%mi_master-testing
+    service: market-report-collapse
+    pronounce: репорт упал и будет восстановлен автоматически!
+    ttl: 300
+
+  default:
+    check_options: {}
+    host: market_report_testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_report
+    - market_testing
+    - market_rtc
+    - market_report_rtc
+    - market
+    - _market_

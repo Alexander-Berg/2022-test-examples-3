@@ -1,0 +1,74 @@
+select /* reqid:6492396255304344633:direct.script:ppcMonitor */ straight_join sum(c.platform = 'search') disabled_cnt
+                                     , count(*) workcamps -- тоже на всяций случай возьмем
+                                     , sum(c.AgencyUID > 0) workcamps_agency
+                                     , sum(c.ManagerUID > 0) workcamps_manager
+                                     , sum(c.platform = 'search') workcamps_no_context
+                                     , sum(c.platform = 'search' and c.AgencyUID > 0) workcamps_no_context_agency
+                                     , sum(c.platform = 'search' and c.ManagerUID > 0) workcamps_no_context_manager
+                                     , sum(IFNULL(c.disabledIps, '')!='') disabled_ips
+                                     , sum(c.statusBehavior!='Yes') disabled_behavior
+                                     , sum(c.platform != 'search' and c.ContextLimit between 1 and 10) workcamps_context_limit_10
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextLimit between 1 and 10) workcamps_agency_context_limit_10
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextLimit between 1 and 10) workcamps_manager_context_limit_10
+, sum(c.platform != 'search' and c.ContextPriceCoef between 1 and 10) workcamps_contextprice_coef_10
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextPriceCoef between 1 and 10) workcamps_agency_contextprice_coef_10
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextPriceCoef between 1 and 10) workcamps_manager_contextprice_coef_10
+, sum(c.platform != 'search' and c.ContextLimit between 11 and 20) workcamps_context_limit_20
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextLimit between 11 and 20) workcamps_agency_context_limit_20
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextLimit between 11 and 20) workcamps_manager_context_limit_20
+, sum(c.platform != 'search' and c.ContextPriceCoef between 11 and 20) workcamps_contextprice_coef_20
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextPriceCoef between 11 and 20) workcamps_agency_contextprice_coef_20
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextPriceCoef between 11 and 20) workcamps_manager_contextprice_coef_20
+, sum(c.platform != 'search' and c.ContextLimit between 21 and 30) workcamps_context_limit_30
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextLimit between 21 and 30) workcamps_agency_context_limit_30
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextLimit between 21 and 30) workcamps_manager_context_limit_30
+, sum(c.platform != 'search' and c.ContextPriceCoef between 21 and 30) workcamps_contextprice_coef_30
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextPriceCoef between 21 and 30) workcamps_agency_contextprice_coef_30
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextPriceCoef between 21 and 30) workcamps_manager_contextprice_coef_30
+, sum(c.platform != 'search' and c.ContextLimit between 31 and 40) workcamps_context_limit_40
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextLimit between 31 and 40) workcamps_agency_context_limit_40
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextLimit between 31 and 40) workcamps_manager_context_limit_40
+, sum(c.platform != 'search' and c.ContextPriceCoef between 31 and 40) workcamps_contextprice_coef_40
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextPriceCoef between 31 and 40) workcamps_agency_contextprice_coef_40
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextPriceCoef between 31 and 40) workcamps_manager_contextprice_coef_40
+, sum(c.platform != 'search' and c.ContextLimit between 41 and 50) workcamps_context_limit_50
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextLimit between 41 and 50) workcamps_agency_context_limit_50
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextLimit between 41 and 50) workcamps_manager_context_limit_50
+, sum(c.platform != 'search' and c.ContextPriceCoef between 41 and 50) workcamps_contextprice_coef_50
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextPriceCoef between 41 and 50) workcamps_agency_contextprice_coef_50
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextPriceCoef between 41 and 50) workcamps_manager_contextprice_coef_50
+, sum(c.platform != 'search' and c.ContextLimit between 51 and 60) workcamps_context_limit_60
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextLimit between 51 and 60) workcamps_agency_context_limit_60
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextLimit between 51 and 60) workcamps_manager_context_limit_60
+, sum(c.platform != 'search' and c.ContextPriceCoef between 51 and 60) workcamps_contextprice_coef_60
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextPriceCoef between 51 and 60) workcamps_agency_contextprice_coef_60
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextPriceCoef between 51 and 60) workcamps_manager_contextprice_coef_60
+, sum(c.platform != 'search' and c.ContextLimit between 61 and 70) workcamps_context_limit_70
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextLimit between 61 and 70) workcamps_agency_context_limit_70
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextLimit between 61 and 70) workcamps_manager_context_limit_70
+, sum(c.platform != 'search' and c.ContextPriceCoef between 61 and 70) workcamps_contextprice_coef_70
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextPriceCoef between 61 and 70) workcamps_agency_contextprice_coef_70
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextPriceCoef between 61 and 70) workcamps_manager_contextprice_coef_70
+, sum(c.platform != 'search' and c.ContextLimit between 71 and 80) workcamps_context_limit_80
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextLimit between 71 and 80) workcamps_agency_context_limit_80
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextLimit between 71 and 80) workcamps_manager_context_limit_80
+, sum(c.platform != 'search' and c.ContextPriceCoef between 71 and 80) workcamps_contextprice_coef_80
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextPriceCoef between 71 and 80) workcamps_agency_contextprice_coef_80
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextPriceCoef between 71 and 80) workcamps_manager_contextprice_coef_80
+, sum(c.platform != 'search' and c.ContextLimit between 81 and 90) workcamps_context_limit_90
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextLimit between 81 and 90) workcamps_agency_context_limit_90
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextLimit between 81 and 90) workcamps_manager_context_limit_90
+, sum(c.platform != 'search' and c.ContextPriceCoef between 81 and 90) workcamps_contextprice_coef_90
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextPriceCoef between 81 and 90) workcamps_agency_contextprice_coef_90
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextPriceCoef between 81 and 90) workcamps_manager_contextprice_coef_90
+, sum(c.platform != 'search' and c.ContextLimit between 91 and 100) workcamps_context_limit_100
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextLimit between 91 and 100) workcamps_agency_context_limit_100
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextLimit between 91 and 100) workcamps_manager_context_limit_100
+, sum(c.platform != 'search' and c.ContextPriceCoef between 91 and 100) workcamps_contextprice_coef_100
+, sum(c.platform != 'search' and c.AgencyUID > 0 and c.ContextPriceCoef between 91 and 100) workcamps_agency_contextprice_coef_100
+, sum(c.platform != 'search' and c.ManagerUID > 0 and c.ContextPriceCoef between 91 and 100) workcamps_manager_contextprice_coef_100
+
+                                  from campaigns c
+                                  left join campaigns wc on wc.cid = c.wallet_cid
+                                 where c.sum - c.sum_spent + IF(c.wallet_cid, wc.sum - wc.sum_spent, 0) > 0.1
+                                   and c.statusShow = "Yes";

@@ -1,0 +1,41 @@
+apply plugin: 'java'
+apply plugin: 'mbuild-java'
+
+buildscript {
+    repositories {
+        maven { url 'http://artifactory.yandex.net/market' }
+    }
+    dependencies {
+        classpath 'ru.yandex.market:mbuild:1.+'
+    }
+}
+
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.seleniumhq.selenium:selenium-java:3.9.1'
+    testCompile 'ru.yandex.qatools.htmlelements:htmlelements-java:1.19'
+    testCompile 'ru.yandex.qatools.htmlelements:htmlelements-matchers:1.19'
+    testCompile 'ru.yandex.qatools.matchers:matcher-decorators:1.4.1'
+    testCompile 'javax.xml.bind:jaxb-api:2.3.0'
+    testCompile 'com.sun.xml.bind:jaxb-core:2.3.0'
+    testCompile 'com.sun.xml.bind:jaxb-impl:2.3.0'
+}
+
+integrationTest {
+    systemProperties project.properties.subMap([
+            'tsum.selenium.url',
+            'tsum.selenium.enableVNC',
+            'tsum.main.page.url',
+            'tsum.test.user.login',
+            'tsum.test.user.secretId',
+            'tsum.test.browser.name',
+            'tsum.test.browser.version',
+    ])
+}
+
+allure {
+    autoconfigure = true
+    downloadLinkFormat = 'https://artifactory.yandex.net/artifactory/yandex_market_releases/io/qameta/allure/allure/%s/allure-%<s.zip'
+    version = '2.7.0'
+}

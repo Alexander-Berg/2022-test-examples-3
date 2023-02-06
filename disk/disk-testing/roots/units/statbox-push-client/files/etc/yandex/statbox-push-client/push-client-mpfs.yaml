@@ -1,0 +1,18 @@
+
+---
+ident: disk
+
+logger-mode: file
+logger-file: /var/log/statbox/watcher.log
+logger-level: 5
+logger-timeformat: "[%d/%b/%Y:%T %z]"
+
+network-master-addr: "logbroker-pre.yandex.net"
+network-proto: rt
+
+files:
+  - name: /var/log/mpfs/event-history.log
+    log_type: ydisk-event-history-log
+  - name: /var/log/yandex/disk/log-reader-tskv.log
+    ident: disk-mpfs
+    log_type: ydisk-log-reader-log

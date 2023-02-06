@@ -1,0 +1,315 @@
+{
+  "meta": {
+    "fields": [
+      {
+        "name": "tariffId",
+        "title": "ID тарифа",
+        "type": "NUMBER",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "partner",
+        "title": "Партнёр",
+        "type": "REFERENCE",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": {
+          "optionsSlug": "lms/partner",
+          "multiple": false,
+          "authorities": [
+            "ROLE_PARTNER"
+          ],
+          "titleFieldName": "readableName",
+          "idFieldName": "id",
+          "hint": "Название партнёра или ID",
+          "pageSize": 20,
+          "queryParamName": "searchQuery"
+        },
+        "secret": null
+      },
+      {
+        "name": "deliveryMethod",
+        "title": "Способ доставки",
+        "type": "LIST",
+        "editable": false,
+        "options": [
+          {
+            "id": null,
+            "displayName": "—",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "COURIER",
+            "displayName": "Курьерская доставка",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "PICKUP",
+            "displayName": "Доставка до пункта выдачи заказа",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "POST",
+            "displayName": "Доставка почтой",
+            "slug": null,
+            "openNewTab": false
+          }
+        ],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "name",
+        "title": "Название тарифа",
+        "type": "STRING",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "code",
+        "title": "Код тарифа",
+        "type": "STRING",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "description",
+        "title": "Описание тарифа",
+        "type": "STRING",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "tags",
+        "title": "Теги/программы тарифа",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "type",
+        "title": "Назначение тарифа",
+        "type": "LIST",
+        "editable": false,
+        "options": [
+          {
+            "id": null,
+            "displayName": "—",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "GENERAL",
+            "displayName": "Общий тариф",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "OWN_DELIVERY",
+            "displayName": "Тариф для собственной службы доставки магазина",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "MARKET_COURIER",
+            "displayName": "Тариф Курьерской службы Маркета",
+            "slug": null,
+            "openNewTab": false
+          }
+        ],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "enabled",
+        "title": "Включен",
+        "type": "BOOLEAN",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "archived",
+        "title": "Отправлен в архив",
+        "type": "BOOLEAN",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "archivedAt",
+        "title": "Время отправки в архив",
+        "type": "DATE_TIME",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "createdAt",
+        "title": "Время создания",
+        "type": "DATE_TIME",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "tariffGroup",
+        "title": "Группа тарифа",
+        "type": "REFERENCE",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "tariffGroupId",
+        "title": "ID группы тарифа",
+        "type": "NUMBER",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": {
+          "optionsSlug": "tariff-groups",
+          "multiple": false,
+          "authorities": [
+            "ROLE_TARIFF_GROUPS"
+          ],
+          "titleFieldName": "description",
+          "idFieldName": "id",
+          "hint": "ID/описание группы тарифов",
+          "pageSize": 20,
+          "queryParamName": "searchQuery"
+        },
+        "secret": null
+      },
+      {
+        "name": "equalPublicAndNonpublicPrices",
+        "title": "Себестоимость и стоимость равны",
+        "type": "BOOLEAN",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      }
+    ],
+    "actions": [
+      {
+        "title": "Загрузить файл",
+        "description": "Загрузить новый файл прайс-листа для выбранного тарифа",
+        "slug": "upload",
+        "identifiedBy": [],
+        "type": "GRID_ACTION",
+        "method": "POST_MULTIPART",
+        "icon": "cloud_upload",
+        "authorities": []
+      },
+      {
+        "title": "Сгенерировать ревизию",
+        "description": "Запустить форсированную генерацию ревизии",
+        "slug": "generateRevision",
+        "identifiedBy": [],
+        "type": "GRID_ACTION",
+        "method": "POST_BODY",
+        "icon": null,
+        "authorities": []
+      }
+    ],
+    "mode": "EDIT",
+    "deletable": false,
+    "children": [
+      {
+        "title": "Файлы прайс-листа",
+        "slug": "price-list-files",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "tariffId",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "Теги/программы тарифа",
+        "slug": "tariffs/tags",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "tariffId",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "ПВЗ-партнёры",
+        "slug": "tariffs/destination-partners",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "tariffId",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      }
+    ],
+    "tabs": []
+  },
+  "item": {
+    "id": 1,
+    "values": {
+      "tariffGroupId": 18,
+      "tariffGroup": {
+        "id": "18",
+        "displayName": "18: group 18",
+        "slug": "tarifficator/tariff-groups",
+        "openNewTab": false
+      },
+      "archived": false,
+      "createdAt": "2019-08-01T12:09:31Z",
+      "code": "Code1",
+      "partner": {
+        "displayName": "1: <не найден>",
+        "id": "1",
+        "openNewTab": false,
+        "slug": "lms/partner"
+      },
+      "deliveryMethod": "PICKUP",
+      "name": "Первый тариф",
+      "description": "Первый тестовый тариф",
+      "tariffId": 1,
+      "type": "GENERAL",
+      "enabled": true,
+      "tags": "DAAS",
+      "equalPublicAndNonpublicPrices": false
+    },
+    "title": "Тариф № 1"
+  }
+}

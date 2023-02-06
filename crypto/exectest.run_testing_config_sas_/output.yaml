@@ -1,0 +1,264 @@
+environment: "testing"
+installation: "russia"
+
+http:
+  port: 80
+  worker_threads: 5
+  max_requests_per_connection: 1000
+  max_in_flight_requests: 75
+  log_body: true
+  asio_server_threads: 2
+
+ping:
+  ping_id: "ping:ping"
+
+yt:
+  main_table:
+    cluster_url: "http://seneca-sas.yt.yandex.net"
+    proxy_role: "crypta-cm"
+    table_path: //home/crypta/testing/cookie_matching/rt/db/replica
+    operation_timeout_ms: 100
+
+  retry_tables:
+    - cluster_url: "http://seneca-sas.yt.yandex.net"
+      proxy_role: "crypta-cm"
+      table_path: //home/crypta/testing/cookie_matching/rt/db/replica
+      operation_timeout_ms: 100
+
+  retry_timeout_ms: 3
+
+  logger:
+    file_name: "/logs/yt-api"
+
+graphite:
+  host: localhost
+  port: 42000
+  root: cm_api
+
+solomon:
+  project: crypta_cm
+  service: api
+  cluster: testing
+  labels:
+    dc: sas
+
+stats:
+  hist:
+    min: 0
+    max: 10
+    bin_count: 10
+
+  percentile:
+    max: 100000000
+    precision: 3
+    percentiles:
+      - 100
+      - 99.9
+      - 99
+      - 98
+      - 95
+      - 90
+
+tvm:
+  self_client_id: 2002218
+  log: tvm
+  destinations:
+    pq: 2001059
+
+juggler:
+  endpoint_options:
+    url_prefix: "http://juggler-push.search.yandex.net"
+    timeout_sec: 10
+
+upload:
+  log_only_types:
+    - adobedmp
+    - appnexus
+    - ditmsk
+    - dmp.*
+    - mediascope
+    - omi
+    - rakuten
+
+touch_timeout_sec: 86400
+
+logbroker:
+  pqlib:
+    worker_threads: 1
+    compression_threads: 1
+    grpc_threads: 1
+
+  use_tvm: True
+
+  access_log_producer:
+    server: logbroker.yandex.net
+    port: 2135
+    topic: crypta/test/cm/access-log
+    source_id_prefix: localhost
+    log_name: pqlib
+    drop_log_name: access_dropped
+    max_bytes_in_flight: 536870912
+
+  change_log_producer:
+    server: logbroker.yandex.net
+    port: 2135
+    topic: crypta/test/cm/change-log
+    source_id_prefix: localhost
+    log_name: pqlib
+    drop_log_name: change_dropped
+    max_bytes_in_flight: 536870912
+    producers_count: 1
+    bind_producers_to_partitions: True
+
+quoter:
+  enabled: True
+  host_port: "quoter.cm.crypta.yandex.net:80"
+  timeout_sec: 10
+  request_interval_sec: 60
+  environment_type: "testing"
+
+logs:
+  main:
+    level: warning
+    targets:
+      - type: stdout
+      - type: rotating
+        file: "/logs/main.log"
+        max_file_size: 419430400
+        max_files: 1
+
+  worker:
+    level: warning
+    targets:
+    - type: rotating
+      file: "/logs/worker.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  identify:
+    level: warning
+    targets:
+    - type: rotating
+      file: "/logs/identify.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  upload:
+    level: warning
+    targets:
+    - type: rotating
+      file: "/logs/upload.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  delete:
+    level: warning
+    targets:
+    - type: rotating
+      file: "/logs/delete.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  expire:
+    level: warning
+    targets:
+    - type: rotating
+      file: "/logs/expire.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  ping:
+    level: warning
+    targets:
+    - type: rotating
+      file: "/logs/ping.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  version:
+    level: warning
+    targets:
+    - type: rotating
+      file: "/logs/version.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  server:
+    level: warning
+    targets:
+    - type: rotating
+      file: "/logs/server.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  pqlib:
+    level: warning
+    targets:
+    - type: rotating
+      file: "/logs/pqlib.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  quoter:
+    level: warning
+    targets:
+    - type: rotating
+      file: "/logs/quoter.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  tvm:
+    level: warning
+    targets:
+    - type: rotating
+      file: "/logs/tvm.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  touch:
+    level: warning
+    targets:
+    - type: rotating
+      file: "/logs/touch.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  access_dropped:
+    level: info
+    format: "%v"
+    targets:
+    - type: rotating
+      file: "/logs/access_dropped.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  change_dropped:
+    level: info
+    format: "%v"
+    targets:
+    - type: rotating
+      file: "/logs/change_dropped.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  yt:
+    level: warning
+    targets:
+    - type: rotating
+      file: "/logs/yt.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  graphite:
+    targets:
+    - type: rotating
+      file: "/logs/graphite.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  solomon:
+    targets:
+    - type: rotating
+      file: "/logs/solomon.log"
+      max_file_size: 419430400
+      max_files: 1

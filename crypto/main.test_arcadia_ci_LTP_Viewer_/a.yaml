@@ -1,0 +1,118 @@
+ci:
+  flows:
+    flow-ltp-viewer:
+      jobs:
+        build-crypta-ltp-viewer-api:
+          input:
+            custom_version: ${context.version_info.full}
+            packages: crypta/ltp/viewer/services/api/docker/crypta-ltp-viewer-api.json
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package_docker
+          title: Build crypta-ltp-viewer-api
+        build-crypta-ltp-viewer-build-index:
+          input:
+            package_resource_attrs:
+              name: crypta-ltp-viewer-build-index
+            packages: crypta/ltp/viewer/services/build_index/crypta-ltp-viewer-build-index.json
+            resource_type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package
+          title: Build crypta-ltp-viewer-build-index
+        build-crypta-ltp-viewer-worker:
+          input:
+            custom_version: ${context.version_info.full}
+            packages: crypta/ltp/viewer/services/worker/docker/crypta-ltp-viewer-worker.json
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package_docker
+          title: Build crypta-ltp-viewer-worker
+        release-stable:
+          input:
+            config:
+              common_release_data:
+                sandbox_common_release_data:
+                  release_stage: stable
+              deploy_system: SANDBOX
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-ltp-viewer-api.resources[?type == 'CRYPTA_DOCKER'])[0].id}
+                type: CRYPTA_DOCKER
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-ltp-viewer-worker.resources[?type == 'CRYPTA_DOCKER'])[0].id}
+                type: CRYPTA_DOCKER
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-ltp-viewer-build-index.resources[?type ==
+                  'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-stable
+          stage: stable
+          task: common/releases/simple_releaser
+          title: Release to stable
+        release-testing:
+          input:
+            config:
+              common_release_data:
+                sandbox_common_release_data:
+                  release_stage: testing
+              deploy_system: SANDBOX
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-ltp-viewer-api.resources[?type == 'CRYPTA_DOCKER'])[0].id}
+                type: CRYPTA_DOCKER
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-ltp-viewer-worker.resources[?type == 'CRYPTA_DOCKER'])[0].id}
+                type: CRYPTA_DOCKER
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-ltp-viewer-build-index.resources[?type ==
+                  'CRYPTA_UNIVERSAL_BUNDLE'])[0].id}
+                type: CRYPTA_UNIVERSAL_BUNDLE
+          needs:
+          - start-testing
+          stage: testing
+          task: common/releases/simple_releaser
+          title: Release to testing
+        start-build:
+          stage: build
+          task: dummy
+          title: Start build
+        start-stable:
+          manual: true
+          needs:
+          - release-testing
+          stage: stable
+          task: dummy
+          title: Start stable
+        start-testing:
+          needs:
+          - build-crypta-ltp-viewer-api
+          - build-crypta-ltp-viewer-worker
+          - build-crypta-ltp-viewer-build-index
+          stage: testing
+          task: dummy
+          title: Start testing
+  releases:
+    ltp-viewer:
+      auto: true
+      filters:
+      - abs-paths:
+        - crypta/ltp/**
+        discovery: dir
+      flow: flow-ltp-viewer
+      stages:
+      - displace: true
+        id: build
+      - displace: true
+        id: testing
+      - id: stable
+      title: LTP Viewer
+  runtime:
+    sandbox-owner: CRYPTA
+  secret: sec-01efps66gnbmejg9wvc9ptvhmc
+service: cryptadev
+title: LTP Viewer

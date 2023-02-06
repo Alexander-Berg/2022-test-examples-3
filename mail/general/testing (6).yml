@@ -1,0 +1,91 @@
+base: etc/collectors-ext/base.yml
+config:
+    log:
+        global:
+            async: false
+            sinks:
+            -   type: file
+                path: var/log/collectors-ext/collectors-ext.log
+                force_flush: true
+        WebAccessTskv:
+            async: false
+            sinks:
+            -   type: file
+                path: var/log/collectors-ext/access.log
+                force_flush: true
+        HttpTskv:
+            async: false
+            sinks:
+            -   type: file
+                path: var/log/collectors-ext/httpout.log
+                force_flush: true
+        typed_log:
+            async: false
+            sinks:
+            -   type: reopenable_file
+                path: var/log/collectors-ext/typed.log
+                force_flush: true
+    modules:
+        module:
+        -   _name: tvm
+            configuration:
+                my_tvm_id: collectors_ext_tst
+                target_services: [blackbox_tst, validator_tst, social_api_tst, social_proxy_tst]
+        -   _name: auth
+            configuration:
+                url: http://pass-test.yandex.ru/blackbox
+                fallback_url: http://pass-test.yandex.ru/blackbox
+        -   _name: imap_client
+            configuration:
+                verbosity_settings:
+                    client_request: true
+                    server_response: true
+                    service_info: true
+        -   _name: send_module
+            configuration:
+                smtp_host: mxback-test.mail.yandex.net
+                smtp_port: 25
+        -   _name: query_dispatcher
+            configuration:
+                include: { _file: etc/collectors-ext/shards/testing.yml }
+        -   _name: oauth_module
+            configuration:
+                host: http://api.social-test.yandex.ru/
+                social_api_tvm_service: social_api_tst
+                social_proxy_tvm_service: social_proxy_tst
+        -   _name: cache_core
+            configuration:
+                memcached:
+                    servers: etc/collectors-ext/memcached/testing.conf
+        -   _name: rpop_processor
+            configuration:
+                validator:
+                    url: http://validator-test.yandex.net:80/validate.xml
+                abook_sync:
+                    url: http://abook.mail.yandex.net:80/mk/external/import.xml
+        -   _name: rpop_api
+            configuration:
+                log_extra: true
+                furita_url: http://furita-test.mail.yandex.net/api/list.xml
+        -   _name: web_server
+            configuration:
+                ssl:
+                    cert_file: etc/collectors-ext/ssl/collectors-ext-testing.stable.qloud-b.yandex.net.pem
+                    key_file: etc/collectors-ext/ssl/collectors-ext-testing.stable.qloud-b.yandex.net.pem
+                endpoints:
+                    listen:
+                    -   addr: '::'
+                        port: 80
+                        ipv6_only: 1
+                    -   addr: '::'
+                        port: 443
+                        ipv6_only: 1
+                        ssl: on
+        -   _name: rpop_scheduler_pq
+            configuration:
+                force_run_interval: 1
+                first_run_interval: 1
+                log_extra: true
+        -   _name: collector_service
+            configuration:
+                validator_host: http://validator-test.yandex.net/validate.xml

@@ -1,0 +1,29 @@
+{% if table == "features_item_model_average_view_statistics" %}
+    {# Result data. #}
+    {% table table %}
+        [
+            "O1",
+            {{ (40.0 + 10.0) / history }},
+            {{ (4.0 + 2.0) / history }},
+            "model",
+            "{{ day }}"
+        ],
+        [
+            "O2",
+            {{ (20.0 + 10.0) / history }},
+            {{ (8.0 + 2.0) / history }},
+            "model",
+            "{{ day }}"
+        ]
+    {% endtable %}
+{% elif table == "features_item_model_view_statistics" %}
+    {% table table %}
+        {% if shift == 0 %}
+            ["O1", 40.0, 4.0, "model", "{{ day }}"],
+            ["O2", 20.0, 8.0, "model", "{{ day }}"]
+        {% elif shift == 1 %}
+            ["O1", 10.0, 2.0, "model", "{{ day }}"],
+            ["O2", 10.0, 2.0, "model", "{{ day }}"]
+        {% endif %}
+    {% endtable %}
+{% endif %}

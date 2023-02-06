@@ -1,0 +1,247 @@
+module: update-order-status-handlers
+operators:
+  - id: prepare-context-handler
+    visibility: public
+    value#processing-handler:
+      id: prepare-context-handler
+      on-fallbacking: do-nothing
+      resources:
+        - id: prepare-context
+          url: $prepare-context-update-order-status-url
+          method: post
+          max-retries: 3
+          caching-enabled: false
+          tvm-name: market-checkouter
+      requests:
+        - id: prepare-context
+          resource: prepare-context
+          body:
+            order#xget: /shared-state/order
+            clientRole#xget: /event/payload/clientRole
+            clientId#xget: /event/payload/clientId
+            clientIds#xget: /event/payload/clientIds
+            shopId#xget: /event/payload/shopId
+            businessId#xget: /event/payload/businessId
+            status#xget: /event/payload/status
+            substatus#xget: /event/payload/substatus
+            rgbs#xget: /event/payload/rgbs
+            updateOrderStatusReasonDetails#xget: /event/payload/updateOrderStatusReasonDetails
+          content-type: application/json
+          fail-policy:
+            - selector: 4*
+              action: ignore
+      result:
+        context:
+          clientInfo#xget: /sources/prepare-context/response/body/clientInfo
+          statusAndSubstatus#xget: /sources/prepare-context/response/body/statusAndSubstatus
+          rgbs#xget: /sources/prepare-context/response/body/rgbs
+          orderHistoryEventReasonDetails#xget: /sources/prepare-context/response/body/orderHistoryEventReasonDetails
+  - id: validate-context-handler
+    visibility: public
+    value#processing-handler:
+      id: validate-context-handler
+      on-fallbacking: do-nothing
+      resources:
+        - id: validate-context
+          url: $validate-context-update-order-status-url
+          method: post
+          max-retries: 3
+          caching-enabled: false
+          tvm-name: market-checkouter
+      requests:
+        - id: validate-context
+          resource: validate-context
+          body:
+            clientInfo#xget: /shared-state/context/clientInfo
+            statusAndSubstatus#xget: /shared-state/context/statusAndSubstatus
+            rgbs#xget: /shared-state/context/rgbs
+            orderHistoryEventReasonDetails#xget: /shared-state/context/orderHistoryEventReasonDetails
+            order#xget: /shared-state/order
+          content-type: application/json
+          fail-policy:
+            - selector: 4*
+              action: ignore
+      result:
+        isValid#equal:
+          - value#xget: /sources/validate-context/response/status-code
+          - value: 200
+        needCancelPayment#and:
+          - value#equal:
+            - value#xget: /sources/validate-context/response/status-code
+            - value: 200
+          - value#equal:
+            - value#xget: /shared-state/context/statusAndSubstatus/status
+            - value: CANCELLED
+        oldStatus#xget: /shared-state/order/status
+        shopDelivery#equal:
+          - value#xget: /shared-state/order/delivery/deliveryPartnerType
+          - value: SHOP
+        plannedQC: []
+  - id: cancel-payment-handler
+    enabled#xget: /shared-state/needCancelPayment
+    visibility: public
+    value#processing-handler:
+      id: cancel-payment-handler
+      on-fallbacking: do-nothing
+      resources:
+        - id: cancel-payment
+          url: $cancel-payment-url
+          method: post
+          max-retries: 3
+          caching-enabled: false
+          tvm-name: market-checkouter
+      requests:
+        - id: cancel-payment
+          resource: cancel-payment
+          body:
+            paymentMethod#xget: /shared-state/order/paymentMethod
+            paymentId#xget: /shared-state/order/paymentId
+            payment#xget: /shared-state/order/payment
+          content-type: application/json
+          fail-policy:
+            - selector: 4*
+              action: ignore
+      result:
+        plannedQC#concat-arrays:
+          - value#xget: /shared-state/plannedQC
+          - value#xget: /sources/cancel-payment/response/body
+  - id: update-order-status-handler
+    enabled#xget: /shared-state/isValid
+    visibility: public
+    value#processing-handler:
+      id: update-order-status-handler
+      on-fallbacking: do-nothing
+      resources:
+        - id: update-order-status
+          url: $update-order-status-url
+          method: post
+          max-retries: 3
+          caching-enabled: false
+          tvm-name: market-checkouter
+      requests:
+        - id: update-order-status
+          resource: update-order-status
+          body:
+            order#xget: /shared-state/order
+            statusAndSubstatus#xget: /shared-state/context/statusAndSubstatus
+            clientInfo#xget: /shared-state/context/clientInfo
+            orderHistoryEventReasonDetails#xget: /shared-state/context/orderHistoryEventReasonDetails
+          content-type: application/json
+          fail-policy:
+            - selector: 409
+              action: propagate
+            - selector: 4*
+              action: ignore
+      result:
+        order#xget: /sources/update-order-status/response/body
+      handler-fallback-policy:
+        - strategy: reschedule
+          reset-checkpoint: true
+          interval: 100ms
+          max-retries: 3
+          enabled#equal:
+            - value#xget: /sources/update-order-status/response/status-code
+            - value: 409
+  # Далее идёт два одинаковых метода, которые отличаются только url. Как их объединить?
+  - id: update-money-delivery-handler
+    visibility: public
+    value#processing-handler:
+      id: update-money-delivery-handler
+      on-fallbacking: do-nothing
+      resources:
+        - id: update-money-delivery
+          url: $update-money-delivery-url
+          method: post
+          max-retries: 3
+          caching-enabled: false
+          tvm-name: market-checkouter
+      requests:
+        - id: update-money-delivery
+          resource: update-money-delivery
+          body:
+            order#xget: /shared-state/order
+            shopDelivery#xget: /shared-state/shopDelivery
+          content-type: application/json
+          fail-policy:
+            - selector: 4*
+              action: ignore
+      result:
+        plannedQC#concat-arrays:
+          - value#xget: /shared-state/plannedQC
+          - value#xget: /sources/update-money-delivery/response/body
+  - id: update-money-delivered-handler
+    visibility: public
+    value#processing-handler:
+      id: update-money-delivered-handler
+      on-fallbacking: do-nothing
+      resources:
+        - id: update-money-delivered
+          url: $update-money-delivered-url
+          method: post
+          max-retries: 3
+          caching-enabled: false
+          tvm-name: market-checkouter
+      requests:
+        - id: update-money-delivered
+          resource: update-money-delivered
+          body:
+            order#xget: /shared-state/order
+            shopDelivery#xget: /shared-state/shopDelivery
+          content-type: application/json
+          fail-policy:
+            - selector: 4*
+              action: ignore
+      result:
+        plannedQC#concat-arrays:
+          - value#xget: /shared-state/plannedQC
+          - value#xget: /sources/update-money-delivered/response/body
+  - id: update-money-cancelled-handler
+    visibility: public
+    value#processing-handler:
+      id: update-money-cancelled-handler
+      on-fallbacking: do-nothing
+      resources:
+        - id: update-money-cancelled
+          url: $update-money-cancelled-url
+          method: post
+          max-retries: 3
+          caching-enabled: false
+          tvm-name: market-checkouter
+      requests:
+        - id: update-money-cancelled
+          resource: update-money-cancelled
+          body:
+            oldStatus#xget: /shared-state/oldStatus
+            order#xget: /shared-state/order
+          content-type: application/json
+          fail-policy:
+            - selector: 4*
+              action: ignore
+      result:
+        plannedQC#concat-arrays:
+          - value#xget: /shared-state/plannedQC
+          - value#xget: /sources/update-money-cancelled/response/body
+  - id: push-planned-qc-handler
+    visibility: public
+    value#processing-handler:
+      id: push-planned-qc-handler
+      on-fallbacking: do-nothing
+      resources:
+        - id: push-planned-qc
+          url: $push-planned-qc-url
+          method: post
+          max-retries: 3
+          caching-enabled: false
+          tvm-name: market-checkouter
+      requests:
+        - id: push-planned-qc
+          resource: push-planned-qc
+          body#xget: /shared-state/plannedQC
+          content-type: application/json
+          fail-policy:
+            - selector: 4*
+              action: ignore
+      result:
+        qcWasPlanned#equal:
+          - value#xget: /sources/push-planned-qc/response/status-code
+          - value: 200

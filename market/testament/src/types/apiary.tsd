@@ -1,0 +1,69 @@
+// eslint-disable-next-line max-classes-per-file
+declare module '@yandex-market/apiary/client/runtime' {
+    export default class Runtime {
+        constructor(params: {strategy: unknown});
+
+        run: () => void;
+    }
+}
+
+declare module '@yandex-market/apiary/server/processor' {
+    export default class Processor {
+        static process(params: unknown): Promise<unknown>;
+    }
+}
+
+declare module '@yandex-market/apiary-annex/jobs' {
+    export function cookiesJob(params: unknown): void;
+    export function statusJob(code: number, lock: boolean): void;
+    export function titleJob(title: Promise<string>): void;
+    export function metaJob(name: string, value: string): void;
+    export function redirectJob(url: string): void;
+}
+
+declare module '@yandex-market/apiary' {
+    import {Component, FC} from 'react';
+    import {Action} from 'redux';
+    import {ActionsObservable} from 'redux-observable';
+    import {Observable} from 'rxjs';
+
+    export type GenericAction = Action<string> & {
+        payload?: unknown;
+        meta?: {
+            [key: string]: unknown;
+        };
+    };
+
+    export type WidgetFacade<D, C> = {
+        getData(): D;
+        getCollections(): C;
+    };
+
+    export type Epic<A extends Action, S> = (
+        action: ActionsObservable<A>,
+        state: S,
+    ) => Observable<Action>;
+
+    export type WidgetEpic<A extends GenericAction, D, C> = Epic<
+        A,
+        WidgetFacade<D, C>
+    >;
+
+    export type Collections = {
+        [key: string]: {
+            [key: string]: unknown;
+        };
+    };
+    export type State<TWidgetData, TCollections extends Collections> = {
+        widgetData: TWidgetData;
+        collections: TCollections;
+    };
+
+    export function connect(
+        mapDataToProps: unknown,
+        mapDispatchToProps: unknown,
+    ): (comp: Component | FC) => Component<unknown>;
+    export class Widget {
+        static describe(params: unknown): void;
+    }
+}

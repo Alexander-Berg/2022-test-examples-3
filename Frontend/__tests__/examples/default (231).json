@@ -1,0 +1,109 @@
+{
+  "block": "service",
+  "mods": {
+      "turbo-lpc": true
+  },
+  "content": {
+      "block": "lc-page",
+      "isLpcMode": true,
+      "content": [
+        {
+          "block": "lc-button-list",
+          "offsets": {
+              "padding": {
+                  "top": "m",
+                  "bottom": "l"
+              }
+          },
+          "background": {
+              "type": "color",
+              "color": "slateblue"
+          },
+          "events": [],
+          "align": "left",
+          "anchor": "lc-button-anchor",
+          "buttons": [{
+              "label": "В Москву",
+              "link": "#in-moscow",
+              "textColor": "#FFF",
+              "backgroundColor": "#000",
+              "events": [
+                {
+                    "data": {},
+                    "type": "onClick",
+                    "action": "hideSection",
+                    "target": {
+                        "type": "LcGroup",
+                        "sectionId": "in_piter"
+                    }
+                },
+                {
+                  "data": {},
+                  "type": "onClick",
+                  "action": "showSection",
+                  "target": {
+                      "type": "LcGroup",
+                      "sectionId": "in_moscow"
+                  }
+                }
+              ]
+          }, {
+              "label": "В Питер",
+              "link": "#in-piter",
+              "fillType": "border",
+              "textColor": "#FFF",
+              "backgroundColor": "#FFF",
+              "events": [
+                {
+                    "data": {},
+                    "type": "onClick",
+                    "action": "showSection",
+                    "target": {
+                        "type": "LcGroup",
+                        "sectionId": "in_piter"
+                    }
+                },
+                {
+                  "data": {},
+                  "type": "onClick",
+                  "action": "hideSection",
+                  "target": {
+                      "type": "LcGroup",
+                      "sectionId": "in_moscow"
+                  }
+                }
+              ]
+          }]
+        },
+        {
+          "block": "lc-group",
+          "offsets": {
+            "padding": {
+                "top": "s",
+                "bottom": "s"
+            }
+          },
+          "children": "In Piter",
+          "viewport": false,
+          "justify": "center",
+          "events": [],
+          "sectionId": "in_piter"
+        },
+        {
+          "block": "lc-group",
+          "offsets": {
+            "padding": {
+                "top": "s",
+                "bottom": "s"
+            }
+          },
+          "children": "In Moscow",
+          "viewport": false,
+          "justify": "center",
+          "events": [],
+          "isVisible": false,
+          "sectionId": "in_moscow"
+        }
+      ]
+  }
+}

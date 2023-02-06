@@ -1,0 +1,35 @@
+#!/usr/bin/make -f
+
+PRJ_NAME=yandex-sovetnik-redir
+PRJDIR=yandex-sovetnik-redir/
+NODE_CONF_DIR=debian/$(DEB_SOURCE_PACKAGE)/etc/vertis-nodejs/conf-available/
+LOGROTATE_CONF_DIR=debian/$(DEB_SOURCE_PACKAGE)/etc/logrotate.d/
+PUSH_CLIENT_CONF_DIR=debian/$(DEB_SOURCE_PACKAGE)/etc/yandex/statbox-push-client/conf-sources/units/
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+
+ifndef WWWDIR
+	WWWDIR=opt/
+endif
+
+PRJWWWDIR=$(WWWDIR)$(PRJDIR)
+DEB_PRJWWW_DESTDIR=debian/$(DEB_SOURCE_PACKAGE)/$(PRJWWWDIR)
+
+install/$(DEB_SOURCE_PACKAGE)::
+	$(MAKE) build BUILDDIR=$(DEB_PRJWWW_DESTDIR)
+
+	# Инит ноды
+	mkdir -p $(NODE_CONF_DIR)
+	cp yandex-sovetnik-redir.node $(NODE_CONF_DIR)yandex-sovetnik-redir
+
+	# logrotate
+	mkdir -p $(LOGROTATE_CONF_DIR)
+	cp yandex-sovetnik-redir.logrotate $(LOGROTATE_CONF_DIR)yandex-sovetnik-redir
+
+	# push-client (Market Health)
+	mkdir -p $(PUSH_CLIENT_CONF_DIR)
+	cp yandex-sovetnik-redir.conf $(PUSH_CLIENT_CONF_DIR)yandex-sovetnik-redir.conf
+
+	dh_environment -p$(DEB_SOURCE_PACKAGE)
+
+	# $(MAKE) clean

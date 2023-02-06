@@ -1,0 +1,52 @@
+#%RAML 0.8
+title: mailWebApi
+baseUri: https://mail.yandex.ru/u2709/api/models.jsx
+
+/?m_=messages:
+  displayName: messages
+  description: Ручка отдает список сообщений
+  post:
+      queryParameters:
+          description: При вызове ручки обязательно указываем папку, метку или тред, откуда хотим полчить сообщения.
+              Запросить кучей все сообения пользователя не получится.
+          _ckey:
+              type: string
+              example: NgSSJIdogVwZaXvylo7EfokM/Wa0NQVYYUG2VK25tk4=
+              required: true
+          _locale:
+              description: Описываем текущую локаль пользователя.
+              enum: [ru, en, tr, uk, kk, ro, ka, hy, be, az, tt]
+              default: ru
+              required: false
+          _messages_per_page:
+              description: Количество отображаемых на странице писем.
+              type: integer
+              default: 30
+              required: false
+          _model.0:
+              description: Модель, к которой обращаемся. Дублирует значение ?m_ параметра.
+              type: string
+              default: messages
+              required: true
+          _uid:
+              description: uid пользователя.
+              example: 373078363
+              required: true
+          sort_type.0:
+              description: Параметр, определеяющий порядок сортировки писем. По умолчанию в Лизе всегда “по дате“
+              type: string
+              default: date
+              required: false
+          thread_id.0:
+              description: tid треда, сообщения из которого хотим получить в ответе.
+              type: string
+              example: t2420000010183738405
+              required: false
+          current_folder.0:
+              description: fid папки, письма из которой хотим получить в ответе.
+              example: 2420000670117041091
+              required: false
+          current_label.0:
+              description: lid папки, письма из которой хотим получить в ответе.
+              example: 2420000002115408592
+              required: false

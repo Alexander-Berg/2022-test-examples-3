@@ -1,0 +1,82 @@
+{
+
+"Repacker with only system fields": {
+  "repack": {
+    "f-1": [],
+    "f-2": null,
+    "f-3": {"f-4": 10}
+  },
+  "expect": { "parsed": true }
+},
+"Repacker with only repack_payload rules": {
+  "repack": {
+    "repack_payload": ["f-1", "f-2", {"f-4": "f1"}]
+  },
+  "expect": { "parsed": true }
+},
+"Repacker with only repack_payload and xiva filled fields": {
+  "repack": {
+    "repack_payload": [{"f-1": "::xiva::push_token"}, {"f-2": "::xiva::transit_id"}]
+  },
+  "expect": { "parsed": true }
+},
+"Empty key is supported": {
+  "repack": {
+    "" : "smth",
+    "repack_payload": ["", {"": "smth"}]
+  },
+  "expect": { "parsed": true }
+},
+"Repacker with both system fields and repack_payload rules": {
+  "repack": {
+    "f-1": { "f-2": "value" },
+    "repack_payload": ["f-1"]
+  },
+  "expect": { "parsed": true }
+},
+"Can't construct custom_repacker from array": {
+  "repack": [ "value" ],
+  "expect": { "parsed": false }
+},
+"Can't construct custom_repacker from null": {
+  "repack": null,
+  "expect": { "parsed": false }
+},
+"Can't construct custom_repacker from decimal": {
+  "repack": 10,
+  "expect": { "parsed": false }
+},
+"Can't construct custom_repacker from bool": {
+  "repack": false,
+  "expect": { "parsed": false}
+},
+"Can't construct custom_repacker from string": {
+  "repack": "",
+  "expect": { "parsed": false }
+},
+"Invalid repack_payload in json": {
+  "repack": {
+    "repack_payload": "123"
+  },
+  "expect": { "parsed": false }
+},
+"Invalid item in repack_payload": {
+  "repack": {
+    "repack_payload": ["123", 10]
+  },
+  "expect": { "parsed": false}
+},
+"Invalid rename item in repack_payload": {
+  "repack": {
+    "repack_payload": ["123", {"value": ["smth"]}]
+  },
+  "expect": { "parsed": false}
+},
+"Empty rename item in repack_payload": {
+  "repack": {
+    "repack_payload": ["123", { }]
+  },
+  "expect": { "parsed": false }
+}
+
+}

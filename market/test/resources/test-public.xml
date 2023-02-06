@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+
+       default-autowire="byName" default-lazy-init="true">
+
+    <import resource="classpath:common-framework-lite/framework-config-lite.xml"/>
+
+    <context:annotation-config/>
+    <bean class="ru.yandex.EmbeddedPgConfig"/>
+
+    <import resource="classpath:abo-public-db-without-pg.xml"/>
+    <import resource="classpath:services-config.xml"/>
+    <import resource="classpath:WEB-INF/checkouter-client.xml"/>
+
+    <!-- PROPERTIES -->
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          lazy-init="false">
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:test-application.properties</value>
+                <value>classpath:abo-core.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--<bean id="servantInfo" class="ru.yandex.common.framework.xml.MockServantInfo"/>-->
+    <bean id="servantInfo" class="ru.yandex.common.framework.core.DefaultServantInfo">
+        <property name="name" value="${servant.name}"/>
+    </bean>
+
+    <bean name="xmlBuilder" class="ru.yandex.common.framework.xml.StringXmlBuilder"/>
+
+    <bean name="servantletManager" class="ru.yandex.common.framework.core.manager.CleverServantletManager">
+        <property name="secFilter">
+            <bean class="ru.yandex.common.framework.core.TrueSecFilter"/>
+        </property>
+    </bean>
+
+    <bean name="profiler" class="ru.yandex.common.util.profile.statdump.StatDumpProfiler"/>
+</beans>

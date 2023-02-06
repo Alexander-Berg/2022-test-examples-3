@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <orders
+            id="1"
+            barcode="1001"
+            platform_client_id="1"
+            sender_id="1"
+            status="PROCESSING"
+            delivery_date_min="2021-03-02"
+            delivery_date_max="2021-03-02"
+    />
+
+    <waybill_segment
+            id="1"
+            order_id="1"
+            partner_id="47"
+            external_id="ff-external-id"
+            waybill_segment_index="0"
+            segment_type="FULFILLMENT"
+            partner_type="FULFILLMENT"
+    />
+
+    <waybill_segment
+            id="2"
+            order_id="1"
+            partner_id="48"
+            external_id="sc-external-id"
+            waybill_segment_index="1"
+            segment_type="SORTING_CENTER"
+            partner_type="SORTING_CENTER"
+    />
+
+    <waybill_segment
+            id="3"
+            order_id="1"
+            partner_id="49"
+            external_id="mk-external-id"
+            waybill_segment_index="2"
+            segment_type="MOVEMENT"
+            partner_type="DELIVERY"
+            waybill_status="PREPARING"
+    />
+
+    <waybill_segment
+            id="4"
+            order_id="1"
+            partner_id="50"
+            external_id="pickup-external-id"
+            waybill_segment_index="3"
+            segment_type="PICKUP"
+            partner_type="DELIVERY"
+            waybill_status="PREPARING"
+    />
+
+    <waybill_segment
+            id="5"
+            order_id="1"
+            partner_id="49"
+            external_id="mk-external-id"
+            waybill_segment_index="4"
+            segment_type="COURIER"
+            partner_type="DELIVERY"
+    />
+
+    <change_order_request
+            id="1"
+            order_id="1"
+            status="PROCESSING"
+            request_type="CHANGE_LAST_MILE_TO_PICKUP"
+    />
+
+    <change_order_segment_request
+            status="PROCESSING"
+            change_order_request_id="1"
+            segment_id="3"
+            required="true"
+    />
+
+    <change_order_segment_request
+            status="SUCCESS"
+            change_order_request_id="1"
+            segment_id="4"
+            required="true"
+    />
+
+    <change_order_request
+            id="2"
+            order_id="1"
+            status="PROCESSING"
+            request_type="UPDATE_ITEMS_INSTANCES"
+    />
+
+    <business_process_state
+            queue_type="PROCESS_WAYBILL_SEGMENT_CHANGE_LAST_MILE"
+            status="SUCCESS_RESPONSE_PROCESSING_SUCCEEDED"
+            author="[null]"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd","changeOrderSegmentRequestId":10}'
+            sequence_id="10"
+    />
+
+    <business_process_state_entity_id
+            entity_type="CHANGE_ORDER_SEGMENT_REQUEST"
+            entity_id="2"
+    />
+
+    <business_process_state
+            queue_type="CHANGE_LAST_MILE_TO_PICKUP_REQUEST_STATUS_UPDATE"
+            status="ENQUEUED"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1","changeOrderSegmentRequestId":2,"sequenceId":1}'
+            parent_id="10"
+            sequence_id="1"
+    />
+
+    <business_process_state_entity_id
+            entity_type="CHANGE_ORDER_SEGMENT_REQUEST"
+            entity_id="2"
+    />
+
+    <business_process_state
+            queue_type="CHANGE_LAST_MILE_TO_PICKUP_REQUEST_STATUS_UPDATE"
+            status="ENQUEUED"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/2","changeOrderSegmentRequestId":1,"sequenceId":2}'
+            parent_id="10"
+            sequence_id="2"
+    />
+
+    <business_process_state_entity_id
+            entity_type="CHANGE_ORDER_SEGMENT_REQUEST"
+            entity_id="1"
+    />
+
+    <business_process_state
+            queue_type="PROCESS_WAYBILL_SEGMENT_CHANGE_LAST_MILE"
+            status="ENQUEUED"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/3","changeOrderSegmentRequestId":1,"sequenceId":3}'
+            parent_id="10"
+            sequence_id="3"
+    />
+
+    <business_process_state_entity_id
+            entity_type="CHANGE_ORDER_SEGMENT_REQUEST"
+            entity_id="1"
+    />
+
+    <business_process_state
+            queue_type="REGISTER_DELIVERY_TRACK"
+            status="ENQUEUED"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/4","orderId":1,"partnerId":50,"waybillSegmentId":4,"sequenceId":4}'
+            parent_id="10"
+            sequence_id="4"
+    />
+
+    <business_process_state_entity_id
+            entity_type="PARTNER"
+            entity_id="50"
+    />
+
+    <business_process_state_entity_id
+            entity_type="ORDER"
+            entity_id="1"
+    />
+
+    <business_process_state_entity_id
+            entity_type="WAYBILL_SEGMENT"
+            entity_id="4"
+    />
+
+</dataset>

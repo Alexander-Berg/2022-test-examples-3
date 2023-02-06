@@ -1,0 +1,26 @@
+# Параметры обработки
+params:
+  default:
+    templates:
+      - get_localhost.tpl
+
+values:
+  default:
+    defaults:
+      mcrouter_port: 11243
+      memcached_port: 21243
+      env: production
+      cache_name: carter-load
+      memory: 64
+  testing:
+    defaults:
+      env: testing
+      memory: 256
+      
+  
+servers:
+  testing:
+    main:
+      - name: "%market_cache-testing@local"
+    global:
+      - name: "%market_cache-testing"

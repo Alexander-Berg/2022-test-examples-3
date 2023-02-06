@@ -1,0 +1,58 @@
+<dataset>
+    <return_segment
+            id="10"
+            return_id="1"
+            return_box_id="1"
+            shipment_destination='{
+                "returnSegmentId": 1,
+                "name": "склад сц",
+                "type": "SORTING_CENTER",
+                "partnerId": 100,
+                "logisticPointId": 200
+            }'
+            shipment_recipient='{
+                "name": "partner name",
+                "type": "DELIVERY_SERVICE_WITH_COURIER",
+                "courier": null,
+                "partnerId": null
+            }'
+            logistic_point_type="COURIER"
+    />
+
+    <return_segment
+            id="1"
+            return_id="1"
+            return_box_id="1"
+            logistic_point_type="SORTING_CENTER"
+    />
+
+    <return_event
+            id="1"
+            logbroker_id="[null]"
+            request_id="test-request-id/1"
+            return_id="1"
+            type="RETURN_SEGMENT_CREATED"
+            payload='{
+                "id": 1,
+                "type": "RETURN_SEGMENT_CREATED",
+                "boxExternalId": "box-external-id",
+                "logisticPointInfo": {
+                    "type": "SORTING_CENTER",
+                    "partnerId": 100,
+                    "logisticPointId": 200,
+                    "logisticPointExternalId": "300"
+                },
+                "shipmentFieldsInfo": {
+                    "recipient": null,
+                    "shipmentTime": null,
+                    "destinationInfo": null
+                }
+            }'
+    />
+
+    <queue_tasks
+            queue_name="RETURN_SEGMENT_GET_ROUTE"
+            payload='{"requestId":"test-request-id/2","returnSegmentId":1,"sortingCenterPartnerIds":null,"useStartTime":false}'
+    />
+
+</dataset>

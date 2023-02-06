@@ -1,0 +1,73 @@
+base: /app/config/base.yml
+config:
+    modules:
+        module:
+        -   _name: furita_cluster_client
+            system:
+            configuration:
+                hosts: https://furita-test.mail.yandex.net
+
+        -   _name: tupita_cluster_client
+            system:
+            configuration:
+                hosts: http://mail-tupita-test.n.yandex-team.ru
+
+        -   _name: mdbsave_cluster_client
+            system:
+            configuration:
+                hosts: https://mdbsave-test.mail.yandex.net:443
+
+        -   _name: msearch_cluster_client
+            configuration:
+                hosts: https://msearch-proxy-test.search.yandex.net:10431
+
+        -   _name: msettings_cluster_client
+            configuration:
+                hosts: https://settings-test.mail.yandex.net
+
+        -   _name: ymod_tvm
+            configuration:
+                service_id: 2008447
+                target_services:
+                -   _name: mulcagate
+                    id: 2000272
+                -   _name: blackbox
+                    id: 224
+                -   _name: furita
+                    id: 2016043
+                -   _name: mdbsave
+                    id: 2025290
+                -   _name: msearch
+                    id: 186
+                -   _name: msettings
+                    id: 2002242
+
+        -   _name: ymod_mds
+            configuration:
+                host_resolver:
+                    url: http://storagetest.mail.yandex.net:8080/hostlist
+                url: http://storagetest.mail.yandex.net:10010/gate/
+                service_name: mxback
+
+        -   _name: nsls
+            configuration:
+                blackbox:
+                    url: http://pass-test.yandex.ru/blackbox
+                bwlist:
+                    url: http://furita-test.mail.yandex.net/api/blackwhitelist
+                domain_rule_forward:
+                    remote: smtp://postback-test.mail.yandex.net:5252
+                forward:
+                    remote: smtp://postback-test.mail.yandex.net:5252
+                notify:
+                    remote: smtp://postback-test.mail.yandex.net:5252
+                autoreply:
+                    remote: smtp://postback-test.mail.yandex.net:5252
+                meta:
+                    remote: smtp://postback-test.mail.yandex.net:5252
+                related_uids:
+                    remote: smtp://localhost:0
+                msearch:
+                    message_types:
+                    -   news
+                    -   t_news

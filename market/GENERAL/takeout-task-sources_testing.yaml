@@ -1,0 +1,290 @@
+---
+# Перечисление ручек забора данных по тейкауту
+- name: pers_grade
+  host: pers-grade.tst.vs.market.yandex.net
+  port: 35824
+  path: /api/takeout
+  hideUnixtimeParam: true
+  allowedColors: [white] # Как появятся данные на красном - сменить на allowedColors: [white, red]
+  tvmDestinationAlias: pers-grade
+
+- name: pers_basket
+  host: pers-basket.tst.vs.market.yandex.net
+  port: 34510
+  path: /takeout
+  hideUnixtimeParam: true
+  allowedColors: [white] # Как появятся данные на красном и синем - сменить на allowedColors: [white, blue, red]
+  tvmDestinationAlias: pers-basket
+
+- name: pers_history
+  host: pers-history.tst.vs.market.yandex.net
+  port: 38602
+  path: /takeout
+  hideUnixtimeParam: true
+  allowedColors: [white] # Как появятся данные на синем - сменить на allowedColors: [white, blue]
+  tvmDestinationAlias: pers-history
+
+# На тестинге не работает по какой-то причине
+#- name: pers_qa
+#  host: pers-qa.tst.vs.market.yandex.net
+#  port: 80
+#  path: /takeout
+#  hideUnixtimeParam: true
+#  allowedColors: [white]
+
+- name: pers_author
+  host: pers-author.tst.vs.market.yandex.net
+  port: 80
+  path: /takeout
+  hideUnixtimeParam: true
+  allowedColors: [white]
+  tvmDestinationAlias: pers-author
+
+- name: pers_utils
+  host: market-utils.tst.vs.market.yandex.net
+  port: 35826
+  path: /api/takeout/
+  hideUnixtimeParam: true
+  allowedColors: [white, blue, red]
+  tvmDestinationAlias: market-utils
+
+- name: pers_comparison
+  host: pers-comparison.tst.vs.market.yandex.net
+  port: 80
+  path: /takeout/data
+  hideUnixtimeParam: true
+  allowedColors: [white]
+
+- name: pers_feedback
+  host: pers-feedback.tst.vs.market.yandex.net
+  port: 80
+  path: /takeout
+  hideUnixtimeParam: true
+  allowedColors: [ white ]
+
+- name: user_card
+  host: checkouter.tst.vs.market.yandex.net
+  port: 39001
+  path: /user-card/history
+  hideUnixtimeParam: true
+  colorAlias: rgb
+  colorValueMap: {blue: BLUE, red: RED, white: GREEN}
+  allowedColors: [white, blue, red]
+  tvmDestinationAlias: market_checkouter
+
+- name: carter
+  host: carter.tst.vs.market.yandex.net
+  port: 35803
+  path: /cart/${uid}/takeout
+  uidInPath: true
+  hideUnixtimeParam: true
+  colorAlias: rgb
+  colorValueMap: {blue: BLUE, white: GREEN}
+  allowedColors: [white, blue]
+  tvmDestinationAlias: market_carter
+
+- name: mbo_cms_api
+  host: mbo-cms-api.tst.vs.market.yandex.net
+  path: /export/user-content
+  hideUnixtimeParam: true
+  hideColorParam: true
+  uidAlias: userId
+  allowedColors: [white]
+  tvmDestinationAlias: mbo-cms-api
+
+- name: abo_public
+  host: abo-public.tst.vs.market.yandex.net
+  port: 38902
+  path: /api/takeout
+  hideColorParam: true
+  allowedColors: [white]
+
+- name: checkout_referee
+  host: checkout-referee.tst.vs.market.yandex.net
+  port: 33484
+  path: /arbitrage/conversations/takeout
+  hideColorParam: true
+  allowedColors: [white]
+
+# Факты по белому маркету
+- name: market_request
+  scheme: https
+  host: platform.lilucrm.tst.market.yandex-team.ru
+  path: /facts/NONE
+  hideUnixtimeParam: true
+  hideColorParam: true
+  allowedColors: [white]
+  uidAlias: puid
+  presetParams: {facts: TakeoutWhiteSearchText}
+  headers: {"Accept": "application/json"}
+  tvmDestinationAlias: platform_api
+
+- name: market_ip
+  scheme: https
+  host: platform.lilucrm.tst.market.yandex-team.ru
+  path: /facts/NONE
+  hideUnixtimeParam: true
+  hideColorParam: true
+  allowedColors: [white]
+  uidAlias: puid
+  presetParams: {facts: TakeoutWhiteIp}
+  headers: {"Accept": "application/json"}
+  tvmDestinationAlias: platform_api
+
+- name: market_product_view
+  scheme: https
+  host: platform.lilucrm.tst.market.yandex-team.ru
+  path: /facts/NONE
+  hideUnixtimeParam: true
+  hideColorParam: true
+  allowedColors: [white]
+  uidAlias: puid
+  presetParams: {facts: TakeoutWhiteProductView}
+  headers: {"Accept": "application/json"}
+  tvmDestinationAlias: platform_api
+
+- name: market_user_agent
+  scheme: https
+  host: platform.lilucrm.tst.market.yandex-team.ru
+  path: /facts/NONE
+  hideUnixtimeParam: true
+  hideColorParam: true
+  allowedColors: [white]
+  uidAlias: puid
+  presetParams: {facts: TakeoutWhiteUserAgent}
+  headers: {"Accept": "application/json"}
+  tvmDestinationAlias: platform_api
+
+- name: market_orders
+  scheme: https
+  host: platform.lilucrm.tst.market.yandex-team.ru
+  path: /facts/NONE
+  hideUnixtimeParam: true
+  hideColorParam: true
+  allowedColors: [white]
+  uidAlias: puid
+  presetParams: {facts: TakeoutWhiteOrder}
+  headers: {"Accept": "application/json"}
+  tvmDestinationAlias: platform_api
+
+# Факты по синему маркету
+- name: beru_request
+  scheme: https
+  host: platform.lilucrm.tst.market.yandex-team.ru
+  path: /facts/NONE
+  hideUnixtimeParam: true
+  hideColorParam: true
+  allowedColors: [blue]
+  uidAlias: puid
+  presetParams: {facts: TakeoutBlueSearchText}
+  headers: {"Accept": "application/json"}
+  tvmDestinationAlias: platform_api
+
+- name: beru_ip
+  scheme: https
+  host: platform.lilucrm.tst.market.yandex-team.ru
+  path: /facts/NONE
+  hideUnixtimeParam: true
+  hideColorParam: true
+  allowedColors: [blue]
+  uidAlias: puid
+  presetParams: {facts: TakeoutBlueIp}
+  headers: {"Accept": "application/json"}
+  tvmDestinationAlias: platform_api
+
+- name: beru_product_view
+  scheme: https
+  host: platform.lilucrm.tst.market.yandex-team.ru
+  path: /facts/NONE
+  hideUnixtimeParam: true
+  hideColorParam: true
+  allowedColors: [blue]
+  uidAlias: puid
+  presetParams: {facts: TakeoutBlueProductView}
+  headers: {"Accept": "application/json"}
+  tvmDestinationAlias: platform_api
+
+- name: beru_user_agent
+  scheme: https
+  host: platform.lilucrm.tst.market.yandex-team.ru
+  path: /facts/NONE
+  hideUnixtimeParam: true
+  hideColorParam: true
+  allowedColors: [blue]
+  uidAlias: puid
+  presetParams: {facts: TakeoutBlueUserAgent}
+  headers: {"Accept": "application/json"}
+  tvmDestinationAlias: platform_api
+
+- name: beru_orders
+  scheme: https
+  host: platform.lilucrm.tst.market.yandex-team.ru
+  path: /facts/NONE
+  hideUnixtimeParam: true
+  hideColorParam: true
+  allowedColors: [blue]
+  uidAlias: puid
+  presetParams: {facts: TakeoutBlueOrder}
+  headers: {"Accept": "application/json"}
+  tvmDestinationAlias: platform_api
+
+# Факты по красному маркету
+- name: bringly_request
+  scheme: https
+  host: platform.lilucrm.tst.market.yandex-team.ru
+  path: /facts/NONE
+  hideUnixtimeParam: true
+  hideColorParam: true
+  allowedColors: [red]
+  uidAlias: puid
+  presetParams: {facts: TakeoutRedSearchText}
+  headers: {"Accept": "application/json"}
+  tvmDestinationAlias: platform_api
+
+- name: bringly_ip
+  scheme: https
+  host: platform.lilucrm.tst.market.yandex-team.ru
+  path: /facts/NONE
+  hideUnixtimeParam: true
+  hideColorParam: true
+  allowedColors: [red]
+  uidAlias: puid
+  presetParams: {facts: TakeoutRedIp}
+  headers: {"Accept": "application/json"}
+  tvmDestinationAlias: platform_api
+
+- name: bringly_product_view
+  scheme: https
+  host: platform.lilucrm.tst.market.yandex-team.ru
+  path: /facts/NONE
+  hideUnixtimeParam: true
+  hideColorParam: true
+  allowedColors: [red]
+  uidAlias: puid
+  presetParams: {facts: TakeoutRedProductView}
+  headers: {"Accept": "application/json"}
+  tvmDestinationAlias: platform_api
+
+- name: bringly_user_agent
+  scheme: https
+  host: platform.lilucrm.tst.market.yandex-team.ru
+  path: /facts/NONE
+  hideUnixtimeParam: true
+  hideColorParam: true
+  allowedColors: [red]
+  uidAlias: puid
+  presetParams: {facts: TakeoutRedUserAgent}
+  headers: {"Accept": "application/json"}
+  tvmDestinationAlias: platform_api
+
+- name: bringly_orders
+  scheme: https
+  host: platform.lilucrm.tst.market.yandex-team.ru
+  path: /facts/NONE
+  hideUnixtimeParam: true
+  hideColorParam: true
+  allowedColors: [red]
+  uidAlias: puid
+  presetParams: {facts: TakeoutRedOrder}
+  headers: {"Accept": "application/json"}
+  tvmDestinationAlias: platform_api

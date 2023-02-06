@@ -1,0 +1,88 @@
+warehouse-timezone: Europe/Moscow
+AppServer: localhost
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms.receiving: debug
+    org.springframework.jdbc.core: debug
+    root: info
+
+spring:
+  datasource:
+    url: &jdbc-url jdbc:h2:mem:SCPRD;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1
+    jdbc-url: *jdbc-url
+  transaction.default-timeout: 30s
+  main:
+    allow-bean-definition-overriding: true
+  config:
+    import:
+      - application-fragment-mq-test.yml
+      - application-fragment-common-test.yml
+  liquibase:
+    enabled: true
+
+token: xxxxxxxxxxxxxxxxxxxxxxmarschrouteT.T.Tokenxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+oltp:
+  url: http://localhost:8383
+
+check:
+  authentication: 'no'
+
+servicebus:
+  api:
+    host: http://localhost:8382
+
+core:
+  api:
+    host: http://localhost:8333
+
+consolidation:
+  api:
+    host: http://localhost:4448
+    timeout: 1
+
+dimension-management:
+  api:
+    host: http://localhost:local
+
+wms:
+  core:
+    tvm:
+      serviceId: 0
+  transportation:
+    moduleName: transportation
+    host: 'http://localhost:1231/transportation'
+    tvm:
+      serviceId: 0
+  consolidation:
+    moduleName: consolidation
+    host: 'http://localhost:1231/consolidation'
+    tvm:
+      serviceId: 0
+  reporter:
+    host: http://localhost:${wiremock.server.port}/reporter
+    tvm:
+      serviceId: 0
+  inventory-management:
+    host: 'http://localhost:1231/inventory-management'
+    tvm:
+      serviceId: 0
+  dimension-management:
+    tvm:
+      serviceId: 0
+
+picking:
+  tvm:
+    serviceId: 0
+    secret: ""
+    api-methods: /transport-orders
+    log-only-mode: false
+    check-user-ticket: false
+    cache:
+      dir: ""
+
+s3.use: false
+
+wiremock.server.port: 9999

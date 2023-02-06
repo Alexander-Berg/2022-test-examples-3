@@ -1,0 +1,58 @@
+BUILD_PACKAGES:
+    multiple_jobs:
+        BUILD_CRYPTA_DYN_TOOLS_PACKAGE:
+            observed_paths:
+              - ^arcadia/crypta/utils/dyn_tools/package/crypta-dyn-tools.json
+            targets:
+              - crypta/utils/dyn_tools/bin
+            packages: crypta/utils/dyn_tools/package/crypta-dyn-tools.json
+            publish_to: crypta-trusty
+
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        commit_path_prefixes:
+          - /trunk/arcadia/crypta/
+        observed_paths: gen:observed_paths
+        targets: gen:targets
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                resource_type: YA_PACKAGE
+                strip_binaries: false
+                compress_package_archive: true
+                package_type: debian
+                packages: gen:packages
+                publish_package: true
+                publish_to: gen:publish_to
+                key_user: robot-secretary
+                dupload_max_attempts: 1
+                run_tests: false
+                run_long_tests: false
+                ignore_fail_tests: false
+                ya_yt_store: true
+        output_resources:
+            YA_PACKAGE: 30

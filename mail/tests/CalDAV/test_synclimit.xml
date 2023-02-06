@@ -1,0 +1,111 @@
+<?xml version="1.0" standalone="no"?>
+
+<!DOCTYPE caldavtest SYSTEM "caldavtest.dtd">
+
+<caldavtest>
+  <require-feature>
+    <feature>caldav</feature>
+  </require-feature>
+
+  <start/>
+
+  <test-suite name='Check sync report with limit'>    
+    <test name='Get first event only'>
+      <description>REPORT</description>
+      <request>
+        <method>REPORT</method>
+        <ruri>/calendars/caldavcompluser@yandex.ru/events-2277</ruri>
+        <header>
+          <name>Depth</name>
+          <value>1</value>
+        </header>
+        <data>
+          <substitutions>yes</substitutions>
+          <content-type>text/xml; charset=utf-8</content-type>
+          <filepath>scripts/report.xml</filepath>
+          <substitute>
+            <name>$synctoken1:</name>
+            <value>sync-token:1 1559305502874</value>
+          </substitute>
+        </data>
+        <verify>
+          <callback>multistatusItems</callback>          
+        <arg>
+            <name>okhrefs</name>
+            <value>/jtJoyTfNyandex.ru.ics</value>
+        </arg>
+        <arg>
+            <name>badhrefs</name>
+            <value></value>            
+        </arg>
+	
+        </verify>
+      </request>
+    </test>
+    <test name='Get second event only'>
+      <description>REPORT</description>
+      <request>
+        <method>REPORT</method>
+        <ruri>/calendars/caldavcompluser@yandex.ru/events-2277</ruri>
+        <header>
+          <name>Depth</name>
+          <value>1</value>
+        </header>
+        <data>
+          <substitutions>yes</substitutions>
+          <content-type>text/xml; charset=utf-8</content-type>
+          <filepath>scripts/report.xml</filepath>
+          <substitute>
+            <name>$synctoken1:</name>
+            <value>sync-token:1 1583248361773 jtJoyTfNyandex.ru.ics</value>
+          </substitute>
+        </data>
+        <verify>
+          <callback>multistatusItems</callback>          
+        <arg>
+            <name>okhrefs</name>
+            <value>/4hFkxOjhyandex.ru.ics</value>
+        </arg>
+        <arg>
+            <name>badhrefs</name>
+            <value></value>            
+        </arg>
+	
+        </verify>
+      </request>
+    </test>
+
+    <test name='Get third event only'>
+      <description>REPORT</description>
+      <request>
+        <method>REPORT</method>
+        <ruri>/calendars/caldavcompluser@yandex.ru/events-2277</ruri>
+        <header>
+          <name>Depth</name>
+          <value>1</value>
+        </header>
+        <data>
+          <substitutions>yes</substitutions>
+          <content-type>text/xml; charset=utf-8</content-type>
+          <filepath>scripts/report.xml</filepath>
+          <substitute>
+            <name>$synctoken1:</name>
+            <value>sync-token:1 1583248370211 4hFkxOjhyandex.ru.ics</value>
+          </substitute>
+        </data>
+        <verify>
+          <callback>multistatusItems</callback>          
+        <arg>
+            <name>okhrefs</name>
+            <value>/KjSV1EKvyandex.ru.ics</value>
+        </arg>
+	
+        </verify>
+      </request>
+    </test>
+    
+  </test-suite>
+
+  <end/>
+  
+</caldavtest>

@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Форма</title>
+    <script>
+        var ya_site_path = {
+            staticHost : '//sitesearch-external.orion.lori.yandex.ru/',
+            serp : 'http://orion-d-dev.inka21.yandex.%tld%/sitesearch'
+        };
+
+        var match = document.location.search.match(/params=([^&]*)/),
+            params = match ? eval('(' + decodeURIComponent(match[1]) + ')') : { 'searchid' : '80594', 'action' : 'results.html' },
+            width;
+
+        match = document.location.search.match(/width=([^&]*)/);
+        width = match ? match[1] : '300';
+        window.onload = function() {
+            document.getElementById('container').style.width = width + 'px';
+        };
+    </script>
+    <style type="text/css">
+        body
+        {
+            background-color: #CCC;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div class="ya-site-form ya-site-form_inited_no" onclick="return params">
+            <form action="http://yandex.ru/sitesearch" method="get">
+                <input type="hidden" name="searchid" value="80594" />
+                <input type="hidden" name="l10n" value="ru" />
+                <input type="hidden" name="reqenc" value="" />
+                <input type="text" name="text" value="" />
+                <input type="submit" value="Найти" />
+            </form>
+        </div>
+        <style type="text/css">
+            .ya-page_js_yes .ya-site-form_inited_no {
+                display: none;
+            }
+        </style>
+        <script type="text/javascript">
+            (function(w, d, c) {
+                var s = d.createElement('script'),
+                    h = d.getElementsByTagName('script')[0],
+                    e = d.documentElement;
+
+                (' ' + e.className + ' ').indexOf(' ya-page_js_yes ') === -1 && (e.className += ' ya-page_js_yes');
+                s.type = 'text/javascript'; s.async = true; s.charset = 'utf-8';
+                s.src = (d.location.protocol === 'https:' ? 'https:' : 'http:') + '//sitesearch-external.orion.lori.yandex.ru/v2.0/js/all.js';
+                h.parentNode.insertBefore(s, h);
+
+                (w[c] || (w[c] = [])).push(function() {
+                    Ya.Site.Form.init();
+                });
+            })(window, document, 'yandex_site_callbacks');
+        </script>
+    </div>
+</body>

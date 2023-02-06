@@ -1,0 +1,27 @@
+{
+  "owner": "marketindexer",
+  "tableName": "common_kv_testing",
+  "splits": {
+    "subkey": "subkey"
+  },
+  "metrics": [
+    {
+      "metricName": "indexer.testing.quota_limits.avatar_used_space_percent",
+      "period": "FIVE_MIN",
+      "metricField": "maxIf(value, (subkey='avatar_used_space_percent'))",
+      "filter": "module = 'quota-limits'",
+      "type": "SIMPLE"
+    }
+  ],
+  "monitorings": [  // Deprecated. Ревью пройдут только правки существующих мониторингов. Правильный способ делать мониторинги: https://nda.ya.ru/3UWSRs (отправлять метрики в Соломон и настраивать мониторинги через UI Соломона).
+    {
+      "name": "indexer.testing.quota_limits.avatar_used_space_percent",
+      "metric": "indexer.testing.quota_limits.avatar_used_space_percent",
+      "checkPoints": 5,
+      "warnsToCrit": 5,
+      "range": {
+        "critTop": 0.8
+      }
+    }
+  ]
+}

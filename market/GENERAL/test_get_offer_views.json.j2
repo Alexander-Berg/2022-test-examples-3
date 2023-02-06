@@ -1,0 +1,54 @@
+{% macro offer(offer_id, model_id, category_id) %}
+    {% if table == "items_offer_category_id" %}
+        ["{{ offer_id }}", "{{ category_id }}", "offer", "{{ day }}"]
+    {% elif table == "items_offer_model_id" %}
+        {% if model_id %}
+            ["{{ offer_id }}", "{{ model_id }}", "offer", "{{ day }}"]
+        {% else %}
+            {#  If we skip this record, we'll get invalid JSON (nothing between two commas).
+                Thus we just put a junk record which will not affect the test. #}
+            ["{{ offer_id }}_junk", "whatever", "offer", "{{ day }}"]
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
+{% macro view(timestamp, yandexuid, offer_id, model_id=None, category_id=None) %}
+    [
+        {{ timestamp }},
+        {"yandexuid": "{{ yandexuid }}"},
+        "view",
+        "offer",
+        {% if offer_id %}
+            "{{ offer_id }}",
+        {% else %}
+            null,
+        {% endif %}
+        {
+            "offer_id": {% if offer_id %}"{{ offer_id }}"{% else %}null{% endif %},
+            "model_id": {% if model_id %}"{{ model_id }}"{% else %}null{% endif %},
+            "category_id": {% if category_id %}"{{ category_id }}"{% else %}null{% endif %}
+        },
+        "{{ day }}"
+    ]
+{% endmacro %}
+
+{% if table == "events_offer_views" %}
+    {# Result data. #}
+    {% table "events" %}
+        {{ view(1506963677001, "Y2", None) }},
+        {{ view(1506963677002, "Y3", "O1", None, "C1") }},
+        {{ view(1506963677003, "Y4", "O2", "M2", "C2") }}
+    {% endtable %}
+{% elif table.startswith("items_offer") %}
+    {% table table %}
+        {{ offer("O1", None, "C1") }},
+        {{ offer("O2", "M2", "C2") }}
+    {% endtable %}
+{% elif table == "events_page_views" %}
+    {% table "events" %}
+        [1506963677000, {"yandexuid": "Y1"}, "view", "page", "main_page", {}, "{{ day }}"],
+        [1506963677001, {"yandexuid": "Y2"}, "view", "page", "offer_card", {"offer_id": null}, "{{ day }}"],
+        [1506963677002, {"yandexuid": "Y3"}, "view", "page", "offer_card", {"offer_id": "O1"}, "{{ day }}"],
+        [1506963677003, {"yandexuid": "Y4"}, "view", "page", "offer_card", {"offer_id": "O2"}, "{{ day }}"]
+    {% endtable %}
+{% endif %}

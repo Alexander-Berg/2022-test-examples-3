@@ -1,0 +1,1 @@
+TRUNCATE order_events_metadata_store;

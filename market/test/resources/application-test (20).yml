@@ -1,0 +1,107 @@
+warehouse-timezone: Europe/Moscow
+spring.datasource.url: jdbc:h2:mem:SCPRD;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1
+spring.archivedatasource.url: jdbc:h2:mem:SCPRDARC;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1
+spring.datasource-scprdd1.url: jdbc:h2:mem:SCPRDD1;MODE=MSSQLServer
+
+AppServer: localhost
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms.receiving: debug
+    org.springframework.jdbc.core: debug
+    root: info
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  transaction.default-timeout: 30s
+  liquibase:
+    enabled: true
+  config:
+    import:
+      - application-fragment-common-test.yml
+      - application-fragment-mq-test.yml
+  jackson:
+    deserialization:
+      wrap-exceptions: false
+    default-property-inclusion: non_null
+
+cte:
+  url: http://host.ru:123
+  tvm:
+    serviceId: 0
+
+print:
+  server:
+    host: localhost
+    port: 631
+    mock: true
+
+oltp:
+  url: http://localhost:8383
+
+wms:
+  core:
+    tvm:
+      serviceId: 0
+  api:
+    host: 'http://wms.local'
+    username: 'wmsuser'
+    password: 'wmspass'
+  transportation:
+    host: 'http://localhost:${wiremock.server.port}/transportation'
+    tvm:
+      serviceId: 0
+  inbound-management:
+    host: http://localhost
+    tvm:
+      serviceId: 0
+      secret: xxx
+      log-only-mode: false
+      check-user-ticket: false
+      cache:
+        dir: /var/cache/tvm
+  dimension-management:
+    tvm:
+      serviceId: 0
+  constraints:
+    api:
+      host: http://localhost:8366
+    tvm:
+      serviceId: 0
+
+auth-app:
+  tvm:
+    serviceId: 0
+
+check:
+  authentication: 'no'
+
+core:
+  api:
+    host: http://localhost:8384
+
+dimension-management:
+  api:
+    host: http://dimension-management:local
+
+servicebus:
+  api:
+    host: http://localhost:8382
+
+warehouse:
+  id: 123
+
+identity:
+  cis:
+    gs: "#GS#"
+
+receiving:
+  tvm:
+    serviceId: 0
+    secret: "secret"
+    cache:
+      dir: ""
+
+s3.use: false

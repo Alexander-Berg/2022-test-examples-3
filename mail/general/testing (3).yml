@@ -1,0 +1,109 @@
+base: etc/collectors/base.yml
+config:
+    log:
+        global:
+            async: false
+            sinks:
+            -   type: file
+                path: var/log/collectors/collectors.log
+                force_flush: true
+        macs:
+            async: false
+            sinks:
+            -   type: file
+                path: var/log/collectors/macs.log
+                force_flush: true
+        WebAccessTskv:
+            async: false
+            sinks:
+            -   type: file
+                path: var/log/collectors/access.log
+                force_flush: true
+        HttpTskv:
+            async: false
+            sinks:
+            -   type: file
+                path: var/log/collectors/httpout.log
+                force_flush: true
+        typed_log:
+            async: false
+            sinks:
+            -   type: reopenable_file
+                path: var/log/collectors/typed.log
+                force_flush: true
+
+    modules:
+        module:
+        -   _name: tvm_external
+            configuration:
+                my_tvm_id: collectors_tst
+                target_services: [collectors_internal_api_tst, blackbox_tst, validator_tst, social_api_tst, mds_tst, nw_tst]
+        -   _name: tvm_internal
+            configuration:
+                my_tvm_id: collectors_internal_api_tst
+                target_services: [collectors_internal_api_tst]
+        -   _name: macs
+            configuration:
+                sharpei: &sharpei_configuration
+                    host: sharpei-testing.mail.yandex.net
+                    port: 80
+        -   _name: messenger
+            configuration:
+                peers:
+                -   collectors-lease-1.collectors-lease.testing.leasemeta.mail.stable.qloud-d.yandex.net:4040
+                -   collectors-lease-2.collectors-lease.testing.leasemeta.mail.stable.qloud-d.yandex.net:4040
+                -   collectors-lease-3.collectors-lease.testing.leasemeta.mail.stable.qloud-d.yandex.net:4040
+        -   _name: shards_distributor
+            configuration:
+                sharpei:
+                    <<: *sharpei_configuration
+                max_owned_locks: 30
+        -   _name: users_distributor
+            configuration:
+                sharpei:
+                    <<: *sharpei_configuration
+        -   _name: bbclient
+            configuration:
+                url: http://pass-test.yandex.ru/blackbox
+                fallback_url: http://pass-test.yandex.ru/blackbox
+        -   _name: oauth_client
+            configuration:
+                hosts: http://oauth-test.yandex.ru
+        -   _name: social_client
+            configuration:
+                hosts: http://api.social-test.yandex.ru
+        -   _name: rpop_client
+            configuration:
+                hosts: http://collectors-ext-testing.stable.qloud-b.yandex.net
+        -   _name: storage_client
+            configuration:
+                hosts: http://storagetest.mail.yandex.net:10010
+        -   _name: nw_client
+            configuration:
+                hosts: http://mxback-test.mail.yandex.net:8027
+        -   _name: validator_client
+            configuration:
+                hosts: http://validator-test.yandex.net
+        -   _name: streamer
+            configuration:
+                streaming_timeout: 2m
+                streaming_penalty: 1m
+                internal_api:
+                    service_name: collectors_internal_api_tst
+        -   _name: web_server
+            configuration:
+                endpoints:
+                    listen:
+                    -   addr: '::'
+                        port: 3048
+                    -   addr: '::'
+                        port: 5048
+                        endpoint_name: 'internal'
+                    -   addr: '::'
+                        port: 8080
+                        endpoint_name: 'service'
+        -   _name: web
+            configuration:
+                internal_api:
+                    service_name: collectors_internal_api_tst
+                allowed_sources: [collectors_tst, collectors_internal_api_tst]

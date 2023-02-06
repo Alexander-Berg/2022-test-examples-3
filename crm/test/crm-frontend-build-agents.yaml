@@ -1,0 +1,167 @@
+labels:
+  du_patchers_target_revision:
+    frontend-build-agent: 11
+  du_sidecar_target_revision:
+    frontend-build-agent:
+      podBin: 2621390537
+meta:
+  account_id: abc:service:200
+  id: crm-frontend-build-agents
+  inherit_acl: true
+  project_id: crm-test
+spec:
+  deploy_units:
+    frontend-build-agent:
+      endpoint_sets:
+      - port: 9090
+      images_for_boxes:
+        frontend-build-agent:
+          digest: sha256:750cc11673998c57fe73bcfcb298cd81b0b444137f4eb57bb614512f3b19a6a4
+          name: crm/crm-frontend-teamcity-build-agent
+          registry_host: registry.yandex.net
+          tag: '1'
+      logbroker_tools_sandbox_info:
+        revision: 2249562029
+      multi_cluster_replica_set:
+        replica_set:
+          clusters:
+          - cluster: sas
+            spec:
+              constraints:
+                antiaffinity_constraints:
+                - key: rack
+                  max_pods: 2
+              replica_count: 4
+          - cluster: vla
+            spec:
+              constraints:
+                antiaffinity_constraints:
+                - key: rack
+                  max_pods: 2
+              replica_count: 4
+          deployment_strategy:
+            max_unavailable: 2
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+              - id: infra
+                labels:
+                  used_by_infra: true
+                quota_policy:
+                  bandwidth_guarantee: 9961472
+                  bandwidth_limit: 41943040
+                  capacity: 32212254720
+                storage_class: ssd
+              pod_agent_payload:
+                spec:
+                  boxes:
+                  - id: frontend-build-agent
+                    resolv_conf: nat64_local
+                    static_resources:
+                    - mount_point: ~/.ssh
+                      resource_ref: git_ssh_key
+                    volumes:
+                    - mode: read_write
+                      mount_point: /data
+                      volume_ref: config
+                  mutable_workloads:
+                  - workload_ref: frontend-build-agent
+                  resources:
+                    static_resources:
+                    - files:
+                        files:
+                        - file_name: id_rsa
+                          secret_data:
+                            alias: robot-crmdev:20210729
+                            id: git-ssh-key
+                      id: git_ssh_key
+                      verification:
+                        check_period_ms: 180000
+                        checksum: 'EMPTY:'
+                  volumes:
+                  - id: config
+                  workloads:
+                  - box_ref: frontend-build-agent
+                    env:
+                    - name: AGENT_NAME_PREFIX
+                      value:
+                        literal_env:
+                          value: crmdev-frontend-
+                    - name: aws_access_key_id
+                      value:
+                        secret_env:
+                          alias: sec-01eyemvzx9zq2pehjwd3dys3j5:ver-01eyemvzxygtxj2cjxx8y7cm8r
+                          id: aws_access_key_id
+                    - name: aws_secret_access_key
+                      value:
+                        secret_env:
+                          alias: sec-01eyemvzx9zq2pehjwd3dys3j5:ver-01eyemvzxygtxj2cjxx8y7cm8r
+                          id: aws_secret_access_key
+                    - name: TANKER_API_TOKEN
+                      value:
+                        secret_env:
+                          alias: sec-01e5stk34kxmvq56rrjvajv4ry:ver-01e5stk34vqc9wp1zdjx88gdvk
+                          id: TANKER_API_TOKEN
+                    - name: st_token
+                      value:
+                        secret_env:
+                          alias: robot-crmdev
+                          id: oauth-st-token
+                    - name: AWS_ACCESS_KEY_ID
+                      value:
+                        secret_env:
+                          alias: robot-crmdev-4.10.21
+                          id: s3-mds-crm-writer-id
+                    - name: AWS_SECRET_ACCESS_KEY
+                      value:
+                        secret_env:
+                          alias: robot-crmdev-4.10.21
+                          id: s3-mds-crm-writer-secret
+                    - name: DCTL_YP_TOKEN
+                      value:
+                        secret_env:
+                          alias: robot-crmdev-11.11
+                          id: dctl-yp-token
+                    - name: YA_TOKEN
+                      value:
+                        secret_env:
+                          alias: robot-crmdev-11.11
+                          id: arc-token
+                    - name: YA_USER
+                      value:
+                        literal_env:
+                          value: robot-crmdev
+                    id: frontend-build-agent
+                    transmit_logs: true
+              resource_requests:
+                memory_guarantee: 6442450944
+                memory_limit: 6442450944
+                network_bandwidth_guarantee: 1048576
+                vcpu_guarantee: 4000
+                vcpu_limit: 4000
+              secret_refs:
+                robot-crmdev:
+                  secret_id: sec-01cxw3nmmnrxk2b76anqyysyhz
+                  secret_version: ver-01ez0qttzvakn708m3a4ngfcjx
+                robot-crmdev-11.11:
+                  secret_id: sec-01cxw3nmmnrxk2b76anqyysyhz
+                  secret_version: ver-01fm7m5dmsnz4j3vx8wmpa2w7k
+                robot-crmdev-4.10.21:
+                  secret_id: sec-01cxw3nmmnrxk2b76anqyysyhz
+                  secret_version: ver-01fh578qgwfhhnhb0gdd2z2087
+                robot-crmdev:20210729:
+                  secret_id: sec-01cxw3nmmnrxk2b76anqyysyhz
+                  secret_version: ver-01fbs3980sjevk0v95jfvzfjnt
+                sec-01e5stk34kxmvq56rrjvajv4ry:ver-01e5stk34vqc9wp1zdjx88gdvk:
+                  secret_id: sec-01e5stk34kxmvq56rrjvajv4ry
+                  secret_version: ver-01e5stk34vqc9wp1zdjx88gdvk
+                sec-01eyemvzx9zq2pehjwd3dys3j5:ver-01eyemvzxygtxj2cjxx8y7cm8r:
+                  secret_id: sec-01eyemvzx9zq2pehjwd3dys3j5
+                  secret_version: ver-01ezchr53gktk6dfcnsxqhxp6b
+      network_defaults:
+        network_id: _CRMWEB__TEST_NETS_
+      patchers_revision: 11
+      pod_agent_sandbox_info:
+        revision: 2621390537
+  revision_info:
+    description: ''

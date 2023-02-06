@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <service
+        id="123"
+        name="service"
+        initial_state_id="1"
+    />
+
+    <service
+        id="223"
+        name="service2"
+        initial_state_id="5"
+    />
+
+    <capacity
+        id="1"
+        name="FIRST"
+        value="10"
+    />
+
+    <capacity
+        id="2"
+        name="SECOND"
+        value="100"
+    />
+
+    <capacity
+        id="3"
+        name="THIRD"
+        value="100"
+    />
+
+    <capacity_unit
+        id="1"
+        capacity_id="1"
+        readable_name="first"
+    />
+    <capacity_unit
+        id="2"
+        capacity_id="1"
+        readable_name="second"
+    />
+
+    <capacity_unit
+        id="3"
+        capacity_id="3"
+        readable_name="third"
+    />
+
+    <priority_function
+        id="1"
+        type="ARRIVAL_TIME"
+    />
+
+    <priority_function
+        id="2"
+        type="DEFAULT"
+    />
+
+    <priority_function
+        id="3"
+        type="DEFAULT"
+    />
+
+    <priority_function_param
+        priority_function_id="1"
+        name="PRIORITY_STEP"
+        value="10"
+    />
+
+    <priority_function_param
+        priority_function_id="1"
+        name="SKIP_N_CLIENTS"
+        value="15"
+    />
+
+    <priority_function_param
+        priority_function_id="3"
+        name="PRIORITY_STEP"
+        value="10"
+    />
+
+    <state
+        id="1"
+        name="REGISTERED"
+        service_id="123"
+    />
+
+    <state
+        id="2"
+        name="ALLOCATED"
+        service_id="123"
+        capacity_id="1"
+    />
+
+    <state
+        id="3"
+        name="IN_QUEUE"
+        service_id="123"
+        capacity_id="1"
+        priority_function_id="1"
+    />
+
+    <state
+        id="4"
+        name="FINISHED"
+        service_id="123"
+        capacity_id="2"
+        priority_function_id="2"
+        is_final="true"
+    />
+
+    <state
+        id="5"
+        name="START"
+        service_id="223"
+        capacity_id="3"
+        priority_function_id="3"
+        is_final="false"
+    />
+
+    <state
+        id="6"
+        name="END"
+        service_id="223"
+        capacity_id="3"
+        is_final="true"
+    />
+
+    <edge
+        id="1"
+        from_state_id="1"
+        to_state_id="2"
+        priority="1"
+    />
+    <edge
+        id="2"
+        from_state_id="2"
+        to_state_id="3"
+        priority="1"
+    />
+
+    <edge
+        id="3"
+        from_state_id="3"
+        to_state_id="4"
+        priority="1"
+    />
+
+    <edge
+        id="4"
+        from_state_id="1"
+        to_state_id="4"
+        priority="2"
+    />
+
+    <edge
+        id="5"
+        from_state_id="5"
+        to_state_id="6"
+        priority="1"
+    />
+
+    <edge_restriction
+        id="1"
+        type="EVENT_REQUIRED"
+        edge_id="1"
+    />
+    <edge_restriction
+        id="2"
+        type="DISJUNCTION"
+        edge_id="1"
+    />
+    <edge_restriction
+        id="3"
+        type="EVENT_REQUIRED"
+        edge_id="3"
+    />
+    <edge_restriction
+        id="4"
+        type="EVENT_REQUIRED"
+        edge_id="4"
+    />
+    <edge_restriction
+        id="5"
+        type="EVENT_REQUIRED"
+        edge_id="5"
+    />
+
+    <restriction_param
+        edge_restriction_id="1"
+        name="EVENT_TYPE"
+        value="SOME_EVENT"
+    />
+
+    <restriction_param
+        edge_restriction_id="2"
+        name="EVENT_TYPE"
+        value="SOME_EVENT_2"
+    />
+    <restriction_param
+        edge_restriction_id="2"
+        name="RESTRICTION_TYPES"
+        value="EVENT_REQUIRED,QUEUE_IS_EMPTY"
+    />
+    <restriction_param
+        edge_restriction_id="3"
+        name="EVENT_TYPE"
+        value="FINISHED_PROCESSING"
+    />
+    <restriction_param
+        edge_restriction_id="4"
+        name="EVENT_TYPE"
+        value="FINISHED_PROCESSING"
+    />
+    <restriction_param
+        edge_restriction_id="5"
+        name="EVENT_TYPE"
+        value="FINISHED_PROCESSING"
+    />
+
+    <edge_action
+        id="1"
+        edge_id="1"
+        type="SEND_NOTIFICATION"
+    />
+    <edge_action
+        id="2"
+        edge_id="5"
+        type="SEND_NOTIFICATION"
+    />
+    <action_param
+        edge_action_id="1"
+        name="URL"
+        value="http://123.com"
+    />
+    <action_param
+        edge_action_id="2"
+        name="TEST"
+        value="http://test.com"
+    />
+
+    <yard_client
+        id="1"
+        state_id="4"
+        external_id="client"
+        name="Abstract Courier"
+        phone="1231234"
+        created_at="2021-08-10 21:31:58"
+        updated_at="2021-08-10 22:41:00"
+        service_id="123"
+        arrival_planned_date="2021-08-10 21:00:00"
+    />
+    <yard_client
+        id="2"
+        state_id="5"
+        external_id="client"
+        name="Abstract Courier"
+        phone="1231234"
+        created_at="2021-08-10 21:31:58"
+        updated_at="2021-08-10 22:41:00"
+        service_id="223"
+        arrival_planned_date="2021-08-10 21:00:00"
+    />
+
+    <yard_client_event
+        id="1"
+        yard_client_id="1"
+        type="CELL_READY"
+        created_at="2021-08-10 21:49:51"
+        processed="false"
+    />
+    <yard_client_event
+        id="2"
+        yard_client_id="2"
+        type="CELL_READY"
+        created_at="2021-08-10 21:49:51"
+        processed="false"
+    />
+
+    <yard_client_info
+        id="1"
+        yard_client_id="1"
+        request_id="123456"
+        created_at="2021-12-14 09:58:14"
+    />
+    <yard_client_info
+        id="2"
+        yard_client_id="2"
+        request_id="123456"
+        created_at="2021-12-14 09:58:14"
+    />
+
+    <yard_client_state_history
+        id="1"
+        yard_client_id="1"
+        state_id="4"
+        created_at="2021-08-10 21:50:00"
+    />
+    <yard_client_state_history
+        id="2"
+        yard_client_id="2"
+        state_id="5"
+        created_at="2021-08-10 21:50:00"
+    />
+
+    <ticket
+        id="1"
+        ticket_code="П001"
+        service_id="123"
+        yard_client_id="1"
+        type="LOADING"
+        created_at="2021-09-23 05:44:07"
+        updated_at="2021-09-23 05:44:07"
+        site_id="1"
+        operator_window_id="1"
+        initial_operator_window_id="1"
+    />
+    <ticket
+        id="2"
+        ticket_code="П002"
+        service_id="223"
+        yard_client_id="2"
+        type="LOADING"
+        created_at="2021-09-23 05:44:07"
+        updated_at="2021-09-23 05:44:07"
+        site_id="3"
+        operator_window_id="3"
+        initial_operator_window_id="3"
+    />
+
+    <client_queue
+        id="1"
+        to_state_id="4"
+        client_id="1"
+        priority="100"
+        current_edge_id="3"
+        clients_passed_before="0"
+    />
+    <client_queue
+        id="2"
+        to_state_id="6"
+        client_id="2"
+        priority="100"
+        current_edge_id="5"
+        clients_passed_before="0"
+    />
+
+</dataset>

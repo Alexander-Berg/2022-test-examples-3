@@ -1,0 +1,87 @@
+staff:
+  oauth_token: ''
+  req_timeout: 5
+  staff_api_url: https://staff-api.yandex-team.ru/v3
+log:
+  backup_count: 10
+  log_file_path: /dev/null
+  error_log_file_path: /dev/null
+  access_log_file_path: /dev/null
+  loglevel: DEBUG
+  observer_queue: WARN
+  cleaner_queue: WARN
+  kikimr_loglevel: ERROR
+mongo:
+# pymongo.MongoClient arguments
+# development:
+  host: localhost:27017
+# production:
+#  host: production-setrace-mongo-1.sas.yp-c.yandex.net,production-setrace-mongo-1.man.yp-c.yandex.net,production-setrace-mongo-1.vla.yp-c.yandex.net
+  authSource: setrace
+  readpreference: primaryPreferred
+  w: 1
+  wtimeout: 5000
+  replicaset: setrace
+  socketTimeoutMS: 1000
+  connectTimeoutMS: 1000
+  serverSelectionTimeoutMS: 5000
+  maxPoolSize: 100
+  compressors: snappy
+auth_qe:
+  base_url: 'http://auth.qe.yandex-team.ru/api/'
+  req_timeout: 5
+passport:
+  blackbox_auth_url: https://passport.yandex-team.ru/passport?retpath={}
+  blackbox_url: http://blackbox.yandex-team.ru/blackbox
+  req_timeout: 5
+run:
+  user_traces: 100
+  robot_traces: 0
+  alice_traces: 10
+  cleaner_traces: 1
+  observer_traces: 1
+  zen_traces: 5
+  secret_id: 'sec-01cjm9mzaanf4r6fnxaejgxh9t'
+  staff_robot_detector: false
+  admin_role: setrace.admin
+  env:
+    PYTHONPATH: '$ARCADIA/search/tools/setrace/src'
+    PYTHONDONTWRITEBYTECODE: 'x'
+  user: loadbase
+  auth: false
+  debug: true
+  skynet_python: /skynet/python/bin/python
+  script_path: $ARCADIA/search/tools/setrace/bin/get-reqid-for-search-source.py
+  private_key_file: $ARCADIA/search/tools/setrace/keys/setrace_id_rsa
+  ydb_endpoint: 'ydb-ru.yandex.net:2135'
+  ydb_database: '/ru/alice/prod/alicelogs'
+  yt:
+    proxy: 'hahn'
+    path: '//home/alice-setrace'
+    retries_count: 2
+  zen_logs_storage:
+    host: 'debug-logs.cloud-clickhouse.kaizen.yandex.net'
+    port: 8443
+    db: zeta_logs
+    cert: '/usr/local/share/ca-certificates/YandexInternalRootCA.crt'
+    username: 'setrace'
+    password: ''
+  aux_tasks: 2
+  security: {}
+
+web:
+  http:
+    host: []
+    port: 18081
+  static_files_path: $ARCADIA/search/tools/setrace/ui/dist
+oauth:
+  client_id: '5b40db3dadd44632913af78599a20891'
+  client_secret: ''
+  url: 'https://oauth.yandex-team.ru/'
+cleanup:
+  period_seconds: 3600
+  max_age_days: 60
+unified_agent:
+  ydb:
+    endpoint: 'ydb-ru.yandex.net:2135'
+    database: '/ru/setrace/production/setrace-logs-index'

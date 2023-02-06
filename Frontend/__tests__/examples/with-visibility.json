@@ -1,0 +1,71 @@
+{
+    "content": [{
+        "block": "form2",
+        "lines": [
+            {
+                "type": "radio",
+                "name": "delivery",
+                "label": "Способ доставки",
+                "options": [
+                    {
+                        "value": "courier1",
+                        "checked": true,
+                        "price": 500,
+                        "label": "Курьером, 500₽",
+                        "meta": "1 день, Внутри МКАД"
+                    },
+                    {
+                        "value": "courier2",
+                        "price": 300,
+                        "label": "Курьером, 300₽",
+                        "meta": "3–4 дня, Внутри МКАД"
+                    },
+                    {
+                        "value": "post",
+                        "price": 150,
+                        "label": "Почта, 150₽",
+                        "meta": "до 30 дней, Почта России"
+                    },
+                    {
+                        "value": "pickup",
+                        "price": 0,
+                        "label": "Самовывоз, Бесплатно",
+                        "meta": "Москва, ул. Льва Толстова, 16. Пн-Пт, с 9 до 18."
+                    }
+                ]
+
+            },
+            {
+                "type": "textarea",
+                "required": true,
+                "label": "Адрес доставки",
+                "name": "shipping_address",
+                "placeholder": "Город, улица, дом, квартира",
+                "visible": [
+                    {
+                        "delivery": "courier1"
+                    },
+                    {
+                        "delivery": "courier2"
+                    },
+                    {
+                        "delivery": "post"
+                    }
+                ]
+            },
+            {
+                "type": "input",
+                "required": true,
+                "label": "Это поле видно, когда почтой и адрес test",
+                "name": "name",
+                "placeholder": "Да",
+                "visible": [
+                    {
+                        "delivery": "post",
+                        "shipping_address": "test"
+                    }
+                ]
+            }
+        ]
+    }]
+}

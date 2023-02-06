@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d] %-5p [%t] %mdc %c{5}:%L %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <includeCallerData>true</includeCallerData>
+        <appender-ref ref="CONSOLE"/>
+    </appender>
+
+    <logger name="ACCESS_LOG" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="ASYNC"/>
+    </logger>
+
+    <logger name="requestTrace" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="ASYNC"/>
+    </logger>
+
+    <logger name="METRICS_LOG" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="ASYNC"/>
+    </logger>
+
+    <logger name="ru.yandex.market.crm" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="ASYNC"/>
+    </logger>
+
+    <logger name="org.springframework" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="ASYNC"/>
+    </logger>
+
+    <logger name="org.springframework.security.web" additivity="false">
+        <level value="WARN"/>
+        <appender-ref ref="ASYNC"/>
+    </logger>
+
+    <logger name="ru.yandex" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="ASYNC"/>
+    </logger>
+
+    <logger name="bcp" additivity="false">
+        <level value="WARN"/>
+        <appender-ref ref="ASYNC"/>
+    </logger>
+
+    <logger name="org.quartz" additivity="false">
+        <level value="WARN"/>
+        <appender-ref ref="ASYNC"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="ASYNC"/>
+    </root>
+
+</configuration>

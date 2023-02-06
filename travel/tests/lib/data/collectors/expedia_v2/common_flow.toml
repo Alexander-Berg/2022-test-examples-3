@@ -1,0 +1,91 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "expedia",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--date-from", "2019-06-16",
+    "--limit", "1",
+]
+
+checkers = [
+    "lb",
+    "partner",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "application/json"
+
+[[partner.responses]]
+    args = {"updated_at_from_utc"="2019-06-16T00:00:00"}
+    data_file = "cpa_export_response_0.json"
+
+[[partner.responses]]
+    args = {"updated_at_from_utc"="2019-06-17T06:34:12"}
+    data_file = "cpa_export_response_1.json"
+
+[lb]
+    topic = "topic-expedia-v2"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+[[lb.expected]]
+    partner_name = "expedia"
+    travel_order_id = "expedia:YA-9348-9333-1094"
+    partner_order_id = "YA-9348-9333-1094"
+    created_at = 1560510715
+    status = "unpaid"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-09-01"
+    check_out = "2019-09-05"
+    order_amount = 40800
+    hotel_name = "Radisson Славянская"
+    permalink = "1054982517"
+    itinerary_id = "9148811926012"
+    confirmation_id = "8510359166272522200"
+    promo_codes = "PROMO,PROMO2"
+    discount_amount = 300
+    label = "sgBO-Q9gt6XPcGiq1JMR-CgRqjVIN-GPMb1tx_Q"
+    privetmir_oct2020_eligible = false
+    use_deferred_payment = false
+    deferred_payment_eligibility = "unknown"
+    yandex_plus_mode = "TOPUP"
+    yandex_plus_topup_points = 10
+    yandex_plus_topup_date = 1560510715
+    yandex_plus_user_balance = 100
+    post_pay_eligible = false
+    post_pay_used = false
+
+[[lb.expected]]
+    partner_name = "expedia"
+    travel_order_id = "expedia:YA-9348-9333-1095"
+    partner_order_id = "YA-9348-9333-1095"
+    created_at = 1560510715
+    status = "unpaid"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-09-01"
+    check_out = "2019-09-05"
+    order_amount = 40800
+    hotel_name = "Radisson Славянская"
+    permalink = "1054982517"
+    itinerary_id = "9148811926012"
+    confirmation_id = "8510359166272522200"
+    label = "sgBO-Q9gt6XPcGiq1JMR-CgRqjVIN-GPMb1tx_Q"
+    privetmir_oct2020_eligible = true
+    use_deferred_payment = false
+    amount_received_from_user = 40800
+    refund_reason = "USER"
+    deferred_payment_eligibility = "unknown"
+    yandex_plus_mode = "WITHDRAW"
+    yandex_plus_withdraw_points = 11
+    yandex_plus_user_balance = 100
+    post_pay_eligible = false
+    post_pay_used = false
+

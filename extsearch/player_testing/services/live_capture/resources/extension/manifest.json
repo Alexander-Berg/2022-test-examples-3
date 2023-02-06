@@ -1,0 +1,52 @@
+{
+    "manifest_version": 2,
+    "name": "Live streaming helper extension",
+    "version": "1.0.0",
+    "applications": {
+        "gecko": {
+            "id": "netserjk@yandex-team.ru"
+        }
+    },
+    "permissions": [
+          "activeTab"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.1tv.ru/live",
+                "https://live.russia.tv/channel/*",
+                "https://telik.top/karusel/",
+                "https://matchtv.ru/on-air",
+                "https://ctc.ru/online/",
+                "https://www.youtube.com/watch*",
+                "https://www.5-tv.ru/live/",
+                "https://www.tvc.ru/tvp",
+                "https://ren.tv/live",
+                "https://domashniy.ru/online/",
+                "https://tv3.ru/live",
+                "https://friday.ru/live",
+                "https://tnt-online.ru/live",
+                "https://www.ntv.ru/air/ntv/",
+                "https://tnt4.ru/live",
+                "https://rutube.ru/feeds/live/video/*"
+            ],
+            "run_at": "document_start",
+            "js": ["page.js"]
+        },
+        {
+            "matches": ["*://*.googleapis.com/*/*", "https://www.youtube.com/watch*"],
+            "js": ["adv_skip.js"],
+            "all_frames": true
+        },
+        {
+            "matches": ["*://www.1tv.ru/iframed/*",
+                "https://static.1tv.ru/eump/embeds/*",
+                "*://staticmv.mediavitrina.ru/dist/eump-vgtrk/*",
+                "*://player.vgtrk.com/iframe/live/*",
+                "*://player.mediavitrina.ru/*",
+                "*://uma.media/play/embed/*"],
+            "js": ["frame.js"],
+            "all_frames": true
+        }
+    ]
+}

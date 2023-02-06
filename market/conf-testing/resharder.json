@@ -1,0 +1,521 @@
+{
+    "TvmConfig": {
+        "CacheDir": "./tvm_cache/",
+        "DstServices": [
+            {
+                "Alias": "logbroker",
+                "Id": 2001059
+            }
+        ],
+        "SrcIdEnvName": "PICROBOT_TVM_ID",
+        "SrcSecretEnvName": "PICROBOT_TVM_SECRET"
+    },
+    "VerboseLevel": 6,
+    "YtVerboseLevel": "Error",
+
+    "YtCluster": "markov",
+    "YtLog": "logs/datacamp-picrobot/resharder-yt.log",
+    "Port": 7570,
+
+    "ClientsPerCluster": 5,
+    "GlobalLog": "logs/datacamp-picrobot/resharder.log",
+
+    "YtWriteTrottlerQuota": {
+        "MaxAccumulatedQuota": 20000
+    },
+
+    "HeavyWorkerThreads": 4,
+    "Destinations": [
+        {
+            "Name": "input_queue",
+            "ShardsCount": 16,
+            "QytWriter": {
+                "Queues": [
+                    {
+                        "Cluster": "markov",
+                        "Path": "//home/market/testing/indexer/picrobot/queues/input_queue"
+                    }
+                ]
+            }
+        }
+    ],
+
+    "Resharders": [
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "//home/market/testing/indexer/picrobot/cs/requests",
+                    "LaunchShardProcessorInFiber": true,
+                    "WorkerMinorName": "w_requests_log",
+                    "ThreadLabelPrefix": "t_requests_log",
+                    "MaxShards": 100,
+                    "MaxShardsToCheck": 100,
+                    "RoundRobinSelectionOfSupplier": true
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "StatelessShardProcessorConfig": {
+                    "ThreadLabelPrefix": "requests_log"
+                },
+
+                "Suppliers": [
+                    {
+                        "Alias": "iva_requests_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/market-indexer/testing/picrobot/picrobot-consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "iva.logbroker.yandex.net",
+                            "SrcTopic": "/market-indexer/testing/picrobot/datacamp-images-to-picrobot"
+                        }
+                    },
+                    {
+                        "Alias": "sas_requests_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/market-indexer/testing/picrobot/picrobot-consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "sas.logbroker.yandex.net",
+                            "SrcTopic": "/market-indexer/testing/picrobot/datacamp-images-to-picrobot"
+                        }
+                    },
+                    {
+                        "Alias": "vla_requests_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/market-indexer/testing/picrobot/picrobot-consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "vla.logbroker.yandex.net",
+                            "SrcTopic": "/market-indexer/testing/picrobot/datacamp-images-to-picrobot"
+                        }
+                    },
+                    {
+                        "Alias": "vlx_requests_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/market-indexer/testing/picrobot/picrobot-consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "vlx.logbroker.yandex.net",
+                            "SrcTopic": "/market-indexer/testing/picrobot/datacamp-images-to-picrobot"
+                        }
+                    }
+                ],
+
+                "TrottlerQuota": {
+                    "QuotaPerSecond": 3000
+                },
+
+                "SrcDcLabel": "sas",
+                "SrcTopicLabel": "/market-indexer/testing/picrobot/datacamp-images-to-picrobot",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "input_queue",
+            "RowProcessor": {
+                "InputType": "IMAGE_REQUEST"
+            }
+        },
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "//home/market/testing/indexer/picrobot/cs/video-requests",
+                    "LaunchShardProcessorInFiber": true,
+                    "WorkerMinorName": "w_video_requests_log",
+                    "ThreadLabelPrefix": "t_video_requests_log",
+                    "MaxShards": 100,
+                    "MaxShardsToCheck": 100,
+                    "RoundRobinSelectionOfSupplier": true
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "StatelessShardProcessorConfig": {
+                    "ThreadLabelPrefix": "video_requests_log"
+                },
+
+                "Suppliers": [
+                    {
+                        "Alias": "iva_video_requests_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/market-indexer/testing/picrobot/picrobot-consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "iva.logbroker.yandex.net",
+                            "SrcTopic": "/market-indexer/testing/picrobot/datacamp-videos-to-picrobot"
+                        }
+                    },
+                    {
+                        "Alias": "sas_video_requests_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/market-indexer/testing/picrobot/picrobot-consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "sas.logbroker.yandex.net",
+                            "SrcTopic": "/market-indexer/testing/picrobot/datacamp-videos-to-picrobot"
+                        }
+                    },
+                    {
+                        "Alias": "vla_video_requests_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/market-indexer/testing/picrobot/picrobot-consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "vla.logbroker.yandex.net",
+                            "SrcTopic": "/market-indexer/testing/picrobot/datacamp-videos-to-picrobot"
+                        }
+                    },
+                    {
+                        "Alias": "vlx_video_requests_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/market-indexer/testing/picrobot/picrobot-consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "vlx.logbroker.yandex.net",
+                            "SrcTopic": "/market-indexer/testing/picrobot/datacamp-videos-to-picrobot"
+                        }
+                    }
+                ],
+
+                "TrottlerQuota": {
+                    "QuotaPerSecond": 10
+                },
+
+                "SrcDcLabel": "sas",
+                "SrcTopicLabel": "/market-indexer/testing/picrobot/datacamp-videos-to-picrobot",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "input_queue",
+            "RowProcessor": {
+                "InputType": "VIDEO_REQUEST"
+            }
+        },
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "//home/market/testing/indexer/picrobot/cs/images",
+                    "LaunchShardProcessorInFiber": true,
+                    "WorkerMinorName": "w_images_log",
+                    "ThreadLabelPrefix": "t_images_log",
+                    "MaxShards": 100,
+                    "MaxShardsToCheck": 100
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "StatelessShardProcessorConfig": {
+                    "ThreadLabelPrefix": "images_log"
+                },
+
+                "Suppliers": [
+                    {
+                        "Alias": "iva_images_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/market-indexer/testing/picrobot/picrobot-consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "iva.logbroker.yandex.net",
+                            "SrcTopic": "/market-indexer/prod/picrobot/images-rthub-to-picrobot"
+                        }
+                    },
+                    {
+                        "Alias": "sas_images_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/market-indexer/testing/picrobot/picrobot-consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "sas.logbroker.yandex.net",
+                            "SrcTopic": "/market-indexer/prod/picrobot/images-rthub-to-picrobot"
+                        }
+                    },
+                    {
+                        "Alias": "vla_images_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/market-indexer/testing/picrobot/picrobot-consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "vla.logbroker.yandex.net",
+                            "SrcTopic": "/market-indexer/prod/picrobot/images-rthub-to-picrobot"
+                        }
+                    },
+                    {
+                        "Alias": "vlx_images_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/market-indexer/testing/picrobot/picrobot-consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "vlx.logbroker.yandex.net",
+                            "SrcTopic": "/market-indexer/prod/picrobot/images-rthub-to-picrobot"
+                        }
+                    }
+                ],
+
+                "SrcDcLabel": "sas",
+                "SrcTopicLabel": "/market-indexer/prod/picrobot/images-rthub-to-picrobot",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "input_queue",
+            "RowProcessor": {
+                "Source": "testing",
+                "InputType": "MDS_RESULT"
+            }
+        },
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "//home/market/testing/indexer/picrobot/cs/meta_updates",
+                    "LaunchShardProcessorInFiber": true,
+                    "WorkerMinorName": "w_meta_update",
+                    "ThreadLabelPrefix": "t_meta_update",
+                    "MaxShards": 100,
+                    "MaxShardsToCheck": 100,
+                    "RoundRobinSelectionOfSupplier": true
+                },
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+                "StatelessShardProcessorConfig": {
+                    "ThreadLabelPrefix": "meta_update"
+                },
+                "Suppliers": [
+                    {
+                        "Alias": "iva_meta_update_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/market-indexer/testing/picrobot/picrobot-consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "iva.logbroker.yandex.net",
+                            "SrcTopic": "/images-rthub/datacamp-image-attrs"
+                        }
+                    },                    {
+                        "Alias": "sas_meta_update_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/market-indexer/testing/picrobot/picrobot-consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "sas.logbroker.yandex.net",
+                            "SrcTopic": "/images-rthub/datacamp-image-attrs"
+                        }
+                    },
+                    {
+                        "Alias": "vla_meta_update_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/market-indexer/testing/picrobot/picrobot-consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "vla.logbroker.yandex.net",
+                            "SrcTopic": "/images-rthub/datacamp-image-attrs"
+                        }
+                    },
+                    {
+                        "Alias": "vlx_meta_update_log",
+                        "LbSupplier": {
+                            "ConfigManagerGrpcHost": "cm.logbroker.yandex.net:1111",
+                            "LogbrokerClientId": "/market-indexer/testing/picrobot/picrobot-consumer",
+                            "LogbrokerTvmAlias": "logbroker",
+                            "SrcServer": "vlx.logbroker.yandex.net",
+                            "SrcTopic": "/images-rthub/datacamp-image-attrs"
+                        }
+                    }
+                ],
+                "TrottlerQuota": {
+                    "QuotaPerSecond": 300
+                },
+                "SrcDcLabel": "sas",
+                "SrcTopicLabel": "/images-rthub/datacamp-image-attrs",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "input_queue",
+            "RowProcessor": {
+                "Source": "testing",
+                "InputType": "EXT_META_UPDATE"
+            }
+        },
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "//home/market/testing/indexer/picrobot/cs/events",
+                    "LaunchShardProcessorInFiber": true,
+                    "WorkerMinorName": "w_events_log",
+                    "ThreadLabelPrefix": "t_events_log",
+                    "MaxShards": 100,
+                    "MaxShardsToCheck": 100
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "StatelessShardProcessorConfig": {
+                    "ThreadLabelPrefix": "images_log"
+                },
+
+                "Suppliers": [
+                    {
+                        "Alias": "events_log",
+                        "YtSupplier": {
+                            "QueueConsumer": "resharder",
+                            "QueuePath": "//home/market/testing/indexer/picrobot/queues/event_queue",
+                            "Cluster": "markov"
+                        }
+                    }
+                ],
+
+                "SrcDcLabel": "sas",
+                "SrcTopicLabel": "//home/market/testing/indexer/picrobot/queues/event_queue",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "input_queue",
+            "RowProcessor": {
+                "InputType": "EVENT_MESSAGE"
+            }
+        },
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "//home/market/testing/indexer/picrobot/cs/hahn_dir_events",
+                    "LaunchShardProcessorInFiber": true,
+                    "WorkerMinorName": "w_hahn_dir_events_log",
+                    "ThreadLabelPrefix": "t_hahn_dir_events_log",
+                    "MaxShards": 100,
+                    "MaxShardsToCheck": 100
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "StatelessShardProcessorConfig": {
+                    "ThreadLabelPrefix": "hahn_dir_events_log"
+                },
+
+                "Suppliers": [
+                    {
+                        "Alias": "hahn_dir_events_log",
+                        "YtDirectorySupplier": {
+                            "Cluster": "hahn",
+                            "Path": "//home/market/testing/indexer/picrobot/queues/yt_directory",
+                            "MasterCluster": "markov",
+                            "SingleDataField": "value",
+                            "MaxOutChunkSize": 100,
+                            "OffsetTranslatorConfig": {
+                                "TranslateTablePath": "//home/market/testing/indexer/picrobot/supliers/yt_directory_hahn_suplier/translate",
+                                "OffsetsTablePath": "//home/market/testing/indexer/picrobot/supliers/yt_directory_hahn_suplier/offsets",
+                                "TablesStoragePath": "//home/market/testing/indexer/picrobot/supliers/yt_directory_hahn_suplier/workcopy",
+                                "TablesStatePath": "//home/market/testing/indexer/picrobot/supliers/yt_directory_hahn_suplier/table_state"
+                            }
+                        }
+                    }
+                ],
+
+                "TrottlerQuota": {
+                    "QuotaPerSecond": 100.0
+                },
+
+                "SrcDcLabel": "sas",
+                "SrcTopicLabel": "//home/market/testing/indexer/picrobot/queues/input_queue",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "input_queue",
+            "RowProcessor": {
+                "InputType": "EVENT_MESSAGE"
+            }
+        },
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "//home/market/testing/indexer/picrobot/cs/hahn_delete_events",
+                    "LaunchShardProcessorInFiber": true,
+                    "WorkerMinorName": "w_hahn_delete_events_log",
+                    "ThreadLabelPrefix": "t_hahn_delete_events_log",
+                    "MaxShards": 100,
+                    "MaxShardsToCheck": 100
+                },
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+                "StatelessShardProcessorConfig": {
+                    "ThreadLabelPrefix": "hahn_delete_events_log"
+                },
+                "Suppliers": [
+                    {
+                        "Alias": "hahn_delete_events",
+                        "YtDirectorySupplier": {
+                            "Cluster": "hahn",
+                            "Path": "//home/market/testing/indexer/picrobot/queues/delete_events",
+                            "MasterCluster": "markov",
+                            "SingleDataField": "value",
+                            "MaxOutChunkSize": 100,
+                            "OffsetTranslatorConfig": {
+                                "TranslateTablePath": "//home/market/testing/indexer/picrobot/supliers/delete_events_hahn_suplier/translate",
+                                "OffsetsTablePath": "//home/market/testing/indexer/picrobot/supliers/delete_events_hahn_suplier/offsets",
+                                "TablesStoragePath": "//home/market/testing/indexer/picrobot/supliers/delete_events_hahn_suplier/workcopy",
+                                "TablesStatePath": "//home/market/testing/indexer/picrobot/supliers/delete_events_hahn_suplier/table_state"
+                            }
+                        }
+                    }
+                ],
+                "TrottlerQuota": {
+                    "QuotaPerSecond": 300.0
+                },
+                "SrcDcLabel": "sas",
+                "SrcTopicLabel": "//home/market/testing/indexer/picrobot/queues/input_queue",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "input_queue",
+            "RowProcessor": {
+                "InputType": "EVENT_MESSAGE"
+            }
+        },
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "//home/market/testing/indexer/picrobot/cs/manual_events",
+                    "LaunchShardProcessorInFiber": true,
+                    "WorkerMinorName": "w_manual_events_log",
+                    "ThreadLabelPrefix": "t_manual_events_log",
+                    "MaxShards": 100,
+                    "MaxShardsToCheck": 100
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "zstd_6",
+
+                "StatelessShardProcessorConfig": {
+                    "ThreadLabelPrefix": "manual_events_log"
+                },
+
+                "Suppliers": [
+                    {
+                        "Alias": "manual_events_log",
+                        "YtDirectorySupplier": {
+                            "Cluster": "hahn",
+                            "Path": "//home/market/testing/indexer/picrobot/queues/manual_input",
+                            "MasterCluster": "markov",
+                            "SingleDataField": "value",
+                            "MaxOutChunkSize": 100,
+                            "OffsetTranslatorConfig": {
+                                "TranslateTablePath": "//home/market/testing/indexer/picrobot/supliers/manual_hahn_suplier/translate",
+                                "OffsetsTablePath": "//home/market/testing/indexer/picrobot/supliers/manual_hahn_suplier/offsets",
+                                "TablesStoragePath": "//home/market/testing/indexer/picrobot/supliers/manual_hahn_suplier/workcopy",
+                                "TablesStatePath": "//home/market/testing/indexer/picrobot/supliers/manual_hahn_suplier/table_state"
+                            }
+                        }
+                    }
+                ],
+
+                "TrottlerQuota": {
+                    "QuotaPerSecond": 100
+                },
+
+                "SrcDcLabel": "sas",
+                "SrcTopicLabel": "//home/market/testing/indexer/picrobot/queues/input_queue",
+                "ServantLabel": "resharder"
+            },
+            "OutputQueue": "input_queue",
+            "RowProcessor": {
+                "InputType": "EVENT_MESSAGE"
+            }
+        }
+    ],
+
+    "SharedTransactionPeriod": 200
+}

@@ -1,0 +1,177 @@
+{
+  "senderId": 1,
+  "startingRegionId": 213,
+  "carrierIds": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "averageOfferWeightDimensions" : {
+    "length" : 1,
+    "width" : 2,
+    "height" : 3,
+    "weight" : 2.3
+  },
+  "modifiers": [
+    {
+      "id": 1,
+      "timestamp": 12345678901,
+      "action": {
+        "costModificationRule": {
+          "operation": "SUBSTRACT",
+          "parameter": 20000,
+          "resultLimit": {
+            "minValue": 50000
+          }
+        }
+      },
+      "condition": {
+        "weight": {
+          "minValue": 40
+        }
+      }
+    },
+    {
+      "id": 2,
+      "timestamp": 12345678901,
+      "action": {
+        "timeModificationRule": {
+          "operation": "MULTIPLY",
+          "parameter": 4
+        }
+      },
+      "condition": {
+        "deliveryDestinations": [
+          223
+        ],
+        "deliveryTypes": [
+          "COURIER"
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "timestamp": 12345678901,
+      "action": {
+        "timeModificationRule": {
+          "operation": "FIX_VALUE",
+          "parameter": 1
+        }
+      }
+    },
+    {
+      "id": 4,
+      "timestamp": 12345678901,
+      "action": {
+        "paidByCustomerServices": [
+          "INSURANCE"
+        ]
+      },
+      "condition": {
+        "chargeableWeight": {
+          "maxValue": 400
+        }
+      }
+    },
+    {
+      "id": 5,
+      "timestamp": 12345678901,
+      "action": {
+        "isCarrierTurnedOn": true
+      },
+      "condition": {
+        "dimension": {
+          "minValue": 20
+        }
+      }
+    },
+    {
+      "id": 6,
+      "timestamp": 123456789123,
+      "action": {
+        "costModificationRule": {
+          "operation": "DIVIDE",
+          "parameter": 2.5,
+          "resultLimit": {
+            "minValue": 150000
+          }
+        },
+        "timeModificationRule": {
+          "operation": "UNKNOWN_VALUE"
+        },
+        "paidByCustomerServices": [
+          "CASH_SERVICE"
+        ],
+        "isCarrierTurnedOn": true
+      },
+      "condition": {
+        "cost": {
+          "minValue": 200000,
+          "maxValue": 1000000,
+          "percent": 2
+        },
+        "deliveryCost": {
+          "percentFromOfferPrice" : 10.00,
+          "comparisonOperation" : "MORE"
+        },
+        "weight": {
+          "minValue": 23,
+          "maxValue": 24
+        },
+        "chargeableWeight": {
+          "minValue": 31,
+          "maxValue": 32
+        },
+        "dimension": {
+          "minValue": 10,
+          "maxValue": 20
+        },
+        "carrierIds": [
+          1,
+          2,
+          3
+        ],
+        "deliveryDestinations": [
+          1,
+          2,
+          3
+        ],
+        "deliveryTypes": [
+          "PICKUP"
+        ]
+      }
+    },
+    {
+      "id": 8,
+      "timestamp": 100,
+      "action": {
+        "costModificationRule": {
+          "operation": "ADD",
+          "parameter": 1000
+        }
+      },
+      "condition": {
+        "weight": {
+          "minValue": 10
+        }
+      }
+    },
+    {
+      "id": 9,
+      "timestamp": 1000,
+      "action": {
+        "costModificationRule": {
+          "operation": "DIVIDE",
+          "parameter": 2.00
+        }
+      },
+      "condition": {
+        "deliveryCost": {
+          "percentFromOfferPrice" : 10.00,
+          "comparisonOperation" : "MORE"
+        }
+      }
+    }
+  ]
+}

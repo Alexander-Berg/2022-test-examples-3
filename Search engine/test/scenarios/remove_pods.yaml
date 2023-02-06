@@ -1,0 +1,151 @@
+objects:
+- &podset1
+  meta:
+    id: man-yabs-saas2.shootka
+
+- &node1
+  meta:
+    id: man2-8399.search.yandex.net
+  labels:
+    topology:
+      rack: MAN-1#B.1.06/1D25
+- &node2
+  meta:
+    id: man0-9670.search.yandex.net
+  labels:
+    topology:
+      rack: MAN-1#B.1.06/1D25
+- &node3
+  meta:
+    id: man0-3648.search.yandex.net
+  labels:
+    topology:
+      rack: MAN-1#B.1.06/1D25
+
+- &pod1
+  meta:
+    id: mdjdazf2yk4bagbg
+    pod_set_id: man-yabs-saas2.shootka
+  spec:
+    node_id: man2-8399.search.yandex.net
+  status:
+    agent:
+      pod_agent_payload:
+        status:
+          ready:
+            status: 'true'
+    dns:
+      persistent_fqdn: mdjdazf2yk4bagbg.man.yp-c.yandex.net
+    eviction:
+      message: Eviction state reset due to pod assignment change
+      state: none
+  labels:
+    deploy_engine: RSC
+
+- &pod2
+  meta:
+    id: mozfnxexszduppjw
+    pod_set_id: man-yabs-saas2.shootka
+  spec:
+    node_id: man0-9670.search.yandex.net
+  status:
+    agent:
+      pod_agent_payload:
+        status:
+          ready:
+            status: 'true'
+    dns:
+      persistent_fqdn: mozfnxexszduppjw.man.yp-c.yandex.net
+    eviction:
+      message: Eviction state reset due to pod assignment change
+      state: none
+  labels:
+    deploy_engine: RSC
+
+- &pod3
+  meta:
+    id: uzdihy6yrqwrpsdo
+    pod_set_id: man-yabs-saas2.shootka
+  spec:
+    node_id: man0-3648.search.yandex.net
+  status:
+    agent:
+      pod_agent_payload:
+        status:
+          ready:
+            status: 'true'
+    dns:
+      persistent_fqdn: uzdihy6yrqwrpsdo.man.yp-c.yandex.net
+    eviction:
+      message: Eviction state reset due to pod assignment change
+      state: none
+  labels:
+    deploy_engine: RSC
+
+
+scenario:
+- action: common/update-context
+  context:
+    yt_root: //home/test/replicactl
+    replicactl:
+      namespaces:
+      - topology
+      - pseudosobaka
+      pod_sets:
+      - man-yabs-saas2.shootka
+      activator:
+        window: 1.0
+        ready_threshold: 0.8
+
+- action: yt/create-map-node
+  path: $yt_root
+
+- action: yp/create-pod-set
+  attrs: *podset1
+
+- action: yp/create-pods
+  nodes:
+  - *node1
+  - *node2
+  - *node3
+  pods:
+  - *pod1
+  - *pod2
+  - *pod3
+
+# Start and wait for replicactl
+- action: replicactl/prepare
+- action: replicactl/start
+- action: replicactl/barrier
+  any_status: true
+  iterations: 3
+  timeout: 10
+
+- action: replicactl/add-targets
+  targets:
+  - {Namespace: topology, LocalPath: stream-0/snapshot-0/topology.1.conf}
+  - {Namespace: topology, LocalPath: stream-1/snapshot-0/topology.1.conf}
+
+- action: replicactl/barrier
+  iterations: 2
+  timeout: 10
+
+- action: replicactl/check-status
+  expected:
+  - {Namespace: topology, LocalPath: stream-0/snapshot-0/topology.1.conf, Annotation: 'Active on 0 / 3 pods, not ready 0 pods, banned 0 pods'}
+  - {Namespace: topology, LocalPath: stream-1/snapshot-0/topology.1.conf, Annotation: 'Active on 0 / 3 pods, not ready 0 pods, banned 0 pods'}
+
+- action: yp/remove-pods
+  pods:
+  - mozfnxexszduppjw
+
+- action: replicactl/barrier
+  iterations: 30
+  timeout: 30
+
+- action: replicactl/check-status
+  expected:
+  - {Namespace: topology, LocalPath: stream-0/snapshot-0/topology.1.conf, Annotation: 'Active on 0 / 2 pods, not ready 0 pods, banned 0 pods'}
+  - {Namespace: topology, LocalPath: stream-1/snapshot-0/topology.1.conf, Annotation: 'Active on 0 / 2 pods, not ready 0 pods, banned 0 pods'}
+
+- action: replicactl/stop

@@ -1,0 +1,141 @@
+{
+    "meta": {
+        "name": "yandex-direct-steps-deploy",
+        "maintainer": "Elena Bolshakova <lena-san@yandex-team.ru>",
+        "description": "direct steps app",
+        "version": "1.{revision}-1"
+    },
+    "build": {
+        "targets": [
+            "direct/apps/test-steps"
+        ]
+    },
+    "data": [
+    {
+        "source": {
+            "type": "RELATIVE",
+            "path": "etc-yadeploy/nginx/direct-steps.conf"
+        },
+        "destination": {
+            "path": "/etc/nginx/direct-steps.conf"
+        }
+    },
+    {
+        "source": {
+            "type": "RELATIVE",
+            "path": "../../infra/direct-utils/zk-sync/confs/db-config-np/db-config.devtest.json"
+        },
+        "destination": {
+            "path": "/etc/yandex-direct/db-config-np/db-config.devtest.json"
+        }
+    },
+    {
+        "source": {
+            "type": "DIRECTORY"
+        },
+        "destination": {
+            "path": "/var/log/nginx-direct-steps"
+        }
+    },
+    {
+        "source": {
+            "type": "RELATIVE",
+            "path": "../../packages/deploy/etc/yandex/unified_agent/conf.d",
+            "files": [
+                "*"
+            ]
+        },
+        "destination": {
+            "path": "/etc/yandex/unified_agent/conf.d/"
+        }
+    },
+    {
+        "source": {
+            "type": "RELATIVE",
+            "path": "../../libs-internal/config/src/main/resources",
+            "files": [
+                "log4j2*"
+            ]
+        },
+        "destination": {
+            "path": "/etc/direct/steps/logging-config/"
+        }
+    },
+    {
+        "source": {
+            "type": "RELATIVE",
+            "path": "usr/bin",
+            "files": [
+                "*"
+            ]
+        },
+        "destination": {
+            "path": "/usr/bin/",
+            "attributes": {
+                "mode": {
+                    "value": "+x"
+                }
+            }
+        }
+    },
+    {
+        "source": {
+            "type": "RELATIVE",
+            "path": "../../packages/deploy/usr/bin",
+            "files": [
+                "*"
+            ]
+        },
+        "destination": {
+            "path": "/usr/bin/",
+            "attributes": {
+                "mode": {
+                    "value": "+x"
+                }
+            }
+        }
+    },
+    {
+        "source": {
+            "type": "DIRECTORY"
+        },
+        "destination": {
+            "path": "/var/log/yandex"
+        }
+    },
+    {
+        "source": {
+            "type": "DIRECTORY"
+        },
+        "destination": {
+            "path": "/var/log/nginx"
+        }
+    },
+    {
+        "source": {
+            "type": "DIRECTORY"
+        },
+        "destination": {
+            "path": "/var/lib/nginx"
+        }
+    },
+    {
+        "source": {
+            "type": "BUILD_OUTPUT",
+            "path": "direct/apps/test-steps/yandex-direct-test-steps"
+        },
+        "destination": {
+            "path": "/var/www/direct-steps/direct-steps"
+        }
+    },
+    {
+        "source": {
+            "type": "INLINE",
+            "content": "{package_version}"
+        },
+        "destination": {
+            "path": "/var/www/direct-steps/version"
+        }
+    }
+    ]
+}

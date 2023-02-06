@@ -1,0 +1,272 @@
+{
+    "serviceId": "GRAPH_ID",
+    "name": "MK Tarniy Test",
+    "initialState": "REGISTERED",
+    "states": [
+        {
+            "name": "REGISTERED",
+            "priorityFunction": null,
+            "final": null
+        },
+        {
+            "name": "ALLOCATED",
+            "priorityFunction": null,
+            "final": null
+        },
+        {
+            "name": "WAITING",
+            "priorityFunction": {
+                "type": "ARRIVAL_TIME",
+                "params": []
+            },
+            "final": null
+        },
+        {
+            "name": "PROCESSING",
+            "priorityFunction": null,
+            "final": null
+        },
+        {
+            "name": "PROCESSED",
+            "priorityFunction": null,
+            "final": null
+        },
+        {
+            "name": "LEAVE_THE_SERVICE",
+            "priorityFunction": null,
+            "final": true
+        },
+        {
+            "name": "CANCELLED",
+            "priorityFunction": null,
+            "final": true
+        }
+    ],
+    "edges": [
+        {
+            "fromState": "REGISTERED",
+            "toState": "ALLOCATED",
+            "restrictions": [
+                {
+                    "type": "CONJUNCTION",
+                    "params": [
+                        {
+                            "type": "ELEMENTS_IN_ALMOST_EMPTY_QUEUE",
+                            "value": "2"
+                        },
+                        {
+                            "type": "STATES_TO_CHECK_QUEUE_IS_EMPTY",
+                            "value": "ALLOCATED,WAITING,PROCESSING"
+                        },
+                        {
+                            "type": "MINUTES_BEFORE_SLOT_TO_ARRIVE_IN_TIME",
+                            "value": "0"
+                        },
+                        {
+                            "type": "MINUTES_BEFORE_SLOT_TO_ARRIVE_NOT_TOO_EARLY",
+                            "value": "30"
+                        },
+                        {
+                            "type": "CONJUNCTION_RESTRICTION_TYPES",
+                            "value": "ARRIVAL_TIME_NOT_TOO_EARLY,DISJUNCTION"
+                        },
+                        {
+                            "type": "RESTRICTION_TYPES",
+                            "value": "ARRIVAL_TIME_NEAR_SLOT,QUEUE_IS_EMPTY"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 1
+        },
+        {
+            "fromState": "REGISTERED",
+            "toState": "CANCELLED",
+            "restrictions": [
+                {
+                    "type": "EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "CANCELLED"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 2
+        },
+        {
+            "fromState": "REGISTERED",
+            "toState": "PROCESSED",
+            "restrictions": [
+                {
+                    "type": "EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "FINISHED"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 3
+        },
+        {
+            "fromState": "ALLOCATED",
+            "toState": "WAITING",
+            "restrictions": [],
+            "actions": [],
+            "priority": 1
+        },
+        {
+            "fromState": "ALLOCATED",
+            "toState": "CANCELLED",
+            "restrictions": [
+                {
+                    "type": "EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "CANCELLED"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 2
+        },
+        {
+            "fromState": "ALLOCATED",
+            "toState": "PROCESSED",
+            "restrictions": [
+                {
+                    "type": "EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "FINISHED"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 3
+        },
+        {
+            "fromState": "WAITING",
+            "toState": "PROCESSING",
+            "restrictions": [
+                {
+                    "type": "EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "ENTERED"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 1
+        },
+        {
+            "fromState": "WAITING",
+            "toState": "CANCELLED",
+            "restrictions": [
+                {
+                    "type": "EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "CANCELLED"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 2
+        },
+        {
+            "fromState": "WAITING",
+            "toState": "PROCESSED",
+            "restrictions": [
+                {
+                    "type": "EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "FINISHED"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 3
+        },
+        {
+            "fromState": "PROCESSING",
+            "toState": "CANCELLED",
+            "restrictions": [
+                {
+                    "type": "EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "CANCELLED"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 1
+        },
+        {
+            "fromState": "PROCESSING",
+            "toState": "PROCESSED",
+            "restrictions": [
+                {
+                    "type": "EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "FINISHED"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 2
+        },
+        {
+            "fromState": "PROCESSED",
+            "toState": "LEAVE_THE_SERVICE",
+            "restrictions": [
+                {
+                    "type": "EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "LEFT"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 1
+        }
+    ],
+    "capacities": [
+        {
+            "name": "SC_CAPACITY",
+            "states": [
+                "WAITING",
+                "PROCESSING"
+            ],
+            "value": 5,
+            "capacityUnits": []
+        }
+    ]
+}

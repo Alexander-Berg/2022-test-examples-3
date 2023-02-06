@@ -1,0 +1,12 @@
+auto lo eth0 eth1 
+iface lo inet loopback
+
+iface eth0 inet6 auto
+  privext 0
+  mtu 8950
+  ya-netconfig-fb-disable YES
+  ya-netconfig-bb-disable YES
+{% if 'ipvs' in salt['grains.get']('conductor:tags') or 'ipvs_tun' in salt['grains.get']('conductor:tags') %}
+  ya-slb-tun YES
+  ya-slb6-tun YES
+{% endif %}

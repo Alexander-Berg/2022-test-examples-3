@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<dataset>
+
+    <!--  Одна волна - один батч - один заказ из одного товара  -->
+    <ORDERS ORDERKEY="00000001" BATCHORDERNUMBER="B0000001" />
+    <ORDERS ORDERKEY="B0000001" TOTALQTY="4"/>
+
+    <!--  Деталь батча с 1 штучкой шортанутого товара и 1 отобранной  -->
+    <ORDERDETAIL
+        ORDERKEY="B0000001"
+        ORDERLINENUMBER="01"
+        STORERKEY="0001"
+        SKU="ROV01"
+        OPENQTY="2"
+        QTYALLOCATED="0"
+        QTYPICKED="1"
+        STATUS="52"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Деталь первого заказа с товаром ROV01, одна штучка была консолидирована  -->
+    <ORDERDETAIL
+        ORDERKEY="00000001"
+        ORDERLINENUMBER="01"
+        BATCHORDERNUMBER="B0000001"
+        BATCHORDERLINE="01"
+        STORERKEY="0001"
+        SKU="ROV01"
+        OPENQTY="3"
+        QTYALLOCATED="0"
+        QTYPICKED="1"
+        STATUS="52"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Отконсолидированный первый товар первого заказа, уже переместилась в заказ - будет удален  -->
+    <PICKDETAIL
+        PICKDETAILKEY="PDK1"
+        PICKHEADERKEY=" "
+        ORDERKEY="00000001"
+        ORDERLINENUMBER="01"
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123001"
+        STATUS="5"
+        QTY="1"
+        WAVEKEY="WAVE0001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Отобранный первый товар, еще в батче - будет удален  -->
+    <PICKDETAIL
+        PICKDETAILKEY="PDK2"
+        PICKHEADERKEY=" "
+        ORDERKEY="B0000001"
+        ORDERLINENUMBER="01"
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123001"
+        STATUS="5"
+        QTY="1"
+        WAVEKEY="WAVE0001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Не связанная с заказом и батчом пик деталь  -->
+    <PICKDETAIL
+        PICKDETAILKEY="PDK3"
+        PICKHEADERKEY=" "
+        ORDERKEY="00000002"
+        ORDERLINENUMBER="02"
+        STORERKEY="0002"
+        SKU="ROV02"
+        LOT="123002"
+        STATUS="5"
+        QTY="1"
+        WAVEKEY="WAVE0001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Волна с текущим заказом и батчом  -->
+    <WAVE
+        WAVEKEY="W0000001"
+        BATCHORDERNUMBER="B0000001"
+        STATUS="5"
+        INPROCESS="1"
+        WAVE_TYPE="ALL"
+        START_TYPE="DEFAULT"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <WAVEDETAIL
+        WAVEKEY="W0000001"
+        WAVEDETAILKEY="WD000011"
+        ORDERKEY="B0000001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <WAVEDETAIL
+        WAVEKEY="W0000001"
+        WAVEDETAILKEY="WD000012"
+        ORDERKEY="00000001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Будет удален, так как пик деталь с ключом PDK1 будет удалена (в первом заказе)  -->
+    <USERACTIVITY
+        USERACTIVITYKEY="UAK1"
+        PICKDETAILKEY="PDK1"
+        TYPE="PK"
+    />
+
+    <!--  Не будет удален, так как пик деталь с ключом PDK3 не будет удалена (во втором заказе)  -->
+    <USERACTIVITY
+        USERACTIVITYKEY="UAK3"
+        PICKDETAILKEY="PDK3"
+        TYPE="PK"
+    />
+
+    <!--  Будет удален, так как пик деталь с ключом PDK1 будет удалена (в первом заказе)  -->
+    <TASKDETAIL
+        TASKDETAILKEY="TDK1"
+        PICKDETAILKEY="PDK1"
+    />
+
+    <!--  Не будет удален, так как пик деталь с ключом PDK3 не будет удалена (во втором заказе)  -->
+    <TASKDETAIL
+        TASKDETAILKEY="TDK3"
+        PICKDETAILKEY="PDK3"
+    />
+
+    <!--  Будет удалена, т.к. PDK1 удаляется  -->
+    <LOTXIDHEADER
+        PICKDETAILKEY="PDK1"
+        LOTXIDKEY="LIDK1"
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Не будет удалена, т.к. PDK3 не удаляется  -->
+    <LOTXIDHEADER
+        PICKDETAILKEY="PDK3"
+        LOTXIDKEY="LIDK3"
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Будет удалена, т.к. PDK1 удаляется  -->
+    <LOTXIDDETAIL
+        PICKDETAILKEY="PDK1"
+        LOTXIDKEY="LIDK1"
+        LOTXIDLINENUMBER="01"
+        LOT="123001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Не будет удалена, т.к. PDK3 не удаляется  -->
+    <LOTXIDDETAIL
+        PICKDETAILKEY="PDK3"
+        LOTXIDKEY="LIDK3"
+        LOTXIDLINENUMBER="01"
+        LOT="123001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+</dataset>

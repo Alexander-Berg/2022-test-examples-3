@@ -1,0 +1,824 @@
+labels:
+  tags:
+    - logexport
+    - unified-agent-reader
+meta:
+  id: crm-issue-events-test
+  project_id: crm-test
+spec:
+  deploy_unit_settings:
+    assigner:
+      environment: testing
+    counters:
+      environment: testing
+    timeliner:
+      environment: testing
+  deploy_units:
+    assigner:
+      collect_portometrics_from_sidecars: true
+      coredump_config:
+        unified-agent:
+          coredump_processor:
+            aggregator: {}
+            cleanup_ttl_seconds: 86400
+            count_limit: 3
+            output: ""
+            probability: 100
+            total_size_limit_megabytes: 1000
+      dynamic_resource_updater_sandbox_info:
+        revision: 1985693042
+      endpoint_sets:
+        - id: solomon
+          liveness_limit_ratio: 0.35
+          port: 3456
+        - id: ua.solomon
+          liveness_limit_ratio: 0.35
+          port: 3457
+      images_for_boxes:
+        assigner-box:
+          digest: sha256:c44e8b6009f254b14c2d1e5dc4a6aa9177cc82ee70f0df8463c63b7f5105e2ad
+          name: crm/issue-assigner
+          registry_host: registry.yandex.net
+          tag: '47'
+        logexport-box:
+          digest: sha256:aceeb2561bd866567d970a41293e314cec44ed057c850e4cddf0d27422261e82
+          name: crm/log-export-worker
+          registry_host: registry.yandex.net
+          tag: '34'
+      infra_components:
+        allow_automatic_updates: true
+      logbroker_tools_sandbox_info:
+        revision: 2739742779
+      multi_cluster_replica_set:
+        replica_set:
+          clusters:
+            - cluster: sas
+              spec:
+                replica_count: 1
+            - cluster: vla
+              spec:
+                replica_count: 1
+          deployment_strategy:
+            max_unavailable: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+                - id: disk-0
+                  labels:
+                    used_by_infra: true
+                  quota_policy:
+                    bandwidth_guarantee: 1048576
+                    bandwidth_limit: 2097152
+                    capacity: 42949672960
+                  storage_class: hdd
+              host_infra:
+                monitoring:
+                  pod_agent:
+                    add_pod_agent_user_signals: true
+              pod_agent_payload:
+                spec:
+                  boxes:
+                    - id: logexport-box
+                      volumes:
+                        - mode: read_write
+                          mount_point: /logs
+                          volume_ref: logs_volume
+                    - id: assigner-box
+                      volumes:
+                        - mode: read_write
+                          mount_point: /logs
+                          volume_ref: logs_volume
+                    - cgroup_fs_mount_mode: ro
+                      id: unified-agent-box
+                      rootfs:
+                        create_mode: read_only
+                        layer_refs:
+                          - base
+                          - unified-agent-directory-layout
+                          - unified-agent-lbkx-config
+                      static_resources:
+                        - mount_point: /unified_agent/bin
+                          resource_ref: unified-agent-bin
+                        - mount_point: /unified_agent/liveness
+                          resource_ref: unified-agent-liveness-check
+                      volumes:
+                        - mode: read_write
+                          mount_point: /unified_agent/data
+                          volume_ref: ua-data
+                  mutable_workloads:
+                    - workload_ref: logexport-workload
+                    - workload_ref: assigner-workload
+                    - workload_ref: unified-agent
+                  resources:
+                    layers:
+                      - checksum: MD5:f96807d42bc01a5c8bd12a42f7d68a30
+                        id: base
+                        url: sbr:2083514813
+                      - checksum: MD5:c5a50776d38b5a791dd171faca8939be
+                        id: unified-agent-directory-layout
+                        url: sbr:2670656501
+                      - checksum: MD5:f0ceeba5a04ee96a559f82ff73526770
+                        id: unified-agent-lbkx-config
+                        url: sbr:3243338979
+                    static_resources:
+                      - id: unified-agent-bin
+                        url: sbr:3208761595
+                        verification:
+                          check_period_ms: 180000
+                          checksum: MD5:6d5dff49efcacc6faf412e6185387a60
+                      - id: unified-agent-liveness-check
+                        url: sbr:2865674739
+                        verification:
+                          check_period_ms: 180000
+                          checksum: MD5:026d1820780297f083c6a46835f29818
+                  volumes:
+                    - id: logs_volume
+                    - id: ua-data
+                  workloads:
+                    - box_ref: logexport-box
+                      env:
+                        - name: ASPNETCORE_ENVIRONMENT
+                          value:
+                            literal_env:
+                              value: Testing
+                        - name: ElasticConfig__Password
+                          value:
+                            secret_env:
+                              alias: crm-logs-test-admin:202108031953
+                              id: crm-issue-assigner
+                        - name: ElasticConfig__Username
+                          value:
+                            literal_env:
+                              value: crm-issue-assigner
+                        - name: LogSourcesConfig__Sources__1__ApplicationName
+                          value:
+                            literal_env:
+                              value: logs-issue-events-assigner
+                        - name: LogSourcesConfig__Sources__1__DirectoryPath
+                          value:
+                            literal_env:
+                              value: /logs/Yandex.Crm.IssueAssignerService
+                      id: logexport-workload
+                      readiness_check:
+                        tcp_check:
+                          port: 80
+                      transmit_logs: true
+                    - box_ref: assigner-box
+                      env:
+                        - name: ASPNETCORE_ENVIRONMENT
+                          value:
+                            literal_env:
+                              value: Testing
+                        - name: ConnectionStrings__SkillsDatabase
+                          value:
+                            secret_env:
+                              alias: crm-issue-assigner-db
+                              id: connection-string
+                        - name: HangfireConfig__DbConnectionString
+                          value:
+                            secret_env:
+                              alias: crm-issue-assigner-db:20210902
+                              id: connection-string
+                      id: assigner-workload
+                      readiness_check:
+                        tcp_check:
+                          port: 80
+                    - box_ref: unified-agent-box
+                      destroy_policy:
+                        container:
+                          command_line: /bin/bash -c "/unified_agent/bin/unified_agent -c /unified_agent/config/config.yaml & pid=$!; while true; do unified_agent_idle=$(curl localhost:16301/check_backlog 2>/dev/null); if [ "$unified_agent_idle" = "IDLE1" ]; then echo "Unified Agent is idle"; break; else echo "Unified Agent is busy '$unified_agent_idle', waiting..."; sleep 1; fi; done; kill $pid"
+                        max_tries: 2
+                      env:
+                        - name: LOGBROKER_CONSUMER
+                          value:
+                            literal_env:
+                              value: /crm/testing/issue/assigner-consumer
+                        - name: LOGBROKER_TOPIC
+                          value:
+                            literal_env:
+                              value: /crm/testing/issue/events
+                        - name: TVM_CLIENT_ID
+                          value:
+                            literal_env:
+                              value: '2001283'
+                        - name: TVM_SECRET
+                          value:
+                            secret_env:
+                              alias: tvm.secret.2001283
+                              id: client_secret
+                        - name: TVM_DST_ID
+                          value:
+                            literal_env:
+                              value: '2001283'
+                      id: unified-agent
+                      liveness_check:
+                        container:
+                          command_line: /unified_agent/liveness/ua_liveness_check.sh 5000
+                      readiness_check:
+                        http_get:
+                          expected_answer: OK
+                          path: /ready
+                          port: 16301
+                      start:
+                        command_line: /unified_agent/bin/unified_agent -c /unified_agent/config/config.yaml --log-priority DEBUG
+                      stop_policy:
+                        max_tries: 3
+                        unix_signal:
+                          signal: SIGTERM
+                      transmit_logs: true
+              resource_requests:
+                memory_guarantee: 8589934592
+                memory_limit: 8589934592
+                network_bandwidth_guarantee: 1048576
+                network_bandwidth_limit: 10485760
+                vcpu_guarantee: 1000
+                vcpu_limit: 1000
+              secret_refs:
+                crm-issue-assigner-db:
+                  secret_id: sec-01fdw6wye9jc4hjmq6zcerhf6k
+                  secret_version: ver-01fdw6wyefr1c1g3wswk9hgd1e
+                crm-issue-assigner-db:20210902:
+                  secret_id: sec-01fdw6wye9jc4hjmq6zcerhf6k
+                  secret_version: ver-01fek9eqvae2wv0z9tey8wewpc
+                crm-logs-test-admin:202108031953:
+                  secret_id: sec-01f92gcrxd4j2czhv1x3epk464
+                  secret_version: ver-01fc6ey207r4ej93vpcvaxkdd1
+                tvm.secret.2001283:
+                  secret_id: sec-01dq7m10q03ytkzp4z39hzs07w
+                  secret_version: ver-01dq7m10yrrfwh13ng7azs89ge
+      network_defaults:
+        network_id: _CRMTEST_DEPLOY_NETS_
+      patchers_revision: 13
+      pod_agent_sandbox_info:
+        revision: 3006211268
+      tvm_config:
+        blackbox_environment: ProdYaTeam
+        client_port: 2
+        clients:
+          - destinations:
+              - alias: crm
+                app_id: 2001283
+            secret_selector:
+              alias: tvm.secret.2001283
+              id: client_secret
+            source:
+              alias: crm
+              app_id: 2001283
+        mode: enabled
+      tvm_sandbox_info:
+        revision: 2728323868
+    counters:
+      collect_portometrics_from_sidecars: true
+      coredump_config:
+        unified-agent:
+          coredump_processor:
+            aggregator: {}
+            cleanup_ttl_seconds: 86400
+            count_limit: 3
+            output: ""
+            probability: 100
+            total_size_limit_megabytes: 1000
+      dynamic_resource_updater_sandbox_info:
+        revision: 1985693042
+      endpoint_sets:
+        - id: solomon
+          liveness_limit_ratio: 0.35
+          port: 3456
+        - id: ua.solomon
+          liveness_limit_ratio: 0.35
+          port: 3457
+      images_for_boxes:
+        counters-box:
+          digest: sha256:e86e1ea9b1cd9fc46f1f50bbdac1b2ec19af6818ff6f77841cedaceb0ccc6c91
+          name: crm/crm-counters
+          registry_host: registry.yandex.net
+          tag: 1.0.174-b
+        logexport-box:
+          digest: sha256:aceeb2561bd866567d970a41293e314cec44ed057c850e4cddf0d27422261e82
+          name: crm/log-export-worker
+          registry_host: registry.yandex.net
+          tag: '34'
+      infra_components:
+        allow_automatic_updates: true
+      logbroker_tools_sandbox_info:
+        revision: 2739742779
+      multi_cluster_replica_set:
+        replica_set:
+          clusters:
+            - cluster: vla
+              spec:
+                replica_count: 1
+            - cluster: sas
+              spec:
+                replica_count: 1
+          deployment_strategy:
+            max_unavailable: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+                - id: disk-0
+                  labels:
+                    used_by_infra: true
+                  quota_policy:
+                    bandwidth_guarantee: 1048576
+                    bandwidth_limit: 2097152
+                    capacity: 21474836480
+                  storage_class: hdd
+              host_infra:
+                monitoring:
+                  pod_agent:
+                    add_pod_agent_user_signals: true
+              pod_agent_payload:
+                spec:
+                  boxes:
+                    - compute_resources:
+                        anonymous_memory_limit: 943718400
+                        memory_limit: 1073741824
+                      env:
+                        - name: ASPNETCORE_ENVIRONMENT
+                          value:
+                            literal_env:
+                              value: Testing
+                      id: logexport-box
+                      rootfs: {}
+                      volumes:
+                        - mode: read_write
+                          mount_point: /logs
+                          volume_ref: logs_volume
+                    - compute_resources:
+                        anonymous_memory_limit: 7864320000
+                        memory_limit: 8589934592
+                      env:
+                        - name: ASPNETCORE_ENVIRONMENT
+                          value:
+                            literal_env:
+                              value: Testing
+                      id: counters-box
+                      volumes:
+                        - mode: read_write
+                          mount_point: /logs
+                          volume_ref: logs_volume
+                    - cgroup_fs_mount_mode: ro
+                      compute_resources:
+                        anonymous_memory_limit: 943718400
+                        memory_limit: 1073741824
+                      id: unified-agent-box
+                      rootfs:
+                        create_mode: read_only
+                        layer_refs:
+                          - base
+                          - unified-agent-directory-layout
+                          - unified-agent-lbkx-config
+                      static_resources:
+                        - mount_point: /unified_agent/bin
+                          resource_ref: unified-agent-bin
+                        - mount_point: /unified_agent/liveness
+                          resource_ref: unified-agent-liveness-check
+                      volumes:
+                        - mode: read_write
+                          mount_point: /unified_agent/data
+                          volume_ref: ua-data
+                  mutable_workloads:
+                    - workload_ref: logexport-workload
+                    - workload_ref: counters-workload
+                    - workload_ref: unified-agent
+                  resources:
+                    layers:
+                      - checksum: MD5:f96807d42bc01a5c8bd12a42f7d68a30
+                        id: base
+                        url: sbr:2083514813
+                      - checksum: MD5:c5a50776d38b5a791dd171faca8939be
+                        id: unified-agent-directory-layout
+                        url: sbr:2670656501
+                      - checksum: MD5:d5797938453bdaa2167d45890aadeef4
+                        id: unified-agent-lbkx-config
+                        url: sbr:3243339284
+                    static_resources:
+                      - id: unified-agent-bin
+                        url: sbr:3208761595
+                        verification:
+                          check_period_ms: 180000
+                          checksum: MD5:6d5dff49efcacc6faf412e6185387a60
+                      - id: unified-agent-liveness-check
+                        url: sbr:2865674739
+                        verification:
+                          check_period_ms: 180000
+                          checksum: MD5:026d1820780297f083c6a46835f29818
+                  volumes:
+                    - generic: {}
+                      id: logs_volume
+                    - id: ua-data
+                  workloads:
+                    - box_ref: logexport-box
+                      env:
+                        - name: ElasticConfig__Password
+                          value:
+                            secret_env:
+                              alias: crm-logs-test-admin
+                              id: crm-counters
+                        - name: ElasticConfig__Username
+                          value:
+                            literal_env:
+                              value: crm-counters
+                        - name: LogSourcesConfig__Sources__1__DirectoryPath
+                          value:
+                            literal_env:
+                              value: /logs/Crm.AliveCountersService
+                        - name: LogSourcesConfig__Sources__1__ApplicationName
+                          value:
+                            literal_env:
+                              value: logs-issue-events-counters
+                      id: logexport-workload
+                      transmit_logs: true
+                    - box_ref: counters-box
+                      env:
+                        - name: XivaConfig__SendToken
+                          value:
+                            secret_env:
+                              alias: crm-xiva-sendToken
+                              id: crm-test-xiva-sendToken
+                        - name: OracleDbSettings__Password
+                          value:
+                            secret_env:
+                              alias: crm-oracle-testing
+                              id: crm_service_counters
+                        - name: IssueCountersConfig__NotifySeconds
+                          value:
+                            literal_env:
+                              value: '1'
+                        - name: IssueCountersConfig__LoadDays
+                          value:
+                            literal_env:
+                              value: '0'
+                        - name: ConnectionStrings__CountersDatabase
+                          value:
+                            secret_env:
+                              alias: crm-live-counter-db
+                              id: connection-string-test-rw
+                        - name: CommonPolicy__CrmTvmId
+                          value:
+                            literal_env:
+                              value: '2001283'
+                        - name: Kestrel__Endpoints__Http__Url
+                          value:
+                            literal_env:
+                              value: http://*:80
+                        - name: IssueCountersConfig__EventsBlockSize
+                          value:
+                            literal_env:
+                              value: '32'
+                        - name: IssueCountersConfig_CrmTvmId
+                          value:
+                            literal_env:
+                              value: '2001283'
+                        - name: IssueCountersConfig__ApiHost
+                          value:
+                            literal_env:
+                              value: https://crm-test.yandex-team.ru/api/v0
+                      id: counters-workload
+                      liveness_check:
+                        http_get:
+                          path: /liveness
+                          port: 80
+                          time_limit:
+                            initial_delay_ms: 180000
+                      readiness_check:
+                        http_get:
+                          path: /readiness
+                          port: 80
+                          time_limit:
+                            initial_delay_ms: 180000
+                    - box_ref: unified-agent-box
+                      destroy_policy:
+                        container:
+                          command_line: /bin/bash -c "/unified_agent/bin/unified_agent -c /unified_agent/config/config.yaml & pid=$!; while true; do unified_agent_idle=$(curl localhost:16301/check_backlog 2>/dev/null); if [ "$unified_agent_idle" = "IDLE1" ]; then echo "Unified Agent is idle"; break; else echo "Unified Agent is busy '$unified_agent_idle', waiting..."; sleep 1; fi; done; kill $pid"
+                        max_tries: 2
+                      env:
+                        - name: LOGBROKER_TOPIC
+                          value:
+                            literal_env:
+                              value: /crm/testing/issue/events
+                        - name: LOGBROKER_CONSUMER
+                          value:
+                            literal_env:
+                              value: /crm/testing/issue/counters-consumer
+                        - name: TVM_CLIENT_ID
+                          value:
+                            literal_env:
+                              value: '2001283'
+                        - name: TVM_SECRET
+                          value:
+                            secret_env:
+                              alias: tvm.secret.2001283
+                              id: client_secret
+                        - name: TVM_DST_ID
+                          value:
+                            literal_env:
+                              value: '2001283'
+                      id: unified-agent
+                      liveness_check:
+                        container:
+                          command_line: /unified_agent/liveness/ua_liveness_check.sh 5000
+                      readiness_check:
+                        http_get:
+                          expected_answer: OK
+                          path: /ready
+                          port: 16301
+                      start:
+                        command_line: /unified_agent/bin/unified_agent -c /unified_agent/config/config.yaml --log-priority DEBUG
+                      stop_policy:
+                        max_tries: 3
+                        unix_signal:
+                          signal: SIGTERM
+                      transmit_logs: true
+              resource_requests:
+                memory_guarantee: 10737418240
+                memory_limit: 10737418240              
+                network_bandwidth_guarantee: 2097152
+                network_bandwidth_limit: 4194304
+                vcpu_guarantee: 3000
+                vcpu_limit: 3000
+              secret_refs:
+                crm-live-counter-db:
+                  secret_id: sec-01ffj36b5n3rd6fcbfbw0f7rpk
+                  secret_version: ver-01fm54x26p8xxz53hkkhq253gm
+                crm-logs-test-admin:
+                  secret_id: sec-01f92gcrxd4j2czhv1x3epk464
+                  secret_version: ver-01f9xsxwhzbk78dfjcd3tt2ppy
+                crm-oracle-testing:
+                  secret_id: sec-01fxq26qx7q0kdveqrvm1ac354
+                  secret_version: ver-01fz8d2vwwb46xs8yy0gsc1b65
+                crm-xiva-sendToken:
+                  secret_id: sec-01enhyq8ddae0jjd0atccpwfk8
+                  secret_version: ver-01ep4t3vwcdedngeadg0sv2ynf
+                tvm.secret.2001283:
+                  secret_id: sec-01dq7m10q03ytkzp4z39hzs07w
+                  secret_version: ver-01dq7m10yrrfwh13ng7azs89ge
+      network_defaults:
+        network_id: _CRMTEST_DEPLOY_NETS_
+      patchers_revision: 13
+      pod_agent_sandbox_info:
+        revision: 2936629847
+      tvm_config:
+        blackbox_environment: ProdYaTeam
+        clients:
+          - destinations:
+              - alias: crm
+                app_id: 2001283
+            secret_selector:
+              alias: tvm.secret.2001283
+              id: client_secret
+            source:
+              alias: crm
+              app_id: 2001283
+        mode: enabled
+      tvm_sandbox_info:
+        revision: 2728323868
+    timeliner:
+      collect_portometrics_from_sidecars: true
+      coredump_config:
+        unified-agent:
+          coredump_processor:
+            aggregator: {}
+            cleanup_ttl_seconds: 86400
+            count_limit: 3
+            output: ""
+            probability: 100
+            total_size_limit_megabytes: 1000
+      dynamic_resource_updater_sandbox_info:
+        revision: 1985693042
+      endpoint_sets:
+        - id: solomon
+          liveness_limit_ratio: 0.35
+          port: 3456
+        - id: ua.solomon
+          liveness_limit_ratio: 0.35
+          port: 3457
+      images_for_boxes:
+        logexport-box:
+          digest: sha256:aceeb2561bd866567d970a41293e314cec44ed057c850e4cddf0d27422261e82
+          name: crm/log-export-worker
+          registry_host: registry.yandex.net
+          tag: '34'
+        timeliner-box:
+          digest: sha256:bc90a6ea6dba5d8d6081e1d58a1791f9426b7ec2949763ad2e6ca965c8abb1c3
+          name: crm/issue-events/timeliner
+          registry_host: registry.yandex.net
+          tag: '20'
+      infra_components:
+        allow_automatic_updates: true
+      logbroker_tools_sandbox_info:
+        revision: 2739742779
+      multi_cluster_replica_set:
+        replica_set:
+          clusters:
+            - cluster: sas
+              spec:
+                constraints:
+                  antiaffinity_constraints:
+                    - key: rack
+                      max_pods: 1
+                replica_count: 1
+            - cluster: vla
+              spec:
+                constraints:
+                  antiaffinity_constraints:
+                    - key: rack
+                      max_pods: 1
+                replica_count: 1
+          deployment_strategy:
+            max_unavailable: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+                - id: disk-0
+                  labels:
+                    used_by_infra: true
+                  quota_policy:
+                    bandwidth_guarantee: 5242880
+                    bandwidth_limit: 10485760
+                    capacity: 21474836480
+                  storage_class: hdd
+              host_infra:
+                monitoring:
+                  pod_agent:
+                    add_pod_agent_user_signals: true
+              pod_agent_payload:
+                spec:
+                  boxes:
+                    - id: logexport-box
+                      volumes:
+                        - mode: read_write
+                          mount_point: /logs
+                          volume_ref: logs_volume
+                    - env:
+                        - name: ASPNETCORE_ENVIRONMENT
+                          value:
+                            literal_env:
+                              value: Testing
+                      id: timeliner-box
+                      volumes:
+                        - mode: read_write
+                          mount_point: /logs
+                          volume_ref: logs_volume
+                    - cgroup_fs_mount_mode: ro
+                      id: unified-agent-box
+                      rootfs:
+                        create_mode: read_only
+                        layer_refs:
+                          - base
+                          - unified-agent-directory-layout
+                          - unified-agent-lbkx-config
+                      static_resources:
+                        - mount_point: /unified_agent/bin
+                          resource_ref: unified-agent-bin
+                        - mount_point: /unified_agent/liveness
+                          resource_ref: unified-agent-liveness-check
+                      volumes:
+                        - mode: read_write
+                          mount_point: /unified_agent/data
+                          volume_ref: ua-data
+                  mutable_workloads:
+                    - workload_ref: logexport-workload
+                    - workload_ref: timeliner-workload
+                    - workload_ref: unified-agent
+                  resources:
+                    layers:
+                      - checksum: MD5:f96807d42bc01a5c8bd12a42f7d68a30
+                        id: base
+                        url: sbr:2083514813
+                      - checksum: MD5:c5a50776d38b5a791dd171faca8939be
+                        id: unified-agent-directory-layout
+                        url: sbr:2670656501
+                      - checksum: MD5:a859120c594827a06f2c96869490a27a
+                        id: unified-agent-lbkx-config
+                        url: sbr:3243338791
+                    static_resources:
+                      - id: unified-agent-bin
+                        url: sbr:3208761595
+                        verification:
+                          check_period_ms: 180000
+                          checksum: MD5:6d5dff49efcacc6faf412e6185387a60
+                      - id: unified-agent-liveness-check
+                        url: sbr:2865674739
+                        verification:
+                          check_period_ms: 180000
+                          checksum: MD5:026d1820780297f083c6a46835f29818
+                  volumes:
+                    - generic: {}
+                      id: logs_volume
+                    - id: ua-data
+                  workloads:
+                    - box_ref: logexport-box
+                      env:
+                        - name: ElasticConfig__Username
+                          value:
+                            literal_env:
+                              value: crm-issue-timeliner
+                        - name: ElasticConfig__Password
+                          value:
+                            secret_env:
+                              alias: crm-logs-test-admin
+                              id: crm-issue-timeliner
+                        - name: ASPNETCORE_ENVIRONMENT
+                          value:
+                            literal_env:
+                              value: Testing
+                        - name: LogSourcesConfig__Sources__1__DirectoryPath
+                          value:
+                            literal_env:
+                              value: /logs/Crm.Timeliner.WebHost
+                        - name: LogSourcesConfig__Sources__1__ApplicationName
+                          value:
+                            literal_env:
+                              value: logs-issue-events-timeliner
+                      id: logexport-workload
+                      transmit_logs: true
+                    - box_ref: timeliner-box
+                      env:
+                        - name: XivaConfig__SendToken
+                          value:
+                            secret_env:
+                              alias: crm-xiva-sendToken
+                              id: crm-test-xiva-sendToken
+                      id: timeliner-workload
+                    - box_ref: unified-agent-box
+                      destroy_policy:
+                        container:
+                          command_line: /bin/bash -c "/unified_agent/bin/unified_agent -c /unified_agent/config/config.yaml & pid=$!; while true; do unified_agent_idle=$(curl localhost:16301/check_backlog 2>/dev/null); if [ "$unified_agent_idle" = "IDLE1" ]; then echo "Unified Agent is idle"; break; else echo "Unified Agent is busy '$unified_agent_idle', waiting..."; sleep 1; fi; done; kill $pid"
+                        max_tries: 2
+                      env:
+                        - name: LOGBROKER_TOPIC
+                          value:
+                            literal_env:
+                              value: /crm/testing/issue/events
+                        - name: LOGBROKER_CONSUMER
+                          value:
+                            literal_env:
+                              value: /crm/testing/issue/timeliner-consumer
+                        - name: TVM_CLIENT_ID
+                          value:
+                            literal_env:
+                              value: '2001283'
+                        - name: TVM_SECRET
+                          value:
+                            secret_env:
+                              alias: tvm-token
+                              id: client_secret
+                        - name: TVM_DST_ID
+                          value:
+                            literal_env:
+                              value: '2001283'
+                      id: unified-agent
+                      liveness_check:
+                        container:
+                          command_line: /unified_agent/liveness/ua_liveness_check.sh 5000
+                      readiness_check:
+                        http_get:
+                          expected_answer: OK
+                          path: /ready
+                          port: 16301
+                      start:
+                        command_line: /unified_agent/bin/unified_agent -c /unified_agent/config/config.yaml --log-priority DEBUG
+                      stop_policy:
+                        max_tries: 3
+                        unix_signal:
+                          signal: SIGTERM
+                      transmit_logs: true
+              resource_requests:
+                memory_guarantee: 2147483648
+                memory_limit: 2147483648
+                network_bandwidth_guarantee: 1048576
+                network_bandwidth_limit: 5242880
+                vcpu_guarantee: 2000
+                vcpu_limit: 2000
+              secret_refs:
+                crm-logs-test-admin:
+                  secret_id: sec-01f92gcrxd4j2czhv1x3epk464
+                  secret_version: ver-01faz7abrdbygm8ry79z40h5wa
+                crm-xiva-sendToken:
+                  secret_id: sec-01enhyq8ddae0jjd0atccpwfk8
+                  secret_version: ver-01ep4t3vwcdedngeadg0sv2ynf
+                tvm-token:
+                  secret_id: sec-01dq7m10q03ytkzp4z39hzs07w
+                  secret_version: ver-01dq7m10yrrfwh13ng7azs89ge
+      network_defaults:
+        network_id: _CRMTEST_DEPLOY_NETS_
+      patchers_revision: 13
+      pod_agent_sandbox_info:
+        revision: 3006211268
+      tvm_config:
+        blackbox_environment: ProdYaTeam
+        clients:
+          - destinations:
+              - alias: crm
+                app_id: 2001283
+            secret_selector:
+              alias: tvm-token
+              id: client_secret
+            source:
+              alias: crm
+              app_id: 2001283
+        mode: enabled
+      tvm_sandbox_info:
+        revision: 2728323868

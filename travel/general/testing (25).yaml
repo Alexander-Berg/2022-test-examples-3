@@ -1,0 +1,27 @@
+import:
+  - config/base.yaml
+
+routes:
+  - input:
+      plugin: grpc
+      config:
+        uri: 127.0.0.1:16302
+    channel:
+      case:
+        - when:
+            message:
+              log_name: processing-events-log
+          channel:
+            pipe:
+              - pipe_ref:
+                  name: base_pipe
+            output:
+              plugin: logbroker
+              config:
+                endpoint: logbroker.yandex.net
+                topic: /avia/testing/trips/processing-events-log
+                tvm:
+                  client_id: 2032352
+                  disk_cache_directory: /unified_agent/tvm_cache
+                  secret:
+                    env: TVM_SECRET

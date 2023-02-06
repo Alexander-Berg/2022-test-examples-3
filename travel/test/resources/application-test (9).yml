@@ -1,0 +1,50 @@
+# validate the schema before tests (for those who forget migrations)
+client-call-service:
+  ttl: 2h
+  cleanup-start-delay: 30s
+  cleanup-interval: 10m
+grpc:
+  enabled: false
+orders:
+  sync-checkout: false
+opentracing:
+  spring:
+    web:
+      enabled: false
+spring:
+  datasource:
+    url:
+    driver-class-name:
+    username: sa
+    password:
+  jpa:
+    database-platform: ru.yandex.travel.hibernate.dialects.CustomH2Dialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: ru.yandex.travel.hibernate.dialects.CustomH2Dialect
+        jdbc:
+          time_zone: UTC
+  main:
+    allow-bean-definition-overriding: true
+workflow-processing:
+  concurrency-failure:
+    retry-count: 15
+    max-timeout: 2s
+  delayed-retries-limit: 10
+  pending-workflow-polling-interval: 100ms
+  use-savepoints: true
+  use-processing-pools: true
+  processing-pools:
+    default-pool-id: 1
+    pools:
+      1:
+        entity-types:
+        name: default
+        threads: 2
+      2:
+        entity-types: TEST_ENTITY, some_other_entity
+        name: test entities
+        threads: 2

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG" packages="ru.yandex.market.logistics.logging.backlog, ru.yandex.market.logistics.mqm.logging">
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %-5p [%c{1} %t] %m%n"/>
+        </Console>
+        <Console name="BACK_LOG">
+            <BackLogLayout />
+        </Console>
+        <Console name="TSKV_LOG">
+            <TskvLogLayout />
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="CONSOLE"/>
+        </Root>
+        <AsyncLogger name="backLogger" level="info" additivity="false" includeLocation="true">
+            <AppenderRef ref="BACK_LOG"/>
+        </AsyncLogger>
+        <Logger name="planFactTskvLogger" level="info" additivity="false">
+            <AppenderRef ref="TSKV_LOG"/>
+        </Logger>
+    </Loggers>
+</Configuration>

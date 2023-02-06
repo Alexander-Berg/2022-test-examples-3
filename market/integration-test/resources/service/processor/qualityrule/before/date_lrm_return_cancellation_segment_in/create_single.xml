@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lrm_return
+        lrm_return_id="1"
+        status="[null]"
+        source="CANCELLATION"
+        order_external_id="ORDER1"
+        logistic_point_from_id="1"
+    />
+
+    <lrm_return
+        lrm_return_id="2"
+        status="[null]"
+        source="CANCELLATION"
+        order_external_id="ORDER2"
+        logistic_point_from_id="1"
+    />
+
+    <plan_fact
+        id="1"
+        entity_type="LRM_RETURN"
+        entity_id="1"
+        expected_status="IN"
+        processing_status="ENQUEUED"
+        plan_fact_status="ACTIVE"
+        expected_status_datetime="2020-11-01 12:00:00 +0000"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        created="2020-11-01 12:00:00 +0000"
+    />
+
+    <plan_fact
+        id="2"
+        entity_type="LRM_RETURN"
+        entity_id="2"
+        expected_status="IN"
+        processing_status="ENQUEUED"
+        plan_fact_status="ACTIVE"
+        expected_status_datetime="2020-11-01 12:00:00 +0000"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        created="2020-11-01 12:00:00 +0000"
+    />
+
+    <quality_rule
+        id="1"
+        enabled="true"
+        expected_status="IN"
+        aggregation_type="DATE_LRM_CANCELLATION_RETURN_TO_ANY_SEGMENT_IN"
+        rule_processor="STARTREK"
+        rule='{
+                "queue": "MQMTESTRETURN",
+                "_type": ".LrmCancellationReturnCreatedToSegmentInPayload",
+                "allowedToCloseAssigned": false
+            }'
+    />
+
+    <plan_fact_group
+        id="1"
+        aggregation_key="date:2020-11-01;"
+        aggregation_type="DATE_LRM_CANCELLATION_RETURN_TO_ANY_SEGMENT_IN"
+        processing_status="ENQUEUED"
+        expected_status="IN"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 1]
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+        plan_fact_group_id="1"
+        plan_fact_id="1"
+    />
+
+    <plan_fact_group_relations
+        plan_fact_group_id="1"
+        plan_fact_id="2"
+    />
+
+</dataset>

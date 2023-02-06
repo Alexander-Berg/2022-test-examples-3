@@ -1,0 +1,113 @@
+bin_path = "travel/cpa/data_processing/update_labels_avia/update_labels_avia"
+
+args = [
+    "--yt-proxy", "%(yt_proxy)s",
+    "--src-dir", "//home/tests/update_labels_avia/avia-redir-balance-by-day-log",
+    "--dst-dir", "//home/tests/update_labels_avia/labels",
+]
+
+checkers = [
+    "yt",
+]
+
+[yt.input.redir_logs]
+    path = "//home/tests/update_labels_avia/avia-redir-balance-by-day-log/some_date"
+
+[[yt.input.redir_logs.data]]
+    MARKER = "MARKER_1"
+    NATIONAL_VERSION = "NATIONAL_VERSION_1"
+    PP = 1
+    PRICE = 1.0
+    WHEN = "WHEN_1"
+    RETURN_DATE = "RETURN_DATE_1"
+    ADULT_SEATS = 1
+    CHILDREN_SEATS = 1
+    INFANT_SEATS = 1
+    OFFER_PRICE = 1.0
+
+[[yt.input.redir_logs.data]]
+    MARKER = "MARKER_2"
+    NATIONAL_VERSION = "NATIONAL_VERSION_2"
+    PP = 2
+    PRICE = 2.0
+    WHEN = "WHEN_2"
+    RETURN_DATE = "RETURN_DATE_2"
+    ADULT_SEATS = 2
+    CHILDREN_SEATS = 2
+    INFANT_SEATS = 2
+    OFFER_PRICE = 2.0
+
+[yt.input.labels]
+    path = "//home/tests/update_labels_avia/labels/labels"
+    sort_by = "label"
+
+# labels table already contains data
+[[yt.input.labels.data]]
+    label = "label_0"
+    label_national_version = "label_national_version_0"
+    label_pp = 0
+    label_price = 0.0
+    label_when = "label_when_0"
+    label_return_date = "label_return_date_0"
+    label_adult_seats = 0
+    label_children_seats = 0
+    label_infant_seats = 0
+    label_offer_price = 0.0
+
+[yt.output.labels]
+    path = "//home/tests/update_labels_avia/labels/labels"
+    fields_to_skip = [
+        "label_wizardredirkey",
+        "label_utm_term",
+        "label_utm_source",
+        "label_utm_campaign",
+        "label_utm_content",
+        "label_offer_currency",
+        "label_ytp_referer",
+        "label_utm_medium",
+    ]
+
+# new data
+[[yt.output.labels.data]]
+    label = "MARKER_1"
+    label_national_version = "NATIONAL_VERSION_1"
+    label_pp = 1
+    label_price = 1.0
+    label_when = "WHEN_1"
+    label_return_date = "RETURN_DATE_1"
+    label_adult_seats = 1
+    label_children_seats = 1
+    label_infant_seats = 1
+    label_offer_price = 1.0
+
+[[yt.output.labels.data]]
+    label = "MARKER_2"
+    label_national_version = "NATIONAL_VERSION_2"
+    label_pp = 2
+    label_price = 2.0
+    label_when = "WHEN_2"
+    label_return_date = "RETURN_DATE_2"
+    label_adult_seats = 2
+    label_children_seats = 2
+    label_infant_seats = 2
+    label_offer_price = 2.0
+
+# old data
+[[yt.output.labels.data]]
+    label = "label_0"
+    label_national_version = "label_national_version_0"
+    label_pp = 0
+    label_price = 0.0
+    label_when = "label_when_0"
+    label_return_date = "label_return_date_0"
+    label_adult_seats = 0
+    label_children_seats = 0
+    label_infant_seats = 0
+    label_offer_price = 0.0
+
+[yt.output.processed_labels]
+    path = "//home/tests/update_labels_avia/labels/processed_labels"
+    fields_to_skip = ["content_revision"]
+
+[[yt.output.processed_labels.data]]
+    table = "//home/tests/update_labels_avia/avia-redir-balance-by-day-log/some_date"

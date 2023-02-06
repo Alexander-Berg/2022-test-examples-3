@@ -1,0 +1,57 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "rusline_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 415
+    confirm_dt = ""
+    created_at = "2020-01-31 00:06:45"
+    currency = "RUB"
+    from = "VKO"
+    marker = "9622a6df-a5e969-40f6-4f34-acf1-811748e59d401"
+    order_id = "6N7NTD"
+    partner = "rusline"
+    partner_id = 57
+    price = 3685.0
+    source = "nemo"
+    status = "booking"
+    ticket_number = ""
+    to = "EGO"
+    trip_type = "oneway"
+    unixtime = 1580419942
+
+[lb]
+    topic = "topic-rusline_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "partner_profit", "updated_at"]
+
+[[lb.expected]]
+    status = "pending"
+    category = "avia"
+    partner_id = 57
+    created_at = 1580429205
+    origin = "VKO"
+    partner_order_id = "6N7NTD"
+    label = "9622a6df-a5e969-40f6-4f34-acf1-811748e59d401"
+    source = "history"
+    destination = "EGO"
+    partner_name = "rusline"
+    trip_type = "oneway"
+    billing_order_id = 415
+    order_amount = 3685.0
+    travel_order_id = "rusline:6N7NTD"
+    currency_code = "RUB"

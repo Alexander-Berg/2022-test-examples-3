@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<m:config xmlns:c="urn:jmf:common:1.0"
+          xmlns:m="urn:jmf:metaclass:config:1.0"
+          xmlns:a="urn:jmf:attribute:type:default:config:1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <m:metaclass>
+        <m:fqn>deprecatedEntityWithStatusBackTimer</m:fqn>
+        <m:parent>bo</m:parent>
+        <m:title>
+            <c:value>Тестовый БО с атрибутом "Счетчик времени"</c:value>
+        </m:title>
+        <m:logics>
+            <m:logic>wf</m:logic>
+        </m:logics>
+        <m:attributes>
+            <m:attribute required="true">
+                <m:code>timeZone</m:code>
+                <m:title>
+                    <c:value>Часовой пояс</c:value>
+                </m:title>
+                <m:type xsi:type="a:catalogItem" fqn="timeZone"/>
+                <m:default>Europe/Moscow</m:default>
+            </m:attribute>
+            <m:attribute required="true">
+                <m:code>serviceTime</m:code>
+                <m:title>
+                    <c:value>Время обслуживания</c:value>
+                </m:title>
+                <m:type xsi:type="a:catalogItem" fqn="serviceTime"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>resolutionTime</m:code>
+                <m:title>
+                    <c:value>Запас времени</c:value>
+                </m:title>
+                <m:type xsi:type="a:duration"/>
+                <m:default>PT1H</m:default>
+            </m:attribute>
+
+            <m:attribute versioned="true">
+                <m:code>timer</m:code>
+                <m:title>
+                    <c:value>Счетчик времени</c:value>
+                </m:title>
+                <m:type code="backTimer">
+                    <m:property code="definition">statusBackTimerExample</m:property>
+                </m:type>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+</m:config>

@@ -1,0 +1,60 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "ticketsru_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 1001
+    confirm_dt = ""
+    created_at = "2020-01-31 00:18:41"
+    currency = "RUR"
+    from = "SVX"
+    marker = "3afec2bc-a5e969-0a1a-4e3f-8c90-6cac2027a1bb1"
+    order_id = "BMZWJM"
+    partner = "ticketsru"
+    partner_id = 74
+    price = 11615.0
+    source = "ticketsru"
+    status = "paid"
+    ticket_number = ""
+    to = "LED"
+    trip_type = "oneway"
+    unixtime = 1580419112
+
+[lb]
+    topic = "topic-ticketsru_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "updated_at"]
+
+[[lb.expected]]
+    origin = "SVX"
+    adults = 1
+    billing_order_id = 1001
+    trip_type = "oneway"
+    order_amount = 11615.0
+    partner_id = 74
+    children = 0
+    category = "avia"
+    partner_name = "ticketsru"
+    destination = "LED"
+    label = "3afec2bc-a5e969-0a1a-4e3f-8c90-6cac2027a1bb1"
+    source = "history"
+    status = "confirmed"
+    partner_order_id = "BMZWJM"
+    travel_order_id = "ticketsru:BMZWJM"
+    created_at = 1580429921
+    infants = 0
+    currency_code = "RUB"

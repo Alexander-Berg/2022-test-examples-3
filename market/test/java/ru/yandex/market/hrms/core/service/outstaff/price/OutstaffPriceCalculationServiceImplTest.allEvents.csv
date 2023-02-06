@@ -1,0 +1,42 @@
+public.outstaff
+id,yt_id,area_type,area,last_name,first_name,mid_name,login_hrms,work_started,russian_citizenship,deactivated,birthday,gender,passport,phone,position,medbook,hygiene_cert_date,psycho_exam_date,pre_med_exam_date,url_photo,url_access_docs,url_psycho_exam,url_pre_med_exam,url_docs_legality,deactivation_reason,company_login_id
+100,129205766,СЦ,СЦ Екатеринбург,тестовый,тест,тестович,test-login-0,2021-07-05,false,null,2021-07-01,0,12 34 567890,+79153453432,Оператор ПРТ,1212 4433,2021-07-02,2021-07-03,2021-07-04,http://disk.yandex.ru/photo.jpg,http://disk.yandex.ru/access_docs.jpg,http://disk.yandex.ru/psycho.jpg,http://disk.yandex.ru/med.jpg,http://disk.yandex.ru/legality.jpg,null,1
+
+public.wms_user
+login,domain_id,employee_id,outstaff_id,state
+user-100,1,null,100,READY
+
+public.outstaff_timex_sync
+outstaff_id,timex_oid
+100,timex-100
+
+public.operation_group
+id,name,created_by
+5228,АутстаффКонсолидация,user
+6666,АутстаффНаставничество,user
+
+public.operation
+name,operation_group_id,created_by
+"Перемещение штучное, шт ЗОНА КОНСОЛИДАЦИИ 89",5228,user
+
+public.operation_base_rate
+domain_id,employee_group,outstaff_company_id,operation_group_id,unit,price,created_by,date_from
+1,OUTSTAFF,326611127,5228,штуки,50,user,2021-01-01
+1,OUTSTAFF,326611127,6666,час,100,user,2021-01-01
+
+public.wms_operations_stat
+warehouse_code,wms_login,date_hour,first_operation_time,operation_end_time,sys_oper,operation_type,seconds,cnt_qty,cnt_box,cnt_damage,cnt_loc,cnt_sku,cnt_sl_lot,perf_seconds1hour
+SOF,user-100,2021-06-01 12:00:00 +0300,2021-06-01 12:30:00 +0300,2021-06-01 12:31:00 +0300,1,"Перемещение штучное, шт ЗОНА КОНСОЛИДАЦИИ 89",60,5,0,0,0,0,0,60
+
+public.non_production_operation
+domain_id,outstaff_id,operation_group_id,is_full_shift,started_at,ended_at,wms_login
+1,100,6666,true,2021-06-01 12:00:00 +0300,2021-06-01 12:15:00 +0300,user-100
+
+public.timex_operating_areas
+domain_id,area,working_area
+1,ФФЦ Софьино,ФФЦ Софьино - операционный зал
+
+public.timex_history
+timex_oid,event_time_utc,area
+timex-100,2021-06-01 11:45:00 +0300,ФФЦ Софьино - операционный зал
+timex-100,2021-06-01 18:45:00 +0300,выход

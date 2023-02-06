@@ -1,0 +1,67 @@
+{
+  "owner": "checkout",
+  "tableName": "notifier_testing",
+  "splits": {
+    "status": "status",
+    "channel_type": "channel_type",
+    "subkey": "subkey"
+  },
+  "metrics": [
+    // Время обработки различных стадий
+    {
+      "metricNameArray": [
+        "notifier.test.timings.${subkey}",
+        "notifier.test.channel.${channel_type}.timings.${subkey}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "duration",
+      "filter": "key = 'STATE_DURATION' AND status != 'FAILED'",
+      "type": "QUANTILE"
+    },
+
+    // Время отправки
+    {
+      "metricNameArray": [
+        "notifier.test.channel.${channel_type}.latency.${subkey}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "duration",
+      "filter": "key = 'STATE_DURATION' and subkey = 'NOTE_SENDING_TIME'",
+      "type": "QUANTILE"
+    },
+
+    // Число полученных / отправленных
+    {
+      "metricNameArray": [
+        "notifier.test.note-per-min.in",
+        "notifier.test.channel.${channel_type}.note-per-min.in"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "count()",
+      "filter": "key = 'STATE_DURATION' and subkey = 'EVENT_PROCESSING_TIME'",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "notifier.test.note-per-min.out",
+        "notifier.test.channel.${channel_type}.note-per-min.out"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "count()",
+      "filter": "key = 'STATE_DURATION' and subkey = 'NOTE_SENDING_TIME' and status != 'FAILED'",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName" : "notifier.test.channel.EMAIL.note-per-min.FAILED",
+      "period": "ONE_MIN",
+      "metricField": "countIf(key = 'STATE_DURATION' and subkey = 'NOTE_SENDING_TIME' and status = 'FAILED')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName" : "notifier.test.channel.MBI.note-per-min.FAILED",
+      "period": "ONE_MIN",
+      "metricField": "countIf(key = 'STATE_DURATION' and subkey = 'NOTE_SENDING_TIME' and status = 'FAILED')",
+      "type": "SIMPLE"
+    }
+  ]
+}

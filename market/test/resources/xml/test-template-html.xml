@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.1">
+    <xsl:output method="xml" indent="no"/>
+
+    <xsl:variable name="testParamSubject" select="/data/test-param-subject"/>
+    <xsl:variable name="testParamBody" select="/data/test-param-body"/>
+
+    <xsl:template match="/">
+        <root>
+            <subject>
+                <xsl:text>Тестовый заголовок для заказа&#32;</xsl:text>
+                <xsl:value-of select="$testParamSubject"/>
+            </subject>
+            <body>
+                <xsl:choose>
+                    <xsl:when test="data[@format = 'text/html']">
+                        <xsl:call-template name="page-wrapper"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>Изменение параметра&#32;</xsl:text>
+                        <xsl:value-of select="$testParamBody"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </body>
+        </root>
+    </xsl:template>
+
+    <xsl:template name="page-wrapper">
+        <xsl:text>При проверке магазина </xsl:text>
+        <xsl:text>Изменение параметра&#32;</xsl:text>
+        <xsl:value-of select="$testParamBody"/>
+    </xsl:template>
+
+</xsl:stylesheet>

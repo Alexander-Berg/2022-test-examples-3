@@ -1,0 +1,39 @@
+- gather_facts: false
+  hosts: localhost
+  # SB-tasks with daily schedule has an e-mail notification
+  # - rasp_suburban_events.update_expected_suburban_events
+  # - rasp_suburban_events.clean_suburban_events
+  roles:
+  - checks:
+    - rasp_suburban_events.update_company_crashes
+    limits: '{{ crit_0_warn_0 }}'
+    flap: '{{ stable3h_critical6h }}'
+    role: chat_only
+    nodata_mode: force_ok
+    rtime: 60
+  - checks:
+    - rasp_suburban_events.update_movista_raw_cancels
+    - rasp_suburban_events.update_movista_matched_cancels
+    - rasp_suburban_events.update_suburban_events
+    limits: '{{ crit_0_warn_0 }}'
+    flap: '{{ stable1200critical2400 }}'
+    role: chat_only
+    nodata_mode: force_ok
+    rtime: 60
+  - checks:
+    - rasp_suburban_events.monitoring
+    - rasp_suburban_events.update_expected_suburban_events_after_prepare_all
+    limits: '{{ crit_0_warn_0 }}'
+    flap: '{{ stable180critical1200 }}'
+    role: chat_only
+    nodata_mode: force_ok
+    rtime: 60
+  vars:
+    children:
+      - rasp_sandbox_testing
+    host: rasp_sandbox_testing
+    telegram_chats:
+      - 'rasp-achtung'
+  vars_files:
+  - ../vars/common.yml
+  - vars/rasp.yml

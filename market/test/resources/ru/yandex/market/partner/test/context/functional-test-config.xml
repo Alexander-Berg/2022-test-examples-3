@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mockito="http://www.mockito.org/spring/mockito"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.mockito.org/spring/mockito http://www.mockito.org/spring/mockito.xsd">
+
+    <context:annotation-config/>
+
+    <import resource="classpath:core-config.xml"/>
+
+    <bean id="functionalTestConfig"
+          class="ru.yandex.market.partner.test.context.FunctionalTestConfig"/>
+
+    <!--spy-->
+    <mockito:spy beanName="aboPublicService"/>
+    <mockito:spy beanName="agencyService"/>
+    <mockito:spy beanName="avatarsClient"/>
+    <mockito:spy beanName="turboAvatarsClient"/>
+    <mockito:spy beanName="categoryParametersParser"/>
+    <mockito:spy beanName="cutoffMessageLinkDao"/>
+    <mockito:spy beanName="paymentDao"/>
+    <mockito:spy beanName="logisticPartnerService"/>
+    <mockito:spy beanName="marketIdGrpcService"/>
+    <mockito:spy beanName="mboMappingService"/>
+    <mockito:spy beanName="prepayRequestDocumentDao"/>
+    <mockito:spy beanName="prepayRequestValidatorService"/>
+    <mockito:spy beanName="regionService"/>
+    <mockito:spy beanName="supplierXlsHelper"/>
+    <mockito:spy beanName="ultraControllerYtTemplate"/>
+    <mockito:spy beanName="yamStorageService"/>
+    <mockito:spy beanName="webmasterYtTemplate"/>
+    <mockito:spy beanName="dataCampService"/>
+    <mockito:spy beanName="mdsS3Client"/>
+    <mockito:spy beanName="clock"/>
+    <mockito:spy beanName="dataCampShopClient"/>
+    <mockito:spy beanName="dbSupplierCategoryFeeDao"/>
+    <mockito:spy beanName="fulfillmentTariffDao"/>
+    <mockito:spy beanName="cpaDataPusher"/>
+    <mockito:spy beanName="sortingDailyTariffDao"/>
+    <mockito:spy beanName="sortingOrdersTariffDao"/>
+
+    <!--alias -->
+    <alias name="dataSource" alias="dataSourceBilling"/>
+    <alias name="dataSource" alias="readOnlyBillingDataSource"/>
+    <alias name="dataSource" alias="readOnlyDataSource"/>
+    <alias name="jdbcTemplate" alias="readOnlyJdbcTemplate"/>
+    <alias name="jdbcTemplate" alias="shopJdbcTemplate"/>
+    <alias name="namedParameterJdbcTemplate" alias="namedJdbcTemplate"/>
+
+    <!--Executorы, которые для стабильности тестов должны выполняться в том же потоке-->
+    <bean id="syncExecutor"
+          name="asyncCheckouterServiceExecutor,
+          supplierFeedTaskExecutor,
+          promoObsoleteAssortmentClearingExecutor,
+          refreshExecutor"
+          class="ru.yandex.misc.thread.executor.SyncExecutor"/>
+
+    <bean id="dbEnvironmentService" class="ru.yandex.market.core.environment.DBEnvironmentService">
+        <constructor-arg name="jdbcTemplate" ref="jdbcTemplate"/>
+        <constructor-arg name="transactionTemplate" ref="transactionTemplate"/>
+        <constructor-arg name="lockService" ref="lockService"/>
+    </bean>
+
+    <bean name="environmentService" class="ru.yandex.market.mbi.environment.TestEnvironmentService">
+        <constructor-arg>
+            <list>
+                <ref bean="dbEnvironmentService"/>
+                <bean class="ru.yandex.market.mbi.environment.ApplicationContextEnvironmentService"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <!--используем почти честный кеш-->
+    <bean class="ru.yandex.market.core.config.MemCachedTestConfig"/>
+
+    <!--выключаем yt-->
+    <bean class="ru.yandex.market.core.config.YtTestConfig"/>
+
+    <!-- QueryProfiler -->
+    <mockito:mock id="jdbcTemplateProfilerBeanPostProcessor"
+                  class="ru.yandex.market.mbi.profiler.ProfilerBeanPostProcessor"/>
+    <mockito:mock id="memCacheProfilerBeanPostProcessor"
+                  class="ru.yandex.market.mbi.profiler.ProfilerBeanPostProcessor"/>
+    <mockito:mock id="hitRatioProfilerBeanPostProcessor"
+                  class="ru.yandex.market.mbi.profiler.ProfilerBeanPostProcessor"/>
+    <mockito:mock id="paramsTemplateHitRatioProfilerBeanPostProcessor"
+                  class="ru.yandex.market.mbi.profiler.ProfilerBeanPostProcessor"/>
+
+    <mockito:mock id="checkouterClient" class="ru.yandex.market.checkout.checkouter.client.CheckouterClient"/>
+    <mockito:mock id="checkouterShopApi" class="ru.yandex.market.checkout.checkouter.client.CheckouterShopApi"/>
+
+    <mockito:mock id="partnerHeater" class="ru.yandex.common.cache.memcached.MemCachedServiceHeater"/>
+
+    <bean id="clock" class="ru.yandex.common.util.date.TestableClock"/>
+
+    <mockito:mock id="balanceXmlRPCServiceFactory"
+                  class="ru.yandex.market.common.balance.xmlrpc.Balance2XmlRPCServiceFactory"/>
+    <mockito:mock id="taskScheduler" class="org.springframework.scheduling.TaskScheduler"/>
+    <mockito:mock id="zooClient" class="ru.yandex.market.common.zk.ZooClient"/>
+    <mockito:mock id="passportService" class="ru.yandex.market.core.passport.MemCachedBlackboxPassportService"/>
+    <mockito:mock id="marketReportService" class="ru.yandex.market.common.report.DefaultAsyncMarketReportService"/>
+    <mockito:mock id="clickReportService" class="ru.yandex.market.core.clickreport.impl.DefaultClickReportService"/>
+
+    <mockito:mock id="deliveryCalculatorIndexerClient"
+                  class="ru.yandex.market.deliverycalculator.indexerclient.HttpDeliveryCalculatorIndexerClient"/>
+
+    <mockito:mock id="commonMarketSearchClient" class="ru.yandex.market.common.util.AsyncRetryHttpClient"/>
+
+    <mockito:mock id="pushApiHttpRequestFactory"
+                  class="ru.yandex.market.checkout.pushapi.client.http.PushApiHttpComponentsClientHttpRequestFactory"/>
+
+    <mockito:mock id="pushApiClient" class="ru.yandex.market.checkout.pushapi.client.PushApi"/>
+
+    <mockito:mock id="checkouterHttpRequestFactory"
+                  class="ru.yandex.market.checkout.checkouter.client.SecuredHttpComponentsClientHttpRequestFactory"/>
+
+    <mockito:mock id="biddingClientFactory" class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean"/>
+
+    <mockito:mock id="reportingService" class="ru.yandex.market.core.graphite.SimpleReportingService"/>
+
+    <mockito:mock id="batchAuthoritiesLoader" class="ru.yandex.market.security.core.HttpBatchAuthoritiesLoader"/>
+    <mockito:mock id="operationNamesLoader" class="ru.yandex.market.security.core.HttpAllOperationNamesLoader"/>
+    <mockito:mock id="httpStaticDomainAuthoritiesLoader"
+                  class="ru.yandex.market.security.core.HttpStaticDomainAuthoritiesLoader"/>
+    <mockito:mock id="feedFileStorage" class="ru.yandex.market.core.feed.mds.FeedFileStorage"/>
+    <mockito:mock id="marketSearchService" class="ru.yandex.market.mbi.report.DefaultMarketSearchService"/>
+    <mockito:mock id="blueMarketReportService" class="ru.yandex.market.common.report.AsyncMarketReportService"/>
+    <mockito:mock id="ru.yandex.market.core.report.MarketSearchCoreConfig#1"
+                  class="ru.yandex.market.core.report.MarketSearchCoreConfig"/>
+    <mockito:mock id="biddingApi" class="ru.yandex.market.bidding.BiddingApi"/>
+    <mockito:mock id="auctionService" class="ru.yandex.market.core.auction.bidding.BiddingRemoteAuctionService"/>
+    <mockito:mock id="patientMboMappingsService" class="ru.yandex.market.mboc.http.MboMappingsService"/>
+    <mockito:mock id="mboDeliveryParamsClient" class="ru.yandex.market.core.offer.warehouse.MboDeliveryParamsClient"/>
+    <mockito:mock id="fulfillmentWorkflowClientApi" class="ru.yandex.market.ff.client.FulfillmentWorkflowClientApi"/>
+    <mockito:mock id="marketProtoPartnerContentService" class="ru.yandex.market.ir.http.PartnerContentService"/>
+    <mockito:mock id="marketProtoSupplierDocumentService" class="ru.yandex.market.mdm.http.SupplierDocumentService"/>
+    <mockito:mock id="balanceRepeatMap" class="java.util.HashMap"/>
+    <mockito:mock id="qParserLogBrokerService" class="ru.yandex.market.logbroker.LogbrokerServiceImpl"/>
+    <mockito:mock id="samovarLogbrokerService" class="ru.yandex.market.logbroker.LogbrokerServiceImpl"/>
+    <mockito:mock id="tvm2PartnerMarketDataCamp" class="ru.yandex.inside.passport.tvm2.Tvm2"/>
+    <mockito:mock id="mbiTvm" class="ru.yandex.inside.passport.tvm2.Tvm2"/>
+    <mockito:mock id="nesuClient" class="ru.yandex.market.logistics.nesu.client.NesuClient"/>
+    <mockito:mock id="lomClient" class="ru.yandex.market.logistics.lom.client.LomClient"/>
+    <mockito:mock id="hahnYt" class="ru.yandex.inside.yt.kosher.Yt"/>
+    <mockito:mock id="ytHttpFactory" class="ru.yandex.market.core.yt.YtHttpFactory"/>
+    <mockito:mock id="agencyRewardCurrentInstant" class="java.util.function.Supplier"/>
+    <!--    <mockito:mock id="mockedCurrencyConverterService" class="ru.yandex.market.core.currency.CurrencyConverterService"/>-->
+
+    <mockito:mock id="logbrokerCluster" class="ru.yandex.market.logbroker.model.LogbrokerCluster"/>
+    <mockito:mock id="lbkxCluster" class="ru.yandex.market.logbroker.model.LogbrokerCluster"/>
+    <mockito:mock id="memCachedApiLimitsAgentService"
+                  class="ru.yandex.market.api.resource.MemCachedApiLimitsAgentService"/>
+    <mockito:mock id="partnerBotRestClient"
+                  class="ru.yandex.market.notification.telegram.bot.client.PartnerBotRestClient"/>
+    <mockito:mock id="draftOffersMetadataService"
+                  class="ru.yandex.market.partner.mvc.controller.offer.draft.DraftOffersMetadataService"/>
+
+    <bean class="ru.yandex.market.core.test.context.EarlyDelegatingSpy">
+        <constructor-arg>
+            <set>
+                <value>campaignService</value>
+                <value>deliveryTariffService</value>
+                <value>billingService</value>
+                <value>campaignSpendingService</value>
+                <value>notificationService</value>
+            </set>
+        </constructor-arg>
+    </bean>
+
+    <bean name="supplierXlsHelper" class="ru.yandex.market.core.feed.supplier.SupplierXlsHelper">
+        <constructor-arg name="template">
+            <bean class="org.springframework.core.io.ClassPathResource">
+                <constructor-arg name="path" value="supplier/feed/xls_template.xlsm"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg name="fileNameSuffix" value=".xlsm"/>
+    </bean>
+
+    <bean class="springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration"/>
+
+    <bean id="dataCampShopClient" class="ru.yandex.market.core.datacamp.DataCampClientStub"/>
+
+    <mockito:mock id="lsmClient" class="ru.yandex.market.logistics.management.client.LMSClient"/>
+    <mockito:mock id="wwClient" class="ru.yandex.market.logistics.werewolf.client.WwClient"/>
+    <mockito:mock id="ff4ShopsClient" class="ru.yandex.market.core.stocks.FF4ShopsClient"/>
+    <mockito:mock id="aboPublicRestClient" class="ru.yandex.market.abo.api.client.AboPublicRestClient"/>
+    <mockito:mock id="logProcessorClient" class="ru.yandex.market.mbi.logprocessor.client.MbiLogProcessorClient"/>
+
+    <mockito:mock id="ticketParserTvmClient" class="ru.yandex.passport.tvmauth.TvmClient"/>
+
+    <bean id="partnerService" class="ru.yandex.market.core.partner.PartnerService">
+        <constructor-arg ref="partnerDao"/>
+        <constructor-arg ref="paramService"/>
+        <constructor-arg ref="historyService"/>
+        <constructor-arg>
+            <bean class="org.mockito.Mockito" factory-method="mock">
+                <constructor-arg value="com.google.common.cache.Cache"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="virtualShopChecker" class="ru.yandex.market.partner.security.checker.VirtualShopChecker">
+        <constructor-arg ref="paramService"/>
+        <constructor-arg value="false"/>
+    </bean>
+
+    <mockito:mock id="amazonS3" class="com.amazonaws.services.s3.AmazonS3"/>
+    <mockito:mock id="resourceLocationFactory" class="ru.yandex.market.common.mds.s3.client.service.factory.ResourceLocationFactory"/>
+    <mockito:mock id="promoOfferLogbrokerService" class="ru.yandex.market.logbroker.LogbrokerServiceImpl"/>
+    <mockito:mock id="faviconClient" class="ru.yandex.market.core.favicon.client.FaviconClient"/>
+
+    <bean id="javaSecMigrationService" class="ru.yandex.market.security.migration.JavaSecMigrationService">
+        <constructor-arg index="0" ref="dataSource"/>
+        <constructor-arg index="1" ref="javaSecMigrationDao"/>
+        <constructor-arg index="2" ref="transactionTemplate"/>
+    </bean>
+    <bean id="javaSecMigrationDao" class="ru.yandex.market.security.migration.JavaSecMigrationDao">
+        <constructor-arg ref="jdbcTemplate"/>
+    </bean>
+
+    <mockito:mock id="saasService" class="ru.yandex.market.mbi.datacamp.saas.SaasService"/>
+    <mockito:mock id="bpmnClient" class="ru.yandex.market.mbi.bpmn.client.MbiBpmnClient"/>
+    <mockito:mock id="promocodePromoTemplate" class="org.springframework.core.io.Resource"/>
+    <mockito:mock id="cashbackPromoTemplate" class="org.springframework.core.io.Resource"/>
+    <mockito:mock id="loyaltyRestClientImpl" class="ru.yandex.market.core.supplier.promo.service.loyalty.LoyaltyRestClientImpl"/>
+    <mockito:spy beanName="urlCapacityLimiter"/>
+
+    <mockito:mock id="disposalTariffService" class="ru.yandex.market.core.fulfillment.billing.disposal.DisposalTariffService" />
+    <mockito:mock id="xdocSupplyTariffService" class="ru.yandex.market.core.billing.fulfillment.xdoc.tariff.XdocSupplyTariffService" />
+    <mockito:mock id="storageMultiplierService" class="ru.yandex.market.core.billing.fulfillment.storage.StorageMultiplierService" />
+
+    <mockito:mock id="communicationProxyClient" class="ru.yandex.market.communication.proxy.client.CommunicationProxyClient"/>
+    <mockito:mock id="partnerStatusService" class="ru.yandex.market.core.program.partner.status.PartnerStatusService"/>
+    <mockito:mock id="partnerNotificationClient" class="ru.market.partner.notification.client.PartnerNotificationClient"/>
+    <mockito:mock id="deliveryRegionBlacklistYtDao" class="ru.yandex.market.core.delivery.region_blacklist.dao.DeliveryRegionBlacklistYtDao"/>
+</beans>

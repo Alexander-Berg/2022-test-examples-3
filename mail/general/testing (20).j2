@@ -1,0 +1,21 @@
+{% extends "base.yml" %}
+{% from "secrets/testing.j2" import secrets %}
+
+{% block infra_environment %}2002{% endblock %}
+{% block environment %}testing{% endblock %}
+{% block network_macro %}_MAILTESTNETS_{% endblock %}
+
+{% set deploy_units = {
+    "main": {
+      "version": "20220620-1049.r9607506.remove_qloud",
+      "max_unavailable": 1,
+      "dc": {
+        "sas": 1,
+        "vla": 1,
+        "myt": 1,
+        "iva": 1,
+      }
+    }
+
+  }
+%}

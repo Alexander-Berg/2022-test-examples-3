@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="logback/appender/freeze-duration-tskv-appender.xml"/>
+    <include resource="logback/appender/freeze-duration-reason-type-tskv-appender.xml"/>
+    <include resource="logback/appender/freeze-amount-tskv-appender.xml"/>
+    <include resource="logback/appender/stock-type-amount-tskv-appender.xml"/>
+    <include resource="logback/appender/stock-event-appender.xml"/>
+    <include resource="logback/appender/sku-amount-tskv-appender.xml"/>
+    <include resource="logback/appender/trace-appender.xml"/>
+    <include resource="logback/appender/connection-pool-appender.xml"/>
+    <include resource="logback/appender/jetty_pool_file.xml"/>
+    <include resource="logback/appender/queued-unfreeze-jobs-tskv-appender.xml"/>
+    <include resource="logback/appender/rty-appender.xml"/>
+    <include resource="logback/appender/sentry-appender.xml"/>
+
+    <appender name="SIMPLE_FILE_TEST" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${LOG_FILE}-simple.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE}-%d{yyyy-MM-dd-HH}-simple.log.gz</fileNamePattern>
+            <maxHistory>24</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} request_id %X{requestId:-NA} [%thread] %-5level %logger{35} - %replace(%msg){'[\r\n]+',' '} %ex{50}%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="requestTrace" level="TRACE" additivity="false">
+        <appender-ref ref="TRACE"/>
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="SIMPLE_FILE_TEST"/>
+        <appender-ref ref="SENTRY"/>
+    </root>
+    <logger name="connectionPool" level="INFO" additivity="false">
+        <appender-ref ref="CONNECTION_POOL"/>
+    </logger>
+    <logger name="freezeDurationTskv" level="INFO" additivity="false">
+        <appender-ref ref="FREEZE_DURATION_TSKV"/>
+    </logger>
+    <logger name="stockTypeAmountTskv" level="INFO" additivity="false">
+        <appender-ref ref="STOCK_TYPE_AMOUNT_TSKV"/>
+    </logger>
+    <logger name="skuAmountTskv" level="INFO" additivity="false">
+        <appender-ref ref="SKU_AMOUNT_TSKV"/>
+    </logger>
+    <logger name="stockEvents" level="INFO" additivity="false">
+        <appender-ref ref="STOCK_EVENTS"/>
+    </logger>
+    <logger name="JettyPoolDebug" level="DEBUG" additivity="false">
+        <appender-ref ref="JETTY_POOL_FILE"/>
+    </logger>
+    <logger name="queuedUnfreezeJobsTskv" level="INFO" additivity="false">
+        <appender-ref ref="QUEUED_UNFREEZE_JOBS_TSKV"/>
+    </logger>
+    <logger name="freezeAmountTskv" level="INFO" additivity="false">
+        <appender-ref ref="FREEZE_AMOUNT_TSKV"/>
+    </logger>
+    <logger name="freezeDurationWithReasonTypeTskv" level="INFO" additivity="false">
+        <appender-ref ref="FREEZE_DURATION_REASON_TYPE_TSKV"/>
+    </logger>
+    <logger name="rtyEvents" level="TRACE" additivity="false">
+        <appender-ref ref="RTY_EVENTS"/>
+    </logger>
+</configuration>

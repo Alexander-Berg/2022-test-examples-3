@@ -1,0 +1,41 @@
+context:
+  default:
+    service_name: market_thanks
+    priority: 101
+    servername_regexp: market\\.(fslb[\\w\\d]*\\.)?yandex\\.(ru|ua|kz|by)(\\.)?
+    vs: market
+    cert: market
+    antirobot: true
+    antirobot_service_name: market
+    starttime_cookie: true
+    balancing_method: active
+    health_check: '"GET /ping HTTP/1.1\r\nHost: heartbeat.market.yandex.ru\r\n\r\n"'
+    paths:
+    - /thanks.*
+
+  testing:
+    cert: fslb-testing
+
+servers:
+  default:
+    main:
+    - name: N%production_market_static_pages_msk@local
+      timeout: 35s
+      weight: 100
+      plain_http_backend: true
+    - name: N%production_market_static_pages_sas@local
+      timeout: 35s
+      weight: 100
+      plain_http_backend: true
+    - name: N%production_market_static_pages_msk
+      timeout: 35s
+      plain_http_backend: true
+    - name: N%production_market_static_pages_sas
+      timeout: 35s
+      plain_http_backend: true
+
+  testing:
+    main:
+    - name: N%testing_market_static_pages_sas
+      timeout: 35s
+      plain_http_backend: true

@@ -1,0 +1,36 @@
+{
+  "logHosts": "*",
+  "logPath": "**/matcher2-reload-report.log",
+  "parser": {
+    "dateFormat": "yyyy-MM-dd'T'HH:mm:ssZ",
+    "separator": "\t",
+    "fields": [
+      "date",
+      "reload_start",
+      "reload_finish",
+      "session_id",
+      "env"
+    ],
+    "columns": {
+      "reload_start": {
+        "type": "Int64"
+      },
+      "reload_finish": {
+        "type": "Int64"
+      },
+      "session_id": {
+        "type": "String"
+      },
+      "env": {
+        "type": "String"
+      },
+      "host": {
+        "type": "String"
+      }
+    }
+  },
+  "clickhouseTable": "matcher_reload_report_testing",
+  "sources": [
+    "logbroker://market-health-testing--other"
+  ]
+}

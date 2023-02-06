@@ -1,0 +1,74 @@
+BUILD_CRYPTA_API_CLIENT:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/api/client
+    check_task:
+        name: YA_MAKE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                targets: crypta/api/client
+                arts: crypta/api/client/crypta
+                result_rt: CRYPTA_API_CLIENT
+                result_single_file: true
+        output_resources:
+            CRYPTA_API_CLIENT: 30
+
+BUILD_CRYPTA_API_CLIENT_BOTTLE:
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        observed_paths:
+          - ^arcadia/crypta/api/client
+    check_task:
+        name: BUILD_ARCADIA_PROJECT_FOR_ALL
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            ctx:
+                kill_timeout: 6300
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                backup_to_mds: false
+                project: crypta/api/client/crypta
+                platforms_list:
+                  - linux
+                  - darwin
+                  - win32

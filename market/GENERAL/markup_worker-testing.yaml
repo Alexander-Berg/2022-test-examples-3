@@ -1,0 +1,337 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarkup_worker-testing
+
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=markup_worker-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 101%
+      nodata_mode: skip
+    children:
+    - NANNY%testing_market_markup_worker_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications:
+    - template_kwargs:
+        login: instrumenty_gvd_dev
+        method: telegram
+        status:
+        - CRIT
+        - WARN
+        - from: WARN
+          to: OK
+        - from: CRIT
+          to: OK
+      template_name: on_status_change
+    service: disk_free_space
+    tags:
+    - market_testing
+    - market_rtc
+    - marketmarkupworker
+    - testing
+    - market
+    - _market_
+
+  # Check fresh-core-dumps
+  - aggregator_kwargs:
+      limits:
+        - crit: 0%
+          day_end: 7
+          day_start: 1
+          time_end: 20
+          time_start: 12
+          warn: '0'
+        - crit: 101%
+          day_end: 7
+          day_start: 1
+          time_end: 11
+          time_start: 21
+          warn: 101%
+      nodata_mode: skip
+    children:
+      - NANNY%testing_market_markup_worker_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications:
+      - template_kwargs:
+          login: instrumenty_gvd_dev
+          method: telegram
+          status:
+            - CRIT
+            - WARN
+            - from: WARN
+              to: OK
+            - from: CRIT
+              to: OK
+        template_name: on_status_change
+    service: fresh-core-dumps
+    tags:
+      - market_testing
+      - market_rtc
+      - marketmarkupworker
+      - testing
+      - market
+      - _market_
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=markup_worker-testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 101%
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_markup_worker_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications: []
+    service: logrotate
+    tags:
+    - market_testing
+    - market_rtc
+    - marketmarkupworker
+    - testing
+    - market
+    - _market_
+
+  # Check monitoring_dev
+  # https://juggler.yandex-team.ru/check_details/?host=markup_worker-testing&service=monitoring_dev&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 101%
+      nodata_mode: force_crit
+    children:
+    - markup_worker-testing:monitoring_dev_warn
+    - markup_worker-testing:monitoring_dev_crit
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications: []
+    service: monitoring_dev
+    tags:
+    - market_testing
+    - market_rtc
+    - marketmarkupworker
+    - testing
+    - market
+    - _market_
+    - monitoring_dev
+
+  # Check monitoring_dev_crit
+  # https://juggler.yandex-team.ru/check_details/?host=markup_worker-testing&service=monitoring_dev_crit&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /monitoring?resp=dev
+      regexp: ^(0|1);
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 101%
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_markup_worker_vla:monitoring_dev_crit:all
+    notifications: []
+    service: monitoring_dev_crit
+    tags:
+    - market_testing
+    - market_rtc
+    - marketmarkupworker
+    - testing
+    - market
+    - _market_
+
+  # Check monitoring_dev_warn
+  # https://juggler.yandex-team.ru/check_details/?host=markup_worker-testing&service=monitoring_dev_warn&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      - 500
+      path: /monitoring?resp=dev
+      regexp: ^(0|2);
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 146%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 146%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 101%
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_markup_worker_vla:monitoring_dev_warn:all
+    notifications: []
+    service: monitoring_dev_warn
+    tags:
+    - market_testing
+    - market_rtc
+    - marketmarkupworker
+    - testing
+    - market
+    - _market_
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=markup_worker-testing&service=ping&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 101%
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_markup_worker_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications: []
+    service: ping
+    tags:
+    - market_testing
+    - market_rtc
+    - marketmarkupworker
+    - testing
+    - market
+    - _market_
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=markup_worker-testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 101%
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_markup_worker_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications: []
+    service: push-client-status
+    tags:
+    - market_testing
+    - market_rtc
+    - marketmarkupworker
+    - testing
+    - market
+    - _market_
+
+  # Check not-finished-main-tasks
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children: []
+    notifications:
+      - template_kwargs:
+          login: instrumenty_gvd_dev
+          method: telegram
+          status:
+            - from: OK
+              to: CRIT
+          time_end: 20:00
+          time_start: 10:00
+          day_end: 5
+          day_start: 1
+        template_name: on_status_change
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    refresh_time: 60
+    service: not-finished-main-tasks
+    tags:
+      - market_testing
+      - market_rtc
+      - marketmarkupworker
+      - testing
+      - market
+      - _market_
+
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    check_options: {}
+    host: markup_worker-testing
+    namespace: market.common
+    refresh_time: 60
+    ttl: 900

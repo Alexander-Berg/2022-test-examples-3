@@ -1,0 +1,104 @@
+cgi:
+  q-type: type
+  q-mode: mode
+  q-oid: business_oid
+  q-uri: uri
+  q-ids: relev_result_ids
+  tag_user: origin
+tvm-service:
+  tag_service: 2001886
+export:
+  - tag_user
+  - tag_service
+quota: main
+router:
+  - map: tag_service
+    data:
+      - key: 2014710
+        quota: market-offline-shops-all
+  - not-empty: q-oid
+    router:
+      - map: tag_service
+        data:
+          - key: 2001694
+            quota: front-maps-oid
+          - key: 2010070
+            quota: mobile-maps-oid
+          - key: 2011018
+            quota: front-maps-service-oid
+  - not-empty: q-uri
+    router:
+      - map: tag_service
+        data:
+          - key: 2001694
+            quota: front-maps-uri
+          - key: 2010070
+            quota: mobile-maps-uri
+          - key: 2011018
+            quota: front-maps-service-uri
+  - not-empty: q-ids
+    router:
+      - map: tag_service
+        data:
+          - key: 2001694
+            quota: front-maps-result-ids
+          - key: 2001694
+            quota: mobile-maps-result-ids
+          - key: 2011018
+            quota: front-maps-service-result-ids
+  - regexp: q-type
+    data:
+      - key: (.*biz.*geo.*)|(.*geo.*biz.*)
+        router:
+          - map: tag_service
+            data:
+              - key: 2001694
+                quota: front-maps-geobiz
+              - key: 2010070
+                quota: mobile-maps-geobiz
+              - key: 2011018
+                quota: front-maps-service-geobiz
+      - key: .*biz.*
+        router:
+          - map: q-mode
+            data:
+              - key: reverse
+                router:
+                  - map: tag_service
+                    data:
+                      - key: 2001694
+                        quota: front-maps-biz-reverse
+                      - key: 2001694
+                        quota: mobile-maps-biz-reverse
+                      - key: 2011018
+                        quota: front-maps-service-biz-reverse
+                  - map: tag_service
+                    data:
+                      - key: 2001694
+                        quota: front-maps-biz
+                      - key: 2010070
+                        quota: mobile-maps-biz
+                      - key: 2011018
+                        quota: front-maps-service-biz
+      - key: .*geo.*
+        router:
+          - map: q-mode
+            data:
+              - key: reverse
+                router:
+                  - map: tag_service
+                    data:
+                      - key: 2001694
+                        quota: front-maps-geo-reverse
+                      - key: 2010070
+                        quota: mobile-maps-geo-reverse
+                      - key: 2011018
+                        quota: front-maps-service-geo-reverse
+          - map: tag_service
+            data:
+              - key: 2001694
+                quota: front-maps-geo
+              - key: 2010070
+                quota: mobile-maps-geo
+              - key: 2011018
+                quota: front-maps-service-geo

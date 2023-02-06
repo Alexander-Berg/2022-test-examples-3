@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <business_process_state
+            id="1001"
+            status="SYNC_PROCESS_SUCCEEDED"
+            save_to_yt_only="true"
+            comment="Some orders were not updated. Errors by types: {ORDER_NOT_FOUND=[(4,1004), (5,1005), (7,1007), (8,null), (9,null), (10,null), (null,1006)], MULTIPLE_SHIPMENT_DATES_FOR_SAME_ORDER=[(3,1003)]}"
+            queue_type="MULTIPLE_CHANGE_ORDER_SHIPMENT_DATES_VIA_FILE"
+            payload='{
+              "requestId": "1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1",
+              "mdsFileId": 1,
+              "author": {
+                "abcServiceId": 1010,
+                "yandexUid": 10
+              },
+              "sequenceId": 1001
+            }'
+    />
+
+    <business_process_state
+            id="1"
+            status="ENQUEUED"
+            comment="[null]"
+            queue_type="CHANGE_ORDER_SHIPMENT_DATE"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1/1","orderId":1,"shipmentDate":"2020-11-11","author":{"abcServiceId":1010,"yandexUid":10},"sequenceId":1}'
+            parent_id="1001"
+    />
+
+    <business_process_state
+            id="2"
+            status="ENQUEUED"
+            comment="[null]"
+            queue_type="CHANGE_ORDER_SHIPMENT_DATE"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1/2","orderId":2,"shipmentDate":"2020-11-02","author":{"abcServiceId":1010,"yandexUid":10},"sequenceId":2}'
+            parent_id="1001"
+    />
+</dataset>

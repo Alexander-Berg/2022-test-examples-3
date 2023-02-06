@@ -1,0 +1,31 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket-yt-indexer-testing
+
+juggler:
+  checks:
+
+  # Check mi-testing-yt-sla
+  # https://juggler.yandex-team.ru/check_details/?host=market-yt-indexer-testing&service=mi-testing-yt-sla&last=1DAY&mode=edit
+  - children:
+    - market-yt-indexer:indexer-testing-arnold
+    - market-yt-indexer:indexer-testing-hahn
+    service: mi-testing-yt-sla
+    namespace: market.indexer
+    ttl: 900
+    tags:
+    - market_indexer_testing
+    - testing
+    - market
+    - _market_
+
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    check_options: {}
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market-yt-indexer-testing
+    notifications: []
+    refresh_time: 60

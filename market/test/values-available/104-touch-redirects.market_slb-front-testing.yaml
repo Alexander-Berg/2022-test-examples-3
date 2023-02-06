@@ -1,0 +1,15 @@
+context:
+  default:
+    service_name: touch_market_redirects
+    servername_regexp: (www\\.)?(mobile|pda)\\.market\\.([\\w\\d]+\\.)?yandex\\.(ru|ua|kz|by)|(www\\.)?m\\.market\\.market\\.yandex\\.(ru|ua|kz|by)|www\\.m\\.market\\.(fslb[\\w\\d]*\\.)?yandex\\.(ru|ua|kz|by)
+    vs: market
+    plain_http: true
+    special: true
+    service_type: redirect
+    cert: fslb-testing
+    rewrite_regexp: .*(ru|ua|kz|by)$
+    rewrite_url: https://m.market.fslb.yandex.%1
+
+  testing:
+    cert: fslb-testing
+

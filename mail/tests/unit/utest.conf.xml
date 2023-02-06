@@ -1,0 +1,40 @@
+<config>
+    <system>
+        <daemon>0</daemon>
+        <verbose>44</verbose>
+        <pid>./ypop.pid</pid>
+
+        <reactor io_threads="1" accept_threads="1" pool_count="1" name="global"></reactor>
+    </system>
+    <log>
+        <Core>
+            <DisableLogging>true</DisableLogging>
+        </Core>
+        <Sink:Console>
+            <Destination>Console</Destination>
+            <Filter>"not %CustomLog%"</Filter>
+            <Format>"[%TimeStamp%] %UniqID%: %_%"</Format>
+            <Asynchronous>false</Asynchronous>
+            <AutoFlush>true</AutoFlush>
+        </Sink:Console>
+    </log>
+    <modules>
+        <module>
+            <system>
+                <name>http_client</name>
+                <type>service_object</type>
+                <factory>yhttp::call_impl</factory>
+                <factory_suffix>ymod_http_client_call_impl</factory_suffix>
+            </system>
+            <configuration>
+                <reactor>global</reactor>
+                <net_settings>
+                    <user_agent>imap.yandex.ru</user_agent>
+                    <debug_logging>off</debug_logging>
+                    <profile_logging>off</profile_logging>
+                    <url>http://settings.mail.yandex.net:80</url>
+                </net_settings>
+            </configuration>
+        </module>
+    </modules>
+</config>

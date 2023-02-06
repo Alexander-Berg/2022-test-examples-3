@@ -1,0 +1,96 @@
+SELECT 
+  OA.BusinessId AS OA_BusinessId, 
+  OA.ShopId AS OA_ShopId, 
+  OA.OfferYabsId AS OA_OfferYabsId, 
+  first(OA.Url) AS OA_Url, 
+  first(OA.Name) AS OA_Name, 
+  first(OA.PictureUrl) AS OA_PictureUrl, 
+  first(OA.Price) AS OA_Price, 
+  first(OA.CurrencyName) AS OA_CurrencyName, 
+  sum(OS.Shows) AS shows, 
+  sum(OS.Clicks) AS clicks, 
+  IF(shows <> 0, ((clicks * 100000000) / shows), 0) AS ctr, 
+  sum(OS.CostCurTaxFree) AS cost, 
+  sum(OS.CostCur) AS costWithTax, 
+  sum(OS.SumPurchaseRevenue) AS revenue, 
+  IF((
+    cost <> 0
+    AND revenue <> 0
+  ), ((double(cost) * 100000000.0) / double(revenue)), null) AS crr, 
+  sum(OS.Buckets) AS carts, 
+  sum(OS.Purchases) AS purchases, 
+  IF(clicks <> 0, (cost / clicks), 0) AS avgClickCost, 
+  IF(purchases <> 0, (sum(OS.SumAvgProductPrice) / purchases), null) AS avgProductPrice, 
+  IF(purchases <> 0, (sum(OS.SumPurchaseRevenue) / purchases), null) AS avgPurchaseRevenue, 
+  sum(OS.ABConversions) AS autobudgetGoals, 
+  sum(OS.KeyConversions) AS meaningfulGoals
+FROM yt.OfferStat_bs AS OS
+  JOIN yt.OfferAttributes_bs AS OA
+    ON (OS.BusinessId, OS.ShopId, OS.OfferYabsId) = (OA.BusinessId, OA.ShopId, OA.OfferYabsId)
+WHERE (
+  OS.OrderID IN (13)
+  AND OS.GroupExportID IN (4)
+  AND OS.EventDate = 1635714000
+)
+GROUP BY 
+  OA_BusinessId, 
+  OA_ShopId, 
+  OA_OfferYabsId
+HAVING (
+  is_substr('a',lower(OA_Url))
+  AND NOT(is_substr('b',lower(OA_Url)))
+  AND is_substr('c',lower(OA_Name))
+  AND NOT(is_substr('d',lower(OA_Name)))
+  AND shows >= 1
+  AND shows <= 2
+  AND clicks >= 3
+  AND clicks <= 4
+  AND ctr >= 5000000
+  AND ctr <= 6000000
+  AND cost >= 7000000
+  AND cost <= 8000000
+  AND costWithTax >= 9000000
+  AND costWithTax <= 10000000
+  AND revenue >= 25000000
+  AND revenue <= 26000000
+  AND crr >= 27000000
+  AND crr <= 28000000
+  AND carts >= 11
+  AND carts <= 12
+  AND purchases >= 13
+  AND purchases <= 14
+  AND avgClickCost >= 15000000
+  AND avgClickCost <= 16000000
+  AND avgProductPrice >= 17000000
+  AND avgProductPrice <= 18000000
+  AND avgPurchaseRevenue >= 19000000
+  AND avgPurchaseRevenue <= 20000000
+  AND autobudgetGoals >= 21
+  AND autobudgetGoals <= 22
+  AND meaningfulGoals >= 23
+  AND meaningfulGoals <= 24
+  AND NOT((
+    is_null(OA_Name)
+    AND is_null(OA_Url)
+  ))
+)
+ORDER BY 
+  OA_BusinessId DESC, 
+  OA_ShopId DESC, 
+  OA_OfferYabsId DESC, 
+  OA_Name DESC, 
+  shows DESC, 
+  clicks DESC, 
+  ctr DESC, 
+  cost DESC, 
+  costWithTax DESC, 
+  revenue DESC, 
+  crr DESC, 
+  carts DESC, 
+  purchases DESC, 
+  avgClickCost DESC, 
+  avgProductPrice DESC, 
+  avgPurchaseRevenue DESC, 
+  autobudgetGoals DESC, 
+  meaningfulGoals DESC
+LIMIT 1000

@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<dataset>
+
+    <ORDERS ORDERKEY="ORD001" TYPE="19" />
+
+    <!--  Деталь заказа с отобранной 1 штучкой товара, после шорта QTYPICKED станет 0  -->
+    <ORDERDETAIL ORDERKEY="ORD001" ORDERLINENUMBER="01" STORERKEY="0001" SKU="ROV01" OPENQTY="1" QTYALLOCATED="0" QTYPICKED="1" EDITWHO="SETUP"/>
+
+    <!--  Другая деталь того же заказа, в другом контейнере - не будет шортиться  -->
+    <ORDERDETAIL ORDERKEY="ORD001" ORDERLINENUMBER="02" STORERKEY="0002" SKU="ROV02" OPENQTY="1" QTYALLOCATED="0" QTYPICKED="1" EDITWHO="SETUP"/>
+
+    <!--  В контейнере была 1 штучка ROV01, она отправится в ячейку LOST  -->
+    <SERIALINVENTORY SERIALNUMBER="100001" STORERKEY="0001" SKU="ROV01" LOT="123001" LOC="S01" ID="101" QTY="1" EDITWHO="SETUP"/>
+
+    <!--  ROV02 не отправится в LOST, так как не пришел в запросе  -->
+    <SERIALINVENTORY SERIALNUMBER="100002" STORERKEY="0002" SKU="ROV02" LOT="123002" LOC="S01" ID="101" QTY="1" EDITWHO="SETUP"/>
+
+    <!--  Отобранная 1 штучка - будет удалена -->
+    <PICKDETAIL
+        PICKDETAILKEY="PDK1"
+        PICKHEADERKEY=" "
+        ORDERKEY="ORD001"
+        ORDERLINENUMBER="01"
+        STATUS="5"
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123001"
+        ASSIGNMENTNUMBER="ASGN01"
+        LOC="S01"
+        ID="101"
+        QTY="1"
+        WAVEKEY="WAVE0001"
+    />
+
+    <!--  Отобранный другой товар того же заказа - удаляться не должен  -->
+    <PICKDETAIL
+        PICKDETAILKEY="PDK2"
+        PICKHEADERKEY=" "
+        ORDERKEY="ORD001"
+        ORDERLINENUMBER="02"
+        STATUS="5"
+        STORERKEY="0002"
+        SKU="ROV02"
+        LOT="123002"
+        ASSIGNMENTNUMBER="ASGN02"
+        LOC="S01"
+        ID="101"
+        QTY="1"
+        WAVEKEY="WAVE0001"
+    />
+
+    <!--  Задание на отбор 1 штучки шортанутого товара - будет обновлено  -->
+    <USERACTIVITY PICKDETAILKEY="PDK1" STATUS="9" TYPE="PK" EDITWHO="SETUP"/>
+
+    <!--  Задание на отбор не-шортированного товара - не будет изменено  -->
+    <USERACTIVITY PICKDETAILKEY="PDK2" STATUS="9" TYPE="PK" EDITWHO="SETUP"/>
+
+    <!--  Задание на отбор 1 штучки шортанутого товара - будет переведен в статус CANCELLED("X")  -->
+    <TASKDETAIL TASKDETAILKEY="TDK1" PICKDETAILKEY="PDK1" STATUS="9" EDITWHO="SETUP"/>
+
+    <!--  Задание на отбор не-шортированного товара - не будет изменено  -->
+    <TASKDETAIL TASKDETAILKEY="TDK2" PICKDETAILKEY="PDK2" STATUS="9" EDITWHO="SETUP"/>
+
+    <!--  Будет удалена, т.к. PDK1 удаляется  -->
+    <LOTXIDHEADER PICKDETAILKEY="PDK1" LOTXIDKEY="LIDK1" STORERKEY="0001" SKU="ROV01" LOT="123001" EDITWHO="SETUP"/>
+
+    <!--  Не будет удалена, т.к. PDK2 не удаляется  -->
+    <LOTXIDHEADER PICKDETAILKEY="PDK2" LOTXIDKEY="LIDK2" STORERKEY="0002" SKU="ROV02" LOT="123002" EDITWHO="SETUP"/>
+
+    <!--  Будет удалена, т.к. PDK1 удаляется  -->
+    <LOTXIDDETAIL PICKDETAILKEY="PDK1" LOTXIDKEY="LIDK1" LOTXIDLINENUMBER="01" LOT="123001" SOURCEKEY="ORD001" IOFLAG="O" OOTHER1="100001" EDITWHO="SETUP"/>
+
+    <LOTXIDDETAIL PICKDETAILKEY="PDK2" LOTXIDKEY="LIDK2" LOTXIDLINENUMBER="01" LOT="123002" SOURCEKEY="ORD001" IOFLAG="O" OOTHER1="100002" EDITWHO="SETUP"/>
+
+    <!--  Баллансы из S01 для ROV01 перетекут в LOST  -->
+    <LOTXLOCXID STORERKEY="0001" SKU="ROV01" LOT="123001" LOC="S01"  ID="101" QTY="1" QTYALLOCATED="0" QTYPICKED="1" STATUS="OK"   EDITWHO="SETUP"/>
+
+    <LOTXLOCXID STORERKEY="0002" SKU="ROV02" LOT="123002" LOC="S01"  ID="101" QTY="1" QTYALLOCATED="0" QTYPICKED="1" STATUS="OK"   EDITWHO="SETUP"/>
+
+    <LOTXLOCXID STORERKEY="0001" SKU="ROV01" LOT="123001" LOC="LOST" ID=""    QTY="0" QTYALLOCATED="0" QTYPICKED="0" STATUS="HOLD" EDITWHO="SETUP"/>
+
+    <!--  В ячейке S01 числится одна штука ROV01, она переместится в LOST  -->
+    <SKUXLOC STORERKEY="0001" SKU="ROV01" LOC="S01"  QTY="1" QTYALLOCATED="0" QTYPICKED="1" EDITWHO="SETUP"/>
+
+    <SKUXLOC STORERKEY="0002" SKU="ROV02" LOC="S01"  QTY="1" QTYALLOCATED="0" QTYPICKED="1" EDITWHO="SETUP"/>
+
+    <SKUXLOC STORERKEY="0001" SKU="ROV01" LOC="LOST" QTY="0" QTYALLOCATED="0" QTYPICKED="0" EDITWHO="SETUP"/>
+
+    <SORTATIONSTATIONDETAIL SORTATIONSTATIONKEY="S01" SERIALKEY="101" SORTLOCATION="101" DROPID="101"/>
+
+    <WAVE WAVEKEY="WAVE0001" WAVE_TYPE="BIG_WITHDRAWAL" />
+</dataset>

@@ -1,0 +1,72 @@
+mail_name		= Yandex
+
+mydomain		= yandex.ru
+
+mydestination		= ya.ru, narod.ru, yandex.ru, yandex.by, yandex.kz, yandex.ua, yandex.com, yandex.com.tr, yandex.az, yandex.co.il, yandex.com.am, yandex.com.ge, yandex.ee, yandex.fr, yandex.kg, yandex.lt, yandex.lv, yandex.md, yandex.tj, yandex.tm, yandex.uz, xn--d1acpjx3f.xn--p1ai, mxbacks.yandex.ru, mxbacks.mail.yandex.net, galatasaray.net, hash:/etc/postfix/domain_maps
+local_transport		= lmtp:127.0.0.1:1234
+
+append_at_myorigin	= no
+append_dot_mydomain	= no
+
+allow_min_user		= yes
+
+alias_maps		= hash:/etc/postfix/aliases
+transport_maps		= hash:/etc/postfix/transport_maps
+virtual_alias_maps	= hash:/etc/postfix/virtual_alias_maps
+local_recipient_maps	=
+
+header_checks		= regexp:/etc/postfix/header_checks_mxback, regexp:/etc/postfix/header_checks_yandex_internal
+
+bounce_template_file	= /etc/postfix/bounce.int.cf
+bounce_template_file_ru	= /etc/postfix/bounce.int.cf.ru
+bounce_xyh = bGFiZWw9U3lzdE1ldGthU086Ym91bmNl
+
+message_size_limit	= 67108864
+
+mynetworks              = 127.0.0.0/8 5.255.216.0/24 5.255.227.0/24 37.9.109.0/24 77.88.31.0/25 87.250.230.0/24 87.250.241.128/25 5.45.198.0/23 5.45.216.0/24 37.140.138.0/23 37.140.190.0/23 77.88.28.0/24 77.88.29.0/24 77.88.61.128/25 84.201.143.128/26 84.201.186.0/23 87.250.231.0/24 95.108.130.0/23 95.108.205.0/24 95.108.252.0/23 95.108.252.0/24 95.108.253.0/24 [2a02:6b8:0:202::]/64 [2a02:6b8:0:801::]/64 [2a02:6b8:0:c48::]/64 [2a02:6b8:0:f05::]/64 [2a02:6b8:0:1402::]/64 [2a02:6b8:0:1472::]/64 [2a02:6b8:0:1619::]/64 [2a02:6b8:0:1819::]/64 [2a02:6b8:0:1a2d::]/64 [2a02:6b8:0:2519::]/64 [2a02:6b8:b011:900::]/56 [2a02:6b8:b011:900::]/64 [2a02:6b8:0:f35::]/64 [2a02:6b8:0:1465::]/64 [2a02:6b8:0:1630::]/64 [2a02:6b8:0:1a72::]/64 [2a02:6b8:b030::]/64 [::1]/128 [2a02:6b8:c0e:370:0:640::]/96
+
+mynetworks_style	= subnet
+
+delay_warning_time	= 0h
+bounce_queue_lifetime	= 3d
+maximal_queue_lifetime	= 3d
+	
+hash_queue_depth	= 1
+hash_queue_names	= active, bounce, defer, deferred, flush, hold, incoming
+
+queue_run_delay		= 30s
+minimal_backoff_time	= 30s
+maximal_backoff_time	= 300s
+
+default_process_limit	= 1000
+qmgr_message_active_limit = 1500
+qmgr_message_recipient_limit = 1000000
+
+in_flow_delay		= 0s
+
+smtp_helo_timeout	= 75s
+smtp_mail_timeout	= 75s
+smtp_quit_timeout	= 75s
+smtp_rcpt_timeout	= 75s
+
+smtpd_hard_error_limit	= 1024
+smtpd_helo_required	= yes
+smtpd_delay_reject	= no
+smtpd_timeout		= 20
+
+smtpd_recipient_limit	= 51333
+
+transport_retry_time	= 1s
+
+always_add_missing_headers      = yes
+local_header_rewrite_clients    = static:all
+
+smtp_destination_concurrency_limit	= 600
+lmtp_destination_concurrency_limit	= 600
+default_destination_concurrency_limit	= 500
+
+initial_destination_concurrency		= 500
+
+relayhost		= [forwards.mail.yandex.net]
+
+smtpd_recipient_restrictions	= reject_non_fqdn_recipient, permit_mynetworks, reject_unauth_destination

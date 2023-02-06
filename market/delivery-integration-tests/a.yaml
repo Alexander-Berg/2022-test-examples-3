@@ -1,0 +1,34 @@
+service: delivery
+title: Logistics Autotests
+arcanum:
+  review:
+    required: true
+    auto_assign: true
+    disabling_policy: denied
+    groups:
+    - name: "reviewers"
+      roles:
+      - "delivery:@id=45, !delivery:duty"
+      - "delivery:@id=45"
+      - "delivery:developer, !delivery:duty"
+      - "delivery:developer"
+    override_policy: "override"
+    rules:
+    - reviewers:
+      - name: "reviewers"
+        ship: 1
+        assign: 2
+    auto_merge:
+      enabled: true
+      requirements:
+        - type: comment_issues_closed
+          disabling_policy: need_reason
+        - type: st_issue_linked
+          disabling_policy: need_reason
+        - type: build
+          disabling_policy: need_reason
+        - type: tests
+          disabling_policy: need_reason
+ci:
+  autocheck:
+    strong: true

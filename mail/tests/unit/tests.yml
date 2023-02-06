@@ -1,0 +1,36 @@
+config:
+    system:
+        daemon: 0
+        verbose: 44
+        dir: ./
+        libpath: [ ./lib/modules, ./lib64/modules ]
+        reactor:
+        -   { _io_threads: 1, _pool_count: 20, _name: global }
+    log:
+        global:
+            level: info
+            queue_size: 1048576
+            #sinks:
+                #-   type: stdout
+                #force_flush: true
+    modules:
+        module:
+        -   _name: http_client
+            system:
+                name: http_client
+                type: service_object
+                factory: yhttp::call_impl
+            configuration:
+                reactor: global
+                enable_logging: true
+                socket:
+                    resolve_order: ipv6_ipv4
+        -   _name: rate_controller
+            system:
+                name: rate_controller
+                factory: ymod_ratecontroller::rate_controller_module_impl
+            configuration:
+                reactor: global
+                default:
+                    max_concurrency: 25
+                    max_queue_size: 100000

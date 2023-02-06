@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-autowire="byName"
+       default-lazy-init="false">
+
+    <import resource="antifraud-yql-datasource-beans.xml"/>
+    <import resource="antifraud-yql-black-ips.xml"/>
+    <import resource="antifraud-yql-filter-beans.xml"/>
+    <import resource="antifraud-yql-service-beans.xml"/>
+
+    <bean class="com.codahale.metrics.MetricRegistry"/>
+    <bean id="healthCheckRegistry" class="com.codahale.metrics.health.HealthCheckRegistry"/>
+
+    <bean id="ytPathsConfig" class="ru.yandex.market.antifraud.yql.model.YtITestConfig"/>
+
+    <bean id="first100Filter" class="ru.yandex.market.antifraud.yql.validate.filter.YqlSqlFilter"
+          c:id="1000"
+          c:queryTemplateLocation="filter/filter_first_100.sql"/>
+
+    <bean id="first100Filter_2" class="ru.yandex.market.antifraud.yql.validate.filter.YqlSqlFilter"
+          c:id="1002"
+          c:queryTemplateLocation="filter/filter_first_100.sql"/>
+
+    <bean id="limitedShowsFilterSet" class="ru.yandex.market.antifraud.yql.validate.filter.YqlFilterSet"
+          c:name="limited_shows_set">
+        <constructor-arg index="1">
+            <list>
+                <ref bean="first100Filter"/>
+                <ref bean="first100Filter_2"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="limitedShowsValidator" class="ru.yandex.market.antifraud.yql.validate.YqlValidator"
+          c:filterSet-ref="limitedShowsFilterSet"
+          c:ytLogConfig-ref="showsLogConfig"/>
+
+    <bean id="firstFilterShowsFilterSet" class="ru.yandex.market.antifraud.yql.validate.filter.YqlFilterSet"
+          c:name="first_filter_shows_set">
+        <constructor-arg index="1">
+            <list>
+                <ref bean="first100Filter"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="firstFilterShowsValidator" class="ru.yandex.market.antifraud.yql.validate.YqlValidator"
+          c:filterSet-ref="firstFilterShowsFilterSet"
+          c:ytLogConfig-ref="showsLogConfig"/>
+
+    <bean id="yt" class="ru.yandex.market.antifraud.yql.yt.YtFactory" factory-method="yt" c:ytConfig-ref="ytPathsConfig"/>
+
+</beans>

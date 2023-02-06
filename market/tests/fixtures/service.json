@@ -1,0 +1,878 @@
+{
+  "runtime_attrs": {
+    "content": {
+      "instance_spec": {
+        "volume": [],
+        "hostProvidedDaemons": [
+          {
+            "type": "YASM_AGENT"
+          }
+        ],
+        "instancectl": {
+          "url": [
+            "rbtorrent:b0e4e02f7cf3b00a7b9a75cf6de28baaafe3b66e"
+          ],
+          "fetchableMeta": {
+            "type": "SANDBOX_RESOURCE",
+            "sandboxResource": {
+              "resourceType": "INSTANCECTL",
+              "resourceId": "387524878",
+              "taskId": "168258624",
+              "taskType": ""
+            }
+          },
+          "version": "1.81"
+        },
+        "notifyAction": {
+          "resourceRequest": {
+            "request": [],
+            "limit": []
+          },
+          "handlers": []
+        },
+        "type": "SANDBOX_LAYERS",
+        "appContainer": {
+          "instancectl": {
+            "url": [],
+            "fetchableMeta": {
+              "type": "SANDBOX_RESOURCE",
+              "sandboxResource": {
+                "resourceType": "",
+                "resourceId": "",
+                "taskId": "",
+                "taskType": ""
+              }
+            },
+            "version": ""
+          },
+          "notifyAction": {
+            "resourceRequest": {
+              "request": [],
+              "limit": []
+            },
+            "handlers": []
+          },
+          "dockerImage": {
+            "registry": "registry.yandex.net",
+            "name": ""
+          },
+          "workDir": "",
+          "auxDaemons": [],
+          "volumes": [],
+          "rootVolume": {
+            "quota": "0"
+          },
+          "initContainers": [],
+          "containers": []
+        },
+        "dockerImage": {
+          "registry": "registry.yandex.net",
+          "name": ""
+        },
+        "auxDaemons": [
+          {
+            "type": "JUGGLER_AGENT"
+          }
+        ],
+        "qemuKvm": {
+          "layersConfig": {
+            "url": [],
+            "fetchableMeta": {
+              "type": "SANDBOX_RESOURCE",
+              "sandboxResource": {
+                "resourceType": "",
+                "resourceId": "",
+                "taskId": "",
+                "taskType": ""
+              }
+            },
+            "version": ""
+          },
+          "image": {
+            "windows": {
+              "image": {
+                "url": [],
+                "fetchableMeta": {
+                  "type": "SANDBOX_RESOURCE",
+                  "sandboxResource": {
+                    "resourceType": "",
+                    "resourceId": "",
+                    "taskId": "",
+                    "taskType": ""
+                  }
+                }
+              }
+            },
+            "type": "LINUX",
+            "linux": {
+              "image": {
+                "url": [],
+                "fetchableMeta": {
+                  "type": "SANDBOX_RESOURCE",
+                  "sandboxResource": {
+                    "resourceType": "",
+                    "resourceId": "",
+                    "taskId": "",
+                    "taskType": ""
+                  }
+                }
+              },
+              "authorizedUsers": {
+                "userList": {
+                  "logins": [],
+                  "nannyGroupIds": [],
+                  "staffGroupIds": []
+                },
+                "type": "SERVICE_MANAGERS"
+              }
+            }
+          },
+          "instancectl": {
+            "url": [],
+            "fetchableMeta": {
+              "type": "SANDBOX_RESOURCE",
+              "sandboxResource": {
+                "resourceType": "",
+                "resourceId": "",
+                "taskId": "",
+                "taskType": ""
+              }
+            },
+            "version": ""
+          }
+        },
+        "layersConfig": {
+          "bind": [
+            {
+              "path": "/place/db/www/logs",
+              "mountPath": "/place/db/www/logs"
+            },
+            {
+              "path": "/place/db/bsconfig/webcache",
+              "mountPath": "/place/db/bsconfig/webcache"
+            },
+            {
+              "path": "/place/db/bsconfig/webstate",
+              "mountPath": "/place/db/bsconfig/webstate"
+            }
+          ],
+          "layer": [
+            {
+              "url": [
+                "rbtorrent:3a3500776f766fe93428b956fb9d0338e9cca010"
+              ],
+              "fetchableMeta": {
+                "type": "SANDBOX_RESOURCE",
+                "sandboxResource": {
+                  "resourceType": "PORTO_LAYER_SEARCH_UBUNTU_TRUSTY",
+                  "resourceId": "185561863",
+                  "taskId": "78522603",
+                  "taskType": "BUILD_PORTO_LAYER"
+                }
+              }
+            },
+            {
+              "url": [
+                "rbtorrent:a010f133adbcb596e51a8055ac873e5781bce9dc"
+              ],
+              "fetchableMeta": {
+                "type": "SANDBOX_RESOURCE",
+                "sandboxResource": {
+                  "resourceType": "PORTO_LAYER_MARKET_BASE_TRUSTY",
+                  "resourceId": "224331531",
+                  "taskId": "94142480",
+                  "taskType": "BUILD_PORTO_LAYER"
+                }
+              }
+            },
+            {
+              "url": [
+                "rbtorrent:855e5a0ef0b79503f55033fd4caa052fc5b49283"
+              ],
+              "fetchableMeta": {
+                "type": "SANDBOX_RESOURCE",
+                "sandboxResource": {
+                  "resourceType": "PORTO_LAYER_MARKET_JDK",
+                  "resourceId": "293616952",
+                  "taskId": "125032773",
+                  "taskType": "BUILD_PORTO_LAYER"
+                }
+              }
+            }
+          ]
+        },
+        "initContainers": [
+          {
+            "command": [
+              "/bin/sh",
+              "-c",
+              "tar -zxf market-common-config.tar.gz && bash bin/prepare.sh {BSCONFIG_INAME}"
+            ],
+            "name": "prepare",
+            "env": []
+          },
+          {
+            "command": [
+              "/bin/sh",
+              "-c",
+              "ln -sfn pdata pstate"
+            ],
+            "name": "prepare-logrotate",
+            "env": []
+          }
+        ],
+        "id": "",
+        "containers": [
+          {
+            "name": "nginx",
+            "restartPolicy": {
+              "maxPeriodSeconds": 60,
+              "periodBackoff": 2,
+              "type": "ALWAYS",
+              "minPeriodSeconds": 1,
+              "periodJitterSeconds": 20
+            },
+            "command": [
+              "bash",
+              "-c",
+              "mkdir -p data/{INSTANCECTL_CONTAINER}; mkdir -p /var/logs/yandex/{INSTANCECTL_CONTAINER} ; /usr/sbin/nginx -p {BSCONFIG_IDIR}/conf/nginx -c {BSCONFIG_IDIR}/conf/nginx/nginx.conf"
+            ],
+            "env": [],
+            "readinessProbe": {
+              "periodBackoff": 2,
+              "handlers": [
+                {
+                  "execAction": {
+                    "command": []
+                  },
+                  "type": "TCP_SOCKET",
+                  "httpGet": {
+                    "uriScheme": "HTTP",
+                    "path": "",
+                    "host": "",
+                    "httpHeaders": [],
+                    "port": ""
+                  },
+                  "tcpSocket": {
+                    "host": "",
+                    "port": "{BSCONFIG_IPORT}"
+                  }
+                }
+              ],
+              "initialDelaySeconds": 5,
+              "successThreshold": 0,
+              "maxPeriodSeconds": 60,
+              "minPeriodSeconds": 5,
+              "failureThreshold": 0
+            },
+            "lifecycle": {
+              "termBarrier": "IGNORE",
+              "terminationGracePeriodSeconds": 10,
+              "preStop": {
+                "execAction": {
+                  "command": []
+                },
+                "type": "NONE",
+                "httpGet": {
+                  "host": "",
+                  "path": "",
+                  "uriScheme": "",
+                  "httpHeaders": [],
+                  "port": ""
+                },
+                "tcpSocket": {
+                  "host": "",
+                  "port": ""
+                }
+              },
+              "stopGracePeriodSeconds": 0
+            }
+          },
+          {
+            "name": "rfsd",
+            "restartPolicy": {
+              "maxPeriodSeconds": 60,
+              "periodBackoff": 2,
+              "type": "ALWAYS",
+              "minPeriodSeconds": 1,
+              "periodJitterSeconds": 20
+            },
+            "command": [
+              "/usr/bin/rfsd",
+              "-p",
+              "{BSCONFIG_IPORT_PLUS_5}",
+              "-q",
+              "-f",
+              "-e",
+              "conf/rfs-exports.conf",
+              "-u",
+              "root"
+            ],
+            "env": [],
+            "readinessProbe": {
+              "periodBackoff": 2,
+              "handlers": [
+                {
+                  "execAction": {
+                    "command": []
+                  },
+                  "type": "TCP_SOCKET",
+                  "httpGet": {
+                    "uriScheme": "HTTP",
+                    "path": "",
+                    "host": "",
+                    "httpHeaders": [],
+                    "port": ""
+                  },
+                  "tcpSocket": {
+                    "host": "",
+                    "port": "{BSCONFIG_IPORT_PLUS_5}"
+                  }
+                }
+              ],
+              "initialDelaySeconds": 5,
+              "successThreshold": 0,
+              "maxPeriodSeconds": 60,
+              "minPeriodSeconds": 5,
+              "failureThreshold": 0
+            },
+            "lifecycle": {
+              "termBarrier": "IGNORE",
+              "terminationGracePeriodSeconds": 10,
+              "preStop": {
+                "execAction": {
+                  "command": []
+                },
+                "type": "NONE",
+                "httpGet": {
+                  "host": "",
+                  "path": "",
+                  "uriScheme": "",
+                  "httpHeaders": [],
+                  "port": ""
+                },
+                "tcpSocket": {
+                  "host": "",
+                  "port": ""
+                }
+              },
+              "stopGracePeriodSeconds": 0
+            }
+          },
+          {
+            "name": "logrotate",
+            "restartPolicy": {
+              "maxPeriodSeconds": 60,
+              "periodBackoff": 2,
+              "type": "ALWAYS",
+              "minPeriodSeconds": 1,
+              "periodJitterSeconds": 20
+            },
+            "command": [
+              "/bin/bash",
+              "bin/logrotate.sh",
+              "1800"
+            ],
+            "env": [],
+            "readinessProbe": {
+              "periodBackoff": 2,
+              "handlers": [
+                {
+                  "execAction": {
+                    "command": [
+                      "/bin/sh",
+                      "-c",
+                      "pgrep -f 'logrotate.sh' > /dev/null"
+                    ]
+                  },
+                  "type": "EXEC",
+                  "httpGet": {
+                    "uriScheme": "HTTP",
+                    "path": "",
+                    "host": "",
+                    "httpHeaders": [],
+                    "port": ""
+                  },
+                  "tcpSocket": {
+                    "host": "",
+                    "port": ""
+                  }
+                }
+              ],
+              "initialDelaySeconds": 5,
+              "successThreshold": 0,
+              "maxPeriodSeconds": 60,
+              "minPeriodSeconds": 5,
+              "failureThreshold": 0
+            },
+            "lifecycle": {
+              "termBarrier": "IGNORE",
+              "terminationGracePeriodSeconds": 10,
+              "preStop": {
+                "execAction": {
+                  "command": []
+                },
+                "type": "NONE",
+                "httpGet": {
+                  "host": "",
+                  "path": "",
+                  "uriScheme": "",
+                  "httpHeaders": [],
+                  "port": ""
+                },
+                "tcpSocket": {
+                  "host": "",
+                  "port": ""
+                }
+              },
+              "stopGracePeriodSeconds": 0
+            }
+          },
+          {
+            "name": "content-api-admin",
+            "restartPolicy": {
+              "maxPeriodSeconds": 60,
+              "periodBackoff": 2,
+              "type": "ALWAYS",
+              "minPeriodSeconds": 1,
+              "periodJitterSeconds": 20
+            },
+            "command": [
+              "bash",
+              "-c",
+              "mkdir -p /var/logs/yandex/{INSTANCECTL_CONTAINER} ; bin/{INSTANCECTL_CONTAINER}-start.sh --logdir=/var/logs/yandex/{INSTANCECTL_CONTAINER} --httpport={BSCONFIG_IPORT_PLUS_1} --debugport={BSCONFIG_IPORT_PLUS_2} --tmpdir={BSCONFIG_IDIR}/tmp --datadir={BSCONFIG_IDIR}/pdata --extdatadir={BSCONFIG_IDIR}/data-getter --environment={a_ctype}"
+            ],
+            "env": [],
+            "readinessProbe": {
+              "periodBackoff": 2,
+              "handlers": [],
+              "initialDelaySeconds": 5,
+              "successThreshold": 0,
+              "maxPeriodSeconds": 60,
+              "minPeriodSeconds": 5,
+              "failureThreshold": 0
+            },
+            "lifecycle": {
+              "termBarrier": "IGNORE",
+              "terminationGracePeriodSeconds": 10,
+              "preStop": {
+                "execAction": {
+                  "command": []
+                },
+                "type": "NONE",
+                "httpGet": {
+                  "host": "",
+                  "path": "",
+                  "uriScheme": "",
+                  "httpHeaders": [],
+                  "port": ""
+                },
+                "tcpSocket": {
+                  "host": "",
+                  "port": ""
+                }
+              },
+              "stopGracePeriodSeconds": 0
+            }
+          }
+        ]
+      },
+      "instances": {
+        "iss_settings": {
+          "instance_cls": "ru.yandex.iss.Instance",
+          "hooks_resource_limits": {
+            "iss_hook_validate": {
+              "io_policy": "normal",
+              "cpu_policy": "normal"
+            },
+            "iss_hook_notify": {
+              "io_policy": "normal",
+              "cpu_policy": "normal"
+            },
+            "iss_hook_reopenlogs": {
+              "io_policy": "normal",
+              "cpu_policy": "normal"
+            },
+            "iss_hook_install": {
+              "io_policy": "normal",
+              "cpu_policy": "normal"
+            },
+            "iss_hook_uninstall": {
+              "io_policy": "normal",
+              "cpu_policy": "normal"
+            },
+            "iss_hook_stop": {
+              "io_policy": "normal",
+              "cpu_policy": "normal"
+            },
+            "iss_hook_status": {
+              "io_policy": "normal",
+              "cpu_policy": "normal"
+            }
+          }
+        },
+        "instance_list": [],
+        "gencfg_groups": [],
+        "chosen_type": "EXTENDED_GENCFG_GROUPS",
+        "extended_gencfg_groups": {
+          "network_settings": {
+            "use_mtn": true
+          },
+          "tags": [],
+          "instance_properties_settings": {
+            "tags": "ALL_STATIC"
+          },
+          "containers_settings": {
+            "slot_porto_properties": "NONE"
+          },
+          "groups": [
+            {
+              "release": "tags/stable-103-r51",
+              "name": "VLA_MARKET_TEST_CONTENT_API_ADMIN",
+              "limits": {
+                "io_policy": "normal",
+                "cpu_policy": "normal",
+                "ulimit": "data: 68719476736 68719476736; memlock: 68719476736 68719476736"
+              },
+              "tags": []
+            }
+          ],
+          "sysctl_settings": {
+            "params": []
+          }
+        },
+        "yp_pod_ids": {
+          "orthogonal_tags": {
+            "tier": "none",
+            "metaprj": "unknown",
+            "itype": "unknown",
+            "ctype": "unknown",
+            "prj": "testing-market-mcrp-request-sas"
+          },
+          "pods": []
+        }
+      },
+      "resources": {
+        "services_balancer_config_files": [],
+        "url_files": [],
+        "sandbox_files": [
+          {
+            "task_type": "HTTP_UPLOAD",
+            "task_id": "157475118",
+            "resource_id": "364602710",
+            "is_dynamic": false,
+            "local_path": "application.tar",
+            "resource_type": "MARKET_MBO_SKUBD_APP"
+          },
+          {
+            "is_dynamic": false,
+            "resource_type": "STATBOX_PUSHCLIENT",
+            "local_path": "push-client",
+            "task_type": "BUILD_STATBOX_PUSHCLIENT",
+            "task_id": "146741790"
+          },
+          {
+            "is_dynamic": false,
+            "resource_type": "MARKET_DATASOURCES_TESTING",
+            "local_path": "datasources.tar.gz",
+            "task_type": "BUILD_MARKET_DATASOURCES",
+            "task_id": "127212087"
+          },
+          {
+            "task_type": "MARKET_YA_PACKAGE",
+            "task_id": "167927800",
+            "resource_id": "386805689",
+            "is_dynamic": false,
+            "local_path": "market-common-config.tar.gz",
+            "resource_type": "MARKET_COMMON_CONFIG"
+          },
+          {
+            "task_type": "BUILD_JUGGLER_CHECKS_BUNDLE",
+            "task_id": "171610934",
+            "resource_id": "394284668",
+            "extract_path": "{JUGGLER_CHECKS_PATH}/market-juggler-rtc-checks-bundle.tar.gz",
+            "is_dynamic": false,
+            "local_path": "market-juggler-rtc-checks-bundle.tar.gz",
+            "resource_type": "MARKET_JUGGLER_RTC_CHECKS_BUNDLE"
+          }
+        ],
+        "static_files": [
+          {
+            "is_dynamic": false,
+            "content": "{%- set environment = env.BSCONFIG_ITAGS.split(\"a_ctype_\")[1].split()[0] -%}\n{%- set location = env.BSCONFIG_ITAGS.split(\"a_dc_\")[1].split()[0] -%}\n{%- set nginx_log_prefix = \"content-api-admin\" -%}\n{%- set log_files = [\n                        \"nginx/\" + nginx_log_prefix + \"-access-tskv.log\",\n                    ]-%}\n{%- set nginx_includes = [\n                            \"include/logging\",\n                        ]-%}",
+            "local_path": "variables.tmpl.static"
+          }
+        ],
+        "template_set_files": [],
+        "l7_fast_balancer_config_files": []
+      },
+      "engines": {
+        "engine_type": "ISS_VLA"
+      }
+    },
+    "parent_id": "c7f280f2559c0d1d58b1395e13ef4c9d4bf652f3",
+    "_id": "f56ec17ab4949e07f2c85ea8f1b033f952172481",
+    "change_info": {
+      "comment": "BUILD_JUGGLER_CHECKS_BUNDLE 171610934 (testing)",
+      "ctime": 1510120655757,
+      "author": "nanny-robot"
+    },
+    "meta_info": {
+      "startrek_tickets": [],
+      "ticket_info": {
+        "release_id": "SANDBOX_RELEASE-171610934-TESTING",
+        "ticket_id": "MARKET-2993414"
+      },
+      "is_disposable": false,
+      "scheduling_config": {
+        "sched_activate_recipe": "",
+        "scheduling_priority": "NONE",
+        "sched_prepare_recipe": ""
+      },
+      "conf_id": "testing_market_template_service_for_java_iva-1510120655757",
+      "changes_record": {
+        "files": [
+          {
+            "type": "SANDBOX_FILE",
+            "sandbox_file_change": {
+              "task_type": "BUILD_JUGGLER_CHECKS_BUNDLE",
+              "task_id": "171610934",
+              "resource_type": "MARKET_JUGGLER_RTC_CHECKS_BUNDLE"
+            }
+          }
+        ]
+      },
+      "annotations": {
+        "instance_type": "SANDBOX_LAYERS"
+      }
+    }
+  },
+  "auth_attrs": {
+    "content": {
+      "observers": {
+        "logins": [],
+        "groups": []
+      },
+      "owners": {
+        "logins": [
+          "d3rp"
+        ],
+        "groups": [
+          "52201"
+        ]
+      },
+      "conf_managers": {
+        "logins": [
+          "nanny-robot"
+        ],
+        "groups": []
+      },
+      "mode": "NANNY",
+      "ops_managers": {
+        "logins": [
+          "nanny-robot"
+        ],
+        "groups": []
+      }
+    },
+    "_id": "f29025855861798fefb8d6bc287be55888224fe6",
+    "change_info": {
+      "comment": "-",
+      "ctime": 1507099723520,
+      "author": "d3rp"
+    }
+  },
+  "current_state": {
+    "content": {
+      "is_paused": {
+        "info": {
+          "comment": "Copy of testing_market_content_api_admin_vla by d3rp",
+          "ticket_id": "",
+          "ctime": 1506516851179,
+          "author": "d3rp"
+        },
+        "value": false
+      },
+      "active_snapshots": [],
+      "summary": {
+        "entered": 1506516851179,
+        "value": "OFFLINE"
+      }
+    },
+    "entered": 1506516851179,
+    "_id": "948ef63d4adc4df9b0acb33fd3ebf29d063d97de"
+  },
+  "info_attrs": {
+    "content": {
+      "category": "/market/",
+      "ui_settings": {
+        "set_snapshot_as_current_on_activate": "True"
+      },
+      "balancers_integration": {
+        "auto_update_services_balancers": false
+      },
+      "recipes": {
+        "content": [
+          {
+            "context": [],
+            "labels": [],
+            "id": "default",
+            "name": "_activate_only_service_configuration.yaml",
+            "desc": "Activate"
+          }
+        ],
+        "prepare_recipes": [
+          {
+            "context": [],
+            "labels": [],
+            "id": "default",
+            "name": "_prepare_service_configuration.yaml",
+            "desc": "Prepare"
+          }
+        ]
+      },
+      "labels": [
+        {
+          "key": "geo"
+        },
+        {
+          "key": "ctype"
+        },
+        {
+          "key": "itype"
+        },
+        {
+          "key": "prj"
+        }
+      ],
+      "yp_settings": {
+        "mirror_to_yp": "SKIP"
+      },
+      "tickets_integration": {
+        "gencfg_release_rule": {
+          "filter_params": {
+            "expression": "True"
+          },
+          "queue_id": "MARKET",
+          "responsibles": []
+        },
+        "service_release_rules": [
+          {
+            "sandbox_resource_type": "MARKET_MBO_SKUBD_APP",
+            "ticket_priority": "NORMAL",
+            "desc": "Application",
+            "queue_id": "MARKET",
+            "filter_params": {
+              "expression": "sandbox_release.release_type in (\"testing\",)"
+            },
+            "sandbox_task_type": "HTTP_UPLOAD",
+            "auto_commit_settings": {
+              "scheduling_priority": "NORMAL",
+              "enabled": true
+            },
+            "responsibles": []
+          },
+          {
+            "sandbox_resource_type": "MARKET_COMMON_CONFIG",
+            "ticket_priority": "NORMAL",
+            "desc": "Config",
+            "queue_id": "MARKET",
+            "filter_params": {
+              "expression": "sandbox_release.release_type in (\"testing\",)"
+            },
+            "sandbox_task_type": "MARKET_YA_PACKAGE",
+            "auto_commit_settings": {
+              "enabled": true
+            },
+            "responsibles": []
+          },
+          {
+            "sandbox_resource_type": "MARKET_DATASOURCES_TESTING",
+            "ticket_priority": "NORMAL",
+            "desc": "Datasources",
+            "queue_id": "MARKET",
+            "filter_params": {
+              "expression": "sandbox_release.release_type in (\"testing\",)"
+            },
+            "sandbox_task_type": "BUILD_MARKET_DATASOURCES",
+            "auto_commit_settings": {
+              "scheduling_priority": "NONE",
+              "enabled": false
+            },
+            "responsibles": []
+          },
+          {
+            "sandbox_resource_type": "MARKET_JUGGLER_RTC_CHECKS_BUNDLE",
+            "ticket_priority": "NORMAL",
+            "desc": "juggler checks",
+            "queue_id": "MARKET",
+            "filter_params": {
+              "expression": "sandbox_release.release_type in (\"testing\",)"
+            },
+            "sandbox_task_type": "BUILD_JUGGLER_CHECKS_BUNDLE",
+            "auto_commit_settings": {
+              "scheduling_priority": "NONE",
+              "enabled": true
+            },
+            "responsibles": []
+          }
+        ],
+        "service_release_tickets_enabled": true,
+        "instancectl_release_rule": {
+          "queue_id": "INSTANCECTL",
+          "auto_commit_settings": {},
+          "match_release_type": "-",
+          "responsibles": []
+        }
+      },
+      "monitoring_settings": {
+        "panels": {
+          "juggler": [],
+          "quentao": [],
+          "yasm": []
+        },
+        "deploy_monitoring": {
+          "is_enabled": false
+        },
+        "juggler_settings": {
+          "is_enabled": false
+        }
+      },
+      "queue_id": "MARKET",
+      "cms_settings": {
+        "cms_stub_policy": "SKIP_ON_FAILURE"
+      },
+      "scheduling_policy": {
+        "type": "BASED_ON_SNAPSHOT_PRIORITY",
+        "based_on_snapshot_priority": {
+          "prepare_recipe": "default",
+          "activate_recipe": "default"
+        }
+      },
+      "desc": "Template service for Java Application"
+    },
+    "parent_id": "bbdf62220b19512bfedab4c1fc4560b4690d87c2",
+    "_id": "888e059e08203d68e1a645d7d93daaa5b7578e8a",
+    "change_info": {
+      "comment": "",
+      "ctime": 1510311955313,
+      "author": "d3rp"
+    }
+  },
+  "target_state": {
+    "info": {
+      "comment": "Copy of testing_market_content_api_admin_vla by d3rp",
+      "ticket_id": "",
+      "ctime": 1506516851179,
+      "author": "d3rp"
+    },
+    "content": {
+      "is_enabled": false,
+      "recipe_parameters": [],
+      "labels": [],
+      "snapshots": []
+    },
+    "_id": "b06cefc7bb46c2b2d556953dc9403d1922c79ea3"
+  },
+  "_id": "test_service_should_not_exist"
+}

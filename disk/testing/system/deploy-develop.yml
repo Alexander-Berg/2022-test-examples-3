@@ -1,0 +1,44 @@
+---
+##################################################
+# Deploy deb packages on testing bench.
+#
+- hosts: mpfs
+  gather_facts: no
+  vars:
+    deb_name: "{{ lookup('pipe', 'ls -1 python-mpfs-disk_*.deb') }}"
+    tmp_dir: "/tmp/mpfs-current-debs"
+  tasks:
+    - include: tasks/install-deb.yml
+
+    - service:
+        name: mpfs-core-uwsgi-disk
+        state: restarted
+      become: yes
+      ignore_errors: yes
+
+- hosts: api
+  gather_facts: no
+  vars:
+    deb_name: "{{ lookup('pipe', 'ls -1 python-mpfs-api_*.deb') }}"
+    tmp_dir: "/tmp/mpfs-current-debs"
+  tasks:
+    - include: tasks/install-deb.yml
+
+    - service:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - mpfs-intapi-uwsgi
+        - mpfs-extapi-uwsgi
+        - mpfs-api-admin-uwsgi
+      become: yes
+      ignore_errors: yes
+
+- hosts: 127.0.0.1
+  connection: local
+  gather_facts: no
+  tasks:
+    - include: tasks/qloud_deploy.yml
+      package_name: "{{ queue.package_name }}"
+      version: "{{ mpfs_version }}"
+      qloud_deploy_env: "{{ qloud_env }}"

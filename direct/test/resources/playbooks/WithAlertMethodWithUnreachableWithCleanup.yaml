@@ -1,0 +1,29 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  pre_tasks:
+  - juggler_facts: jserver_api=http://fakejuggler.yandex.ru:8998/api
+  tasks:
+  - juggler_check: dummy task
+    args:
+      host: fake_checks.yandex.ru
+      service: queue_juggler_event_from_perl
+      alert_method:
+      - GOLEM
+      flap: false
+      ttl: 900
+      aggregator: logic_or
+      aggregator_kwargs:
+        unreach_mode: skip
+        unreach_service:
+        - check: direct.developers:UNREACHABLE
+      children:
+      - fakeserv1.yandex.ru:queue_raw_event_from_perl
+      - fakeserv2.yandex.ru:queue_raw_event_from_perl
+      - fakeserv3.yandex.ru:queue_raw_event_from_perl
+      - fakeserv4.yandex.ru:queue_raw_event_from_perl
+      namespace: testnamespace
+      jcheck_mark: junitTestMark
+  post_tasks:
+  - juggler_cleanup: jcheck_mark=junitTestMark

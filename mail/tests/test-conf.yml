@@ -1,0 +1,32 @@
+config:
+    system:
+        daemon: 0
+        dir: ./
+        reactor:
+        -   { _io_threads: 1, _pool_count: 1, _name: global }
+    log:
+        global:
+            level: debug
+            queue_size: 1048576
+            async: true
+            sinks:
+            -   type: stdout
+    modules:
+        module:
+        -   _name: smtp_client
+            system:
+                name: smtp_client
+                factory: ymod_smtpclient::CallImpl
+            configuration:
+                reactor: global
+                default_timeouts:
+                    connect: 2.0    # seconds
+                    command: 0.1    # seconds
+                    data: 10.0      # seconds
+                reuse_connection: true
+                max_idle_time: 10.0 # seconds
+                max_pool_size: 1  # required for session reuse test case
+                connect_attempt_timeout: 1.0    # seconds
+                smtp_ssl_default_port: 1465
+                ssl:
+                    only_tls: false # allow sslv3, tls*

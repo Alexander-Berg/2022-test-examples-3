@@ -1,0 +1,1 @@
+DELETE from order_events_failover_counter;

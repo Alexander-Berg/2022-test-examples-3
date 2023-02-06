@@ -1,0 +1,33 @@
+# Параметры обработки
+params:
+  default:
+    generate: no
+    templates:
+      - get_localhost.tpl
+  "%market_cache-testing":
+    generate: yes
+
+values:
+  default:
+    defaults:
+      env: production
+      cache_name: le087
+      mcrouter_port: 11227
+      memcached_port: 21227
+      memory: 128      
+      cache_name: le087
+  testing:
+    defaults:
+      env: testing
+  
+servers:
+  default:
+    main:
+      - name: "%market_cache-stable@local"
+    global:
+      - name: "%market_cache-stable"
+  testing:
+    main:
+      - name: "%market_cache-testing@local"
+    global:
+      - name: "%market_cache-testing"

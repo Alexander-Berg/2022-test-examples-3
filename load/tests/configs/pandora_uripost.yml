@@ -1,0 +1,41 @@
+console: {enabled: false, package: yandextank.plugins.Console}
+telegraf: {enabled: false, package: yandextank.plugins.Telegraf}
+phantom: {enabled: false, package: yandextank.plugins.Phantom}
+pandora:
+  package: yandextank.plugins.Pandora
+  enabled: true
+  resources:
+  - src: https://storage-int.mds.yandex.net/get-load-ammo/15228/ae29cfd3e4024c9f95bc1bff65882394
+    dst: ./pandora_uripost.ammo
+  config_content:
+    pools:
+      - id: HTTP pool
+        gun:
+          type: http
+          target: target.tank-testing.in.yandex-team.ru:443
+          ssl: true
+        ammo:
+          type: uripost
+          file: ./pandora_uripost.ammo
+        result:
+          type: phout
+          destination: ./phout.log
+        rps: 
+          - {duration: 30s, type: line, from: 1, to: 1500}
+        startup:
+          type: once
+          times: 100
+    log:
+      level: error
+    monitoring:
+      expvar:
+        enabled: true
+        port: 1234
+monitoring:
+  enabled: false
+  package: yandextank.plugins.YASM
+uploader:
+  api_address: https://lunapark.yandex-team.ru/
+  task: YANDEXTANK-1
+  job_name: '[pandora][uripost][resource][ssl]'
+  operator: lunapark

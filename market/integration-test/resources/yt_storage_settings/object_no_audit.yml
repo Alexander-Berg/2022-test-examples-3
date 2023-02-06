@@ -1,0 +1,36 @@
+---
+development:
+  table_name: 'msku_gold'
+  mdm_entity_type_id: 7770077700
+  enabled: true
+  auto_compaction_period: 21600000
+  tablet_cell_bundle_meta: 'market-mdm-development'
+  tablet_cell_bundle_replicas: 'market-mdm-development'
+  tablet_count: 1
+  compression_codec: 'LZ4' # r.y.m.yt.util.table.constants.CompressionCodec#name()
+  primary_medium: 'SSD_BLOBS' # r.y.m.yt.util.table.constants.Medium#name()
+  audit: false
+  indices:
+  - index:
+    primary: true
+    name_postfix: '_msku_id_idx'
+    columns:
+    - search_column:
+      name: 'msku_id'
+      mdm_attribute_path: [100500]
+      type: 'UINT64' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+      mdm_type: 'INT64' # MdmAttributeDataType#name()
+  - composite_index:
+    name_postfix: '_biz_id_and_shop_ssku_idx'
+    index_type: 'ONE_2_ONE'
+    columns:
+      - first_column:
+        name: 'business_id'
+        mdm_attribute_path: [200500]
+        type: 'UINT64' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+        mdm_type: 'INT64' # MdmAttributeDataType#name()
+      - second_column:
+        name: 'shop_sku'
+        mdm_attribute_path: [300500]
+        type: 'STRING' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+        mdm_type: 'STRING' # MdmAttributeDataType#name()

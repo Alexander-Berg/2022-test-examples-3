@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <environment_param ID="1" NAME="enable-send-box-received-to-les" VALUE="true"/>
+    <environment_param ID="2" NAME="unit-count-types-not-for-les-sending" VALUE="NON_COMPLIENT, ANOMALY"/>
+
+
+    <fulfillment_service
+        ID="121"
+        NAME="test"
+        STATUS="1"
+        TYPE="1"
+    />
+
+    <SUPPLIER
+        ID="1"
+        NAME="supplier1"
+    />
+
+    <!-- Возврат 1-->
+    <SHOP_REQUEST
+        ID="1"
+        SUPPLIER_ID="1"
+        SERVICE_ID="121"
+        STATUS="10"
+        TYPE="7"
+        SUBTYPE="DEFAULT"
+        STOCK="3"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        ITEMS_TOTAL_COUNT="6"
+        ITEMS_TOTAL_DEFECT_COUNT="0"
+        ITEMS_TOTAL_FACT_COUNT="6"
+        TO_STOCK_TYPE="0"
+        COMMENT="test"
+        DETAILS_LOADED="1"
+        INBOUND_ID="2"
+    />
+
+    <!-- Возврат 2 в коробке два товара-->
+    <SHOP_REQUEST
+        ID="2"
+        SUPPLIER_ID="1"
+        SERVICE_ID="121"
+        SUBTYPE="DEFAULT"
+        STATUS="10"
+        TYPE="7"
+        STOCK="3"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        ITEMS_TOTAL_COUNT="6"
+        ITEMS_TOTAL_DEFECT_COUNT="0"
+        ITEMS_TOTAL_FACT_COUNT="6"
+        TO_STOCK_TYPE="0"
+        COMMENT="test"
+        DETAILS_LOADED="1"
+        INBOUND_ID="2"
+    />
+
+
+    <registry id="1"
+              request_id="1"
+              type="9"
+              unit_counts='[{"counts": [{"type": "FIT", "count": 1}], "unitType": 10}]'
+    />
+
+    <registry_unit id="1" registry_id="1" type="10"
+                   identifiers='{"parts": [{"type": "ORDER_ID", "value": "12345"}, {"type": "ORDER_RETURN_ID", "value": "extId1"}, {"type": "BOX_ID", "value": "BOX_12345"}]}'
+                   parents='[]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 1, "relatedUnitIds": [{}]}]}'/>
+
+    <registry_unit id="2" registry_id="1" type="20"
+                   identifiers='{"parts": [{"type": "ORDER_ID", "value": "12345"}, {"type": "BOX_ID", "value": "BOX_12345"}, {"type": "SHOP_SKU", "value": "shopsku1"}, {"type": "VENDOR_ID", "value": "11"}]}'
+                   parents='[]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 1, "relatedUnitIds": [{"unitIds": [{"parts": [{"type": "CIS", "value": "991870055836"}, {"type": "ORDER_RETURN_REASON_ID", "value": "DO_NOT_FIT"}]}]}]}]}'
+    />
+
+    <registry id="2"
+              request_id="2"
+              type="9"
+              unit_counts='[{"counts": [{"type": "FIT", "count": 1}], "unitType": 10}]'
+    />
+
+    <registry_unit id="3" registry_id="2" type="10"
+                   identifiers='{"parts": [{"type": "ORDER_ID", "value": "12345"}, {"type": "BOX_ID", "value": "BOX_12346"}, {"type": "ORDER_RETURN_ID", "value": "extId2"}]}'
+                   parents='[]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 1, "relatedUnitIds": [{}]}]}'/>
+
+    <registry_unit id="4" registry_id="2" type="20"
+                   identifiers='{"parts": [{"type": "ORDER_ID", "value": "12345"}, {"type": "BOX_ID", "value": "BOX_12346"}, {"type": "SHOP_SKU", "value": "shopsku2"}, {"type": "VENDOR_ID", "value": "12"}]}'
+                   parents='[]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "DEFECT", "count": 1, "relatedUnitIds": [{"unitIds": [{"parts": [{"type": "CIS", "value": "991870055836"}, {"type": "ORDER_RETURN_REASON_ID", "value": "DO_NOT_FIT"}]}]}]}]}'
+    />
+
+    <registry_unit id="5" registry_id="2" type="20"
+                   identifiers='{"parts": [{"type": "ORDER_ID", "value": "12345"}, {"type": "BOX_ID", "value": "BOX_12346"}, {"type": "SHOP_SKU", "value": "shopsku3"}, {"type": "VENDOR_ID", "value": "13"}]}'
+                   parents='[]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 2, "relatedUnitIds": [{"unitIds": [{"parts": [{"type": "CIS", "value": "991870055837"}, {"type": "CIS", "value": "991870055838"}, {"type": "ORDER_RETURN_REASON_ID", "value": "DO_NOT_FIT"}]}]}]}]}'
+    />
+
+    <registry_unit id="6" registry_id="2" type="20"
+                   identifiers='{"parts": [{"type": "ORDER_ID", "value": "12345"}, {"type": "BOX_ID", "value": "BOX_12346"}, {"type": "SHOP_SKU", "value": "shopsku3"}, {"type": "VENDOR_ID", "value": "13"}]}'
+                   parents='[]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "NON_COMPLIENT", "count": 1, "relatedUnitIds": [{}], "nonconformityAttributes": ["MISMATCHING_DESCRIPTION"]}]}'
+    />
+
+    <registry_unit id="7" registry_id="2" type="10"
+                   identifiers='{"parts": [{"type": "BOX_ID", "value": "BOX_NON_COMPLIENT"}, {"type": "ORDER_RETURN_ID", "value": "NON_COMPLIENT_extId2"}]}'
+                   parents='[]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "NON_COMPLIENT", "count": 1, "relatedUnitIds": [{}]}]}'/>
+
+
+
+    <registry_unit id="8" registry_id="2" type="10"
+                   identifiers='{"parts": [{"type": "ORDER_ID", "value": "123456"}, {"type": "BOX_ID", "value": "ANOMALY_BOX_12346"}, {"type": "ORDER_RETURN_ID", "value": "ANOMALY_extId2"}]}'
+                   parents='[]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "ANOMALY", "count": 1, "relatedUnitIds": [{}]}]}'/>
+
+    <registry_unit id="9" registry_id="2" type="20"
+                   identifiers='{"parts": [{"type": "ORDER_ID", "value": "123456"}, {"type": "BOX_ID", "value": "ANOMALY_BOX_12346"}, {"type": "SHOP_SKU", "value": "shopsku2"}, {"type": "VENDOR_ID", "value": "12"}]}'
+                   parents='[]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "NON_COMPLIENT", "count": 1, "relatedUnitIds": [{}], "nonconformityAttributes": ["MISMATCHING_DESCRIPTION"]}]}'
+    />
+
+    <registry_unit id="10" registry_id="2" type="20"
+                   identifiers='{"parts": [{"type": "ORDER_ID", "value": "123456"}, {"type": "SHOP_SKU", "value": "shopsku3"}, {"type": "VENDOR_ID", "value": "13"}]}'
+                   parents='[]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "NON_COMPLIENT", "count": 1, "relatedUnitIds": [{}], "nonconformityAttributes": ["MISMATCHING_DESCRIPTION"]}]}'
+    />
+
+</dataset>

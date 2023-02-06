@@ -1,0 +1,54 @@
+# test agitation count limit as target_count and total model grades difference
+
+# instead of random sort by price
+MOCK VAR $random_agit
+SET ($item) -> { return $item.price }
+
+MOCK VAR $random_agit_bal
+SET ($item) -> { return $item.entity_id}
+
+MOCK VAR $overflowMultiplier
+SET 1
+
+MOCK VAR $numberIfModels
+SET 3
+
+MOCK VAR $start_date
+SET "13"
+
+MOCK VAR $end_date
+SET "15"
+
+MOCK DIR_TABLE //home/market/_YT_ENV_/pers-grade/author/paid_agitation_mail
+NAME 13
+SCHEMA model_id1:string, model_id2:string, model_id3:string, model_id4:string
+SCHEMA author_type:int32, user_id:string
+
+# agitations
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/author/agitation/current
+SCHEMA type:int32, author_type:int32, user_id:string,
+SCHEMA entity_id:string, data:yson, agitation_order:uint64
+# check target count limit
+{"type": 0, "author_type": 0, "user_id": "6", "entity_id": "5", "data": {"persPayAvailable": "1"}, "agitation_order": 1}
+{"type": 0, "author_type": 0, "user_id": "7", "entity_id": "5", "data": {"persPayAvailable": "1"}, "agitation_order": 1}
+{"type": 0, "author_type": 0, "user_id": "8", "entity_id": "5", "data": {"persPayAvailable": "1"}, "agitation_order": 1}
+{"type": 0, "author_type": 0, "user_id": "9", "entity_id": "5", "data": {"persPayAvailable": "1"}, "agitation_order": 1}
+{"type": 0, "author_type": 0, "user_id": "10", "entity_id": "5", "data": {"persPayAvailable": "1"}, "agitation_order": 1}
+{"type": 0, "author_type": 0, "user_id": "6", "entity_id": "6", "data": {"persPayAvailable": "1"}, "agitation_order": 1}
+{"type": 0, "author_type": 0, "user_id": "7", "entity_id": "6", "data": {"persPayAvailable": "1"}, "agitation_order": 1}
+{"type": 0, "author_type": 0, "user_id": "8", "entity_id": "6", "data": {"persPayAvailable": "1"}, "agitation_order": 1}
+{"type": 0, "author_type": 0, "user_id": "9", "entity_id": "6", "data": {"persPayAvailable": "1"}, "agitation_order": 1}
+{"type": 0, "author_type": 0, "user_id": "10", "entity_id": "6", "data": {"persPayAvailable": "1"}, "agitation_order": 1}
+
+MOCK VAR_TABLE $current_paid_opinion_models
+SCHEMA payer_type:int32, payer_id:string, model_id:int64
+SCHEMA price:uint64, charge:double, balance:double
+SCHEMA target_count:uint64
+{"payer_type": 0, "payer_id": "2", "model_id": 5, "price": 52, "charge": 4.0, "balance": 100.0, "target_count":5}
+{"payer_type": 0, "payer_id": "2", "model_id": 6, "price": 52, "charge": 4.0, "balance": 100.0, "target_count":5}
+
+MOCK VAR_TABLE $pub_model_grades_cnt
+SCHEMA resource_id:uint64, cnt:uint64
+{"resource_id":5, "cnt": 3}
+{"resource_id":6, "cnt": 3}
+

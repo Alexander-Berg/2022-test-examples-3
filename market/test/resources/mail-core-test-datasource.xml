@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd"
+       default-lazy-init="false" default-autowire="byName">
+
+    <bean id="persNotifyEmbeddedDbUtil" class="ru.yandex.pers.notify.db.PersNotifyEmbeddedDbUtil" factory-method="valueOf">
+        <constructor-arg value="INSTANCE"/>
+    </bean>
+
+    <bean id="dataSource" factory-bean="persNotifyEmbeddedDbUtil" factory-method="getPersNotifyDataSource"/>
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"/>
+
+    <bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="transactionProcessor" class="ru.yandex.common.util.inbox.TransactionProcessor"/>
+    <bean id="transactionLockService" class="ru.yandex.common.util.inbox.TransactionLockServiceMySQL"/>
+
+    <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate"/>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"/>
+
+    <tx:annotation-driven/>
+</beans>

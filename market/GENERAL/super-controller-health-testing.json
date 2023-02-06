@@ -1,0 +1,38 @@
+{
+  "logHosts": "**",
+  "logPath": "**/super-controller-health.log",
+  "parser": {
+    "dateFormat": "dd/MMM/yyyy:HH:mm:ss Z",
+    "separator": "\t",
+    "fields": [
+      "date", "session_id", "big_session", "monitor_result", "session_start_time", "stage", "stage_start_time"
+    ],
+    "columns": {
+      "host": {
+        "type": "String"
+      },
+      "session_id": {
+        "type": "String"
+      },
+      "big_session": {
+        "type": "UInt8"
+      },
+      "monitor_result": {
+        "type": "UInt8"
+      },
+      "session_start_time": {
+        "type": "UInt32"
+      },
+      "stage": {
+        "type": "String"
+      },
+      "stage_start_time": {
+        "type": "UInt32"
+      }
+    }
+  },
+  "clickhouseTable": "super_controller_health",
+  "sources": [
+    "logbroker://market-health-testing--other"
+  ]
+}

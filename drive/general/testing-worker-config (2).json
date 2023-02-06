@@ -1,0 +1,49 @@
+{
+  "db": {
+    "driver": "postgres",
+    "options": {
+      "hosts": [
+        "sas-f9ap7jwn1uts2xih.db.yandex.net:6432",
+        "vla-24jeof09710xmc5o.db.yandex.net:6432"
+      ],
+      "name": "runner_testing",
+      "user": "runner_testing",
+      "password": {{ env "DB_PASSWORD" | json }},
+      "target_session_attrs": "read-write",
+      "ssl_mode": "verify-full"
+    }
+  },
+  "tvm": {
+    "source": 2024589,
+    "secret": {{ env "TVM_SECRET" | json }},
+    "targets": {
+      "solomon": 2010242
+    },
+    "bb_env": "intranet"
+  },
+  "solomon": {
+    "project": "carsharing_analytics",
+    "cluster": "testing",
+    "service": "dajr",
+    "target": "solomon"
+  },
+  "host_name": {{ env "DEPLOY_POD_PERSISTENT_FQDN" | json }},
+  "host_labels": {
+    "stage": "testing",
+    "os": "linux"
+  },
+  "worker": {
+    "cache_dir": "/dajr/cache",
+    "arcadia": {
+      "base_url": "https://a.yandex-team.ru/api/tree/blob/trunk/arcadia/",
+      "token": {{ env "ARCADIA_TOKEN" | json }}
+    },
+    "sandbox": {
+      "base_url": "https://proxy.sandbox.yandex-team.ru/",
+      "token": {{ env "SANDBOX_TOKEN" | json }}
+    },
+    "porto_max_connections": 200
+  },
+  "log_level": "info",
+  "SystemDir": "/dajr"
+}

@@ -1,0 +1,168 @@
+annotations:
+  stagectl_epoch: 800
+  stagectl_vcs:
+    svn_branch: stage_controller/stable-142-1
+    svn_revision: 8976034
+    svn_tag: stage_controller/stable-142-1
+labels:
+  deploy_engine: env_controller
+  du_patchers_target_revision:
+    crm-frontend-test: 11
+  du_sidecar_target_revision:
+    crm-frontend-test:
+      logbrokerToolsLayer: 2249562029
+      podBin: 2621390537
+  notifications_last_timestamp: 1640874957040709000
+  tags: []
+meta:
+  account_id: abc:service:200
+  acl:
+  - action: allow
+    permissions:
+    - read
+    - read_secrets
+    - write
+    - create
+    - ssh_access
+    - root_ssh_access
+    subjects:
+    - robot-drug-deploy
+  id: crm-frontend-test
+  inherit_acl: true
+  project_id: crm-test
+spec:
+  deploy_units:
+    crm-frontend-test:
+      endpoint_sets:
+      - port: 80
+      - id: solomon
+        port: 3456
+      images_for_boxes:
+        crm-frontend-test:
+          name: crm/frontend
+          registry_host: registry.yandex.net
+          tag: 0.0.24
+      logbroker_config:
+        custom_topic_request:
+          secret_selector:
+            alias: tvm.secret.2031546
+            id: client_secret
+          topic_name: crm/logs/frontend-test
+          tvm_client_id: 2031546
+      logbroker_tools_sandbox_info:
+        revision: 2249562029
+      network_defaults:
+        network_id: _CRMTEST_WEB_NETS_
+      patchers_revision: 7
+      replica_set:
+        per_cluster_settings:
+          sas:
+            deployment_strategy:
+              max_unavailable: 1
+            pod_count: 2
+        replica_set_template:
+          constraints:
+            antiaffinity_constraints:
+            - key: rack
+              max_pods: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+              - id: disk-0
+                labels:
+                  used_by_infra: true
+                quota_policy:
+                  bandwidth_guarantee: 5242880
+                  bandwidth_limit: 5242880
+                  capacity: 3221225472
+                storage_class: ssd
+              pod_agent_payload:
+                spec:
+                  boxes:
+                  - id: crm-frontend-test
+                    rootfs: {}
+                  mutable_workloads:
+                  - workload_ref: crm-frontend-test
+                  resources: {}
+                  workloads:
+                  - box_ref: crm-frontend-test
+                    env:
+                    - name: AWS_ACCESS_KEY_ID
+                      value:
+                        secret_env:
+                          alias: robot-crmdev
+                          id: s3-mds-crm-writer-id
+                    - name: AWS_SECRET_ACCESS_KEY
+                      value:
+                        secret_env:
+                          alias: robot-crmdev
+                          id: s3-mds-crm-writer-secret
+                    - name: MDS_ENDPOINT
+                      value:
+                        literal_env:
+                          value: http://s3.mds.yandex.net
+                    - name: MDS_STATIC_BUILD_PATH
+                      value:
+                        literal_env:
+                          value: s3://crm-public/dist/develop.62
+                    - name: CRM_BACKEND_API_URL
+                      value:
+                        literal_env:
+                          value: https://crm-test.yandex-team.ru
+                    - name: CRM_APP_URL
+                      value:
+                        literal_env:
+                          value: https://morda.crm-test.yandex-team.ru
+                    - name: LOGGER_MODE
+                      value:
+                        literal_env:
+                          value: deploy
+                    - name: NODE_ENV
+                      value:
+                        literal_env:
+                          value: production
+                    id: crm-frontend-test
+                    liveness_check:
+                      http_get:
+                        expected_answer: OK
+                        path: /ping
+                        port: 80
+                    readiness_check:
+                      http_get:
+                        expected_answer: OK
+                        path: /ready
+                        port: 80
+                    start: {}
+                    transmit_logs: true
+              resource_requests:
+                memory_guarantee: 1073741824
+                memory_limit: 1073741824
+                network_bandwidth_guarantee: 10485760
+                vcpu_guarantee: 1000
+                vcpu_limit: 1000
+              secret_refs:
+                robot-crmdev:
+                  secret_id: sec-01cxw3nmmnrxk2b76anqyysyhz
+                  secret_version: ver-01fhtt9zhyb902s3a3wtw1fvgx
+              secrets:
+                tvm.secret.2031546:
+                  delegation_token: jL-5gOVEEc3JCT-EJIHXkaQCNUnpJxWOPafdTI5DaBk.1.31ff593a3eb57026
+                  secret_id: sec-01fmh7py9anrfh8r4xxe79kq8v
+                  secret_version: ver-01fmh7pyavj8ygrt1dx2v5n0cz
+      revision: 107
+      tvm_config:
+        blackbox_environment: ProdYaTeam
+        clients:
+        - destinations:
+          - alias: blackbox
+            app_id: 223
+          secret_selector:
+            alias: tvm.secret.2031546
+            id: client_secret
+          source:
+            alias: crm
+            app_id: 2031546
+        mode: enabled
+  revision: 117
+  revision_info: {}
+

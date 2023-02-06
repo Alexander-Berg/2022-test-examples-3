@@ -1,0 +1,29 @@
+{% if table == "features_item_pair_offer_offer_clickout_statistics" %}
+    {# Result data. #}
+    {% table table %}
+        ["O1", "O2", 1.0, 2.0, "offer", "offer", "{{ day }}"],
+        ["O2", "O1", 1.0, 1.0, "offer", "offer", "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_clickouts" %}
+    {% macro clickout(timestamp, yandexuid, offer_id) -%}
+        [
+            {{ timestamp }},
+            {
+                "yandexuid": "{{ yandexuid }}"
+            },
+            "view",
+            "offer",
+            "{{ offer_id }}",
+            {},
+            "{{ day }}"
+        ]
+    {%- endmacro %}
+    {% table "events" %}
+        {% if shift == 0 %}
+            {{ clickout(1503225532000, "19275", "O2") }},
+            {{ clickout(1503225532001, "19275", "O1") }},
+            {{ clickout(1503225532002, "19275", "O2") }},
+            {{ clickout(1503225532004, "19275", "O2") }}
+        {% endif %}
+    {% endtable %}
+{% endif %}

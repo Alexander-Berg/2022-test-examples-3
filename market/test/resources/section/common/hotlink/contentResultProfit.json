@@ -1,0 +1,87 @@
+{
+    "snippets": [
+        {
+            "type": "profit",
+            "deeplink": "deeplinkUrl",
+            "title": "Some title",
+            "indexValue": 5.4,
+            "indexStructure": {
+                "priceValue": 5.2,
+                "discountValue": 0,
+                "promoValue": 0.2,
+                "cashbackValue": 0
+            },
+            "actions": {
+                "onShow": {
+                    "events": [
+                        {
+                            "name": "CMS-PAGE_HOTLINKS_SNIPPET_VISIBLE",
+                            "type": "AppMetrica",
+                            "once": true,
+                            "key": "hotlink-Some title",
+                            "params": [
+                                "w-987",
+                                "w-987-1",
+                                "hotlink-Some title"
+                            ]
+                        }
+                    ],
+                    "type": "SendAnalyticsAction"
+                },
+                "onClick": {
+                    "actions": [
+                        {
+                            "events": [
+                                {
+                                    "name": "CMS-PAGE_HOTLINKS_SNIPPET_NAVIGATE",
+                                    "type": "AppMetrica",
+                                    "once": false,
+                                    "key": "hotlink-Some title",
+                                    "params": [
+                                        "w-987",
+                                        "w-987-1",
+                                        "hotlink-Some title"
+                                    ]
+                                }
+                            ],
+                            "type": "SendAnalyticsAction"
+                        },
+                        {
+                            "link": "deeplinkUrl",
+                            "type": "DeeplinkNavigationAction"
+                        }
+                    ],
+                    "type": "ListAction"
+                }
+            },
+            "@id": "hotlink-Some title"
+        }
+    ],
+    "analytics": {
+        "w-987": {
+            "cmsPageId": 123,
+            "widgetId": "987",
+            "name": "HotlinksSection",
+            "title": "some title",
+            "is_login": false,
+            "is_plus_user": false,
+            "widget_position": 0
+        },
+        "w-987-1": {
+            "resolvers": [
+                {
+                    "resolver": "someResolver",
+                    "version": "v1",
+                    "key": "value",
+                    "param": "target"
+                }
+            ]
+        },
+        "hotlink-Some title": {
+            "position": 0,
+            "title": "Some title",
+            "deeplink": "deeplinkUrl",
+            "type": "profit"
+        }
+    }
+}

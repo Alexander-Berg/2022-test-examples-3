@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="true" default-autowire="byName">
+
+    <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+
+    <bean id="httpServerInitializer"
+          class="ru.yandex.common.framework.http.HttpServerInitializer"
+          lazy-init="false">
+        <property name="port" value="8011"/>
+        <property name="handlers">
+            <list>
+                <bean class="ru.yandex.common.framework.http.OutputFormatManagerHandler">
+                    <property name="jsonRequestHandler">
+                        <bean class="ru.yandex.common.framework.http.JsonRequestHandler">
+                            <property name="redirectChecker">
+                                <bean class="ru.yandex.common.framework.core.ErrorRedirectChecker"/>
+                            </property>
+                        </bean>
+                    </property>
+                    <property name="defaultRequestHandler">
+                        <bean class="ru.yandex.common.framework.http.DefaultRequestHandler">
+                            <property name="redirectChecker">
+                                <bean class="ru.yandex.common.framework.core.ErrorRedirectChecker"/>
+                            </property>
+                        </bean>
+                    </property>
+                </bean>
+                <bean class="ru.yandex.common.framework.http.PingHandler">
+                    <property name="configAuditManager">
+                        <bean class="ru.yandex.common.framework.ca.ConfigAuditManager">
+                            <property name="defaultDeploymentGroup" value="development"/>
+                            <property name="auditors">
+                                <list>
+                                    <bean class="ru.yandex.common.framework.http.TestConfigAuditor"/>
+                                </list>
+                            </property>
+                        </bean>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean name="xmlBuilder" class="ru.yandex.common.framework.xml.StringXmlBuilder">
+        <property name="servantInfo">
+            <bean class="ru.yandex.common.framework.core.DefaultServantInfo">
+                <property name="name" value="cf-test"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="jsonBuilder" class="ru.yandex.common.framework.json.SimpleJsonBuilder"/>
+
+    <bean id="servantInfo" class="ru.yandex.common.framework.xml.MockServantInfo"/>
+
+    <bean name="servantletManager" class="ru.yandex.common.framework.core.ServantletManager">
+        <property name="secFilter">
+            <bean class="ru.yandex.common.framework.core.TrueSecFilter"/>
+        </property>
+    </bean>
+
+    <bean name="servantletDispatcher" class="ru.yandex.common.framework.corba.DefaultServantletDispatcher"/>
+
+    <bean name="profiler" class="ru.yandex.common.util.profile.statdump.StatDumpProfiler"/>
+</beans>

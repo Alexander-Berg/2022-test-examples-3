@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+               http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+               http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+       default-autowire="byName"
+       default-lazy-init="true"
+		>
+
+	<bean name="priceChecker" class="ru.yandex.market.supercontroller.pricechecker.PriceChecker">
+		<property name="priceCheckerDao">
+			<ref bean="priceCheckerDao"/>
+		</property>
+		<property name="avgPriceBigRatioWeight" value="0.15"/>
+		<property name="avgPriceSmallRatioWeight" value="0.10"/>
+		<property name="maxPriceIncreaseFactorWeight" value="0.2"/>
+		<property name="minPriceDecreaseFactorWeight" value="0.3"/>
+		<property name="offersCountWeight" value="6"/>
+	</bean>
+
+	<bean name="priceCheckerDao" class="ru.yandex.market.supercontroller.pricechecker.PriceCheckerDao"/>
+
+	<bean name="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@pike.yandex.ru:1522:scat"/>
+		<property name="username" value="market_model"/>
+		<property name="password" value="4Ryb;ybrfvc"/>
+	</bean>
+
+</beans>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<formalizer>
+    <filters type="stringDictionary">
+        <filter value="{name}\n*2{value}" id="6170818" weight="250"/>
+        <filter value="{name}\n*5{value}" id="6170821" weight="50"/>
+        <filter value="{value}" id="6170825" weight="50"/>
+        <filter value="{value}\n*1{name}" id="6177416" weight="50"/>
+    </filters>
+    <rule class="ru.yandex.market.ir.decision.BooleanRule" type="boolean"/>
+    <rule class="ru.yandex.market.ir.decision.StringDictionaryRule" type="stringDictionary"/>
+    <tags/>
+    <baseUnit name="Емкость Вт·ч">
+        <unit id="12325035" name="кВт·ч" multiplier="1000.0">
+            <alias value="кВт·ч"/>
+            <alias value="eu570419"/>
+            <alias value="квт·ч"/>
+        </unit>
+        <unit id="12324996" name="Вт·ч" multiplier="1.0">
+            <alias value="Вт·ч"/>
+            <alias value="вт/эл"/>
+            <alias value="вт·ч"/>
+        </unit>
+    </baseUnit>
+    <type baseType="stringDictionary" id="4922804" name="4922804:enum:ControlType">
+        <value id="16826520" name="сенсорное">
+            <alias value="сенсорное"/>
+        </value>
+    </type>
+    <type baseType="stringDictionary" id="28616160" name="28616160:enum:Programms">
+        <param name="allow_multivalues" value="true"/>
+        <param name="confident_in_parameters" value="true"/>
+        <value id="28616189" name="интенсивная">
+            <alias value="интенсивная"/>
+        </value>
+    </type>
+    <type baseType="boolean" id="16395390" name="16395390:boolean:SMART_device">
+        <param name="formalize_from_parameters" value="true"/>
+        <param name="formalize_from_title" value="true"/>
+        <param name="confident_in_parameters" value="true"/>
+        <value id="16395391" name="TRUE"/>
+        <value id="16395396" name="FALSE"/>
+    </type>
+
+    <type baseType="boolean" id="16395391" name="16395391:boolean:stupid_device">
+        <param name="formalize_from_parameters" value="true"/>
+        <param name="formalize_from_title" value="true"/>
+        <value id="26395391" name="TRUE"/>
+        <value id="26395396" name="FALSE"/>
+    </type>
+
+    <category id="90584" name="Посудомоечные машины" use_title_maker="false">
+        <param id="4922804" name="Управление" xslname="ControlType" type="4922804:enum:ControlType" level="model"
+               required_for_index="false" notify_stores="false" published="true" model_filter_index="-1">
+            <alias value="Управление"/>
+            <alias value="тип управления"/>
+        </param>
+        <param id="28616160" name="Программы" xslname="Programms" type="28616160:enum:Programms" level="model"
+               required_for_index="false" notify_stores="false" published="true" model_filter_index="-1">
+            <alias value="Программы"/>
+        </param>
+        <param id="16395390" name="SMART_device" xslname="SMART_device" type="16395390:boolean:SMART_device"
+               level="model" notify_stores="false" published="true" model_filter_index="-1">
+        </param>
+
+        <param id="16395391" name="stupid_device" xslname="stupid_device" type="16395391:boolean:stupid_device"
+               level="model" notify_stores="false" published="true" model_filter_index="-1">
+        </param>
+
+    </category>
+    <dependency-rules>
+        <rule id="27802074" weight="5000">
+            <if>
+                <value-matches paramId="28616160" valueId="28616189"/>
+            </if>
+            <then>
+                <assign-value paramId="16395390" valueId="16395391"/>
+                <assign-value paramId="16395391" valueId="26395391"/>
+            </then>
+        </rule>
+
+    </dependency-rules>
+    <links/>
+    <conflict-rules/>
+</formalizer>

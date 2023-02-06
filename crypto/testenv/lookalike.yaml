@@ -1,0 +1,57 @@
+BUILD_BUNDLES:
+    multiple_jobs:
+        BUILD_CRYPTA_LOOKALIKE_INDEX_BUNDLE:
+            observed_paths:
+              - ^arcadia/crypta/lookalike/index/crypta-lookalike-index.json
+              - ^arcadia/crypta/lookalike/index/index.yaml
+            targets:
+              - crypta/lookalike/index/test
+            packages: crypta/lookalike/index/crypta-lookalike-index.json
+            resource_type: CRYPTA_LOOKALIKE_INDEX_BUNDLE
+
+    owners:
+        - g:crypta
+    type: CHECK
+    filter:
+        commit_path_prefixes:
+          - /trunk/arcadia/crypta/
+        observed_paths: gen:observed_paths
+        targets: gen:targets
+    check_task:
+        name: YA_PACKAGE
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                    - recipients:
+                          - '{commit_author}'
+                          - crypta-ci
+                      statuses:
+                          - SUCCESS
+                          - FAILURE
+                          - EXCEPTION
+                      transport: email
+            ctx:
+                packages: gen:packages
+                resource_type: gen:resource_type
+                package_resource_attrs:
+                  released: testing
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                strip_binaries: false
+                compress_package_archive: true
+                package_type: tarball
+                run_tests: false
+                run_long_tests: false
+                ignore_fail_tests: false
+                ya_yt_store: true
+        output_resources:
+            gen:resource_type: inf

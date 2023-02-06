@@ -1,0 +1,114 @@
+{
+    "HttpServer": {
+        "Port": 80
+    },
+    "Logs": {
+        "Rules": [
+            {
+                "FilePath": "/dev/stderr",
+                "MinLevel": "Info"
+            },
+            {
+                "FilePath": "./michurin.log",
+                "MinLevel": "Warning"
+            }
+        ]
+    },
+    "YtRpc": {
+        "EnableRetries": true
+    },
+    "MichurinSystemConfig": {
+        "Name": "michurin",
+        "MaxInflightBytes": 10000000000,
+        "Suppliers": [
+            {
+                "Alias": "resharded_yt_log",
+                "YtSupplier": {
+                    "ChunkSize": 500,
+                    "MaxOutChunkSize": 5000,
+                    "QueueConsumer": "michurin",
+                    "QueuePath": "//home/crypta/testing/rtsklejka/qyt/michurin_events",
+                    "Cluster": "hahn"
+                }
+            }
+        ],
+        "ConsumingSystem": {
+            "Cluster": "hahn",
+            "MainPath": "//home/crypta/testing/rtsklejka/consuming_systems/michurin",
+            "MaxShardsAutoResolveRatio": 0.04,
+            "WorkerMinorName": "w_michurin"
+        },
+        "StateManagerConfig": {
+            "StateCacheConfig": {
+                "PinnedEpochsCount": 1
+            },
+            "EpochStatesSizeQuota": 1000000,
+            "EpochStatesCountQuota": 5000,
+            "StateSizeDummy": 3000
+        },
+        "StatefulShardProcessorConfig": {
+            "LoadingBatchSize": 20000
+        },
+        "MichurinStateProcessorConfig": {
+            "StateTable": "//home/crypta/testing/rtsklejka/state/michurin_state",
+            "CryptaIdQueue": "//home/crypta/testing/rtsklejka/qyt/cryptaid_events",
+            "RewindQueue": "//home/crypta/testing/rtsklejka/qyt/rewound_events",
+            "CryptaIdMaxMessagesCount": 25,
+            "EdgeLimit": 100,
+            "EnforceEdgeLimitAfter": 150,
+            "LogWhitelistTable": "//home/crypta/testing/rtsklejka/state/whitelist",
+            "ReshardingModule": 128,
+            "ForceEdgesStrongForSplit": true,
+            "DebounceCfg": {
+                "Lifetime": 300
+            },
+            "Brusilov": {
+                "Queue": "//home/crypta/testing/rtsklejka/qyt/vulture_events",
+                "ReshardingModule": 128,
+                "MaxMessagesCount": 5,
+                "Enabled": false
+            }
+        }
+    },
+    "CryptaIdSystemConfig": {
+        "Name": "cryptaid",
+        "Suppliers": [
+            {
+                "Alias": "cryptaid_yt_log",
+                "YtSupplier": {
+                    "QueueConsumer": "michurin_cryptaid",
+                    "QueuePath": "//home/crypta/testing/rtsklejka/qyt/cryptaid_events",
+                    "Cluster": "hahn"
+                }
+            }
+        ],
+        "ConsumingSystem": {
+            "Cluster": "hahn",
+            "MainPath": "//home/crypta/testing/rtsklejka/consuming_systems/cryptaid/michurin_cryptaid",
+            "MaxShardsAutoResolveRatio": 0.04,
+            "WorkerMinorName": "w_cryptaid_michurin"
+        },
+        "StateManagerConfig": {
+            "StateCacheConfig": {
+                "PinnedEpochsCount": 0
+            }
+        },
+        "CryptaIdStateProcessorConfig": {
+            "StateTable": "//home/crypta/testing/rtsklejka/state/cryptaid_state"
+        }
+    },
+    "LogbrokerConfig": {
+        "EnableRewinds": false,
+        "RewindProducerConfig": {
+            "Topic": "/crypta/prod/graph/rewind",
+            "SourceIdPrefix": "michurin-rewind",
+            "MaxChunkSizeBytes": 102400
+        }
+    },
+    "TvmApiConfig": {
+        "SelfClientId": 2017217,
+        "Destinations": {
+            "pq": 2001059
+        }
+    }
+}

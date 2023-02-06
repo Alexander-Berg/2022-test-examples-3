@@ -1,0 +1,198 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый market_stock-storage-solomon-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_stock-storage-solomon-testing
+
+juggler:
+  checks:
+
+  # Check execution-queue-many-attempt-numbers
+  # https://juggler.yandex-team.ru/check_details/?host=market_stock-storage-solomon-testing&service=execution-queue-many-attempt-numbers&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 20%
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - EVENTS%host=market_stock-storage-testing & service=stock-storage_TESTING_Execution_Queue_Many_Attempt_Numbers_*:all:all
+    service: execution-queue-many-attempt-numbers
+
+  # Check http-code-4xx-percent
+  # https://juggler.yandex-team.ru/check_details/?host=market_stock-storage-solomon-testing&service=http-code-4xx-percent&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 20%
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - market_stock-storage-testing:stock-storage_TESTING_http-code_4XX-percent
+    service: http-code-4xx-percent
+
+  # Check http-code-5xx-percent
+  # https://juggler.yandex-team.ru/check_details/?host=market_stock-storage-solomon-testing&service=http-code-5xx-percent&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 23
+        time_start: 0
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - market_stock-storage-testing:stock-storage_TESTING_http-code_5XX-percent
+    service: http-code-5xx-percent
+
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 23
+        time_start: 0
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - market_stock-storage-testing:stock-storage_PRODUCTION_http-code_4XX-percent-order
+    service: http-code-orders-4xx-percent
+
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 23
+        time_start: 0
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - market_stock-storage-testing:c384845c-f6d9-43b2-801d-0bc3ef72f633
+    service: http-code-orders-5xx-percent
+
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 23
+        time_start: 0
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - market_stock-storage-testing:stock-storage_TESTING_jdbc_threads_busy
+    service: jdbc-pool-size
+
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 23
+        time_start: 0
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - market_stock-storage-testing:stock-storage_TESTING_jetty_threads_busy
+    service: jetty-pool-size
+
+  # Check jvm-gc-pause
+  # https://juggler.yandex-team.ru/check_details/?host=market_stock-storage-solomon-testing&service=jvm-gc-pause&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 20%
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - market_stock-storage-testing:stock-storage_TESTING_jvm_gc_pause_seconds_max
+    service: jvm-gc-pause
+
+  # Check min-delta-queue-execute-after
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 20%
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - EVENTS%host=market_stock-storage-testing & service=stock-storage_TESTING_Min_Delta_Queue_Execute_After_*:all:all
+    service: min-delta-queue-execute-after
+   
+     # Check queued-unfreeze-jobs-attempts
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 20%
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - EVENTS%host=market_stock-storage-testing & service=stock-storage_TESTING_Unfreeze_Jobs_Many_Attempt_Numbers:all:all
+    service: queued-unfreeze-jobs-many-attempts
+    
+
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    check_options: {}
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_stock-storage-solomon-testing
+    namespace: market.ff
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_prod
+    - market_delivery
+    - market_rtc
+    - stock-storage
+    - market
+    - _market_
+    ttl: 900

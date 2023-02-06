@@ -1,0 +1,100 @@
+package ru.yandex.direct.core.entity.campaign.service.validation.type.add
+
+import junitparams.JUnitParamsRunner
+import junitparams.Parameters
+import junitparams.naming.TestCaseName
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
+import ru.yandex.direct.core.entity.campaign.model.CampaignWithSkadNetworkForbidden
+import ru.yandex.direct.core.entity.campaign.model.ContentPromotionCampaign
+import ru.yandex.direct.core.entity.campaign.model.CpmBannerCampaign
+import ru.yandex.direct.core.entity.campaign.model.CpmPriceCampaign
+import ru.yandex.direct.core.entity.campaign.model.CpmYndxFrontpageCampaign
+import ru.yandex.direct.core.entity.campaign.model.DynamicCampaign
+import ru.yandex.direct.core.entity.campaign.model.InternalAutobudgetCampaign
+import ru.yandex.direct.core.entity.campaign.model.InternalDistribCampaign
+import ru.yandex.direct.core.entity.campaign.model.InternalFreeCampaign
+import ru.yandex.direct.core.entity.campaign.model.McBannerCampaign
+import ru.yandex.direct.core.entity.campaign.model.SmartCampaign
+import ru.yandex.direct.core.entity.campaign.model.TextCampaign
+import ru.yandex.direct.core.entity.campaign.service.type.add.container.RestrictedCampaignsAddOperationContainer
+import ru.yandex.direct.core.entity.campaign.service.validation.CampaignDefects
+import ru.yandex.direct.test.utils.assertj.Conditions.matchedBy
+import ru.yandex.direct.testing.matchers.validation.Matchers.hasDefectWithDefinition
+import ru.yandex.direct.testing.matchers.validation.Matchers.hasNoDefectsDefinitions
+import ru.yandex.direct.testing.matchers.validation.Matchers.validationError
+import ru.yandex.direct.validation.result.PathHelper.field
+import ru.yandex.direct.validation.result.PathHelper.index
+import ru.yandex.direct.validation.result.PathHelper.path
+import ru.yandex.direct.validation.result.ValidationResult
+
+@RunWith(JUnitParamsRunner::class)
+class CampaignWithSkadNetworkForbiddenAddValidationTypeSupportTest {
+
+    lateinit var typeSupport: CampaignWithSkadNetworkForbiddenAddValidationTypeSupport
+
+    fun testData() = listOf(
+            listOf("TextCampaign", TextCampaign()),
+            listOf("DynamicCampaign", DynamicCampaign()),
+            listOf("SmartCampaign", SmartCampaign()),
+            listOf("ContentPromotionCampaign", ContentPromotionCampaign()),
+            listOf("CpmBannerCampaign", CpmBannerCampaign()),
+            listOf("CpmPriceCampaign", CpmPriceCampaign()),
+            listOf("CpmYndxFrontpageCampaign", CpmYndxFrontpageCampaign()),
+            listOf("InternalAutobudgetCampaign", InternalAutobudgetCampaign()),
+            listOf("InternalDistribCampaign", InternalDistribCampaign()),
+            listOf("InternalFreeCampaign", InternalFreeCampaign()),
+            listOf("McBannerCampaign", McBannerCampaign())
+    )
+
+    @Before
+    fun setUp() {
+        typeSupport = CampaignWithSkadNetworkForbiddenAddValidationTypeSupport()
+    }
+
+    @Test
+    @Parameters(method = "testData")
+    @TestCaseName("campaign is {0} and not copy")
+    fun shouldAddDefectIfFlagIsPresent(testCase: String, campaign: CampaignWithSkadNetworkForbidden) {
+        val container = mock(RestrictedCampaignsAddOperationContainer::class.java)
+        campaign.isSkadNetworkEnabled = true
+
+        val result = typeSupport.preValidate(container, ValidationResult(listOf(campaign)))
+
+        assertThat(result)
+                .`is`(matchedBy(hasDefectWithDefinition<Any>(
+                        validationError(
+                                path(index(0), field(CampaignWithSkadNetworkForbidden.IS_SKAD_NETWORK_ENABLED)),
+                                CampaignDefects.inconsistentCampaignType()
+                        )
+                )))
+    }
+
+    @Test
+    @Parameters(method = "testData")
+    @TestCaseName("campaign is {0} and not copy")
+    fun shouldValidateOkIfFlagIsNotPresent(testCase: String, campaign: CampaignWithSkadNetworkForbidden) {
+        val container = mock(RestrictedCampaignsAddOperationContainer::class.java)
+
+        val result = typeSupport.preValidate(container, ValidationResult(listOf(campaign)))
+
+        assertThat(result).`is`(matchedBy(hasNoDefectsDefinitions<Any>()))
+    }
+
+    @Test
+    @Parameters(method = "testData")
+    @TestCaseName("campaign is {0} and not copy")
+    fun shouldValidateOkIfCopy(testCase: String, campaign: CampaignWithSkadNetworkForbidden) {
+        val container = mock(RestrictedCampaignsAddOperationContainer::class.java)
+        `when`(container.isCopy)
+                .thenReturn(true)
+
+        val result = typeSupport.preValidate(container, ValidationResult(listOf(campaign)))
+
+        assertThat(result).`is`(matchedBy(hasNoDefectsDefinitions<Any>()))
+    }
+}

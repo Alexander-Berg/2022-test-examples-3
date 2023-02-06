@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+       default-lazy-init="false" default-autowire="byName">
+
+
+    <!-- Import prod configs -->
+    <import resource="classpath:market-utils-internal.xml"/>
+    <import resource="classpath:mvc/controllers.xml"/>
+    <import resource="classpath:mail-core/xiva.xml"/>
+
+    <import resource="classpath:pers-notify-client/pers-notify-client.xml"/>
+
+    <context:component-scan base-package="ru.yandex.market.pers.notify"/>
+    <context:component-scan base-package="ru.yandex.market.pers.area"/>
+
+    <!-- Mocks -->
+    <import resource="classpath:mock.xml"/>
+    <import resource="classpath:mock-market-utils.xml"/>
+    <import resource="classpath:market-utils-test-datasource.xml"/>
+
+
+    <!-- Utils -->
+    <bean class="ru.yandex.market.pers.notify.test.MarketUtilsTestEnvironment"/>
+    <bean class="ru.yandex.market.pers.notify.api.controller.SubscriptionControllerInvoker"/>
+    <bean class="ru.yandex.market.pers.notify.api.controller.UserControllerInvoker"/>
+    <bean class="ru.yandex.market.pers.notify.api.controller.SettingsControllerInvoker"/>
+
+    <!-- Properties -->
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          lazy-init="false">
+        <property name="locations">
+            <list>
+                <value>classpath:mail-core/memcached.properties</value>
+                <value>classpath:test-application.properties</value>
+                <value>local-application.properties</value>
+            </list>
+        </property>
+        <property name="fileEncoding" value="utf-8"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+</beans>

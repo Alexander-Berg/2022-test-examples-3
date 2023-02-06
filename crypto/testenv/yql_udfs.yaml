@@ -1,0 +1,165 @@
+BUILD_CRYPTA_UDF:
+    multiple_jobs:
+        BUILD_CRYPTA_IDENTIFIERS_UDF:
+            commit_path_prefixes:
+              - /trunk/arcadia/crypta/
+              - /trunk/arcadia/contirb/libs/icu/
+              - /trunk/arcadia/contirb/libs/libphonenumber/
+              - /trunk/arcadia/contirb/libs/re2/
+              - /trunk/arcadia/yql/udfs/crypta/
+            targets: yql/udfs/crypta/identifiers
+            arts: yql/udfs/crypta/identifiers/libcrypta_identifier_udf.so
+            result_rt: CRYPTA_IDENTIFIERS_UDF
+
+        BUILD_CRYPTA_SOCKET_DECRYPTOR_UDF:
+            commit_path_prefixes:
+              - /trunk/arcadia/yql/udfs/crypta/socket_decryptor/
+              - /trunk/arcadia/crypta/graph/rtdi-rt/decryptor/
+            targets: yql/udfs/crypta/socket_decryptor
+            arts: yql/udfs/crypta/socket_decryptor/libdecryptor_udf.so
+            result_rt: CRYPTA_SOCKET_DECRYPTOR_UDF
+
+        BUILD_CRYPTA_ITP_UDF:
+            commit_path_prefixes:
+              - /trunk/arcadia/metrika/uatraits/data/
+              - /trunk/arcadia/metrika/uatraits/library/
+              - /trunk/arcadia/yql/udfs/crypta/itp/
+            targets: yql/udfs/crypta/itp
+            arts: yql/udfs/crypta/itp/libitp_udf.so
+            result_rt: CRYPTA_ITP_UDF
+
+        BUILD_CRYPTA_TCP_OPTIONS_UDF:
+            commit_path_prefixes:
+                - /trunk/arcadia/yql/udfs/crypta/tcp_options
+            targets: yql/udfs/crypta/tcp_options
+            arts: yql/udfs/crypta/tcp_options/libtcp_options_udf.so
+            result_rt: CRYPTA_TCP_OPTIONS_UDF
+
+        BUILD_CRYPTA_LEMMER_UDF:
+            commit_path_prefixes:
+              - /trunk/arcadia/yql/udfs/crypta/lemmer/
+            targets: yql/udfs/crypta/lemmer
+            arts: yql/udfs/crypta/lemmer/libcrypta_lemmer_udf.so
+            result_rt: CRYPTA_LEMMER_UDF
+
+        BUILD_CRYPTA_RTGEO_UDF:
+            commit_path_prefixes:
+              - /trunk/arcadia/crypta/
+              - /trunk/arcadia/rtmapreduce/mrtasks/rtcrypta_geo/proto/
+              - /trunk/arcadia/yql/udfs/crypta/
+            targets: yql/udfs/crypta/rtgeo
+            arts: yql/udfs/crypta/rtgeo/libcrypta_rtgeo_udf.so
+            result_rt: CRYPTA_RTGEO_UDF
+
+        BUILD_CRYPTA_AWAPS_PARSER_UDF:
+            commit_path_prefixes:
+              - /trunk/arcadia/crypta/
+              - /trunk/arcadia/library/cpp/string_utils/
+              - /trunk/arcadia/yql/udfs/crypta/
+            targets: yql/udfs/crypta/awaps
+            arts: yql/udfs/crypta/awaps/libparse_awaps_udf.so
+            result_rt: CRYPTA_AWAPS_PARSER_UDF
+
+        BUILD_CRYPTA_SOUP_UDF:
+            commit_path_prefixes:
+              - /trunk/arcadia/crypta/
+              - /trunk/arcadia/yql/udfs/crypta/
+            targets: yql/udfs/crypta/soup
+            arts: yql/udfs/crypta/soup/libcrypta_soup_udf.so
+            result_rt: CRYPTA_SOUP_UDF
+
+        BUILD_CRYPTA_SAMPLER_UDF:
+            commit_path_prefixes:
+              - /trunk/arcadia/crypta/
+              - /trunk/arcadia/yql/udfs/crypta/
+            targets: yql/udfs/crypta/sampler
+            arts: yql/udfs/crypta/sampler/libcrypta_sampler_udf.so
+            result_rt: CRYPTA_SAMPLER_UDF
+
+        BUILD_CRYPTA_URL_UTILS_UDF:
+            commit_path_prefixes:
+              - /trunk/arcadia/crypta/
+              - /trunk/arcadia/kernel/urlnorm
+              - /trunk/arcadia/library/cpp/uri
+              - /trunk/arcadia/yql/udfs/crypta/
+            targets: yql/udfs/crypta/url_utils
+            arts: yql/udfs/crypta/url_utils/libcrypta_url_utils_udf.so
+            result_rt: CRYPTA_URL_UTILS_UDF
+
+        BUILD_CRYPTA_CM_UDF:
+            commit_path_prefixes:
+            - /trunk/arcadia/crypta/
+            - /trunk/arcadia/yql/udfs/crypta/
+            targets: yql/udfs/crypta/cm
+            arts: yql/udfs/crypta/cm/libcrypta_cm_udf.so
+            result_rt: CRYPTA_CM_UDF
+
+        BUILD_CRYPTA_IPREQ_UDF:
+            commit_path_prefixes:
+            - /trunk/arcadia/crypta/
+            - /trunk/arcadia/yql/udfs/crypta/
+            targets: yql/udfs/crypta/ipreq
+            arts: yql/udfs/crypta/ipreq/libcrypta_ipreq_udf.so
+            result_rt: CRYPTA_IPREQ_UDF
+
+        BUILD_CRYPTA_EU_EMAIL_FILTER_UDF:
+            commit_path_prefixes:
+                - /trunk/arcadia/crypta/graph/bloom_email/udf
+            targets: crypta/graph/bloom_email/udf
+            arts: crypta/graph/bloom_email/udf/libeu_email_filter_udf.so
+            result_rt: CRYPTA_EU_EMAIL_FILTER_UDF
+
+        BUILD_CRYPTA_LTP_VIEWER_UDF:
+            commit_path_prefixes:
+              - /trunk/arcadia/crypta/
+              - /trunk/arcadia/yql/udfs/crypta/
+            targets: yql/udfs/crypta/ltp
+            arts: yql/udfs/crypta/ltp/libcrypta_ltp_viewer_udf.so
+            result_rt: CRYPTA_UNIVERSAL_BUNDLE
+            result_attrs:
+                name: crypta-ltp-viewer-udf
+
+    owners:
+      - g:crypta
+    type: CHECK
+    filter:
+        commit_path_prefixes: gen:commit_path_prefixes
+        targets:
+          - gen:targets
+    check_task:
+        name: CRYPTA_YA_MAKE_YT
+        priority: SERVICE:LOW
+        params:
+            apiargs:
+                requirements:
+                    platform: linux
+                notifications:
+                  - recipients:
+                      - '{commit_author}'
+                      - crypta-ci
+                    statuses:
+                      - SUCCESS
+                      - FAILURE
+                      - EXCEPTION
+                    transport: email
+            custom_fields:
+                yt_publish_proxy: hahn.yt.yandex.net
+                yt_publish_dir: //home/crypta/public/udfs/stable
+                yt_archive_dir: //home/crypta/public/udfs/unstable
+                yt_token_name: ROBOT_CRYPTA_YT_TOKEN
+                yt_token_owner: CRYPTA
+                kill_timeout: 6300
+                build_type: relwithdebinfo
+                build_system: semi_distbuild
+                checkout_arcadia_from_url: arcadia:/arc/trunk/arcadia@{revision}
+                use_aapi_fuse: true
+                use_arc_instead_of_aapi: true
+                aapi_fallback: true
+                checkout: false
+                targets: gen:targets
+                arts: gen:arts
+                result_rt: gen:result_rt
+                result_attrs: gen:result_attrs
+                result_single_file: true
+        output_resources:
+            gen:result_rt: 30

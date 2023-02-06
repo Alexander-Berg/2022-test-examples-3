@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<m:config xmlns:c="urn:jmf:common:1.0"
+          xmlns:m="urn:jmf:metaclass:config:1.0"
+          xmlns:a="urn:jmf:attribute:type:default:config:1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+    <m:metaclass>
+        <m:fqn>ou</m:fqn>
+        <m:parent>bo</m:parent>
+        <m:title>
+            <c:value>Подразделение</c:value>
+        </m:title>
+        <m:description>
+            <c:value>Тестовое организационное подразделение</c:value>
+        </m:description>
+        <m:attributes>
+            <m:attribute>
+                <m:code>parent</m:code>
+                <m:title>
+                    <c:value>Родитель</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="ou"/>
+                <m:relation parent="true"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>head</m:code>
+                <m:title>
+                    <c:value>Руководитель</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="employee"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>employees</m:code>
+                <m:title>
+                    <c:value>Сотрудники</c:value>
+                </m:title>
+                <m:type xsi:type="a:back" fqn="employee@ou" expectedSize="SMALL"/>
+            </m:attribute>
+            <m:attribute naturalId="true">
+                <m:code>staffId</m:code>
+                <m:title>
+                    <c:value>Идентификатор на стаффе</c:value>
+                </m:title>
+                <m:type xsi:type="a:integer"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+    <m:metaclass>
+        <m:fqn>ou$default</m:fqn>
+        <m:parent>ou</m:parent>
+        <m:title>
+            <c:value>Отдел</c:value>
+        </m:title>
+    </m:metaclass>
+
+    <m:metaclass>
+        <m:fqn>employee</m:fqn>
+        <m:parent>bo</m:parent>
+        <m:title>
+            <c:value>Сотрудник</c:value>
+        </m:title>
+        <m:description>
+            <c:value>Тестовый сотрудник</c:value>
+        </m:description>
+        <m:attributes>
+            <m:attribute required="true">
+                <m:code>ou</m:code>
+                <m:title>
+                    <c:value>Подразделение</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="ou"/>
+                <m:relation parent="true"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>lastName</m:code>
+                <m:title>
+                    <c:value>Фамилия</c:value>
+                </m:title>
+                <m:type xsi:type="a:string"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>firstName</m:code>
+                <m:title>
+                    <c:value>Имя</c:value>
+                </m:title>
+                <m:type xsi:type="a:string"/>
+            </m:attribute>
+            <m:attribute unique="true">
+                <m:code>staffId</m:code>
+                <m:title>
+                    <c:value>Идентификатор на стаффе</c:value>
+                </m:title>
+                <m:type xsi:type="a:string"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>uid</m:code>
+                <m:title>
+                    <c:value>Идентификатор</c:value>
+                </m:title>
+                <m:type xsi:type="a:string"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+    <m:metaclass>
+        <m:fqn>employee$default</m:fqn>
+        <m:parent>employee</m:parent>
+        <m:title>
+            <c:value>Сотрудник</c:value>
+        </m:title>
+    </m:metaclass>
+
+</m:config>

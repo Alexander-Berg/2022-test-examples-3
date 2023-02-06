@@ -1,0 +1,51 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "bronevik",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--date-from", "2019-12-04",
+    "--limit", "1",
+]
+
+checkers = [
+    "lb",
+    "partner",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "application/json"
+
+[[partner.responses]]
+    args = {"updated_at_from_utc"="2019-12-04T00:00:00"}
+    data_file = "cpa_export_response_0.json"
+
+[lb]
+    topic = "topic-bronevik"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+[[lb.expected]]
+    partner_name = "bronevik"
+    travel_order_id = "bronevik:YA-9999-9999-9935"
+    partner_order_id = "YA-9999-9999-9935"
+    created_at = 1575536086
+    status = "unpaid"
+    currency_code = "RUB"
+    category = "hotels"
+    snapshot_source = "collectors"
+    check_in = "2019-12-12"
+    check_out = "2019-12-14"
+    order_amount = 10980
+    profit_amount = 1537.2
+    hotel_name = 'Южная дача'
+    permalink = "60683313980"
+    label = "string"
+    privetmir_oct2020_eligible = false
+    use_deferred_payment = false
+    deferred_payment_eligibility = "unknown"
+    post_pay_eligible = false
+    post_pay_used = false

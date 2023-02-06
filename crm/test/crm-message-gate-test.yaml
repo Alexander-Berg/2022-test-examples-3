@@ -1,0 +1,179 @@
+labels:
+  tags: ["logexport"]
+meta:
+  account_id: abc:service:200
+  acl:
+  - action: allow
+    permissions:
+    - read
+    - write
+    - create
+    - ssh_access
+    - root_ssh_access
+    - read_secrets
+    subjects:
+    - robot-drug-deploy
+  effective_account_id: null
+  id: crm-message-gate-test
+  inherit_acl: true
+  parent_key: ''
+  project_id: crm-test
+spec:
+  deploy_units:
+    message-gate:
+      dynamic_resource_updater_sandbox_info:
+        revision: 1985693042
+      endpoint_sets:
+      - liveness_limit_ratio: 0.35
+        port: 80
+      images_for_boxes:
+        logexport-box:
+          name: crm/log-export-worker
+          registry_host: registry.yandex.net
+          tag: '34'
+        message-gate-box:
+          digest: sha256:9a45f6ddc32ff7d6cdd6a21ef9218f0108b817382779da74765424b8314382ff
+          name: crm/message-gate
+          registry_host: registry.yandex.net
+          tag: 7-b
+      multi_cluster_replica_set:
+        replica_set:
+          clusters:
+          - cluster: sas
+            spec:
+              replica_count: 1
+          - cluster: vla
+            spec:
+              replica_count: 1
+          deployment_strategy:
+            max_unavailable: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+              - id: main-disk
+                labels:
+                  used_by_infra: true
+                quota_policy:
+                  bandwidth_guarantee: 1048576
+                  bandwidth_limit: 2097152
+                  capacity: 32212254720
+                storage_class: hdd
+              pod_agent_payload:
+                spec:
+                  boxes:
+                  - env:
+                    - name: ASPNETCORE_ENVIRONMENT
+                      value:
+                        literal_env:
+                          value: Testing
+                    id: message-gate-box
+                    rootfs: {}
+                    volumes:
+                    - mode: read_write
+                      mount_point: /logs
+                      volume_ref: logs
+                  - env:
+                    - name: ASPNETCORE_ENVIRONMENT
+                      value:
+                        literal_env:
+                          value: Testing
+                    id: logexport-box
+                    rootfs: {}
+                    volumes:
+                    - mode: read_write
+                      mount_point: /logs
+                      volume_ref: logs
+                  mutable_workloads:
+                  - workload_ref: message-gate-workload
+                  - workload_ref: logexport-workload
+                  resources: {}
+                  volumes:
+                  - id: logs
+                  workloads:
+                  - box_ref: message-gate-box
+                    env:
+                    - name: ConnectionStrings__MessageDatabase
+                      value:
+                        secret_env:
+                          alias: message-gate-test:202205041457
+                          id: connection-string
+                    - name: ASPNETCORE_ENVIRONMENT
+                      value:
+                        literal_env:
+                          value: Testing
+                    id: message-gate-workload
+                    liveness_check:
+                      http_get:
+                        any: true
+                        path: /liveness
+                        port: 80
+                    readiness_check:
+                      http_get:
+                        any: true
+                        path: /readiness
+                        port: 80
+                  - box_ref: logexport-box
+                    env:
+                    - name: ElasticConfig__Username
+                      value:
+                        literal_env:
+                          value: crm-message-gate
+                    - name: ElasticConfig__Password
+                      value:
+                        secret_env:
+                          alias: crm-logs-admin
+                          id: crm-message-gate
+                    - name: LogSourcesConfig__Sources__1__ApplicationName
+                      value:
+                        literal_env:
+                          value: logs-message-gate
+                    - name: LogSourcesConfig__Sources__1__DirectoryPath
+                      value:
+                        literal_env:
+                          value: /logs/Yandex.Crm.MessageGate.Service
+                    id: logexport-workload
+                    transmit_logs: true
+              resource_requests:
+                memory_guarantee: 8589934592
+                memory_limit: 8589934592
+                network_bandwidth_guarantee: 10485760
+                vcpu_guarantee: 4000
+                vcpu_limit: 4000
+              secret_refs:
+                crm-logs-admin:
+                  secret_id: sec-01f92gcrxd4j2czhv1x3epk464
+                  secret_version: ver-01fzjy4fj6db0yjvxg29xdpgvn
+                message-gate-test:
+                  secret_id: sec-01g0knr7fxhb4yh4frjr8p4934
+                  secret_version: ver-01g0ktr9h1fk5vnra9mqsx2mz4
+                message-gate-test:20220504:
+                  secret_id: sec-01g0knr7fxhb4yh4frjr8p4934
+                  secret_version: ver-01g270qtmvbdtak199xa57p6pe
+                message-gate-test:202205041457:
+                  secret_id: sec-01g0knr7fxhb4yh4frjr8p4934
+                  secret_version: ver-01g27ewnjwwcqhaye2f600yam7
+                tvm.secret.2001283:
+                  secret_id: sec-01dq7m10q03ytkzp4z39hzs07w
+                  secret_version: ver-01dq7m10yrrfwh13ng7azs89ge
+      network_defaults:
+        network_id: _CRMTEST_DEPLOY_NETS_
+      patchers_revision: 11
+      pod_agent_sandbox_info:
+        revision: 3006211268
+      revision: 23
+      tvm_config:
+        blackbox_environment: ProdYaTeam
+        clients:
+        - destinations:
+          - alias: crm
+            app_id: 2001283
+          secret_selector:
+            alias: tvm.secret.2001283
+            id: client_secret
+          source:
+            alias: crm
+            app_id: 2001283
+        mode: enabled
+      tvm_sandbox_info:
+        revision: 2927963150
+  sox_service: false

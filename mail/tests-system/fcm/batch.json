@@ -1,0 +1,138 @@
+{
+  "fcm_response": [
+    {
+      "success": 3,
+      "failure": 0,
+      "canonical_ids": 1,
+      "multicast_id": 123,
+      "results": [
+        {
+          "result_id": 1,
+          "message_id": "a"
+        },
+        {
+          "result_id": 2,
+          "registration_id": "new token here",
+          "message_id": "b"
+        },
+        {
+          "result_id": 3,
+          "message_id": "c"
+        }
+      ]
+    },
+    {
+      "success": 1,
+      "failure": 2,
+      "canonical_ids": 1,
+      "multicast_id": 123,
+      "results": [
+        {
+          "result_id": 1
+        },
+        {
+          "error": "InvalidRegistration"
+        },
+        {
+          "error": "InvalidRegistration",
+          "registration_id": "new_token"
+        }
+      ]
+    },
+    {
+      "success": 1,
+      "failure": 6,
+      "canonical_ids": 0,
+      "multicast_id": 123,
+      "results": [
+        {
+          "error": "DeviceresultRateExceeded"
+        },
+        {
+          "result_id": 1
+        },
+        {
+          "error": "InternalServerError"
+        },
+        {
+          "error": "Unavailable"
+        },
+        {
+          "error": "MismatchSenderId"
+        },
+        {
+          "error": "NotRegistered"
+        },
+        {
+          "error": "MissingRegistration"
+        }
+      ]
+    }
+  ],
+  "expect": [
+    {
+      "results": [
+        {
+          "code": 200,
+          "result": {"message_id": "a"}
+        },
+        {
+          "code": 200,
+          "result": {"message_id": "b", "new_token": "new token here"}
+        },
+        {
+          "code": 200,
+          "result": {"message_id": "c"}
+        }
+      ]
+    },
+    {
+      "results": [
+        {
+          "code": 200,
+          "result": ""
+        },
+        {
+          "code": 205,
+          "result": {"error": "InvalidRegistration"}
+        },
+        {
+          "code": 205,
+          "result": {"error": "InvalidRegistration", "new_token": "new_token"}
+        }
+      ]
+    },
+    {
+      "results": [
+        {
+          "code": 502,
+          "result": {"error": "DeviceresultRateExceeded"}
+        },
+        {
+          "code": 200,
+          "result": ""
+        },
+        {
+          "code": 502,
+          "result": {"error": "InternalServerError"}
+        },
+        {
+          "code": 502,
+          "result": {"error": "Unavailable"}
+        },
+        {
+          "code": 205,
+          "result": {"error": "MismatchSenderId"}
+        },
+        {
+          "code": 205,
+          "result": {"error": "NotRegistered"}
+        },
+        {
+          "code": 205,
+          "result": {"error": "MissingRegistration"}
+        }
+      ]
+    }
+  ]
+}

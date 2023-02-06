@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/context
+	   http://www.springframework.org/schema/context/spring-context.xsd"
+       default-lazy-init="false" default-autowire="byName">
+
+    <context:component-scan base-package="ru.yandex.market.pers.notify">
+        <context:exclude-filter type="regex" expression="ru\.yandex\.market\.pers\.notify\.external\..*"/>
+        <context:exclude-filter type="regex" expression="ru\.yandex\.market\.pers\.notify\.executor\.listener..*"/>
+    </context:component-scan>
+
+    <!-- Properties -->
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          lazy-init="false">
+        <property name="locations">
+            <list>
+                <value>classpath:mail-core/memcached.properties</value>
+                <value>classpath:test-application.properties</value>
+                <value>local-application.properties</value>
+            </list>
+        </property>
+        <property name="fileEncoding" value="utf-8"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+    <!-- Mocks -->
+
+    <import resource="classpath:mail-core/memcache.xml"/>
+    <import resource="classpath:mail-core/xiva.xml"/>
+    <import resource="classpath:mock.xml"/>
+    <import resource="classpath:mail-core-test-datasource.xml"/>
+
+    <!-- Beans -->
+    <bean id="configuration" class="freemarker.template.Configuration">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="URLEscapingCharset" value="UTF-8"/>
+        <property name="numberFormat" value="computer"/>
+        <property name="locale" value="RU"/>
+    </bean>
+
+    <bean id="ftLoaderFactory" class="ru.yandex.market.pers.notify.templates.FTLoaderFactory"/>
+
+    <bean class="ru.yandex.market.util.db.ConfigurationService" id="notifyConfigurationService">
+        <property name="configTableName" value="CONFIGURATION"/>
+        <property name="idColumnName" value="PARAM"/>
+    </bean>
+
+    <bean id="regionService" class="ru.yandex.common.util.region.RegionService">
+        <property name="regionTreeBuilder">
+            <bean class="ru.yandex.common.util.region.RegionTreePlainTextBuilder">
+                <property name="timeoutMillis" value="3000"/>
+                <property name="plainTextURL" value="classpath:geoexport.txt"/>
+                <property name="skipHeader" value="true"/>
+                <property name="skipUnRootRegions" value="true"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="currencyHelper" class="ru.yandex.market.pers.notify.api.service.CurrencyHelper">
+        <property name="currencyResource" value="${currency.rates.file}"/>
+    </bean>
+
+    <bean id="subscriptionAndIdentityDAO" class="ru.yandex.market.pers.notify.settings.SubscriptionAndIdentityDAO"/>
+
+    <bean id="subscriptionAndIdentityService" class="ru.yandex.market.pers.notify.settings.SubscriptionAndIdentityService"/>
+
+    <bean id="userAddressDAO" class="ru.yandex.market.pers.notify.checkout.UserAddressDAO"/>
+
+    <bean id="subscriptionsCacher" class="ru.yandex.market.pers.notify.SubscriptionsCacher">
+        <property name="memCachedServiceConfig" ref="marketUtilsCachedServiceConfig"/>
+        <property name="memCachingService" ref="memCachingService"/>
+        <property name="subscriptionAndIdentityDAO" ref="subscriptionAndIdentityDAO"/>
+    </bean>
+
+    <bean id="passportService" class="ru.yandex.market.pers.notify.passport.CompositePassportService">
+        <constructor-arg name="blackBoxPassportService" ref="blackBoxPassportService"/>
+        <constructor-arg name="resolveUidService" ref="resolveUidService"/>
+        <constructor-arg name="jsonPassportService" ref="jsonPassportService"/>
+        <constructor-arg name="userInfoService" ref="userInfoService"/>
+    </bean>
+</beans>

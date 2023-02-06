@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <lrm_return
+            lrm_return_id="1"
+            source="CLIENT"
+            order_external_id="NOT_VALID"
+            logistic_point_from_id="1"
+    />
+
+    <lrm_return
+            lrm_return_id="2"
+            source="CANCELLATION"
+            order_external_id="ORDER2"
+            logistic_point_from_id="2"
+    />
+
+    <lrm_return_segment
+        id="1"
+        lrm_return_id="1"
+        lrm_segment_id="15"
+        status="IN"
+        logistic_point_partner_id="172"
+        logistic_point_external_id="13"
+        external_box_id="ORDER1"
+        logistic_point_id="200"
+        logistic_point_type="PICKUP"
+    />
+
+    <lrm_return_segment
+        id="2"
+        lrm_return_id="2"
+        external_box_id="FAILED_VALUE"
+        lrm_segment_id="16"
+        status="IN"
+        logistic_point_partner_id="172"
+        logistic_point_external_id="13"
+        logistic_point_id="200"
+        logistic_point_type="PICKUP"
+    />
+
+    <plan_fact
+        id="1"
+        entity_type="LRM_RETURN_SEGMENT"
+        entity_id="1"
+        expected_status="OUT"
+        processing_status="ENQUEUED"
+        plan_fact_status="ACTIVE"
+        expected_status_datetime="2020-11-01 12:00:00 +0000"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        created="2020-11-01 12:00:00 +0000"
+    />
+
+    <plan_fact
+        id="2"
+        entity_type="LRM_RETURN_SEGMENT"
+        entity_id="2"
+        expected_status="OUT"
+        processing_status="ENQUEUED"
+        plan_fact_status="ACTIVE"
+        expected_status_datetime="2020-11-01 12:00:00 +0000"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        created="2020-11-01 12:00:00 +0000"
+    />
+
+    <lom_order
+        id="1"
+        platform_client_id="1"
+        barcode="ORDER3"
+        status="PROCESSING"
+    />
+
+    <lom_waybill_segment
+        id="3"
+        external_id="3"
+        order_id="1"
+        partner_id="301"
+        partner_type="FULFILLMENT"
+        segment_type="FULFILLMENT"
+        waybill_segment_index="0"
+        shipment_date="2021-05-11"
+    />
+
+    <plan_fact
+        id="3"
+        entity_type="LOM_WAYBILL_SEGMENT"
+        entity_id="3"
+        waybill_segment_type="PICKUP"
+        expected_status="OUT"
+        processing_status="ENQUEUED"
+        plan_fact_status="ACTIVE"
+        expected_status_datetime="2020-11-01 12:00:00 +0000"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        created="2020-11-01 12:00:00 +0000"
+    />
+
+    <quality_rule
+        id="1"
+        enabled="true"
+        expected_status="OUT"
+        aggregation_type="PARTNER_RETURN_SEGMENT_PVZ"
+        rule_processor="STARTREK"
+        rule='{
+                "queue": "MQMTESTRETURN",
+                "_type": ".PartnerLrmReturnSegmentPvzPayload",
+                "allowedToCloseAssigned": false
+            }'
+    />
+
+    <plan_fact_group
+        id="1"
+        aggregation_key="date:2020-11-01;lrmPartnerFrom:172;"
+        aggregation_type="PARTNER_RETURN_SEGMENT_PVZ"
+        processing_status="ENQUEUED"
+        expected_status="OUT"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 1],
+                        "lrmPartnerFrom": {
+                            "id": 172,
+                            "name": "172"
+                        },
+                        "lrmPartnerTo": {
+                            "id": 301,
+                            "name": "301"
+                        }
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+        plan_fact_group_id="1"
+        plan_fact_id="1"
+    />
+
+    <plan_fact_group_relations
+        plan_fact_group_id="1"
+        plan_fact_id="2"
+    />
+
+    <plan_fact_group_relations
+        plan_fact_group_id="1"
+        plan_fact_id="3"
+    />
+
+</dataset>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd"
+       default-lazy-init="false"
+       default-autowire="no">
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:local-app.properties</value>
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+    <bean id="pushApiXmlMessageConverter"
+          class="ru.yandex.market.checkout.common.xml.NewClassMappingXmlMessageConverter">
+        <property name="deserializers" ref="pushApiXmlDeserializers"/>
+        <property name="serializers" ref="pushApiXmlSerializers"/>
+    </bean>
+
+    <bean id="pushApiRestErrorHandler"
+          class="ru.yandex.market.checkout.pushapi.client.error.PushApiRestErrorHandler">
+        <property name="messageConverter" ref="pushApiXmlMessageConverter"/>
+    </bean>
+
+</beans>

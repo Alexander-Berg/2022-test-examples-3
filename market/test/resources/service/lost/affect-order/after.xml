@@ -1,0 +1,201 @@
+<?xml version="1.0"?>
+<dataset>
+    <PUTAWAYZONE PUTAWAYZONE="1"/>
+    <PUTAWAYZONE PUTAWAYZONE="FLOOR"/>
+    <AREADETAIL AREAKEY="FLOOR" PUTAWAYZONE="FLOOR"/>
+    <NSQLCONFIG CONFIGKEY="YM_REMOVE_ABSENT_ITEMS" NSQLVALUE="1"/>
+
+    <LOC LOC="LOST" PUTAWAYZONE="1" LOCATIONTYPE="PICK" LOGICALLOCATION="100001"/>
+    <LOC LOC="C4-10-0001" PUTAWAYZONE="FLOOR" LOCATIONTYPE="PICK" LOGICALLOCATION="100001"/>
+
+    <LOT LOT="L5" SKU="ROV0000000000000000004" STORERKEY="100" Qty="0" QtyOnHold="0"/>
+
+    <PACK PACKKEY="PACK" PACKDESCR="DESCR" PACKUOM1="2"/>
+
+    <SKU STORERKEY="100" SKU="ROV0000000000000000004" PACKKEY="PACK" PUTAWAYLOC="C4-10-0001"
+         PUTAWAYZONE="FLOOR" SHELFLIFEINDICATOR="N" STDGROSSWGT="5" STDCUBE="5" DESCR="SKU ROV0000000000000000004"/>
+    <SKU STORERKEY="100" SKU="ROV0000000000000000359" PACKKEY="PACK" PUTAWAYLOC="C4-10-0001"
+         PUTAWAYZONE="FLOOR" SHELFLIFEINDICATOR="N" STDGROSSWGT="5" STDCUBE="5" DESCR="SKU ROV0000000000000000359"/>
+
+    <USERACTIVITY ASSIGNMENTNUMBER="01" PRIORITY="1" USERID="anonymousUser"
+                  STATUS="0" TYPE="PK" TASKDETAILKEY="TDK0001" PICKDETAILKEY="PDK1"/>
+
+    <LOTATTRIBUTE
+        LOT="L5"
+        STORERKEY="100"
+        SKU="ROV0000000000000000004"
+        LOTTABLE08="1"
+        LOTTABLE10="LOT1"
+    />
+
+    <PICKDETAIL
+        PICKDETAILKEY="PDK1"
+        PICKHEADERKEY=" "
+        ORDERKEY="B000001001"
+        ORDERLINENUMBER="03"
+        STATUS="0"
+        STORERKEY="100"
+        SKU="ROV0000000000000000004"
+        LOT="L5"
+        assignmentNumber="01"
+        fromLoc="C4-10-0001"
+    />
+
+    <TASKDETAIL
+        assignmentNumber="01"
+        taskType="PK"
+        status="0"
+        qty="1.0000"
+        putAwayZone="FLOOR"
+        fromLoc="C4-10-0001"
+        taskDetailKey="TDK0001"
+        orderKey="B000001001"
+        orderlinenumber="03"
+        waveKey="W5"
+        pickDetailKey="PDK1"
+        priority="5"
+        lot="L5"
+        sku="ROV0000000000000000004"
+        storerKey="100"
+        userKey="anonymousUser"
+        logicalFromLoc="3"
+        toLoc="toLoc1"
+        fromId="fromId1"
+        toId="toId1"
+        UOMQTY="1.0000"
+        Statusmsg=""
+        UserPosition=""
+        ReasonKey=""
+    />
+
+    <LOTxLOCxID
+        STORERKEY="100"
+        SKU="ROV0000000000000000004"
+        LOC="C4-10-0001"
+        LOT="L5"
+        STATUS="OK"
+        QTY="0"
+        QTYPICKED="0"
+    />
+    <LOTxLOCxID
+        STORERKEY="100"
+        SKU="ROV0000000000000000004"
+        LOC="LOST"
+        LOT="L5"
+        STATUS="HOLD"
+        QTY="0"
+        QTYPICKED="0"
+    />
+
+    <SKUxLOC
+        STORERKEY="100"
+        SKU="ROV0000000000000000004"
+        LOC="C4-10-0001"
+        LOCATIONTYPE="REP_BUF"
+        QTY="0"
+        QTYPICKED="0"
+        ADDWHO="TEST"
+        ADDDATE="2020-01-01 00:00:00.000"
+        EDITWHO="test"
+        EDITDATE="2020-04-01 12:34:56.789"
+    />
+    <SKUxLOC
+        STORERKEY="100"
+        SKU="ROV0000000000000000004"
+        LOC="LOST"
+        LOCATIONTYPE="PICK"
+        QTY="0"
+        QTYPICKED="0"
+        ADDWHO="test"
+        ADDDATE="2020-04-01 12:34:56.789"
+        EDITWHO="test"
+        EDITDATE="2020-04-01 12:34:56.789"
+    />
+
+    <WAVEDETAIL
+        wavekey="W5"
+        wavedetailkey="01"
+        orderkey="ORD777"
+    />
+
+    <!-- Сам заказ получил статус 68 по статусу оставшейся детали  -->
+    <ORDERS
+        Orderkey="ORD777"
+        Openqty="1"
+        Status="68"
+        ADDWHO="SETUP"
+        ADDDATE="2020-01-01 00:00:00.000"
+
+        max_absent_items_price_percent="99"
+        scheduledshipdate="2020-04-01 12:34:56.789"
+        orderdate="2020-04-01 12:34:56.789"
+    />
+    <!-- Батч, в котором отбираем кусок заказа -->
+    <ORDERS
+        Orderkey="B000001001"
+        Openqty="1"
+        Status="51"
+        ADDWHO="SETUP"
+        ADDDATE="2020-01-01 00:00:00.000"
+
+        max_absent_items_price_percent="99.0"
+        scheduledshipdate="2020-04-01 12:34:56.789"
+        orderdate="2020-04-01 12:34:56.789"
+    />
+
+    <!--
+    Для позиции из заказа:
+      уже статус 68 "сортирован по службам доставки"
+       -->
+    <ORDERDETAIL
+        ORDERKEY="ORD777"
+        ORDERLINENUMBER="01"
+        STORERKEY="100"
+        SKU="ROV0000000000000000359"
+        OPENQTY="2"
+        QTYPICKED="2"
+        qtyAllocated="0"
+        STATUS="68"
+        ISMASTER="0"
+        extendedprice="5"
+        originalqty="2"
+        removable_if_absent="1"
+
+    />
+
+    <!-- деталь заказа, которую не нашли -->
+    <!-- её положение в батче-->
+    <ORDERDETAIL
+        ORDERKEY="B000001001"
+        ORDERLINENUMBER="03"
+        STORERKEY="100"
+        SKU="ROV0000000000000000004"
+        OPENQTY="0"
+        QTYPICKED="0"
+        qtyAllocated="0"
+        STATUS="51"
+        ISMASTER="0"
+        extendedprice="5"
+        originalqty="5"
+        removable_if_absent="1"
+    />
+
+    <!-- её положение в исходном заказе -->
+    <ORDERDETAIL
+        ORDERKEY="ORD777"
+        ORDERLINENUMBER="02"
+        STORERKEY="100"
+        SKU="ROV0000000000000000004"
+        OPENQTY="0"
+        QTYPICKED="0"
+        qtyAllocated="0"
+        STATUS="-5"
+        ISMASTER="0"
+        batchordernumber="B000001001"
+        batchorderline="03"
+        extendedprice="5"
+        originalqty="5"
+        removable_if_absent="1"
+    />
+
+</dataset>

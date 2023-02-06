@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<m:config xmlns:c="urn:jmf:common:1.0"
+          xmlns:m="urn:jmf:metaclass:config:1.0"
+          xmlns:a="urn:jmf:attribute:type:default:config:1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <m:metaclass typed="false">
+        <m:fqn>dependencySimple</m:fqn>
+        <m:parent>systemEntity</m:parent>
+        <m:title>
+            <c:value lang="ru">Простой объект для тестирования</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute required="true">
+                <m:code>title</m:code>
+                <m:title>
+                    <c:value lang="ru">Название</c:value>
+                </m:title>
+                <m:type code="string"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+
+    <m:metaclass typed="false">
+        <m:fqn>dependencyLinked1</m:fqn>
+        <m:parent>systemEntity</m:parent>
+        <m:title>
+            <c:value lang="ru">Действие "delete"</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>link</m:code>
+                <m:title>
+                    <c:value lang="ru">Link</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="dependencySimple"/>
+                <m:relation>
+                    <m:dependency process="delete" condition="always" action="delete"/>
+                </m:relation>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+    <m:metaclass typed="false">
+        <m:fqn>dependencyLinked2</m:fqn>
+        <m:parent>systemEntity</m:parent>
+        <m:title>
+            <c:value lang="ru">Действие "forbid"</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>link</m:code>
+                <m:title>
+                    <c:value lang="ru">Link</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="dependencySimple"/>
+                <m:relation>
+                    <m:dependency process="delete" condition="always" action="forbid"/>
+                </m:relation>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+</m:config>

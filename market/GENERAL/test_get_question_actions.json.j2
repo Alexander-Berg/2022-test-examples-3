@@ -1,0 +1,119 @@
+{% macro metrika_event(eventtime, yandexuid, host, goal, params) %}
+    [
+        "{{ eventtime }}",
+        "referer",
+        "goal://{{ host }}/{{ goal }}",
+        "{{ params }}",
+        "{{ yandexuid }}",
+        "160656",
+        "0",
+        "browserinfo",
+        "0",
+        "watchid",
+        "clientip6",
+        "p123456"
+    ]
+{% endmacro %}
+
+{% macro metrika_event_touch(eventtime, yandexuid, goal, params) %}
+    {{ metrika_event(eventtime, yandexuid, "m.market.yandex.ru", goal, params) }}
+{% endmacro %}
+
+{% macro metrika_event_desktop(eventtime, yandexuid, goal, params) %}
+    {{ metrika_event(eventtime, yandexuid, "market.yandex.ru", goal, params) }}
+{% endmacro %}
+
+{% macro question(question_id, model_id, category_id, vendor_id) %}
+    [
+        "{{ category_id }}",
+        "{{ model_id }}",
+        "title",
+        "{{ question_id }}",
+        "p123456",
+        "y123456",
+        "picture",
+        "{{ vendor_id }}",
+        1506963677001
+    ]
+{% endmacro %}
+
+{% macro interaction(timestamp, yandexuid, action, host, question_id, model_id, category_id, vendor_id) %}
+    [
+        {{ timestamp }},
+        {
+            "yandexuid": "{{ yandexuid }}",
+            "puid": "p123456"
+        },
+        "{{ action }}",
+        "question",
+        "{{ question_id }}",
+        {
+            "category_id": "{{ category_id }}",
+            "host": "{{ host }}",
+            "model_id": "{{ model_id }}",
+            "vendor_id": "{{ vendor_id }}"
+        },
+        "{{ day }}"
+    ]
+{% endmacro %}
+
+{% macro interaction_touch(timestamp, yandexuid, action, question_id, model_id, category_id, vendor_id) %}
+    {{ interaction(timestamp, yandexuid, action, "m.market.yandex.ru", question_id, model_id, category_id, vendor_id) }}
+{% endmacro %}
+
+{% macro interaction_desktop(timestamp, yandexuid, action, question_id, model_id, category_id, vendor_id) %}
+    {{ interaction(timestamp, yandexuid, action, "market.yandex.ru", question_id, model_id, category_id, vendor_id) }}
+{% endmacro %}
+
+{% if table == "events_question_actions" %}
+    {# Result data. #}
+    {% table "events" %}
+        {{ interaction_desktop(1506963677000, "Y2", "add_like", "101", "m01", "c01", "v01") }},
+        {{ interaction_desktop(1506963677000, "Y2", "remove_like", "101", "m01", "c01", "v01") }},
+        {{ interaction_desktop(1506963677000, "Y2", "add_like", "101", "m01", "c01", "v01") }},
+        {{ interaction_desktop(1506963677000, "Y2", "remove_like", "101", "m01", "c01", "v01") }},
+        {{ interaction_desktop(1506963677000, "Y2", "subscribe", "101", "m01", "c01", "v01") }},
+        {{ interaction_desktop(1506963677000, "Y2", "unsubscribe", "101", "m01", "c01", "v01") }},
+        {{ interaction_desktop(1506963677000, "Y2", "add_comment_like", "101", "m01", "c01", "v01") }},
+        {{ interaction_desktop(1506963677000, "Y2", "remove_comment_like", "101", "m01", "c01", "v01") }},
+        {{ interaction_desktop(1506963677000, "Y2", "add_comment_dislike", "101", "m01", "c01", "v01") }},
+        {{ interaction_desktop(1506963677000, "Y2", "remove_comment_dislike", "101", "m01", "c01", "v01") }},
+
+        {{ interaction_touch(1506963677000, "Y3", "add_like", "202", "m02", "c02", "v02") }},
+        {{ interaction_touch(1506963677000, "Y3", "remove_like", "202", "m02", "c02", "v02") }},
+        {{ interaction_touch(1506963677000, "Y3", "subscribe", "202", "m02", "c02", "v02") }},
+        {{ interaction_touch(1506963677000, "Y3", "unsubscribe", "202", "m02", "c02", "v02") }},
+        {{ interaction_touch(1506963677000, "Y3", "add_comment_like", "202", "m02", "c02", "v02") }},
+        {{ interaction_touch(1506963677000, "Y3", "remove_comment_like", "202", "m02", "c02", "v02") }},
+        {{ interaction_touch(1506963677000, "Y3", "add_comment_dislike", "202", "m02", "c02", "v02") }},
+        {{ interaction_touch(1506963677000, "Y3", "remove_comment_dislike", "202", "m02", "c02", "v02") }}
+    {% endtable %}
+{% elif table == "logfeller_bs_watch_log" %}
+    {% table table %}
+        {{ metrika_event_desktop(1506963677, "Y2", "product-question-page_product-question_vote-question-add", "{\\\"questionId\\\": 101}") }},
+        {{ metrika_event_desktop(1506963677, "Y2", "product-question-page_product-question_vote-question-remove", "{\\\"questionId\\\": 101}") }},
+        {{ metrika_event_desktop(1506963677, "Y2", "product-questions_vote-question-add", "{\\\"questionId\\\": 101}") }},
+        {{ metrika_event_desktop(1506963677, "Y2", "product-questions_vote-question-remove", "{\\\"questionId\\\": 101}") }},
+        {{ metrika_event_desktop(1506963677, "Y2", "product-question-page_product-question_subscribe-button_perform-click", "{\\\"questionId\\\": 101, \\\"action\\\": \\\"subscribe\\\"}") }},
+        {{ metrika_event_desktop(1506963677, "Y2", "product-question-page_product-question_subscribe-button_perform-click", "{\\\"questionId\\\": 101, \\\"action\\\": \\\"unsubscribe\\\"}") }},
+        {{ metrika_event_desktop(1506963677, "Y2", "product-question-page_product-question_answer_add-like-vote-answer", "{\\\"questionId\\\": 101}") }},
+        {{ metrika_event_desktop(1506963677, "Y2", "product-question-page_product-question_answer_remove-like-vote-answer", "{\\\"questionId\\\": 101}") }},
+        {{ metrika_event_desktop(1506963677, "Y2", "product-question-page_product-question_answer_add-dislike-vote-answer", "{\\\"questionId\\\": 101}") }},
+        {{ metrika_event_desktop(1506963677, "Y2", "product-question-page_product-question_answer_remove-dislike-vote-answer", "{\\\"questionId\\\": 101}") }},
+
+        {{ metrika_event_touch(1506963677, "Y3", "product-question_vote-question-add", "{\\\"questionId\\\": 202}") }},
+        {{ metrika_event_touch(1506963677, "Y3", "product-question_vote-question-remove", "{\\\"questionId\\\": 202}") }},
+        {{ metrika_event_touch(1506963677, "Y3", "product-question_subscribe-button_perform-click", "{\\\"questionId\\\": 202, \\\"action\\\": \\\"subscribe\\\"}") }},
+        {{ metrika_event_touch(1506963677, "Y3", "product-question_subscribe-button_perform-click", "{\\\"questionId\\\": 202, \\\"action\\\": \\\"unsubscribe\\\"}") }},
+        {{ metrika_event_touch(1506963677, "Y3", "product-question_questions-answers-add-like-vote-answer", "{\\\"questionId\\\": 202}") }},
+        {{ metrika_event_touch(1506963677, "Y3", "product-question_questions-answers-remove-like-vote-answer", "{\\\"questionId\\\": 202}") }},
+        {{ metrika_event_touch(1506963677, "Y3", "product-question_questions-answers-add-dislike-vote-answer", "{\\\"questionId\\\": 202}") }},
+        {{ metrika_event_touch(1506963677, "Y3", "product-question_questions-answers-remove-dislike-vote-answer", "{\\\"questionId\\\": 202}") }}
+    {% endtable %}
+{% elif table == "dj_question" %}
+    {% table table %}
+        {{ question("101", "m01", "c01", "v01") }},
+        {{ question("202", "m02", "c02", "v02") }},
+        {{ question("fake", "fake", "fake", "fake") }}
+    {% endtable %}
+{% endif %}

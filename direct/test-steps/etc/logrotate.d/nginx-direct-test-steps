@@ -1,0 +1,16 @@
+/var/log/nginx-direct-test-steps/*.log {
+    daily
+    dateext
+    rotate 10000
+    missingok
+    compress
+    delaycompress
+    notifempty
+    sharedscripts
+    create 0644 root root
+    postrotate
+    if [ -f /var/run/nginx-direct-test-steps.pid ]; then \
+        /etc/init.d/nginx-direct-test-steps reload > /dev/null; \
+    fi;
+    endscript
+}

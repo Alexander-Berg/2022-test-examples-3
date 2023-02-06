@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<m:config xmlns:c="urn:jmf:common:1.0"
+          xmlns:m="urn:jmf:metaclass:config:1.0"
+          xmlns:a="urn:jmf:attribute:type:default:config:1.0"
+          xmlns:mse="urn:jmf:module:search:extension:config:1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:usc="urn:jmf:ui:suggest:config:1.0"
+>
+    <m:metaclass>
+        <m:fqn>attributeWithSuggest</m:fqn>
+        <m:parent>systemEntity</m:parent>
+        <m:title>
+            <c:value>Метакласс, в котором есть атрибут, для которого вызывается suggest</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>filtratedAttr</m:code>
+                <m:title>
+                    <c:value>Атрибут со скриптом фильтрации</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="suggestTest"/>
+                <m:filtrationScript code="filtrateFiltratedAttr"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+    <m:metaclass>
+        <m:fqn>suggestTest</m:fqn>
+        <m:parent>systemEntity</m:parent>
+        <m:title>
+            <c:value>Объект для тестирования suggest</c:value>
+        </m:title>
+        <m:logics>
+            <m:logic>suggestTitle</m:logic>
+            <m:logic>withSearch</m:logic>
+        </m:logics>
+        <m:attributes>
+            <m:attribute naturalId="true">
+                <m:code>naturalId</m:code>
+                <m:title>
+                    <c:value>Натуральный идентификатор</c:value>
+                </m:title>
+                <m:type xsi:type="a:string"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>title</m:code>
+                <m:title>
+                    <c:value>Название</c:value>
+                </m:title>
+                <m:type xsi:type="a:integer"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>information</m:code>
+                <m:title>
+                    <c:value>Информация</c:value>
+                </m:title>
+                <m:description>
+                    <c:value>Атрибут для теста fastSearch, который не указан для поиска</c:value>
+                </m:description>
+                <m:type xsi:type="a:string"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>description</m:code>
+                <m:title>
+                    <c:value>Описание</c:value>
+                </m:title>
+                <m:description>
+                    <c:value>Атрибут для теста fastSearch, который указан для поиска</c:value>
+                </m:description>
+                <m:type xsi:type="a:string"/>
+            </m:attribute>
+        </m:attributes>
+        <m:extensions>
+            <m:extension xsi:type="mse:search">
+                <mse:search>
+                    <mse:attribute code="description"/>
+                </mse:search>
+            </m:extension>
+            <m:extension xsi:type="usc:suggest">
+                <usc:attribute code="naturalId"/>
+            </m:extension>
+        </m:extensions>
+    </m:metaclass>
+
+    <m:metaclass>
+        <m:fqn>suggestTestWithTitleOnly</m:fqn>
+        <m:parent>systemEntity</m:parent>
+        <m:title>
+            <c:value>Объект для тестирования suggest</c:value>
+        </m:title>
+        <m:logics>
+            <m:logic>suggestTitle</m:logic>
+        </m:logics>
+        <m:attributes>
+            <m:attribute>
+                <m:code>title</m:code>
+                <m:title>
+                    <c:value>Название</c:value>
+                </m:title>
+                <m:type xsi:type="a:integer"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+    <m:metaclass>
+        <m:fqn>suggestTestWithTitleAndWf</m:fqn>
+        <m:parent>systemEntity</m:parent>
+        <m:title>
+            <c:value>Объект с ЖЦ для тестирования suggest</c:value>
+        </m:title>
+        <m:logics>
+            <m:logic>wf</m:logic>
+            <m:logic>suggestTitle</m:logic>
+        </m:logics>
+        <m:attributes>
+            <m:attribute>
+                <m:code>title</m:code>
+                <m:title>
+                    <c:value>Название</c:value>
+                </m:title>
+                <m:type xsi:type="a:string"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+</m:config>

@@ -1,0 +1,45 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый market_tarantino_cachepinger-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_tarantino_cachepinger-testing
+
+juggler:
+  checks:
+  - {}
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 23
+        time_start: 0
+        warn: 0
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --path
+      - /cachepinger?action=ping
+      - --port-offset
+      - 1
+    children:
+    - NANNY%testing_market_tarantino_redis_sas
+    - NANNY%testing_market_tarantino_redis_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_tarantino_cachepinger-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    service: ping
+    tags:
+    - market_testing
+    - market_kgb
+    - market_rtc
+    - tarantino
+    - market
+    - _market_
+    ttl: 900

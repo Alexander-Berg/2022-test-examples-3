@@ -1,0 +1,18 @@
+- gather_facts: false
+  hosts: localhost
+  roles:
+  - checks:
+    - queue-length
+    limits: '{{ crit_0_warn_0 }}'
+    role: passive
+    rtime: 60
+    flap: '{{ stable60critical120 }}'
+  vars:
+    children:
+    - rasp-test-sqs-celery-default
+    host: rasp-test-sqs-celery-default-agg
+    telegram_chats:
+    - 'rasp-achtung'
+  vars_files:
+  - ../vars/common.yml
+  - vars/trains.yml

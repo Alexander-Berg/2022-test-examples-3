@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+       default-autowire="no">
+
+    <tx:annotation-driven transaction-manager="pgTransactionManager"/>
+
+    <import resource="mock-pg.xml"/>
+    <import resource="datasources-without-pg.xml"/>
+    <import resource="classpath:context/jpa.xml"/>
+
+    <import resource="classpath:context/services.xml"/>
+    <import resource="classpath:context/container.xml"/>
+    <import resource="classpath:context/jobs-tms-tasks.xml"/>
+    <import resource="classpath:WEB-INF/web-context.xml"/>
+
+    <context:annotation-config/>
+    <bean id="mockFactory" class="ru.yandex.market.checkout.referee.test.MockFactory"/>
+    <bean class="ru.yandex.market.checkout.referee.test.MockExternalServicesConfig"/>
+    <bean name="checkoutRefereeHttpRequestFactory"
+          class="ru.yandex.market.checkout.referee.test.MockMvcClientHttpRequestFactory2"
+          c:mockMvc-ref="mockMvc"/>
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:WEB-INF/checkouter-client.properties</value>
+                <value>classpath:test-app.properties</value>
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+    <bean id="groupManager" class="ru.yandex.market.checkout.referee.util.EnvironmentGroupManager"/>
+</beans>

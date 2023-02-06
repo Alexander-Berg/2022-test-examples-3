@@ -1,0 +1,466 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_delivery_transport_manager-testing-nonessential
+
+vars:
+  - &kwargs_with_service_api_points
+    args:
+      - --kwargs
+      - '[
+          { "service": "transportation_reached-allowed-status", "path": "/health/transportation/reached-allowed-status" },
+          { "service": "transportation_reached-good-status", "path": "/health/transportation/reached-good-status" },
+          { "service": "transportation_slot-booking-failed", "path": "/health/transportation/slot-booking-failed" },
+          { "service": "transportation_xdoc-pallet-count-in-transport", "path": "/health/transportation/xdoc-pallet-count-in-transport" },
+          { "service": "dbqueue_transportation_checker", "path": "/health/dbqueue/transportation_checker/failed" },
+          { "service": "dbqueue_shipment", "path": "/health/dbqueue/shipment/failed" },
+          { "service": "dbqueue_create_register_old", "path": "/health/dbqueue/create_register_old/failed" },
+          { "service": "dbqueue_put_inbound", "path": "/health/dbqueue/put_inbound/failed" },
+          { "service": "dbqueue_put_movement", "path": "/health/dbqueue/put_movement/failed" },
+          { "service": "dbqueue_put_outbound", "path": "/health/dbqueue/put_outbound/failed" },
+          { "service": "dbqueue_fetch_registers", "path": "/health/dbqueue/fetch_registers/failed" },
+          { "service": "dbqueue_transfer_register_ffwf", "path": "/health/dbqueue/transfer_register_ffwf/failed" },
+          { "service": "dbqueue_transportation_master", "path": "/health/dbqueue/transportation_master/failed" },
+          { "service": "dbqueue_process_order_event_ids", "path": "/health/dbqueue/process_order_event_ids/failed" },
+          { "service": "dbqueue_process_track", "path": "/health/dbqueue/process_track/failed" },
+          { "service": "dbqueue_request_external_id", "path": "/health/dbqueue/request_external_id/failed" },
+          { "service": "dbqueue_create_ticket", "path": "/health/dbqueue/create_ticket/failed" },
+          { "service": "dbqueue_update_ticket", "path": "/health/dbqueue/update_ticket/failed" },
+          { "service": "dbqueue_fetch_register_units", "path": "/health/dbqueue/fetch_register_units/failed" },
+          { "service": "dbqueue_delete_orders", "path": "/health/dbqueue/delete_orders/failed" },
+          { "service": "dbqueue_delete_transportations", "path": "/health/dbqueue/delete_transportations/failed" },
+          { "service": "dbqueue_enrich_transportation_task", "path": "/health/dbqueue/enrich_transportation_task/failed" },
+          { "service": "dbqueue_cancel_movement_task", "path": "/health/dbqueue/cancel_movement/failed" },
+          { "service": "dbqueue_validate_transportation_task", "path": "/health/dbqueue/validate_transportation_task/failed" },
+          { "service": "dbqueue_transportation_car_selection", "path": "/health/dbqueue/transportation_car_selection/failed" },
+          { "service": "dbqueue_validate_transportation_task_product_availability_request", "path": "/health/dbqueue/validate_transportation_task_product_availability_request/failed" },
+          { "service": "dbqueue_validate_transportation_task_product_availability_check", "path": "/health/dbqueue/validate_transportation_task_product_availability_check/failed" },
+          { "service": "dbqueue_enrich_regular_interwarehouse", "path": "/health/dbqueue/enrich_regular_interwarehouse/failed" },
+          { "service": "dbqueue_x_doc_create_ff", "path": "/health/dbqueue/x_doc_create_ff/failed" },
+          { "service": "dbqueue_x_doc_create_dc", "path": "/health/dbqueue/x_doc_create_dc/failed" },
+          { "service": "dbqueue_x_doc_submit_inbound_date", "path": "/health/dbqueue/x_doc_submit_inbound_date/failed" },
+          { "service": "dbqueue_x_doc_fetch_register", "path": "/health/dbqueue/x_doc_fetch_register/failed" },
+          { "service": "dbqueue_x_doc_enrich_transportation_to_ff", "path": "/health/dbqueue/x_doc_enrich_transportation_to_ff/failed" },
+          { "service": "dbqueue_create_xdoc_outbound_plan", "path": "/health/dbqueue/create_xdoc_outbound_plan/failed" },
+          { "service": "dbqueue_send_telegram_notification", "path": "/health/dbqueue/send_telegram_notification/failed" },
+          { "service": "dbqueue_x_doc_outbound_fact_registry", "path": "/health/dbqueue/x_doc_outbound_fact_registry/failed" },
+          { "service": "dbqueue_x_doc_update_slot_meta", "path": "/health/dbqueue/x_doc_update_slot_meta/failed" },
+          { "service": "dbqueue_x_doc_update_ff_status", "path": "/health/dbqueue/x_doc_update_ff_status/failed" },
+          { "service": "dbqueue_cancel_transportation", "path": "/health/dbqueue/cancel_transportation/failed" },
+          { "service": "dbqueue_create_dropoff_returns", "path": "/health/dbqueue/create_dropoff_returns/failed" },
+          { "service": "dbqueue_bind_order", "path": "/health/dbqueue/bind_order/failed" },
+          { "service": "dbqueue_les_order_bound", "path": "/health/dbqueue/les_order_bound/failed" },
+          { "service": "dbqueue_send_unit_documents", "path": "/health/dbqueue/send_unit_documents/failed" },
+          { "service": "tms_logs_cleanup_executor", "path": "/health/tms/tms_logs_cleanup_executor" },
+          { "service": "tms_get_movement_configuration", "path": "/health/tms/get_movement_configuration" },
+          { "service": "tms_find_transportation_to_be_checked", "path": "/health/tms/find_transportation_to_be_checked" },
+          { "service": "tms_refresh_transportations_by_config", "path": "/health/tms/refresh_transportations_by_config" },
+          { "service": "tms_start_transportation_shipment", "path": "/health/tms/start_transportation_shipment" },
+          { "service": "tms_get_db_queue_tasks", "path": "/health/tms/get_db_queue_tasks" },
+          { "service": "tms_get_transportation_status_statistics", "path": "/health/tms/get_transportation_status_statistics" },
+          { "service": "tms_enqueue_buffered_order_events", "path": "/health/tms/enqueue_buffered_order_events" },
+          { "service": "tms_read_ffwf_request_status_events", "path": "/health/tms/read_ffwf_request_status_events" },
+          { "service": "tms_clean_database_transportation_info", "path": "/health/tms/clean_database_transportation_info" },
+          { "service": "tms_clean_database_orders_info", "path": "/health/tms/clean_database_orders_info" },
+          { "service": "tms_enrich_transportation_tasks", "path": "/health/tms/enrich_transportation_tasks" },
+          { "service": "tms_enrich_regular_interwarehouse_transportations", "path": "/health/tms/enrich_regular_interwarehouse_transportations" },
+          { "service": "tms_clean_dbqueue_log_info", "path": "/health/tms/clean_dbqueue_log_info" },
+          { "service": "tms_update_dropoff_relations", "path": "/health/tms/update_dropoff_relations" },
+          { "service": "tms_create_dropoff_return_transportations", "path": "/health/tms/create_dropoff_return_transportations" },
+          { "service": "tms_create_st_tickets_with_return_dropoff_couriers", "path": "/health/tms/create_st_tickets_with_return_dropoff_couriers" },
+          { "service": "tms_bind_unbound_orders", "path": "/health/tms/bind_unbound_orders" },
+          { "service": "tms_pull_dc_state_from_yt", "path": "/health/tms/pull_dc_state_from_yt" },
+          { "service": "tms_create_send_unit_document_tasks", "path": "/health/tms/create_send_unit_document_tasks" }
+        ]'
+
+  # OK: jobs run on all hosts
+  # WARN: jobs fail on some hosts
+  # CRIT: jobs fail on all hosts
+  - &tms_kwargs
+    limits:
+      - day_start: 1
+        day_end: 7
+        time_start: 0
+        time_end: 23
+        crit: 99%
+        warn: 1%
+
+juggler:
+  checks:
+
+    # Check ping
+    # https://juggler.yandex-team.ru/check_details/?host=market_delivery_transport_manager-testing-nonessential&service=ping&last=1DAY&mode=edit
+    - service: ping
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check we have no transportations in non-allowed (e.g. still new or scheduling) status for tomorrow (after cutoff) or today (before cutoff)
+    # Indicates that all planned transportations are in processing
+    - service: transportation_reached-allowed-status
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check we have no transportations in bad (any non-allowed + error statuses) status for tomorrow (after cutoff) or today (before cutoff)
+    # This is not a critical monitoring. Indicates that some transportations are in error status after cutoff
+    - service: transportation_reached-good-status
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check we have no transportations cancelled because of slot booking failed
+    - service: transportation_slot-booking-failed
+      check_options:
+        *kwargs_with_service_api_points
+      tags:
+        - on_duty
+
+    # Check we have not enough pallets in xdock big car
+    - service: transportation_xdoc-pallet-count-in-transport
+      check_options:
+        *kwargs_with_service_api_points
+      tags:
+        - on_duty
+
+    # Check no transportations on -7 days scale are in ERROR state
+    # disabled in testing
+
+    # DBQUEUE:
+
+    # Check TRANSPORTATION_CHECKER jobs
+    - service: dbqueue_transportation_checker
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check SHIPMENT jobs
+    - service: dbqueue_shipment
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check CREATE_REGISTER_OLD jobs
+    - service: dbqueue_create_register_old
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check PUT_INBOUND jobs
+    - service: dbqueue_put_inbound
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check PUT_MOVEMENT jobs
+    - service: dbqueue_put_movement
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check PUT_OUTBOUND jobs
+    - service: dbqueue_put_outbound
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check FETCH_REGISTERS jobs
+    - service: dbqueue_fetch_registers
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check TRANSFER_REGISTER_FFWF jobs
+    - service: dbqueue_transfer_register_ffwf
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check TRANSPORTATION_MASTER jobs
+    - service: dbqueue_transportation_master
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check PROCESS_ORDER_EVENT_IDS jobs
+    - service: dbqueue_process_order_event_ids
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check PROCESS_TRACK jobs
+    - service: dbqueue_process_track
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check REQUEST_EXTERNAL_ID jobs
+    - service: dbqueue_request_external_id
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check CREATE_TICKET jobs
+    - service: dbqueue_create_ticket
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check UPDATE_TICKET jobs
+    - service: dbqueue_update_ticket
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check FETCH_REGISTER_UNITS jobs
+    - service: dbqueue_fetch_register_units
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check DELETE_ORDERS jobs
+    - service: dbqueue_delete_orders
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check DELETE_TRANSPORTATIONS jobs
+    - service: dbqueue_delete_transportations
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check ENRICH_TRANSPORTATION_TASK jobs
+    - service: dbqueue_enrich_transportation_task
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check CANCEL_MOVEMENT jobs
+    - service: dbqueue_cancel_movement_task
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check VALIDATE_TRANSPORTATION_TASK jobs
+    - service: dbqueue_validate_transportation_task
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check TRANSPORTATION_CAR_SELECTION jobs
+    - service: dbqueue_transportation_car_selection
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check VALIDATE_transportation_task_product_availability_REQUEST jobs
+    - service: dbqueue_validate_transportation_task_product_availability_request
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check VALIDATE_transportation_task_product_availability_CHECK jobs
+    - service: dbqueue_validate_transportation_task_product_availability_check
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check ENRICH_REGULAR_INTERWAREHOUSE jobs
+    - service: dbqueue_enrich_regular_interwarehouse
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check X_DOC_CREATE_FF jobs
+    - service: dbqueue_x_doc_create_ff
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check X_DOC_CREATE_DC jobs
+    - service: dbqueue_x_doc_create_dc
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check X_DOC_SUBMIT_INBOUND_DATE jobs
+    - service: dbqueue_x_doc_submit_inbound_date
+      check_options:
+        *kwargs_with_service_api_points
+
+
+    # Check X_DOC_FETCH_REGISTER jobs
+    - service: dbqueue_x_doc_fetch_register
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check X_DOC_ENRICH_TRANSPORTATION_TO_FF jobs
+    - service: dbqueue_x_doc_enrich_transportation_to_ff
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check CREATE_XDOC_OUTBOUND_PLAN jobs
+    - service: dbqueue_create_xdoc_outbound_plan
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check SEND_TELEGRAM_NOTIFICATION jobs
+    - service: dbqueue_send_telegram_notification
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check X_DOC_OUTBOUND_FACT_REGISTRY jobs
+    - service: dbqueue_x_doc_outbound_fact_registry
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check X_DOC_UPDATE_SLOT_META jobs
+    - service: dbqueue_x_doc_update_slot_meta
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check X_DOC_UPDATE_FF_STATUS jobs
+    - service: dbqueue_x_doc_update_ff_status
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check CANCEL_TRANSPORTATION jobs
+    - service: dbqueue_cancel_transportation
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check CREATE_DROPOFF_RETURNS jobs
+    - service: dbqueue_create_dropoff_returns
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check BIND_ORDER jobs
+    - service: dbqueue_bind_order
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check LES_ORDER_BOUND jobs
+    - service: dbqueue_les_order_bound
+      check_options: *kwargs_with_service_api_points
+      tags:
+        - on_duty
+
+    # Check SEND_UNIT_DOCUMENTS jobs
+    - service: dbqueue_send_unit_documents
+      check_options: *kwargs_with_service_api_points
+      tags:
+        - crit_on_fire_warn_on_duty
+
+    # TMS
+    - service: tms_logs_cleanup_executor
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+
+    - service: tms_get_movement_configuration
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+
+    - service: tms_find_transportation_to_be_checked
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+
+    - service: tms_refresh_transportations_by_config
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+
+    - service: tms_start_transportation_shipment
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+
+    - service: tms_get_db_queue_tasks
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+
+    - service: tms_get_transportation_status_statistics
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+
+    - service: tms_read_ffwf_request_status_events
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+
+    - service: tms_enqueue_buffered_order_events
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+
+    - service: tms_clean_database_transportation_info
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+
+    - service: tms_clean_database_orders_info
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+
+    - service: tms_enrich_transportation_tasks
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+
+    - service: tms_enrich_regular_interwarehouse_transportations
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+
+    - service: tms_clean_dbqueue_log_info
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+
+    - service: tms_update_dropoff_relations
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+
+    - service: tms_create_dropoff_return_transportations
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+
+    - service: tms_create_st_tickets_with_return_dropoff_couriers
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+      tags:
+        - on_duty
+
+    - service: tms_bind_unbound_orders
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+      tags:
+        - on_duty
+
+    - service: tms_pull_dc_state_from_yt
+      aggregator_kwargs: *tms_kwargs
+      check_options:
+        *kwargs_with_service_api_points
+      tags:
+        - on_duty
+
+    - service: tms_create_send_unit_document_tasks
+      aggregator_kwargs: *tms_kwargs
+      check_options: *kwargs_with_service_api_points
+      tags:
+        - on_duty
+
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+        - crit: 30%
+          day_end: 7
+          day_start: 1
+          time_end: 20
+          time_start: 12
+          warn: '0'
+        - crit: 30%
+          day_end: 7
+          day_start: 1
+          time_end: 11
+          time_start: 21
+          warn: '0'
+      nodata_mode: force_crit
+    children:
+      - NANNY%testing_market_market_delivery_transport_manager_vla
+      - NANNY%testing_market_market_delivery_transport_manager_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_delivery_transport_manager-testing-nonessential
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    tags:
+      - market_testing
+      - market_rtc
+      - deliverytransportmanager
+      - testing
+      - market
+      - _market_
+    ttl: 900

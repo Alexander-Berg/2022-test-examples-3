@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+       default-autowire="byType">
+
+    <import resource="classpath:/ir-tms/property-configure.xml"/>
+    <import resource="classpath:/ir-tms/ir-tms-yt-core.xml"/>
+    <import resource="classpath:/ir-tms/saas.xml"/>
+    <import resource="classpath:/ir-tms/db-config.xml"/>
+
+    <context:property-placeholder ignore-resource-not-found="true" properties-ref="irTmsProperties"/>
+
+    <!-- override property locations-->
+    <bean id="irTmsProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <array>
+                <!-- Датасорсы нужны, чтобы не коммитеть токен в код.
+                     Пока нет централизованного запуска интеграционных тестов ir-tms.
+                     Когда будет - это придётся уносить. -->
+                <value>file:/etc/yandex/market-datasources/datasources.properties</value>
+                <value>classpath:ir-tms/test_properties/tms-jdbc-test.properties</value>
+                <value>classpath:ir-tms/test_properties/test-application.properties</value>
+                <value>classpath:ir-tms/test_properties/others-jdbc.properties</value>
+
+                <value>classpath:ir-tms/test_config/saas/saas-test.properties</value>
+            </array>
+        </property>
+
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+</beans>

@@ -1,0 +1,63 @@
+LogConfig: "{{ replicactl.log_config }}"
+# YtProxy: "{{ yt_cluster }}" -- from env
+
+TargetTable: "{{ yt_root }}/replicactl_target"
+StatusTable: "{{ yt_root }}/replicactl_status"
+PodsTable: "{{ yt_root }}/replicactl_pods"
+
+Service {
+    Monitoring {
+        Port: {{ replicactl.monitoring_port }}
+    }
+
+    CreateYtTables: true
+    CheckYtSchemas: true
+    AlterYtSchemas: true
+
+    LockNode: "{{ yt_root }}/replicactl_lock"
+    LockTimeout: "20s"
+    LockPingInterval: "2s"
+    RetryPingTimeout: "10s"
+
+    ModifyLockId: "replicactl"
+    ModifyLockTable: "{{ yt_root }}/modify_locks"
+    LockMergeThreshold: 20
+
+    DontVerifyFirstIteration: true
+}
+
+Deploy {
+{% for namespace in replicactl.namespaces %}
+    Namespaces: "{{ namespace }}"
+{% endfor %}
+    DeployerTargetTable: "{{ yt_root }}/deployer_target"
+    DeployerStatusTable: "{{ yt_root }}/deployer_status"
+
+    SelfDeployerCheckInterval: "1s"
+    SelfDeployerCheckDenom: 3
+}
+
+InstanceSet {
+    InstancesTable: "{{ yt_root }}/yp_instances"
+    TimestampsTable: "{{ yt_root }}/yp_timestamps"
+    LockPrefix: "instances/"
+
+    YpSyncer {
+        EnableSsl: false
+    }
+{% for pod_set in replicactl.pod_sets %}
+    PodSets {
+        YpLocation: "{{ yp_address }}"
+        PodSetId: "{{ pod_set }}"
+    }
+{% endfor %}
+}
+
+BannedGroups {
+    Table: "{{ yt_root }}/banned_groups"
+}
+
+Activator {
+    Window: {{ replicactl.activator.window }}
+    ReadyThreshold: {{ replicactl.activator.ready_threshold }}
+}

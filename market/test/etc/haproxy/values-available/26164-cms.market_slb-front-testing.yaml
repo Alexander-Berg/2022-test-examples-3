@@ -1,0 +1,43 @@
+# Параметры обработки
+params:
+  default:
+    resolve: true
+    templates:
+      - user_mslb_triple_waterfall.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    be_defaults:
+      check:          check observe layer7
+      on_error:       fastinter
+
+    be_globals:
+      timeout_queue:  500ms
+      timeout_server: 120s
+
+    be1_globals:
+      timeout_connect: 25
+
+    globals:
+      balance:         random
+      service_name:    cms.tst.vs.market.yandex.net
+      service_port:    80
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    be1:
+    - name: YP@testing-market-front-cms-sas@local
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing-market-front-cms-vla@local
+      dns_resolvers: yandex-ns
+      resolve: false
+    be3:
+    - name: YP@testing-market-front-cms-sas
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing-market-front-cms-vla
+      dns_resolvers: yandex-ns
+      resolve: false

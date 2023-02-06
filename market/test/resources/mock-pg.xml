@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:c="http://www.springframework.org/schema/c" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="pgTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+          p:dataSource-ref="pgDataSource"/>
+
+    <bean id="pgTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate"
+          p:transactionManager-ref="pgTransactionManager"/>
+
+    <bean id="pgJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" lazy-init="false"
+          c:dataSource-ref="pgDataSource"/>
+
+    <bean id="pgConfigBuilder" class="ru.yandex.market.test.pg.embedded.PGConfigBuilder"
+          c:version="10.5-1"/>
+    <bean id="pgConfig" factory-bean="pgConfigBuilder" factory-method="build"/>
+
+    <bean id="pgLiquibaseDataSource" class="ru.yandex.market.test.pg.embedded.PGEmbeddedDataSource"
+          p:config-ref="pgConfig"
+          p:defaultSchemaName="arbitrage"/>
+
+    <bean id="pgDataSource" class="ru.yandex.market.test.pg.embedded.PGEmbeddedDataSource"
+          p:config-ref="pgConfig"
+          p:defaultSchemaName="arbitrage"/>
+
+    <bean id="pgDatabase" class="ru.yandex.market.test.pg.embedded.PGEmbeddedDatabase"
+          c:config-ref="pgConfig"
+          c:artifactStorePath="#{new java.io.File('').absolutePath}"/>
+
+    <bean name="sequenceJdbcTemplate" class="ru.yandex.common.util.db.SafeSimpleJdbcTemplate"
+          c:dataSource-ref="pgDataSource"/>
+
+    <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase"
+          p:dataSource-ref="pgLiquibaseDataSource"
+          p:changeLog="classpath:liquibase.xml"
+          p:dropFirst="true"/>
+
+    <bean id="checkoutRefereeSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+          p:dataSource-ref="pgDataSource"
+          p:configLocation="classpath:sql/mybatis-config.xml"/>
+
+    <bean id="sqlMapperTemplate" class="org.mybatis.spring.SqlSessionTemplate"
+          c:sqlSessionFactory-ref="checkoutRefereeSqlSessionFactory"
+          c:executorType="BATCH"/>
+</beans>

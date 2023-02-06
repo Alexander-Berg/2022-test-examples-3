@@ -1,0 +1,176 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "aviaoperator",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--password", "password",
+    "--date-from", "2019-01-01",
+    "--date-to", "2019-01-02",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "partner",
+    "yt",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "apllication/xml"
+
+[[partner.responses]]
+    args = {date1 = "2019-01-01", date2 = "2019-01-01"}
+    data_file = "partner_response_2019_01_01.xml"
+
+[[partner.responses]]
+    args = {date1 = "2019-01-02", date2 = "2019-01-02"}
+    data_file = "partner_response_2019_01_02.xml"
+
+[yt.input.partner_table]
+    path = "//home/rasp/reference/partner"
+
+[[yt.input.partner_table.data]]
+    billing_order_id = 203
+    code = "aviaoperator"
+    partner_id = 33
+
+[yt.input.station_table]
+    path = "//home/rasp/reference/station"
+
+[[yt.input.station_table.data]]
+    city_id = "c54"
+    iata = "SVX"
+    sirena = ""
+
+[[yt.input.station_table.data]]
+    city_id = "c213"
+    iata = "DME"
+    sirena = ""
+
+[[yt.input.station_table.data]]
+    city_id = "c2"
+    iata = "LED"
+    sirena = ""
+
+[lb]
+    topic = "topic-aviaoperator"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+[[lb.expected]]
+    partner_name = "aviaoperator"
+    travel_order_id = "aviaoperator:id_0_0"
+    partner_order_id = "id_0_0"
+    created_at = 1546300800
+    status = "pending"
+    label = "marker_0_0"
+    currency_code = "EUR"
+    order_amount = 2000.0
+    category = "avia"
+    source = "aviaoperator"
+    partner_id = 33
+    billing_order_id = 203
+    origin = "SVX"
+    destination = "DME"
+    trip_type = "oneway"
+    date_forward = "2019-01-01"
+    date_backward = ""
+
+[[lb.expected]]
+    partner_name = "aviaoperator"
+    travel_order_id = "aviaoperator:id_0_1"
+    partner_order_id = "id_0_1"
+    created_at = 1546300801
+    status = "confirmed"
+    label = "marker_0_1"
+    currency_code = "USD"
+    order_amount = 2000.0
+    category = "avia"
+    source = "aviaoperator"
+    partner_id = 33
+    billing_order_id = 203
+    origin = "SVX"
+    destination = "LED"
+    trip_type = "roundtrip"
+    date_forward = "2019-01-01"
+    date_backward = "2019-01-02"
+
+[[lb.expected]]
+    partner_name = "aviaoperator"
+    travel_order_id = "aviaoperator:id_0_2"
+    partner_order_id = "id_0_2"
+    created_at = 1546300802
+    status = "cancelled"
+    label = "marker_0_2"
+    currency_code = "RUB"
+    order_amount = 2000.0
+    category = "avia"
+    source = "aviaoperator"
+    partner_id = 33
+    billing_order_id = 203
+    origin = "SVX"
+    destination = "DME"
+    trip_type = "openjaw"
+    date_forward = "2019-01-01"
+    date_backward = "2019-01-02"
+
+[[lb.expected]]
+    partner_name = "aviaoperator"
+    travel_order_id = "aviaoperator:id_1_0"
+    partner_order_id = "id_1_0"
+    created_at = 1546387200
+    status = "pending"
+    label = "marker_1_0"
+    currency_code = "EUR"
+    order_amount = 2000.0
+    category = "avia"
+    source = "aviaoperator"
+    partner_id = 33
+    billing_order_id = 203
+    origin = "SVX"
+    destination = "DME"
+    trip_type = "oneway"
+    date_forward = "2019-01-02"
+    date_backward = ""
+
+[[lb.expected]]
+    partner_name = "aviaoperator"
+    travel_order_id = "aviaoperator:id_1_1"
+    partner_order_id = "id_1_1"
+    created_at = 1546387201
+    status = "confirmed"
+    label = "marker_1_1"
+    currency_code = "USD"
+    order_amount = 2000.0
+    category = "avia"
+    source = "aviaoperator"
+    partner_id = 33
+    billing_order_id = 203
+    origin = "SVX"
+    destination = "LED"
+    trip_type = "roundtrip"
+    date_forward = "2019-01-02"
+    date_backward = "2019-01-03"
+
+[[lb.expected]]
+    partner_name = "aviaoperator"
+    travel_order_id = "aviaoperator:id_1_2"
+    partner_order_id = "id_1_2"
+    created_at = 1546387202
+    status = "cancelled"
+    label = "marker_1_2"
+    currency_code = "RUB"
+    order_amount = 2000.0
+    category = "avia"
+    source = "aviaoperator"
+    partner_id = 33
+    billing_order_id = 203
+    origin = "SVX"
+    destination = "DME"
+    trip_type = "openjaw"
+    date_forward = "2019-01-02"
+    date_backward = "2019-01-03"

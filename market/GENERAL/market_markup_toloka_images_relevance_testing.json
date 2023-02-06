@@ -1,0 +1,37 @@
+{
+  "owner": "marketir",
+  "statfaceReports": [
+    {
+      "title": "Релевантность изображений, собранных в Толоке (Тестинг)",
+      "report": "Market/Content/Markup/TolokaImagesRelevanceTesting",
+      "tableName": "markup_worker_toloka_images_relevance_testing",
+      "periodArray": [
+        "DAY"
+      ],
+      "splits": [
+        {
+          "name": "category",
+          "title": "Категория",
+          "splitField": "dictGetString('category', 'full_name', arrayJoin(dictGetHierarchy('category', toUInt64(category_id))))",
+          "tree": true
+        }
+      ],
+      "fields": [
+        {
+          "name": "total",
+          "title": "Кол-во картинок в выборке",
+          "metricField": "anyLast(total_images_seen)"
+        }, {
+          "name": "problems",
+          "title": "Не размеченные картинки из выборки",
+          "metricField": "anyLast(problem_count)"
+        }, {
+          "name": "relevance",
+          "title": "Процент релевантный изображений",
+          "metricField": "anyLast(relevance_ratio)*100",
+          "viewType": "Percent"
+        }
+      ]
+    }
+  ]
+}

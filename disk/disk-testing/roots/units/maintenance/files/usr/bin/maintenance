@@ -1,0 +1,47 @@
+#!/bin/bash
+
+ABYSSYNC_DISABLE_FLAG=/etc/yandex/abyssync.disabled
+
+fail() {
+    echo "$1 Fail"
+    exit 1
+}
+
+success() {
+    echo "$1 Success"
+    exit 0
+}
+
+auto_open () {
+    iptruler all up
+}
+
+auto_close () {
+    iptruler all down
+}
+
+balancer_close() {
+    touch $ABYSSYNC_DISABLE_FLAG
+    auto_close
+}
+
+balancer_open() {
+    rm -f $ABYSSYNC_DISABLE_FLAG
+    auto_open
+}
+
+execute() {
+    $1 || fail "$1"
+    success "$1"
+}
+
+if [[ "$1" == "open" ]]; then
+    execute balancer_open
+elif [[ "$1" == "close" ]]; then
+    execute balancer_close
+elif [ -n "$1" ]; then
+    execute $1
+else
+    echo "Usage: $0 <open|close|auto_open|auto_close>"
+    exit 1
+fi

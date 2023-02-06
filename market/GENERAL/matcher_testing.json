@@ -1,0 +1,123 @@
+{
+  "owner": "marketir",
+  "tableName": "matcher_health_testing",
+  "splits": {
+    "dc": "if(substring(host, 1, 3) in ('iva', 'man', 'vla', 'sas'), substring(host, 1, 3), if(endsWith(host, 'yp-c.yandex.net'), substring(host, position(host, '.') + 1, 3), if(dictGetString('dc', 'dc', sipHash64(host)) <> '', dictGetString('dc', 'dc', sipHash64(host)), 'undefined_dc')))",
+    "host": "host",
+    "method": "method"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "ir.matcher.testing.rps.host.${host}",
+        "ir.matcher.testing.rps.dc.${dc}",
+        "ir.matcher.testing.rps.method.${method}",
+        "ir.matcher.testing.rps.total"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "count() / 60",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "ir.matcher.testing.errors_percent.4xx.${method}.host.${host}",
+        "ir.matcher.testing.errors_percent.4xx.${method}.dc.${dc}",
+        "ir.matcher.testing.errors_percent.4xx.${method}.total",
+        "ir.matcher.testing.errors_percent.4xx.ALL_METHODS.host.${host}",
+        "ir.matcher.testing.errors_percent.4xx.ALL_METHODS.dc.${dc}",
+        "ir.matcher.testing.errors_percent.4xx.ALL_METHODS.total"
+      ],
+      "tableName": "matcher_access_testing",
+      "period": "ONE_MIN",
+      "metricField": "countIf(http_code >= 400 and http_code <= 499) * 100 / count()",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "ir.matcher.testing.errors_percent.404.${method}.host.${host}",
+        "ir.matcher.testing.errors_percent.404.${method}.dc.${dc}",
+        "ir.matcher.testing.errors_percent.404.${method}.total",
+        "ir.matcher.testing.errors_percent.404.ALL_METHODS.host.${host}",
+        "ir.matcher.testing.errors_percent.404.ALL_METHODS.dc.${dc}",
+        "ir.matcher.testing.errors_percent.404.ALL_METHODS.total"
+      ],
+      "tableName": "matcher_access_testing",
+      "period": "ONE_MIN",
+      "metricField": "countIf(http_code = 404) * 100 / count()",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "ir.matcher.testing.errors_percent.5xx.${method}.host.${host}",
+        "ir.matcher.testing.errors_percent.5xx.${method}.dc.${dc}",
+        "ir.matcher.testing.errors_percent.5xx.${method}.total",
+        "ir.matcher.testing.errors_percent.5xx.ALL_METHODS.host.${host}",
+        "ir.matcher.testing.errors_percent.5xx.ALL_METHODS.dc.${dc}",
+        "ir.matcher.testing.errors_percent.5xx.ALL_METHODS.total"
+      ],
+      "tableName": "matcher_access_testing",
+      "period": "ONE_MIN",
+      "metricField": "countIf(http_code >= 500 and http_code <= 599) * 100 / count()",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "ir.matcher.testing.errors_percent.3xx.${method}.host.${host}",
+        "ir.matcher.testing.errors_percent.3xx.${method}.dc.${dc}",
+        "ir.matcher.testing.errors_percent.3xx.${method}.total",
+        "ir.matcher.testing.errors_percent.3xx.ALL_METHODS.host.${host}",
+        "ir.matcher.testing.errors_percent.3xx.ALL_METHODS.dc.${dc}",
+        "ir.matcher.testing.errors_percent.3xx.ALL_METHODS.total"
+      ],
+      "tableName": "matcher_access_testing",
+      "period": "ONE_MIN",
+      "metricField": "countIf(http_code >= 300 and http_code <= 399) * 100 / count()",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "ir.matcher.testing.offers-per-second.host.${host}",
+        "ir.matcher.testing.offers-per-second.dc.${dc}",
+        "ir.matcher.testing.offers-per-second.total"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "sum(offers_count) / 60",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "ir.matcher.testing.work_time.host.${host}",
+        "ir.matcher.testing.work_time.dc.${dc}",
+        "ir.matcher.testing.work_time.total"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "work_time_ms",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "ir.matcher.testing.work_time.per_offer.host.${host}",
+        "ir.matcher.testing.work_time.per_offer.dc.${dc}",
+        "ir.matcher.testing.work_time.per_offer.total"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "toInt64(work_time_ms / offers_count), offers_count",
+      "type": "QUANTILE_TIMING_WEIGHTED"
+    },
+    {
+      "metricNameArray": [
+        "ir.matcher.testing.timings.${method}.host.${host}",
+        "ir.matcher.testing.timings.${method}.dc.${dc}",
+        "ir.matcher.testing.timings.${method}.total",
+        "ir.matcher.testing.timings.ALL_METHODS.host.${host}",
+        "ir.matcher.testing.timings.ALL_METHODS.dc.${dc}",
+        "ir.matcher.testing.timings.ALL_METHODS.total"
+      ],
+      "tableName": "matcher_access_testing",
+      "period": "ONE_MIN",
+      "metricField": "resptime_ms",
+      "filter": "http_code = 200",
+      "type": "QUANTILE_TIMING"
+    }
+  ]
+}

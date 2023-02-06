@@ -1,0 +1,37 @@
+uwsgi:
+  root_config: /app/config/testing.yml
+  yaml: /app/config/base.yml
+  plugins: python3,logfile
+  processes: 1
+  chdir: /app/python/
+  logger: file:/app/log/tractor_api.log
+  req-logger: file:/app/log/access.log
+
+  uid: app
+  gid: app
+
+tvm:
+  enforced: true
+  clients:
+    "2016789": sarah
+    "2025686": collectors_ext # collectors_ext_tst
+
+tractor_db:
+    conninfo: "host=sas-kdlags2lmj301mm3.db.yandex.net,vla-cj9nkmu93xvqm1cy.db.yandex.net port=6432 dbname=tractor_disk_db user=tractor_disk target_session_attrs=read-write"
+
+versioned_keys:
+  data:
+    "1": dHJhY3Rvcl9fX3NlY3JldA== # b64encode("tractor___secret".encode())
+
+directory:
+    host: http://api-internal-test.directory.ws.yandex.net
+
+methods:
+  disk:
+    create_migration:
+      file_size_limit: 1048576 # 1 MB
+      logins_limit: 200
+  mail:
+    create_migration:
+      file_size_limit: 10485760 # 10 MB
+      logins_limit: 200

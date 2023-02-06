@@ -1,0 +1,274 @@
+{
+  "owner": "marketir",
+  "tableName": "ultra_controller_health_testing",
+  "splits": {
+    "key": "key",
+    "host": "host",
+    "method": "method"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "ir.ultra-controller.testing.errors.4xx.${host}",
+        "ir.ultra-controller.testing.errors.4xx.total"
+      ],
+      "tableName": "ultra_controller_access_testing",
+      "period": "ONE_MIN",
+      "metricField": "countIf(http_code >= 400 and http_code <= 499) / count()",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.clutcher.req_count",
+      "period": "ONE_MIN",
+      "metricField": "sum(clutcher_req_count)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.classifier.work_time",
+      "period": "ONE_MIN",
+      "metricField": "classifier_work_time_ms",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.classifier.work_time.per_offer",
+      "period": "ONE_MIN",
+      "metricField": "toInt64(classifier_work_time_ms / classifier_req_count), classifier_req_count",
+      "type": "QUANTILE_TIMING_WEIGHTED"
+    },
+    {
+      "metricNameArray": [
+        "ir.ultra-controller.testing.timings.${host}.${method}",
+        "ir.ultra-controller.testing.timings.total"
+      ],
+      "tableName": "ultra_controller_access_testing",
+      "period": "ONE_MIN",
+      "metricField": "resptime_ms",
+      "filter": "http_code = 200",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.mapper.req_count",
+      "period": "ONE_MIN",
+      "metricField": "sum(mapper_req_count)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.formalizer.work_time",
+      "period": "ONE_MIN",
+      "metricField": "formalizer_work_time_ms",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.formalizer.work_time.per_offer",
+      "period": "ONE_MIN",
+      "metricField": "toInt64(formalizer_work_time_ms / formalizer_req_count), formalizer_req_count",
+      "type": "QUANTILE_TIMING_WEIGHTED"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.light_matcher.work_time",
+      "period": "ONE_MIN",
+      "metricField": "light_matcher_work_time_ms",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.light_matcher.work_time.per_offer",
+      "period": "ONE_MIN",
+      "metricField": "toInt64(light_matcher_work_time_ms / light_matcher_req_count), light_matcher_req_count",
+      "type": "QUANTILE_TIMING_WEIGHTED"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.matcher.req_count",
+      "period": "ONE_MIN",
+      "metricField": "sum(matcher_req_count)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.classifier.req_count",
+      "period": "ONE_MIN",
+      "metricField": "sum(classifier_req_count)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.classifier.log_app_count",
+      "period": "ONE_MIN",
+      "metricField": "sum(classifier_log_app_count)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "ir.ultra-controller.testing.rps.${host}",
+        "ir.ultra-controller.testing.rps.total"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "count() / 60",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "ir.ultra-controller.testing.errors.5xx.${host}",
+        "ir.ultra-controller.testing.errors.5xx.total"
+      ],
+      "tableName": "ultra_controller_access_testing",
+      "period": "ONE_MIN",
+      "metricField": "countIf(http_code >= 500 and http_code <= 599) / count()",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.additional.${key}",
+      "tableName": "ultra_controller_kv_testing",
+      "period": "FIVE_MIN",
+      "metricField": "max(value)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "ir.ultra-controller.testing.errors.3xx.${host}",
+        "ir.ultra-controller.testing.errors.3xx.total"
+      ],
+      "tableName": "ultra_controller_access_testing",
+      "period": "ONE_MIN",
+      "metricField": "countIf(http_code >= 300 and http_code <= 399) / count()",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.light_matcher.req_count",
+      "period": "ONE_MIN",
+      "metricField": "sum(light_matcher_req_count)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "ir.ultra-controller.testing.errors.404.${host}",
+        "ir.ultra-controller.testing.errors.404.total"
+      ],
+      "tableName": "ultra_controller_access_testing",
+      "period": "ONE_MIN",
+      "metricField": "countIf(http_code = 404) / count()",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.clutcher.work_time",
+      "period": "ONE_MIN",
+      "metricField": "clutcher_work_time_ms",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.clutcher.work_time.per_offer",
+      "period": "ONE_MIN",
+      "metricField": "toInt64(clutcher_work_time_ms / clutcher_req_count), clutcher_req_count",
+      "type": "QUANTILE_TIMING_WEIGHTED"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.bad_cat.work_time",
+      "period": "ONE_MIN",
+      "metricField": "bad_cat_work_time_ms",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.work_time",
+      "period": "ONE_MIN",
+      "metricField": "work_time_ms",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.work_time.per_offer",
+      "period": "ONE_MIN",
+      "metricField": "toInt64(work_time_ms / offers_count), offers_count",
+      "type": "QUANTILE_TIMING_WEIGHTED"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.matcher.work_time",
+      "period": "ONE_MIN",
+      "metricField": "matcher_work_time_ms",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.matcher.work_time.per_offer",
+      "period": "ONE_MIN",
+      "metricField": "toInt64(matcher_work_time_ms / matcher_req_count), matcher_req_count",
+      "type": "QUANTILE_TIMING_WEIGHTED"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.mapper.work_time",
+      "period": "ONE_MIN",
+      "metricField": "mapper_work_time_ms",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.offers-per-second",
+      "period": "ONE_MIN",
+      "metricField": "sum(offers_count) / 60",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.bad_word.work_time",
+      "period": "ONE_MIN",
+      "metricField": "bad_word_work_time_ms",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.formalizer.req_count",
+      "period": "ONE_MIN",
+      "metricField": "sum(formalizer_req_count)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.cache_hits",
+      "period": "ONE_MIN",
+      "metricField": "sum(ultra_controller_cache_hits)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.cache_hits_percent",
+      "period": "ONE_MIN",
+      "metricField": "if((sum(offers_count) + sum(ultra_controller_cache_hits)) = 0, 0, round(sum(ultra_controller_cache_hits) * 100 / (sum(offers_count) + sum(ultra_controller_cache_hits)), 2))",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.skutcher.work_time",
+      "period": "ONE_MIN",
+      "metricField": "skutcher_work_time_ms",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.skutcher.work_time.per_offer",
+      "period": "ONE_MIN",
+      "metricField": "toInt64(skutcher_work_time_ms / skutcher_req_count), skutcher_req_count",
+      "type": "QUANTILE_TIMING_WEIGHTED"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.ultra_controller_request_size",
+      "period": "ONE_MIN",
+      "metricField": "toInt64(ultra_controller_request_size / 1024)",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.ultra_controller_request_size.per_offer",
+      "period": "ONE_MIN",
+      "metricField": "toInt64(ultra_controller_request_size / offers_count), offers_count",
+      "type": "QUANTILE_TIMING_WEIGHTED"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.ultra_controller_response_size",
+      "period": "ONE_MIN",
+      "metricField": "toInt64(ultra_controller_response_size / 1024)",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricName": "ir.ultra-controller.testing.health.ultra_controller_response_size.per_offer",
+      "period": "ONE_MIN",
+      "metricField": "toInt64(ultra_controller_response_size / offers_count), offers_count",
+      "type": "QUANTILE_TIMING_WEIGHTED"
+    },
+    {
+      "metricNameArray": [
+        "ir.ultra-controller.testing.service-errors.5xx.${host}",
+        "ir.ultra-controller.testing.service-errors.5xx.total"
+      ],
+      "tableName": "ultra_controller_access_testing",
+      "period": "ONE_MIN",
+      "metricField": "countIf(http_code >= 500 and http_code <= 599 and method != 'ping' and method != 'monitoring') / count()",
+      "type": "SIMPLE"
+    }
+  ]
+}

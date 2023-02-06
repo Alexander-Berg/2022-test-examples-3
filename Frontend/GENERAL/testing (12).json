@@ -1,0 +1,732 @@
+{
+  "name": "jobs_test",
+  "revision": 0,
+  "vertical": "JOBS",
+  "uploadedAt": 0,
+  "firstSeen": 0,
+  "deleted": false,
+  "tag": "",
+  "settings": {
+    "expressionsMap": [],
+    "edgeExpressionsMap": [
+      ["ROUTER->RESPONSE", "ROUTER[renderer_export]"],
+      ["ROUTER->FEMIDA_PROD", "!ROUTER[redirect] && ROUTER[femida_http_request] && ROUTER[is_production]"],
+      ["ROUTER->FEMIDA_PROD_1", "!ROUTER[redirect] && ROUTER[femida_http_request_1] && ROUTER[is_production]"],
+      ["ROUTER->FEMIDA_PROD_2", "!ROUTER[redirect] && ROUTER[femida_http_request_2] && ROUTER[is_production]"],
+      ["FEMIDA_PROD->TEMPLATES", "!ROUTER[main] && ROUTER[is_production]"],
+      ["FEMIDA_PROD_1->TEMPLATES", "!ROUTER[main] && ROUTER[is_production]"],
+      ["FEMIDA_PROD_2->TEMPLATES", "!ROUTER[main] && ROUTER[is_production]"],
+      ["ROUTER->FEMIDA_TEST_EXTERNAL", "!ROUTER[redirect] && ROUTER[femida_http_request] && !ROUTER[is_production]"],
+      ["ROUTER->FEMIDA_TEST_EXTERNAL_1", "!ROUTER[redirect] && ROUTER[femida_http_request_1] && !ROUTER[is_production]"],
+      ["ROUTER->FEMIDA_TEST_EXTERNAL_2", "!ROUTER[redirect] && ROUTER[femida_http_request_2] && !ROUTER[is_production]"],
+      ["TEMPLATES->TURBOPAGES_SUBGRAPH", "!TEMPLATES[isApi]"],
+      ["TEMPLATES->RESPONSE", "TEMPLATES[isApi]"],
+      ["ROUTER->CUSTOM_RESPONSE", "ROUTER[redirect]"],
+      ["TEMPLATES->CUSTOM_RESPONSE", "!TEMPLATES[isApi]"],
+      ["TURBOPAGES_SUBGRAPH->CUSTOM_RESPONSE", "!TEMPLATES[isApi] && !ROUTER[redirect]"],
+      ["LPC_PROD->TEMPLATES", "!ROUTER[isApi]"],
+      ["ROUTER->LPC_PROD", "!ROUTER[redirect] && ROUTER[lpc_http_request]"],
+      ["ROUTER->TEMPLATES", "!ROUTER[redirect]"],
+      ["FEMIDA_TEST_EXTERNAL->TEMPLATES", "!ROUTER[main] && !ROUTER[is_production]"],
+      ["FEMIDA_TEST_EXTERNAL_1->TEMPLATES", "!ROUTER[main] && !ROUTER[is_production]"],
+      ["FEMIDA_TEST_EXTERNAL_2->TEMPLATES", "!ROUTER[main] && !ROUTER[is_production]"]
+    ],
+    "nodeDepsMap": [
+      [
+        "INIT_UAAS",
+        {
+          "inputDepsList": [
+              "INIT_UAAS_PREPARE_DATA",
+              "HTTP_REQUEST"
+          ]
+        }
+      ],
+      [
+        "UAAS",
+        {
+          "inputDepsList": [
+              "INIT_UAAS",
+              "HTTP_REQUEST"
+          ]
+        }
+      ],
+      [
+        "CUSTOM_RESPONSE",
+        {
+          "inputDepsList": [
+            "TURBOPAGES_SUBGRAPH@!http_response",
+            "TEMPLATES",
+            "ROUTER",
+            "CUSTOM_RESPONSE_PREPARE_DATA",
+            "HTTP_REQUEST"
+          ]
+        }
+      ],
+      [
+        "RESPONSE",
+        {
+          "inputDepsList": [
+            "CUSTOM_RESPONSE",
+            "ROUTER",
+            "TEMPLATES"
+          ]
+        }
+      ],
+      [
+        "TEMPLATES",
+        {
+          "inputDepsList": [
+            "FEMIDA_PROD@http_response->femida_http_response",
+            "FEMIDA_PROD_1@http_response->femida_http_response_1",
+            "FEMIDA_PROD_2@http_response->femida_http_response_2",
+            "LPC_PROD@!http_response->lpc_http_response",
+            "FEMIDA_TEST_EXTERNAL@http_response->femida_http_response",
+            "FEMIDA_TEST_EXTERNAL_1@http_response->femida_http_response_1",
+            "FEMIDA_TEST_EXTERNAL_2@http_response->femida_http_response_2",
+            "ROUTER",
+            "TEMPLATES_PREPARE_DATA",
+            "HTTP_REQUEST",
+            "UAAS"
+          ]
+        }
+      ],
+      [
+        "ROUTER",
+        {
+            "inputDepsList": [
+                "UAAS",
+                "HTTP_REQUEST",
+                "ROUTER_PREPARE_DATA"
+            ]
+        }
+      ],
+      [
+        "FEMIDA_PROD",
+        {
+          "inputDepsList": [
+            "ROUTER@!femida_http_request->http_request"
+          ]
+        }
+      ],
+      [
+        "FEMIDA_TEST_EXTERNAL",
+        {
+          "inputDepsList": [
+            "ROUTER@!femida_http_request->http_request"
+          ]
+        }
+      ],
+      [
+        "FEMIDA_PROD_1",
+        {
+          "inputDepsList": [
+            "ROUTER@!femida_http_request_1->http_request"
+          ]
+        }
+      ],
+      [
+        "FEMIDA_TEST_EXTERNAL_1",
+        {
+          "inputDepsList": [
+            "ROUTER@!femida_http_request_1->http_request"
+          ]
+        }
+      ],
+      [
+        "FEMIDA_PROD_2",
+        {
+          "inputDepsList": [
+            "ROUTER@!femida_http_request_2->http_request"
+          ]
+        }
+      ],
+      [
+        "FEMIDA_TEST_EXTERNAL_2",
+        {
+          "inputDepsList": [
+            "ROUTER@!femida_http_request_2->http_request"
+          ]
+        }
+      ],
+      [
+        "LPC_PROD",
+        {
+          "inputDepsList": [
+            "ROUTER@!lpc_http_request->http_request"
+          ]
+        }
+      ],
+      [
+        "TURBOPAGES_SUBGRAPH",
+        {
+          "inputDepsList": [
+            "!TEMPLATES->RAWDATA_SOURCE",
+            "!HTTP_REQUEST"
+          ]
+        }
+      ]
+    ],
+    "inputDepsList": [
+      "HTTP_REQUEST"
+    ],
+    "outputDepsList": [],
+    "criticalDepsList": [],
+    "nodesMap": [
+      [
+        "UAAS",
+        {
+          "backendName": {
+            "value": "UAAS_YP_GRPC"
+          },
+          "params": {
+              "timeout": {
+                "value": "1000ms"
+              },
+              "responsibles": {
+                "abc_service": [
+                    {
+                        "slug": "experiments",
+                        "duty_slugs": [
+                            "abt_duty"
+                        ]
+                    }
+                ]
+              }
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": []
+        }
+      ],
+      [
+        "INIT_UAAS_PREPARE_DATA",
+        {
+            "nodeType": 0,
+            "expectsDebugInfo": false,
+            "neverDiscard": false,
+            "forceRequestOnEmptyInput": false,
+            "excludeFromCommonStats": false,
+            "inputTypesList": [],
+            "outputTypesList": [],
+            "embedList": [
+              {
+                "fieldsMap": [
+                  [
+                    "template",
+                    {
+                      "nullValue": 0,
+                      "numberValue": 0,
+                      "stringValue": "jobs-init-usersplit",
+                      "boolValue": false
+                    }
+                  ],
+                  [
+                    "type",
+                    {
+                      "nullValue": 0,
+                      "numberValue": 0,
+                      "stringValue": "template_params",
+                      "boolValue": false
+                    }
+                  ]
+                ]
+              }
+            ],
+            "monitoringList": []
+        }
+      ],
+      [
+        "INIT_UAAS",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "RENDERER_JOBS"
+          },
+          "params": {
+            "timeout": {
+              "value": "1000ms"
+            },
+            "codecsList": [],
+            "attempts": {
+              "maxAttempts": {
+                "value": 2
+              }
+            }
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": []
+        }
+      ],
+      [
+        "TEMPLATES",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "RENDERER_JOBS"
+          },
+          "params": {
+            "timeout": {
+              "value": "1000ms"
+            },
+            "codecsList": [],
+            "attempts": {
+              "maxAttempts": {
+                "value": 2
+              }
+            }
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": []
+        }
+      ],
+      [
+        "ROUTER",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "RENDERER_JOBS"
+          },
+          "params": {
+            "timeout": {
+              "value": "1000ms"
+            },
+            "codecsList": [],
+            "attempts": {
+              "maxAttempts": {
+                "value": 2
+              }
+            }
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": []
+        }
+      ],
+      [
+        "FEMIDA_PROD",
+        {
+            "nodeType": 0,
+            "backendName": {
+              "value": "JOBS__FEMIDA_PROD"
+            },
+            "params": {
+              "timeout": {
+                "value": "9000ms"
+              },
+              "soft_timeout": {
+                "value": "4500ms"
+              },
+              "codecsList": [],
+              "attempts": {
+                "maxAttempts": {
+                  "value": 2
+                }
+              }
+            },
+            "expectsDebugInfo": false,
+            "neverDiscard": false,
+            "forceRequestOnEmptyInput": false,
+            "excludeFromCommonStats": false,
+            "inputTypesList": [],
+            "outputTypesList": [],
+            "embedList": [],
+            "monitoringList": []
+        }
+      ],
+      [
+        "FEMIDA_PROD_1",
+        {
+            "nodeType": 0,
+            "backendName": {
+              "value": "JOBS__FEMIDA_PROD"
+            },
+            "params": {
+              "timeout": {
+                "value": "9000ms"
+              },
+              "soft_timeout": {
+                "value": "4500ms"
+              },
+              "codecsList": [],
+              "attempts": {
+                "maxAttempts": {
+                  "value": 2
+                }
+              }
+            },
+            "expectsDebugInfo": false,
+            "neverDiscard": false,
+            "forceRequestOnEmptyInput": false,
+            "excludeFromCommonStats": false,
+            "inputTypesList": [],
+            "outputTypesList": [],
+            "embedList": [],
+            "monitoringList": []
+        }
+      ],
+      [
+        "FEMIDA_PROD_2",
+        {
+            "nodeType": 0,
+            "backendName": {
+              "value": "JOBS__FEMIDA_PROD"
+            },
+            "params": {
+              "timeout": {
+                "value": "9000ms"
+              },
+              "soft_timeout": {
+                "value": "4500ms"
+              },
+              "codecsList": [],
+              "attempts": {
+                "maxAttempts": {
+                  "value": 2
+                }
+              }
+            },
+            "expectsDebugInfo": false,
+            "neverDiscard": false,
+            "forceRequestOnEmptyInput": false,
+            "excludeFromCommonStats": false,
+            "inputTypesList": [],
+            "outputTypesList": [],
+            "embedList": [],
+            "monitoringList": []
+        }
+      ],
+      [
+        "FEMIDA_TEST_EXTERNAL",
+        {
+            "nodeType": 0,
+            "backendName": {
+              "value": "JOBS__FEMIDA_TEST_EXTERNAL"
+            },
+            "params": {
+              "timeout": {
+                "value": "9000ms"
+              },
+              "soft_timeout": {
+                "value": "4500ms"
+              },
+              "codecsList": [],
+              "attempts": {
+                "maxAttempts": {
+                  "value": 2
+                }
+              }
+            },
+            "expectsDebugInfo": false,
+            "neverDiscard": false,
+            "forceRequestOnEmptyInput": false,
+            "excludeFromCommonStats": false,
+            "inputTypesList": [],
+            "outputTypesList": [],
+            "embedList": [],
+            "monitoringList": []
+        }
+      ],
+      [
+        "FEMIDA_TEST_EXTERNAL_1",
+        {
+            "nodeType": 0,
+            "backendName": {
+              "value": "JOBS__FEMIDA_TEST_EXTERNAL"
+            },
+            "params": {
+              "timeout": {
+                "value": "9000ms"
+              },
+              "soft_timeout": {
+                "value": "4500ms"
+              },
+              "codecsList": [],
+              "attempts": {
+                "maxAttempts": {
+                  "value": 2
+                }
+              }
+            },
+            "expectsDebugInfo": false,
+            "neverDiscard": false,
+            "forceRequestOnEmptyInput": false,
+            "excludeFromCommonStats": false,
+            "inputTypesList": [],
+            "outputTypesList": [],
+            "embedList": [],
+            "monitoringList": []
+        }
+      ],
+      [
+        "FEMIDA_TEST_EXTERNAL_2",
+        {
+            "nodeType": 0,
+            "backendName": {
+              "value": "JOBS__FEMIDA_TEST_EXTERNAL"
+            },
+            "params": {
+              "timeout": {
+                "value": "9000ms"
+              },
+              "soft_timeout": {
+                "value": "4500ms"
+              },
+              "codecsList": [],
+              "attempts": {
+                "maxAttempts": {
+                  "value": 2
+                }
+              }
+            },
+            "expectsDebugInfo": false,
+            "neverDiscard": false,
+            "forceRequestOnEmptyInput": false,
+            "excludeFromCommonStats": false,
+            "inputTypesList": [],
+            "outputTypesList": [],
+            "embedList": [],
+            "monitoringList": []
+        }
+      ],
+      [
+        "LPC_PROD",
+        {
+            "nodeType": 0,
+            "backendName": {
+              "value": "JOBS__LPC_PROD"
+            },
+            "params": {
+              "timeout": {
+                "value": "2000ms"
+              },
+              "codecsList": [],
+              "attempts": {
+                "maxAttempts": {
+                  "value": 2
+                }
+              }
+            },
+            "expectsDebugInfo": false,
+            "neverDiscard": false,
+            "forceRequestOnEmptyInput": false,
+            "excludeFromCommonStats": false,
+            "inputTypesList": [],
+            "outputTypesList": [],
+            "embedList": [],
+            "monitoringList": []
+        }
+      ],
+      [
+        "ROUTER_PREPARE_DATA",
+        {
+            "nodeType": 0,
+            "expectsDebugInfo": false,
+            "neverDiscard": false,
+            "forceRequestOnEmptyInput": false,
+            "excludeFromCommonStats": false,
+            "inputTypesList": [],
+            "outputTypesList": [],
+            "embedList": [
+              {
+                "fieldsMap": [
+                  [
+                    "template",
+                    {
+                      "nullValue": 0,
+                      "numberValue": 0,
+                      "stringValue": "get_request_item",
+                      "boolValue": false
+                    }
+                  ],
+                  [
+                    "type",
+                    {
+                      "nullValue": 0,
+                      "numberValue": 0,
+                      "stringValue": "template_params",
+                      "boolValue": false
+                    }
+                  ]
+                ]
+              }
+            ],
+            "monitoringList": []
+        }
+      ],
+      [
+        "TEMPLATES_PREPARE_DATA",
+        {
+            "nodeType": 0,
+            "expectsDebugInfo": false,
+            "neverDiscard": false,
+            "forceRequestOnEmptyInput": false,
+            "excludeFromCommonStats": false,
+            "inputTypesList": [],
+            "outputTypesList": [],
+            "embedList": [
+              {
+                "fieldsMap": [
+                  [
+                    "template",
+                    {
+                      "nullValue": 0,
+                      "numberValue": 0,
+                      "stringValue": "jobs",
+                      "boolValue": false
+                    }
+                  ],
+                  [
+                    "type",
+                    {
+                      "nullValue": 0,
+                      "numberValue": 0,
+                      "stringValue": "template_params",
+                      "boolValue": false
+                    }
+                  ]
+                ]
+              }
+            ],
+            "monitoringList": []
+        }
+      ],
+      [
+        "CUSTOM_RESPONSE",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "RENDERER_JOBS"
+          },
+          "params": {
+            "timeout": {
+              "value": "1000ms"
+            },
+            "codecsList": [],
+            "attempts": {
+              "maxAttempts": {
+                "value": 2
+              }
+            }
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": []
+        }
+      ],
+      [
+        "CUSTOM_RESPONSE_PREPARE_DATA",
+        {
+            "nodeType": 0,
+            "expectsDebugInfo": false,
+            "neverDiscard": false,
+            "forceRequestOnEmptyInput": false,
+            "excludeFromCommonStats": false,
+            "inputTypesList": [],
+            "outputTypesList": [],
+            "embedList": [
+              {
+                "fieldsMap": [
+                  [
+                    "template",
+                    {
+                      "nullValue": 0,
+                      "numberValue": 0,
+                      "stringValue": "custom_request",
+                      "boolValue": false
+                    }
+                  ],
+                  [
+                    "type",
+                    {
+                      "nullValue": 0,
+                      "numberValue": 0,
+                      "stringValue": "template_params",
+                      "boolValue": false
+                    }
+                  ]
+                ]
+              }
+            ],
+            "monitoringList": []
+        }
+      ],
+      [
+        "TURBOPAGES_SUBGRAPH",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "SELF__SHARED"
+          },
+          "params": {
+            "handler": {
+              "value": "/_subhost/turbopages_subgraph"
+            },
+            "timeout": {
+              "value": "1000ms"
+            },
+            "codecsList": [],
+            "attempts": {
+              "maxAttempts": {
+                "value": 2
+              }
+            }
+          },
+          "aliasConfig": {
+            "addrAlias": {
+              "value": "SELF"
+            }
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": []
+        }
+      ]
+    ],
+    "streamingNoBlockOutputs": false,
+    "nodeSubsetsMap": [],
+    "responsibles": {
+      "loginsList": [
+        "qfox",
+        "robot-frontend",
+        "olgakozlova",
+        "grisshafkn"
+      ],
+      "abcList": []
+    },
+    "allowedTvmIdsList": [],
+    "allowEmptyResponse": false
+  },
+  "createdAt": 0
+}

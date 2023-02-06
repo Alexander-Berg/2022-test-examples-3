@@ -1,0 +1,21 @@
+context:
+  default:
+    service_name: global_b2c
+    servername_regexp: '(global-b2c\\.tst\\.vs\\.market\\.yandex\\.net|b2c-test\\.market\\.yandex\\.com|b2c-dev\\.market\\.yandex\\.com)'
+    vs: global_b2c
+    health_check: '"GET /ping HTTP/1.1\r\nHost: global-b2c.tst.vs.market.yandex.net\r\n\r\n"'
+    attempts: 1
+    antirobot: True
+    antirobot_service_name: market_other
+    balancing_method: "active"
+    cert: global-b2c.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+
+servers:
+  default:
+    main:
+      - name: "GREY%global-b2c.tst.vs.market.yandex.net"
+        timeout: "35s"
+        port: 80
+        plain_http_backend: True

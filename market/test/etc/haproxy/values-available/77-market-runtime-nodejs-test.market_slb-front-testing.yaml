@@ -1,0 +1,40 @@
+params:
+  default:
+    generate: true
+    resolve: true
+    templates:
+    - user_mslb_http.tpl
+values:
+  default:
+    defaults:
+      check: check observe layer7
+      on_error: fastinter
+    globals:
+      ping_expect: string pong
+      service_name: fslb.yandex.ru
+      service_port: 82
+      timeout_server: 35s
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+    - check: check ssl verify none observe layer7
+      name: YP@testing-market-front-desktop-market-test-sas@local
+      weight: 100
+      dns_resolvers: yandex-ns
+      resolve: false
+    - check: check ssl verify none observe layer7
+      name: YP@testing-market-front-desktop-market-test-vla@local
+      weight: 100
+      dns_resolvers: yandex-ns
+      resolve: false
+    - check: check ssl verify none observe layer7
+      name: YP@testing-market-front-desktop-market-test-sas
+      weight: 1
+      dns_resolvers: yandex-ns
+      resolve: false
+    - check: check ssl verify none observe layer7
+      name: YP@testing-market-front-desktop-market-test-vla
+      weight: 1
+      dns_resolvers: yandex-ns
+      resolve: false

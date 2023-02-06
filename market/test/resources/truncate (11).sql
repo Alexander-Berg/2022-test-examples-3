@@ -1,0 +1,10 @@
+TRUNCATE TABLE pay.payment;
+TRUNCATE TABLE pay.payment_hst;
+TRUNCATE TABLE pay.payment_offer;
+TRUNCATE TABLE pay.content_state;
+TRUNCATE TABLE pay.content_price;
+TRUNCATE TABLE pay.payer_event_queue;
+TRUNCATE TABLE pay.payer_balance;
+TRUNCATE TABLE pay.unbalanced_pays;
+TRUNCATE TABLE pay.configuration;
+truncate table pay.payment_offer_skip_log;

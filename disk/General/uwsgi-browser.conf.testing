@@ -1,0 +1,27 @@
+[uwsgi]
+processes = 25
+stats = :3737
+socket = [::]:3131
+buffer-size = 400000
+uid=nginx
+gid=nginx
+MPFS_PACKAGE = browser
+env = MPFS_PACKAGE=%(MPFS_PACKAGE)
+; Enable disabled threading cleanup after fork
+py-call-osafterfork = true
+; Enable disabled GIL
+enable-threads = true
+harakiri = 600
+listen = 256
+max-requests = 4096
+min-worker-lifetime = 300
+max-worker-lifetime = 1800
+thunder-lock = true
+
+; Logging:
+; Aware of IDE's tab replacement
+tab = @(exec://bash -c "echo -en '\t'")
+; Do not confuse with %(host) from uWSGI log format
+host = @(exec://bash -c "hostname")
+req-logger = file:$(UWSGI_LOG)
+logformat = tskv%(tab)tskv_format=ydisk-mpfs-uwsgi-log%(tab)host=%(host)%(tab)unixtime=%(epoch)%(tab)timestamp=%(ctime)%(tab)timezone=+0300%(tab)appname=%(MPFS_PACKAGE)%(tab)pid=%(pid)%(tab)remote_addr=%(addr)%(tab)remote_user=%(user)%(tab)vars=%(vars)%(tab)pktsize=%(pktsize)%(tab)method=%(method)%(tab)uri=%(uri)%(tab)size=%(size)%(tab)msecs=%(msecs)%(tab)proto=%(proto)%(tab)status=%(status)%(tab)headers=%(headers)%(tab)hsize=%(hsize)%(tab)switches=%(switches)%(tab)core=%(core)

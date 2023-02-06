@@ -1,0 +1,19 @@
+disk_yadrop_crash=grep -c 'CRASH REPORT='
+disk_yadrop_pusher_error=grep -cP 'url=http:\/\/pusher.yandex.net.* code=(?!200)'
+disk_webdav_status=awk '/yadrop_web/ { if(!($0 ~ /Yandex\.Mail/ && $(NF-3) == 401) && !($0 ~ /GET \/\?ping/)) { x[$(NF-3)]++ } } END {for(i in x) {print x[i],i} }'
+disk_webdav_timings=awk '/yadrop_web/ {print $(NF-2)}'
+disk_webdav_yadrop_bb_stat=/usr/lib/monitoring/yadrop_bb_stat.pl
+disk_mpfs_timings=awk '/\/(json|desktop|service)/ {print $(NF-5)}'
+disk_mpfs_status=awk '/\/(json|desktop|service)/ {code=$(NF-4); if (code == 507) {code = 402} x[code]++} END {for(i in x) {print x[i],i}}'
+disk_mpfs_uploader_status=awk '/loader.disk.yandex.net/ { x[$(NF-3)]++ } END {for(i in x) {print x[i],i} }'
+disk_mpfs_mongo_timings=awk '/logging mongos/ {print $NF}'
+disk_mpfs_mongos_exception=fgrep -c 'socket exception'
+disk_mpfs_mongodb_stat=awk -f /var/lib/mpfs/mongo_stat.awk
+disk_mpfs_queue_jobs=awk 'BEGIN {ok=0;fail=0;temp=0} /status: OK/ {ok++} /status: FAIL/ {fail++} /status: TEMPORARY/ {temp++} /, time: / {t[i++] = $NF;} END {print "ok", ok; print "fail",fail;print "temp",temp; printf "job_timings "; for (x in t) {printf "%s ",  t[x]}}'
+disk_mpfs_queue_type=grep -Po "TYPE: \w+ " | awk '{ type[$2]++;}END{for(i in type)print type[i],i}'
+disk_mpfs_queue_timings=fgrep -v xiva_unsubscribe | awk '/lifetime:/ {print $NF}'
+disk_mpfs_counters_timings=awk '/counters.disk.yandex.net/ {print $NF}'
+disk_mpfs_counters_status=awk '/counters.disk.yandex.net/ {x[$(NF-3)]++} END {for(i in x) {print x[i],i}}'
+disk_mpfs_queue_index_lifetime=for x in 0 60 300; do curl -s "http://localhost/queue/count?queue=queue-index&time_offset=$x"; echo " "; done | xargs echo | awk '{if($1 != 0) {print $2/$1*100, $3/$1*100} else { print "0 0" }}'
+disk_mpfs_queue_jobs_type=/usr/lib/yandex/disk/mpfs/count_jobs.py
+

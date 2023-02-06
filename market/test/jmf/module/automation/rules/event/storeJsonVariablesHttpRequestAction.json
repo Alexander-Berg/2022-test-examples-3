@@ -1,0 +1,60 @@
+{
+  "rules": [
+    {
+      "actions": [
+        {
+          "type": "httpRequest",
+          "method": "GET",
+          "url": "https://example.com",
+          "variablesExtractionRules": [
+            {
+              "name": "responseStatus",
+              "path": "status"
+            },
+            {
+              "name": "key",
+              "path": "body.data.key"
+            },
+            {
+              "name": "array",
+              "path": "body.array[*].key"
+            }
+          ]
+        },
+        {
+          "type": "edit",
+          "parameter": "obj",
+          "properties": [
+            {
+              "code": "simple1@responseStatus",
+              "value": {
+                "type": "template",
+                "value": "${params.responseStatus}"
+              }
+            },
+            {
+              "code": "simple1@dataKey",
+              "value": {
+                "type": "script",
+                "value": "params.key"
+              }
+            },
+            {
+              "code": "simple1@arrayKeys",
+              "value": {
+                "type": "script",
+                "value": "params.array"
+              }
+            }
+          ]
+        },
+        {
+          "type": "httpRequest",
+          "method": "POST",
+          "url": "https://example.com/test",
+          "body": "{\"responseStatus\": ${params.responseStatus.toJson()}, \"dataKey\": ${params.key.toJson()}, \"arrayKeys\": ${params.array.toJson()}}"
+        }
+      ]
+    }
+  ]
+}

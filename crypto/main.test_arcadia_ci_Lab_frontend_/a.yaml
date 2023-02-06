@@ -1,0 +1,82 @@
+ci:
+  flows:
+    flow-lab-frontend:
+      jobs:
+        build-crypta-web-lab:
+          input:
+            custom_version: ${context.version_info.full}
+            packages: crypta/web/lab/docker/crypta-web-lab.json
+          needs:
+          - start-build
+          stage: build
+          task: projects/crypta/ya_package_docker
+          title: Build crypta-web-lab
+        release-stable:
+          input:
+            config:
+              common_release_data:
+                sandbox_common_release_data:
+                  release_stage: stable
+              deploy_system: SANDBOX
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-web-lab.resources[?type == 'CRYPTA_DOCKER'])[0].id}
+                type: CRYPTA_DOCKER
+          needs:
+          - start-stable
+          stage: stable
+          task: common/releases/simple_releaser
+          title: Release to stable
+        release-testing:
+          input:
+            config:
+              common_release_data:
+                sandbox_common_release_data:
+                  release_stage: testing
+              deploy_system: SANDBOX
+            release_items:
+            - sandbox_release_item:
+                id: ${(tasks.build-crypta-web-lab.resources[?type == 'CRYPTA_DOCKER'])[0].id}
+                type: CRYPTA_DOCKER
+          needs:
+          - start-testing
+          stage: testing
+          task: common/releases/simple_releaser
+          title: Release to testing
+        start-build:
+          stage: build
+          task: dummy
+          title: Start build
+        start-stable:
+          manual: true
+          needs:
+          - release-testing
+          stage: stable
+          task: dummy
+          title: Start stable
+        start-testing:
+          needs:
+          - build-crypta-web-lab
+          stage: testing
+          task: dummy
+          title: Start testing
+  releases:
+    lab-frontend:
+      auto: true
+      filters:
+      - abs-paths:
+        - crypta/web/lab/**
+        discovery: dir
+      flow: flow-lab-frontend
+      stages:
+      - displace: true
+        id: build
+      - displace: true
+        id: testing
+      - id: stable
+      title: Lab frontend
+  runtime:
+    sandbox-owner: CRYPTA
+  secret: sec-01efps66gnbmejg9wvc9ptvhmc
+service: cryptadev
+title: Lab frontend

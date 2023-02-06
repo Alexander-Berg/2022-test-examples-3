@@ -1,0 +1,106 @@
+{
+  "blog": {
+    "enable": false,
+    "writers_count": 2,
+    "topic": "market-indexer/testing/white/datacamp-offers-blog",
+    "log_level": "message"
+  },
+
+  "explanation_log": {
+    "enable": true,
+    "filename": "feed_errors.pbuf.sn",
+    "log_level": "warning"
+  },
+
+  "logbroker": {
+    "enable": true,
+    "bind_business_id_to_partition": true,
+    "enable_sending_stocks_to_separate_topic": false,
+    "bind_business_id_to_data_center": true,
+    "host_man": "man.logbroker.yandex.net",
+    "host_sas": "sas.logbroker.yandex.net",
+    "host_vla": "vla.logbroker.yandex.net",
+    "host": "logbroker.yandex.net",
+    "port": 2135,
+    "qoffers_topic": "market-indexer/testing/blue/datacamp-qoffers",
+    "stocks_topic": "market-indexer/testing/united/datacamp-offers-stocks",
+    "categories_topic": "market-indexer/testing/united/datacamp-categories",
+    "categories_topic_writers_count": 1,
+    "categories_topic_batch_size":50,
+    "categories_in_dedicated_topic": true,
+    "writers_count": 4,
+    "source_id": "qparser-20210701-",
+    "tvm_client_id": 2011472,
+    "tvm_secret_path": "properties.d/tvm-token-datacamp-blue-testing",
+    "complete_feed_finish_command_batch_size": 10000,
+    "datacamp_messages_topic": "market-indexer/testing/blue/datacamp-messages",
+    "datacamp_messages_writers_count": 4,
+    "batch_size": 50,
+    "enable_log_error_limit": true,
+    "max_inflight_per_partition": 100,
+    "log_error_limit": 100000,
+    "qoffers_quick_pipeline_messages_topic": "market-indexer/testing/united/datacamp-qoffers-quick-pipeline",
+    "qoffers_quick_pipeline_messages_writers_count": 1
+  },
+
+  "data": {
+    "rates": "/var/lib/yandex/market-data-getter/currency_rates/recent/currency_rates.xml"
+  },
+
+  "trace" : {
+    "enable_offers_trace": false,
+    "offers_trace_dir": "/var/logs/yandex/trace"
+  },
+
+  "stroller": {
+    "host": "datacamp.white.tst.vs.market.yandex.net"
+  },
+
+  "feature": {
+    "force_rur_currency_for_blue": false,
+    "allow_alcohol_type": true,
+    "allow_books_type": true,
+    "allow_artist_title_type": true,
+    "enable_required_fields_verification": true,
+    "accept_cpa_offers_for_adv_shop": true,
+    "enable_quick_pipeline": false,
+    "enable_price_diff_check": true
+  },
+
+  "deduplication": {
+    "quota_enabled_for_feeds_by_url": true,
+    "feed_id_binding_enabled": true
+  },
+
+  "price_diff_check": {
+    "batch_size": 10000,
+    "max_percentage": 50.0,
+    "use_meta_proxy": true
+  },
+
+  "yt": {
+    "enable": true,
+    "sas_proxy": "hahn",
+    "vla_proxy": "arnold",
+    "token_path": "path-to-your-token",
+    "basic_offers_table": "//home/market/testing/indexer/datacamp/united/basic_offers",
+    "full_deduplication": true,
+    "service_offers_table": "//home/market/testing/indexer/datacamp/united/service_offers",
+    "actual_service_offers_table": "//home/market/testing/indexer/datacamp/united/actual_service_offers",
+    "system_partners": "10522310,10454595",
+    "max_inflight": 600,
+    "meta_proxy": "pythia",
+    "mr_complete_commands_queue_table": "//home/commands_queue",
+    "mr_complete_commands_business_id_whitelist": "10785652,846863,10432691"
+  },
+
+  "ydb": {
+    "get_mr_cluster_from_coordination_service": false
+  },
+
+  "ignore_lists" : {
+    "business" : "",
+    "shop" : "",
+    "feed" : ""
+  }
+}

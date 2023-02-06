@@ -1,0 +1,46 @@
+- name: market-checkouter-test01h.db.yandex.net
+  cluster_id: c8c4e3ae-4e79-48b5-a19d-807a0bd7360b
+  zone_id: sas
+  resources:
+    resource_preset_id: db1.medium
+    disk_size: "161061273600"
+    disk_type_id: local-ssd
+  role: MASTER
+  health: ALIVE
+  services:
+  - type: POSTGRESQL
+    health: ALIVE
+  - type: POOLER
+    health: ALIVE
+- name: market-checkouter-test01i.db.yandex.net
+  cluster_id: c8c4e3ae-4e79-48b5-a19d-807a0bd7360b
+  zone_id: man
+  resources:
+    resource_preset_id: db1.medium
+    disk_size: "161061273600"
+    disk_type_id: local-ssd
+  role: REPLICA
+  health: ALIVE
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+    health: ALIVE
+  replica_type: ASYNC
+- name: vla-di1z5b4nx75yqonp.db.yandex.net
+  cluster_id: c8c4e3ae-4e79-48b5-a19d-807a0bd7360b
+  zone_id: vla
+  resources:
+    resource_preset_id: db1.medium
+    disk_size: "161061273600"
+    disk_type_id: local-ssd
+  role: REPLICA
+  health: ALIVE
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+    health: ALIVE
+  priority: "0"
+  replica_type: SYNC
+

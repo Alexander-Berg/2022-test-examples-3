@@ -1,0 +1,33 @@
+warehouse-timezone: Europe/Moscow
+spring:
+  datasource:
+    url: &jdbc-url jdbc:h2:mem:SCPRD;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1
+    jdbc-url: *jdbc-url
+    username: replenishment
+    separator: ^^^ END OF SCRIPT ^^^
+  main:
+    allow-bean-definition-overriding: true
+  config:
+    import:
+      - application-fragment-mq-test.yml
+      - application-fragment-common-test.yml
+  liquibase:
+    enabled: true
+wms:
+  replenishment:
+    tvm:
+      serviceId: 0
+      secret:
+      api-methods: /*
+      log-only-mode: false
+      check-user-ticket: false
+      cache:
+        dir:
+  autostart:
+    tvm:
+      serviceId: 0
+
+check:
+  authentication: 'no'
+
+s3.use: false

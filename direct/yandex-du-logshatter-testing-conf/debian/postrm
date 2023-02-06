@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -e
+
+function remove_divert {
+    dpkg-divert --rename --remove $1
+}
+
+case "$1" in 
+    purge)
+        remove_divert /etc/yandex/logshatter/logshatter-testing.properties
+	remove_divert /usr/bin/logshatter.sh
+    ;;
+esac

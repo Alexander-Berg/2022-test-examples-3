@@ -1,0 +1,119 @@
+SELECT
+  B.bid AS bid,
+  IF(is_null(sum(S.Shows)), 0, sum(S.Shows)) AS shows,
+  IF(is_null(sum(S.Clicks)), 0, sum(S.Clicks)) AS clicks,
+  IF(is_null(sum(IF(S.CurrencyID = 0, ((S.Cost * 100) / 118), S.CostTaxFree))), 0, sum(IF(S.CurrencyID = 0, ((S.Cost * 100) / 118), S.CostTaxFree))) AS cost,
+  IF(is_null(sum(S.CostCur)), 0, sum(S.CostCur)) AS costWithTax,
+  IF(is_null(sum(S.PriceCur)), 0, sum(S.PriceCur)) AS revenue,
+  IF(is_null(sum(S.GoalsNum)), 0, sum(S.GoalsNum)) AS goals,
+  IF(shows > 0, ((cost / shows) * 1000), 0) AS cpmPrice,
+  IF(is_null(sum(S.FirstPageClicks)), 0, sum(S.FirstPageClicks)) AS firstPageClicks,
+  IF(is_null(sum(S.FirstPageShows)), 0, sum(S.FirstPageShows)) AS firstPageShows,
+  IF(is_null(sum(S.FirstPageSumPosClicks)), 0, sum(S.FirstPageSumPosClicks)) AS firstPageSumPosClicks,
+  IF(is_null(sum(S.FirstPageSumPosShows)), 0, sum(S.FirstPageSumPosShows)) AS firstPageSumPosShows,
+  IF(is_null(sum(IF(S.IsRMP, S.Clicks, S.SessionNum))), 0, sum(IF(S.IsRMP, S.Clicks, S.SessionNum))) AS sessions,
+  IF(is_null(sum(S.SessionNumLimited)), 0, sum(S.SessionNumLimited)) AS sessionsLimited,
+  IF(is_null(sum(S.Bounces)), 0, sum(S.Bounces)) AS bounces,
+  IF(is_null(sum(S.SessionDepth)), 0, sum(S.SessionDepth)) AS sessionDepth,
+  IF(shows > 0, ((clicks * 100000000) / shows), 0) AS ctr,
+  IF(clicks > 0, (cost / clicks), 0) AS avgClickCost,
+  IF(firstPageShows > 0, ((firstPageSumPosShows * 1000000) / firstPageShows), 0) AS avgShowPosition,
+  IF(firstPageClicks > 0, ((firstPageSumPosClicks * 1000000) / firstPageClicks), 0) AS avgClickPosition,
+  IF(sessionsLimited > 0, ((bounces * 100000000) / sessionsLimited), 0) AS bounceRate,
+  IF(sessionsLimited > 0, ((sessionDepth * 1000000) / sessionsLimited), 0) AS avgDepth,
+  IF(clicks > 0, ((goals * 100000000) / clicks), 0) AS conversionRate,
+  IF(goals > 0, (cost / goals), null) AS avgGoalCost,
+  IF((
+    cost > 0
+    AND revenue > 0
+  ), ((double((revenue - cost)) * 1000000.0) / double(cost)), null) AS profitability,
+  IF((
+    cost > 0
+    AND revenue > 0
+  ), ((double(cost) * 100000000.0) / double(revenue)), null) AS crr,
+  S.UpdateTime AS UpdateTime
+FROM yt.bannerstable_direct AS B
+  LEFT OUTER JOIN yt.DirectPhraseStatV2_bs AS S
+    ON (
+      (B.cid, B.pid, B.bid) = (S.ExportID, S.GroupExportID, S.DirectBannerID)
+      AND S.IsFlat = true
+      AND S.UpdateTime = 1546290000
+    )
+WHERE (
+  B.cid IN (44)
+  AND B.pid IN (33)
+  AND B.bid IN (11)
+  AND NOT(B.bid IN (22))
+  AND (B.cid, B.pid, B.bid) IN ((10, 20, 30))
+  AND B.banner_type IN ('image_ad')
+  AND is_substr('a',lower(B.title))
+  AND NOT(is_substr('f',lower(B.title)))
+  AND NOT(lower(B.title) IN ('c'))
+  AND is_substr('d',lower(B.title_extension))
+  AND lower(B.title_extension) IN ('e')
+  AND NOT(lower(B.title_extension) IN ('g'))
+  AND is_substr('h',lower(B.body))
+  AND lower(B.body) IN ('i')
+  AND NOT(is_substr('j',lower(B.body)))
+  AND NOT(lower(B.body) IN ('k'))
+  AND is_substr('l',lower(B.href))
+  AND lower(B.href) IN ('m')
+  AND NOT(is_substr('n',lower(B.href)))
+  AND NOT(lower(B.href) IN ('o'))
+  AND is_substr('p',lower(B.bannersInternalDescription))
+  AND lower(B.bannersInternalDescription) IN ('q')
+  AND NOT(is_substr('r',lower(B.bannersInternalDescription)))
+  AND NOT(lower(B.bannersInternalDescription) IN ('s'))
+  AND (
+      (is_substr('t',regex_replace_all(' ',lower(B.title),' ')))
+      OR (is_substr('t',regex_replace_all(' ',lower(B.title_extension),' ')))
+      OR (is_substr('t',regex_replace_all(' ',lower(B.body),' ')))
+  )
+  AND B.bannersInternalTemplateId IN (55)
+  AND B.BannerID IN (66)
+  AND NOT(B.BannerID IN (77))
+  AND is_substr('88',numeric_to_string(B.BannerID))
+  AND NOT((
+    is_null(B.images_image_hash)
+    AND is_null(B.banner_images_image_hash)
+    AND is_null(B.creative_id)
+  ))
+  AND NOT(is_null(B.sitelinks_set_id))
+  AND NOT(is_null(B.vcard_id))
+  AND (
+    (
+      B.statusModerate IN (
+        'Sending', 'Sent', 'Ready'
+      )
+      AND B.statusPostModerate IN (
+        'No', 'Rejected'
+      )
+    )
+    OR (
+      B.banner_type IN (
+        'image_ad', 'mcbanner'
+      )
+      AND B.bannerImagesStatusModerate IN (
+        'Ready', 'Sending', 'Sent'
+      )
+    )
+    OR (
+      B.banner_type IN (
+        'image_ad', 'cpc_video', 'cpm_banner', 'performance'
+      )
+      AND B.bannersPerformanceStatusModerate IN (
+        'Ready', 'Sending', 'Sent'
+      )
+    )
+  )
+  AND NOT(B.banner_type IN (
+    'performance_main', 'performance'
+  ))
+  AND B.statusArch = 'Yes'
+  AND B.bid IN (11)
+)
+GROUP BY
+  bid,
+  B.cid_hash,
+  B.__shard__,
+  UpdateTime

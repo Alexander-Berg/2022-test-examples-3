@@ -1,0 +1,183 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "Task Manager config schema",
+  "properties": {
+    "input_table": {
+      "$id": "#/properties/input_table",
+      "type": "string",
+      "title": "The Input_table Schema",
+      "default": "",
+      "examples": [
+        "//home/geoadv/export/production/ad_export_snippets"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "snippet_name": {
+      "$id": "#/properties/snippet_name",
+      "type": "string",
+      "title": "The Snippet_name Schema",
+      "default": "",
+      "examples": [
+        "experimental/1.x",
+        "ydo_ratings"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "permalink_field": {
+      "$id": "#/properties/permalink_field",
+      "type": "string",
+      "title": "The Permalink_field Schema",
+      "default": "",
+      "examples": [
+        "permalink"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "format": {
+      "$id": "#/properties/format",
+      "type": "string",
+      "title": "The Format Schema",
+      "enum": [
+        "flat",
+        "xml",
+        "json",
+        "raw",
+        ""
+      ]
+    },
+    "generation": {
+      "$id": "#/properties/generation",
+      "type": ["string", "object"],
+      "title": "The Generation Schema",
+      "anyOf": [
+        {
+            "type": "string",
+            "default": "",
+            "examples": [
+                "",
+                "similar_orgs_extension.yql",
+                "afisha_snippets_geozen_generate.py"
+            ],
+            "pattern": "^(.*)$"
+        },
+        {
+            "type": "object",
+            "title": "The Generation Schema",
+            "required": [
+              "attrs",
+              "type"
+            ],
+            "properties": {
+              "attrs": {
+                "$id": "#/properties/generation/properties/attrs",
+                "type": "object",
+                "title": "The Attrs Schema",
+                "required": [
+                  "released"
+                ],
+                "properties": {
+                  "released": {
+                    "$id": "#/properties/generation/properties/attrs/properties/released",
+                    "type": "string",
+                    "title": "The Released Schema",
+                    "default": "",
+                    "examples": [
+                      "stable",
+                      "testing"
+                    ],
+                    "pattern": "^(.*)$"
+                  }
+                }
+              },
+              "type": {
+                "$id": "#/properties/generation/properties/type",
+                "type": "string",
+                "title": "The Sandbox Resource Type Schema",
+                "default": "",
+                "examples": [
+                  "INNER_ORGS_PREPARER"
+                ],
+                "pattern": "^(.*)$"
+              }
+            }
+        }
+      ]
+    },
+    "data_field": {
+      "$id": "#/properties/data_field",
+      "type": "string",
+      "title": "The Data_field Schema",
+      "default": "",
+      "examples": [
+        "data"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "yt_ttl": {
+      "$id": "#/properties/yt_ttl",
+      "type": "integer",
+      "title": "The Yt_ttl Schema",
+      "default": 1,
+      "examples": [
+        1
+      ]
+    },
+    "key_type": {
+      "$id": "#/properties/key_type",
+      "type": "string",
+      "title": "The Key_type Schema",
+      "default": "",
+      "enum": [
+        "permalink",
+        "provider",
+        "permalink_heavy",
+        ""
+      ]
+    },
+    "data_map": {
+      "$id": "#/properties/data_map",
+      "type": "string",
+      "title": "The Data_map Schema",
+      "enum": [
+        "field"
+      ]
+    },
+    "notify": {
+      "$id": "#/properties/notify",
+      "type": "array",
+      "title": "The Notify Schema",
+      "items": {
+        "$id": "#/properties/notify/items",
+        "type": "string",
+        "title": "The Items Schema",
+        "default": "",
+        "examples": [
+          "antipich"
+        ],
+        "pattern": "^(.*)$"
+      }
+    },
+    "validate": {
+      "$id": "#/properties/validate",
+      "type": "boolean",
+      "title": "The Validate Schema",
+      "default": true,
+      "examples": [
+        false,
+        true
+      ]
+    },
+    "temp_tables": {
+      "$id": "#/properties/temp_tables",
+      "type": "object",
+      "title": "The Temp_tables Schema"
+    }
+  },
+  "required": [
+    "input_table",
+    "snippet_name"
+  ]
+}

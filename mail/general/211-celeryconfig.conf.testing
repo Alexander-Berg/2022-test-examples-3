@@ -1,0 +1,11 @@
+# coding: utf-8
+
+CELERY_MONGODB_BACKEND_SETTINGS = {"database": "maillists"}
+BROKER_URL = 'mongodb://mongo-1.mongo.testing.maillists.mail.stable.qloud-d.yandex.net'
+CELERY_RESULT_BACKEND = BROKER_URL
+
+CELERY_IMPORTS = ('mlcore.tasks',)
+
+import warnings
+
+warnings.filterwarnings('ignore', category=UserWarning, module=r'^pymongo\.connection$')

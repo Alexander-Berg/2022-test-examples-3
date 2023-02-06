@@ -1,0 +1,54 @@
+package ru.yandex.direct.dialogs.client;
+
+import java.nio.charset.Charset;
+import java.util.List;
+import java.util.Map;
+
+import okhttp3.mockwebserver.Dispatcher;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.RecordedRequest;
+import org.assertj.core.api.SoftAssertions;
+import org.junit.Test;
+
+import ru.yandex.direct.dialogs.client.model.Skill;
+import ru.yandex.direct.utils.JsonUtils;
+import ru.yandex.inside.passport.tvm2.TvmHeaders;
+
+import static java.util.Collections.singletonList;
+
+public class DialogsClientGetSkillsByUserIdTest extends DialogsClientTestBase {
+    private final String skillId = "edae52db-e03c-482f-8dc2-58d5c1212ed1";
+    private final Long userId = 784578558L;
+
+    @Test
+    public void getSkillsTest() {
+        Map<Long, List<Skill>> skills = dialogsClient.getSkillsByUserId(singletonList(userId));
+        Skill expected = createTestSkill(skillId);
+        SoftAssertions.assertSoftly(soft -> {
+            soft.assertThat(skills).hasSize(1);
+            Skill skill = skills.get(userId).get(0);
+            soft.assertThat(skill.getSkillId()).isEqualTo(expected.getSkillId());
+            soft.assertThat(skill.getBotGuid()).isEqualTo(expected.getBotGuid());
+            soft.assertThat(skill.getName()).isEqualTo(expected.getName());
+            soft.assertThat(skill.getOnAir()).isEqualTo(expected.getOnAir());
+            soft.assertThat(skill.getError()).isNull();
+        });
+    }
+
+    @Override
+    protected Dispatcher dispatcher() {
+        return new Dispatcher() {
+            @Override
+            public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+                SoftAssertions.assertSoftly(soft -> {
+                    soft.assertThat(request.getHeader(TvmHeaders.SERVICE_TICKET)).isEqualTo(TICKET_BODY);
+                    soft.assertThat(request.getHeader("Content-type")).isEqualTo("application/json");
+                    soft.assertThat(request.getPath()).isEqualTo("/chats/bulk/get");
+                    soft.assertThat(request.getBody().readString(Charset.defaultCharset())).contains(userId.toString());
+                });
+                return new MockResponse()
+                        .setBody(JsonUtils.toJson(singletonList(singletonList(createTestSkill(skillId)))));
+            }
+        };
+    }
+}

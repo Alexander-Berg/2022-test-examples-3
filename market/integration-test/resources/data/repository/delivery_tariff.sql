@@ -1,0 +1,16 @@
+INSERT INTO delivery_tariff (delivery_service_id, tariff_type, tariff_id, tariff_name, tariff_code)
+VALUES (148, 'POST', 4191, 'RM', 'RM'),
+       (149, 'POST', 4195, 'SRM', 'SRM'),
+       (150, 'POST', 4193, 'NRM', 'NRM'),
+       (151, 'DELIVERY', 4194, 'RM', 'EMS'),
+       (152, 'PICKUP', 4196, 'PUDO', 'PUDO'),
+       (154, 'POST', 4197, 'RM', 'RM'),
+       (155, 'POST', 4198, 'SRM', 'SRM'),
+       (156, 'POST', 4199, 'NRM', 'NRM'),
+       (157, 'DELIVERY', 4200, 'EMS', 'EMS'),
+       (158, 'POST', 4202, 'RM', 'RM'),
+       (159, 'POST', 4203, 'SRM', 'SRM'),
+       (168, 'DELIVERY', 5542, 'EMS', 'EMS'),
+       (167, 'POST', 5539, 'RM', 'RM'),
+       (201, 'DELIVERY', 6035, 'PE Courier', 'PE Courier'),
+       (161, 'DELIVERY', 4204, 'Courier', 'Courier');

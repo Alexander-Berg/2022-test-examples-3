@@ -1,0 +1,46 @@
+config:
+    system:
+        dir: .
+        libpath:
+            - lib64
+            - lib64/modules
+        reactor:
+            threads: 2
+    log:
+        global:
+            async: true
+            queue_size: 10000
+            sinks:
+                -   type: stdout
+    modules:
+        module:
+            -   system:
+                    name: webserver
+                    factory: ymod_webserver::impl
+                configuration:
+                    endpoints:
+                        listen:
+                            -   _addr: 0.0.0.0
+                            -   _port: 17180
+            -   system:
+                    name: netch
+                    factory: ymod_messenger::module
+                configuration:
+                    reactor: global
+                    default:
+                        pool_size: 1
+                        reconnect_timeout: 3100
+                    endpoints:
+                        listen:
+                            -   _addr: 0.0.0.0
+                                _port: 17100
+            -   system:
+                    name: node
+                    factory: ymod_lease::node
+                configuration:
+                    tag: mytag
+            -   system:
+                    name: testup
+                    factory: ymod_lease::test_up
+                configuration:
+                    peer: [localhost:16100, localhost:16200]

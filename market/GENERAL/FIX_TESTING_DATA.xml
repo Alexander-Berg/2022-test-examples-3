@@ -1,0 +1,53 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="MARKETDISCOUNT-2196" author="fonar101" runOnChange="false">
+        <!--language=PostgreSQL-->
+        <sql>
+            WITH c AS (INSERT INTO admin_user(login) VALUES('ermakov-n') RETURNING id)
+            INSERT INTO admin_user_role(admin_user_id,role)  SELECT id, 'SUPERUSER' FROM c;
+       </sql>
+    </changeSet>
+    <changeSet id="MARKETDISCOUNT-3598" author="fonar101" runOnChange="false">
+        <!--language=PostgreSQL-->
+        <sql>
+            insert into promo(id, status, promo_type, start_date, end_date, promo_key, promo_subtype, platform, name)
+            values (103, 'ACTIVE', 'CASHBACK', now(), now() + INTERVAL '1 year', 'testing_promo_key_103',
+                    'YANDEX_CASHBACK', 'BLUE', 'Testing cashback promo');
+            insert into cashback_props(id,nominal,promo_id) values (0,3,103);
+            insert into cashback_rule(id,cashback_props_id,rule_type,bean) values (0,0,2,'categoryFilterRule');
+            insert into cashback_rule_params(name,value,cashback_rule_id) values ('CATEGORY_ID','90579',0);
+       </sql>
+    </changeSet>
+    <changeSet id="MARKETDISCOUNT-3683" author="fonar101">
+        <!--language=PostgreSQL-->
+        <sql>
+            UPDATE delivery_welcome_promo_requests
+               SET status = 'CANCELLED'
+             WHERE subscription = 'WELCOME_DELIVERY' AND status = 'IN_QUEUE' AND id &lt;= 52482
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-5901 update priority" author="fonar101">
+        <!--language=PostgreSQL-->
+        <sql>
+            UPDATE category_type_group_tariff_reference SET min_cashback_nominal=3, max_cashback_nominal=30 WHERE id=10000;
+            UPDATE category_type_group_tariff_reference SET min_cashback_nominal=1, max_cashback_nominal=30 WHERE id=10001;
+            UPDATE category_type_group_tariff_reference SET min_cashback_nominal=5, max_cashback_nominal=30 WHERE id=10002;
+        </sql>
+    </changeSet>
+    <changeSet id="delete hid" author="fonar101">
+        <!--language=PostgreSQL-->
+        <sql>
+            DELETE FROM category_type_reference WHERE id = 10011;
+        </sql>
+    </changeSet>
+    <changeSet id="MARKETDISCOUNT-5909 fill level type" author="fonar101">
+        <sql>
+            UPDATE cashback_props SET level_type = 'MULTI_ORDER' WHERE nominal_type = 'FIXED';
+        </sql>
+    </changeSet>
+</databaseChangeLog>

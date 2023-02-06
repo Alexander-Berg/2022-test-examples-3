@@ -1,0 +1,45 @@
+{
+  "logHosts": "*",
+  "logPath": "**/psku-post-processor-receive-stat.log",
+  "clickhouseTable": "psku_post_processor_receive_stat_testing",
+  "sources": [
+    "logbroker://market-health-testing--other"
+  ],
+  "parser": {
+    "dateFormat": "yyyy-MM-dd HH:mm:ss.SSSS",
+    "separator": "\t",
+    "tskvMatch": {},
+    "columns" : {
+      "host" : {
+        "type" : "String"
+      },
+      "session" : {
+        "type" : "String"
+      },
+      "psku_id" : {
+        "type" : "UInt64"
+      },
+      "msku_id" : {
+        "type" : "UInt64"
+      },
+      "psku_category_id" : {
+        "type" : "UInt32"
+      },
+      "msku_category_id" : {
+        "type" : "UInt32"
+      },
+      "send_ts" : {
+        "type" : "DateTime"
+      },
+      "receive_ts" : {
+        "type" : "DateTime"
+      },
+      "pair_state" : {
+        "type" : "String"
+      },
+      "pair_type" : {
+        "type" : "String"
+      }
+    }
+  }
+}

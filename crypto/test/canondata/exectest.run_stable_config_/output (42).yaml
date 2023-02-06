@@ -1,0 +1,156 @@
+
+
+logbroker:
+  pqlib:
+    threads_count: 2
+
+  consumer:
+    server: "lbkx.logbroker.yandex.net"
+    port: 2135
+    topics:
+      - "crypta@prod@lookalike--update-lal-fast-log"
+    client_id: "crypta/prod/lookalike/consumer"
+    max_memory_usage: 16777216
+    max_infly_requests: 10
+    max_count: 1
+    max_size: 1048576
+    use_lock_session: false
+    read_mirrored_partitions: true
+    max_uncommitted_count: 50
+
+  credentials:
+    use_secure_tvm: True
+    tvm:
+      client_tvm_id: 2019159
+
+  pqlib_log_name: pqlib
+
+worker:
+  threads: 4
+
+reader:
+  read_timeout_ms: 1000
+
+graphite:
+  host: localhost
+  port: 42000
+  root: lookalike_lal_manager.direct
+
+solomon:
+  project: crypta_lookalike
+  service: lal_manager
+  cluster: production
+  labels:
+    dc: sas
+    scope: direct
+
+tvm:
+  self_client_id: 2019159
+  log: tvm
+  destinations:
+    siberia: 2017433
+
+lal_database:
+  table:
+    cluster_url: "hahn.yt.yandex.net"
+    proxy_role: "default"
+    table_path: "//home/crypta/production/lookalike/scopes/direct/lals"
+  modify_rows:
+    require_sync_replica: false
+  logger:
+    file_name: "/logs/yt-api"
+
+siberia_client:
+  host: "siberia.crypta.yandex.net"
+  port: 80
+  timeout_sec: 3
+  retry_options:
+    max_tries: 3
+    random_delta_ms: 0
+    exponental_multiplier_ms: 0
+
+custom_audience_client:
+  host: "ca.siberia.crypta.yandex.net"
+  port: 80
+  threads_count: 2
+  timeout_sec: 120
+
+static_yt_client_proxy: hahn.yt.yandex.net
+custom_audiences_table_path: //home/crypta/production/lookalike/scopes/direct/ca_bindings
+goal_audience_table_path: //home/crypta/production/lookalike/goal_audiences/goal_audiences
+metrika_segments_table_path: //home/crypta/production/lookalike/metrika_segments/metrika_segments
+metrika_ecommerce_table_path: //home/crypta/production/lookalike/metrika_ecommerce/metrika_ecommerce
+metrika_counter_audience_table_path: //home/crypta/production/lookalike/metrika_counter_audiences/metrika_counter_audiences
+mobile_event_table_path: //home/crypta/production/lookalike/mobile_event/mobile_event
+audience_segments_table_path: //home/crypta/production/audience/Stats
+cdp_segments_table_path: //home/metrika/cdp/production/export/user_segments
+max_ids_to_describe: 100000
+describing_mode: fast
+redescribe_ttl_days: 1
+remove_ttl_days: 30
+stats_check_interval_seconds: 10
+
+stats:
+  hist:
+    min: 0
+    max: 3600
+    bin_count: 3600
+
+  percentile:
+    max: 600000000
+    precision: 3
+    percentiles:
+      - 50
+      - 60
+      - 70
+      - 80
+      - 90
+      - 95
+      - 98
+      - 99
+      - 99.9
+      - 100
+
+logs:
+  main:
+    level: "info"
+    targets:
+    - type: "stdout"
+    - type: "rotating"
+      file: "/logs/main.log"
+      max_file_size: 4194304
+      max_files: 1
+
+  worker:
+    level: "debug"
+    targets:
+    - type: "rotating"
+      file: "/logs/worker.log"
+      max_file_size: 4194304
+      max_files: 1
+  pqlib:
+    level: "debug"
+    targets:
+    - type: "rotating"
+      file: "/logs/pqlib.log"
+      max_file_size: 4194304
+      max_files: 1
+
+  graphite:
+    targets:
+    - type: rotating
+      file: "/logs/graphite.log"
+      max_file_size: 4194304
+      max_files: 1
+  solomon:
+    targets:
+    - type: rotating
+      file: "/logs/solomon.log"
+      max_file_size: 4194304
+      max_files: 1
+  tvm:
+    targets:
+    - type: rotating
+      file: "/logs/tvm.log"
+      max_file_size: 4194304
+      max_files: 1

@@ -1,0 +1,145 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый market-infra-graphite-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket-infra-graphite-testing
+
+juggler:
+  checks:
+
+  # Check UNREACHABLE
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-graphite-testing&service=UNREACHABLE&last=1DAY&mode=edit
+  - active: icmpping
+    active_kwargs:
+      disable_ipv4: yes
+      use_all_dc: 'false'
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    service: UNREACHABLE
+
+  # Check clickhouse-server
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-graphite-testing&service=clickhouse-server&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    service: clickhouse-server
+
+  # Check hw_errs
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-graphite-testing&service=hw_errs&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    service: hw_errs
+
+  # Check iptruler
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-graphite-testing&service=iptruler&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    service: iptruler
+
+  # Check load_average
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-graphite-testing&service=load_average&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    service: load_average
+
+  # Check oom_killer
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-graphite-testing&service=oom_killer&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    service: oom_killer
+
+  # Check raid
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-graphite-testing&service=raid&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    service: raid
+
+  # Check ssh
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-graphite-testing&service=ssh&last=1DAY&mode=edit
+  - active: ssh
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    service: ssh
+
+  # Check unispace
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-graphite-testing&service=unispace&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    service: unispace
+  default:
+    check_options: {}
+    children:
+    - CGROUP%market_graphite-db-testing
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market-infra-graphite-testing
+    namespace: market.infra
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market-infra-testing
+    - market-infra
+    - market-graphite-testing
+    - market
+    - _market_
+    ttl: 900

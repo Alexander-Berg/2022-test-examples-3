@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <return
+            source="COURIER"
+            external_id="return-external-id"
+            order_external_id="order-external-id"
+            logistic_point_from_id="1234"
+            courier_car_number="courier-car-number"
+            courier_name="courier-name"
+            courier_uid="courier-uid"
+            order_items_info='[
+                {
+                    "supplierId": 765,
+                    "vendorCode": "item-vendor-code-1",
+                    "instances": [{
+                        "CIS": "item-cis",
+                        "UIT": "item-uit"
+                    }]
+                },
+                {
+                    "supplierId": 766,
+                    "vendorCode": "item-vendor-code-2",
+                    "instances": []
+                }
+            ]'
+    />
+
+    <return_box
+            return_id="1"
+            external_id="box-external-id"
+    />
+
+    <return_item
+            return_id="1"
+            box_id="1"
+            supplier_id="765"
+            vendor_code="item-vendor-code"
+            instances='{"CIS":"item-cis"}'
+            return_reason="return-reason"
+            return_subreason="WRONG_ITEM"
+            return_reason_type="WRONG_ITEM"
+    />
+
+    <queue_tasks
+            queue_name="ENRICH_RETURN"
+            payload='{"requestId":"test-request-id/1","returnId":1}'
+    />
+
+    <queue_tasks
+            queue_name="RETURN_CHANGE_ORDER_ITEMS"
+            payload='{"requestId":"test-request-id/2","returnId":1}'
+    />
+</dataset>

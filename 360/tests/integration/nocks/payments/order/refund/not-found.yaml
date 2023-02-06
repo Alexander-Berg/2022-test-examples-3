@@ -1,0 +1,27 @@
+$schema: ../../../_schemas/nock.yaml
+
+scope: 'http://payments'
+method: POST
+path: /v1/order/1234567890/0/refund
+
+reqheaders:
+  $include: ../../../_samples/reqheaders.yaml
+
+body:
+  caption: order
+  currency: RUB
+  price: 1500
+  items:
+    - $include: ../../../_samples/product.yaml
+      product_id: 1
+
+status: 404
+
+response:
+  code: 404
+  status: fail
+  data:
+    message: ORDER_NOT_FOUND
+    params:
+      uid: 1234567890
+      order_id: 0

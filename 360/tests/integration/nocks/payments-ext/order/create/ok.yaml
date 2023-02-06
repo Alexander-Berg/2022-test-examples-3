@@ -1,0 +1,25 @@
+$schema: ../../../_schemas/nock.yaml
+
+scope: 'http://payments'
+method: POST
+path: /ext/order/1234567890
+
+reqheaders:
+  $include: ../../../_samples/reqheaders.yaml
+  content-type: application/json
+
+body:
+  caption: 'order'
+  description: 'abc'
+  currency: RUB
+  price: 1500
+  items:
+    - $include: ../../../_samples/product.yaml
+
+status: 200
+
+response:
+  status: success
+  code: 200
+  data:
+    $include: ../../../_samples/order.yaml

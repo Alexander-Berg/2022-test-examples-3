@@ -1,0 +1,186 @@
+SELECT
+  K.pid AS pid,
+  K.id AS id,
+  K.cid AS cid,
+  first(K.price) AS price,
+  first(K.bid_type) AS bid_type,
+  first(K.price_context) AS price_context,
+  first(K.PhraseID) AS PhraseID,
+  first(K.is_suspended) AS is_suspended,
+  first(K.phrase) AS phrase,
+  first(K.net_stop) AS net_stop,
+  first(K.is_deleted) AS is_deleted,
+  first(K.search_stop) AS search_stop,
+  first(K.showsForecast) AS showsForecast,
+  first(K.autobudgetPriority) AS autobudgetPriority,
+  first(K.statusModerate) AS statusModerate,
+  first(K.is_archived) AS is_archived,
+  IF(is_null(sum(S.Shows)), 0, sum(S.Shows)) AS shows,
+  IF(is_null(sum(S.Clicks)), 0, sum(S.Clicks)) AS clicks,
+  IF(is_null(sum(IF(S.CurrencyID = 0, ((S.Cost * 100) / 118), S.CostTaxFree))), 0, sum(IF(S.CurrencyID = 0, ((S.Cost * 100) / 118), S.CostTaxFree))) AS cost,
+  IF(is_null(sum(S.CostCur)), 0, sum(S.CostCur)) AS costWithTax,
+  IF(is_null(sum(S.PriceCur)), 0, sum(S.PriceCur)) AS revenue,
+  IF(is_null(sum(S.GoalsNum)), 0, sum(S.GoalsNum)) AS goals,
+  IF(shows > 0, ((cost / shows) * 1000), 0) AS cpmPrice,
+  IF(is_null(sum(S.FirstPageClicks)), 0, sum(S.FirstPageClicks)) AS firstPageClicks,
+  IF(is_null(sum(S.FirstPageShows)), 0, sum(S.FirstPageShows)) AS firstPageShows,
+  IF(is_null(sum(S.FirstPageSumPosClicks)), 0, sum(S.FirstPageSumPosClicks)) AS firstPageSumPosClicks,
+  IF(is_null(sum(S.FirstPageSumPosShows)), 0, sum(S.FirstPageSumPosShows)) AS firstPageSumPosShows,
+  IF(is_null(sum(IF(S.IsRMP, S.Clicks, S.SessionNum))), 0, sum(IF(S.IsRMP, S.Clicks, S.SessionNum))) AS sessions,
+  IF(is_null(sum(S.SessionNumLimited)), 0, sum(S.SessionNumLimited)) AS sessionsLimited,
+  IF(is_null(sum(S.Bounces)), 0, sum(S.Bounces)) AS bounces,
+  IF(is_null(sum(S.SessionDepth)), 0, sum(S.SessionDepth)) AS sessionDepth,
+  IF(shows > 0, ((clicks * 100000000) / shows), 0) AS ctr,
+  IF(clicks > 0, (cost / clicks), 0) AS avgClickCost,
+  IF(firstPageShows > 0, ((firstPageSumPosShows * 1000000) / firstPageShows), 0) AS avgShowPosition,
+  IF(firstPageClicks > 0, ((firstPageSumPosClicks * 1000000) / firstPageClicks), 0) AS avgClickPosition,
+  IF(sessionsLimited > 0, ((bounces * 100000000) / sessionsLimited), 0) AS bounceRate,
+  IF(sessionsLimited > 0, ((sessionDepth * 1000000) / sessionsLimited), 0) AS avgDepth,
+  IF(clicks > 0, ((goals * 100000000) / clicks), 0) AS conversionRate,
+  IF(goals > 0, (cost / goals), null) AS avgGoalCost,
+  IF((
+    cost > 0
+    AND revenue > 0
+  ), ((double((revenue - cost)) * 1000000.0) / double(cost)), null) AS profitability,
+  IF((
+    cost > 0
+    AND revenue > 0
+  ), ((double(cost) * 100000000.0) / double(revenue)), null) AS crr,
+  IF(is_null(sum(GS1.GoalsNum)), 0, sum(GS1.GoalsNum)) AS goals1,
+  IF(is_null(sum(GS1.WithShowsGoalsNum)), 0, sum(GS1.WithShowsGoalsNum)) AS goalsWithShows1,
+  IF(clicks > 0, ((goals1 * 100000000) / clicks), 0) AS conversionRate1,
+  IF(goals1 > 0, (cost / goals1), 0) AS costPerAction1,
+  IF(is_null(sum(GS1.PriceCur)), 0, sum(GS1.PriceCur)) AS revenue1
+FROM yt.bidstable_direct AS K
+  LEFT OUTER JOIN yt.DirectPhraseStatV2_bs AS S
+  ON (
+    (K.cid, K.pid, uint64(K.id)) = (S.ExportID, S.GroupExportID, S.PhraseExportID)
+    AND S.UpdateTime = 1546290000
+  )
+  LEFT OUTER JOIN yt.DirectPhraseGoalsStat_bs AS GS1
+  ON (S.ExportID, S.GroupExportID, S.UpdateTime, S.PhraseExportID, S.PhraseID, S.DirectBannerID, S.GoalContextID, S.IsFlat, S.IsMobile, S.CurrencyID, S.IsRMP, IF(is_null(S.AutobudgetStrategyID), -1, S.AutobudgetStrategyID), 1) = (GS1.ExportID, GS1.GroupExportID, GS1.UpdateTime, GS1.PhraseExportID, GS1.PhraseID, GS1.DirectBannerID, GS1.GoalContextID, GS1.IsFlat, GS1.IsMobile, GS1.CurrencyID, GS1.IsRMP, IF(is_null(GS1.AutobudgetStrategyID), -1, GS1.AutobudgetStrategyID), GS1.GoalID)
+WHERE (
+  K.cid IN (11)
+  AND K.pid IN (33)
+  AND K.id IN (11)
+  AND NOT(K.id IN (22))
+  AND is_substr('a',lower(K.phrase))
+  AND lower(K.phrase) IN ('b')
+  AND NOT(is_substr('c',lower(K.phrase)))
+  AND NOT(lower(K.phrase) IN ('d'))
+  AND (
+    is_substr('e',lower(K.keyword))
+    OR is_substr('f',lower(K.keyword))
+  )
+  AND (
+    is_substr('g',lower(K.keyword))
+    OR is_substr('h',lower(K.keyword))
+  )
+  AND (
+    is_substr('i',lower(K.minus_words))
+    OR is_substr('j',lower(K.minus_words))
+  )
+  AND (
+    is_substr('k',lower(K.minus_words))
+    OR is_substr('l',lower(K.minus_words))
+  )
+  AND K.price <= 55000000
+  AND K.price >= 44000000
+  AND K.price_context <= 77000000
+  AND K.price_context >= 66000000
+  AND K.autobudgetPriority IN (3)
+  AND K.bid_type IN ('keyword')
+  AND (
+    (
+      K.statusModerate = 'Yes'
+      AND K.is_suspended = 0
+      AND K.is_archived = false
+      AND (
+        K.is_deleted = 0
+        OR is_null(K.is_deleted)
+      )
+    )
+    OR (
+      K.is_archived = true
+      AND (
+        K.is_deleted = 0
+        OR is_null(K.is_deleted)
+      )
+    )
+  )
+)
+GROUP BY
+  pid,
+  id,
+  cid,
+  K.__hash__,
+  K.__shard__
+HAVING (
+  cost >= 1000000
+  AND cost <= 2000000
+  AND costWithTax >= 1000000
+  AND costWithTax <= 2000000
+  AND shows >= 3
+  AND shows <= 4
+  AND clicks >= 5
+  AND clicks <= 6
+  AND ctr >= 7000000
+  AND ctr <= 8000000
+  AND avgClickCost >= 9000000
+  AND avgClickCost <= 10000000
+  AND avgShowPosition >= 11000000
+  AND avgShowPosition <= 12000000
+  AND avgClickPosition >= 13000000
+  AND avgClickPosition <= 14000000
+  AND bounceRate >= 15000000
+  AND bounceRate <= 16000000
+  AND conversionRate >= 17000000
+  AND conversionRate <= 18000000
+  AND avgGoalCost >= 19000000
+  AND avgGoalCost <= 20000000
+  AND goals >= 21
+  AND goals <= 22
+  AND avgDepth >= 23000000
+  AND avgDepth <= 24000000
+  AND profitability >= 25000000
+  AND profitability <= 26000000
+  AND revenue >= 27000000
+  AND revenue <= 28000000
+  AND goals1 >= 2
+  AND goals1 <= 3
+  AND conversionRate1 >= 4000000
+  AND conversionRate1 <= 5000000
+  AND costPerAction1 >= 6000000
+  AND costPerAction1 <= 7000000
+)
+ORDER BY
+  id DESC,
+  pid DESC,
+  cid DESC,
+  phrase DESC,
+  price DESC,
+  price_context DESC,
+  autobudgetPriority DESC,
+  cost DESC,
+  costWithTax DESC,
+  shows DESC,
+  clicks DESC,
+  ctr DESC,
+  revenue DESC,
+  goals DESC,
+  cpmPrice DESC,
+  profitability DESC,
+  crr DESC,
+  avgDepth DESC,
+  avgGoalCost DESC,
+  avgClickCost DESC,
+  avgShowPosition DESC,
+  avgClickPosition DESC,
+  bounceRate DESC,
+  conversionRate DESC,
+  costPerAction DESC,
+  bid_type DESC,
+  goals1 DESC,
+  conversionRate1 DESC,
+  costPerAction1 DESC
+LIMIT 1000

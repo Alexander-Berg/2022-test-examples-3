@@ -1,0 +1,158 @@
+<fastcgi xmlns:xi="http://www.w3.org/2001/XInclude">
+        <pools>
+                <pool name="main" threads="2" queue="16"/>
+        </pools>
+        <handlers>
+                <handler pool="main" url="/(disk|zip|preview|share|stat).*">
+                        <component name="blackbox-authorizer"/>
+                </handler>
+                <handler pool="main" url="/(rdisk|rzip|rpreview|rsample).*">
+                        <component name="regional-cdn-md5"/>
+                </handler>
+                <handler pool="main" url="/rshare.*">
+                        <component name="regional-cdn-rnd"/>
+                </handler>
+                <handler pool="main" port="1084" url="/.*">
+                        <component name="url-checker"/>
+                </handler>
+        </handlers>
+        <components>
+                <component name="blackbox-authorizer" type="blackbox-authorizer:blackbox-authorizer">
+                        <blackbox>https://pass-test.yandex.ru/blackbox</blackbox>
+                        <auth_host_from_headers>1</auth_host_from_headers>
+                        <logger>daemon-logger</logger>
+                        <deny-code>403</deny-code>
+                        <allow-code>402</allow-code>
+                        <blackbox-fail-code>500</blackbox-fail-code>
+                        <blackbox-timeout-code>500</blackbox-timeout-code>
+                        <!-- ms -->
+                        <blackbox-timeout>2000</blackbox-timeout>
+                        <basic-auth-type>webdav</basic-auth-type>
+                        <cache>
+                                <use>yes</use>
+                                <ttl>60</ttl>
+                        </cache>
+                </component>
+
+                <component name="regional-cdn-md5" type="regional-cdn:regional-cdn">
+                        <logger>daemon-logger</logger>
+                        <hosts>
+                                <host>
+                                        <name>downloader.dsd.yandex.net</name>
+
+                                        <alias>downloader.dsd.yandex.ru</alias>
+                                        <alias>1.downloader.dsd.yandex.ru</alias>
+                                        <alias>2.downloader.dsd.yandex.ru</alias>
+                                        <alias>3.downloader.dsd.yandex.ru</alias>
+                                        <alias>4.downloader.dsd.yandex.ru</alias>
+
+                                        <alias>downloader.dsd.yandex.com</alias>
+                                        <alias>1.downloader.dsd.yandex.com</alias>
+                                        <alias>2.downloader.dsd.yandex.com</alias>
+                                        <alias>3.downloader.dsd.yandex.com</alias>
+                                        <alias>4.downloader.dsd.yandex.com</alias>
+
+                                        <alias>downloader.dsd.yandex.com.tr</alias>
+                                        <alias>1.downloader.dsd.yandex.com.tr</alias>
+                                        <alias>2.downloader.dsd.yandex.com.tr</alias>
+                                        <alias>3.downloader.dsd.yandex.com.tr</alias>
+                                        <alias>4.downloader.dsd.yandex.com.tr</alias>
+
+                                        <alias>downloader.dsd.yandex.ua</alias>
+                                        <alias>1.downloader.dsd.yandex.ua</alias>
+                                        <alias>2.downloader.dsd.yandex.ua</alias>
+                                        <alias>3.downloader.dsd.yandex.ua</alias>
+                                        <alias>4.downloader.dsd.yandex.ua</alias>
+
+
+                                        <allow_force_default>yes</allow_force_default>
+                                        <add_host_prefix>no</add_host_prefix>
+                                        <check-alive>
+                                                <policy>by timeout</policy>
+                                        </check-alive>
+                                        <distribution>
+                                                <use-filename-only>1</use-filename-only>
+                                                <policy>md5</policy>
+                                                <ignore-query>
+                                                        <param>*</param>
+                                                </ignore-query>
+                                        </distribution>
+                                        <regional-module>regional-module-net</regional-module>
+                                        <redirect-status>302</redirect-status>
+                                        <special-response-codes>
+                                                <prefix code="303">/rdisk</prefix>
+                                                <prefix code="303">/rpreview</prefix>
+                                        </special-response-codes>
+                                </host>
+                        </hosts>
+                </component>
+                <component name="regional-cdn-rnd" type="regional-cdn:regional-cdn">
+                        <logger>daemon-logger</logger>
+                        <hosts>
+                                <host>
+                                        <name>downloader.dsd.yandex.net</name>
+                                        <alias>downloader.dsd.yandex.ru</alias>
+                                        <alias>downloader.dsd.yandex.com</alias>
+                                        <alias>downloader.dsd.yandex.com.tr</alias>
+                                        <alias>downloader.dsd.yandex.ua</alias>
+
+                                        <add_host_prefix>no</add_host_prefix>
+                                        <check-alive>
+                                                <policy>by timeout</policy>
+                                        </check-alive>
+                                        <distribution>
+                                                <use-filename-only>1</use-filename-only>
+                                                <policy>rnd</policy>
+                                                <ignore-query>
+                                                        <param>*</param>
+                                                </ignore-query>
+                                        </distribution>
+                                        <regional-module>regional-module-net</regional-module>
+                                        <redirect-status>302</redirect-status>
+                                </host>
+                        </hosts>
+                </component>
+                <component name="regional-module-net" type="regional-module:regional-module">
+                        <logger>daemon-logger</logger>
+                        <local-region>none</local-region>
+                        <hostlist>
+                                <addr>http://127.0.0.1:8585/</addr>
+                                <handler>disk_downloader-net</handler>
+                                <timeout>15</timeout>
+                                <cache>/var/cache/fastcgi-blackbox-authorizer/downloader-cache-net</cache>
+                        </hostlist>
+                        <host-pattern>downloader-</host-pattern>
+                </component>
+                <component name="url-checker" type="url-checker-module:url-checker">
+                        <logger>daemon-logger</logger>
+                        <success-code>402</success-code>
+                        <forbidden-code>403</forbidden-code>
+                        <url>https://djfs-api-stable.qloud.dst.yandex.net/api/blocking</url>
+                        <timeout>10</timeout>
+                        <update-period>60</update-period>
+                        <cache-path>/var/cache/fastcgi-blackbox-authorizer/downloader-cache-url-checker</cache-path>
+                </component>
+                <component name="daemon-logger" type="logger:logger">
+                        <level>INFO</level>
+                        <control-uri>/log</control-uri>
+                        <ident>fastcgi-blackbox-authorizer</ident>
+                </component>
+        </components>
+        <modules>
+                <module name="blackbox-authorizer" path="/usr/lib/fastcgi/fastcgi-blackbox-authorizer.so"/>
+                <module name="logger" path="/usr/lib/fastcgi2/fastcgi2-syslog.so.0"/>
+                <module name="regional-module" path="/usr/lib/fastcgi2/elliptics-regional-module.so"/>
+                <module name="regional-cdn" path="/usr/lib/fastcgi/fastcgi-regional-cdn.so"/>
+                <module name="url-checker-module" path="/usr/lib/fastcgi2/url-checker.so"/>
+        </modules>
+        <daemon>
+                <logger component="daemon-logger"/>
+                <endpoint>
+                        <backlog>16384</backlog>
+                        <socket>/var/run/fastcgi-blackbox-authorizer/fastcgi-blackbox-authorizer.sock</socket>
+                        <threads>128</threads>
+                </endpoint>
+                <pidfile>/var/run/fastcgi-blackbox-authorizer.pid</pidfile>
+                <monitor_port>20071</monitor_port>
+        </daemon>
+</fastcgi>

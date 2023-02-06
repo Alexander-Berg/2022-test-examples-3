@@ -1,0 +1,57 @@
+module: orders-pipelines
+operators:
+  - id: update-order-status-pipeline
+    visibility: public
+    value#processing-pipeline:
+      id: update-order-status-pipeline
+      conditions:
+        - reason: update-order-status
+      shared-state-init:
+        {}
+      stages:
+        - id: get-checkouter-order-stage
+          handlers:
+            - value#xget: /external/order-handlers/get-checkouter-order-handler
+        - id: prepare-context-stage
+          handlers:
+            - value#xget: /external/update-order-status-handlers/prepare-context-handler
+        - id: validate-context-stage
+          handlers:
+            - value#xget: /external/update-order-status-handlers/validate-context-handler
+        - id: cancel-payment-stage
+          handlers:
+            - value#xget: /external/update-order-status-handlers/cancel-payment-handler
+        - id: update-order-status-stage
+          handlers:
+            - value#xget: /external/update-order-status-handlers/update-order-status-handler
+        - id: update-money-delivery-stage
+          enabled#equal:
+            - value#xget: /shared-state/order/status
+            - value: DELIVERY
+          handlers:
+            - value#xget: /external/update-order-status-handlers/update-money-delivery-handler
+        - id: update-money-delivered-stage
+          enabled#equal:
+            - value#xget: /shared-state/order/status
+            - value: DELIVERED
+          handlers:
+            - value#xget: /external/update-order-status-handlers/update-money-delivered-handler
+        - id: update-money-cancelled-stage
+          enabled#equal:
+            - value#xget: /shared-state/order/status
+            - value: CANCELLED
+          handlers:
+            - value#xget: /external/update-order-status-handlers/update-money-cancelled-handler
+        - id: push-planned-qc-stage
+          # Условие, что массив с plannedQC имеет хотя бы 1 элемент
+          handlers:
+            - value#xget: /external/update-order-status-handlers/push-planned-qc-handler
+        # следующая директива позволяет в тестах просматривать содержимое shared-state
+        - id: testpoint
+          handlers:
+            - id: shared-state-testpoint-handler
+              enabled#boolean: true
+              testpoints:
+                - testpoint-name: shared-state-testpoint
+                  extra-data:
+                    sharedState#xget: /shared-state

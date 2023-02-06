@@ -1,0 +1,95 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <property name="TIMESTAMP_WITH_TIME_ZONE" value="datetimeoffset" dbms="mssql"/>
+    <property name="TIMESTAMP_WITH_TIME_ZONE" value="TIMESTAMP WITH TIME ZONE" dbms="h2"/>
+
+    <property name="NOW" value="getutcdate()" dbms="mssql"/>
+    <property name="NOW" value="CURRENT_TIMESTAMP()" dbms="h2"/>
+
+    <property name="USER_NAME" value="user_name()" dbms="mssql"/>
+    <property name="USER_NAME" value="USER()" dbms="h2"/>
+
+    <changeSet id="MARKETWMS-7927" author="zlobinasv">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists
+                        schemaName="wmwhse1"
+                        tableName="ANOMALY_IDENTITY_DETAILS"
+                />
+            </not>
+        </preConditions>
+        <createTable tableName="ANOMALY_IDENTITY_DETAILS" schemaName="wmwhse1">
+            <column name="SERIALKEY" type="int" autoIncrement="true" startWith="1" incrementBy="1" remarks="Row key">
+                <constraints
+                        unique="true"
+                        uniqueConstraintName="ANOMALY_IDENTITY_DETAILS_SERIALKEY_UNIQUE"
+                        nullable="false"
+                />
+            </column>
+            <column name="ANOMALYLOTKEY" type="nvarchar(50)" remarks="Key of anomaly lot">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TYPE" type="nvarchar(255)" remarks="Type of identifier">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IDENTITY" type="nvarchar(256)" remarks="Value of identifier">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STATUS" type="bit" remarks="Status of identity validation: valid (1) or invalid (0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDDATE" type="${TIMESTAMP_WITH_TIME_ZONE}" defaultValueComputed="${NOW}"
+                    remarks="Insertion date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDWHO" type="nvarchar(256)" defaultValueComputed="${USER_NAME}" remarks="Who added">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITDATE" type="${TIMESTAMP_WITH_TIME_ZONE}" defaultValueComputed="${NOW}"
+                    remarks="Last update date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITWHO" type="nvarchar(256)" defaultValueComputed="${USER_NAME}" remarks="Who edited">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ITEM" type="nvarchar(50)" remarks="Value of identifier" defaultValue="">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey
+                columnNames="ANOMALYLOTKEY, TYPE, IDENTITY, ITEM"
+                constraintName="PK_ANOMALY_IDENTITY_DETAILS_WITH_ITEM"
+                schemaName="wmwhse1"
+                tableName="ANOMALY_IDENTITY_DETAILS"
+        />
+        <addForeignKeyConstraint
+                baseColumnNames="TYPE"
+                baseTableName="ANOMALY_IDENTITY_DETAILS"
+                baseTableSchemaName="wmwhse1"
+                constraintName="FK_ANOMALY_IDENTITY_DETAILS_IDENTITY_TYPE"
+                referencedColumnNames="TYPE"
+                referencedTableName="IDENTITY_TYPE"
+                referencedTableSchemaName="wmwhse1"
+                onDelete="CASCADE"
+        />
+        <addForeignKeyConstraint
+            baseColumnNames="ANOMALYLOTKEY"
+            baseTableName="ANOMALY_IDENTITY_DETAILS"
+            baseTableSchemaName="wmwhse1"
+            constraintName="FK_ANOMALY_IDENTITY_DETAILS_ANOMALYLOTKEY"
+            referencedColumnNames="ANOMALYLOTKEY"
+            referencedTableName="ANOMALYLOT"
+            referencedTableSchemaName="wmwhse1"
+            onDelete="CASCADE"
+            onUpdate="CASCADE"
+        />
+        <rollback>
+            <dropTable schemaName="wmwhse1" tableName="ANOMALY_IDENTITY_DETAILS"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

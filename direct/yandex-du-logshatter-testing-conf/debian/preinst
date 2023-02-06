@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -e
+
+function add_divert {
+     dpkg-divert --package yandex-du-logshatter-testing-conf --divert "$1".divert --rename "$1"
+}
+
+case "$1" in 
+    install|upgrade)
+        add_divert /etc/yandex/logshatter/logshatter-testing.properties
+	add_divert /usr/bin/logshatter.sh
+    ;;
+esac

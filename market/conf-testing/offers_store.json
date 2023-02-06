@@ -1,0 +1,44 @@
+{
+    "HttpServer": {
+        "Port": 7571
+    },
+    "Logs": {
+        "Rules": [
+            {
+                "FilePath": "logs/offers-store/offers_store.log",
+                "ExcludeCategories": [],
+                "MinLevel": "Info"
+            }
+        ]
+    },
+    "Suppliers": [
+        {
+            "Alias": "datacamp",
+            "YtSupplier": {
+                "QueueConsumer": "offers_store",
+                "QueuePath": "//home/market/testing/backbone/offers_store/queues/datacamp",
+                "Cluster": "markov"
+            }
+        }
+    ],
+    "ConsumingSystem": {
+        "Cluster": "markov",
+        "MainPath": "//home/market/testing/backbone/offers_store/cs/offers_store",
+        "MaxShards": 16,
+        "MaxShardsToCheck": 16,
+        "WorkerMinorName": "0"
+    },
+    "StatefulShardProcessorConfig": {
+        "MaxEpochsInFlight": 3,
+        "MaxGroupingTasks": 3
+    },
+    "StateConfig": {
+        "ContentOfferStateTable": "//home/market/testing/backbone/offers_store/state/ContentOffers",
+        "ServiceOfferStateTable": "//home/market/testing/backbone/offers_store/state/ServiceOffers"
+    },
+    "StateManagerConfig": {
+        "EpochStatesSizeQuota": 6000
+    },
+    "Codec": "zstd_6",
+    "ProcessingThreads": 5
+}

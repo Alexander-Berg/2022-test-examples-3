@@ -1,0 +1,29 @@
+{
+  "id" : "market_test_expression",
+  "projectId" : "market-incidents",
+  "name" : "market_test_expression",
+  "version" : 16,
+  "createdBy" : "mastepanov-v",
+  "createdAt" : "2021-11-24T09:35:52Z",
+  "updatedBy" : "mastepanov-v",
+  "updatedAt" : "2021-11-24T10:24:18Z",
+  "state" : "ACTIVE",
+  "notificationChannels" : [ ],
+  "channels" : [ ],
+  "type" : {
+    "expression" : {
+      "program" : "let threshold = 100;\n\nlet limit_bottom_alarm = single(tail(constant_line(threshold), 1d));\n\nlet input = group_lines('sum', {project=\"market-indexer\", cluster=\"production\", service=\"report-rty-stats\", sensor=\"total\", data_type=\"offer_disabled_push_partner_feed\", dc=\"ALL\", quantile=\"0.95\", role=\"ALL\", report_color=\"white\", processing_type=\"ALL\", period=\"five_min\"});\n\nlet reason = 'Обнаружено отставание сигнала. ';\nalarm_if (count(input) < 1);\n\nlet min = min(tail(input, 12));\n\nlet reason = 'Превышение х5 SLO в течение часа! ';\nalarm_if(min > threshold);\n\nlet reason = 'ОК';",
+      "checkExpression" : ""
+    }
+  },
+  "annotations" : {
+    "description" : "{{expression.reason}}"
+  },
+  "periodMillis" : 10800000,
+  "delaySeconds" : 60,
+  "windowSecs" : 10800,
+  "delaySecs" : 60,
+  "description" : "тестовая проверка",
+  "resolvedEmptyPolicy" : "RESOLVED_EMPTY_DEFAULT",
+  "noPointsPolicy" : "NO_POINTS_DEFAULT"
+}

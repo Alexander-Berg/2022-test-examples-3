@@ -1,0 +1,18 @@
+{% extends "base.yml" %}
+{% from "secrets/testing.j2" import secrets %}
+
+{% block environment %}testing{% endblock %}
+{% block network_macro %}_MAILTESTNETS_{% endblock %}
+
+{% set deploy_units = {
+    "main": {
+      "version": "202207182140.tmpdeployoptimizations",
+      "max_unavailable": 1,
+      "clusters": {
+        "sas": 1,
+        "iva": 1,
+        "myt": 1
+      }
+    }
+  }
+%}

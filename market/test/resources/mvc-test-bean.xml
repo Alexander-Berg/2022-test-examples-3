@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd"
+       default-autowire="byName" default-lazy-init="true">
+
+    <mvc:annotation-driven/>
+
+    <import resource="classpath:main-test-bean.xml"/>
+    <import resource="classpath:http-server.xml"/>
+    <import resource="classpath:http-server-development.xml"/>
+    <import resource="classpath:common-framework-lite/framework-config-lite.xml"/>
+
+    <bean name="servantletManager" class="ru.yandex.common.framework.core.manager.CleverServantletManager">
+        <property name="secFilter" ref="secFilter"/>
+        <property name="newLogFormat" value="true"/>
+    </bean>
+
+    <bean id="checkouterAnnotationObjectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
+
+    <bean id="mainMockMvcFactory" class="ru.yandex.market.abo.MainMockMvcFactory"/>
+    <bean id="mockMvc" factory-bean="mainMockMvcFactory" factory-method="getMockMvc"/>
+
+</beans>

@@ -1,0 +1,21 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url 'http://artifactory.yandex.net/market' }
+    }
+    dependencies {
+        classpath 'ru.yandex.market:mbuild:1.+'
+    }
+}
+
+apply plugin: 'mbuild-application'
+
+mainClassName = 'gradle_single.Main'
+applicationDefaultJvmArgs = ['-Xmx4g', '-Xms4g', '-Xss2m', '-XX:+UseG1GC', '-XX:MaxGCPauseMillis=100']
+mbuild {
+    appPlugin {
+        packageName='yandex-market-project-builder-gradle-single'
+        jvmVariableParameters = ['-XX:HeapDumpPath=${LOG_DIR}/hprof/', '-Xloggc:${LOG_GC}']
+        sandboxResourceType='SINGLE_PROJECT_TYPE'
+    }
+}

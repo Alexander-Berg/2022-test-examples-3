@@ -1,0 +1,356 @@
+{
+  "feedId": 16,
+  "feedStatus": "ERROR",
+  "irProcessId": 235240,
+  "upload": {
+    "fileName": "xls_simplified_10101.xls",
+    "fileSize": 6,
+    "uploadedAt": "2018-11-07T18:06:00Z"
+  },
+  "processedAt": "${json-unit.ignore}",
+  "errors": [
+    {
+      "code": "ir.partner_content.error.params.invalid_param_value",
+      "textTemplate": "В shop_sku {{#shopSKUs}}{{.}}, {{/shopSKUs}} параметр {{paramName}} заполнен не верно. Полученное значение: {{receivedValue}}, верное значение: {{correctValue}}.",
+      "textMessages": [
+        {
+          "templateArgumentsAsJson": "{\"correctValue\":\"Adidas\",\"shopSKUs\":[\"1234\", \"1235\"],\"receivedValue\":\"Abibas\",\"paramName\":\"Производитель\"}"
+        }
+      ],
+      "occurrences": [
+        {
+          "shopSku": "1234",
+          "paramName": "Производитель",
+          "receivedValue": "Abibas",
+          "correctValue": "Adidas"
+        },
+        {
+          "shopSku": "1235",
+          "paramName": "Производитель",
+          "receivedValue": "Abibas",
+          "correctValue": "Adidas"
+        }
+      ]
+    },
+    {
+      "code": "ir.partner_content.error.excel_invalid_file_format",
+      "textTemplate": "Неправильный формат файла: {{message}}",
+      "textMessages": [
+        {
+          "templateArgumentsAsJson": "{\"message\":\"Это не Excel\"}"
+        }
+      ],
+      "occurrences": []
+    },
+    {
+      "code": "ir.partner_content.error.invalid_numeric_param_value",
+      "textTemplate": "Указано не допустимое значение ({{receivedValue}}) числового параметра {{paramName}} в shop sku {{shopSKU}}. Значение должно быть{{#minValue}} больше или равно {{minValue}}{{/minValue}}{{#maxValue}} меньше или равно {{maxValue}}{{/maxValue}}",
+      "textMessages": [
+        {
+          "templateArgumentsAsJson": "{\"minValue\":1.0,\"shopSKU\":\"9012\",\"maxValue\":100.0,\"receivedValue\":\"9999\",\"rowIndex\":15,\"paramName\":\"диаганаль\"}"
+        }
+      ],
+      "occurrences": [
+        {
+          "shopSku": "9012",
+          "paramName": "диаганаль",
+          "receivedValue": "9999",
+          "rowIndex": 15,
+          "minValue": 1.0,
+          "maxValue": 100.0
+        }
+      ]
+    },
+    {
+      "code": "ir.partner_content.error.empty_pictures",
+      "textTemplate": "Не указаны изображения для shop sku {{shopSKU}}",
+      "textMessages": [
+        {
+          "templateArgumentsAsJson": "{\"shopSKU\":\"7890\",\"rowIndex\":12}"
+        }
+      ],
+      "occurrences": [
+        {
+          "shopSku": "7890",
+          "rowIndex": 12
+        }
+      ]
+    },
+    {
+      "code": "ir.partner_content.error.inconsistent_data",
+      "textTemplate": "Найдены не консистентные записи sku({{#shopSKUs}}{{.}}, {{/shopSKUs}}) для модели {{modelName}}. Не консистенты наборы значений параметров {{#paramNames}}{{.}}, {{/paramNames}}",
+      "textMessages": [
+        {
+          "templateArgumentsAsJson": "{\"paramNames\":[\"Диагональ экрана\", \"Разрешение экрана\"],\"modelName\":\"Моделька A200 ZX\",\"shopSKUs\":[\"01235\",\"01236\"],\"rowIndexes\":[18,19]}"
+        }
+      ],
+      "occurrences": [
+        {
+          "modelName": "Моделька A200 ZX",
+          "shopSku": "01235",
+          "paramName": "Диагональ экрана",
+          "rowIndex": 18
+        },
+        {
+          "modelName": "Моделька A200 ZX",
+          "shopSku": "01236",
+          "paramName": "Диагональ экрана",
+          "rowIndex": 19
+        },
+        {
+          "modelName": "Моделька A200 ZX",
+          "shopSku": "01235",
+          "paramName": "Разрешение экрана",
+          "rowIndex": 18
+        },
+        {
+          "modelName": "Моделька A200 ZX",
+          "shopSku": "01236",
+          "paramName": "Разрешение экрана",
+          "rowIndex": 19
+        }
+      ]
+    },
+    {
+      "code": "ir.partner_content.error.logs.market_model_exist",
+      "textTemplate": "Модель {{partnerModelName}} с shop_sku {{#shopSKUs}}{{.}}, {{/shopSKUs}} уже существует на маркете (model_id = {{marketModelId}}) и имеет иное название: \"{{marketModelName}}\"",
+      "textMessages": [
+        {
+          "templateArgumentsAsJson": "{\"shopSKUs\":[\"5678\", \"5679\"],\"marketModelId\":12345678,\"partnerModelName\":\"Странная абстракиция\",\"marketModelName\":\"Конкретная абстракиция\"}"
+        }
+      ],
+      "occurrences": [
+        {
+          "modelName": "Странная абстракиция",
+          "shopSku": "5678",
+          "correctModelName": "Конкретная абстракиция"
+        },
+        {
+          "modelName": "Странная абстракиция",
+          "shopSku": "5679",
+          "correctModelName": "Конкретная абстракиция"
+        }
+      ]
+    },
+    {
+      "code": "ir.partner_content.error.incorrect_param_name",
+      "textTemplate": "Указан не существующий параметер {{paramName}}",
+      "textMessages": [
+        {
+          "templateArgumentsAsJson": "{\"paramName\":\"Илюстрация\"}"
+        }
+      ],
+      "occurrences": [
+        {
+          "paramName": "Илюстрация"
+        }
+      ]
+    },
+    {
+      "code": "ir.partner_content.error.duplicate_sku_data",
+      "textTemplate": "Найдены дублирующиеся записи sku({{#shopSKUs}}{{.}}, {{/shopSKUs}}) для модели {{modelName}}. Совпадают наборы значений параметров {{#paramNames}}{{.}}, {{/paramNames}}",
+      "textMessages": [
+        {
+          "templateArgumentsAsJson": "{\"paramNames\":[\"цвет товара\", \"Вес товара\"],\"modelName\":\"Моделька A100 CB\",\"shopSKUs\":[\"0123\",\"01234\"],\"rowIndexes\":[16,17]}"
+        }
+      ],
+      "occurrences": [
+        {
+          "modelName": "Моделька A100 CB",
+          "shopSku": "0123",
+          "paramName": "цвет товара",
+          "rowIndex": 16
+        },
+        {
+          "modelName": "Моделька A100 CB",
+          "shopSku": "01234",
+          "paramName": "цвет товара",
+          "rowIndex": 17
+        },
+        {
+          "modelName": "Моделька A100 CB",
+          "shopSku": "0123",
+          "paramName": "Вес товара",
+          "rowIndex": 16
+        },
+        {
+          "modelName": "Моделька A100 CB",
+          "shopSku": "01234",
+          "paramName": "Вес товара",
+          "rowIndex": 17
+        }
+      ]
+    },
+    {
+      "code": "ir.partner_content.error.params.not_filled_value",
+      "textTemplate": "В shop_sku {{#shopSKUs}}{{.}}, {{/shopSKUs}} параметр {{paramName}} не заполнен, а должен быть заполнен. Верное значение: {{correctValue}}.",
+      "textMessages": [
+        {
+          "templateArgumentsAsJson": "{\"correctValue\":\"серобуромалиновый\",\"shopSKUs\":[\"2345\", \"2346\"],\"paramName\":\"Цвет товара\"}"
+        }
+      ],
+      "occurrences": [
+        {
+          "shopSku": "2345",
+          "paramName": "Цвет товара",
+          "correctValue": "серобуромалиновый"
+        },
+        {
+          "shopSku": "2346",
+          "paramName": "Цвет товара",
+          "correctValue": "серобуромалиновый"
+        }
+      ]
+    },
+    {
+      "code": "ir.partner_content.error.empty_shop_sku",
+      "textTemplate": "Не указан shop sku в строке {{rowIndex}}",
+      "textMessages": [
+        {
+          "templateArgumentsAsJson": "{\"rowIndex\":123}"
+        }
+      ],
+      "occurrences": [
+        {
+          "rowIndex": 123
+        }
+      ]
+    },
+    {
+      "code": "ir.partner_content.error.invalid_param_value",
+      "textTemplate": "Указано не допустимое значение ({{receivedValue}}) параметра {{paramName}} в shop sku {{shopSKU}}",
+      "textMessages": [
+        {
+          "templateArgumentsAsJson": "{\"shopSKU\":\"8901\",\"receivedValue\":\"чернявый\",\"rowIndex\":14,\"paramName\":\"цвет\"}"
+        }
+      ],
+      "occurrences": [
+        {
+          "shopSku": "8901",
+          "paramName": "цвет",
+          "receivedValue": "чернявый",
+          "rowIndex": 14
+        }
+      ]
+    },
+    {
+      "code": "ir.partner_content.error.empty_model_name",
+      "textTemplate": "Не заполнено название модели для shop sku {{shopSKU}}",
+      "textMessages": [
+        {
+          "templateArgumentsAsJson": "{\"shopSKU\":\"7890\",\"rowIndex\":11}"
+        }
+      ],
+      "occurrences": [
+        {
+          "shopSku": "7890",
+          "rowIndex": 11
+        }
+      ]
+    },
+    {
+      "code": "ir.partner_content.error.logs.wrong_category",
+      "textTemplate": "Модель {{partnerModelName}} в неверной категории. Затрагивает shop_sku {{#shopSKUs}}{{.}}, {{/shopSKUs}}.",
+      "textMessages": [
+        {
+          "templateArgumentsAsJson": "{\"shopSKUs\":[\"4567\", \"4568\"],\"partnerModelName\":\"Гравицаппа\"}"
+        }
+      ],
+      "occurrences": [
+        {
+          "modelName": "Гравицаппа",
+          "shopSku": "4567"
+        },
+        {
+          "modelName": "Гравицаппа",
+          "shopSku": "4568"
+        }
+      ]
+    },
+    {
+      "code": "ir.partner_content.error.pictures.bad_picture",
+      "textTemplate": "Картинка {{url}} для shop_sku {{#shopSKUs}}{{.}}, {{/shopSKUs}}. Обнаружены проблемы:\nНЕ соответсвует товару - {{isNotRelevant}},\nизображение размыто - {{isBlurred}},\nизображение НЕ на белом фоне - {{isNotWhiteBackground}},\nна изображении присутвует водяной знак - {{hasWatermark}},\nизображение обрезано - {{isCropped}}.",
+      "textMessages": [
+        {
+          "templateArgumentsAsJson": "{\"hasWatermark\":true,\"isBlurred\":true,\"shopSKUs\":[\"3456\", \"3457\"],\"isCropped\":true,\"isNotWhiteBackground\":true,\"isNotRelevant\":true,\"url\":\"https://avatars.mds.yandex.net/get-mpic/1220464/img_id6559446408753393621.jpeg/9hq\"}"
+        }
+      ],
+      "occurrences": [
+        {
+          "shopSku": "3456",
+          "imageUrl": "https://avatars.mds.yandex.net/get-mpic/1220464/img_id6559446408753393621.jpeg/9hq",
+          "imageProblems": [
+            "IS_NOT_RELEVENT",
+            "IS_BLURRED",
+            "IS_NOT_WHITE_BACKGROUND",
+            "HAS_WATERMARK",
+            "IS_CROPPED"
+          ]
+        },
+        {
+          "shopSku": "3457",
+          "imageUrl": "https://avatars.mds.yandex.net/get-mpic/1220464/img_id6559446408753393621.jpeg/9hq",
+          "imageProblems": [
+            "IS_NOT_RELEVENT",
+            "IS_BLURRED",
+            "IS_NOT_WHITE_BACKGROUND",
+            "HAS_WATERMARK",
+            "IS_CROPPED"
+          ]
+        }
+      ]
+    },
+    {
+      "code": "ir.partner_content.error.some_new_unknown_and_never_intended_error",
+      "textTemplate": "Эта ошибка для shop sku {{shopSKU}} только для тестов фронта и никогда, никогда не должна прийти от IR'а",
+      "textMessages": [
+        {
+          "templateArgumentsAsJson": "{\"shopSKU\":\"ABBABBA123\"}"
+        }
+      ],
+      "occurrences": []
+    },
+    {
+      "code": "ir.partner_content.error.absent_mandatory_parameter",
+      "textTemplate": "Не заполнен обязательный параметер {{paramName}} для shop sku {{shopSKU}}",
+      "textMessages": [
+        {
+          "templateArgumentsAsJson": "{\"shopSKU\":\"6789\",\"rowIndex\":10,\"paramName\":\"Наличие чего-то\"}"
+        }
+      ],
+      "occurrences": [
+        {
+          "shopSku": "6789",
+          "paramName": "Наличие чего-то",
+          "rowIndex": 10
+        }
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "code": "ir.partner_content.warn.model_already_exist",
+      "textTemplate": "Модель {{modelName}} с shop_sku {{#shopSKUs}}{{.}}, {{/shopSKUs}} уже представлена на маркете с ID={{marketModelId}}",
+      "textMessages": [
+        {
+          "templateArgumentsAsJson": "{\"modelName\":\"Моделька A200 ZX\",\"shopSKUs\":[\"01235\",\"01236\"], \"marketModelId\": 12412541}"
+        }
+      ],
+      "occurrences": [
+        {
+          "modelName": "Моделька A200 ZX",
+          "shopSku": "01235"
+        },
+        {
+          "modelName": "Моделька A200 ZX",
+          "shopSku": "01236"
+        }
+      ]
+    }
+  ],
+  "statistics": {
+    "modelsCreated": 100,
+    "skuCreated": 0
+  },
+  "stage": "MANUAL"
+}

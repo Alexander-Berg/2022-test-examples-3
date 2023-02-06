@@ -1,0 +1,262 @@
+<DaemonConfig>
+    LogLevel : 6
+    LogRotation : 0
+    LoggerType : ${LOGS_DIR}/rty_server.log
+    LockExecutablePages : false
+    <Controller>
+        Port : ${CONTROLLER_PORT}
+        UseSlowUpdate : 0
+        Threads : 2
+        MaxQueue : 0
+        MaxConnections : 0
+        ClientTimeout : 0
+        StartServer : 1
+        EnableNProfile : 1
+    </Controller>
+</DaemonConfig>
+
+<Server>
+    IndexGenerator : FULLARC
+    IndexDir : ${INDEX_DIR}
+    IsPrefixedIndex : 0
+    VerificationPolicy : Testing
+    DoStoreArchive : 1
+    UseExtendedProcessors : 0
+    PruneAttrSort :
+    StartAsDaemon : 0
+    NoMorphology : 0
+    MorphologyLanguages :
+    PreferedMorphologyLanguages :
+    Components : MARKET
+    WatchdogOptionsFile : ${CONFIGS_DIR}/watchdog.cfg
+    IsSecondaryMetaServiceComponent : true
+    AdditionalModules : DOCFETCHER,Synchronizer
+    <Searcher>
+        AccessLog : ${LOGS_DIR}/rty_access.log
+        ArchiveCacheSizeMb : 0
+        ArchivePolicy :
+        ArchiveType : AT_FLAT
+        DefaultBaseSearchConfig :
+        DefaultMemorySearchConfig :
+        DefaultMetaSearchConfig :
+        ExternalSearch : rty_relevance
+        FactorsInfo : ${CONFIGS_DIR}/erf.cfg
+        FiltrationModel : SIMPLE
+        KeepAllDocuments : 1
+        LoadLog :
+        EventLog :
+        LockIndexFiles : true
+        PrefetchSizeBytes : 100000
+        RawPassages : 0
+        ReArrangeOptions :
+        ReAskBaseSearches : 0
+        TwoStepQuery : 0
+        WildcardSearch : infix
+        LocalHostName : localhost
+        RetryStartMetasearch : true
+        RedirectSearchErrorLogToGlobal : false
+        AutoStartServer : ${EMERGENCY_AUTO_START_SEARCH or 1}
+        <HttpOptions>
+            Port : ${SEARCH_PORT}
+            Threads : 1
+            MaxQueue : 0
+            MaxConnections : 0
+            ClientTimeout : 0
+        </HttpOptions>
+    </Searcher>
+    <BaseSearchersServer>
+        Port : ${BASE_PORT}
+        Threads : 1
+        MaxQueue : 0
+        MaxConnections : 0
+        ClientTimeout : 0
+    </BaseSearchersServer>
+    <Repair>
+        Enabled : 0
+        Threads : 10
+        NormalizerThreads : 5
+    </Repair>
+    <Merger>
+        Enabled : 1
+        Threads : 1
+        MaxSegments : 1
+        MaxDocumentsToMerge : 10000000
+        MergerCheckPolicy : TIME
+        TimingCheckIntervalMilliseconds : 10000
+        IndexSwitchSystemLockFile : ${DATA_DIR}/indexswitchlock
+    </Merger>
+    <Logger>
+    </Logger>
+    <Monitoring>
+        Enabled : 0
+        MinSpaceIndexerMbytes : 1024
+        MinSpaceLoggerMbytes : 200
+        TimeCacheCheckingSeconds : 300
+    </Monitoring>
+    <ComponentsConfig>
+        <DDK>
+            EnableLifetimeCheck : true
+            DefaultLifetimeMinutes : ${ 1 * 24 * 60 }
+            CheckAlways : false
+        </DDK>
+        <ERF>
+            IsUsed : False
+        </ERF>
+        <FULLARC>
+            NoFullLayer : 1
+            ActiveLayers : base,MARKET
+            LightLayers : MARKET
+            <Layers>
+                <base>
+                    WriteContextDataAccessType : FILE
+                    ReadContextDataAccessType : FILE
+                </base>
+                <MARKET>
+                    WriteContextDataAccessType : FILE
+                    ReadContextDataAccessType : MEMORY_LOCKED_MAP
+                    Compression : RAW
+                </MARKET>
+            </Layers>
+        </FULLARC>
+        <MARKET>
+            WriteFactorsToFullarcMode : sparse
+        </MARKET>
+    </ComponentsConfig>
+    <ModulesConfig>
+        <DOCFETCHER>
+            Enabled : 1
+            StateFile : ${INDEX_DIR}/docFetcherState
+            LogFile : ${LOGS_DIR}/rty_docfetcher.log
+            SysLogFile : ${LOGS_DIR}/rty_docfetcher_sys.log
+            SearchOpenDocAgeSec : ${EMERGENCY_SEARCH_OPEN_DOC_AGE or -1}
+            EnableSearchOnStart : ${EMERGENCY_ENABLE_SEARCH_ON_START or 0}
+            <Stream>
+                StreamId : 1
+                StreamType : PersQueue
+                Name : PQ-main-1
+                Server : logbroker.yandex.net
+                Ident : market-quick/testing/main
+                UserPrefix : market-quick/testing/main/reader-
+                Datacenters : vla,sas,myt,iva,man
+                Replica : main-report-without-diff-backend:${BASE_PORT}
+                Shard : 0
+                StartBlockTime : 0
+                MaxAgeToGetSec : 36000
+                MaxDocAgeToKeepSec : 36000
+                ReceiveDelay : 0
+                AsyncStart : ${EMERGENCY_ASYNC_START or 1}
+                FastIndexWhenNoSearch : 1
+                Rate : ${EMERGENCY_STREAM_RATE or 20000}
+                BurstRate : ${EMERGENCY_STREAM_BURST_RATE or 20000}
+                BatchSize : ${EMERGENCY_STREAM_BATCH_SIZE or 25000}
+                ReadTimeout : 1000
+                UseNewProtocol : false
+                Threads : ${EMERGENCY_STREAM_THREADS or 4}
+                UseNewPQLib : true
+                ShardMin : 0
+                ShardMax : 0
+                UseShardedLogtype : true
+                UseDirectoryTopicFormat : true
+                <ReplicaIds>
+                    Id : 1
+                    Replicas : main-report-without-diff-backend:${BASE_PORT}
+                </ReplicaIds>
+                <TVM>
+                    DestinationAlias : pq
+                    DestinationClientId : 2001059
+                    Secret : ${TVM_SECRET or "secret"}
+                    ClientId : ${TVM_CLIENT_ID or 0}
+                </TVM>
+            </Stream>
+            <Stream>
+                StreamId : 2
+                StreamType : PersQueue
+                Name : PQ-main-2
+                Server : logbroker.yandex.net
+                Ident : market-quick/testing/main
+                UserPrefix : market-quick/testing/main/reader-
+                Datacenters : vla,sas,myt,iva,man
+                Replica : main-report-without-diff-backend:${BASE_PORT}
+                Shard : 8
+                StartBlockTime : 0
+                MaxAgeToGetSec : 36000
+                MaxDocAgeToKeepSec : 36000
+                ReceiveDelay : 0
+                AsyncStart : ${EMERGENCY_ASYNC_START or 1}
+                FastIndexWhenNoSearch : 1
+                Rate : ${EMERGENCY_STREAM_RATE or 20000}
+                BurstRate : ${EMERGENCY_STREAM_BURST_RATE or 20000}
+                BatchSize : ${EMERGENCY_STREAM_BATCH_SIZE or 25000}
+                ReadTimeout : 1000
+                UseNewProtocol : false
+                Threads : ${EMERGENCY_STREAM_THREADS or 4}
+                UseNewPQLib : true
+                ShardMin : 8
+                ShardMax : 8
+                UseShardedLogtype : true
+                UseDirectoryTopicFormat : true
+                <ReplicaIds>
+                    Id : 1
+                    Replicas : main-report-without-diff-backend:${BASE_PORT}
+                </ReplicaIds>
+                <TVM>
+                    DestinationAlias : pq
+                    DestinationClientId : 2001059
+                    Secret : ${TVM_SECRET or "secret"}
+                    ClientId : ${TVM_CLIENT_ID or 0}
+                </TVM>
+            </Stream>
+            <DatacenterChecker>
+                StreamType : PersQueue
+                Host : logbroker.yandex.net
+                Port : 8999
+                Query : clusters
+                CheckInterval : 5m
+                BlockDuration : 30m
+            </DatacenterChecker>
+        </DOCFETCHER>
+        <Synchronizer>
+            DetachPath : ${DETACH_DIR}
+        </Synchronizer>
+    </ModulesConfig>
+    <Indexer>
+        <Common>
+            IndexLog : ${LOGS_DIR}/rty_indexer.log
+            IndexLogLevel : 3
+            DocProperty : attr_bb_prop
+            RecognizeLibraryFile : NOTSET
+            DefaultCharset : utf-8
+            DefaultLanguage : rus
+            DefaultLanguage2 : rus
+            PauseOnStart : ${EMERGENCY_INDEXING_PAUSE_ON_START or true}
+            <HttpOptions>
+                Port : ${INDEXER_PORT}
+                Threads : 40
+                MaxQueue : 5000
+                MaxConnections : 0
+                ClientTimeout : 1000
+            </HttpOptions>
+            <ZonesToProperties>
+                z_text : p_text
+            </ZonesToProperties>
+        </Common>
+        <Disk>
+            DocumentsQueueSize : 5000
+            Threads : ${EMERGENCY_DISK_INDEXER_THREADS or 2}
+            ConnectionTimeout : 100
+            ProtocolType : default.local
+            MaxDocuments : 200000
+            CloseThreads : 1
+            PortionDocCount : 90
+            TimeToLiveSec : 1800
+        </Disk>
+        <Memory>
+            DocumentsQueueSize : 5000
+            Threads : 1
+            ConnectionTimeout : 100
+            ProtocolType : default.local
+            GarbageCollectionTime : 10
+            MaxDocumentsReserveCapacityCoeff : 4
+        </Memory>
+    </Indexer>
+</Server>

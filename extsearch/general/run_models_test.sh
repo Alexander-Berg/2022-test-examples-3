@@ -1,0 +1,1 @@
+VH3_DEV=1 VH3_PROFILE=graphs/profile.yaml ./cli/index_builder_cli -v -c a.yaml run graphs.models_indexer_graph.run_models_indexer_test --configs-resid "3212862672" --bins-resid "3255026166" --mbo-models-resid "3254696710" --generation "20220623_0000"

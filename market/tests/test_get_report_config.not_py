@@ -1,0 +1,259 @@
+import unittest
+
+from lib.Service import get_report_config, get_report_config_by_date
+from lib.Service import RTC
+from lib.tools import print_df, today
+import inspect
+
+DATE = date=today(minus_days=1, astype=str)
+
+class ReportConfigGetterTest(unittest.TestCase):
+
+    def setUp(self):
+        self.instances_by_kraken = get_report_config_by_date(date=DATE)
+
+    def test_report_white_main(self):
+        by_kraken = self.instances_by_kraken.loc['warehouse-report-white']
+        by_indexer = get_report_config(service='market')
+
+        try:
+            df = by_kraken == by_indexer
+            if not all(df.num.tolist()):
+                print_df(df.query('num != True'))
+
+            self.assertEqual(all(df.num.tolist()), True)
+        except Exception as ex:
+            print()
+            print(inspect.currentframe().f_code.co_name.upper() + " mismatches:")
+            print("Kraken:")
+            print_df(by_kraken)
+            print("Indexer:")
+            print_df(by_indexer)
+
+            raise ex
+
+    def test_report_white_api(self):
+        by_kraken = self.instances_by_kraken.loc['api-report-white']
+        by_indexer = get_report_config(service='api')
+
+        try:
+            df = by_kraken == by_indexer
+            if not all(df.num.tolist()):
+                print_df(df.query('num != True'))
+
+            self.assertEqual(all(df.num.tolist()), True)
+        except Exception as ex:
+            print()
+            print(inspect.currentframe().f_code.co_name.upper() + " mismatches:")
+            print("Kraken:")
+            print_df(by_kraken)
+            print("Indexer:")
+            print_df(by_indexer)
+
+            raise ex
+
+    def test_report_white_parallel(self):
+        by_kraken = self.instances_by_kraken.loc['parallel-report-white']
+        by_indexer = get_report_config(service='parallel')
+
+        df = by_kraken == by_indexer
+
+        try:
+            if not all(df.num.tolist()):
+                print_df(df.query('num != True'))
+
+            self.assertEqual(all(df.num.tolist()), True)
+        except Exception as ex:
+            print()
+            print(inspect.currentframe().f_code.co_name.upper() + " mismatches:")
+            print("Kraken:")
+            print_df(by_kraken)
+            print("Indexer:")
+            print_df(by_indexer)
+
+            raise ex
+
+    def test_report_white_int(self):
+        by_kraken = self.instances_by_kraken.loc['int-report-white']
+        by_indexer = get_report_config(service='int')
+
+        df = by_kraken == by_indexer
+
+        try:
+            if not all(df.num.tolist()):
+                print_df(df.query('num != True'))
+
+            self.assertEqual(all(df.num.tolist()), True)
+        except Exception as ex:
+            print()
+            print(inspect.currentframe().f_code.co_name.upper() + " mismatches:")
+            print("Kraken:")
+            print_df(by_kraken)
+            print("Indexer:")
+            print_df(by_indexer)
+
+            raise ex
+
+    def test_report_blue_api(self):
+        by_kraken = self.instances_by_kraken.loc['api-report-blue']
+        by_indexer = get_report_config(service='blue-api')
+
+        try:
+            df = by_kraken == by_indexer
+            if not all(df.num.tolist()):
+                print_df(df.query('num != True'))
+
+            self.assertTrue(all(df.num.tolist()))
+        except Exception as ex:
+            print()
+            print(inspect.currentframe().f_code.co_name.upper() + " mismatches:")
+            print("Kraken:")
+            print_df(by_kraken)
+            print("Indexer:")
+            print_df(by_indexer)
+
+            raise ex
+
+    def test_report_blue_main(self):
+        by_kraken = self.instances_by_kraken.loc['warehouse-report-blue']
+        by_indexer = get_report_config(service='blue-market')
+
+        try:
+            df = by_kraken == by_indexer
+            if not all(df.num.tolist()):
+                print_df(df.query('num != True'))
+
+            self.assertEqual(all(df.num.tolist()), True)
+        except Exception as ex:
+            print()
+            print(inspect.currentframe().f_code.co_name.upper() + " mismatches:")
+            print("Kraken:")
+            print_df(by_kraken)
+            print("Indexer:")
+            print_df(by_indexer)
+
+            raise ex
+
+    def test_front_blue_desktop(self):
+        by_kraken = self.instances_by_kraken.loc['front-blue-desktop'].rename(columns={'num': 'instances'})
+        by_RTC = RTC.get_services_instances_count(
+            services=RTC.get_services(_filter='front_blue_desktop'),
+            by_dc=True,
+            date=DATE
+        )
+
+        try:
+            df = by_kraken == by_RTC
+            if not all(df.instances.tolist()):
+                print_df(df.query('instances != True'))
+
+            self.assertTrue(all(df.instances.tolist()))
+        except Exception as ex:
+            print()
+            print(inspect.currentframe().f_code.co_name.upper() + " mismatches:")
+            print("Kraken:")
+            print_df(by_kraken)
+            print("RTC:")
+            print_df(by_RTC)
+
+            raise ex
+
+    def test_front_blue_touch(self):
+        by_kraken = self.instances_by_kraken.loc['front-blue-touch'].rename(columns={'num': 'instances'})
+        by_RTC = RTC.get_services_instances_count(
+            services=RTC.get_services(_filter='front_blue_touch'),
+            by_dc=True,
+            date=DATE
+        )
+
+        try:
+            df = by_kraken == by_RTC
+            if not all(df.instances.tolist()):
+                print_df(df.query('instances != True'))
+
+            self.assertTrue(all(df.instances.tolist()))
+        except Exception as ex:
+            print()
+            print(inspect.currentframe().f_code.co_name.upper() + " mismatches:")
+            print("Kraken:")
+            print_df(by_kraken)
+            print("RTC:")
+            print_df(by_RTC)
+
+            raise ex
+
+    def test_front_red_desktop(self):
+        by_kraken = self.instances_by_kraken.loc['front-red-desktop'].rename(columns={'num': 'instances'})
+        by_RTC = RTC.get_services_instances_count(
+            services=RTC.get_services(_filter='front_red_desktop'),
+            by_dc=True,
+            date=DATE
+        )
+
+        try:
+            df = by_kraken == by_RTC
+            if not all(df.instances.tolist()):
+                print_df(df.query('instances != True'))
+
+            self.assertTrue(all(df.instances.tolist()))
+        except Exception as ex:
+            print()
+            print(inspect.currentframe().f_code.co_name.upper() + " mismatches:")
+            print("Kraken:")
+            print_df(by_kraken)
+            print("RTC:")
+            print_df(by_RTC)
+
+            raise ex
+
+    def test_front_market_desktop(self):
+        by_kraken = self.instances_by_kraken.loc['market-front-desktop'].rename(columns={'num': 'instances'})
+        by_RTC = RTC.get_services_instances_count(
+            services=RTC.get_services(_filter='front_white_desktop'),
+            by_dc=True,
+            date=DATE
+        )
+
+        try:
+            df = by_kraken == by_RTC
+            if not all(df.instances.tolist()):
+                print_df(df.query('instances != True'))
+
+            self.assertTrue(all(df.instances.tolist()))
+        except Exception as ex:
+            print()
+            print(inspect.currentframe().f_code.co_name.upper() + " mismatches:")
+            print("Kraken:")
+            print_df(by_kraken)
+            print("RTC:")
+            print_df(by_RTC)
+
+            raise ex
+
+    def test_front_market_touch(self):
+        by_kraken = self.instances_by_kraken.loc['market-front-touch'].rename(columns={'num': 'instances'})
+        by_RTC = RTC.get_services_instances_count(
+            services=RTC.get_services(_filter='front_white_touch'),
+            by_dc=True,
+            date=DATE
+        )
+
+        try:
+            df = by_kraken == by_RTC
+            if not all(df.instances.tolist()):
+                print_df(df.query('instances != True'))
+
+            self.assertTrue(all(df.instances.tolist()))
+        except Exception as ex:
+            print()
+            print(inspect.currentframe().f_code.co_name.upper() + " mismatches:")
+            print("Kraken:")
+            print_df(by_kraken)
+            print("RTC:")
+            print_df(by_RTC)
+
+            raise ex
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,0 +1,60 @@
+
+PRAGMA yt.DefaultMemoryLimit = "2048M";
+PRAGMA yt.DataSizePerJob = "100M";
+PRAGMA File("word_conditions.txt", "yt://tmp/word_rules");
+
+$rules = ParseFile("String", "word_conditions.txt");
+$match = Hyperscan::MultiMatch(String::JoinFromList($rules, '
+'));
+
+$m = ($lemmas) -> {
+    RETURN $match($lemmas);
+};
+
+$rule_ids = ($lemmas) -> {
+    $mm = $m($lemmas);
+    RETURN AsList(
+        -- rule 1
+(NOT $mm.0 AND $mm.1 AND $mm.2),
+-- rule 2
+($mm.3 OR $mm.4 OR $mm.5),
+-- rule 3
+$mm.6
+    )
+};
+
+$condition_id_to_rule_id = AsDict(
+(0, 1ul),
+(1, 2ul),
+(2, 3ul)
+);
+
+$convert_condition_results_to_rule_ids = ($condition_results) -> {
+    RETURN ListFlatMap(
+        ListEnumerate($condition_results),
+        ($condition_id_and_result) -> {
+            RETURN CASE $condition_id_and_result.1
+                    WHEN True THEN  $condition_id_to_rule_id[$condition_id_and_result.0]
+                    ELSE NULL
+                    END;
+        }
+    )
+};
+
+$process_rules = ($lemmas) -> {
+    $condition_results = $rule_ids($lemmas);
+    RETURN $convert_condition_results_to_rule_ids($condition_results);
+};
+
+
+INSERT INTO `//output/table` WITH TRUNCATE
+SELECT DISTINCT
+    yandexuid,
+    rule_ids AS rule_id,
+FROM (
+    SELECT
+        yandexuid,
+        $process_rules(lemmas) as rule_ids
+    FROM `//input/table`
+)
+FLATTEN LIST BY rule_ids

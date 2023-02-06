@@ -1,0 +1,108 @@
+base: app/config/base.yml
+config:
+    system:
+        uid: ""
+        gid: ""
+        daemon: 1
+        dir: {dir}
+        pid: {pid}
+        reactor:
+        -   _name: global
+            _io_threads: 1
+            _pool_count: 2
+        -   _name: http
+            _io_threads: 1
+            _pool_count: 4
+        -   _name: stat
+            _io_threads: 1
+            _pool_count: 1
+        -   _name: smtp
+            _io_threads: 1
+            _pool_count: 2
+    modules:
+        module:
+        -   _name: furita_cluster_client
+            configuration:
+                hosts: https://furita-test.mail.yandex.net
+
+        -   _name: tupita_cluster_client
+            configuration:
+                hosts: http://mail-tupita-test.n.yandex-team.ru
+
+        -   _name: mdbsave_cluster_client
+            configuration:
+                hosts: https://mdbsave-test.mail.yandex.net:443
+
+        -   _name: msearch_cluster_client
+            configuration:
+                hosts: https://msearch-proxy-test.search.yandex.net:10431
+
+        -   _name: msettings_cluster_client
+            configuration:
+                hosts: https://settings-test.mail.yandex.net
+
+        -   _name: ymod_tvm
+            configuration:
+                service_id: 2008447
+                target_services:
+                -   _name: mulcagate
+                    id: 2000272
+                -   _name: blackbox
+                    id: 224
+                -   _name: furita
+                    id: 2016043
+                -   _name: mdbsave
+                    id: 2025290
+                -   _name: msearch
+                    id: 186
+                -   _name: msettings
+                    id: 2002242
+
+        -   _name: ymod_mds
+            configuration:
+                host_resolver:
+                    use: 0
+                url: http://storagetest.mail.yandex.net:10010/gate/
+                service_name: mxback
+
+        -   _name: stat_server
+            configuration:
+                endpoints:
+                    listen:
+                    -   _addr: '::0'
+                        _port: {statserver_port}
+                        profile: true
+        -   _name: smtp_server
+            configuration:
+                endpoints:
+                    listen:
+                    -   addr: '::'
+                        port: {smtpserver_port}
+                        ssl: off
+        -   _name: web_server
+            configuration:
+                endpoints:
+                    listen:
+                        _port: {webserver_port}
+        -   _name: nsls
+            configuration:
+                blackbox:
+                    url: http://pass-test.yandex.ru/blackbox
+                bwlist:
+                    url: http://furita-test.mail.yandex.net/api/blackwhitelist
+                domain_rule_forward:
+                    remote: smtp://postback-test.mail.yandex.net:5252
+                forward:
+                    remote: smtp://postback-test.mail.yandex.net:5252
+                notify:
+                    remote: smtp://postback-test.mail.yandex.net:5252
+                autoreply:
+                    remote: smtp://postback-test.mail.yandex.net:5252
+                meta:
+                    remote: smtp://postback-test.mail.yandex.net:5252
+                related_uids:
+                    remote: smtp://postback-test.mail.yandex.net:5252
+                msearch:
+                    message_types:
+                    -   news
+                    -   t_news

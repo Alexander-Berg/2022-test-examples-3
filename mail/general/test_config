@@ -1,0 +1,956 @@
+index_threads = 10
+maxmemdocs = 2000000
+index_divisor = 1
+shards = 1000
+use_journal = 1
+index_path = /home/tabolin/lucene-test-index
+#index_path = /u0/mdb301/
+primary_key = url
+
+xurls_regex_file = ../../rpm/lucene-xurls-patterns/src/lucene_xurls_patterns
+
+[access_log]
+file = /home/tabolin/log/lucene/access.log
+rotate = number
+date.locale = en
+
+[index_log]
+file = /home/tabolin/log/lucene/index.log
+rotate = number
+separator = \ 
+date.format = dd/MMM/yyyy:HH:mm:ss
+date.locale = en
+level.show = false
+
+[index_access_log]
+file = /home/tabolin/log/lucene/index-access.log
+rotate = number
+date.locale = en
+
+[error_log]
+file = /home/tabolin/log/lucene/error.log
+rotate = number
+separator = \ 
+date.format = dd/MMM/yyyy:HH:mm:ss
+date.locale = en
+level.show = false
+
+[full_log]
+file = /home/tabolin/log/lucene/full.log
+rotate = number
+level.min = all
+
+# plain old http server config
+[http]
+port = 1089
+timeout = 10000
+# ignored
+connections = 100
+workers.min = 200
+
+# new search server config
+[search]
+port = 8089
+timeout = 10000
+connections = 1000
+workers.min = 100
+
+# json indexer config
+[indexer]
+port = 8182
+timeout = 100000
+connections = 1000
+workers.min = 200
+
+# Yandex codec config
+[yandex_codec]
+terms_writer_block_size = 8192
+fields_writer_buffer_size = 6144
+
+[field.url]
+tokenizer = keyword
+store = true
+attribute = true
+
+[field.mimetype]
+tokenizer = keyword
+filters = lowercase
+prefixed = true
+store = true
+analyze = true
+attribute = true
+index_alias = mimetype_np
+
+[field.mimetype_np]
+tokenizer = keyword
+filters = lowercase
+analyze = true
+attribute = true
+
+[field.disposition_type]
+tokenizer = keyword
+filters = lowercase
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.hdr_from]
+tokenizer = letter
+filters = lowercase|replace:ё:е
+prefixed = true
+store = true
+analyze = true
+index_alias = hdr_from_keyword
+
+[field.hdr_from_keyword]
+tokenizer = keyword
+filters = lowercase|replace:ё:е
+prefixed = true
+analyze = true
+attribute = true
+
+[field.hdr_from_email]
+tokenizer = lf
+filters = lowercase
+prefixed = true
+analyze = true
+attribute = true
+
+[field.hdr_from_display_name]
+tokenizer = lf
+filters = lowercase|replace:ё:е
+prefixed = true
+analyze = true
+attribute = true
+
+[field.hdr_from_normalized]
+tokenizer = lf
+filters = lowercase
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.reply_to]
+tokenizer = letter
+filters = lowercase|replace:ё:е
+prefixed = true
+store = true
+analyze = true
+index_alias = reply_to_keyword
+
+[field.reply_to_keyword]
+tokenizer = keyword
+filters = lowercase|replace:ё:е
+prefixed = true
+analyze = true
+attribute = true
+
+[field.reply_to_email]
+tokenizer = lf
+filters = lowercase
+prefixed = true
+analyze = true
+attribute = true
+
+[field.reply_to_display_name]
+tokenizer = lf
+filters = lowercase|replace:ё:е
+prefixed = true
+analyze = true
+attribute = true
+
+[field.reply_to_normalized]
+tokenizer = lf
+filters = lowercase
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.hdr_to]
+tokenizer = letter
+filters = lowercase|replace:ё:е
+prefixed = true
+store = true
+analyze = true
+index_alias = hdr_to_keyword
+
+[field.hdr_to_keyword]
+tokenizer = keyword
+filters = lowercase|replace:ё:е
+prefixed = true
+analyze = true
+attribute = true
+
+[field.hdr_to_email]
+tokenizer = lf
+filters = lowercase
+prefixed = true
+analyze = true
+attribute = true
+
+[field.hdr_to_display_name]
+tokenizer = lf
+filters = lowercase|replace:ё:е
+prefixed = true
+analyze = true
+attribute = true
+
+[field.hdr_to_normalized]
+tokenizer = lf
+filters = lowercase
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.hdr_cc]
+tokenizer = letter
+filters = lowercase|replace:ё:е
+prefixed = true
+store = true
+analyze = true
+index_alias = hdr_cc_keyword
+
+[field.hdr_cc_keyword]
+tokenizer = keyword
+filters = lowercase|replace:ё:е
+prefixed = true
+analyze = true
+attribute = true
+
+[field.hdr_cc_email]
+tokenizer = lf
+filters = lowercase
+prefixed = true
+analyze = true
+attribute = true
+
+[field.hdr_cc_display_name]
+tokenizer = lf
+filters = lowercase|replace:ё:е
+prefixed = true
+analyze = true
+attribute = true
+
+[field.hdr_cc_normalized]
+tokenizer = lf
+filters = lowercase
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.hdr_bcc]
+tokenizer = letter
+filters = lowercase|replace:ё:е
+prefixed = true
+store = true
+analyze = true
+index_alias = hdr_bcc_keyword
+
+[field.hdr_bcc_keyword]
+tokenizer = keyword
+filters = lowercase|replace:ё:е
+prefixed = true
+analyze = true
+attribute = true
+
+[field.hdr_bcc_email]
+tokenizer = lf
+filters = lowercase
+prefixed = true
+analyze = true
+attribute = true
+
+[field.hdr_bcc_display_name]
+tokenizer = lf
+filters = lowercase|replace:ё:е
+prefixed = true
+analyze = true
+attribute = true
+
+[field.hdr_bcc_normalized]
+tokenizer = lf
+filters = lowercase
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.hdr_subject]
+tokenizer = letter
+filters = truncate:64|lowercase|replace:ё:е|lemmer
+prefixed = true
+store = true
+analyze = true
+index_alias = hdr_subject_keyword
+
+[field.hdr_subject_keyword]
+tokenizer = keyword
+filters = lowercase|replace:ё:е
+prefixed = true
+analyze = true
+attribute = true
+
+[field.hdr_subject_normalized]
+tokenizer = letter
+filters = truncate:64|lowercase|replace:ё:е|lemmer
+prefixed = true
+store = true
+analyze = true
+index_alias = hdr_subject_normalized_keyword
+
+[field.hdr_subject_normalized_keyword]
+tokenizer = keyword
+filters = lowercase|replace:ё:е
+prefixed = true
+analyze = true
+attribute = true
+
+[field.msg_id]
+tokenizer = keyword
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.body_text]
+tokenizer = letter
+filters = truncate:64|lowercase|replace:ё:е|lemmer
+prefixed = true
+analyze = true
+
+[field.pure_body]
+tokenizer = letter
+filters = truncate:64|lowercase|replace:ё:е|lemmer
+prefixed = true
+analyze = true
+
+[field.ocr_text]
+tokenizer = letter
+filters = truncate:64|lowercase|replace:ё:е|lemmer
+store = true
+prefixed = true
+analyze = true
+
+[field.received_date]
+tokenizer = keyword
+filters = padding:10
+prefixed = true
+store = true
+analyze = true
+attribute = true
+type = integer
+index_alias = received_day
+
+[field.received_day]
+tokenizer = keyword
+filters = daf:86400|padding:10
+analyze = true
+attribute = true
+index_alias = received_day_p
+
+[field.received_day_p]
+tokenizer = keyword
+filters = daf:86400|padding:10
+prefixed = true
+analyze = true
+attribute = true
+
+[field.mid]
+store = true
+type = long
+index_alias = mid_p
+
+[field.mid_p]
+tokenizer = keyword
+prefixed = true
+analyze = true
+attribute = true
+index_alias = mid_padded
+
+[field.mid_padded]
+tokenizer = keyword
+filters = padding:20
+prefixed = true
+analyze = true
+attribute = true
+
+[field.hid]
+tokenizer = keyword
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.fid]
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.stid]
+store = true
+analyze = true
+attribute = true
+
+[field.thread_id]
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.suid]
+tokenizer = keyword
+store = true
+attribute = true
+
+[field.uid]
+tokenizer = keyword
+store = true
+attribute = true
+
+[field.headers]
+tokenizer = lf
+filters = lowercase|headers
+prefixed = true
+analyze = true
+attribute = true
+
+[field.attachsize]
+tokenizer = keyword
+filters = padding:10
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.attachsize_b]
+tokenizer = keyword
+filters = padding:20
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.attachsize_kb]
+tokenizer = keyword
+filters = padding:20
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.attachname]
+tokenizer = letter
+filters = lowercase|replace:ё:е
+prefixed = true
+store = true
+analyze = true
+index_alias = attachname_keyword
+# TODO: remove this field after Yandex.Mail reindex
+search_alias = attachname_backward_compatibility
+
+[field.attachname_backward_compatibility]
+tokenizer = letter
+filters = lowercase|replace:ё:е
+prefixed = true
+analyze = true
+attribute = true
+search_alias = attachname_keyword
+
+[field.attachname_keyword]
+tokenizer = keyword
+filters = lowercase|replace:ё:е
+prefixed = true
+analyze = true
+attribute = true
+
+[field.attachtype]
+tokenizer = letter
+filters = lowercase|replace:ё:е
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.attachments]
+tokenizer = letter
+filters = lowercase|replace:ё:е
+prefixed = true
+store = true
+analyze = true
+index_alias = attachments_keyword
+
+[field.attachments_keyword]
+tokenizer = lf
+filters = lowercase|replace:ё:е
+prefixed = true
+analyze = true
+attribute = true
+
+[field.md5]
+tokenizer = keyword
+store = true
+analyze = true
+attribute = true
+index_alias = md5_p
+
+[field.md5_p]
+tokenizer = keyword
+prefixed = true
+analyze = true
+attribute = true
+
+[field.x_urls]
+tokenizer = boolean
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.message_type]
+tokenizer = letter
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.built_date]
+tokenizer = keyword
+store = true
+analyze = true
+attribute = true
+
+[field.parsed]
+tokenizer = keyword
+analyze = true
+attribute = true
+
+[field.meta]
+tokenizer = lf
+filters = lowercase|headers
+prefixed = true
+analyze = true
+attribute = true
+
+[field.error]
+tokenizer = boolean
+store = true
+analyze = true
+attribute = true
+
+[field.truncated]
+tokenizer = keyword
+filters = padding:10
+store = true
+prefixed = true
+analyze = true
+attribute = true
+type = integer
+
+[field.has_attachments]
+tokenizer = boolean
+prefixed = true
+analyze = true
+attribute = true
+
+[field.draft]
+tokenizer = boolean
+prefixed = true
+analyze = true
+attribute = true
+
+[field.lcn]
+tokenizer = keyword
+filters = padding:20
+store = true
+prefixed = true
+analyze = true
+attribute = true
+type = long
+
+[field.album]
+tokenizer = letter
+filters = lowercase|replace:ё:е|lemmer
+prefixed = true
+store = true
+analyze = true
+
+[field.album_tracks]
+tokenizer = keyword
+filters = padding:3
+prefixed = true
+store = true
+analyze = true
+attribute = true
+type = integer
+
+[field.altitude]
+tokenizer = keyword
+filters = maf:1000000|padding:10
+prefixed = true
+store = true
+analyze = true
+attribute = true
+type = float
+
+[field.artist]
+tokenizer = letter
+filters = lowercase|replace:ё:е|lemmer
+prefixed = true
+store = true
+analyze = true
+
+[field.author]
+tokenizer = letter
+filters = lowercase|replace:ё:е|lemmer
+prefixed = true
+store = true
+analyze = true
+
+[field.comment]
+tokenizer = letter
+filters = lowercase|replace:ё:е|lemmer
+prefixed = true
+store = true
+analyze = true
+
+[field.composer]
+tokenizer = letter
+filters = lowercase|replace:ё:е|lemmer
+prefixed = true
+store = true
+analyze = true
+
+[field.created]
+tokenizer = keyword
+filters = padding:10
+prefixed = true
+store = true
+analyze = true
+attribute = true
+type = integer
+
+[field.description]
+tokenizer = letter
+filters = lowercase|replace:ё:е|lemmer
+prefixed = true
+store = true
+analyze = true
+
+[field.duration]
+tokenizer = keyword
+filters = maf:100|padding:10
+prefixed = true
+store = true
+analyze = true
+attribute = true
+type = float
+
+[field.genre]
+tokenizer = letter
+filters = lowercase|replace:ё:е|lemmer
+prefixed = true
+store = true
+analyze = true
+
+[field.height]
+tokenizer = keyword
+filters = padding:10
+prefixed = true
+store = true
+analyze = true
+attribute = true
+type = integer
+
+[field.keywords]
+tokenizer = letter
+filters = lowercase|replace:ё:е|lemmer
+prefixed = true
+store = true
+analyze = true
+
+[field.latitude]
+tokenizer = keyword
+filters = aaz:90|maf:1000000|padding:10
+prefixed = true
+store = true
+analyze = true
+attribute = true
+type = float
+
+[field.longitude]
+tokenizer = keyword
+filters = aaz:180|maf:1000000|padding:10
+prefixed = true
+store = true
+analyze = true
+attribute = true
+type = float
+
+[field.manufacturer]
+tokenizer = letter
+filters = lowercase|replace:ё:е|lemmer
+prefixed = true
+store = true
+analyze = true
+
+[field.model]
+tokenizer = letter
+filters = lowercase|replace:ё:е|lemmer
+prefixed = true
+store = true
+analyze = true
+
+[field.modified]
+tokenizer = keyword
+filters = padding:10
+prefixed = true
+store = true
+analyze = true
+attribute = true
+type = integer
+
+[field.orientation]
+tokenizer = keyword
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.pages]
+tokenizer = keyword
+filters = padding:5
+prefixed = true
+store = true
+analyze = true
+attribute = true
+type = integer
+
+[field.print_date]
+tokenizer = keyword
+filters = padding:10
+prefixed = true
+store = true
+analyze = true
+attribute = true
+type = integer
+
+[field.producer]
+tokenizer = letter
+filters = lowercase|replace:ё:е|lemmer
+prefixed = true
+store = true
+analyze = true
+
+[field.ratio]
+tokenizer = keyword
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.released]
+tokenizer = letter
+filters = lowercase|replace:ё:е|lemmer
+prefixed = true
+store = true
+analyze = true
+
+[field.subject]
+tokenizer = letter
+filters = lowercase|replace:ё:е|lemmer
+prefixed = true
+store = true
+analyze = true
+
+[field.title]
+tokenizer = letter
+filters = lowercase|replace:ё:е|lemmer
+prefixed = true
+store = true
+analyze = true
+
+[field.tool]
+tokenizer = letter
+filters = lowercase|replace:ё:е|lemmer
+prefixed = true
+store = true
+analyze = true
+
+[field.track_number]
+tokenizer = keyword
+filters = padding:3
+prefixed = true
+store = true
+analyze = true
+attribute = true
+type = integer
+
+[field.width]
+tokenizer = keyword
+filters = padding:10
+prefixed = true
+store = true
+analyze = true
+attribute = true
+type = integer
+
+[field.abook_suid]
+tokenizer = keyword
+store = true
+attribute = true
+
+[field.abook_name]
+tokenizer = lf
+filters = lowercase|replace:ё:е
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.abook_email]
+tokenizer = letter
+filters = lowercase|replace:ё:е
+prefixed = true
+store = true
+analyze = true
+index_alias = abook_email_exact
+
+[field.abook_email_exact]
+tokenizer = lf
+filters = lowercase
+prefixed = true
+analyze = true
+
+[field.abook_phone]
+tokenizer = letter
+filters = lowercase
+prefixed = true
+store = true
+analyze = true
+
+[field.abook_source_type]
+tokenizer = lf
+filters = lowercase
+prefixed = true
+store = true
+analyze = true
+
+[field.abook_id]
+tokenizer = keyword
+filters = lowercase
+prefixed = true
+store = true
+analyze = true
+
+[field.abook_revision]
+tokenizer = keyword
+filters = lowercase
+prefixed = true
+store = true
+analyze = true
+
+[field.abook_last_contacted]
+tokenizer = keyword
+filters = padding:10
+prefixed = true
+store = true
+analyze = true
+attribute = true
+type = integer
+
+[field.abook_times_contacted]
+tokenizer = keyword
+filters = lowercase
+prefixed = true
+store = true
+analyze = true
+
+[field.abook_photo_base]
+tokenizer = letter
+filters = lowercase|replace:ё:е
+prefixed = true
+store = true
+analyze = true
+
+[field.blackbox_lastauth]
+type = integer
+store = true
+index = false
+
+[field.senders_suid]
+tokenizer = keyword
+store = true
+attribute = true
+
+[field.senders_last_contacted]
+tokenizer = keyword
+filters = padding:10
+prefixed = true
+store = true
+analyze = true
+attribute = true
+type = integer
+
+[field.senders_received_count]
+tokenizer = keyword
+prefixed = true
+store = true
+analyze = true
+type = integer
+
+[field.senders_sent_count]
+tokenizer = keyword
+prefixed = true
+store = true
+analyze = true
+type = integer
+
+[field.senders_names]
+tokenizer = lf
+filters = lowercase|replace:ё:е
+prefixed = true
+store = true
+analyze = true
+attribute = true
+
+[field.senders_lcn]
+tokenizer = keyword
+filters = padding:20
+store = true
+prefixed = true
+analyze = true
+attribute = true
+type = long
+
+[field.kv_service]
+tokenizer = keyword
+prefixed = true
+store = true
+analyze = true
+attribute = true
+index_alias = kv_service_np
+
+[field.kv_service_np]
+tokenizer = keyword
+attribute = true
+
+[field.kv_suid]
+tokenizer = keyword
+store = true
+attribute = true
+
+[field.kv_data]
+store = true
+index = false
+
+[field.kv_number]
+type = long
+store = true
+index = false
+

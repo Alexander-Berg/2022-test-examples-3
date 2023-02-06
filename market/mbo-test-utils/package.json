@@ -1,0 +1,57 @@
+{
+  "name": "@yandex-market/mbo-test-utils",
+  "version": "1.1.17",
+  "description": "Utils for test react app",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.yandex-team.ru/market-java/mbo-frontend"
+  },
+  "author": "Yandex Market Back Office Frontend Team",
+  "license": "UNLICENSED",
+  "publishConfig": {
+    "registry": "https://npm.yandex-team.ru/"
+  },
+  "scripts": {
+    "test": "jest $JEST_OPTS",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
+    "build": "npm run build:cjs",
+    "build:cjs": "npm run build:tsc -- --outDir dist",
+    "build:tsc": "tsc -p tsconfig.build.json",
+    "build:watch": "npm run build:tsc -- -w --outDir dist",
+    "lint": "npm run lint:ts && npm run prettier",
+    "lint:ts": "eslint --ext .ts,.tsx src/ --max-warnings 0",
+    "prettier": "prettier -c './src/**/*.{ts,tsx}'",
+    "prettier:fix": "npm run prettier -- --write",
+    "lib:publish": "npm publish --register=https://npm.yandex-team.ru/ ./",
+    "version:generate": "tools-version-patch-date up --path=\"./package.json\""
+  },
+  "dependencies": {
+    "synchronous-promise": "^2.0.10"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.25.0",
+    "@typescript-eslint/parser": "^4.25.0",
+    "@yandex-market/mbo-dev-utils": "latest",
+    "@yandex-market/mbo-linters": "^2.4.10",
+    "eslint": "7.27.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-import-resolver-typescript": "2.4.0",
+    "eslint-plugin-import": "2.24.0",
+    "eslint-plugin-jsx-a11y": "6.4.1",
+    "eslint-plugin-prettier": "3.4.0",
+    "eslint-plugin-react": "7.23.2",
+    "eslint-plugin-react-hooks": "4.2.0",
+    "jest": "^26.4.0",
+    "prettier": "^1.19.1",
+    "ramda": "^0.27.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^26.2.0",
+    "typescript": "^3.9.7"
+  }
+}

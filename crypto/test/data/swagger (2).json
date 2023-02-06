@@ -1,0 +1,136 @@
+{
+    "info": {
+        "contact": {
+            "url": "https://wiki.yandex-team.ru/crypta/"
+        },
+        "description": "Provides ways to interact with Crypta",
+        "version": "8833718",
+        "title": "Crypta API"
+    },
+    "paths": {
+        "/lab/segment": {
+            "get": {
+                "description": "",
+                "parameters": [
+                    {
+                        "required": false,
+                        "type": "string",
+                        "name": "lang",
+                        "in": "query"
+                    }
+                ],
+                "tags": [
+                    "lab"
+                ],
+                "produces": [
+                    "application/json; charset=utf-8"
+                ],
+                "summary": "Get all segments",
+                "operationId": "getAllSegments",
+                "consumes": [
+                    "application/json; charset=utf-8"
+                ],
+                "responses": {
+                    "200": {
+                        "headers": {
+                            "X-Crypta-Request-ID": {
+                                "type": "string",
+                                "description": "Request ID to be reported"
+                            },
+                            "X-Crypta-Host": {
+                                "type": "string",
+                                "description": "Host to be reported"
+                            },
+                            "X-Crypta-Instance-ID": {
+                                "type": "string",
+                                "description": "Instance ID to be reported"
+                            }
+                        },
+                        "description": "successful operation",
+                        "schema": {
+                            "items": {
+                                "$ref": "#/definitions/ru.yandex.crypta.lab.proto.Segment"
+                            },
+                            "type": "array"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "lab"
+        }
+    ],
+    "basePath": "/",
+    "definitions": {
+        "ru.yandex.crypta.lab.proto.Segment.Export": {
+            "type": "object",
+            "properties": {
+                "segmentId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "fullExpressions": {
+                    "items": {
+                        "$ref": "#/definitions/ru.yandex.crypta.lab.proto.FullValue"
+                    },
+                    "type": "array"
+                },
+                "hasExpressionErrors": {
+                    "type": "boolean"
+                },
+                "state": {
+                    "enum": [
+                        "CREATED",
+                        "ACTIVE",
+                        "DEPRECATED",
+                        "DISABLED",
+                        "DELETED",
+                        "UNRECOGNIZED"
+                    ],
+                    "type": "string"
+                },
+                "keywordId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "ru.yandex.crypta.lab.proto.Segment": {
+            "type": "object",
+            "properties": {
+                "exports": {
+                    "$ref": "#/definitions/ru.yandex.crypta.lab.proto.Segment.Exports"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "ru.yandex.crypta.lab.proto.FullValue": {
+            "type": "object",
+            "properties": {
+                "normalized": {
+                    "type": "string"
+                }
+            }
+        },
+        "ru.yandex.crypta.lab.proto.Segment.Exports": {
+            "type": "object",
+            "properties": {
+                "exports": {
+                    "items": {
+                        "$ref": "#/definitions/ru.yandex.crypta.lab.proto.Segment.Export"
+                    },
+                    "type": "array"
+                }
+            }
+        }
+    },
+    "swagger": "2.0"
+}

@@ -1,0 +1,24 @@
+$schema: ../../../_schemas/nock.yaml
+
+scope: 'http://payments'
+method: GET
+path: /ext/order_hash:abcdefghijklmnopqrstuvwxyz
+
+reqheaders:
+  $include: ../../../_samples/reqheaders.yaml
+  user-agent: TEST_USER_AGENT
+
+query:
+  poll: 'false'
+
+status: 200
+
+response:
+  code: 200
+  status: success
+  data:
+    order:
+      $include: ../../../_samples/order.yaml
+    merchant:
+      $include: ../../../_samples/merchant.yaml
+    transaction: null

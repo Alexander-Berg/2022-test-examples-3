@@ -1,0 +1,8 @@
+# -*- coding: utf-8 -*-
+
+ENV_TESTING = 'testing'
+ENV_PRODUCTION= 'production'
+ENV_APP_ENV = 'APP_ENV'
+ENV_OAUTH = 'OAUTH'
+ENV_COOKIE = 'COOKIE'
+ENV_TVM_SECRET = 'TVM_SECRET'

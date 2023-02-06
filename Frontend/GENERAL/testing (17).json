@@ -1,0 +1,89 @@
+{
+  "settings": {
+    "edge_expressions": {
+      "BACKEND->RESPONSE": "BACKEND[raw_http_response]",
+      "TEMPLATES->RESPONSE": "!BACKEND[raw_http_response]"
+    },
+    "input_deps": ["HTTP_REQUEST"],
+    "node_deps": {
+      "INIT_MERGED": {
+        "input_deps": ["HTTP_REQUEST"]
+      },
+      "BLACKBOX_PREPARE": {
+        "input_deps": ["!INIT_MERGED@request"]
+      },
+      "BLACKBOX": {
+        "input_deps": ["!BLACKBOX_PREPARE@blackbox_http_request->http_request"]
+      },
+      "BACKEND": {
+        "input_deps": ["INIT_MERGED", "BLACKBOX@http_response->blackbox_http_response"]
+      },
+      "TEMPLATES": {
+        "input_deps": ["HTTP_REQUEST", "TEMPLATES_DATA", "INIT_MERGED", "BACKEND"]
+      },
+      "RESPONSE": {
+        "input_deps": ["BACKEND@raw_http_response->http_response", "TEMPLATES"]
+      }
+    },
+    "output_deps": ["RESPONSE"],
+    "nodes": {
+      "INIT_MERGED": {
+        "backend_name": "SELF",
+        "node_type": "DEFAULT",
+        "params": {
+          "attempts": {
+            "max_attempts": 2
+          },
+          "handler": "/_subhost/init",
+          "timeout": "1000ms"
+        }
+      },
+      "BLACKBOX_PREPARE": {
+        "backend_name": "MY_ALICE",
+        "node_type": "DEFAULT",
+        "params": {
+          "handler": "/_setup/blackbox",
+          "timeout": "1000ms"
+        }
+      },
+      "BLACKBOX": {
+        "backend_name": "BLACKBOX_HTTP",
+        "node_type": "DEFAULT",
+        "params": {
+          "codecs": ["lz4"],
+          "timeout": "150ms"
+        }
+      },
+      "BACKEND": {
+        "backend_name": "MY_ALICE",
+        "node_type": "DEFAULT",
+        "params": {
+          "attempts": {
+            "max_attempts": 2
+          },
+          "handler": "/main-page",
+          "timeout": "1000ms"
+        }
+      },
+      "TEMPLATES_DATA": {
+        "embed": [
+          {
+            "template": "my-alice",
+            "type": "template_params"
+          }
+        ],
+        "node_type": "EMBED"
+      },
+      "TEMPLATES": {
+        "backend_name": "RENDERER_ALICE",
+        "node_type": "DEFAULT",
+        "params": {
+          "timeout": "1000ms"
+        }
+      }
+    },
+    "responsibles": {
+      "logins": ["ivangromov"]
+    }
+  }
+}

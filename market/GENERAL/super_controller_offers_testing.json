@@ -1,0 +1,123 @@
+{
+  "owner": "marketir",
+  "statfaceReports": [
+    {
+      "title": "Статистика по оферам (Тестинг)",
+      "report": "Market/Content/SuperController/OffersTesting",
+      "tableName": "super_controller_offers_statistic_testing",
+      "period": "ONE_MIN",
+      "splits": [
+        {
+          "name": "category",
+          "title": "Категория",
+          "splitField": "dictGetString('category', 'full_name', arrayJoin(dictGetHierarchy('category', toUInt64(category))))",
+          "tree": true
+        },
+        {
+          "name": "host",
+          "title": "Хост",
+          "splitField": "host",
+          "viewType": "Selector"
+        }
+      ],
+      "fields": [
+        {
+          "name": "overall_offers_count",
+          "title": "Overall offers count",
+          "metricField": "sum(overall_offers_count)"
+        },
+        {
+          "name": "matched_offers",
+          "title": "Matched offers count",
+          "metricField": "sum(matching_matched_offers)"
+        },
+        {
+          "name": "matching_guru_offers",
+          "title": "Guru offers count",
+          "metricField": "sum(matching_guru_offers)"
+        },
+        {
+          "name": "matching_vendor_matched_offers",
+          "title": "Vendor matched offers count",
+          "metricField": "sum(matching_vendor_matched_offers)"
+        },
+        {
+          "name": "matching_task_matched_offers",
+          "title": "Task matched offers count",
+          "metricField": "sum(matching_task_matched_offers)"
+        },
+        {
+          "name": "matching_no_match_guru_offers",
+          "title": "No match guru offers count",
+          "metricField": "sum(matching_no_match_guru_offers)"
+        },
+        {
+          "name": "formalized_offers_count",
+          "title": "Formalized offers count",
+          "metricField": "sum(formalized_offers_count)"
+        },
+        {
+          "name": "clusterized_offers_count",
+          "title": "Clusterized offers count",
+          "metricField": "sum(clusterized_offers_count)"
+        },
+        {
+          "name": "matching_matched_books_offers",
+          "title": "Matching books offers count",
+          "metricField": "sum(matching_matched_books_offers)"
+        },
+        {
+          "name": "red_offers_count",
+          "title": "Red offers count",
+          "metricField": "sum(red_offers_count)"
+        },
+        {
+          "name": "external_mappings_count",
+          "title": "External mappings count",
+          "metricField": "sum(red_offers_external_mappings_count)"
+        },
+        {
+          "name": "generated_red_title_count",
+          "title": "Generated red titles count",
+          "metricField": "sum(red_offers_generated_red_title_count)"
+        }
+      ],
+      "graphs": [
+        {
+          "title": "Полнота матчинга",
+          "fields": [
+            "overall_offers_count",
+            "matched_offers",
+            "matching_guru_offers"
+          ]
+        },
+        {
+          "title": "Полнота матчинга в деталях",
+          "fields": [
+            "matched_offers",
+            "matching_vendor_matched_offers",
+            "matching_no_match_guru_offers",
+            "matching_task_matched_offers"
+          ]
+        },
+        {
+          "title": "Cтатистика по оферам",
+          "fields": [
+            "matched_offers",
+            "formalized_offers_count",
+            "clusterized_offers_count",
+            "matching_matched_books_offers"
+          ]
+        },
+        {
+          "title": "Cтатистика по красным офферам",
+          "fields": [
+            "red_offers_count",
+            "external_mappings_count",
+            "generated_red_title_count"
+          ]
+        }
+      ]
+    }
+  ]
+}

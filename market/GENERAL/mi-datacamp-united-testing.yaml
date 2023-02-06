@@ -1,0 +1,541 @@
+#!include marketdatacamp.yaml
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmi-datacamp-united-testing
+
+vars:
+- &topics-lag-troubleshooting
+    title: Траблшутинг лагов в топиках
+    url: https://docs.yandex-team.ru/market-datacamp/support/readlag
+- &piper-dashboard
+    title: Дашборд пайпера
+    url: https://yasm.yandex-team.ru/template/panel/Market_Datacamp_PiperWhite_testing/
+- &piper-meta
+  urls:
+    - *topics-lag-troubleshooting
+    - *piper-dashboard
+
+juggler:
+  checks:
+
+  - service: piper-mboc-lb-commit-time-lag
+    children:
+    - market-indexer_testing_united_datacamp-mbo-offer-state-updates
+
+  - service: piper-lb-commit-time-lag
+    check_tags:
+      - market_datacamp_check_controllers_release_testing
+    meta: *piper-meta
+    children:
+    - market-indexer_testing_united_blue_datacamp-messages
+    - market-indexer_testing_united_blue_stock-storage
+    - market-indexer_testing_united_blue_datacamp-qoffers
+    - market-indexer_testing_united_datacamp-qoffers
+    - market-indexer_testing_united_datacamp-qoffers-direct
+    - market-indexer_testing_united_datacamp-qoffers-upload-update
+    - market-indexer_testing_united_datacamp-qoffers-vertical
+    - market-indexer_testing_united_datacamp-offers-from-miner
+    - market-indexer_testing_united_datacamp-offers-from-routines
+    - market-indexer_testing_united_datacamp-offer-bids
+    - market-indexer_testing_united_datacamp-amore-data-blue
+    - market-indexer_testing_united_datacamp-supplier-promo-offer
+    - market_adv_promo_test_promo-offer
+    - market-indexer_testing_united_datacamp-mbo-offer-hidings-topic
+    - market-indexer_testing_united_datacamp-mdm-offers
+    - mbi_test_assortment-market-quick
+    - mbi_test_market-quick
+    - mbi_test_market-quick-stocks
+    - mbi_test_ff4shops-api-stocks
+    - market-indexer_testing_white_datacamp-offers-blog
+    - market-indexer_testing_white_datacamp-messages
+    - market-indexer_testing_united_datacamp-anaplan-mbi-promo-updates
+    - market-indexer-testing-datacamp-render-model-commit-lag-time
+    - market-indexer_testing_united_datacamp-categories
+    - market-indexer_testing_united_datacamp-offers-stocks
+    - market-indexer_testing_united_datacamp-offers-from-msku-miner
+
+  - service: piper-mboc-lb-length
+    meta: *piper-meta
+    children:
+    - market-indexer_testing_united_datacamp-mbo-offer-state-updates
+
+  - service: piper-lb-length
+    check_tags:
+      - market_datacamp_check_controllers_release_testing
+    meta: *piper-meta
+    children:
+    - market-indexer_testing_united_blue_datacamp-messages
+    - market-indexer_testing_united_blue_stock-storage
+    - market-indexer_testing_united_blue_datacamp-qoffers
+    - market-indexer_testing_united_datacamp-qoffers
+    - market-indexer_testing_united_datacamp-qoffers-direct
+    - market-indexer_testing_united_datacamp-qoffers-upload-update
+    - market-indexer_testing_united_datacamp-qoffers-vertical
+    - market-indexer_testing_united_datacamp-offers-from-miner
+    - market-indexer_testing_united_datacamp-offers-from-routines
+    - market-indexer_testing_united_datacamp-offer-bids
+    - market-indexer_testing_united_datacamp-amore-data-blue
+    - market-indexer_testing_united_datacamp-supplier-promo-offer
+    - market_adv_promo_test_promo-offer
+    - market-indexer_testing_united_datacamp-mbo-offer-hidings-topic
+    - market-indexer_testing_united_datacamp-mdm-offers
+    - mbi_test_assortment-market-quick
+    - mbi_test_market-quick
+    - mbi_test_market-quick-stocks
+    - mbi_test_ff4shops-api-stocks
+    - market-indexer_testing_white_datacamp-offers-blog
+    - market-indexer_testing_white_datacamp-messages
+    - market-indexer_testing_united_datacamp-anaplan-mbi-promo-updates
+    - market-indexer_testing_united_datacamp-categories
+    - market-indexer_testing_united_datacamp-offers-stocks
+    - market-indexer_testing_united_datacamp-offers-from-msku-miner
+
+  - service: piper-mboc-lb-read-time-lag
+    meta: *piper-meta
+    children:
+    - market-indexer_testing_united_datacamp-mbo-offer-state-updates
+
+  - service: piper-lb-read-time-lag
+    check_tags:
+      - market_datacamp_check_controllers_release_testing
+    meta: *piper-meta
+    children:
+    - market-indexer_testing_united_blue_datacamp-messages
+    - market-indexer_testing_united_blue_stock-storage
+    - market-indexer_testing_united_blue_datacamp-qoffers
+    - market-indexer_testing_united_datacamp-qoffers
+    - market-indexer_testing_united_datacamp-qoffers-direct
+    - market-indexer_testing_united_datacamp-qoffers-upload-update
+    - market-indexer_testing_united_datacamp-qoffers-vertical
+    - market-indexer_testing_united_datacamp-offers-from-miner
+    - market-indexer_testing_united_datacamp-offers-from-routines
+    - market-indexer_testing_united_datacamp-offer-bids
+    - market-indexer_testing_united_datacamp-amore-data-blue
+    - market-indexer_testing_united_datacamp-supplier-promo-offer
+    - market_adv_promo_test_promo-offer
+    - market-indexer_testing_united_datacamp-mbo-offer-hidings-topic
+    - market-indexer_testing_united_datacamp-mdm-offers
+    - mbi_test_assortment-market-quick
+    - mbi_test_market-quick
+    - mbi_test_market-quick-stocks
+    - mbi_test_ff4shops-api-stocks
+    - market-indexer_testing_white_datacamp-offers-blog
+    - market-indexer_testing_white_datacamp-messages
+    - market-indexer_testing_united_datacamp-anaplan-mbi-promo-updates
+    - market-indexer_testing_united_datacamp-categories
+    - market-indexer_testing_united_datacamp-offers-stocks
+    - market-indexer_testing_united_datacamp-offers-from-msku-miner
+
+  # Check miner-lb-commit-time-lag
+  # https://juggler.yandex-team.ru/check_details/?host=mi-datacamp-united-testing&service=miner-lb-commit-time-lag&last=1DAY&mode=edit
+  - service: miner-lb-commit-time-lag
+    children:
+    - market-indexer_testing_united_datacamp-offers-to-miner
+    - market-indexer_testing_united_datacamp-offers-to-miner-regular
+    - market-indexer-testing-iris-msku-controllers-to-miner-commit-lag-time
+
+  # Check miner-lb-length
+  # https://juggler.yandex-team.ru/check_details/?host=mi-datacamp-united-testing&service=miner-lb-length&last=1DAY&mode=edit
+  - service: miner-lb-length
+    children:
+    - market-indexer_testing_united_datacamp-offers-to-miner
+    - market-indexer_testing_united_datacamp-offers-to-miner-regular
+
+  # Check miner-lb-read-time-lag
+  # https://juggler.yandex-team.ru/check_details/?host=mi-datacamp-united-testing&service=miner-lb-read-time-lag&last=1DAY&mode=edit
+  - service: miner-lb-read-time-lag
+    children:
+    - market-indexer_testing_united_datacamp-offers-to-miner
+    - market-indexer_testing_united_datacamp-offers-to-miner-regular
+
+  # Check mining-queue-length
+  # https://juggler.yandex-team.ru/check_details/?host=mi-datacamp-united-testing&service=mining-queue-length&last=1DAY&mode=edit
+  - service: mining-queue-length
+    children:
+    - market-indexer_testing_united_datacamp-offers-to-miner:miner-lb-length
+    - market-indexer_testing_united_datacamp-offers-to-miner-regular:miner-lb-length
+    - market-indexer_testing_united_datacamp-offers-from-miner:piper-lb-length
+
+
+  # Check parser-lb-commit-time-lag
+  # https://juggler.yandex-team.ru/check_details/?host=mi-datacamp-united-testing&service=parser-lb-commit-time-lag&last=1DAY&mode=edit
+  - service: parser-lb-commit-time-lag
+    children:
+    - market-indexer_testing_blue_datacamp-push-feeds-technical
+    - market-indexer_testing_blue_datacamp-check-tasks
+    - market-indexer_testing_white_datacamp-update-tasks
+    - market-indexer_testing_white_datacamp-push-feeds-technical
+    - datacamp-parser-market-update-tasks-test
+    - datacamp-parser-market-push-feeds-technical-test
+
+  # Check parser-lb-length
+  # https://juggler.yandex-team.ru/check_details/?host=mi-datacamp-united-testing&service=parser-lb-length&last=1DAY&mode=edit
+  - service: parser-lb-length
+    children:
+    - market-indexer_testing_blue_datacamp-push-feeds-technical
+    - market-indexer_testing_blue_datacamp-check-tasks
+    - market-indexer_testing_white_datacamp-update-tasks
+    - market-indexer_testing_white_datacamp-push-feeds-technical
+    - datacamp-parser-market-update-tasks-test
+    - datacamp-parser-market-push-feeds-technical-test
+
+  # Check parser-lb-read-time-lag
+  # https://juggler.yandex-team.ru/check_details/?host=mi-datacamp-united-testing&service=parser-lb-read-time-lag&last=1DAY&mode=edit
+  - service: parser-lb-read-time-lag
+    children:
+    - market-indexer_testing_blue_datacamp-push-feeds-technical
+    - market-indexer_testing_blue_datacamp-check-tasks
+    - market-indexer_testing_white_datacamp-update-tasks
+    - market-indexer_testing_white_datacamp-push-feeds-technical
+    - datacamp-parser-market-update-tasks-test
+    - datacamp-parser-market-push-feeds-technical-test
+
+  # Check parser-lb-total-messages
+  # https://juggler.yandex-team.ru/check_details/?host=mi-datacamp-united-testing&service=parser-lb-total-messages&last=1DAY&mode=edit
+  - service: parser-lb-total-messages
+    children:
+    - market-indexer_testing_blue_datacamp-push-feeds-technical
+    - market-indexer_testing_white_datacamp-push-feeds-technical
+
+  # Check to-picrobot-lb-read-time-lag
+  # https://juggler.yandex-team.ru/check_details/?host=mi-datacamp-united-testing&service=to-picrobot-lb-read-time-lag&last=1DAY&mode=edit
+  - service: to-picrobot-lb-read-time-lag
+    children:
+    - market-indexer_testing_united_datacamp_images-to-picrobot
+
+  # Check from-picrobot-lb-read-time-lag
+  # https://juggler.yandex-team.ru/check_details/?host=mi-datacamp-united-testing&service=from-picrobot-lb-read-time-lag&last=1DAY&mode=edit
+  - service: from-picrobot-lb-read-time-lag
+    children:
+      - market-indexer_testing_united_datacamp_images-from-picrobot
+
+  # Check from-picrobot-lb-read-read-count
+  - service: from-picrobot-lb-read-count
+    children:
+      - market-indexer_testing_united_datacamp_images-from-picrobot
+
+  # Check datacamp-picrobot-queues
+  # https://juggler.yandex-team.ru/raw_events/?query=host%3Ddatacamp_picrobot_testing*%26service%3Ddatacamp-picrobot-queues%26tag%3Ddatacamp-picrobot
+  - service: datacamp-picrobot-queues
+    children:
+      - datacamp_picrobot_testing_processor_queue
+      - datacamp_picrobot_testing_copier_queue
+      - datacamp_picrobot_testing_copier_goods_pic_queue
+      - datacamp_picrobot_testing_copier_yabs_performance_queue
+      - datacamp_picrobot_testing_output_store_row_queue
+      - datacamp_picrobot_testing_output_queue
+      - datacamp_picrobot_testing_resharder_queue
+
+  # Check datacamp-picrobot SB task
+  # https://juggler.yandex-team.ru/raw_events/?project=&query=service%3Ddatacamp-picrobot-sandbox%26host%3Dsb-test*
+  - service: datacamp-picrobot-sandbox
+    children:
+      - sb-test-backup
+      - sb-test-delete
+      - sb-test-retry
+    ttl: 90000
+    refresh_time: 3600
+
+  - service: check_sender_to_miner_state
+    children:
+      - datacamp-testing:check_sender_to_miner_state
+    ttl: 3600
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      nodata_desc: 'Не пришел статус мониторинга из sandbox таски: https://sandbox.yandex-team.ru/scheduler/705126/view'
+
+  - service: check_force_count_miner_state
+    children:
+      - datacamp-testing:check_force_count_miner_state
+    ttl: 3600
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      nodata_desc: 'Не пришел статус мониторинга из sandbox таски: https://sandbox.yandex-team.ru/scheduler/704984/view'
+
+  - service: check_copy_task_state
+    children:
+      - datacamp-testing:check_copy_task_state
+    ttl: 3600
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      nodata_desc: 'Не пришел статус мониторинга из sandbox таски: https://sandbox.yandex-team.ru/scheduler/704984/view'
+
+  - service: check_sender_to_miner_state_direct
+    children:
+      - datacamp-testing:check_sender_to_miner_state_direct
+    ttl: 3600
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      nodata_desc: 'Не пришел статус мониторинга из sandbox таски: https://sandbox.yandex-team.ru/scheduler/705126/view'
+
+  - service: check_sender_to_miner_state_foodtech
+    children:
+      - datacamp-testing:check_sender_to_miner_state_foodtech
+    ttl: 3600
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      nodata_desc: 'Не пришел статус мониторинга из sandbox таски: https://sandbox.yandex-team.ru/scheduler/705126/view'
+
+  - service: check_sender_to_miner_state_market
+    children:
+      - datacamp-testing:check_sender_to_miner_state_market
+    ttl: 3600
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      nodata_desc: 'Не пришел статус мониторинга из sandbox таски: https://sandbox.yandex-team.ru/scheduler/705126/view'
+
+  - service: check_united_1p_available_offers
+    children:
+      - datacamp-testing:check_united_1p_available_offers
+    ttl: 3600
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      nodata_desc: 'Не пришел статус мониторинга из sandbox таски: https://sandbox.yandex-team.ru/scheduler/705126/view'
+
+  - service: check_failed_async_jobs
+    <<: *active-routines-check-testing
+    active_kwargs:
+      <<: *active-routines-check-kwargs-testing
+      path: monitoring?check=check_failed_async_jobs
+
+  - service: check_system_feed_service_price_freshness
+    meta:
+      urls:
+        - title: Оффер
+          url: http://datacamp.white.tst.vs.market.yandex.net/v1/partners/10454595/offers?shop_id=10454584&offer_id=519&offer_id=520&offer_id=521&offer_id=522&format=json&full=da
+        - title: Фидархив
+          url: http://idxapi.tst.vs.market.yandex.net:29334/v1/feed_archives/get?shop_id=10454584
+        - title: Задания на парсинг
+          url: https://yql.yandex-team.ru/Operations/YsbOfclwve6OpNIR-nvWoP95xml0MkBkCHh5HAzz9cs=
+    <<: *active-routines-check-testing
+    active_kwargs:
+      <<: *active-routines-check-kwargs-testing
+      path: monitoring?check=check_system_feed_service_price_freshness
+
+  - service: check_system_api_offer_service_price_freshness
+    check_tags:
+      - market_datacamp_check_controllers_release_testing
+    meta:
+      urls:
+        - title: Оффер
+          url: http://datacamp.white.tst.vs.market.yandex.net/v1/partners/10454595/offers?shop_id=10454584&offer_id=123456&format=json&full=da
+        - title: Логфеллер
+          url: https://yql.yandex-team.ru/Operations/YsbPEbq3kx0R-7Lb_l3xBwu5Y2E_lu9ZdVrIzDtkH64=
+    <<: *active-routines-check-testing
+    active_kwargs:
+      <<: *active-routines-check-kwargs-testing
+      path: monitoring?check=check_system_api_offer_service_price_freshness
+
+  - service: check_system_http_offer_service_price_freshness
+    check_tags:
+      - market_datacamp_check_controllers_release_testing
+    meta:
+      urls:
+        - title: Оффер
+          url: http://datacamp.white.tst.vs.market.yandex.net/v1/partners/10454595/offers?shop_id=10454584&offer_id=12345678&format=json&full=da
+        - title: Логфеллер
+          url: https://yql.yandex-team.ru/Operations/YsbQCNJwbCKncODHsgUIinBWbU1P470CXmAA9Tc4bsE=
+    <<: *active-routines-check-testing
+    active_kwargs:
+      <<: *active-routines-check-kwargs-testing
+      path: monitoring?check=check_system_http_offer_service_price_freshness
+
+  - service: check_system_no_service_price_for_inclusive
+    meta:
+      urls:
+        - title: Оффер
+          url: http://datacamp.white.tst.vs.market.yandex.net/v1/partners/10454595/offers?shop_id=10454584&offer_id=monoffer1&format=json&full=da
+        - title: Фидархив
+          url: http://idxapi.tst.vs.market.yandex.net:29334/v1/feed_archives/get?shop_id=10454584
+        - title: Задания на парсинг
+          url: https://yql.yandex-team.ru/Operations/YsbOfclwve6OpNIR-nvWoP95xml0MkBkCHh5HAzz9cs=
+    <<: *active-routines-check-testing
+    active_kwargs:
+      <<: *active-routines-check-kwargs-testing
+      path: monitoring?check=check_system_no_service_price_for_inclusive
+
+  - service: check_system_disabled_api_united_offer_freshness
+    check_tags:
+      - market_datacamp_check_controllers_release_testing
+    meta:
+      urls:
+        - title: Оффер
+          url: http://datacamp.white.tst.vs.market.yandex.net/v1/partners/10454595/offers?shop_id=10454584&offer_id=123456789&format=json&full=da
+        - title: Логфеллер
+          url: https://yql.yandex-team.ru/Operations/YsbP1dJwbCKncOBpS4o_zCHAsfQibHch100v5faajog=
+    <<: *active-routines-check-testing
+    active_kwargs:
+      <<: *active-routines-check-kwargs-testing
+      path: monitoring?check=check_system_disabled_api_united_offer_freshness
+
+  - service: check_system_disabled_http_united_offer_freshness
+    check_tags:
+      - market_datacamp_check_controllers_release_testing
+    meta:
+      urls:
+        - title: Оффер
+          url: http://datacamp.white.tst.vs.market.yandex.net/v1/partners/10454595/offers?shop_id=10454584&offer_id=1234567&format=json&full=da
+        - title: Логфеллер
+          url: https://yql.yandex-team.ru/Operations/YsbPPbq3kx0R-7NBrijgSLrQyX7QdP5-sULha3S_okg=
+    <<: *active-routines-check-testing
+    active_kwargs:
+      <<: *active-routines-check-kwargs-testing
+      path: monitoring?check=check_system_disabled_http_united_offer_freshness
+
+  - service: check_blue_system_feed_freshness
+    meta:
+      urls:
+        - title: Оффер
+          url: http://datacamp.white.tst.vs.market.yandex.net/v1/partners/10522310/offers?shop_id=10336543&offer_id=push-monitor-11554382&format=json&full=da
+        - title: Фидархив
+          url: http://idxapi.tst.vs.market.yandex.net:29334/v1/feed_archives/get?shop_id=10336543
+        - title: Задания на парсинг
+          url: https://yql.yandex-team.ru/Operations/YsWova5OD708hZwwNaxenGfoXhnc2cr_Affo847GDkQ=
+        - title: Траблшутинг
+          url: https://docs.yandex-team.ru/market-datacamp/support/monitorings#check_blue_system_feed_freshness
+    <<: *active-routines-check-testing
+    active_kwargs:
+      <<: *active-routines-check-kwargs-testing
+      path: monitoring?check=check_blue_system_feed_freshness
+
+  - service: check_blue_system_api_offer_freshness
+    check_tags:
+      - market_datacamp_check_controllers_release_testing
+    meta:
+      urls:
+        - title: Оффер
+          url: http://datacamp.white.tst.vs.market.yandex.net/v1/partners/10522310/offers?shop_id=10336543&offer_id=push-monitor-check-api-price&format=json&full=da
+        - title: Логфеллер
+          url: https://yql.yandex-team.ru/Operations/YsWZdbq3kx0R-ShDhh6i3hmQd4PSLbHg7yMlCNtqL9Y=
+    <<: *active-routines-check-testing
+    active_kwargs:
+      <<: *active-routines-check-kwargs-testing
+      path: monitoring?check=check_blue_system_api_offer_freshness
+
+  - service: check_blue_system_http_offer_freshness
+    check_tags:
+      - market_datacamp_check_controllers_release_testing
+    meta:
+      urls:
+        - title: Оффер
+          url: http://datacamp.white.tst.vs.market.yandex.net/v1/partners/10522310/offers?shop_id=10336543&offer_id=push-monitor-check-http-price&format=json&full=da
+        - title: Логфеллер
+          url: https://yql.yandex-team.ru/Operations/YsWmO65OD708hZoC07dCLhU7iIx24J8hp2sW0erkW-w=
+    <<: *active-routines-check-testing
+    active_kwargs:
+      <<: *active-routines-check-kwargs-testing
+      path: monitoring?check=check_blue_system_http_offer_freshness
+
+  - service: check_blue_system_mining_freshness
+    <<: *active-routines-check-testing
+    active_kwargs:
+      <<: *active-routines-check-kwargs-testing
+      path: monitoring?check=check_blue_system_mining_freshness
+
+  - service: check_united_out_tables_modification_time
+    children:
+      -
+        host: mi-datacamp-united-testing
+        service: check_united_out_tables_modification_time_hahn
+        type: HOST
+      -
+        host: mi-datacamp-united-testing
+        service: check_united_out_tables_modification_time_arnold
+        type: HOST
+
+  - service: check_united_out_tables_modification_time_hahn
+    <<: *active-routines-check-testing
+    active_kwargs:
+      <<: *active-routines-check-kwargs-testing
+      path: monitoring?check=check_united_out_tables_modification_time&yt_proxy=hahn
+    tags:
+      - market_indexer_datacamp
+      - market_testing
+      - testing
+      - market
+      - _market_
+      - a_geo_sas
+
+  - service: check_united_out_tables_modification_time_arnold
+    <<: *active-routines-check-testing
+    active_kwargs:
+      <<: *active-routines-check-kwargs-testing
+      path: monitoring?check=check_united_out_tables_modification_time&yt_proxy=arnold
+    tags:
+      - market_indexer_datacamp
+      - market_testing
+      - testing
+      - market
+      - _market_
+      - a_geo_vla
+
+  - service: check_tablet_count
+    children:
+      -
+        host: mi-datacamp-united-testing
+        service: check_tablet_count_hahn
+        type: HOST
+      -
+        host: mi-datacamp-united-testing
+        service: check_tablet_count_arnold
+        type: HOST
+
+  - service: check_tablet_count_hahn
+    <<: *active-routines-check-testing
+    active_kwargs:
+      <<: *active-routines-check-kwargs-testing
+      path: monitoring?check=check_tablet_count&replica_proxies=hahn,seneca-sas
+    tags:
+      - market_indexer_datacamp
+      - market_testing
+      - testing
+      - market
+      - _market_
+      - a_geo_sas
+
+  - service: check_tablet_count_arnold
+    <<: *active-routines-check-testing
+    active_kwargs:
+      <<: *active-routines-check-kwargs-testing
+      path: monitoring?check=check_tablet_count&replica_proxies=arnold,seneca-vla
+    tags:
+      - market_indexer_datacamp
+      - market_testing
+      - testing
+      - market
+      - _market_
+      - a_geo_vla
+
+  - service: dispatcher-qyt-row-lag
+    check_tags:
+      - market_datacamp_check_controllers_release_testing
+    children:
+    - market-indexer_testing_qyt_dispatcher_queue
+
+  - service: offers-not-mined-in-time
+    children:
+    - blue_in_united-not-mined-in-time-testing
+    - white-not-mined-in-time-testing
+
+  - service: out-table-age
+    children:
+    - blue_out-table-age-testing
+    - eda_out-table-age-testing
+    - lavka_out-table-age-testing
+    - turbo_out-table-age-testing
+    - white_out-table-age-testing
+
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    check_options: {}
+    host: mi-datacamp-united-testing
+    namespace: market.datacamp
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_indexer_datacamp
+    - market_testing
+    - testing
+    - market
+    - _market_
+    ttl: 900

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <fulfillment_service
+        ID="100"
+        NAME="test"
+        STATUS="1"
+        TYPE="1"
+    />
+    <supplier
+        ID = "1"
+        NAME="supplier1"
+    />
+    <shop_request
+        ID="1"
+        SUPPLIER_ID="1"
+        SERVICE_ID="100"
+        STATUS="230"
+        TYPE="21"
+        CREATED_AT="1999-9-9 9:9:9"
+        REQUESTED_DATE="2017-03-01 9:9:9"
+        ITEMS_TOTAL_COUNT="5"
+    />
+
+    <queue_tasks
+        queue_name="PUBLISH_CALENDAR_SHOP_REQUEST_CHANGE"
+        task='{"externalId":1,"oldMeta":{"ffwfId":1,"status":"ACCEPTED_BY_SERVICE"},"newMeta":{"ffwfId":1,"status":"ARRIVED_TO_XDOC_SERVICE"},"updatedTime":"2018-01-01T10:10:10","topic":"CALENDARING_META_INFO_CHANGE_EVENTS","source":"FFWF-test"}'
+        attempt="0"
+    />
+
+    <queue_tasks
+        queue_name="PUBLISH_REQUEST_STATUS_CHANGE"
+        task='{"requestId":1,"requestType":21,"detailsLoaded":false,"preparedDetailsLoaded":false,"changedAt":"2018-01-01T10:10:10","oldStatus":3,"newStatus":230,"receivedChangeAt":"2018-01-01T10:10:10","topic":"REQUEST_STATUS_EVENTS"}'
+        attempt="0"
+    />
+    <queue_tasks
+        queue_name="CREATE_DOCUMENT_TICKET"
+        task='{"requestId":1}'
+        attempt="0"
+    />
+</dataset>

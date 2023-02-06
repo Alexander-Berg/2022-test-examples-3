@@ -1,0 +1,45 @@
+logging:
+  level: DEBUG
+grpc:
+  address: 0.0.0.0:9002
+metrics:
+  addr: "[::]:9948"
+app:
+  s3storagesecret: sec-01d956rm0wknnrbhhjsyx0rh56
+  s3storageaccesskeykey: robot-sputnik-s3-mds-key
+  s3storagesecretkey: robot-sputnik-s3-mds-secret
+  dumpperiod: 15m
+  logbrokerconsumer:
+    clusters:
+      - sas
+      - vla
+      - iva
+      - vlx
+    oauthtokensecret: sec-01d956rm0wknnrbhhjsyx0rh56
+    oauthtokenkey: robot-sputnik-logbroker-token
+    topicprefix: /sputnik/testing/backend/
+    searchytlockprefix: //home/travel/testing/buses/backend/locks/consumers/api-search-consumer-testing
+    segmentsytlockprefix: //home/travel/testing/buses/backend/locks/consumers/api-segments-consumer-testing
+    ytlockpoolsize: 3
+  connector:
+    apiurl: http://testing.api.internal.bus.yandex.net
+  storage:
+    s3storageendpoint: http://s3.mds.yandex.net
+    s3storagebucket: travel.buses.testing
+  blacklist:
+    bunkernode: testing
+  billing:
+    dictpath: /app/api/billing-dict.yaml
+  worker:
+    tvm:
+      self-id: 2023494  # backend-api (testing)
+      id: 2023498  # backend-worker (testing)
+  ytlockclient:
+    secret: sec-01d956rm0wknnrbhhjsyx0rh56
+    secretkey: sputnik-yt-token
+    lockpath: //home/travel/testing/buses/backend/locks/masters/api-master-testing
+  offerstorage:
+    endpoint: ydb-ru-prestable.yandex.net:2135
+    database: /ru-prestable/sputnik/testing/buses-offers
+  redir:
+    address: https://redir.travel-balancer-test.yandex.net

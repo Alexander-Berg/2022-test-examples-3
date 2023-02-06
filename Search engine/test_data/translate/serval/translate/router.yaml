@@ -1,0 +1,46 @@
+quota: default
+
+cgi:
+  srv: srv
+urls: urls
+headers:
+  ip_prefix: x-ip-prefix
+  translate_internal: x-translate-internal
+export:
+  - ip_prefix
+  - srv
+
+router:
+  - not-empty: translate_internal
+    router:
+      - empty: srv
+        quota: translate_internal_no_srv
+      - map: srv
+        data:
+          - key: catalogia
+            quota: translate_internal_srv_catalogia
+          - key: tanker
+            quota: translate_internal_srv_tanker
+    quota: translate_internal_default
+  - map: urls
+    data:
+      - key: /embedock
+        quota: django
+      - key: /mobile-extension/v1/extension.js
+        quota: django
+      - key: /mobile/feedback
+        quota: django
+      - key: /ocr/v1.0/recognize
+        quota: ocr
+      - key: /ocr/v1.1/recognize
+        quota: ocr
+      - key: /website-widget/v1/widget.js
+        quota: django
+      - key: /website-widget/v1/widget.html
+        quota: django
+  - regexp: urls
+    data:
+      - key: "/props/api/users/\\d+/collections/pre-sync"
+        quota: collections
+      - key: "/proxy_.*"
+        quota: downloader

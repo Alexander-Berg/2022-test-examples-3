@@ -1,0 +1,1 @@
+TRUNCATE TABLE shipment_order RESTART IDENTITY;

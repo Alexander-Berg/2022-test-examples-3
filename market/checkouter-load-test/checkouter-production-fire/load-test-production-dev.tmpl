@@ -1,0 +1,100 @@
+core: {aggregator_max_wait: 3600}
+phantom: { enabled: false, address: '{{checkouterBase}}' }
+uploader:
+    enabled: true
+    api_address: 'https://lunapark.yandex-team.ru/'
+    task: 'MARKETAPI-7422'
+    job_name: 'debug tank fire'
+    operator: 'dimkarp93'
+    meta: { use_tank: '{{tank}}' }
+    lock_targets: ['{{tank}}/checkout/prod/fire']
+shellexec:
+  catch_out: true
+  enabled: true
+  package: yandextank.plugins.ShellExec
+  prepare: >
+    find /var/lib/tankapi/tests/ -mindepth 1 -maxdepth 1 -cmin +240
+    -not -path "/var/lib/tankapi/tests/stpd-cache"
+    -not -path "/var/lib/tankapi/tests/lunapark"
+    -prune -exec rm -rf {} +
+    && find /var/lib/tankapi/tests/stpd-cache -mindepth 1 -cmin +240 -prune -exec rm -rf {} +
+    && find /tmp/*downloaded_resource  -maxdepth 1 -cmin +240 -prune -exec rm -rf {} +
+    || true
+pandora:
+    resources:
+     -  src: https://proxy.sandbox.yandex-team.ru/{{pandoraCmd}}/market/capi/checkouter-load-test/checkouter-production-fire/cb_categories.json
+        dst: cb_categories.json
+     -  src: https://proxy.sandbox.yandex-team.ru/{{pandoraCmd}}/market/capi/checkouter-load-test/checkouter-production-fire/noncb_categories.json
+        dst: noncb_categories.json
+    enabled: true
+    pandora_cmd: https://proxy.sandbox.yandex-team.ru/{{pandoraCmd}}/market/capi/checkouter-load-test/checkouter-production-fire/app/app
+    config_content:
+        pools:
+            -   id: Main
+                gun:
+                    maxWeight: 100
+                    type: main_gun
+                    shopId: 431782
+                    cartToReportDegradation: false
+                    checkouterBaseURL: "{{checkouterBaseURL}}"
+                    deliveryType: {{deliveryType}}
+                    deliveryServices:
+                        fulfillment: "all"
+                        fulfillmentCashback: "all"
+                        dropship: "all" #todo set correct for testing
+                        dropshipCashback: "all" #todo set correct for testing
+                    warehouseIDs:
+                        fulfillment: [172]
+                        fulfillmentCashback: [172]
+                        dropship: [] #todo now set ignore
+                        dropshipCashback: [] #todo now set ignore
+#                    warehouseIds: [172, 147]
+                    supplierTypes: ["1", "3"]
+                    environment: {{environment}}
+                    shipmentDay: {{shipmentDay}}
+                    regionId: 213
+                    addresses: {{addresses}}
+                    distribution: {{distribution}}
+                    tvmSecret:
+                        type: FILE
+                        file: "/etc/datasources/checkout_order_autofire.properties"
+                        property: "tvm_secret"
+                    yqlToken:
+                        type: FILE
+                        file: "/etc/datasources/checkout_order_autofire.properties"
+                        property: "yql_token"
+                    handlesCommonDelayMs: {{handlesCommonDelayMs}}
+                    handles: {{handles}}
+                    cartsDistribution: {{cartsDistribution}}
+                    offersDistribution: {{offersDistribution}}
+                    totalOrders: {{totalOrders}}
+                    forceUnfreeze: {{forceUnfreeze}}
+                    stockStorageLimit: 100
+                    onlyInitStocks: false
+                    rps: {{rps}}
+                    rpsLimiterRate: 3
+                    stocksRequiredRate: {{stocksRequiredRate}}
+                    initCashbackStocks: true
+                    percentOfCashbackOrders: {{percentOfCashbackOrders}}
+                    percentOfDropshipOrders: 0
+                    shootingDelay: {{delayInMinutes}}m
+                ammo:
+                    cartsDistribution: {{cartsDistribution}}
+                    offersDistribution: {{offersDistribution}}
+                    type: main_provider
+                    percentOfCashbackOrders: {{percentOfCashbackOrders}}
+                    percentOfDropshipOrders: 0
+                result:
+                    type: phout
+                    id: true
+                    destination: ./phout.log
+                rps:
+                    - { type: const, duration: {{duration}}s, ops: {{rps}} }
+                startup:
+                    - { type: once, times: {{instances}} }
+        log:
+            level: info
+        monitoring:
+            expvar:
+                enabled: true
+                port: 1234

@@ -1,0 +1,42 @@
+status:
+  enabled: true
+  host: localhost
+  port: 16301
+
+monitoring:
+  port: 3476
+
+storages:
+  - name: main # если будут проблемы с записью в LB, накапливаем тут
+    plugin: fs
+    config:
+      directory: ./logs/unified-agent-storage
+      max_partition_size: 2048mb
+
+routes:
+  - input:
+      plugin: grpc
+      config:
+        uri: localhost:20014
+    channel:
+      pipe:
+        - storage_ref:
+            name: main
+        - filter:
+            plugin: assign
+            config:
+              session:
+                - server: "{$host_name}" # чтобы  logfeller мог понять, откуда пришел лог
+      output:
+        plugin: logbroker
+        config:
+          endpoint: logbroker.yandex.net
+          topic: marketir/test/ultracontroller/logging/uc-log
+          tvm:
+            client_id: 2017133
+            destination_id: 2001059
+            secret:
+              file: properties.testing.20_ultra-controller-secret/ultracontroller.tvm.client-secret
+            disk_cache_directory: ./pstate/unified-agent/tvm-cache
+          export_session_meta_keys:
+            - server

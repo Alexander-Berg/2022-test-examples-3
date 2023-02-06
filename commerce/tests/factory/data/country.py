@@ -1,0 +1,22 @@
+COUNTRIES = {
+    'Belarus': 149,
+    'United Kingdom': 102,
+    'China': 134,
+    'Cyprus': 20574,
+    'Greece': 246,
+    'United Arab Emirates': 210,
+    'France': 124,
+    'Germany': 96,
+    'Israel': 181,
+    'Italy': 205,
+    'Switzerland': 126,
+    'Kazakhstan': 159,
+    'Kyrgyzstan': 207,
+    'Latvia': 206,
+    'Russia': 225,
+    'Serbia': 180,
+    'Singapore': 10105,
+    'Spain': 204,
+    'Turkey': 983,
+    'Uzbekistan': 171
+}

@@ -1,0 +1,64 @@
+warehouse-timezone: Europe/Moscow
+spring:
+  datasource:
+    url: &jdbc-url jdbc:h2:mem:WMS;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS CONSTRAINTS\;SET SCHEMA CONSTRAINTS
+    jdbc-url: *jdbc-url
+    username: constraints
+    separator: ^^^ END OF SCRIPT ^^^
+  main:
+    allow-bean-definition-overriding: true
+  config:
+    import:
+      - application-fragment-mq-test.yml
+      - application-fragment-common-test.yml
+  liquibase:
+    enabled: true
+wms:
+  constraints:
+    tvm:
+      serviceId: 0
+      secret:
+      api-methods: /*
+      log-only-mode: false
+      check-user-ticket: false
+      cache:
+        dir:
+  core:
+    tvm:
+      serviceId: 0
+  dimension-management:
+    tvm:
+      serviceId: 0
+
+core:
+  api:
+    host: localhost
+
+dimension-management:
+  api:
+    host: localhost
+
+check:
+  authentication: 'no'
+
+s3.use: false
+
+constraints:
+  job:
+    find-expired-constraints-issues:
+      name: findExpiredConstraintsIssuesJob
+      cron: 0 0 0 * * ?        # 00:00 am every day
+      issue-sla-timeout: 1
+    notify-problem-cargotypes:
+      name: notifyProblemCargoTypesJob
+      delay-in-millis: 300000
+  job-monitoring:
+    config-by-job-name:
+      job1:
+        runs-to-consider: 3
+        warn-failed-runs: 1
+        max-failed-runs: 3
+      job2:
+        runs-to-consider: 3
+        warn-failed-runs: 1
+        max-failed-runs: 3

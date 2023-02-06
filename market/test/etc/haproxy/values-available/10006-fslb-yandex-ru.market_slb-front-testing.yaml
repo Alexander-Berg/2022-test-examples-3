@@ -1,0 +1,26 @@
+params:
+  default:
+    resolve: true
+    templates:
+    - user_mslb_triple_waterfall.tpl
+
+values:
+  default:
+    be_defaults:
+      check: check observe layer7
+      ssl: ssl verify none
+      on_error: fastinter
+    globals:
+      service_name: fslb.yandex.ru
+      service_port: 10006
+      ping_expect: rstring pong
+      timeout_server: 35s
+    meta:
+      monrun_ignore: true
+
+servers:
+  default:
+    be1:
+    - name: N@production_market_front_blue_desktop_content_preview_iva@local
+    be3:
+    - name: N@production_market_front_blue_desktop_content_preview_iva

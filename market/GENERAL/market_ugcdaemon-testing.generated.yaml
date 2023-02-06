@@ -1,0 +1,48 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый market_ugcdaemon-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_ugcdaemon-testing
+
+juggler:
+  checks:
+  - {}
+  default:
+    active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /ping
+      regexp: pong
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options: {}
+    children:
+    - NANNY%testing_ugc_daemon_vla:ping:all
+    - NANNY%testing_ugc_daemon_sas:ping:all
+    host: market_ugcdaemon-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    service: ping
+    tags:
+    - market_test
+    - market_pers
+    - market_rtc
+    - ugcdaemon
+    - market
+    - _market_
+    ttl: 900

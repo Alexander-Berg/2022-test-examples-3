@@ -1,0 +1,28 @@
+- gather_facts: false
+  hosts: localhost
+  roles:
+  - checks:
+    - rasp_run_smoke_tests.api_public.stable
+    - rasp_run_smoke_tests.blablacar.stable
+    - rasp_run_smoke_tests.export.stable
+    - rasp_run_smoke_tests.infocenter.stable
+    - rasp_run_smoke_tests.morda_backend.stable
+    - rasp_run_smoke_tests.morda_front.stable
+    - rasp_run_smoke_tests.pathfinder_core.stable
+    - rasp_run_smoke_tests.suburban_selling.stable
+    - rasp_run_smoke_tests.suburban_widget.stable
+    limits: '{{ crit_0_warn_0 }}'
+    flap: '{{ stable0critical0 }}'
+    role: chat_only
+    nodata_mode: force_ok
+    rtime: 60
+    ttl: 4800
+  vars:
+    children:
+      - rasp_sandbox_testing
+    host: rasp_sandbox_testing
+    telegram_chats:
+      - 'rasp-achtung'
+  vars_files:
+  - ../vars/common.yml
+  - vars/rasp.yml

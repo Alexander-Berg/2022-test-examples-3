@@ -1,0 +1,46 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_content_api_testing
+
+juggler:
+  checks:
+
+    # Check ping
+    # https://juggler.yandex-team.ru/check_details/?host=market_content_api_testing&service=ping&last=1DAY&mode=edit
+    - active: http
+      active_kwargs:
+        ok_codes:
+          - 200
+        path: /ping
+        regexp: ^0;
+      aggregator_kwargs:
+        limits:
+          - crit: 50%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: '0'
+          - crit: 75%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: '0'
+        nodata_mode: force_crit
+      children:
+        - NANNY%testing_market_content_api_sas:ping:all
+        - NANNY%testing_market_content_api_vla:ping:all
+      service: ping
+
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    check_options: { }
+    host: market_content_api_testing
+    namespace: market.common
+    notifications: [ ]
+    refresh_time: 60
+    tags:
+      - market_content_api_testing
+      - market_api
+      - mstat-api
+      - capi-notify-telegram
+    ttl: 900

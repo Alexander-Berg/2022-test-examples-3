@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+<xscript>
+	<logger-factory>
+		<logger>
+			<id>default</id>
+			<type>syslog</type>
+			<level>warn</level>
+			<ident>xscript</ident>
+		</logger>
+	</logger-factory>
+
+        <endpoint>
+                <backlog>128</backlog>
+                <socket></socket>
+                <port>8666</port>
+        </endpoint>
+
+	<alternate-port>7080</alternate-port>
+	<noxslt-port>7079</noxslt-port>
+
+	<script-cache>
+		<buckets>8</buckets>
+		<bucket-size>32</bucket-size>
+	</script-cache>
+
+	<stylesheet-cache>
+		<buckets>8</buckets>
+		<bucket-size>32</bucket-size>
+	</stylesheet-cache>
+
+	<pidfile>/var/run/xscript/xscript.pid</pidfile>
+	<pool-workers>50</pool-workers>
+	<fastcgi-workers>50</fastcgi-workers>
+
+	<modules>
+		<module id="thread-pool">
+			<path>/usr/lib/xscript/xscript-thrpool.so</path>
+		</module>
+
+		<module id="xml-factory">
+			<path>/usr/lib/xscript/xscript-xmlcache.so</path>
+		</module>
+
+		<module id="http-block">
+			<path>/usr/lib/xscript/xscript-http.so</path>
+		</module>
+
+		<module id="mist-block">
+			<path>/usr/lib/xscript/xscript-mist.so</path>
+		</module>
+
+		<module id="file-block">
+			<path>/usr/lib/xscript/xscript-file.so</path>
+		</module>
+
+		<module id="lua-block">
+			<path>/usr/lib/xscript/xscript-lua.so</path>
+		</module>
+
+		<module id="xslt">
+			<path>/usr/lib/xscript/xscript-xslt.so</path>
+		</module>
+
+		<module id="tagged-cache-memory">
+			<path>/usr/lib/xscript/xscript-memcache.so</path>
+		</module>
+
+		<module id="local">
+			<path>/usr/lib/xscript/xscript-local.so</path>
+		</module>
+
+                <module id="json">
+                        <path>/usr/lib/xscript/xscript-json.so</path>
+                </module>
+
+                <module id="uatraits">
+                        <path>/usr/lib/xscript/xscript-uatraits.so</path>
+                </module>
+	</modules>
+
+	<tagged-cache-memory>
+		<pools>16</pools>
+		<pool-size>16</pool-size>
+	</tagged-cache-memory>
+</xscript>

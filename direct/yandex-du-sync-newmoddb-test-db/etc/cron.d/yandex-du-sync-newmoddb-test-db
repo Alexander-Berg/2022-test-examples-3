@@ -1,0 +1,1 @@
+10 1 * * 6 root DATE=$(rsync -R --list-only rsync://ppcbackup03h.yandex.ru:/mysqlbackup/newmoddb/*/*.pos | grep -v tmp | perl -lne '/(\d+)_\d+/ && push @t, $1; END { print ((sort @t)[-1]) }') && /usr/local/bin/sync-db.pl --copy-db --start-db --date=$DATE --conf /etc/sync-db/directmod.conf

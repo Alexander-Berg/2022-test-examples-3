@@ -1,0 +1,22 @@
+cgi:
+  s_service: service
+headers:
+  h_host: host
+tvm-service:
+  tag_service: 2019892
+export:
+  - tag_service
+
+router:
+  - regexp: h_host
+    data:
+      - key: "prestable-market-idx[.]saas[.]yandex[.]net(:[0-9]+)?"
+        quota: market-idx-p
+      - key: "stable[.]saas[.]yandex[.]net(:[0-9]+)?"
+        quota: stable
+  - map: s_service
+    data:
+      - key: "market_saashub"
+        quota: prestable-market-idx
+
+quota: default

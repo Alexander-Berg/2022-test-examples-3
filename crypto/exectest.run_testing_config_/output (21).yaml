@@ -1,0 +1,214 @@
+logbroker:
+  pqlib:
+    worker_threads: 2
+
+  consumer:
+    server: "logbroker.yandex.net"
+    port: 2135
+    topics:
+      - "crypta@test@cm--change-log"
+    client_id: "crypta/test/cm/consumer"
+    max_memory_usage: 16777216
+    max_infly_requests: 3
+    max_size: 102400
+    use_lock_session: false
+    read_mirrored_partitions: true
+    max_uncommitted_size: 67108864
+
+  credentials:
+    use_secure_tvm: True
+    tvm:
+      client_tvm_id: 2019603
+
+  pqlib_log_name: pqlib
+
+  evacuate_log_producer:
+    server: logbroker.yandex.net
+    port: 2135
+    topic: crypta@test@evacuation--rt-log
+    source_id_prefix: localhost
+    log_name: pqlib
+    drop_log_name: evacuate_dropped
+    max_bytes_in_flight: 536870912
+
+tracked_back_ref_tags:
+  - aceexdspis
+  - adneticis
+  - adriveris
+  - adsniperis
+  - adtargetis
+  - admixeris
+  - adspendis
+  - azerionis
+  - betweendigitalis
+  - bexdspis
+  - buzzooladspis
+  - criteois
+  - eskimiis
+  - getintentis
+  - goldfishis
+  - justnowis
+  - kadamis
+  - maximadspis
+  - mtsdspis
+  - mytargetdspis
+  - otmrtbis
+  - qbitis
+  - ramblerssp
+  - reklamstoredspis
+  - rtbhouseis
+  - rutargetis
+  - sapeis
+  - smartyadsis
+  - targetixis
+  - targetrtbis
+  - unityis
+  - upravelis
+  - viniais
+  - vxadsis
+  - vyaddis
+  - yamarketis
+  - yeahmobiis
+
+ttl:
+  default_ttl: 864000
+  extended_ttl: 2592000
+  touch_timeout_sec: 86400
+  extend_ttl_timeout_sec: 86400
+  custom_tag_ttls:
+    google: 1209600
+    GoogleSspUid: 5184000
+    ping: 315360000
+
+reader:
+  read_timeout_ms: 1000
+
+parser:
+  threads: 6
+
+processor:
+  count: 256
+  threads: 6
+  max_batching_time_ms: 1000
+  commit_retry_options:
+    initial_sleep_ms: 1000
+    random_delta_ms: 100
+    sleep_increment_ms: 100
+    exponental_multiplier_ms: 0
+
+  max_commands_per_transaction: 1000
+
+  deduplication_cache:
+    size: 2500000
+    max_age_sec: 600
+
+graphite:
+  host: localhost
+  port: 42000
+  root: cm_mutator
+
+solomon:
+  project: crypta_cm
+  service: mutator
+  cluster: testing
+  labels:
+    dc: man
+
+yt:
+  table:
+    cluster_url: "http://markov.yt.yandex.net"
+    proxy_role: "crypta-cm"
+    table_path: "//home/crypta/testing/cookie_matching/rt/db/master"
+
+  logger:
+    file_name: "/logs/yt-api"
+
+logs:
+  main:
+    level: "info"
+    targets:
+      - type: "stdout"
+      - type: "rotating"
+        file: "/logs/main.log"
+        max_file_size: 419430400
+        max_files: 1
+
+  parser:
+    level: warning
+    targets:
+      - type: "rotating"
+        file: "/logs/parser.log"
+        max_file_size: 419430400
+        max_files: 1
+  processor:
+    level: warning
+    targets:
+      - type: "rotating"
+        file: "/logs/processor.log"
+        max_file_size: 419430400
+        max_files: 1
+  yt:
+    level: warning
+    targets:
+      - type: "rotating"
+        file: "/logs/yt.log"
+        max_file_size: 419430400
+        max_files: 1
+  upload:
+    level: warning
+    targets:
+      - type: "rotating"
+        file: "/logs/upload.log"
+        max_file_size: 419430400
+        max_files: 1
+  delete:
+    level: warning
+    targets:
+      - type: "rotating"
+        file: "/logs/delete.log"
+        max_file_size: 419430400
+        max_files: 1
+  expire:
+    level: warning
+    targets:
+      - type: "rotating"
+        file: "/logs/expire.log"
+        max_file_size: 419430400
+        max_files: 1
+  touch:
+    level: warning
+    targets:
+      - type: "rotating"
+        file: "/logs/touch.log"
+        max_file_size: 419430400
+        max_files: 1
+  pqlib:
+    level: debug
+    targets:
+      - type: "rotating"
+        file: "/logs/pqlib.log"
+        max_file_size: 419430400
+        max_files: 1
+
+  evacuate_dropped:
+    level: info
+    format: "%v"
+    targets:
+    - type: rotating
+      file: "/logs/evacuate_dropped.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  graphite:
+    targets:
+    - type: rotating
+      file: "/logs/graphite.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  solomon:
+    targets:
+    - type: rotating
+      file: "/logs/solomon.log"
+      max_file_size: 419430400
+      max_files: 1

@@ -1,0 +1,28 @@
+{
+  "logHosts": "*",
+  "logPath": "{/var/log/yandex/robot-tms/cache-usage.log,/var/log/yandex/robot/cache-usage.log,**/robot-tms-cache-usage.log}",
+  "clickhouseTable": "market_robot_cache_usage_testing",
+  "parser": {
+    "dateFormat": "yyyy-MM-dd'T'HH:mm:ssZ",
+    "separator": "\t",
+    "tskvMatch": {},
+    "columns": {
+      "host": {
+        "type": "String"
+      },
+      "source": {
+        "type": "String"
+      },
+      "succeeded_count": {
+        "type": "UInt32"
+      },
+      "total": {
+        "type": "UInt32"
+      }
+    }
+  },
+
+  "sources": [
+    "logbroker://market-health-testing--other"
+  ]
+}

@@ -1,0 +1,117 @@
+---
+##################################################
+# Set up test bench.
+#
+## Parameters:
+#
+# component_name:
+#   mpfs | api
+# mpfs_version:
+#   Component's package version to be installed
+#
+## Usage:
+#
+# Пропустить выкатку стабильной версии на не
+# тестируемую компоненту:
+#
+#   $ ansible-playbook -vv set-up-testbench-load.yml --extra-vars "component_name=mpfs mpfs_version=2.554-1" --tags=prepare --skip-tags=check_package \
+# --extra-vars '{"tank_override": {"schedule": "line(1, 50, 1m)"}}'
+#
+# Testing:
+#   $ ansible-playbook -vvv set-up-testbench-load.yml --extra-vars "component_name=mpfs mpfs_version=2.569-1" --tags=prepare,notification \
+#     --skip-tags=check_package,deploy
+
+- hosts: 127.0.0.1
+  connection: local
+  gather_facts: no
+  tasks:
+
+    - name: Setting mpfs_load variables
+      set_fact:
+        component: "{{ mpfs_load }}"
+        mpfs: "{{ mpfs_load.mpfs|combine(mpfs_override|default({})) }}"
+        tank: "{{ mpfs_load.tank|combine(tank_override|default({})) }}"
+      tags:
+        - prepare
+
+    - include: tasks/check-for-testing.yml
+      tags:
+        - prepare
+
+    - include: tasks/deploy.yml
+      package_name: "{{ component.package_name }}"
+      version: "{{ mpfs_version }}"
+      deploy_groups: "{{ component.deploy_groups }}"
+      branch: "testing"
+      issue: "{{ release_issue.key }}"
+      when: release_issue is defined
+      tags:
+        - deploy
+
+    - name: Prepare MPFS test data
+      prepare_testdata:
+        host: "{{ mpfs.host }}:{{ mpfs.port }}"
+        uid: "{{ mpfs.uid }}"
+        image_path: "library/data/image.jpg"
+      register: testdata
+      tags:
+        - prepare
+
+    - name: Prepare urls
+      set_fact:
+        uris:
+          - "/json/user_info?uid={{ mpfs.uid }}"
+          - "/json/info?uid={{ mpfs.uid }}&path=/disk/load-test/load-test-99.jpg&meta=,"
+          - "/json/diff?uid={{ mpfs.uid }}&path=/disk/"
+          - "/json/list?uid={{ mpfs.uid }}&path=/disk/load-test/&meta=,"
+#          - "/json/public_list?amount=40&private_hash={{ testdata.info.public_hash }}"
+#          - "/json/public_info?private_hash={{ testdata.info.public_hash }}"
+      when: testdata is defined
+      tags:
+        - prepare
+
+    - name: Prepare ammos
+      template:
+        src: tank/load.yml.j2
+        dest: tank/load-{{ item|checksum }}.yml
+        mode: '0644'
+      with_items: "{{ uris }}"
+      when: release_issue is defined
+      tags:
+        - prepare
+
+    - name: Run test
+      command: tankapi-cmd {% for name in tank.names %} -t {{ name }}{% endfor %} -p 8083 -c ./tank/load-{{ item|checksum }}.yml
+      with_items: "{{ uris }}"
+      ignore_errors: yes
+      tags:
+        - tests
+      async: 3600
+      poll: 5
+      when:
+        - component_name == "mpfs"
+        - release_issue is defined
+
+    - name: Lunapark test result
+      lunapark:
+        issue: "{{ release_issue.key }}"
+        version: "{{ mpfs_version }}"
+      register: test_result
+      tags:
+        - prepare
+      when:
+        - release_issue is defined
+
+    - name: Send notification to release issue
+      startrek:
+        issue: "{{ release_issue.key }}"
+        update_tests_status:
+          version: "{{ mpfs_version }}"
+          name: load tests
+          passed: "{{ test_result.info.passed }}"
+          failed: "{{ test_result.info.failed }}"
+          report_url: "{{ test_result.info.url }}"
+      tags:
+        - notification
+      when:
+        - release_issue is defined

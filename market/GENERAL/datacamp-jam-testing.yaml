@@ -1,0 +1,103 @@
+juggler:
+  checks:
+    - service: datacamp-dispatcher-jam
+      children:
+      - market-indexer_testing_qyt_dispatcher_queue:dispatcher-qyt-row-lag
+
+    - service: datacamp-miner-jam
+      children:
+      - market-indexer_testing_united_datacamp-offers-to-miner:miner-lb-read-time-lag
+      - market-indexer_testing_united_datacamp-offers-to-miner:miner-lb-commit-time-lag
+      - market-indexer_testing_united_datacamp-offers-to-miner-regular:miner-lb-read-time-lag
+      - market-indexer_testing_united_datacamp-offers-to-miner-regular:miner-lb-commit-time-lag
+
+    - service: datacamp-parser-jam
+      children:
+      - market-indexer_testing_blue_datacamp-push-feeds-technical:parser-lb-read-time-lag
+      - market-indexer_testing_blue_datacamp-push-feeds-technical:parser-lb-commit-time-lag
+      - market-indexer_testing_blue_datacamp-check-tasks:parser-lb-read-time-lag
+      - market-indexer_testing_blue_datacamp-check-tasks:parser-lb-commit-time-lag
+      - market-indexer_testing_white_datacamp-update-tasks:parser-lb-read-time-lag
+      - market-indexer_testing_white_datacamp-update-tasks:parser-lb-commit-time-lag
+      - market-indexer_testing_white_datacamp-push-feeds-technical:parser-lb-read-time-lag
+      - market-indexer_testing_white_datacamp-push-feeds-technical:parser-lb-commit-time-lag
+      - datacamp-parser-market-update-tasks-test:parser-lb-read-time-lag
+      - datacamp-parser-market-update-tasks-test:parser-lb-commit-time-lag
+      - datacamp-parser-market-push-feeds-technical-test:parser-lb-read-time-lag
+      - datacamp-parser-market-push-feeds-technical-test:parser-lb-commit-time-lag
+
+    - service: datacamp-piper-jam
+      children:
+      - market-indexer_testing_united_blue_datacamp-messages:piper-lb-read-time-lag
+      - market-indexer_testing_united_blue_datacamp-messages:piper-lb-commit-time-lag
+      - market-indexer_testing_united_blue_stock-storage:piper-lb-read-time-lag
+      - market-indexer_testing_united_blue_stock-storage:piper-lb-commit-time-lag
+      - market-indexer_testing_united_blue_datacamp-qoffers:piper-lb-read-time-lag
+      - market-indexer_testing_united_blue_datacamp-qoffers:piper-lb-commit-time-lag
+      - market-indexer_testing_united_datacamp-qoffers:piper-lb-read-time-lag
+      - market-indexer_testing_united_datacamp-qoffers:piper-lb-commit-time-lag
+      - market-indexer_testing_united_datacamp-qoffers-direct:piper-lb-read-time-lag
+      - market-indexer_testing_united_datacamp-qoffers-direct:piper-lb-commit-time-lag
+      - market-indexer_testing_united_datacamp-qoffers-upload-update:piper-lb-read-time-lag
+      - market-indexer_testing_united_datacamp-qoffers-upload-update:piper-lb-commit-time-lag
+      - market-indexer_testing_united_datacamp-qoffers-vertical:piper-lb-read-time-lag
+      - market-indexer_testing_united_datacamp-qoffers-vertical:piper-lb-commit-time-lag
+      - market-indexer_testing_united_datacamp-offers-from-miner:piper-lb-read-time-lag
+      - market-indexer_testing_united_datacamp-offers-from-miner:piper-lb-commit-time-lag
+      - market-indexer_testing_united_datacamp-offers-from-routines:piper-lb-read-time-lag
+      - market-indexer_testing_united_datacamp-offers-from-routines:piper-lb-commit-time-lag
+      - market-indexer_testing_united_datacamp-offer-bids:piper-lb-read-time-lag
+      - market-indexer_testing_united_datacamp-offer-bids:piper-lb-commit-time-lag
+      - market-indexer_testing_united_datacamp-amore-data-blue:piper-lb-read-time-lag
+      - market-indexer_testing_united_datacamp-amore-data-blue:piper-lb-commit-time-lag
+      - market-indexer_testing_united_datacamp-supplier-promo-offer:piper-lb-read-time-lag
+      - market-indexer_testing_united_datacamp-supplier-promo-offer:piper-lb-commit-time-lag
+      - market_adv_promo_test_promo-offer:piper-lb-read-time-lag
+      - market_adv_promo_test_promo-offer:piper-lb-commit-time-lag
+      - market-indexer_testing_united_datacamp-mbo-offer-hidings-topic:piper-lb-read-time-lag
+      - market-indexer_testing_united_datacamp-mbo-offer-hidings-topic:piper-lb-commit-time-lag
+      - market-indexer_testing_united_datacamp-mdm-offers:piper-lb-read-time-lag
+      - market-indexer_testing_united_datacamp-mdm-offers:piper-lb-commit-time-lag
+      - mbi_test_assortment-market-quick:piper-lb-read-time-lag
+      - mbi_test_assortment-market-quick:piper-lb-commit-time-lag
+      - mbi_test_market-quick:piper-lb-read-time-lag
+      - mbi_test_market-quick:piper-lb-commit-time-lag
+      - mbi_test_market-quick-stocks:piper-lb-read-time-lag
+      - mbi_test_market-quick-stocks:piper-lb-commit-time-lag
+      - mbi_test_ff4shops-api-stocks:piper-lb-read-time-lag
+      - mbi_test_ff4shops-api-stocks:piper-lb-commit-time-lag
+      - market-indexer_testing_white_datacamp-offers-blog:piper-lb-read-time-lag
+      - market-indexer_testing_white_datacamp-offers-blog:piper-lb-commit-time-lag
+      - market-indexer_testing_white_datacamp-messages:piper-lb-read-time-lag
+      - market-indexer_testing_white_datacamp-messages:piper-lb-commit-time-lag
+      - market-indexer_testing_united_datacamp-anaplan-mbi-promo-updates:piper-lb-read-time-lag
+      - market-indexer_testing_united_datacamp-anaplan-mbi-promo-updates:piper-lb-commit-time-lag
+      - market-indexer_testing_united_datacamp-categories:piper-lb-read-time-lag
+      - market-indexer_testing_united_datacamp-categories:piper-lb-commit-time-lag
+      - market-indexer_testing_united_datacamp-offers-stocks:piper-lb-read-time-lag
+      - market-indexer_testing_united_datacamp-offers-stocks:piper-lb-commit-time-lag
+      - market-indexer_testing_united_datacamp-offers-from-msku-miner:piper-lb-read-time-lag
+      - market-indexer_testing_united_datacamp-offers-from-msku-miner:piper-lb-commit-time-lag
+
+    - service: datacamp-jam
+      children:
+      - datacamp-jam-testing:datacamp-dispatcher-jam
+      - datacamp-jam-testing:datacamp-miner-jam
+      - datacamp-jam-testing:datacamp-parser-jam
+      - datacamp-jam-testing:datacamp-piper-jam
+
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    check_options: {}
+    host: datacamp-jam-testing
+    namespace: market.datacamp
+    notifications: []
+    tags:
+      - market_indexer_datacamp_technical
+      - market_testing
+      - testing
+      - market
+      - _market_
+    ttl: 900

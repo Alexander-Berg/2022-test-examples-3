@@ -1,0 +1,176 @@
+{
+    "serviceId": 123,
+    "name": "service",
+    "initialState": "REGISTERED",
+    "states": [
+        {
+            "name": "REGISTERED",
+            "priorityFunction": null,
+            "final": null
+        },
+        {
+            "name": "ALLOCATED",
+            "priorityFunction": null,
+            "final": null
+        },
+        {
+            "name": "IN_QUEUE",
+            "priorityFunction": {
+                "type": "ARRIVAL_TIME",
+                "params": [
+                    {
+                        "type": "SKIP_N_CLIENTS",
+                        "value": "15"
+                    },
+                    {
+                        "type": "PRIORITY_STEP",
+                        "value": "10"
+                    }
+                ]
+            },
+            "final": null
+        },
+        {
+            "name": "FINISHED",
+            "priorityFunction": {
+                "type": "DEFAULT",
+                "params": []
+            },
+            "final": null
+        }
+    ],
+    "edges": [
+        {
+            "fromState": "REGISTERED",
+            "toState": "ALLOCATED",
+            "restrictions": [
+                {
+                    "type": "DISJUNCTION",
+                    "params": [
+                        {
+                            "type": "RESTRICTION_TYPES",
+                            "value": "EVENT_REQUIRED,QUEUE_IS_EMPTY"
+                        },
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "SOME_EVENT_2"
+                        }
+                    ]
+                },
+                {
+                    "type": "EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "SOME_EVENT"
+                        }
+                    ]
+                }
+            ],
+            "actions": [
+                {
+                    "type": "SEND_NOTIFICATION",
+                    "params": [
+                        {
+                            "type": "URL",
+                            "value": "http://123.com"
+                        }
+                    ]
+                }
+            ],
+            "priority": 1
+        },
+        {
+            "fromState": "ALLOCATED",
+            "toState": "IN_QUEUE",
+            "restrictions": [
+                {
+                    "type": "SITE",
+                    "params": [
+                        {
+                            "type": "SITE_ID",
+                            "value": "SECOND"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 1
+        },
+        {
+            "fromState": "IN_QUEUE",
+            "toState": "FINISHED",
+            "restrictions": [
+                {
+                    "type": "EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "FINISHED_PROCESSING"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 1
+        },
+        {
+            "fromState": "REGISTERED",
+            "toState": "FINISHED",
+            "restrictions": [
+                {
+                    "type": "EVENT_REQUIRED",
+                    "params": [
+                        {
+                            "type": "EVENT_TYPE",
+                            "value": "FINISHED_PROCESSING"
+                        }
+                    ]
+                }
+            ],
+            "actions": [],
+            "priority": 2
+        }
+    ],
+    "capacities": [
+        {
+            "name": "FIRST",
+            "states": [
+                "ALLOCATED",
+                "IN_QUEUE"
+            ],
+            "value": 10,
+            "capacityUnits": [],
+            "params": [
+                {
+                    "name": "param1",
+                    "value": "value1"
+                },
+                {
+                    "name": "param2",
+                    "value": "value2"
+                }
+            ]
+        },
+        {
+            "name": "SECOND",
+            "states": [
+                "FINISHED"
+            ],
+            "value": 100,
+            "capacityUnits": [],
+            "params": [
+                {
+                    "name": "param3",
+                    "value": "value3"
+                }
+            ]
+        }
+    ],
+    "params": [
+        {
+            "name": "TYPE",
+            "value": "FULFILLMENT"
+        }
+    ]
+}

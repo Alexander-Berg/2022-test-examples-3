@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lom_order
+            id="100111"
+            barcode="777"
+            platform_client_id="3"
+            sender_id="1"
+            sender_emails='{test@mail.com, test1@mail.com}'
+            status="ENQUEUED"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <lom_order
+            id="2"
+            barcode="778"
+            platform_client_id="3"
+            sender_id="1"
+            sender_emails='{test@mail.com, test1@mail.com}'
+            status="ENQUEUED"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="100111"
+            external_id="101"
+            partner_id="987654321"
+            partner_type="SORTING_CENTER"
+            segment_type="SORTING_CENTER"
+            waybill_segment_index="0"
+            shipment_date="2020-11-06"
+            partner_name="Тестовый Дропофф"
+    />
+
+    <lom_waybill_segment
+            id="2"
+            order_id="100111"
+            external_id="102"
+            partner_id="987654322"
+            partner_type="SORTING_CENTER"
+            segment_type="SORTING_CENTER"
+            waybill_segment_index="1"
+            partner_name="Тестовый сц1"
+    />
+
+    <lom_waybill_segment
+            id="11"
+            order_id="100111"
+            external_id="112"
+            partner_id="987654332"
+            partner_type="DELIVERY"
+            segment_type="MOVEMENT"
+            shipment_date="2020-12-08"
+            waybill_segment_index="2"
+            partner_name="Тестовая служба доставки 1"
+    />
+
+    <lom_waybill_segment
+            id="3"
+            order_id="2"
+            external_id="103"
+            partner_id="987654323"
+            partner_type="SORTING_CENTER"
+            segment_type="SORTING_CENTER"
+            waybill_segment_index="0"
+            shipment_date="2020-11-06"
+            partner_name="Тестовый Дропофф"
+    />
+
+    <lom_waybill_segment
+            id="4"
+            order_id="2"
+            external_id="104"
+            partner_id="987654322"
+            partner_type="SORTING_CENTER"
+            segment_type="SORTING_CENTER"
+            waybill_segment_index="1"
+            partner_name="Тестовый сц2"
+    />
+
+    <lom_waybill_segment
+            id="12"
+            order_id="2"
+            external_id="113"
+            partner_id="987654342"
+            partner_type="DELIVERY"
+            segment_type="MOVEMENT"
+            shipment_date="2020-12-08"
+            waybill_segment_index="2"
+            partner_name="Тестовая служба доставки 1"
+    />
+
+    <lom_waybill_segment_status_history
+            waybill_segment_id="1"
+            status="OUT"
+            date="2020-11-06 12:00:00 +0000"
+            created="2020-11-06 12:00:00 +0000"
+    />
+
+    <lom_waybill_segment_status_history
+            waybill_segment_id="3"
+            status="OUT"
+            date="2020-11-06 12:00:00 +0000"
+            created="2020-11-06 12:00:00 +0000"
+    />
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="2"
+            waybill_segment_type="SORTING_CENTER"
+            expected_status="IN"
+            processing_status="PROCESSED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2020-11-07 10:00:00 +0300"
+            created="2020-11-01 12:00:00 +0000"
+            schedule_time="2020-11-07 10:00:00 +0300"
+    />
+
+    <plan_fact
+            id="2"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="4"
+            waybill_segment_type="SORTING_CENTER"
+            expected_status="IN"
+            processing_status="PROCESSED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2020-11-07 10:00:00 +0300"
+            created="2020-11-01 12:00:00 +0000"
+            schedule_time="2020-11-07 10:00:00 +0300"
+    />
+
+    <plan_fact_group
+            id="1"
+            aggregation_key="date:2020-11-07;partnerFrom:987654321;"
+            aggregation_type="DROPOFF_SC_INTAKE"
+            processing_status="ENQUEUED"
+            expected_status="IN"
+            waybill_segment_type="SORTING_CENTER"
+            schedule_time="2020-11-07 10:00:00 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 7],
+                        "partnerFrom": {
+                            "id": 987654321,
+                            "name": "Тестовый Дропофф",
+                            "type": "SORTING_CENTER"
+                        }
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="1"
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="2"
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="IN"
+            waybill_segment_type="SORTING_CENTER"
+            aggregation_type="DROPOFF_SC_INTAKE"
+            rule_processor="STARTREK"
+            rule='{ "queue": "MONITORINGSNDBX", "_type": ".DropoffScIntakePayload" }'
+    />
+
+</dataset>

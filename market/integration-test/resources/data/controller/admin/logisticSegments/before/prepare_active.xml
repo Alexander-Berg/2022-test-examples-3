@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <partner id="1" status="active" type="DROPSHIP" name="Partner 1"/>
+
+    <service_code
+            id="1"
+            type="internal"
+            code="CASH_SERVICE"
+            name="Вознаграждение за перечисление денежных средств"
+            is_optional="false"
+    />
+    <service_code
+            id="3"
+            type="internal"
+            code="INSURANCE"
+            name=" Услуга Объявленная ценность"
+            is_optional="false"
+    />
+    <service_code
+            id="4"
+            type="internal"
+            code="PACK"
+            name=" Упаковка по заявке клиента"
+            is_optional="false"
+    />
+    <service_code
+            id="10"
+            type="internal"
+            code="RETURN_SORT"
+            name=" Сортировка возврата"
+            is_optional="false"
+    />
+
+    <logistic_segments id="10001" partner_id="1" location_id="1001" type="movement"/>
+    <logistic_segments id="10002" partner_id="1" location_id="1001" type="warehouse"/>
+    <logistic_segments id="10003" partner_id="1" location_id="1001" type="linehaul"/>
+
+    <logistic_segments_services
+            id="10"
+            segment_id="10001"
+            code="1"
+            duration="32"
+            price="113"
+            delivery_type="courier"
+            status="inactive"
+            frozen="false"
+    />
+    <logistic_segments_services
+            id="20"
+            segment_id="10001"
+            code="3"
+            duration="111"
+            price="331"
+            delivery_type="pickup"
+            status="active"
+            frozen="false"
+    />
+    <logistic_segments_services
+            id="30"
+            segment_id="10002"
+            code="10"
+            duration="322"
+            price="98"
+            delivery_type="pickup"
+            status="active"
+            frozen="false"
+    />
+    <logistic_segments_services
+            id="40"
+            segment_id="10003"
+            code="4"
+            duration="913"
+            price="54"
+            delivery_type="courier"
+            status="active"
+            frozen="false"
+    />
+
+    <logistic_edges from_segment_id="10001" to_segment_id="10002"/>
+    <logistic_edges from_segment_id="10002" to_segment_id="10003"/>
+</dataset>

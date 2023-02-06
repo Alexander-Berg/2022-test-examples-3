@@ -1,0 +1,1 @@
+ALTER SEQUENCE partner_sequence RESTART WITH 47723;

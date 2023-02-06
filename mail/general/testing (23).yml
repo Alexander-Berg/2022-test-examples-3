@@ -1,0 +1,31 @@
+base: etc/template_master/base.yml
+config:
+  log:
+      global:
+          sinks:
+              force_flush: true
+      template_master:
+          sinks:
+              force_flush: true
+  modules:
+    module:
+      -   _name: web_server
+          configuration:
+              endpoints:
+                listen:
+                  - { _addr: '::', _port: 80, ssl: off }
+      -   _name: database
+          configuration:
+              pg:
+                  sharpei:
+                      client:
+                          address:
+                              host: template-master-sharpei-cloud-test.mail.yandex.net
+      -   _name: router
+          configuration:
+              port: 80
+              schema: http
+      -   _name: template_master
+          configuration:
+              template_pool:
+                  matches_for_ready: 5

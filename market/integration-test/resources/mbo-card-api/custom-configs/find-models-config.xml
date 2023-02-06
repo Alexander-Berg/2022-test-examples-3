@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="classpath:mbo-card-api/test-config.xml"/>
+
+    <bean id="findModelsService" class="ru.yandex.market.mbo.db.modelstorage.ModelStorageProtoService">
+        <property name="storageService" ref="statsModelStorageService"/>
+        <property name="modelImageUploadingService"><null/></property>
+        <property name="autoUser" ref="autoUser"/>
+        <property name="generatedSkuService" ref="modelSkuService"/>
+        <property name="modelImageService" ref="modelImageService"/>
+        <property name="imageSyncService" ref="modelImageSyncService"/>
+    </bean>
+</beans>

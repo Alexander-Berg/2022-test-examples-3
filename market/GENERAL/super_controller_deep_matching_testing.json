@@ -1,0 +1,209 @@
+{
+  "owner": "marketir",
+  "statfaceReports": [
+    {
+      "title": "Deep Matching Statistics (Testing)",
+      "report": "Market/Content/SuperController/DeepMatchingTesting",
+      "tableName": "super_controller_offers_statistic_testing",
+      "period": "ONE_MIN",
+      "splits": [
+        {
+          "name": "category",
+          "title": "Category",
+          "splitField": "dictGetString('category', 'full_name', arrayJoin(dictGetHierarchy('category', toUInt64(category))))",
+          "tree": true
+        }
+      ],
+      "fields": [
+        {
+          "name": "overall_offers_count_sum",
+          "title": "Overall offers count",
+          "metricField": "sum(overall_offers_count)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "no_match_offers",
+          "title": "No match offers count",
+          "metricField": "sum(matching_no_match_offers)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "deep_match_offers",
+          "title": "Deep match offers count",
+          "metricField": "sum(matching_deep_match_offers)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "deep_match_coverage",
+          "title": "Deep match coverage (%)",
+          "metricField": "(no_match_offers + deep_match_offers) = 0 ? 0 : (deep_match_offers * 100 / (no_match_offers + deep_match_offers))",
+          "viewType": "Percent"
+        },
+        {
+          "name": "total_match_coverage",
+          "title": "Total match coverage (%)",
+          "metricField": "overall_offers_count_sum = 0 ? 0 : (100 - (no_match_offers * 100 / overall_offers_count_sum))",
+          "viewType": "Percent"
+        },
+        {
+          "name": "vlc_overall_offers_count",
+          "title": "[0%-20%] Overall offers count",
+          "metricField": "sumIf(overall_offers_count, overall_offers_count = 0 or (matching_no_match_offers * 100 / overall_offers_count) >= 80)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "vlc_no_match_offers",
+          "title": "[0%-20%] No match offers count",
+          "metricField": "sumIf(matching_no_match_offers, overall_offers_count = 0 or (matching_no_match_offers * 100 / overall_offers_count) >= 80)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "vlc_deep_match_offers",
+          "title": "[0%-20%] Deep match offers count",
+          "metricField": "sumIf(matching_deep_match_offers, overall_offers_count = 0 or (matching_no_match_offers * 100 / overall_offers_count) >= 80)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "vlc_deep_match_coverage",
+          "title": "[0%-20%] Deep match coverage (%)",
+          "metricField": "(vlc_no_match_offers + vlc_deep_match_offers) = 0 ? 0 : (vlc_deep_match_offers * 100 / (vlc_no_match_offers + vlc_deep_match_offers))",
+          "viewType": "Percent"
+        },
+        {
+          "name": "lc_overall_offers_count",
+          "title": "[20%-40%] Overall offers count",
+          "metricField": "sumIf(overall_offers_count, overall_offers_count != 0 and (matching_no_match_offers * 100 / overall_offers_count) >= 60 and (matching_no_match_offers * 100 / overall_offers_count) < 80)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "lc_no_match_offers",
+          "title": "[20%-40%] No match offers count",
+          "metricField": "sumIf(matching_no_match_offers, overall_offers_count != 0 and (matching_no_match_offers * 100 / overall_offers_count) >= 60 and (matching_no_match_offers * 100 / overall_offers_count) < 80)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "lc_deep_match_offers",
+          "title": "[20%-40%] Deep match offers count",
+          "metricField": "sumIf(matching_deep_match_offers, overall_offers_count != 0 and (matching_no_match_offers * 100 / overall_offers_count) >= 60 and (matching_no_match_offers * 100 / overall_offers_count) < 80)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "lc_deep_match_coverage",
+          "title": "[20%-40%] Deep match coverage (%)",
+          "metricField": "(lc_no_match_offers + lc_deep_match_offers) = 0 ? 0 : (lc_deep_match_offers * 100 / (lc_no_match_offers + lc_deep_match_offers))",
+          "viewType": "Percent"
+        },
+        {
+          "name": "mc_overall_offers_count",
+          "title": "[40%-60%] Overall offers count",
+          "metricField": "sumIf(overall_offers_count, overall_offers_count != 0 and (matching_no_match_offers * 100 / overall_offers_count) >= 40 and (matching_no_match_offers * 100 / overall_offers_count) < 60)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "mc_no_match_offers",
+          "title": "[40%-60%] No match offers count",
+          "metricField": "sumIf(matching_no_match_offers, overall_offers_count != 0 and (matching_no_match_offers * 100 / overall_offers_count) >= 40 and (matching_no_match_offers * 100 / overall_offers_count) < 60)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "mc_deep_match_offers",
+          "title": "[40%-60%] Deep match offers count",
+          "metricField": "sumIf(matching_deep_match_offers, overall_offers_count != 0 and (matching_no_match_offers * 100 / overall_offers_count) >= 40 and (matching_no_match_offers * 100 / overall_offers_count) < 60)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "mc_deep_match_coverage",
+          "title": "[40%-60%] Deep match coverage (%)",
+          "metricField": "(mc_no_match_offers + mc_deep_match_offers) = 0 ? 0 : (mc_deep_match_offers * 100 / (mc_no_match_offers + mc_deep_match_offers))",
+          "viewType": "Percent"
+        },
+        {
+          "name": "hc_overall_offers_count",
+          "title": "[60%-80%] Overall offers count",
+          "metricField": "sumIf(overall_offers_count, overall_offers_count != 0 and (matching_no_match_offers * 100 / overall_offers_count) >= 20 and (matching_no_match_offers * 100 / overall_offers_count) < 40)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "hc_no_match_offers",
+          "title": "[60%-80%] No match offers count",
+          "metricField": "sumIf(matching_no_match_offers, overall_offers_count != 0 and (matching_no_match_offers * 100 / overall_offers_count) >= 20 and (matching_no_match_offers * 100 / overall_offers_count) < 40)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "hc_deep_match_offers",
+          "title": "[60%-80%] Deep match offers count",
+          "metricField": "sumIf(matching_deep_match_offers, overall_offers_count != 0 and (matching_no_match_offers * 100 / overall_offers_count) >= 20 and (matching_no_match_offers * 100 / overall_offers_count) < 40)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "hc_deep_match_coverage",
+          "title": "[60%-80%] Deep match coverage (%)",
+          "metricField": "(hc_no_match_offers + hc_deep_match_offers) = 0 ? 0 : (hc_deep_match_offers * 100 / (hc_no_match_offers + hc_deep_match_offers))",
+          "viewType": "Percent"
+        },
+        {
+          "name": "vhc_overall_offers_count",
+          "title": "[80%-100%] Overall offers count",
+          "metricField": "sumIf(overall_offers_count, overall_offers_count != 0 and (matching_no_match_offers * 100 / overall_offers_count) < 20)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "vhc_no_match_offers",
+          "title": "[80%-100%] No match offers count",
+          "metricField": "sumIf(matching_no_match_offers, overall_offers_count != 0 and (matching_no_match_offers * 100 / overall_offers_count) < 20)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "vhc_deep_match_offers",
+          "title": "[80%-100%] Deep match offers count",
+          "metricField": "sumIf(matching_deep_match_offers, overall_offers_count != 0 and (matching_no_match_offers * 100 / overall_offers_count) < 20)",
+          "viewType": "Integer"
+        },
+        {
+          "name": "vhc_deep_match_coverage",
+          "title": "[80%-100%] Deep match coverage (%)",
+          "metricField": "(vhc_no_match_offers + vhc_deep_match_offers) = 0 ? 0 : (vhc_deep_match_offers * 100 / (vhc_no_match_offers + vhc_deep_match_offers))",
+          "viewType": "Percent"
+        }
+      ],
+      "graphs": [
+        {
+          "title": "Deep match coverage (%)",
+          "fields": [
+            "deep_match_coverage"
+          ]
+        },
+        {
+          "title": "[0%-20%] Deep match coverage (%)",
+          "fields": [
+            "vlc_deep_match_coverage"
+          ]
+        },
+        {
+          "title": "[20%-40%] Deep match coverage (%)",
+          "fields": [
+            "lc_deep_match_coverage"
+          ]
+        },
+        {
+          "title": "[40%-60%] Deep match coverage (%)",
+          "fields": [
+            "mc_deep_match_coverage"
+          ]
+        },
+        {
+          "title": "[60%-80%] Deep match coverage (%)",
+          "fields": [
+            "hc_deep_match_coverage"
+          ]
+        },
+        {
+          "title": "[80%-100%] Deep match coverage (%)",
+          "fields": [
+            "vhc_deep_match_coverage"
+          ]
+        }
+      ]
+    }
+  ]
+}

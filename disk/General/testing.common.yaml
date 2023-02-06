@@ -1,0 +1,136 @@
+auth:
+  network_authorization:
+    enabled: false
+
+  clients:
+    tavern:
+      tvm_2_0:
+        client_ids: [2032203]
+
+billing:
+  billing_delay: 10
+  orders_lost_interval: 3600
+  subscription_payment_cancel: 600
+  subscription_payment_delay: 300
+  sso_organization_space:  # в ключе - domid из ответа блекбокса, в значении - выдаваемое место в байтах
+    - '2997121:107374182400'
+operations:
+  faildelay: 60
+queue2:
+  rabbitmq:
+    hosts:
+      - '%disk_test_queue'
+    user: mqueue-user
+    password: eeTh5ohtho
+    vhost: mqueue-vhost
+services:
+  abook:
+    timeout: 5.0
+  assistant:
+    timeout: 5.0
+  attach:
+    timeout: 5.0
+  aviary:
+    timeout: 5.0
+  bazinga:
+    base_url: http://localhost:28710
+  clck:
+    base_url: https://clck.qloud.dsp.yandex.net/--
+  data_api:
+    list_users_timeout: 10.0
+    timeout: 5.0
+  data_api_profile:
+    timeout: 5.0
+  disk:
+    timeout: 5.0
+  fotki:
+    timeout: 5.0
+  geocoder:
+    timeout: 5.0
+  hidden:
+    timeout: 5.0
+  kladun:
+    base_url: http://testing.disk-uploader-balancer.disk.stable.qloud-d.yandex.net/
+    timeout: 10.0
+  logreader:
+    base_url: http://counters.dst.yandex.net:32460/api/counters
+  mail:
+    timeout: 20.0
+  misc:
+    timeout: 5.0
+  mpfsproxy:
+    base_url: http://mpfs.dst.yandex.net:80
+    timeout: 300.0
+  mulca:
+    timeout: 5.0
+  narod:
+    count_url: http://narod2-test.yandex.ru/disk/mpfs/countfiles/?uid=%s
+    file_moved_url: http://narod2-test.yandex.ru/disk/mpfs/file_moved/?hash=%s&uid=%s&url=%s
+    info_url: http://narod2-test.yandex.ru/disk/mpfs/file/?hash=%s&uid=%s
+    list_moved_files_url: http://narod2-test.yandex.ru/disk/mpfs/list_moved/?uid=%s
+    list_url: http://narod2-test.yandex.ru/disk/mpfs/getfiles/?uid=%s
+    pub_url: http://narod2-test.yandex.ru/disk/%s/%s.html
+    timeout: 10.0
+    user_moved_url: http://narod2-test.yandex.ru/disk/mpfs/user_moved/?uid=%s
+    wait_url: http://narod2-test.yandex.ru/disk/wait?r=%s
+  Passport:
+    timeout: 5.0
+  PassportDedicated:
+    timeout: 5.0
+  photostream:
+    timeout: 5.0
+  push:
+    xmpp_url: http://xiva-tst1j.mail.yandex.net/notifier?uid=%s
+  search:
+    timeout: 20.0
+  search_disk:
+    timeout: 20.0
+  search_indexer:
+    timeout: 1200.0
+  share:
+    timeout: 5.0
+  socialproxy:
+    timeout: 5.0
+  tikaite:
+    timeout: 60.0
+  trash:
+    timeout: 5.0
+  video:
+    timeout: 5.0
+  yavideo:
+    timeout: 5.0
+  QuellerService:
+    base_url_per_dc: {}
+feature_toggles:
+  use_passport: true
+  use_filesystem_lock_autoupdate_period: true
+user:
+  invites:
+    referral_pool: 10737418240
+office:
+  open_document_button:
+    url: https://disk.dst.yandex.ru/edit/%(client_id)s/%(document_id)s
+  only_office:
+    rest_api_host: api02f.dst.yandex.net
+    local_proxy: localhost:12701
+    jwt_enabled: true
+    outbox_secret: secret
+    inbox_secret: secret
+    mpfs_token_secret: secret
+    enabled: true
+    enabled_for_yandex_nets: false
+platform:
+  docviewer:
+    file_link_url: 'https://docviewer.tst.yandex.ru/?%s'
+  telemost:
+    conf_join_short_url_re: https:\/\/telemost\.yandex\.ru\/j\/(?P<conf_key>[^/]{3,20})
+system:
+  system:
+    filesystem_lock_autoupdate_period: 60.0
+    full_index_parents_limit: 6000
+    hidden_clean_period: 30
+    uid: system-test
+    share_uid: "1"
+    old_share_uid: share_test
+  docviewer:
+    url: 'https://docviewer.tst.yandex.%(tld)s/?%(qs)s'

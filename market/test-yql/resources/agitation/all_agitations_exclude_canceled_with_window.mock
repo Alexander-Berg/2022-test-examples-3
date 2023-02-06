@@ -1,0 +1,57 @@
+
+# $agitation_time_limit_ms <= agitation.time <= $now
+# 2021-01-01T00:00:00 = 1609459200000 = very_old_time
+# agitation time = 1631577600000 = Tue Sep 14 03:00:00 MSK 2021
+MOCK VAR $now
+SET DateTime::FromMilliseconds(1631577700000)
+
+MOCK VAR $agitation_time_limit_ms
+SET 1609459200000
+
+
+
+# 2021-09-14T00:00:00 = 1631577600000 - время разработки
+
+MOCK VAR_TABLE $all_agitations_with_added
+SCHEMA author_type:int32, type:int32, user_id:string, entity_id:string,
+SCHEMA data:yson, debug_data:yson, priority:int32, agitation_time:uint64, order:uint64
+{"author_type":0, "type":0, "user_id":"12345", "entity_id":"1", "data":{}, "debug_data":{}, "priority":-1, "agitation_time":1631577600000, "order":4}
+{"author_type":0, "type":0, "user_id":"12345", "entity_id":"2", "data":{}, "debug_data":{}, "priority":-1, "agitation_time":1631577600000, "order":3}
+{"author_type":0, "type":0, "user_id":"12345", "entity_id":"3", "data":{}, "debug_data":{}, "priority":-1, "agitation_time":1631577600000, "order":2}
+{"author_type":0, "type":0, "user_id":"12345", "entity_id":"4", "data":{}, "debug_data":{}, "priority":-1, "agitation_time":1631577600000, "order":1}
+# not in models
+{"author_type":0, "type":0, "user_id":"12345", "entity_id":"5", "data":{}, "debug_data":{}, "priority":-1, "agitation_time":1631577600000, "order":1}
+# excluded by cancel/etc
+{"author_type":0, "type":0, "user_id":"111", "entity_id":"1", "data":{}, "debug_data":{}, "priority":-1, "agitation_time":1631577600000, "order":1}
+{"author_type":0, "type":0, "user_id":"111", "entity_id":"2", "data":{}, "debug_data":{}, "priority":-1, "agitation_time":1631577600000, "order":1}
+
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-pay/tables/pay_payment
+SCHEMA id:int64, user_id:utf8, user_type:int32, entity_id:utf8, entity_type:int32
+{"id":1, "user_id":"", "user_type":0, "entity_id":"", "entity_type":0}
+
+
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/author/agitation_indexer_models/current
+SCHEMA category_id:int64, fmcg_hid:int32, in_idx:int32,
+SCHEMA intim_hid:int32, is_cheap:int32, is_adult:int32,
+SCHEMA model_id:int64, model_id_str:string, name:string,
+SCHEMA price:double, type:int32, definitely_not_adult:bool
+{"category_id":1,"fmcg_hid":0,"in_idx":1,"intim_hid":0,"is_adult":1,"is_cheap":0,"definitely_not_adult":false,"model_id":1,"model_id_str":"1","name":"AAA","price":33600.0,"type":1}
+{"category_id":2,"fmcg_hid":0,"in_idx":1,"intim_hid":0,"is_adult":1,"is_cheap":1,"definitely_not_adult":false,"model_id":2,"model_id_str":"2","name":"BBB","price":120.0,"type":1}
+{"category_id":3,"fmcg_hid":0,"in_idx":1,"intim_hid":0,"is_adult":0,"is_cheap":0,"definitely_not_adult":true,"model_id":3,"model_id_str":"3","name":"CCC","price":966.0,"type":1}
+{"category_id":4,"fmcg_hid":0,"in_idx":1,"intim_hid":0,"is_adult":0,"is_cheap":1,"definitely_not_adult":true,"model_id":4,"model_id_str":"4","name":"DDD","price":96.0,"type":1}
+
+
+MOCK VAR_TABLE $source_agitation_cancel
+SCHEMA user_id:string, entity_id:string, user_type:int32, agitation_type:int32
+{"user_id":"111", "entity_id":"1", "user_type":0, "agitation_type":0}
+
+
+MOCK VAR_TABLE $all_agitations_existing
+SCHEMA user_id:string, entity_id:string, author_type:int32, type:int32
+{"user_id":"111", "entity_id":"2", "author_type":0, "type":0}
+
+
+MOCK VAR_TABLE $source_agitation_hide_popup
+SCHEMA user_id:string, entity_id:string, user_type:int32, agitation_type:int32
+{"user_id":"12345", "entity_id":"1", "user_type":0, "agitation_type":0}

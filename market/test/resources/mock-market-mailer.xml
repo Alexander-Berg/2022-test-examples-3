@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd"
+	   default-lazy-init="false" default-autowire="byName">
+	<bean id="marketMailerMockFactory" class="ru.yandex.market.pers.notify.mock.MarketMailerMockFactory"/>
+
+	<bean id="checkouterClient" factory-bean="marketMailerMockFactory" factory-method="getCheckouterClientMock"/>
+	<bean id="checkouterService" factory-bean="marketMailerMockFactory" factory-method="getCheckouterServiceMock"/>
+	<bean id="checkouterReturnClient" factory-bean="marketMailerMockFactory" factory-method="getCheckouterReturnClientMock"/>
+	<bean id="checkouterOrderHistoryEventsClient" factory-bean="marketMailerMockFactory" factory-method="getCheckouterOrderHistoryEventsClientMock"/>
+	<bean id="carterClient" factory-bean="marketMailerMockFactory" factory-method="getCarterMock"/>
+	<bean id="dbClock" factory-bean="marketMailerMockFactory" factory-method="getClockMock"/>
+	<bean id="historyService" factory-bean="marketMailerMockFactory" factory-method="getHistoryServiceMock"/>
+	<bean id="reportService" factory-bean="marketMailerMockFactory" factory-method="getReportServiceMock"/>
+	<bean id="gradeClient" factory-bean="marketMailerMockFactory" factory-method="getGradeClient"/>
+	<bean id="authorClient" factory-bean="marketMailerMockFactory" factory-method="getAuthorClient"/>
+	<bean id="tarantinoHttpClient" factory-bean="marketMailerMockFactory" factory-method="getTarantinoHttpClient"/>
+	<bean id="reportServiceHusk" factory-bean="marketMailerMockFactory" factory-method="getReportServiceHuskMock"/>
+
+    <bean id="modelTransitionsParser" factory-bean="marketMailerMockFactory" factory-method="getModelTransitionsParserMock"/>
+    <bean id="mbiApiClient" factory-bean="marketMailerMockFactory" factory-method="getMbiApiClientMock" />
+
+	<bean id="notificationPriorityFilter" class="ru.yandex.market.pers.notify.ems.filter.NotificationPriorityFilter" init-method="loadPriorities"/>
+
+	<bean id="crmUserSubscriptionItemTskvWriter" factory-bean="marketMailerMockFactory"
+		  factory-method="getUserSubscriptionItemTskvWriter"/>
+
+	<bean id="thumbnailService" factory-bean="marketMailerMockFactory" factory-method="getThumbnailService"/>
+
+	<bean id="mdsExportService" factory-bean="marketMailerMockFactory" factory-method="getMdsExportService"/>
+
+	<bean id="ytClient" factory-bean="marketMailerMockFactory" factory-method="getYtClient"/>
+
+	<bean id="aboService" factory-bean="marketMailerMockFactory" factory-method="getAboService"/>
+
+	<bean id="checkoutRefereeClient" factory-bean="marketMailerMockFactory" factory-method="getCheckoutReferee"/>
+
+    <bean id="geoExportService" factory-bean="marketMailerMockFactory" factory-method="getGeoExportService"/>
+
+	<bean id="notificationEventsItemLogRecordConsumer" class="ru.yandex.market.pers.notify.logging.TransactionalLogEventTestConsumer">
+		<constructor-arg name="entityClass" value="#{T(ru.yandex.market.pers.notify.ems.persistence.NotificationEventsLogEntity)}" />
+	</bean>
+
+	<bean id="tvmService" class="ru.yandex.market.pers.notify.http.tvm.TvmServiceMockImpl"/>
+
+	<bean id="solomonService" factory-bean="marketMailerMockFactory" factory-method="getSolomonServiceMock" />
+
+	<beans profile="!sender-testing">
+		<bean id="senderClient" factory-bean="marketMailerMockFactory" factory-method="getSenderClientMock" />
+	</beans>
+</beans>

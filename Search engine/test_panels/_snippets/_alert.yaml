@@ -1,0 +1,51 @@
+# BTW, you want nice notifications? Good luck.
+#  https://st.yandex-team.ru/JUGGLER-2227
+
+default:
+  warning: [telegram, email]
+  critical: [telegram, email, sms, phone]
+  namespace: woland
+
+groups:
+  marty:
+    logins:
+    - gluk47  # testing
+    warning: [telegram, email]
+    critical: [telegram, email, sms]
+
+  megamind:
+    logins:
+    - osado
+    warning: [email]
+    critical: [telegram, email, sms]
+
+  apphost:
+    logins:
+    - feldsherov
+    - volcolac
+    - APPHOST-ALERTS
+    warning: []
+    critical: [telegram, email]
+
+users:
+  gluk47:
+    warning: [telegram, email]
+    critical: [telegram, email, sms]
+
+  ageraab:
+    warning: [telegram, email]
+    critical: [telegram, email, sms]
+
+# Alerts generation will start only from the following panels.
+# All included panels will be processed as well.
+# Juggler alerts in the files not reachable from these panels will be ignored.
+# Alerts will have prefix "woland_{key}"
+panels:
+  # name for notifications -> panel name (= yaml file name)
+  lb: lingboost
+  search: _snippets/search-crashes
+  wb: wizard+begemot
+  bgmarty: begemot/_snippets/marty
+  bgfresh: begemot/_snippets/fresh
+  megamind: begemot/megamind
+  ah: apphost/server

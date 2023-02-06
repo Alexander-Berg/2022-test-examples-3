@@ -1,0 +1,23 @@
+module: orders-pipelines
+operators:
+  - id: update-order-item-instances-pipeline
+    visibility: public
+    value#processing-pipeline:
+      id: update-order-item-instances-pipeline
+      conditions:
+        - reason: update-order-item-instances
+      shared-state-init:
+        {}
+      stages:
+        - id: get-order-stage
+          handlers:
+            - value#xget: /external/order-handlers/get-order-handler
+        - id: validate-order-item-instances-stage
+          handlers:
+            - value#xget: /external/order-handlers/validate-order-item-instances-handler
+        - id: preprocess-order-item-instances-stage
+          handlers:
+            - value#xget: /external/order-handlers/preprocess-order-item-instances-handler
+        - id: update-order-item-instances-stage
+          handlers:
+            - value#xget: /external/order-handlers/update-order-item-instances-handler

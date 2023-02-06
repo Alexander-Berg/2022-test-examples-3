@@ -1,0 +1,60 @@
+{
+  "owner": "marketir",
+  "statfaceReports": [
+    {
+      "title": "Статистика по красным оферам (Тестинг)",
+      "report": "Market/Content/SuperController/RedOffersTesting",
+      "tableName": "super_controller_offers_statistic_testing",
+      "period": "DAY",
+      "splits": [
+        {
+          "name": "category",
+          "title": "Категория",
+          "splitField": "dictGetString('category', 'full_name', arrayJoin(dictGetHierarchy('category', toUInt64(category))))",
+          "tree": true
+        },
+        {
+          "name": "host",
+          "title": "Хост",
+          "splitField": "host",
+          "viewType": "Selector"
+        }
+      ],
+      "fields": [
+        {
+          "name": "red_offers_avg",
+          "title": "Red offers average",
+          "metricField": "avg(red_offers_count)"
+        },
+        {
+          "name": "external_mappings_count",
+          "title": "External mappings count",
+          "metricField": "avg(red_offers_external_mappings_count)"
+        },
+        {
+          "name": "external_mappings_ratio",
+          "title": "External mappings ratio",
+          "metricField": "avg(red_offers_external_mappings_count) / (0.0 + avg(red_offers_count)) * 100"
+        },
+        {
+          "name": "generated_red_title_count",
+          "title": "Generated red titles count",
+          "metricField": "avg(red_offers_generated_red_title_count)"
+        },
+        {
+          "name": "generated_red_title_ratio",
+          "title": "Generated red titles ratio",
+          "metricField": "avg(red_offers_generated_red_title_count) / (0.0 + avg(red_offers_count)) * 100"
+        }
+      ],
+      "graphs": [
+        {
+          "title": "Cтатистика покрытия названиями от TM",
+          "fields": [
+            "generated_red_title_ratio"
+          ]
+        }
+      ]
+    }
+  ]
+}

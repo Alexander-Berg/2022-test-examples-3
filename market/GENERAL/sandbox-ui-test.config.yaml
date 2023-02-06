@@ -1,0 +1,30 @@
+templates:
+  - market/market-tpl/sc-app/configs/common/secrets_template.yaml
+  - market/market-tpl/sc-app/configs/common/main_template.yaml
+  - market/market-tpl/sc-app/configs/common/cache_template.yaml
+config:
+  name:
+    market_sc_app_build
+  runner_version:
+    2021.07.19-8430304
+  build_counter:
+    MARKET_TPL_ANDROID
+
+stages:
+  assemble:
+    work_dir:
+      market/market-tpl/sc-app/
+    android-sdk:
+      platforms(28,29,31)+tools(30.0.3)+system-images(android-26;google_apis;x86_64)
+    emulator_system_images:
+      android-26;google_apis;x86_64
+    cmd:
+      - yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+      - MIN_SDK=26 ./gradlew connectedCameraDebugAndroidTest
+      - ./gradlew allurePull allureReport
+    junit:
+      - app/build/reports/androidTests
+      - app/build/reports/allure-report/allureReport
+    <<: *cache
+    <<: *secrets
+    <<: *main

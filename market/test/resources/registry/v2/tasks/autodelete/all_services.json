@@ -1,0 +1,732 @@
+{
+    "result": [
+        {
+            "runtime_attrs": {
+                "content": {
+                    "instance_spec": {},
+                    "instances": {
+                        "iss_settings": {
+                            "instance_cls": "ru.yandex.iss.Instance",
+                            "hooks_resource_limits": {
+                                "iss_hook_validate": {
+                                    "io_policy": "normal",
+                                    "cpu_policy": "normal"
+                                },
+                                "iss_hook_notify": {
+                                    "io_policy": "normal",
+                                    "cpu_policy": "normal"
+                                },
+                                "iss_hook_status": {
+                                    "io_policy": "normal",
+                                    "cpu_policy": "normal"
+                                },
+                                "iss_hook_install": {
+                                    "io_policy": "normal",
+                                    "cpu_policy": "normal"
+                                },
+                                "iss_hook_uninstall": {
+                                    "io_policy": "normal",
+                                    "cpu_policy": "normal"
+                                },
+                                "iss_hook_reopenlogs": {
+                                    "io_policy": "normal",
+                                    "cpu_policy": "normal"
+                                },
+                                "iss_hook_stop": {
+                                    "io_policy": "normal",
+                                    "cpu_policy": "normal"
+                                }
+                            }
+                        },
+                        "gencfg_groups": [],
+                        "extended_gencfg_groups": {
+                            "groups": [
+                                {
+                                    "release": "trunk",
+                                    "name": "MAN_SQR3",
+                                    "limits": {
+                                        "io_policy": "normal",
+                                        "cpu_policy": "normal"
+                                    },
+                                    "tags": []
+                                }
+                            ],
+                            "tags": []
+                        },
+                        "chosen_type": "EXTENDED_GENCFG_GROUPS",
+                        "instance_list": []
+                    },
+                    "engines": {
+                        "engine_type": "ISS"
+                    },
+                    "resources": {
+                        "services_balancer_config_files": [],
+                        "url_files": [
+                            {
+                                "is_dynamic": false,
+                                "url": "https://proxy.sandbox.yandex-team.ru/183644562",
+                                "local_path": "sqrt3"
+                            }
+                        ],
+                        "sandbox_files": [
+                            {
+                                "is_dynamic": false,
+                                "task_id": "42778912",
+                                "local_path": "instancectl",
+                                "task_type": "BUILD_INSTANCE_CTL",
+                                "resource_type": "INSTANCECTL"
+                            },
+                            {
+                                "is_dynamic": false,
+                                "task_id": "42778912",
+                                "local_path": "iss_hook_start",
+                                "task_type": "BUILD_INSTANCE_CTL",
+                                "resource_type": "ISS_HOOK_START"
+                            },
+                            {
+                                "is_dynamic": false,
+                                "task_id": "42778912",
+                                "local_path": "iss_hook_status",
+                                "task_type": "BUILD_INSTANCE_CTL",
+                                "resource_type": "ISS_HOOK_STATUS"
+                            }
+                        ],
+                        "static_files": [
+                            {
+                                "is_dynamic": false,
+                                "content": "[defaults]\nenv_match = ^ENV_(.*)$\nopt_match = ^OPT_(.*)$\n\n[sqrt3]\nbinary = sqrt3\narguments = \":%(BSCONFIG_IPORT)s\"\t\nstatus_script = curl -s -f -o /dev/null -m 1 \"http://localhost:%(BSCONFIG_IPORT)s/sqrt3/64\"",
+                                "local_path": "instancectl.conf"
+                            }
+                        ],
+                        "template_set_files": [],
+                        "l7_fast_balancer_config_files": []
+                    }
+                },
+                "parent_id": "aa676d67e6ee3af73c68c7bdc37d9b01ec48c158",
+                "_id": "5854342d9dadb772674964f513f6956c1c8ccc98",
+                "change_info": {
+                    "comment": "",
+                    "ctime": 1479908702766,
+                    "author": "belmatter"
+                },
+                "meta_info": {
+                    "is_disposable": false,
+                    "scheduling_config": {
+                        "scheduling_priority": "NONE"
+                    },
+                    "startrek_tickets": [],
+                    "annotations": {}
+                }
+            },
+            "auth_attrs": {
+                "content": {
+                    "observers": {
+                        "logins": [],
+                        "groups": []
+                    },
+                    "owners": {
+                        "logins": [
+                            "belmatter"
+                        ],
+                        "groups": []
+                    },
+                    "conf_managers": {
+                        "logins": [
+                            "belmatter"
+                        ],
+                        "groups": []
+                    },
+                    "ops_managers": {
+                        "logins": [
+                            "belmatter"
+                        ],
+                        "groups": []
+                    }
+                },
+                "_id": "a065eee6f71f046526aec980deb26b6647f5a383",
+                "change_info": {
+                    "comment": "Initial commit",
+                    "ctime": 1479906179012,
+                    "author": "belmatter"
+                }
+            },
+            "current_state": {
+                "content": {
+                    "is_paused": {
+                        "info": {
+                            "comment": "Resume actions.",
+                            "author": "belmatter",
+                            "ticket_id": "",
+                            "ctime": 1479907935439
+                        },
+                        "value": false
+                    },
+                    "rollback_snapshot": {
+                        "snapshot_id": "5854342d9dadb772674964f513f6956c1c8ccc98"
+                    },
+                    "active_snapshots": [],
+                    "summary": {
+                        "entered": 1572618245825,
+                        "value": "OFFLINE"
+                    }
+                },
+                "entered": 1479908793837,
+                "_id": "",
+                "reallocation": {
+                    "taskgroup_id": "",
+                    "state": {
+                        "status": "",
+                        "reason": "",
+                        "message": "",
+                        "entered": 0
+                    },
+                    "id": ""
+                }
+            },
+            "info_attrs": {
+                "content": {
+                    "category": "/market/test/belmatter/",
+                    "ui_settings": {},
+                    "balancers_integration": {
+                        "auto_update_services_balancers": false
+                    },
+                    "recipes": {
+                        "content": [
+                            {
+                                "desc": "Activate",
+                                "labels": [],
+                                "id": "default",
+                                "context": [],
+                                "name": "_activate_only_service_configuration.yaml"
+                            }
+                        ],
+                        "prepare_recipes": [
+                            {
+                                "desc": "Prepare",
+                                "labels": [],
+                                "id": "default",
+                                "context": [],
+                                "name": "_prepare_service_configuration.yaml"
+                            }
+                        ]
+                    },
+                    "labels": [
+                        {
+                            "key": "geo",
+                            "value": "man"
+                        }
+                    ],
+                    "tickets_integration": {
+                        "service_release_rules": [],
+                        "service_release_tickets_enabled": false
+                    },
+                    "awacs_managed_settings": {
+                        "allow_manage_secrets_volumes": false,
+                        "components": {
+                            "sandbox_files": [],
+                            "layers": false,
+                            "instancectl": false,
+                            "instance_spec": false
+                        }
+                    },
+                    "abc_group": 0,
+                    "desc": "belmatter testing service",
+                    "instancectl_settings": {
+                        "autoupdate_instancectl_disabled": false
+                    },
+                    "cms_settings": {
+                        "cms_stub_policy": "SKIP"
+                    },
+                    "scheduling_policy": {
+                        "type": "NONE"
+                    },
+                    "monitoring_settings": {}
+                },
+                "parent_id": "8af3776776713676e57b95299a3745a3e8454903",
+                "_id": "4264ecddb8d79877cbe46f91520f9a9eb51e8391",
+                "change_info": {
+                    "comment": "RUNTIMECLOUD-4428: set cms_stub_policy: SKIP",
+                    "ctime": 1513185415922,
+                    "author": "alonger"
+                }
+            },
+            "target_state": {
+                "info": {
+                    "comment": "Remove all snapshots to remove service.",
+                    "author": "alonger",
+                    "ticket_id": "",
+                    "ctime": 1572618201925
+                },
+                "content": {
+                    "is_enabled": false,
+                    "recipe_parameters": [],
+                    "labels": [],
+                    "snapshots": []
+                },
+                "_id": ""
+            },
+            "unique_id_index": "production-market-active-service-vla",
+            "_id": "production_market_active_service_vla"
+        },
+        {
+            "runtime_attrs": {
+                "content": {
+                    "instance_spec": {
+                        "networkProperties": {
+                            "resolvConf": "DEFAULT_RESOLV_CONF",
+                            "etcHosts": "KEEP_ETC_HOSTS"
+                        },
+                        "hostProvidedDaemons": [],
+                        "instancectl": {
+                            "url": [
+                                "rbtorrent:bf6b015527383a09c650b2374e9a579c1fdfd90c"
+                            ],
+                            "fetchableMeta": {
+                                "type": "SANDBOX_RESOURCE",
+                                "sandboxResource": {
+                                    "resourceType": "INSTANCECTL",
+                                    "resourceId": "1047997169",
+                                    "taskId": "474979056",
+                                    "taskType": ""
+                                }
+                            },
+                            "version": "1.192"
+                        },
+                        "notifyAction": {
+                            "resourceRequest": {
+                                "limit": [],
+                                "request": []
+                            },
+                            "handlers": []
+                        },
+                        "dockerImage": {
+                            "registry": "registry.yandex.net",
+                            "name": ""
+                        },
+                        "type": "SANDBOX_LAYERS",
+                        "volume": [],
+                        "osContainerSpec": {
+                            "networkProperties": {
+                                "resolvConf": "DEFAULT_RESOLV_CONF",
+                                "etcHosts": "KEEP_ETC_HOSTS"
+                            },
+                            "hostProvidedDaemons": [],
+                            "instancectl": {
+                                "url": [
+                                    "rbtorrent:bf6b015527383a09c650b2374e9a579c1fdfd90c"
+                                ],
+                                "fetchableMeta": {
+                                    "type": "SANDBOX_RESOURCE",
+                                    "sandboxResource": {
+                                        "resourceType": "INSTANCECTL",
+                                        "resourceId": "1047997169",
+                                        "taskId": "474979056",
+                                        "taskType": ""
+                                    }
+                                },
+                                "version": "1.192"
+                            },
+                            "notifyAction": {
+                                "resourceRequest": {
+                                    "limit": [],
+                                    "request": []
+                                },
+                                "handlers": []
+                            },
+                            "dockerImage": {
+                                "registry": "",
+                                "name": ""
+                            },
+                            "type": "SANDBOX_LAYERS",
+                            "volume": [],
+                            "auxDaemons": [],
+                            "instanceAccess": {
+                                "skynetSsh": "DISABLED"
+                            },
+                            "layersConfig": {
+                                "bind": [],
+                                "layer": [
+                                    {
+                                        "url": [
+                                            "rbtorrent:4eccf4fdbd83d58dc290d550ac82969724c53945"
+                                        ],
+                                        "fetchableMeta": {
+                                            "type": "SANDBOX_RESOURCE",
+                                            "sandboxResource": {
+                                                "resourceType": "PORTO_LAYER_SEARCH_UBUNTU_PRECISE_APP",
+                                                "resourceId": "703602428",
+                                                "taskId": "313732989",
+                                                "taskType": "BUILD_PORTO_LAYER"
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            "initContainers": []
+                        },
+                        "auxDaemons": [],
+                        "instanceAccess": {
+                            "skynetSsh": "ENABLED"
+                        },
+                        "qemuKvm": {
+                            "layersConfig": {
+                                "url": [
+                                    "rbtorrent:882c02f072d0c4d4bbf556fe50ceec626e795446"
+                                ],
+                                "fetchableMeta": {
+                                    "type": "SANDBOX_RESOURCE",
+                                    "sandboxResource": {
+                                        "resourceType": "PORTO_LAYER_SEARCH_QEMU_UBUNTU_XENIAL",
+                                        "resourceId": "562598663",
+                                        "taskId": "248826138",
+                                        "taskType": ""
+                                    }
+                                },
+                                "version": "vmagent_last"
+                            },
+                            "image": {
+                                "windows": {
+                                    "image": {
+                                        "url": [],
+                                        "fetchableMeta": {
+                                            "type": "SANDBOX_RESOURCE",
+                                            "sandboxResource": {
+                                                "resourceType": "",
+                                                "resourceId": "",
+                                                "taskId": "",
+                                                "taskType": ""
+                                            }
+                                        }
+                                    }
+                                },
+                                "type": "LINUX",
+                                "linux": {
+                                    "image": {
+                                        "url": [
+                                            "rbtorrent:59f6fc1ff7efd59a8f37547dc4a4baebfa8af023"
+                                        ],
+                                        "fetchableMeta": {
+                                            "type": "SANDBOX_RESOURCE",
+                                            "sandboxResource": {
+                                                "resourceType": "QEMU_IMAGE",
+                                                "resourceId": "409331232",
+                                                "taskId": "178867853",
+                                                "taskType": "REMOTE_COPY_RESOURCE"
+                                            }
+                                        }
+                                    },
+                                    "authorizedUsers": {
+                                        "userList": {
+                                            "logins": [],
+                                            "nannyGroupIds": [],
+                                            "staffGroupIds": []
+                                        },
+                                        "type": "SERVICE_MANAGERS"
+                                    }
+                                }
+                            },
+                            "instancectl": {
+                                "url": [
+                                    "rbtorrent:bf6b015527383a09c650b2374e9a579c1fdfd90c"
+                                ],
+                                "fetchableMeta": {
+                                    "type": "SANDBOX_RESOURCE",
+                                    "sandboxResource": {
+                                        "resourceType": "INSTANCECTL",
+                                        "resourceId": "1047997169",
+                                        "taskId": "474979056",
+                                        "taskType": ""
+                                    }
+                                },
+                                "version": "1.192"
+                            },
+                            "vmagent": {
+                                "url": [
+                                    "rbtorrent:278507f66246cc9f02a7ffae6242496d0929a096"
+                                ],
+                                "fetchableMeta": {
+                                    "type": "SANDBOX_RESOURCE",
+                                    "sandboxResource": {
+                                        "resourceType": "VMAGENT_PACK",
+                                        "resourceId": "947964256",
+                                        "taskId": "428833900",
+                                        "taskType": ""
+                                    }
+                                },
+                                "version": "0.20"
+                            }
+                        },
+                        "layersConfig": {
+                            "bind": [],
+                            "layer": [
+                                {
+                                    "url": [
+                                        "rbtorrent:4eccf4fdbd83d58dc290d550ac82969724c53945"
+                                    ],
+                                    "fetchableMeta": {
+                                        "type": "SANDBOX_RESOURCE",
+                                        "sandboxResource": {
+                                            "resourceType": "PORTO_LAYER_SEARCH_UBUNTU_PRECISE_APP",
+                                            "resourceId": "703602428",
+                                            "taskId": "313732989",
+                                            "taskType": "BUILD_PORTO_LAYER"
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        "initContainers": [],
+                        "id": "",
+                        "containers": []
+                    },
+                    "instances": {
+                        "yp_pods": {
+                            "orthogonal_tags": {
+                                "metaprj": "unknown",
+                                "itype": "unknown",
+                                "ctype": "unknown",
+                                "prj": "default-content-service"
+                            },
+                            "allocations": [],
+                            "tags": []
+                        },
+                        "chosen_type": "EXTENDED_GENCFG_GROUPS",
+                        "extended_gencfg_groups": {
+                            "network_settings": {
+                                "hbf_nat": "disabled",
+                                "use_mtn": true
+                            },
+                            "tags": [],
+                            "instance_properties_settings": {
+                                "tags": "TOPOLOGY_DYNAMIC"
+                            },
+                            "gencfg_volumes_settings": {
+                                "use_volumes": true
+                            },
+                            "containers_settings": {
+                                "slot_porto_properties": "ALL_EXCEPT_GUARANTEES"
+                            },
+                            "groups": [],
+                            "sysctl_settings": {
+                                "params": []
+                            }
+                        },
+                        "gencfg_groups": [],
+                        "instance_list": [],
+                        "iss_settings": {
+                            "instance_cls": "ru.yandex.iss.Instance",
+                            "hooks_resource_limits": {
+                                "iss_hook_validate": {
+                                    "io_policy": "normal",
+                                    "cpu_policy": "normal"
+                                },
+                                "iss_hook_notify": {
+                                    "io_policy": "normal",
+                                    "cpu_policy": "normal"
+                                },
+                                "iss_hook_status": {
+                                    "io_policy": "normal",
+                                    "cpu_policy": "normal"
+                                },
+                                "iss_hook_install": {
+                                    "io_policy": "normal",
+                                    "cpu_policy": "normal"
+                                },
+                                "iss_hook_uninstall": {
+                                    "io_policy": "normal",
+                                    "cpu_policy": "normal"
+                                },
+                                "iss_hook_reopenlogs": {
+                                    "io_policy": "normal",
+                                    "cpu_policy": "normal"
+                                },
+                                "iss_hook_stop": {
+                                    "io_policy": "normal",
+                                    "cpu_policy": "normal"
+                                }
+                            }
+                        },
+                        "yp_pod_ids": {
+                            "pods": [],
+                            "orthogonal_tags": {
+                                "metaprj": "unknown",
+                                "itype": "unknown",
+                                "ctype": "unknown",
+                                "prj": "default-content-service"
+                            }
+                        }
+                    },
+                    "engines": {
+                        "engine_type": "ISS_MULTI"
+                    },
+                    "resources": {
+                        "services_balancer_config_files": [],
+                        "url_files": [],
+                        "sandbox_files": [],
+                        "static_files": [],
+                        "template_set_files": [],
+                        "l7_fast_balancer_config_files": []
+                    }
+                },
+                "_id": "53kfosq7lpnjeije64q5egms",
+                "change_info": {
+                    "comment": "Initial commit",
+                    "ctime": 1566547638114,
+                    "author": "maxkhol"
+                },
+                "meta_info": {
+                    "is_disposable": false,
+                    "startrek_tickets": [],
+                    "conf_id": "maxkhol_test-1566547638114",
+                    "annotations": {
+                        "startable": "false",
+                        "deploy_engine": "ISS_MULTI"
+                    }
+                }
+            },
+            "auth_attrs": {
+                "content": {
+                    "observers": {
+                        "logins": [],
+                        "groups": []
+                    },
+                    "owners": {
+                        "logins": [
+                            "maxkhol"
+                        ],
+                        "groups": []
+                    },
+                    "conf_managers": {
+                        "logins": [
+                            "maxkhol"
+                        ],
+                        "groups": []
+                    },
+                    "ops_managers": {
+                        "logins": [
+                            "maxkhol"
+                        ],
+                        "groups": []
+                    }
+                },
+                "_id": "vd4jqr77cdrarsi2v5v5l26p",
+                "change_info": {
+                    "comment": "Initial commit",
+                    "ctime": 1566547638114,
+                    "author": "maxkhol"
+                }
+            },
+            "current_state": {
+                "content": {
+                    "is_paused": {
+                        "info": {
+                            "comment": "Initial commit",
+                            "ctime": 1566547638114,
+                            "author": "maxkhol"
+                        },
+                        "value": false
+                    },
+                    "active_snapshots": [],
+                    "summary": {
+                        "entered": 1566547638197,
+                        "value": "OFFLINE"
+                    }
+                },
+                "entered": 1566547638197,
+                "_id": "",
+                "reallocation": {
+                    "taskgroup_id": "",
+                    "state": {
+                        "status": "",
+                        "reason": "",
+                        "message": "",
+                        "entered": 0
+                    },
+                    "id": ""
+                }
+            },
+            "info_attrs": {
+                "content": {
+                    "category": "/market/demo/",
+                    "ui_settings": {},
+                    "balancers_integration": {
+                        "auto_update_services_balancers": false
+                    },
+                    "recipes": {
+                        "content": [
+                            {
+                                "desc": "Activate",
+                                "labels": [],
+                                "id": "default",
+                                "context": [],
+                                "name": "_activate_only_service_configuration.yaml"
+                            }
+                        ],
+                        "prepare_recipes": [
+                            {
+                                "desc": "Prepare",
+                                "labels": [],
+                                "id": "default",
+                                "context": [],
+                                "name": "_prepare_service_configuration.yaml"
+                            }
+                        ]
+                    },
+                    "labels": [],
+                    "tickets_integration": {
+                        "service_release_rules": [],
+                        "service_release_tickets_enabled": false
+                    },
+                    "awacs_managed_settings": {
+                        "allow_manage_secrets_volumes": false,
+                        "components": {
+                            "sandbox_files": [],
+                            "layers": false,
+                            "instancectl": false,
+                            "instance_spec": false
+                        }
+                    },
+                    "abc_group": 0,
+                    "disk_quotas": {
+                        "policy": "ENABLED",
+                        "work_dir_quota": 1500,
+                        "root_fs_quota": 1500
+                    },
+                    "desc": "-",
+                    "instancectl_settings": {
+                        "autoupdate_instancectl_disabled": false
+                    },
+                    "cms_settings": {
+                        "cms_stub_policy": "SKIP"
+                    },
+                    "scheduling_policy": {
+                        "type": "NONE"
+                    },
+                    "monitoring_settings": {}
+                },
+                "_id": "qv4cadhdhcmby7m3blwend7p",
+                "change_info": {
+                    "comment": "Initial commit",
+                    "ctime": 1566547638114,
+                    "author": "maxkhol"
+                }
+            },
+            "target_state": {
+                "info": {
+                    "comment": "Initial commit",
+                    "ctime": 1566547638114,
+                    "author": "maxkhol"
+                },
+                "content": {
+                    "is_enabled": false,
+                    "recipe_parameters": [],
+                    "labels": [],
+                    "snapshots": []
+                },
+                "_id": ""
+            },
+            "unique_id_index": "production-market-another-active-service-vla",
+            "_id": "production_market_another_active_service_vla"
+        }
+    ]
+}

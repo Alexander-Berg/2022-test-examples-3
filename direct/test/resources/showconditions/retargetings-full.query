@@ -1,0 +1,148 @@
+SELECT
+  R.ret_id AS ret_id,
+  R.ret_cond_id AS ret_cond_id,
+  R.pid AS pid,
+  R.cid AS cid,
+  R.bid AS bid,
+  first(R.price_context) AS price_context,
+  first(R.statusBsSynced) AS statusBsSynced,
+  first(R.is_suspended) AS is_suspended,
+  first(R.autobudgetPriority) AS autobudgetPriority,
+  first(R.reach) AS reach,
+  C.negative AS negative,
+  C.is_deleted AS is_deleted,
+  C.retargeting_conditions_type AS retargeting_conditions_type,
+  C.interest AS interest,
+  C.condition_json AS condition_json,
+  C.ClientID AS ClientID,
+  C.condition_desc AS condition_desc,
+  C.condition_name AS condition_name,
+  IF(is_null(sum(S.Shows)), 0, sum(S.Shows)) AS shows,
+  IF(is_null(sum(S.Clicks)), 0, sum(S.Clicks)) AS clicks,
+  IF(is_null(sum(IF(S.CurrencyID = 0, ((S.Cost * 100) / 118), S.CostTaxFree))), 0, sum(IF(S.CurrencyID = 0, ((S.Cost * 100) / 118), S.CostTaxFree))) AS cost,
+  IF(is_null(sum(S.CostCur)), 0, sum(S.CostCur)) AS costWithTax,
+  IF(is_null(sum(S.PriceCur)), 0, sum(S.PriceCur)) AS revenue,
+  IF(is_null(sum(S.GoalsNum)), 0, sum(S.GoalsNum)) AS goals,
+  IF(shows > 0, ((cost / shows) * 1000), 0) AS cpmPrice,
+  IF(is_null(sum(S.FirstPageClicks)), 0, sum(S.FirstPageClicks)) AS firstPageClicks,
+  IF(is_null(sum(S.FirstPageShows)), 0, sum(S.FirstPageShows)) AS firstPageShows,
+  IF(is_null(sum(S.FirstPageSumPosClicks)), 0, sum(S.FirstPageSumPosClicks)) AS firstPageSumPosClicks,
+  IF(is_null(sum(S.FirstPageSumPosShows)), 0, sum(S.FirstPageSumPosShows)) AS firstPageSumPosShows,
+  IF(is_null(sum(IF(S.IsRMP, S.Clicks, S.SessionNum))), 0, sum(IF(S.IsRMP, S.Clicks, S.SessionNum))) AS sessions,
+  IF(is_null(sum(S.SessionNumLimited)), 0, sum(S.SessionNumLimited)) AS sessionsLimited,
+  IF(is_null(sum(S.Bounces)), 0, sum(S.Bounces)) AS bounces,
+  IF(is_null(sum(S.SessionDepth)), 0, sum(S.SessionDepth)) AS sessionDepth,
+  IF(shows > 0, ((clicks * 100000000) / shows), 0) AS ctr,
+  IF(clicks > 0, (cost / clicks), 0) AS avgClickCost,
+  IF(firstPageShows > 0, ((firstPageSumPosShows * 1000000) / firstPageShows), 0) AS avgShowPosition,
+  IF(firstPageClicks > 0, ((firstPageSumPosClicks * 1000000) / firstPageClicks), 0) AS avgClickPosition,
+  IF(sessionsLimited > 0, ((bounces * 100000000) / sessionsLimited), 0) AS bounceRate,
+  IF(sessionsLimited > 0, ((sessionDepth * 1000000) / sessionsLimited), 0) AS avgDepth,
+  IF(clicks > 0, ((goals * 100000000) / clicks), 0) AS conversionRate,
+  IF(goals > 0, (cost / goals), null) AS avgGoalCost,
+  IF((
+    cost > 0
+    AND revenue > 0
+  ), ((double((revenue - cost)) * 1000000.0) / double(cost)), null) AS profitability,
+  IF((
+    cost > 0
+    AND revenue > 0
+  ), ((double(cost) * 100000000.0) / double(revenue)), null) AS crr
+FROM yt.bids_retargetingtable_direct AS R
+  JOIN yt.retargeting_conditionstable_direct AS C
+  ON (R.ret_cond_id, R.__shard__, 123) = (C.ret_cond_id, C.__shard__, C.ClientID)
+  LEFT OUTER JOIN yt.DirectPhraseStatV2_bs AS S
+  ON (
+    (R.cid, R.pid, uint64(R.ret_cond_id)) = (S.ExportID, S.GroupExportID, S.PhraseID)
+    AND S.UpdateTime = 1546290000
+  )
+WHERE (
+  R.ret_id IN (3)
+  AND NOT(R.ret_id IN (4))
+  AND R.ret_cond_id IN (21)
+  AND NOT(R.ret_cond_id IN (22))
+  AND R.pid IN (2)
+  AND R.cid IN (11)
+  AND R.price_context <= 10000000
+  AND R.price_context >= 20000000
+  AND is_substr('name',lower(C.condition_name))
+  AND NOT(is_substr('another',lower(C.condition_name)))
+  AND R.is_suspended = 0
+  AND C.is_deleted = 0
+  AND C.interest = 1
+)
+GROUP BY
+  ret_id,
+  ret_cond_id,
+  pid,
+  cid,
+  bid,
+  R.__hash__,
+  R.__shard__,
+  negative,
+  is_deleted,
+  retargeting_conditions_type,
+  interest,
+  condition_json,
+  ClientID,
+  condition_desc,
+  condition_name
+HAVING (
+  cost >= 1000000
+  AND cost <= 2000000
+  AND costWithTax >= 1000000
+  AND costWithTax <= 2000000
+  AND shows >= 3
+  AND shows <= 4
+  AND clicks >= 5
+  AND clicks <= 6
+  AND ctr >= 7000000
+  AND ctr <= 8000000
+  AND avgClickCost >= 9000000
+  AND avgClickCost <= 10000000
+  AND avgShowPosition >= 11000000
+  AND avgShowPosition <= 12000000
+  AND avgClickPosition >= 13000000
+  AND avgClickPosition <= 14000000
+  AND bounceRate >= 15000000
+  AND bounceRate <= 16000000
+  AND conversionRate >= 17000000
+  AND conversionRate <= 18000000
+  AND avgGoalCost >= 19000000
+  AND avgGoalCost <= 20000000
+  AND goals >= 21
+  AND goals <= 22
+  AND avgDepth >= 23000000
+  AND avgDepth <= 24000000
+  AND profitability >= 25000000
+  AND profitability <= 26000000
+  AND revenue >= 27000000
+  AND revenue <= 28000000
+)
+ORDER BY
+  ret_id DESC,
+  ret_cond_id DESC,
+  bid DESC,
+  pid DESC,
+  cid DESC,
+  price_context DESC,
+  autobudgetPriority DESC,
+  cost DESC,
+  costWithTax DESC,
+  shows DESC,
+  clicks DESC,
+  ctr DESC,
+  revenue DESC,
+  goals DESC,
+  cpmPrice DESC,
+  profitability DESC,
+  crr DESC,
+  avgDepth DESC,
+  avgGoalCost DESC,
+  avgClickCost DESC,
+  avgShowPosition DESC,
+  avgClickPosition DESC,
+  bounceRate DESC,
+  conversionRate DESC,
+  condition_name DESC
+LIMIT 1000

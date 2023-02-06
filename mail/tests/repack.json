@@ -1,0 +1,437 @@
+{
+"defaults": {
+    "message": {
+      "bright": true,
+      "uid": "123",
+      "service": "not-mail",
+      "operation": "not-insert",
+      "transit_id": "Hsdfj5F6Yxu",
+      "raw_data": "",
+      "data": {
+        "smth": "1"
+      }
+    },
+    "subscription": {
+      "id": "1234",
+      "platform": "apns",
+      "app_name": "ru.yandex.ru",
+      "push_token": "XYZxyz"
+    }
+  },
+
+"No payload in message, repack with one additional platform-specific fields": {
+    "message": {
+      "raw_data": "",
+      "repack": {
+        "apns": {
+          "aps": {
+            "alert": "New resource found",
+            "content-available": 0
+          }
+        }
+      }
+    },
+    "expect": {
+      "messages": [ {
+          "payload": "",
+          "urlparams": {
+            "x-aps": {
+              "alert": "New resource found",
+              "content-available": 0
+            }
+          }
+      } ],
+      "bright": true
+    }
+  },
+
+"No payload in message, repack with several platform-specific fields": {
+    "message": {
+      "raw_data": "",
+      "repack": {
+        "apns": {
+          "notification": {
+              "title": "New resource found",
+              "body": "Extra info",
+              "submap": {
+                "some_array": ["val", 1, "val"]
+              }
+          }
+        }
+      }
+    },
+    "expect": {
+      "messages": [ {
+          "payload": "",
+          "urlparams": {
+            "x-notification": {
+              "title": "New resource found",
+              "body": "Extra info",
+              "submap": {
+                "some_array": ["val", 1, "val"]
+              }
+            }
+          }
+      } ]
+    }
+  },
+
+"Json payload in message, apply repacking rules: extract only needed fields from payload. No platform-specific field.": {
+    "message": {
+      "raw_data": { "f1": 1, "f2": "123", "f3": [1,2,3] },
+      "repack": {
+        "apns": {
+          "repack_payload": ["f2", "f3"]
+        }
+      }
+    },
+    "expect": {
+      "messages": [ {
+          "payload": { "f2": "123", "f3": [1,2,3] }
+      } ]
+    }
+  },
+
+"Json payload in message, no repacking rules: pass payload as is": {
+    "message": {
+      "raw_data": { "f1": 1, "f2": "123", "f3": [1,2,3] },
+      "repack": {
+        "apns": { }
+      }
+    },
+    "expect": {
+      "messages": [ {
+          "payload": { "f1": 1, "f2": "123", "f3": [1,2,3] }
+      } ]
+    }
+  },
+
+"Non-Json payload in message (raw string), no repacking rules: pass payload as is": {
+    "message": {
+      "raw_data": "some raw string <br/> some other string",
+      "repack": {
+        "apns": { }
+      }
+    },
+    "expect": {
+      "messages": [ {
+          "payload": "some raw string <br/> some other string"
+      } ]
+    }
+  },
+
+"Json payload in message, repacking rules specified empty []: pass empty payload": {
+    "message": {
+      "raw_data": "some raw string <br/> some other string",
+      "repack": {
+        "apns": {
+          "repack_payload": []
+        }
+      }
+    },
+    "expect": {
+      "messages": [ {
+          "payload": ""
+      } ]
+    }
+  },
+
+"Non-Json payload in message (raw string), repacking rules specified empty []: pass empty payload": {
+    "message": {
+      "raw_data": "some raw string <br/> some other string",
+      "repack": {
+        "apns": {
+          "repack_payload": []
+        }
+      }
+    },
+    "expect": {
+      "messages": [ {
+          "payload": ""
+      } ]
+    }
+  },
+
+"Apply repacking rules: rename fields in payload": {
+    "message": {
+      "raw_data": { "f1": 123 },
+      "repack": {
+        "apns": {
+          "repack_payload": [{ "Message": "f1" } ]
+        }
+      }
+    },
+    "expect": {
+      "messages": [ {
+          "payload": { "Message": 123 }
+      } ]
+    }
+  },
+
+"Apply repacking rules: fill values from xiva (push token; transit-id)": {
+    "message": {
+      "raw_data": {},
+      "repack": {
+        "apns": {
+          "repack_payload": [ {"Xiva-Token": "::xiva::push_token"}, {"Xiva-Transit-Id": "::xiva::transit_id"} ]
+        }
+      }
+    },
+    "expect": {
+      "messages": [ {
+          "payload": {
+            "Xiva-Token" : "XYZxyz",
+            "Xiva-Transit-Id": "Hsdfj5F6Yxu"
+          }
+      } ]
+    }
+  },
+
+"Apply repacking rules: wildcard transfers all fields from payload": {
+    "message": {
+      "raw_data": { "f1": 123, "f2": "2" },
+      "repack": {
+        "apns": {
+          "repack_payload": [ "*", {"Xiva-Transit-Id": "::xiva::transit_id"} ]
+        }
+      }
+    },
+    "expect": {
+      "messages": [ {
+          "payload": {
+            "f1" : 123,
+            "f2" : "2",
+            "Xiva-Transit-Id": "Hsdfj5F6Yxu"
+          }
+      } ]
+    }
+  },
+
+"Apply repacking rules: wildcard only": {
+    "message": {
+      "raw_data": { "f1": 123, "f2": "2" },
+      "repack": {
+        "apns": {
+          "repack_payload": [ "*" ]
+        }
+      }
+    },
+    "expect": {
+      "messages": [ {
+          "payload": {
+            "f1" : 123,
+            "f2" : "2"
+          }
+      } ]
+    }
+  },
+
+"Apply repacking rules: wildcard + rename": {
+    "message": {
+      "raw_data": { "f1": 123, "f2": "2" },
+      "repack": {
+        "apns": {
+          "repack_payload": [ "*", {"Field two": "f2"} ]
+        }
+      }
+    },
+    "expect": {
+      "messages": [ {
+          "payload": {
+            "f1" : 123,
+            "Field two" : "2"
+          }
+      } ]
+    }
+  },
+
+"Apply repacking rules, no payload: fill values from xiva (push token; transit-id)": {
+    "message": {
+      "raw_data": "",
+      "repack": {
+        "apns": {
+          "repack_payload": [ {"Xiva-Token": "::xiva::push_token"}, {"Xiva-Transit-Id": "::xiva::transit_id"} ]
+        }
+      }
+    },
+    "expect": {
+      "messages": [ {
+          "payload": {
+            "Xiva-Token" : "XYZxyz",
+            "Xiva-Transit-Id": "Hsdfj5F6Yxu"
+          }
+      } ]
+    }
+  },
+
+"Apply repacking rules: empty and non-alphanumeric keys supported": {
+    "message": {
+      "raw_data": { "": "value1", "=@:.&-+": "value2" },
+      "repack": {
+        "apns": {
+          "repack_payload": [ "", "=@:.&-+", {"Data": ""}, {"==": "=@:.&-+"} ]
+        }
+      }
+    },
+    "expect": {
+      "messages": [ {
+          "payload": {
+            "": "value1",
+            "Data": "value1",
+            "=@:.&-+": "value2",
+            "==": "value2"
+          }
+      } ]
+    }
+  },
+
+"Apply repacking rules: field is present in payload and has value 'null'": {
+    "message": {
+      "raw_data": { "f1": null, "f2": 2 },
+      "repack": {
+        "apns": { "repack_payload": [ "f1" ] }
+      }
+    },
+    "expect": {
+      "messages": [ { "payload": { "f1": null } } ]
+    }
+  },
+
+"Apply repacking rules: field is not present in payload, so do not pass it": {
+    "message": {
+      "raw_data": { "f1": 1, "f2": "2" },
+      "repack": {
+        "apns": {
+          "repack_payload": [ "f1", "f10", "d" ]
+        }
+      }
+    },
+    "expect": {
+      "messages": [ {
+          "payload": {
+            "f1": 1
+          }
+      } ]
+    }
+  },
+
+"Apply repacking rules: repack payload and add some platform-specific fields": {
+    "message": {
+      "raw_data": { "f1": 1, "f2": "2", "f3": { "f4": 100 } },
+      "repack": {
+        "apns": {
+          "notification": { "title": "external-message" },
+          "repack_payload": [ "f1", "f3" ]
+        }
+      }
+    },
+    "expect": {
+      "messages": [ {
+          "payload": { "f1": 1, "f3": { "f4": 100 } },
+          "urlparams": { "x-notification": { "title": "external-message" } }
+        }
+      ]
+    }
+  },
+
+"String payload and some system fields": {
+    "message": {
+      "raw_data": "not json object raw_data is ok",
+      "repack": {
+        "apns": {
+          "system-field": 100
+        }
+      }
+    },
+    "expect": {
+      "messages": [ {
+          "payload": "not json object raw_data is ok",
+          "urlparams": {
+            "x-system-field": 100
+          }
+        }
+      ]
+    }
+  },
+
+"Repacking rules for platform not found (gcm_compatibility): pass payload as is": {
+  "message": {
+    "raw_data": { "f1": 1, "f2": "2", "f3": [1,2,3] },
+    "repack": {
+      "apns": { "repack_payload": ["f1"], "aps": "smth" }
+    }
+  },
+  "subscription": {
+    "platform": "gcm"
+  },
+  "expect": {
+    "messages": [ {
+      "payload": { "f1": 1, "f2": "2", "f3": [1,2,3] }
+    } ]
+  }
+},
+
+"Repacking rules for platform not found: pass payload as is": {
+    "message": {
+      "raw_data": { "f1": 1, "f2": "2", "f3": [1,2,3] },
+      "repack": {
+        "apns": { "repack_payload": ["f1"], "aps": "smth" }
+      }
+    },
+    "subscription": {
+      "platform": "fcm"
+    },
+    "expect": {
+      "messages": [ {
+        "payload": { "f1": 1, "f2": "2", "f3": [1,2,3] }
+      } ]
+    }
+  },
+
+"Repacking rules for platform not found (gcm_compatibility): apply rules marked 'other'": {
+  "message": {
+    "raw_data": { "f1": 1, "f2": "2", "f3": [1,2,3] },
+    "repack": {
+      "apns": { "repack_payload": ["f1"], "aps": "smth" },
+      "other": { "repack_payload": ["f1", "f3"], "option": "val" }
+    }
+  },
+  "subscription": {
+    "platform": "gcm"
+  },
+  "expect": {
+    "messages": [ {
+      "payload":  { "f1": 1, "f3": [1,2,3] },
+      "urlparams": { "x-option": "val" }
+    } ]
+  }
+},
+
+"Repacking rules for platform not found: apply rules marked 'other'": {
+    "message": {
+      "raw_data": { "f1": 1, "f2": "2", "f3": [1,2,3] },
+      "repack": {
+        "apns": { "repack_payload": ["f1"], "aps": "smth" },
+        "other": { "repack_payload": ["f1", "f3"], "option": "val" }
+      }
+    },
+    "subscription": {
+      "platform": "fcm"
+    },
+    "expect": {
+      "messages": [ {
+        "payload":  { "f1": 1, "f3": [1,2,3] },
+        "urlparams": { "x-option": "val" }
+      } ]
+    }
+  },
+
+"Unknown platform ignored": {
+    "subscription": {
+      "platform": "some-unknown-push-service"
+    },
+    "expect": {
+      "messages": []
+    }
+  }
+}

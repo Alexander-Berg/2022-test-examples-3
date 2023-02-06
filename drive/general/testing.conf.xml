@@ -1,0 +1,2665 @@
+<DaemonConfig>
+    LoggerType : ${LOG_DIR}current-global-frontend${LOG_POSTFIX}
+    LogLevel : 7
+    LogRotation : false
+    StdOut: ${LOG_DIR}current-frontend.stdout${LOG_POSTFIX}
+    StdErr: ${LOG_DIR}current-frontend.stderr${LOG_POSTFIX}
+    <Controller>
+        ClientTimeout : 200
+        ConfigsControl : false
+        ConfigsRoot : ${WorkDir}/configs/
+        Log : ${LOG_DIR}current-controller-producer${LOG_POSTFIX}
+        MaxConnections : 0
+        MaxQueue : 0
+        Port : ${BasePort + 3}
+        StartServer : 1
+        StateRoot : ${StateRootDir and StateRootDir or _BIN_DIRECTORY}/controller_state
+        Threads : 4
+    </Controller>
+</DaemonConfig>
+<Server>
+    DefaultPostgresPoolType: Maps
+    EventLog: ${LOG_DIR}current-unified-client${LOG_POSTFIX}
+    UnifiedAgentEventLog: unix://${WorkDir}/unified_agent.sock
+    UnifiedAgentGrpcMaxMessageSize: 104857600
+    UnifiedAgentMaxInflightBytes: 104857600
+    UnifiedAgentGrpcReconnectDelay: 50ms
+    UnifiedAgentGrpcSendDelay: 10ms
+    <ParkingZonesManager>
+        RTLineAPIName: surge
+    </ParkingZonesManager>
+    <MapsRouter>
+        SelfClientId: ${SecDistTVMId}
+        DestinationTvmId: 2012606
+        HostUrl: http://core-bicycle-router.testing.maps.n.yandex.ru
+        RequestTimeout: 1s
+        VehicleType: scooter
+    </MapsRouter>
+    <PedestrianRouter>
+        SelfClientId: ${SecDistTVMId}
+        DestinationTvmId: 2012630
+        HostUrl: http://core-masstransit-router.maps.yandex.net
+        RequestTimeout: 20s
+    </PedestrianRouter>
+    <UsersController>
+        SurgeServiceName: surge
+    </UsersController>
+    <Chat>
+        DBName: carsharing-support-production
+    </Chat>
+    <SurgeConstructor>
+        RTLineAPIName: surge_info
+        LocationFreshness: 8h
+    </SurgeConstructor>
+    <RequestPolicy>
+        <rtline>
+            GlobalTimeout: 30000
+            ConnectTimeout: 100
+            TasksCheckIntervalms: 5000
+        </rtline>
+        <rtline_indexing_offer>
+            GlobalTimeout: 10000
+            ConnectTimeout: 100
+            TasksCheckIntervalms: 3000
+            MaxAttempts: 3
+        </rtline_indexing_offer>
+        <rtline_indexing_sensors>
+            GlobalTimeout: 500
+            ConnectTimeout: 100
+            TasksCheckIntervalms: 1000
+            MaxAttempts: 1
+        </rtline_indexing_sensors>
+        <rtline_indexing_kv>
+            GlobalTimeout: 1000
+            ConnectTimeout: 100
+            TasksCheckIntervalms: 500
+            MaxAttempts: 2
+        </rtline_indexing_kv>
+        <drive>
+            GlobalTimeout: 50000
+            ConnectTimeout: 100
+            TasksCheckIntervalms: 45000
+            MaxAttempts: 1
+        </drive>
+    </RequestPolicy>
+    <GlobalTaskExecutor>
+        <Queue>
+            QueueIdentifier: QueueDrivePrestable
+            Type: VStorage
+            <Storage>
+                Type: Postgres
+                <Postgres>
+                    ConnectionString: ${SecDistPSQLConn}
+                    Password: ${WorkDir}/secrets/drive-prestable_drive_db-telematics-password
+                    TableName: ya_drive_data_prestable
+                </Postgres>
+            </Storage>
+        </Queue>
+        <Storage>
+            Type: VStorage
+            <Storage>
+                Type: Postgres
+                <Postgres>
+                    ConnectionString: ${SecDistPSQLConn}
+                    Password: ${WorkDir}/secrets/drive-prestable_drive_db-telematics-password
+                    TableName: ya_drive_tasks_queue_prestable
+                </Postgres>
+            </Storage>
+        </Storage>
+    </GlobalTaskExecutor>
+    <TelematicsApi>
+        <Queue>
+            QueueIdentifier: QueueTelematicsStable2
+            Type: VStorage
+            <Storage>
+                Type: Postgres
+                <Postgres>
+                    ConnectionString: ${SecDistPSQLConn}
+                    Password: ${WorkDir}/secrets/drive-prestable_drive_db-telematics-password
+                    TableName: drive_telematics_stable_2_queue
+                    HardLimitPoolSize: 160
+                    LockTimeout: 5s
+                    StatementTimeout: 10s
+                    AgeForKillConnection: 30s
+                </Postgres>
+            </Storage>
+        </Queue>
+        <Storage>
+            Type: VStorage
+            <Storage>
+                Type: Postgres
+                <Postgres>
+                    ConnectionString: ${SecDistPSQLConn}
+                    Password: ${WorkDir}/secrets/drive-prestable_drive_db-telematics-password
+                    TableName: drive_telematics_stable_2_storage
+                    HardLimitPoolSize: 160
+                    LockTimeout: 5s
+                    StatementTimeout: 10s
+                    AgeForKillConnection: 30s
+                </Postgres>
+            </Storage>
+        </Storage>
+    </TelematicsApi>
+
+    <TelematicsClient>
+        SaasTvmId: 2026977
+        FetchHost: prestable-drive.saas.yandex.net
+        FetchPort: 80
+        SpMetaSearch: multi_proxy
+        FetchService: scooter_telematics_t
+        SelfClientId: ${SecDistTVMId}
+        DestinationClientId: 2026342
+        <ServiceDiscovery>
+            ClientName: scooter-backend-testing
+            CacheDir: /var/cache/yandex/service_discovery
+            EndpointSetIds: sas#taxi_scooter_telematics_testing vla#taxi_scooter_telematics_testing
+            UpdateFrequency: 60s
+        </ServiceDiscovery>
+    </TelematicsClient>
+
+    <SensorApi>
+        Name: sensors
+        HistoryApiName: sensors_history
+        HistoryApiTimeout: 300s
+    </SensorApi>
+    <ScootersSurge>
+        SelfClientId: ${SecDistTVMId}
+        DestinationTvmId: 2028744
+        Endpoint: http://scooters-surge.taxi.tst.yandex.net
+    </ScootersSurge>
+    <GeoFeatures>
+        Name: sensors
+    </GeoFeatures>
+
+    <FeaturesClient>
+        RTLineApiName: drive_features
+        ResponseTimeout: 300ms
+        HistoryRTLineApiName: user_events_log_history
+        HistoryResponseTimeout: 2000ms
+    </FeaturesClient>
+
+
+    <!--
+        Databases - это своеобразные kv-хранилища с версионированием, если ты посмотришь,
+        то они над какой-нибудь таблицой работают.
+        Мы их используем чтобы, например, хранить состояния роботов.
+     -->
+    <Databases>
+        <alerts_states>
+            Type: Postgres
+            <Postgres>
+                ConnectionString: ${SecDistPSQLConn}
+                Password: ${WorkDir}/secrets/drive-prod_drive_db-telematics-password
+                TableName: drive_production_alerts
+            </Postgres>
+        </alerts_states>
+        <test_states>
+            Type: Postgres
+            <Postgres>
+                ConnectionString: ${SecDistPSQLConn}
+                Password: ${WorkDir}/secrets/drive-prestable_drive_db-telematics-password
+                TableName: drive_frontend_prestable_states_versioned
+                <Versioning>
+                    Enable: true
+                </Versioning>
+            </Postgres>
+        </test_states>
+        <models_storage>
+            Type: Postgres
+            <Postgres>
+                ConnectionString: ${SecDistPSQLConn}
+                Password: ${WorkDir}/secrets/drive-prod_drive_db-telematics-password
+                TableName: drive_models_storage
+                <Versioning>
+                    Enable: true
+                </Versioning>
+            </Postgres>
+        </models_storage>
+        <telematics_firmware>
+            Type: Postgres
+            <Postgres>
+                ConnectionString: ${SecDistPSQLConn}
+                Password: ${WorkDir}/secrets/drive-prod_drive_db-telematics-password
+                TableName: drive_telematics_firmware
+                <Versioning>
+                    Enable: true
+                </Versioning>
+            </Postgres>
+        </telematics_firmware>
+        <telematics_settings>
+            Type: Postgres
+            <Postgres>
+                ConnectionString: ${SecDistPSQLConn}
+                Password: ${WorkDir}/secrets/drive-prestable_drive_db-telematics-password
+                TableName: drive_telematics_stable_2_misc
+            </Postgres>
+        </telematics_settings>
+    </Databases>
+
+    <!--
+        а ExternalDatabases - это базы настоящие базы
+     -->
+    <ExternalDatabases>
+        <test-scooter-db>
+            Type: Postgres
+            SSLCert: ${WorkDir}/.postgresql/allCAs.pem
+            Password: ${WorkDir}/secrets/drive_keys/CarsharingDBPasswordProd
+            ConnectionString: ${SecDistPSQLConn}
+            UseBalancing: ${USE_DB_BALANCING or "true"}
+        </test-scooter-db>
+        <carsharing-support-production>
+            Type: Postgres
+            SSLCert: ${WorkDir}/.postgresql/allCAs.pem
+            Password: ${WorkDir}/secrets/chats_db_password/chats_db_password
+            ConnectionString: ${SecDistPSQLConn}
+        </carsharing-support-production>
+        <locks-production>
+            Type: Postgres
+            SSLCert: ${WorkDir}/.postgresql/allCAs.pem
+            Password: ${WorkDir}/secrets/drive-prod_drive_db-telematics-password
+            ConnectionString: ${SecDistPSQLConn}
+        </locks-production>
+    </ExternalDatabases>
+
+    <UserDevicesManager>
+        DBName: test-scooter-db
+        MinPropositionsInterval: 30s
+        Type: passport
+        Host: passport-test-internal.yandex.ru
+        IsHttps: false
+        Deep: 90d
+        <RequestConfig>
+            MaxAttempts: 1
+        </RequestConfig>
+        <Headers>
+            ADID: AC_AdjustToken
+            IDFA: IC_AdjustToken
+            OAID: HC_AdjustToken
+        </Headers>
+        IgnoredTokens: 00000000-0000-0000-0000-000000000000
+    </UserDevicesManager>
+
+    <PromoCodesManager>
+        DBName: test-scooter-db
+    </PromoCodesManager>
+    <GlobalAsyncDelivery>
+        Enabled: true
+    </GlobalAsyncDelivery>
+    <Localization>
+        DBName: test-scooter-db
+        Freshness: 5m
+    </Localization>
+    <Settings>
+        DBName: test-scooter-db
+        Freshness: 1s
+    </Settings>
+    <RTBackgroundManager>
+        DBName: test-scooter-db
+        LockDbName: locks-production
+        PingPeriod: 1s
+    </RTBackgroundManager>
+    <ModelsStorage>
+        Name: models_storage
+    </ModelsStorage>
+
+    <NotifiersManager>
+        DBName: test-scooter-db
+    </NotifiersManager>
+
+    <ExternalAccessTokensManager>
+        DBName: test-scooter-db
+    </ExternalAccessTokensManager>
+
+    <DistributingBlockEventsStorage>
+        Type: db
+        DBName: test-scooter-db
+    </DistributingBlockEventsStorage>
+
+    <UserRegistrationManager>
+        ChatId: registration
+        SensitiveDataHashesKeyPath: ${WorkDir}/secrets/sensitive_data_hash_key/sensitive_data_hash_key
+        IsNewChatEnabled: true
+        IsPrimaryDBUsed: false
+        <AccountChecker>
+            Host: blackbox.yandex.net
+            Route: /blackbox
+            SelfTvmId: ${SecDistTVMId}
+            DestinationTvmId: 222
+            MinAccountAge: 365d
+            NoScoringCountries: RUS,UKR,BLR
+            FullScoringCountries: ARM,TJK,UZB,TKM,KGZ
+            HighPrioritySuids: 15,19,24,47,48,52,53,64,91,96,110,117
+            LowPrioritySuids: 31,54,85,97,98,114,116
+        </AccountChecker>
+    </UserRegistrationManager>
+
+    <DriveAPI>
+        DefaultPermissionsMaxAge: 1m
+        TakeoutClientType: fake
+        PrivateDataClientType: fake
+        OctopusClientType: fake
+        <MDS>
+            ApiHost: s3.mdst.yandex.net
+            ApiPort: 443
+            RequestTimeout: 60s
+            Https: 1
+            AccessSecretKeyPath: ${WorkDir}/secrets/s3mds/access_secret_key
+            AccessKeyIdPath: ${WorkDir}/secrets/s3mds/access_key_id
+            <RequestConfig>
+                MaxAttempts: 1
+            </RequestConfig>
+            <!-- PublicBuckets: scooters-photos -->
+            <!-- ^ does not work in testing, details in https://st.yandex-team.ru/SCOOTERSDUTY-416 -->
+        </MDS>
+        <RolesFeatures>
+            NecessaryRoles: GR_default_user_base,default_user,user_access_base
+            BaseRoles: b2b_flow,onboarding_role
+            FirstPlusRidingRoles: full_cashback_role
+        </RolesFeatures>
+        UsersHistoryDeep: 0
+        <DeviceTagsHistory>
+            MaxHistoryDeep: 365d
+            Deep: 1d
+            UseCache: false
+        </DeviceTagsHistory>
+        <TagDescriptionsHistory>
+            MaxHistoryDeep: 10d
+            Deep: 10d
+        </TagDescriptionsHistory>
+        <Search>
+            Entities: User,Car
+            IsEnabled: true
+        </Search>
+        DBName: test-scooter-db
+        <Billing>
+            FailedTaskCheckInterval: 6h
+            MinimalPayment: 31415
+            NotifierName: billing_bot
+            UsePaymentsCache: true
+            ActiveQueue: prestable
+            <AccountsHistoryConfig>
+                Deep: 10m
+                MaxHistoryDeep: 10m
+            </AccountsHistoryConfig>
+            <Logics>
+                Modules: wallet,bonus,coins,yandex_account,mobile_payment,card,yandex_cashback
+                <wallet></wallet>
+                <coins></coins>
+                <bonus></bonus>
+                <card>
+                    ApiHost: trust-payments-test.paysys.yandex.net
+                    ApiPort: 8028
+                    Https: 1
+                    RequestTimeout: 2s
+                    EventLog: ${LOG_DIR}current-global-frontend.trust.events.tlog
+                    <RequestConfig>
+                        MaxAttempts: 1
+                        TimeoutSendingms: 900
+                    </RequestConfig>
+                </card>
+                <mobile_payment>
+                    ApiHost: trust-payments-test.paysys.yandex.net
+                    ApiPort: 8028
+                    Https: 1
+                    RequestTimeout: 10s
+                    EventLog: ${LOG_DIR}current-global-frontend.trust.events.tlog
+                    <RequestConfig>
+                        MaxAttempts: 1
+                        TimeoutSendingms: 900
+                    </RequestConfig>
+                </mobile_payment>
+                <yandex_account>
+                    ApiHost: trust-payments-test.paysys.yandex.net
+                    ApiPort: 8028
+                    Https: 1
+                    RequestTimeout: 2s
+                    EventLog: ${LOG_DIR}current-global-frontend.trust.events.tlog
+                    <RequestConfig>
+                        MaxAttempts: 1
+                        TimeoutSendingms: 900
+                    </RequestConfig>
+                </yandex_account>
+                <yandex_cashback>
+                    ApiHost: trust-payments-test.paysys.yandex.net
+                    ApiPort: 8028
+                    Https: 1
+                    RequestTimeout: 2s
+                    EventLog: ${LOG_DIR}current-global-frontend.trust.events.tlog
+                    <RequestConfig>
+                        MaxAttempts: 1
+                        TimeoutSendingms: 900
+                    </RequestConfig>
+                </yandex_cashback>
+            </Logics>
+        </Billing>
+        <Cars>
+            IsSearchEnabled: 1
+        </Cars>
+        <Users>
+            IsSearchEnabled: 1
+            SearchViaDatabaseVector: user_tsvector("user")
+            <RegistrationGeo>
+                <moscow>
+                    Lat: 55.75222
+                    Lon: 37.61556
+                    LocationName: moscow
+                </moscow>
+                <spb>
+                    Lat: 59.93863
+                    Lon: 30.31413
+                    LocationName: spb
+                </spb>
+                <kazan>
+                    Lat: 55.78874
+                    Lon: 49.12214
+                    LocationName: kazan
+                </kazan>
+                <sochi>
+                    Lat: 43.58528
+                    Lon: 39.72028
+                    LocationName: sochi
+                </sochi>
+            </RegistrationGeo>
+        </Users>
+        <Datasync>
+            <TVM>
+                Source: ${SecDistTVMId}
+                Destination: 132
+                TokenPath: ${WorkDir}/secrets/drive_keys/TVMSecret
+            </TVM>
+            <RequestConfig>
+                GlobalTimeout: 20000
+            </RequestConfig>
+            Host: intapi.disk.yandex.net
+            Port: 8080
+            BaseRoute: v1/personality/profile/persdata/
+        </Datasync>
+        <Geocoder>
+            Host: addrs-testing.search.yandex.net
+            Port: 80
+            Path: search/stable/yandsearch
+            TvmDestination: 2008261
+            TvmSource: ${SecDistTVMId}
+        </Geocoder>
+        <!-- <Takeout>
+            SelfTvmId: 2010450
+            DestinationTvmId: 2009785
+            TvmKeyPath: ${WorkDir}/secrets/takeout_tvm/key
+            Host: takeout-test.passport.yandex.net
+            Port: 443
+            RequestTimeout: 10s
+        </Takeout> -->
+        <FinesManager>
+        </FinesManager>
+        <IncidentsManager>
+        </IncidentsManager>
+        OffersStorageName: offers_manager
+    </DriveAPI>
+
+    <TaxiRouteInfoClient>
+        StatusHost: taxi-routeinfo.taxi.yandex.net
+        StatusPort: 443
+        UseHttps: true
+        StatusUri: /taxi_info
+        ClientId: scooter
+        Auth: ${WorkDir}/secrets/taxi-routeinfo/ApiKey
+    </TaxiRouteInfoClient>
+
+    <TaxiRouteHistory>
+        SelfClientId: ${SecDistTVMId}
+    </TaxiRouteHistory>
+
+    <TaxiSuggest>
+        SelfClientId: ${SecDistTVMId}
+    </TaxiSuggest>
+
+    <TaxiSupportClassifier>
+        SelfClientId: ${SecDistTVMId}
+    </TaxiSupportClassifier>
+
+    <DevicesSnapshotManager>
+        <SensorOptions>
+            <mileage>
+                UpdatePeriod: 10s
+                EnableSecondStage: 1
+            </mileage>
+            <fuel_level-2211>
+                UpdatePeriod: 10s
+                EnableSecondStage: 1
+            </fuel_level-2211>
+            <speed_can>
+                UpdatePeriod: 10s
+                EnableSecondStage: 1
+            </speed_can>
+            <engine_on>
+                UpdatePeriod: 5s
+                EnableSecondStage: 1
+            </engine_on>
+            <speed>
+                UpdatePeriod: 1s
+                EnableSecondStage: 1
+            </speed>
+            <accelerator_pedal>
+                UpdatePeriod: 1s
+                EnableSecondStage: 1
+            </accelerator_pedal>
+            <front_left_door_open>
+                UpdatePeriod: 1s
+                EnableSecondStage: 1
+            </front_left_door_open>
+            <front_right_door_open>
+                UpdatePeriod: 1s
+                EnableSecondStage: 1
+            </front_right_door_open>
+            <rear_left_door_open>
+                UpdatePeriod: 1s
+                EnableSecondStage: 1
+            </rear_left_door_open>
+            <rear_right_door_open>
+                UpdatePeriod: 1s
+                EnableSecondStage: 1
+            </rear_right_door_open>
+        </SensorOptions>
+    </DevicesSnapshotManager>
+
+    <AuthModules>
+        <fake>
+            Type: fake
+            DefaultUserId: f5d8a900-de6b-42a0-a0ef-d4bcdacd0e81
+        </fake>
+
+        <taxi_with_blackbox>
+            Type: meta
+            Submodules: taxi,blackbox
+        </taxi_with_blackbox>
+
+        <blackbox>
+            Type: blackbox2
+            BlackboxUrl: http://pass-test.yandex.ru/blackbox
+            CookieHost: yandex.ru
+            SelfClientId: ${SecDistTVMId}
+            DestinationClientId: 224
+            EnableUserTickets: true
+            Environment: testing
+        </blackbox>
+
+        <blackbox_staff>
+            Type: blackbox2
+            BlackboxUrl: http://blackbox.yandex-team.ru/blackbox
+            CookieHost: yandex-team.ru
+            SelfClientId: ${SecDistTVMId}
+            DestinationClientId: 223
+            IgnoreDeviceId: true
+        </blackbox_staff>
+
+        <taxi>
+            Type: tvm
+            SelfClientId: ${SecDistTVMId}
+            <!-- 
+                2014194 orderhistory
+                2018071 layers
+                2013636 developers
+                2027652 scooters-misc
+                2028744 scooters-surge
+                2026480 atlas-etl
+                2029344 scooters-mostrans
+                2013864 api-proxy
+                2010876 passenger-authorizer
+                2029302 api-proxy-superapp-critical
+                2032408 scooters-ops-relocation
+                2032185 scooters-ops-dispatch
+                2032358 scooters-subscription
+                2031927 scooters-ops
+                2033755 scooters-offers
+                2028242 scooter-accumulator-bot
+                2014904 statistics
+                2035331 scooters-ops-repair
+                2036036 scooters-payments
+                2033235 scooters-updater
+            --> 
+            AcceptedClientIds: 2014194,2018071,2013636,2027652,2028744,2026480,2029344,2013864,2010876,2029302,2032408,2032185,2032358,2031927,2033755,2028242,2014904,2035331,2036036,2033235
+            <!-- tvm id of @sapunovnik in test env -->
+            UserId: f5d8a900-de6b-42a0-a0ef-d4bcdacd0e81
+            BlackboxEnv: Test
+        </taxi>
+    </AuthModules>
+
+    <Datasync>
+        Host: intapi.disk.yandex.net
+        Port: 8080
+        SelfClientId: ${SecDistTVMId}
+        DestinationClientId: 132
+    </Datasync>
+
+    <Tvm>
+        SelfClientId: ${SecDistTVMId}
+        DestinationClientIds: 132,222,223,224,2000078,2000382,2000599,2000834,2000836,2001071,2001267,2001886,2009785,2009819,2012606,2011468,2012116,2012630,2013178,2015018,2016313,2016315,2024769,2026342,2028744,2008261,2033227,2026977
+        SecretFile: ${WorkDir}/secrets/drive_keys/TVMSecret
+        UserTicketEnvironments: Test
+    </Tvm>
+
+    <HttpServer>
+        Port:${BasePort}
+        Threads: 96
+        CompressionEnabled: true
+        MaxQueueSize: 10000
+    </HttpServer>
+
+    <RequestHandlers>
+        <default>
+            ThreadsCount: 32
+        </default>
+        <external_offer>
+            ThreadsCount: 16
+        </external_offer>
+    </RequestHandlers>
+
+    <LPMClient>
+        Name: LPM
+        Host: https://trust-lpm-test.paysys.yandex.net:8031
+        ServiceToken: taxi_samokat_payments_8f584fd387b458595cfd57cb0cea2df8
+        RequestTimeout: 600ms
+        <RequestConfig>
+            MaxAttempts: 1
+            TimeoutSendingms: 600
+        </RequestConfig>
+    </LPMClient>
+
+    <RTLineAPIs>
+        <offers>
+            Host: saas-searchproxy-maps-prestable.yandex.net
+            Port: 17000
+            ServiceName: drive_offers
+            RequestPolicyName: rtline
+            BalancerTimeoutTable: 10ms 30ms 50ms 70ms 90ms 110ms 130ms 150ms 250ms 500ms 1000ms
+
+            IndexingHost: saas-indexerproxy-maps-prestable.yandex.net
+            IndexingPort: 80
+            IndexingToken: fd0e2e75ac48ae99b40cc312af569cb6
+            IndexingPolicyName: rtline_indexing_offer
+        </offers>
+        <surge_info>
+            Host: saas-searchproxy-maps-prestable.yandex.net
+            Port: 17000
+            ServiceName: drive_cache
+            RequestPolicyName: rtline
+            BalancerTimeoutTable: 10ms 30ms 50ms 70ms 90ms 110ms 130ms 150ms 250ms 500ms 1000ms
+
+            IndexingHost: saas-indexerproxy-maps-prestable.yandex.net
+            IndexingPort: 80
+            IndexingToken: ac6ac7f7a6544f336202c0b058104374
+            IndexingPolicyName: rtline_indexing_kv
+        </surge_info>
+        <default-linker>
+            Host: saas-searchproxy-maps.yandex.net
+            Port: 17000
+            ServiceName: default-linker
+            RequestPolicyName: rtline
+        </default-linker>
+        <drive_graph>
+            Host: saas-searchproxy-maps-prestable.yandex.net
+            Port: 17000
+            ServiceName: scooter_graph
+            RequestPolicyName: rtline
+        </drive_graph>
+        <drive_router>
+            Host: saas-searchproxy-maps.yandex.net
+            Port: 17000
+            ServiceName: scooter_router
+            BalancerTimeoutTable: 10ms 30ms 50ms 100ms 150ms 250ms 500ms 1000ms 2000ms
+            RequestPolicyName: rtline
+        </drive_router>
+        <transport-router>
+            Host: saas-searchproxy-maps-prestable.yandex.net
+            Port: 17000
+            ServiceName: transport-router
+            RequestPolicyName: rtline
+        </transport-router>
+        <sensors>
+            Host: prestable-drive.saas.yandex.net
+            Port: 80
+            ServiceName: scooter_telematics_t
+            SelfClientId: ${SecDistTVMId}
+            DestinationTvmId: 2026977
+            SpMetaSearch: multi_proxy
+            BalancerTimeoutTable: 10ms 30ms 50ms 70ms 90ms 110ms 130ms 150ms 250ms 500ms 1000ms
+            RequestPolicyName: rtline
+            <!-- TODO: remove -->
+            IndexingHost: saas-indexerproxy-maps-prestable.yandex.net
+            IndexingPort: 80
+            IndexingToken: -
+            IndexingPolicyName: rtline_indexing_sensors
+        </sensors>
+        <sensors_history>
+            Host: saas-searchproxy-maps-kv.yandex.net
+            Port: 17000
+            ServiceName: scooter_telematics_history
+            BalancerTimeoutTable: 10ms 30ms 50ms 70ms 90ms 110ms 130ms 150ms 250ms 500ms 1000ms
+            RequestPolicyName: rtline
+        </sensors_history>
+        <surge>
+            Host: saas-searchproxy-maps.yandex.net
+            Port: 17000
+            ServiceName: scooter
+            RequestPolicyName: rtline
+
+            IndexingHost: saas-indexerproxy-maps.yandex.net
+            IndexingPort: 80
+            IndexingToken: -
+            IndexingPolicyName: rtline_indexing_sensors
+        </surge>
+        <landmarks>
+            Host: saas-searchproxy-maps-prestable.yandex.net
+            Port: 17000
+            ServiceName: landmarks
+            RequestPolicyName: rtline
+        </landmarks>
+        <user_events_log_history>
+            Host: saas-searchproxy-maps.yandex.net
+            Port: 17000
+            ServiceName: scooter_search
+            RequestPolicyName: rtline
+        </user_events_log_history>
+        <drive_features>
+            Host: saas-searchproxy-kv.yandex.net
+            Port: 17000
+            ServiceName: scooter_features
+            SelfClientId: ${SecDistTVMId}
+            DestinationTvmId: 2011468
+            SpMetaSearch: multi_proxy
+            RequestPolicyName: rtline
+            BalancerTimeoutTable: 10ms 30ms 50ms 70ms 90ms 110ms 130ms 150ms 250ms 500ms 1000ms
+        </drive_features>
+    </RTLineAPIs>
+
+    <TaxiTrackStoryConfig>
+      Uri: internal-trackstory.taxi.tst.yandex.net
+      GetTrackPath: /scooters/track
+      SelfTvmId: ${SecDistTVMId}
+      DestinationTvmId: 2033227
+      RequestTimeout: 1000ms
+      MaxInterval: 15h
+    </TaxiTrackStoryConfig>
+
+    <Processors>
+        ProcessorDefaultTimeout: 1s
+
+        <default_config:default>
+            Access-Control-Allow-Origin: ((^(.*)\.yandex-team\.ru$)|(^(www\.)?yandex\.(ru|by|ua|kz|com|com\.tr)$))
+            DumpEventLog: true
+            <AppBuildsSelector>
+                IC_AppBuild: 1
+                AC_AppBuild: 1
+                AS_AppBuild: 10032
+            </AppBuildsSelector>
+        </default_config:default>
+
+        <!-- client app endpoints  -->
+
+        <scooters/external/sessions/current>
+            AuthModuleName: taxi_with_blackbox
+            ProcessorType: current_session
+            OverrideCgiPart: report=user_app
+        </scooters/external/sessions/current>
+
+        <scooters/sessions/current>
+            AuthModuleName: taxi_with_blackbox
+            ProcessorType: current_session
+            OverrideCgiPart: report=user_app
+        </scooters/sessions/current>
+
+        <scooters/api/yandex/user/settings>
+            ProcessorType: set_personal_settings
+            AuthModuleName: taxi_with_blackbox
+        </scooters/api/yandex/user/settings>
+
+        <scooters/user/settings>
+            ProcessorType: set_personal_settings
+            AuthModuleName: taxi_with_blackbox
+        </scooters/user/settings>
+
+        <scooters/api/yandex/offers/book>
+            AuthModuleName: taxi_with_blackbox
+            ProcessorType: book
+            RequestTimeout: 10s
+        </scooters/api/yandex/offers/book>
+
+        <scooters/offers/book>
+            AuthModuleName: taxi_with_blackbox
+            ProcessorType: book
+            RequestTimeout: 10s
+        </scooters/offers/book>
+
+        <scooters/api/yandex/offers/create>
+            ProcessorType: create_offers
+            AuthModuleName: taxi_with_blackbox
+        </scooters/api/yandex/offers/create>
+
+        <scooters/api/yandex/car/control>
+            AuthModuleName: taxi_with_blackbox
+            ProcessorType: car_user_control
+            RequestTimeout: 60s
+        </scooters/api/yandex/car/control>
+
+        <scooters/car/control>
+            AuthModuleName: taxi_with_blackbox
+            ProcessorType: car_user_control
+            RequestTimeout: 60s
+        </scooters/car/control>
+
+        <scooters/api/yandex/car/actualization>
+            ProcessorType: tags_actualization
+            AuthModuleName: taxi_with_blackbox
+        </scooters/api/yandex/car/actualization>
+
+        <scooters/car/actualization>
+            ProcessorType: tags_actualization
+            AuthModuleName: taxi_with_blackbox
+        </scooters/car/actualization>
+
+        <scooters/api/yandex/card>
+            AuthModuleName: taxi_with_blackbox
+            ProcessorType: set_card
+        </scooters/api/yandex/card>
+
+        <scooters/card>
+            AuthModuleName: taxi_with_blackbox
+            ProcessorType: set_card
+        </scooters/card>
+
+        <scooters/api/yandex/tag/evolve>
+            AuthModuleName: taxi_with_blackbox
+            ProcessorType: tag_evolve
+            RequestTimeout: 60s
+        </scooters/api/yandex/tag/evolve>
+
+        <scooters/tag/evolve>
+            AuthModuleName: taxi_with_blackbox
+            ProcessorType: tag_evolve
+            RequestTimeout: 60s
+        </scooters/tag/evolve>
+
+        <scooters/api/yandex/trace/photo/upload>
+            ProcessorType: upload_service_photo
+            AuthModuleName: fake
+            BucketName: scooters-photos
+            EnableServiceSessions: 0
+            OverrideCgiPart: entity=trace
+            RequestTimeout: 60s
+        </scooters/api/yandex/trace/photo/upload>
+
+        <scooters/trace/photo/upload>
+            ProcessorType: upload_service_photo
+            AuthModuleName: taxi_with_blackbox
+            BucketName: scooters-photos
+            EnableServiceSessions: 0
+            OverrideCgiPart: entity=trace
+            RequestTimeout: 60s
+        </scooters/trace/photo/upload>
+
+        <scooters/sessions/history>
+            AuthModuleName: taxi
+            ProcessorType: client_history
+            OverrideCgiPart: numdoc=10
+            RequestTimeout: 10s
+        </scooters/sessions/history>
+
+        <!-- back2back endpoints -->
+
+        <api/taxi/offers/create>
+            ProcessorType: create_offers
+            AuthModuleName: taxi
+            OverrideCgiPart: report=user_app
+        </api/taxi/offers/create>
+
+        <api/taxi/car/list>
+            AuthModuleName: taxi
+            ProcessorType: service_app_list
+            OverrideCgiPart: report=user_app
+        </api/taxi/car/list>
+
+        <api/taxi/car/details>
+            AuthModuleName: taxi
+            ProcessorType: service_app_list
+        </api/taxi/car/details>
+
+        <api/taxi/car/info>
+            AuthModuleName: taxi
+            ProcessorType: car_admin_portal_info
+        </api/taxi/car/info>
+
+        <api/taxi/car/tag_add>
+            AuthModuleName: taxi
+            ProcessorType: car_tags/add
+        </api/taxi/car/tag_add>
+
+        <api/taxi/car/tag_remove>
+            AuthModuleName: taxi
+            ProcessorType: car_tags/remove
+        </api/taxi/car/tag_remove>
+
+        <api/taxi/car/control>
+            AuthModuleName: taxi
+            ProcessorType: car_root_control
+            RequestTimeout: 60s
+        </api/taxi/car/control>
+
+        <api/taxi/sessions/history>
+            AuthModuleName: taxi
+            ProcessorType: client_history
+            OverrideCgiPart: numdoc=10
+            RequestTimeout: 10s
+        </api/taxi/sessions/history>
+
+        <api/taxi/user/tag_add>
+            AuthModuleName: taxi
+            ProcessorType: user_tags/add
+        </api/taxi/user/tag_add>
+        <api/taxi/user/tags_list>
+            AuthModuleName: taxi
+            ProcessorType: user_tags/list
+        </api/taxi/user/tags_list>
+
+        <api/taxi/car/tag/history>
+            ProcessorType: car_history
+            AuthModuleName: taxi
+        </api/taxi/car/tag/history>
+
+        <api/taxi/sessions/current>
+            AuthModuleName: taxi
+            ProcessorType: current_session
+        </api/taxi/sessions/current>
+
+        <api/taxi/sessions/drop>
+            AuthModuleName: taxi
+            ProcessorType: tag_evolve
+            OverridePost: {"tag_name":"old_state_reservation"}
+            RequestTimeout: 60s
+        </api/taxi/sessions/drop>
+
+        <api/taxi/sessions/item>
+            AuthModuleName: taxi
+            ProcessorType: taxi_session_item
+        </api/taxi/sessions/item>
+
+        <api/taxi/sessions/list>
+            AuthModuleName: taxi
+            ProcessorType: taxi_session_list
+        </api/taxi/sessions/list>
+
+        <api/taxi/car/telematics/state>
+            AuthModuleName: taxi
+            ProcessorType: telematics_car_state
+        </api/taxi/car/telematics/state>
+
+        <api/taxi/offers/fixpoint>
+            AuthModuleName: taxi
+            ProcessorType: external_offer
+        </api/taxi/offers/fixpoint>
+
+        <api/taxi/billing/payment/info>
+            AuthModuleName: taxi
+            ProcessorType: user_payments
+        </api/taxi/billing/payment/info>
+
+        <!-- admin endpoints -->
+
+        <api/staff/areas/propositions/propose>
+            ProcessorType: drive_areas_propose
+            AuthModuleName: blackbox_staff
+        </api/staff/areas/propositions/propose>
+
+        <api/staff/areas/propositions/confirm>
+            ProcessorType: drive_areas_confirm
+            AuthModuleName: blackbox_staff
+        </api/staff/areas/propositions/confirm>
+
+        <api/staff/areas/propositions/reject>
+            ProcessorType: drive_areas_reject
+            AuthModuleName: blackbox_staff
+        </api/staff/areas/propositions/reject>
+
+        <api/staff/user_tags/add>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_tags/add
+        </api/staff/user_tags/add>
+
+        <api/staff/user_tags/update>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_tags/update
+        </api/staff/user_tags/update>
+
+        <api/staff/user_tags/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_tags/remove
+        </api/staff/user_tags/remove>
+
+        <api/staff/user_tags/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_tags/list
+        </api/staff/user_tags/list>
+
+        <api/staff/user/tag/history/details>
+            ProcessorType: user_tags_history_details
+            AuthModuleName: blackbox_staff
+        </api/staff/user/tag/history/details>
+
+        <api/staff/users/tags_history>
+            ProcessorType: user_tags_history
+            AuthModuleName: blackbox_staff
+        </api/staff/users/tags_history>
+
+        <api/staff/user/tag/details>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_tags/details
+        </api/staff/user/tag/details>
+
+        <api/staff/account/tag/add>
+            AuthModuleName: blackbox_staff
+            ProcessorType: account_tags/add
+        </api/staff/account/tag/add>
+
+        <api/staff/account/tag/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: account_tags/remove
+        </api/staff/account/tag/remove>
+
+        <api/staff/account/tag/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: account_tags/list
+        </api/staff/account/tag/list>
+
+        <api/staff/account/tag/history>
+            ProcessorType: account_tags_history
+            AuthModuleName: blackbox_staff
+        </api/staff/account/tag/history>
+
+        <api/staff/account/tag/details>
+            AuthModuleName: blackbox_staff
+            ProcessorType: account_tags/details
+        </api/staff/account/tag/details>
+
+        <api/staff/account/tag/update>
+            AuthModuleName: blackbox_staff
+            ProcessorType: account_tags/update
+        </api/staff/account/tag/update>
+
+        <api/staff/account/tag/history/details>
+            ProcessorType: account_tags_history_details
+            AuthModuleName: blackbox_staff
+        </api/staff/account/tag/history/details>
+
+        <api/staff/car/details>
+            AuthModuleName: blackbox_staff
+            ProcessorType: service_app_list
+            OverrideCgiPart: report=service_app_details
+        </api/staff/car/details>
+
+        <api/staff/documents/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: get_documents_list
+        </api/staff/documents/list>
+
+        <api/staff/documents/history>
+            AuthModuleName: blackbox_staff
+            ProcessorType: get_document_history
+        </api/staff/documents/history>
+
+        <api/staff/documents/upsert>
+            AuthModuleName: blackbox_staff
+            ProcessorType: upsert_document
+        </api/staff/documents/upsert>
+
+        <api/staff/documents/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: remove_document
+        </api/staff/documents/remove>
+
+        <api/staff/documents/preview>
+            AuthModuleName: blackbox_staff
+            ProcessorType: preview_document
+        </api/staff/documents/preview>
+
+        <api/staff/documents/schedule>
+            AuthModuleName: blackbox_staff
+            ProcessorType: schedule_document
+        </api/staff/documents/schedule>
+
+        <api/staff/documents/queue>
+            AuthModuleName: blackbox_staff
+            ProcessorType: get_queued_documents_list
+        </api/staff/documents/queue>
+
+        <api/staff/document_queue/history>
+            AuthModuleName: blackbox_staff
+            ProcessorType: get_queued_documents_history
+        </api/staff/document_queue/history>
+
+        <api/staff/document_queue/cancel>
+            AuthModuleName: blackbox_staff
+            ProcessorType: cancel_queue_document
+        </api/staff/document_queue/cancel>
+
+        <api/staff/document_queue/set_queue>
+            AuthModuleName: blackbox_staff
+            ProcessorType: set_queue_document
+        </api/staff/document_queue/set_queue>
+
+        <api/staff/alerts/info>
+            ProcessorType: alerts_group
+            AuthModuleName: blackbox_staff
+        </api/staff/alerts/info>
+
+        <api/staff/alerts/meta>
+            ProcessorType: alerts_meta_processor
+            AuthModuleName: blackbox_staff
+        </api/staff/alerts/meta>
+
+        <api/staff/attachments/assign>
+            AuthModuleName: blackbox_staff
+            ProcessorType: car_assign_attachment
+        </api/staff/attachments/assign>
+
+        <api/staff/car/attachments/list>
+            AuthModuleName: blackbox_staff
+            OverrideCgiPart: report=all
+            ProcessorType: car_attached_hardware
+        </api/staff/car/attachments/list>
+
+        <api/staff/car/tag/perform/finish>
+            ProcessorType: service_app_finish
+            AuthModuleName: blackbox_staff
+            RequestTimeout: 60s
+        </api/staff/car/tag/perform/finish>
+
+        <api/staff/search>
+            ProcessorType: service_app_search
+            AuthModuleName: blackbox_staff
+        </api/staff/search>
+
+        <api/staff/car/tag/perform/start>
+            ProcessorType: service_app_start
+            AuthModuleName: blackbox_staff
+        </api/staff/car/tag/perform/start>
+
+        <api/staff/user/tag/perform/start>
+            ProcessorType: service_app_start
+            AuthModuleName: blackbox_staff
+        </api/staff/user/tag/perform/start>
+
+        <api/staff/user/tag/perform/finish>
+            ProcessorType: service_app_finish
+            AuthModuleName: blackbox_staff
+            RequestTimeout: 60s
+        </api/staff/user/tag/perform/finish>
+
+        <api/staff/sessions/drop>
+            AuthModuleName: blackbox_staff
+            ProcessorType: tag_evolve
+            OverridePost: {"tag_name":"old_state_reservation"}
+            RequestTimeout: 60s
+        </api/staff/sessions/drop>
+
+        <api/staff/user/phone/history>
+            AuthModuleName: blackbox_staff
+            ProcessorType: phone_binding_history
+        </api/staff/user/phone/history>
+
+        <api/staff/car/edit>
+            AuthModuleName: blackbox_staff
+            ProcessorType: car_upsert
+        </api/staff/car/edit>
+
+        <api/staff/car/history>
+            AuthModuleName: blackbox_staff
+            ProcessorType: car_modification_history
+        </api/staff/car/history>
+
+        <api/staff/user/info>
+            ProcessorType: user_admin_portal_info
+            AuthModuleName: blackbox_staff
+        </api/staff/user/info>
+
+        <api/staff/user/report>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_admin_portal_info
+        </api/staff/user/report>
+
+        <api/staff/user/dups>
+            ProcessorType: user_dups
+            AuthModuleName: blackbox_staff
+        </api/staff/user/dups>
+
+        <api/staff/user/edit>
+            ProcessorType: user_edit
+            AuthModuleName: blackbox_staff
+        </api/staff/user/edit>
+
+        <api/staff/user/list>
+            ProcessorType: user_list
+            AuthModuleName: blackbox_staff
+        </api/staff/user/list>
+
+        <api/staff/user/history>
+            ProcessorType: user_modification_history
+            AuthModuleName: blackbox_staff
+        </api/staff/user/history>
+
+        <api/staff/user/permissions>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_permissions
+        </api/staff/user/permissions>
+
+        <api/staff/user/delete>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_force_delete
+        </api/staff/user/delete>
+
+        <api/staff/user/requests>
+            ProcessorType: user_requests_history
+            AuthModuleName: blackbox_staff
+        </api/staff/user/requests>
+
+        <api/staff/devices/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_devices_list
+        </api/staff/devices/list>
+
+        <api/staff/devices/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_device_remove
+        </api/staff/devices/remove>
+
+        <api/staff/devices/control>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_devices_control
+        </api/staff/devices/control>
+
+        <api/staff/my/roles/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: current_user_roles
+        </api/staff/my/roles/list>
+
+        <api/staff/roles/activation>
+            AuthModuleName: blackbox
+            ProcessorType: user_role_activation
+        </api/staff/roles/activation>
+
+        <api/staff/roles/snapshot/reject>
+            AuthModuleName: blackbox_staff
+            ProcessorType: manage_roles/snapshot/reject
+        </api/staff/roles/snapshot/reject>
+
+        <api/staff/roles/snapshot/propose>
+            AuthModuleName: blackbox_staff
+            ProcessorType: manage_roles/snapshot/propose
+        </api/staff/roles/snapshot/propose>
+
+        <api/staff/roles/snapshot/confirm>
+            AuthModuleName: blackbox_staff
+            ProcessorType: manage_roles/snapshot/confirm
+        </api/staff/roles/snapshot/confirm>
+
+        <api/staff/roles/snapshot/upsert>
+            AuthModuleName: blackbox_staff
+            ProcessorType: manage_roles/snapshot/upsert
+        </api/staff/roles/snapshot/upsert>
+
+        <api/staff/tag/photos>
+            ProcessorType: get_service_photo
+            AuthModuleName: blackbox_staff
+        </api/staff/tag/photos>
+
+        <api/staff/fueling/map>
+            AuthModuleName: blackbox_staff
+            ProcessorType: fueling_map
+        </api/staff/fueling/map>
+
+        <api/support_staff/chat/stickers/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: robot_chat_sticker_list
+            IsAdminProcessor: 1
+        </api/support_staff/chat/stickers/list>
+
+        <api/support_staff/chat/stickers/edit>
+            AuthModuleName: blackbox_staff
+            ProcessorType: robot_chat_sticker_edit
+        </api/support_staff/chat/stickers/edit>
+
+        <api/support_staff/chat/stickers/history>
+            AuthModuleName: blackbox_staff
+            ProcessorType: robot_chat_sticker_history
+        </api/support_staff/chat/stickers/history>
+
+        <api/support_staff/webphone/authorize>
+            ProcessorType: support_center_webphone_auth
+            AuthModuleName: blackbox_staff
+        </api/support_staff/webphone/authorize>
+
+        <api/support_staff/webphone/call>
+            ProcessorType: support_center_start_call
+            AuthModuleName: blackbox_staff
+        </api/support_staff/webphone/call>
+
+        <api/support_staff/yang/revision>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_persdata_revision
+        </api/support_staff/yang/revision>
+
+        <api/support_staff/request/defer>
+            AuthModuleName: blackbox_staff
+            ProcessorType: support_center_defer_request
+        </api/support_staff/request/defer>
+
+        <api/support_staff/request/undefer>
+            AuthModuleName: blackbox_staff
+            ProcessorType: support_center_undefer_request
+        </api/support_staff/request/undefer>
+
+        <api/support_staff/chats/filter>
+            AuthModuleName: blackbox_staff
+            ProcessorType: robot_chat_filter
+        </api/support_staff/chats/filter>
+
+        <api/support_staff/chat/node_jump>
+            AuthModuleName: blackbox_staff
+            ProcessorType: robot_chat_node_jump
+        </api/support_staff/chat/node_jump>
+
+        <api/staff/support/requests>
+            AuthModuleName: blackbox_staff
+            ProcessorType: support_center_requests
+            RequestTimeout: 60s
+        </api/staff/support/requests>
+
+        <api/staff/support/load_balance/get>
+            AuthModuleName: blackbox_staff
+            ProcessorType: support_center_get_load_balance
+        </api/staff/support/load_balance/get>
+
+        <api/staff/support/load_balance/update>
+            AuthModuleName: blackbox_staff
+            ProcessorType: support_center_update_load_balance
+        </api/staff/support/load_balance/update>
+
+        <api/staff/fueling/order/create>
+            AuthModuleName: blackbox_staff
+            ProcessorType: support_create_fueling_order
+        </api/staff/fueling/order/create>
+
+        <api/staff/support/playback/get>
+            AuthModuleName: blackbox_staff
+            ProcessorType: support_center_playback_info
+        </api/staff/support/playback/get>
+
+        <api/staff/support/playback/update>
+            AuthModuleName: blackbox_staff
+            ProcessorType: support_center_update_palyback
+        </api/staff/support/playback/update>
+
+        <api/support_staff/user/tag/perform/start>
+            ProcessorType: service_app_start
+            AuthModuleName: blackbox_staff
+        </api/support_staff/user/tag/perform/start>
+
+        <api/support_staff/user/tag/perform/finish>
+            ProcessorType: service_app_finish
+            AuthModuleName: blackbox_staff
+            RequestTimeout: 60s
+        </api/support_staff/user/tag/perform/finish>
+
+        <api/support_staff/tag/evolve>
+            AuthModuleName: blackbox_staff
+            ProcessorType: tag_evolve
+            OverrideCgiPart: evolution_mode=default
+            RequestTimeout: 60s
+        </api/support_staff/tag/evolve>
+
+        <api/support_staff/my/roles/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: current_user_roles
+        </api/support_staff/my/roles/list>
+
+        <api/support_staff/settings/info>
+            ProcessorType: settings_info
+            AuthModuleName: blackbox_staff
+        </api/support_staff/settings/info>
+
+        <api/support_staff/user/permissions>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_permissions
+        </api/support_staff/user/permissions>
+
+        <api/support_staff/localization/info>
+            AuthModuleName: blackbox_staff
+            ProcessorType: localization_info
+        </api/support_staff/localization/info>
+
+        <api/support_staff/chats/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: robot_chat_list
+        </api/support_staff/chats/list>
+
+        <api/support_staff/chat/history>
+            AuthModuleName: blackbox_staff
+            ProcessorType: robot_chat_history
+        </api/support_staff/chat/history>
+
+        <api/support_staff/chat/resource>
+            AuthModuleName: blackbox_staff
+            ProcessorType: robot_chat_resource
+        </api/support_staff/chat/resource>
+
+        <api/support_staff/chat/resource/preview>
+            AuthModuleName: blackbox_staff
+            ProcessorType: robot_chat_resource_preview
+        </api/support_staff/chat/resource/preview>
+
+        <api/support_staff/chat/message/edit>
+            AuthModuleName: blackbox_staff
+            ProcessorType: robot_chat_edit
+        </api/support_staff/chat/message/edit>
+
+        <api/support_staff/chats/feed>
+            AuthModuleName: blackbox_staff
+            ProcessorType: robot_chat_admin_feed
+            DumpEventLog: false
+        </api/support_staff/chats/feed>
+
+        <api/support_staff/categorization/history>
+            AuthModuleName: blackbox_staff
+            ProcessorType: support_center_categorization_history
+        </api/support_staff/categorization/history>
+
+        <api/support_staff/categorization/get>
+            AuthModuleName: blackbox_staff
+            ProcessorType: support_center_get_categorization
+        </api/support_staff/categorization/get>
+
+        <api/support_staff/categorization/add>
+            AuthModuleName: blackbox_staff
+            ProcessorType: support_center_add_categorization
+        </api/support_staff/categorization/add>
+
+        <api/support_staff/categorization/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: support_center_remove_categorization
+        </api/support_staff/categorization/remove>
+
+        <api/support_staff/categorization/tree>
+            AuthModuleName: blackbox_staff
+            ProcessorType: support_center_categorization_tree
+        </api/support_staff/categorization/tree>
+
+        <api/support_staff/categorization/tree/edit>
+            AuthModuleName: blackbox_staff
+            ProcessorType: support_center_categorization_tree_edit
+        </api/support_staff/categorization/tree/edit>
+
+        <api/head/register>
+            ProcessorType: register_head
+            AuthModuleName: fake
+        </api/head/register>
+
+        <api/head/session_key>
+            ProcessorType: get_session_key
+            AuthModuleName: fake
+        </api/head/session_key>
+
+        <api/head/sessions/current>
+            ProcessorType: current_session
+            AuthModuleName: key_auth
+        </api/head/sessions/current>
+
+        <api/head/tag/list>
+            ProcessorType: car_tags/list
+            AuthModuleName: key_auth_yaauto
+        </api/head/tag/list>
+
+        <api/staff/head/info>
+            ProcessorType: head_info
+            AuthModuleName: blackbox_staff
+        </api/staff/head/info>
+
+        <api/staff/head/session>
+            ProcessorType: get_session_by_head_device
+            AuthModuleName: crosslogin
+            <AppBuildsSelector>
+            </AppBuildsSelector>
+        </api/staff/head/session>
+
+        <api/support_staff/user/register-force>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_force_register
+        </api/support_staff/user/register-force>
+
+        <api/staff/webphone/sync>
+            AuthModuleName: blackbox_staff
+            ProcessorType: support_center_sync_call_data
+        </api/staff/webphone/sync>
+
+        <api/staff/chat/classify>
+            AuthModuleName: blackbox_staff
+            ProcessorType: robot_chat_ml_classifier
+        </api/staff/chat/classify>
+
+        <api/staff/notifiers/upsert>
+            ProcessorType: notifiers_upsert
+            AuthModuleName: blackbox_staff
+        </api/staff/notifiers/upsert>
+
+        <api/staff/notifiers/remove>
+            ProcessorType: notifiers_remove
+            AuthModuleName: blackbox_staff
+        </api/staff/notifiers/remove>
+
+        <api/staff/notifiers/info>
+            ProcessorType: notifiers_info
+            AuthModuleName: blackbox_staff
+        </api/staff/notifiers/info>
+
+        <api/staff/tags/search>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_tag_search
+        </api/staff/tags/search>
+
+        <api/support_staff/chat/message>
+            AuthModuleName: blackbox_staff
+            ProcessorType: robot_chat_action
+        </api/support_staff/chat/message>
+
+        <api/staff/sessions/history>
+            AuthModuleName: blackbox_staff
+            ProcessorType: sessions_history
+            FetchedGeoTags: msc_area,spb_area,kazan_area,sochi_area
+        </api/staff/sessions/history>
+
+        <api/staff/sessions/current>
+            AuthModuleName: blackbox_staff
+            ProcessorType: current_session
+        </api/staff/sessions/current>
+
+        <api/staff/billing/accounts>
+            AuthModuleName: blackbox_staff
+            ProcessorType: list_accounts
+        </api/staff/billing/accounts>
+
+        <api/staff/billing/accounts/history>
+            ProcessorType: account_history
+            AuthModuleName: blackbox_staff
+        </api/staff/billing/accounts/history>
+
+        <api/staff/billing/accounts/descriptions>
+            AuthModuleName: blackbox_staff
+            ProcessorType: get_common_accounts
+        </api/staff/billing/accounts/descriptions>
+
+        <api/staff/billing/accounts/descriptions/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: remove_account_description
+        </api/staff/billing/accounts/descriptions/remove>
+
+        <api/staff/billing/accounts/update>
+            AuthModuleName: blackbox_staff
+            ProcessorType: update_common_account
+        </api/staff/billing/accounts/update>
+
+        <api/staff/billing/accounts/create>
+            AuthModuleName: blackbox_staff
+            ProcessorType: create_account
+        </api/staff/billing/accounts/create>
+
+        <api/staff/billing/accounts/update_data>
+            AuthModuleName: blackbox_staff
+            ProcessorType: update_account_data
+        </api/staff/billing/accounts/update_data>
+
+        <api/staff/billing/accounts/activate>
+            AuthModuleName: blackbox_staff
+            ProcessorType: activate_account
+        </api/staff/billing/accounts/activate>
+
+        <api/staff/billing/accounts/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: remove_account
+        </api/staff/billing/accounts/remove>
+
+        <api/staff/billing/accounts/link>
+            AuthModuleName: blackbox_staff
+            ProcessorType: link_account
+        </api/staff/billing/accounts/link>
+
+        <api/staff/billing/trust>
+            AuthModuleName: blackbox_staff
+            ProcessorType: trust_info
+        </api/staff/billing/trust>
+
+        <api/staff/billing/calculator>
+            AuthModuleName: blackbox_staff
+            ProcessorType: price_calculator
+        </api/staff/billing/calculator>
+
+        <api/staff/billing/payment/info>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_payments
+        </api/staff/billing/payment/info>
+
+        <api/staff/billing/payment/reset>
+            AuthModuleName: blackbox_staff
+            ProcessorType: reset_payment
+        </api/staff/billing/payment/reset>
+
+        <api/staff/billing/payment/cancel>
+            AuthModuleName: blackbox_staff
+            ProcessorType: cancel_payment
+        </api/staff/billing/payment/cancel>
+
+        <api/staff/billing/terminals/info>
+            AuthModuleName: blackbox_staff
+            ProcessorType: trust_products_info
+        </api/staff/billing/terminals/info>
+
+        <api/staff/billing/terminals/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: trust_products_remove
+        </api/staff/billing/terminals/remove>
+
+        <api/staff/billing/terminals/upsert>
+            AuthModuleName: blackbox_staff
+            ProcessorType: trust_products_upsert
+        </api/staff/billing/terminals/upsert>
+
+        <api/staff/billing/global_refund>
+            AuthModuleName: blackbox_staff
+            ProcessorType: global_refunds_processor
+            RequestTimeout: 200s
+        </api/staff/billing/global_refund>
+
+        <api/staff/user/check_driver_license>
+            ProcessorType: user_fines/check_driver_license
+            AuthModuleName: blackbox_staff
+        </api/staff/user/check_driver_license>
+
+        <api/staff/fines/resend_email>
+            ProcessorType: user_fines/resend_email
+            AuthModuleName: blackbox_staff
+        </api/staff/fines/resend_email>
+
+        <api/staff/fines/reassign>
+            ProcessorType: user_fines/reassign
+            AuthModuleName: blackbox_staff
+        </api/staff/fines/reassign>
+
+        <api/staff/fines/decree_info>
+            ProcessorType: user_fines/decree_info
+            AuthModuleName: blackbox_staff
+        </api/staff/fines/decree_info>
+
+        <api/staff/fines/list>
+            ProcessorType: user_fines/list
+            AuthModuleName: blackbox_staff
+            OverrideCgiPart: extended_info=true
+        </api/staff/fines/list>
+
+        <api/staff/incident/initiate>
+            AuthModuleName: blackbox_staff
+            ProcessorType: initiate_incident
+        </api/staff/incident/initiate>
+
+        <api/staff/incident/upload_startrek_attachment>
+            ProcessorType: incident_startrek_attachment
+            AuthModuleName: blackbox_staff
+            RequestTimeout: 60s
+        </api/staff/incident/upload_startrek_attachment>
+
+        <api/staff/incident/create>
+            ProcessorType: create_incident
+            AuthModuleName: blackbox_staff
+        </api/staff/incident/create>
+
+        <api/staff/incident/list>
+            ProcessorType: list_incidents
+            AuthModuleName: blackbox_staff
+        </api/staff/incident/list>
+
+        <api/staff/incident/perform_transition>
+            ProcessorType: perform_incident_transition
+            AuthModuleName: blackbox_staff
+            RequestTimeout: 60s
+        </api/staff/incident/perform_transition>
+
+        <api/staff/incident/initiate_evacuation>
+            ProcessorType: initiate_evacuation
+            AuthModuleName: blackbox_staff
+        </api/staff/incident/initiate_evacuation>
+
+        <api/staff/incident/photo/register>
+            ProcessorType: register_photo
+            AuthModuleName: blackbox_staff
+            ReportResultSnapshot: true
+            RequireTagPerform: false
+        </api/staff/incident/photo/register>
+
+        <api/staff/incident/photo/upload>
+            ProcessorType: upload_service_photo
+            AuthModuleName: blackbox_staff
+            BucketName: carsharing-tags
+            AcceptanceInterval: 1d
+            RequestTimeout: 60s
+        </api/staff/incident/photo/upload>
+
+        <api/staff/incident/photo/list>
+            ProcessorType: get_service_photo
+            AuthModuleName: blackbox_staff
+            OverrideCgiPart: tag_names=dtp_flow_details,dtp_flow_photo_damages,dtp_flow_photo_document,dtp_flow_photo_panel,dtp_flow_photo_vin,DTP,dtp_inspected,dtp_not_registred,DTP_registration,dtp_registred
+        </api/staff/incident/photo/list>
+
+        <api/staff/photo/markup/get>
+            AuthModuleName: blackbox_staff
+            ProcessorType: get_marked_photos
+        </api/staff/photo/markup/get>
+
+        <api/staff/photo/markup/update>
+            AuthModuleName: blackbox_staff
+            ProcessorType: update_photo_markup
+        </api/staff/photo/markup/update>
+
+        <api/staff/photo/metadata/update>
+            AuthModuleName: blackbox_staff
+            ProcessorType: update_photo_meta_data
+        </api/staff/photo/metadata/update>
+
+        <api/staff/sessions/list>
+            ProcessorType: sessions
+            AuthModuleName: blackbox_staff
+        </api/staff/sessions/list>
+
+        <api/staff/sessions>
+            AuthModuleName: blackbox_staff
+            ProcessorType: sessions
+            DumpEventLog: false
+        </api/staff/sessions>
+
+        <api/staff/car/commands>
+            AuthModuleName: blackbox_staff
+            ProcessorType: service_car_command
+            RequestTimeout: 60s
+        </api/staff/car/commands>
+
+        <api/staff/car/info>
+            AuthModuleName: blackbox_staff
+            ProcessorType: car_admin_portal_info
+        </api/staff/car/info>
+
+        <api/staff/car/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: service_app_list
+            OverrideCgiPart: report=admin_app
+            RequestTimeout: 10s
+        </api/staff/car/list>
+
+        <api/staff/car/telematics/password>
+            AuthModuleName: blackbox_staff
+            ProcessorType: telematics_car_password
+        </api/staff/car/telematics/password>
+
+        <api/staff/car/telematics/status>
+            AuthModuleName: blackbox_staff
+            ProcessorType: telematics_status
+        </api/staff/car/telematics/status>
+
+        <api/staff/car/telematics/state>
+            AuthModuleName: blackbox_staff
+            ProcessorType: telematics_car_state
+        </api/staff/car/telematics/state>
+
+        <api/staff/car/telematics/history>
+            AuthModuleName: blackbox_staff
+            ProcessorType: telematics_history
+        </api/staff/car/telematics/history>
+
+        <api/staff/localization/upsert>
+            AuthModuleName: blackbox_staff
+            ProcessorType: localization_upsert
+        </api/staff/localization/upsert>
+
+        <api/staff/localization/info>
+            AuthModuleName: blackbox_staff
+            ProcessorType: localization_info
+        </api/staff/localization/info>
+
+        <api/staff/localization/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: localization_remove
+        </api/staff/localization/remove>
+
+        <api/staff/tag/evolve>
+            AuthModuleName: blackbox_staff
+            ProcessorType: tag_evolve
+            OverrideCgiPart: evolution_mode=default
+            RequestTimeout: 60s
+        </api/staff/tag/evolve>
+
+        <api/staff/trace/tag/details>
+            AuthModuleName: blackbox_staff
+            ProcessorType: trace_tags/details
+        </api/staff/trace/tag/details>
+
+        <api/staff/trace/tag/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: trace_tags/list
+        </api/staff/trace/tag/list>
+
+        <api/staff/track/trace>
+            AuthModuleName: blackbox_staff
+            ProcessorType: traces_info
+            TracksApiName: drive_graph
+        </api/staff/track/trace>
+
+        <api/staff/track/search>
+            AuthModuleName: blackbox_staff
+            ProcessorType: traces_search
+            TracksApiName: drive_graph
+        </api/staff/track/search>
+
+        <api/staff/maintenance/info>
+            AuthModuleName: blackbox_staff
+            ProcessorType: maintenance_info
+        </api/staff/maintenance/info>
+
+        <api/staff/maintenance/upsert>
+            AuthModuleName: blackbox_staff
+            ProcessorType: maintenance_upsert
+        </api/staff/maintenance/upsert>
+
+        <api/staff/maintenance/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: maintenance_remove
+        </api/staff/maintenance/remove>
+
+        <api/staff/track/analyzer>
+            AuthModuleName: blackbox_staff
+            ProcessorType: analyzer
+            TracksApiName: yagr
+            LinkerApiName: default-linker
+            DefaultSpeedThreshold: 6.95
+            ForceUserId: false
+            RequestTimeout: 60s
+        </api/staff/track/analyzer>
+
+        <api/staff/track/tail>
+            AuthModuleName: blackbox_staff
+            ProcessorType: tail
+            TracksApiName: drive_graph
+            LinkerApiName: default-linker
+        </api/staff/track/tail>
+
+        <api/staff/car/control>
+            AuthModuleName: blackbox_staff
+            ProcessorType: car_root_control
+            RequestTimeout: 60s
+        </api/staff/car/control>
+
+        <api/staff/areas/remove>
+            ProcessorType: areas_remove
+            AuthModuleName: blackbox_staff
+        </api/staff/areas/remove>
+
+        <api/staff/areas/upsert>
+            ProcessorType: areas_upsert
+            AuthModuleName: blackbox_staff
+        </api/staff/areas/upsert>
+
+        <api/staff/areas/info>
+            ProcessorType: areas_info
+            AuthModuleName: blackbox_staff
+        </api/staff/areas/info>
+
+        <api/staff/areas/history>
+            ProcessorType: areas_history
+            AuthModuleName: blackbox_staff
+        </api/staff/areas/history>
+
+        <api/staff/area_tags/add>
+            ProcessorType: area_tags/add
+            AuthModuleName: blackbox_staff
+        </api/staff/area_tags/add>
+
+        <api/staff/area_tags/update>
+            ProcessorType: area_tags/update
+            AuthModuleName: blackbox_staff
+        </api/staff/area_tags/update>
+
+        <api/staff/area_tags/remove>
+            ProcessorType: area_tags/remove
+            AuthModuleName: blackbox_staff
+        </api/staff/area_tags/remove>
+
+        <api/staff/area_tags/history>
+            ProcessorType: area_tags_history
+            AuthModuleName: blackbox_staff
+        </api/staff/area_tags/history>
+
+        <api/staff/settings/remove>
+            ProcessorType: settings_remove
+            AuthModuleName: blackbox_staff
+        </api/staff/settings/remove>
+
+        <api/staff/settings/upsert>
+            ProcessorType: settings_upsert
+            AuthModuleName: blackbox_staff
+        </api/staff/settings/upsert>
+
+        <api/staff/settings/info>
+            ProcessorType: settings_info
+            AuthModuleName: blackbox_staff
+        </api/staff/settings/info>
+
+        <api/staff/settings/history>
+            ProcessorType: settings_history
+            AuthModuleName: blackbox_staff
+        </api/staff/settings/history>
+
+        <api/staff/user/photo/approve>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_doc_photo_status
+        </api/staff/user/photo/approve>
+
+        <api/staff/chats/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: robot_chat_remove
+        </api/staff/chats/remove>
+
+        <api/staff/admin/drop_key>
+            ProcessorType: drop_public_key
+            AuthModuleName: blackbox_staff
+        </api/staff/admin/drop_key>
+
+        <api/staff/admin/head_info>
+            ProcessorType: head_info
+            AuthModuleName: blackbox_staff
+        </api/staff/admin/head_info>
+
+        <api/staff/tag/description/add>
+            AuthModuleName: blackbox_staff
+            ProcessorType: service_tags/add
+        </api/staff/tag/description/add>
+
+        <api/staff/tag/description/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: service_tags/list
+        </api/staff/tag/description/list>
+
+        <api/staff/tag/description/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: service_tags/remove
+        </api/staff/tag/description/remove>
+
+        <api/staff/car/tag/add>
+            AuthModuleName: blackbox_staff
+            ProcessorType: car_tags/add
+        </api/staff/car/tag/add>
+
+        <api/staff/car/tag/update>
+            ProcessorType: car_tags/update
+            AuthModuleName: blackbox_staff
+        </api/staff/car/tag/update>
+
+        <api/staff/tags/by_performer>
+            ProcessorType: tags/by_performer
+            AuthModuleName: blackbox_staff
+        </api/staff/tags/by_performer>
+
+        <api/staff/car/attachments/history>
+            AuthModuleName: blackbox_staff
+            ProcessorType: car_assignment_history
+        </api/staff/car/attachments/history>
+
+        <api/staff/car/attachments/unassign>
+            AuthModuleName: blackbox_staff
+            ProcessorType: car_unassign_attachment
+        </api/staff/car/attachments/unassign>
+
+        <api/staff/car/tag/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: car_tags/remove
+        </api/staff/car/tag/remove>
+
+        <api/staff/car/tag/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: car_tags/list
+        </api/staff/car/tag/list>
+
+        <api/staff/car/tag/details>
+            AuthModuleName: blackbox_staff
+            ProcessorType: car_tags/details
+        </api/staff/car/tag/details>
+
+        <api/staff/car/tag/history>
+            ProcessorType: car_history
+            AuthModuleName: blackbox_staff
+        </api/staff/car/tag/history>
+
+        <api/staff/car/tag/history/details>
+            ProcessorType: car_history_details
+            AuthModuleName: blackbox_staff
+        </api/staff/car/tag/history/details>
+
+        <api/staff/actions/add>
+            AuthModuleName: blackbox_staff
+            ProcessorType: manage_action/add
+            Notifier: support_notifications
+        </api/staff/actions/add>
+
+        <api/staff/actions/confirm>
+            AuthModuleName: blackbox_staff
+            ProcessorType: manage_action/confirm
+        </api/staff/actions/confirm>
+
+        <api/staff/actions/propose>
+            AuthModuleName: blackbox_staff
+            ProcessorType: manage_action/propose
+        </api/staff/actions/propose>
+
+        <api/staff/actions/reject>
+            AuthModuleName: blackbox_staff
+            ProcessorType: manage_action/reject
+        </api/staff/actions/reject>
+
+        <api/staff/actions/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: manage_action/list
+        </api/staff/actions/list>
+
+        <api/staff/actions/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: manage_action/remove
+            Notifier: support_notifications
+        </api/staff/actions/remove>
+
+        <api/staff/login/add>
+            AuthModuleName: blackbox_staff
+            ProcessorType: manage_login/add
+        </api/staff/login/add>
+
+        <api/staff/login/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: manage_login/list
+        </api/staff/login/list>
+
+        <api/staff/login/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: manage_login/remove
+        </api/staff/login/remove>
+
+        <api/staff/roles/add>
+            AuthModuleName: blackbox_staff
+            ProcessorType: manage_roles/add
+        </api/staff/roles/add>
+
+        <api/staff/roles/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: manage_roles/list
+        </api/staff/roles/list>
+
+        <api/staff/roles/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: manage_roles/remove
+        </api/staff/roles/remove>
+
+        <api/staff/roles/users>
+            AuthModuleName: blackbox_staff
+            ProcessorType: users_by_roles
+        </api/staff/roles/users>
+
+        <api/staff/user/actions/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_actions/list
+        </api/staff/user/actions/list>
+
+        <api/staff/user/roles/activate>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_role_activation
+            OverrideCgiPart: enabled=1
+        </api/staff/user/roles/activate>
+
+        <api/staff/user/roles/deactivate>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_role_activation
+            OverrideCgiPart: enabled=0
+        </api/staff/user/roles/deactivate>
+
+        <api/staff/user/roles/add>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_roles/add
+        </api/staff/user/roles/add>
+
+        <api/staff/user/roles/history>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_roles/history
+        </api/staff/user/roles/history>
+
+        <api/staff/user/roles/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_roles/list
+        </api/staff/user/roles/list>
+
+        <api/staff/user/roles/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_roles/remove
+        </api/staff/user/roles/remove>
+
+        <api/staff/roles/actions/add>
+            AuthModuleName: blackbox_staff
+            ProcessorType: roles_action/add
+        </api/staff/roles/actions/add>
+
+        <api/staff/roles/actions/list>
+            AuthModuleName: blackbox_staff
+            ProcessorType: roles_action/list
+        </api/staff/roles/actions/list>
+
+        <api/staff/roles/actions/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: roles_action/remove
+        </api/staff/roles/actions/remove>
+
+        <api/staff/constants>
+            AuthModuleName: blackbox_staff
+            ProcessorType: constants/list
+        </api/staff/constants>
+
+        <api/staff/promo/give_out>
+            ProcessorType: promo/give_out
+            AuthModuleName: blackbox_staff
+        </api/staff/promo/give_out>
+
+        <api/staff/promo/get>
+            ProcessorType: promo/get
+            AuthModuleName: blackbox_staff
+        </api/staff/promo/get>
+
+        <api/staff/promo/generation>
+            ProcessorType: promo/generation
+            AuthModuleName: blackbox_staff
+        </api/staff/promo/generation>
+
+        <api/staff/promo/check>
+            ProcessorType: promo/check
+            AuthModuleName: blackbox_staff
+        </api/staff/promo/check>
+
+        <api/staff/promo/user_history>
+            ProcessorType: promo/user_history
+            AuthModuleName: blackbox_staff
+        </api/staff/promo/user_history>
+
+        <api/staff/external_promo/info>
+            AuthModuleName: blackbox_staff
+            ProcessorType: external_promo/info
+        </api/staff/external_promo/info>
+
+        <api/staff/external_promo/upload>
+            AuthModuleName: blackbox_staff
+            ProcessorType: external_promo/upload
+        </api/staff/external_promo/upload>
+
+        <api/staff/user/tags_history>
+            AuthModuleName: blackbox_staff
+            ProcessorType: user_history
+            RequestTimeout: 10s
+        </api/staff/user/tags_history>
+
+        <api/staff/car/batch-upload>
+            AuthModuleName: blackbox_staff
+            ProcessorType: car_registry_update
+        </api/staff/car/batch-upload>
+
+        <api/staff/car/insurance/batch-upload>
+            AuthModuleName: blackbox_staff
+            ProcessorType: car_insurance_upload
+        </api/staff/car/insurance/batch-upload>
+
+        <api/staff/fuel_card/batch-upload>
+            AuthModuleName: blackbox_staff
+            ProcessorType: fueling_cards_upload
+        </api/staff/fuel_card/batch-upload>
+
+        <api/staff/offers/book_special>
+            AuthModuleName: blackbox_staff
+            ProcessorType: offer_book
+            OfferName: on_app_update_offer_builder
+        </api/staff/offers/book_special>
+
+        <api/staff/landing/get>
+            ProcessorType: landings_get
+            AuthModuleName: blackbox_staff
+        </api/staff/landing/get>
+
+        <api/staff/landing/upsert>
+            ProcessorType: landing_upsert
+            AuthModuleName: blackbox_staff
+        </api/staff/landing/upsert>
+
+        <api/staff/landing/clear>
+            ProcessorType: user_landings_clear
+            AuthModuleName: blackbox_staff
+        </api/staff/landing/clear>
+
+        <api/staff/landing/remove>
+            ProcessorType: landing_remove
+            AuthModuleName: blackbox_staff
+        </api/staff/landing/remove>
+
+        <api/staff/landing/info>
+            ProcessorType: landing_info
+            AuthModuleName: blackbox_staff
+        </api/staff/landing/info>
+
+        <api/staff/log/push>
+            AuthModuleName: blackbox_staff
+            ProcessorType: log_push
+        </api/staff/log/push>
+
+        <api/staff/model/info>
+            AuthModuleName: blackbox_staff
+            ProcessorType: car_models_info
+        </api/staff/model/info>
+
+        <api/staff/model/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: car_models_remove
+        </api/staff/model/remove>
+
+        <api/staff/model_spec/add>
+            AuthModuleName: blackbox_staff
+            ProcessorType: car_model_specification_add
+        </api/staff/model_spec/add>
+
+        <api/staff/model_spec/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: car_model_specification_remove
+        </api/staff/model_spec/remove>
+
+        <api/staff/mds/info>
+            AuthModuleName: blackbox_staff
+            ProcessorType: mds_bucket_info
+            OutPattern: https://$BUCKET_NAME$.s3.yandex.net/$KEY$
+        </api/staff/mds/info>
+
+        <api/staff/mds/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: mds_remove
+        </api/staff/mds/remove>
+
+        <api/staff/mds/add>
+            AuthModuleName: blackbox_staff
+            ProcessorType: mds_upload
+            RequestTimeout: 60s
+        </api/staff/mds/add>
+
+        <api/staff/mds/proxy>
+            AuthModuleName: blackbox_staff
+            ProcessorType: mds_proxy
+        </api/staff/mds/proxy>
+
+        <api/staff/major/get>
+            AuthModuleName: blackbox_staff
+            ProcessorType: current_major_queries
+        </api/staff/major/get>
+
+        <api/staff/major/cancel>
+            AuthModuleName: blackbox_staff
+            ProcessorType: repair_tag_cancel
+        </api/staff/major/cancel>
+
+        <api/staff/major/details>
+            AuthModuleName: blackbox_staff
+            ProcessorType: repair_tag_details
+        </api/staff/major/details>
+
+        <api/staff/major/tyre_info>
+            AuthModuleName: blackbox_staff
+            ProcessorType: tyre_service_info
+        </api/staff/major/tyre_info>
+
+        <api/staff/major/tyre_storage>
+            AuthModuleName: blackbox_staff
+            ProcessorType: tyre_storage_info
+        </api/staff/major/tyre_storage>
+        <api/staff/major/last_tyre>
+            AuthModuleName: blackbox_staff
+            ProcessorType: last_tyre_info
+        </api/staff/major/last_tyre>
+        <api/staff/major/tyre_files>
+            AuthModuleName: blackbox_staff
+            ProcessorType: tyre_files
+        </api/staff/major/tyre_files>
+
+        <api/staff/state_filters/remove>
+            ProcessorType: state_filters_remove
+            AuthModuleName: blackbox_staff
+        </api/staff/state_filters/remove>
+
+        <api/staff/state_filters/upsert>
+            ProcessorType: state_filters_upsert
+            AuthModuleName: blackbox_staff
+        </api/staff/state_filters/upsert>
+
+        <api/staff/state_filters/info>
+            ProcessorType: state_filters_info
+            AuthModuleName: blackbox_staff
+        </api/staff/state_filters/info>
+
+        <api/staff/bg/upsert>
+            AuthModuleName: blackbox_staff
+            ProcessorType: rt_background_upsert
+        </api/staff/bg/upsert>
+
+        <api/staff/bg/info>
+            AuthModuleName: blackbox_staff
+            ProcessorType: rt_background_info
+            RequestTimeout: 10s
+        </api/staff/bg/info>
+
+        <api/staff/bg/remove>
+            AuthModuleName: blackbox_staff
+            ProcessorType: rt_background_remove
+        </api/staff/bg/remove>
+
+        <api/staff/firmware/add>
+            ProcessorType: telematics_firmware_add
+            AuthModuleName: blackbox_staff
+        </api/staff/firmware/add>
+
+        <api/staff/firmware/remove>
+            ProcessorType: telematics_firmware_remove
+            AuthModuleName: blackbox_staff
+        </api/staff/firmware/remove>
+
+        <api/staff/firmware/list>
+            ProcessorType: telematics_firmware_list
+            AuthModuleName: blackbox_staff
+        </api/staff/firmware/list>
+
+        <api/staff/ranking/model/add>
+            ProcessorType: offer_model_add
+            AuthModuleName: blackbox_staff
+        </api/staff/ranking/model/add>
+
+        <api/staff/ranking/model/get>
+            ProcessorType: offer_model_get
+            AuthModuleName: blackbox_staff
+        </api/staff/ranking/model/get>
+
+        <api/staff/ranking/model/list>
+            ProcessorType: offer_model_list
+            AuthModuleName: blackbox_staff
+        </api/staff/ranking/model/list>
+
+        <api/staff/ranking/model/remove>
+            ProcessorType: offer_model_remove
+            AuthModuleName: blackbox_staff
+        </api/staff/ranking/model/remove>
+
+        <api/staff/parking/list>
+            ProcessorType: parking_list
+            AuthModuleName: blackbox_staff
+        </api/staff/parking/list>
+
+        <api/staff/external_access_token/upsert>
+            ProcessorType: upsert_external_access_token
+            AuthModuleName: blackbox_staff
+        </api/staff/external_access_token/upsert>
+
+        <api/staff/external_access_token/invalidate>
+            ProcessorType: invalidate_external_access_token
+            AuthModuleName: blackbox_staff
+        </api/staff/external_access_token/invalidate>
+
+        <api/staff/external_promo/info>
+            AuthModuleName: blackbox_staff
+            ProcessorType: external_promo/info
+        </api/staff/external_promo/info>
+
+        <api/staff/external_promo/upload>
+            AuthModuleName: blackbox_staff
+            ProcessorType: external_promo/upload
+        </api/staff/external_promo/upload>
+
+        <api/staff/bills/history>
+            AuthModuleName: blackbox_staff
+            ProcessorType: compiled_bills_history
+        </api/staff/bills/history>
+
+        <api/staff/refunds/history>
+            AuthModuleName: blackbox_staff
+            ProcessorType: compiled_refunds_history
+        </api/staff/refunds/history>
+
+        <!-- Static -->
+        <api/fake/car/list>
+            AuthModuleName: fake
+            ProcessorType: demo_car_list
+        </api/fake/car/list>
+
+        <api/fake/static/list>
+            AuthModuleName: fake
+            ProcessorType: client_settings_info
+            CommonPrefix: user_app.static.
+        </api/fake/static/list>
+
+        <api/fake/sessions/current>
+            AuthModuleName: fake
+            ProcessorType: current_session
+        </api/fake/sessions/current>
+
+        <api/fake/settings/list>
+            AuthModuleName: fake
+            ProcessorType: client_settings_info
+            CommonPrefix: user_app.settings.
+        </api/fake/settings/list>
+
+        <api/fake/scanner/areas>
+            AuthModuleName: fake
+            ProcessorType: areas_scanner
+        </api/fake/scanner/areas>
+
+        <api/fake/areas/drop/info>
+            Access-Control-Allow-Origin:
+            AuthModuleName: fake
+            ProcessorType: parking_areas_info
+        </api/fake/areas/drop/info>
+
+        <api/fake/areas/operation/info>
+            Access-Control-Allow-Origin:
+            AuthModuleName: fake
+            ProcessorType: areas_operation
+        </api/fake/areas/operation/info>
+
+        <api/fake/memory/info>
+            Access-Control-Allow-Origin:
+            AuthModuleName: fake
+            ProcessorType: memory_info
+        </api/fake/memory/info>
+
+        <api/fake/memory/snapshot>
+            Access-Control-Allow-Origin:
+            AuthModuleName: fake
+            ProcessorType: memory_snapshot
+        </api/fake/memory/snapshot>
+
+        <api/fake/memory/profile>
+            Access-Control-Allow-Origin:
+            AuthModuleName: fake
+            ProcessorType: memory_profile
+        </api/fake/memory/profile>
+
+        <api/fake/memory/release>
+            Access-Control-Allow-Origin:
+            AuthModuleName: fake
+            ProcessorType: memory_release
+        </api/fake/memory/release>
+    </Processors>
+
+    <Notifications>
+    </Notifications>
+
+    <BackgroundProcesses>
+        <Processes>
+            <rent_pricing_watcher>
+                Type: rent_pricing_watcher
+                NotifierName: test_start
+                SyncStorageName: test_states
+                Period: 30s
+            </rent_pricing_watcher>
+
+            <users_downtime>
+                Type: telegram_bot
+                BotId: bot499754952:AAHGv__JNoLH1BPxQOW9J0r_dRe_vcMeeyY
+                ProcessorType: alert_users
+                SyncStorageName: alerts_states
+                Period: 5s
+                <Processor>
+                    StorageName: alerts_states
+                    DefaultDowntime: 3600
+                    DefaultNoAnswerDowntime: 12h
+                </Processor>
+            </users_downtime>
+
+            <billing_watcher_prestable>
+                Type: billing_watcher
+                Period: 5s
+                SyncStorageName: alerts_states
+                BillingQueue: active
+                TasksAtOnce: 10
+                MaxIterations: 200
+            </billing_watcher_prestable>
+
+            <parking_balance_prestable>
+                Type: parking_balance
+                SyncStorageName: alerts_states
+                Period: 1d
+                KznClientToken: ${PARKINGKZN_TOKEN}
+                Notifier: parking_payment_notifications
+            </parking_balance_prestable>
+            <transformation_rollback_prestable>
+                Type: transformation_rollback
+                Period: 30s
+                SyncStorageName: alerts_states
+            </transformation_rollback_prestable>
+            <major_requester>
+                Type: major_requester
+                MaxAge: 5m
+                SyncStorageName: alerts_states
+                Period: 5m
+                TagNames: maintenance,diagnostics,mechanic_repair,body_repair
+                NotifierName: major_tags_controller
+                CancelCommentName: Причина отказа
+                CancelStatus: Отказ М-Профи
+                <CarsFilter>
+                    AreaTagsFilter: to_service
+                </CarsFilter>
+            </major_requester>
+            <user_fueling_control>
+                Type: regular_fueling_report
+                Period: 24h
+                SyncStorageName: alerts_states
+                NotifierName: cars_fueling_report
+                Description: ежедневный отчет
+            </user_fueling_control>
+            <telematics_firmware>
+                Type: telematics_firmware
+                Period: 300s
+                SyncStorageName: alerts_states
+            </telematics_firmware>
+            <car_markers>
+                Type: car_markers
+                FullTankTagName: full_tank_marker
+                RidingTagsCorrection: no_price
+                PackOfferPushNotifier: drive_push
+                SyncStorageName: alerts_states
+                Period: 1m
+            </car_markers>
+
+            <db_service>
+                Type: db_service
+                HeadSessionsHistoryLiveTime: 90d
+                Notifier: db_service_notifier
+                DeadlyTags: fueling_yellow92, fueling_yellow95, fueling_red95, fueling_yellow95, car_state_by_user, old_state_acceptance, old_state_riding, cleaning, incorrect_moving, old_state_reservation, old_state_parking, full_tank_marker, just_cleaned, parking_payment, transformation, telematics, fueling_red92, fueling_yellow, fueling, cleaning_a, no_signal, low_voltage, telematics_lag_prestable, cleaning_check, cleaning_check_provider, cleaned_less_than_24h_ago, east_long_stay_1h, east_stay, fueling_green95, fueling_green92, telematics_firmware, yaauto_deferred_warming, car_scanner, individual_discount_7pct, individual_discount_7pct_push, reg_push_approved, individual_discount_7pct_landing, user_start_20_v2, start_20v2, documents_were_reasked, user_start_20_before_reg, individual_discount, salary_fueling_pay, telematics_configuration, east_long_stay_4h, driving_from_East, telematics_lag, tag_reservation_features, east_long_stay_6h, cleaning_light, gps_jammed, east_long_stay_9h, manual_hold, urgent_cleaning, lock_to_tech_support, east_long_stay_12h, user_fueling_tag, urgent_fueling95,ny_game, email_mincost_zone, registration_newchat, user_character_birth_day, user_alert_missed_reserv, fixpush_time, push_alert_forgotten_reservation, taxi_promo_october_end, taxi_promo_november, registration_robot_call, first_order_non-reg-2, discount_happy_birthday, reg_push_resubmit_one, push_birthday, first_order_20_03.08, user_character_aluminium, individual_discount_push, birthday_landing, fixpush_km, november_daily_10pct, user_push_sweet_november, user_start_20_regular, start_20_regular, landing_start_20v2, landing_november_spb, push_alert_forgotten_ride, user_character_silver, individual_discount_landing, user_chat_show_tag, yandex_card, user_alert_test, landing_start_20_regular, reg_push_resubmit_many, user_fueling_tag, abt_with_start, abt_no_start, pdd_fine_push, svo_home_push, bb_fail_use, support_chat_general, reminder_old_license, blocked_old_license, led_home_push, support_chat_car, user_reenter, support_chat_deferred, chatnotification_push, vko_home_push, blocked_duplicate_namber_pass, push_yplus_for_inactive_users, support_chat_waiting_feedback, old_backend_ban, landing_yplus_for_inactive_users, individual_discount_15pct, taxi_promo_october, bb_engine_failed, push_alert_forgotten_reserv_2, first_order_non-reg, push_alert_forgotten_reg, same_person, speedasshole_push_unblock, speedasshole_push_3day, documents_stuck, individual_start_discount_20pct, abt_start_one_week, bonus_msk_spb_no-ride, dme_home_push, blocked_duplicate_driver_license, bb_no_found, bb_service_problem, tag_reservation_features, individual_discount_10pct, push_carreminder, user_taxi_business_non_new_user, support_chat_finance, blocked_speed_asshole, tarif_centr_push, user_character_credit, tarif_centr, blocked_speed_asshole_3day, bb_ya_auto, user_chat_notification, mercedes_e200_access_landing, fine_pdd_12_09_2, reg_push_rejected, bb_window_washer, landing_bmw_access, bonus300_non-riders, discount20_non-riders, support_chat_riding, blocked_too_old, yplus_inactive_users_reminder, individual_discount_velar, discount_7pct_and_velar_push, user_character_gold, user_alert_missed_fix, user_reg_push_alert_license, documents_reask_tag, fine_eva_msc, bb_difficult_case, discount_7pct_and_velar_landing, user_character_too_old, vostok_utro_push, user_app_settings, multipolzovateli_15_5_push, push_pleasecall, maybe_fraud_documents, ny_game_push, multipolzovateli_15_5_landing, tatarstan_full, speedasshole_push_unblockhope, too_unexperienced, bb_break_car, bb_forgot_finish, landing_november_kzn, fine_pdd_12_16_1, support_chat_app, bonus_kazan_no-ride, push_300bonus_kazan, reg_push_intro_stuck, mega_kazan, support_chat_dtp, user_character_platinum, speedasshole_push_1week, blocked_bb_check, refund_forgot_finish, intro_views, reenter_stumble, bb_fuel_cash, blocked_speed_asshole_1week, landing_300bonus_kazan, blocked_deprivation_long, mail_finreg_licence_nodiscount, reg_push_intro_stuck_2, mail_finreg_licence_discount, reg_push_intro_stuck_bonus, bb_free_waiting, u_kogo_business_multi_push, blocked_for_resubmit, landing_cargo_days, support_chat_lostandfound, user_manual_check_ОК, user_character_eva, aggressivedriver_push_1violation, refund_other_reason, blocked_video_check_error, support_chat_2_line, u_kogo_plus&business_push, old_license_wakeup_push, user_character_aggressive, speedasshole_push_10day, push_cantcall, kazan_launch, driveteam_bonus_migration, reg_push_unblock_generic, push_carwait, speed_asshole_landing_1, too_young, mail_finreg_1resub_discount, user_recheck_in_yang, user_reg_push_alert, bb_wheel, speedasshole_push_forever, fine_pdd_12_17_1_2, blocked_speed_asshole_10day, u_kogo_business_multi_landing, real_launch_kazan, user_start_20_regular_fake, user_reg_push_alert_pass, u_kogo_business_multi_landing_2, u_kogo_plus&business_landing, fine_eva_msc_obl, user_registered_manually, old_license_wakeup, bb_bad_support, violation_hardpdd_parking, user_reg_push_alert_control, support_chat_auto, user_reg_push_alert_selfie, user_start_exp_fake_one_week, refund_random_reserve, violation_uncomfortable_parking, violation_terrible_parking, blocked_driving_ban, user_reg_push_alert_license_cont, support_chat_game, fine_eva_spb, support_chat_registration, push_kotelniki, push_winner_1h, mail_finreg_1resub_with_discount, mail_finreg_1resub_nodiscount, speed_asshole_landing_3, u_kogo_plus&business_landing_2, user_wakeup_sms_1resub_disc, user_wakeup_sms_1resub, blocked_bb_check_rejected, violation_donotknow_smoked, bonus_ny, mail_finreg_card_nodiscount, user_wakeup_push_card, user_wakeup_push_card_disc, mail_finreg_card_with_discount, user_wakeup_sms_card_disc, user_wakeup_sms_card, user_start_20, bbfeedback_flat_tire, start_20, user_start_50, start_50, user_start_30, start_30, refund_debt, blocked_speed_asshole_forever, fine_pdd_12_15_1, fine_pdd_12_16_5, promzona_vostok_deny_landing, test_fine, support_chat_plus, landing_start_20, landing_start_50, landing_start_30, fine_DTP, blocked_fraud_selfie_screencap, blocked_too_many_resubmits, bb_remove, push_badparking, u_kogo_nichego_multi_push, support_chat_lowpriority, fine_pdd_12_16_2, violation_know_smoke, violation_garbage_seatbelt, violation_garbage, card_debit, fine_DTP_deductible, reg_push_welcome, blocked_deprivation_other, launch_odintsovo_push, fine_payment_area, blocked_old_passport, user_character_dtp, bb_fuel_empty, balashiha_push, fine_eva_kazan, bb_fuel_card, violation_lightpdd_parking, user_character_mb_bonus_scam, fine_pdd_12_12_2, fine_smoke, u_kogo_nichego_multi_landing_2, aggressivedriver_push_forever, landing_odintsovo, fine_pdd_12_09_6, fine_pdd_12_12_1, registration_problems, bb_refund_fine, violation_donotknow_aggressive, support_chat_game_common, refund_fine, user_reg_push_alert_pass_control, u_kogo_nichego_multi_landing, violation_hard_other, fine_pdd_12_09_3, yac_push, u_kogo_plus_multi_push, reminder_old_passport, debt_push_1, violation_donotknowstop_area, blocked_deprivation_pause, speed_asshole_landing_2, refund_DTP, blocked_blacklist_twin, disable_game_tag, bb_incorrect_billing, blocked_bb_check_already_seen, user_reg_push_alert_selfie_cont, user_character_drunk_driver, yac_landing_tag, chaginskaya_deny, email_debt_DTP_1, fine_garbage, violation_light_other, blocked_deprivation_license, violation_takeout_parking, fine_eva_spb_obl, bonus_trump, mercedes_izmaylovo_landing, push_break_car, fine_drunk_driver, bb_dtp_recalculate, refund_service_problem, fine_vehicle_control_transfer, blocked_fraud_selfie_another_p, leaf_discharged_push, fine_pdd_12_17_1_1, u_kogo_plus_multi_landing_2, violation_exploitation, u_kogo_plus_multi_landing, zheleznodorozhny_drop_landing, fine_closed_area, user_alert_DTP_debt, miki_birthday_1y_all, user_alert_debt_DTP, refund_yaauto, blocked_account_transfer, fine_parking_outside_area, blocked_chargeback, user_character_critic, violation_know_aggressive, tariff_winner_1h_everyday, email_debt_2, dzerzhinski_drop_area_landing, refund_closed_area, landing_winner_1h_everyday, fine_account_transfer, blocked_aggressive_driver, bonus_newbie, refund_dirty, test_bb_credit, blocked_on_general_terms_dr_tx, landing_winner_2d_qashqai, push_cleaning_cancel, miki_birthday_1y_top10, user_character_refund, aggressivedriver_push_3violation, fine_leaving_area, tariff_winner_2d_qashqai, user_character_chargeback, user_refueling_refueller, bb_trump, yac_push_poehavshie, landing_winner_1h_everyday_plus, user_refueling_refueller_msk, tariff_winner_1h_everyday_plus, fine_pdd_12_18, fine_misuse_car, miki_birthday_1y_top, taxi_promo_september, blocked_accident_run, test_bb_debit, violation_animal, email_debt_1, fine_refuse_register_car_damage, user_character_drug_man, driveteam_bonus_debit, user_refueling_candidate, blocked_fake_fueling, landing_winner_1h_holiday, driveteam_bonus_credit, promo_bonus_credit, tariff_winner_1h_holiday, fine_pdd_12_13_1, user_character_mb_fuel_scam, user_refueling_refueller_spb, credit_push_3, fine_PDD, fine_pdd_12_14_1_1, violation_area, fine_pdd_12_16_4, fine_steal, fine_not_report_incident, refund_no_found, user_character_popular, refund_trip_status, reg_push_expired, user_refueling_old, fine_pdd_12_19_6, additional_staff_discount, longrent_push_3, simple_user_tag, volvo_xc40_data_msc, landing_winner_3d_everydayplus, push_911reminder, blocked_old_passport_reg, tariff_winner_3d_ed_plus, credit_push_1, user_refueling_active_refueller, fine_oversized_cargo, fine_gibdd_speed_discount, user_landing_plus_newmembership, tag_reservation_futures, user_landing_ny_block_road, violation, reg_push_different, push_fix_test, reg_push_badquality, centr_limit_03082019_push, fine_towing_car, fine_pdd_12_12_3, user_refueling_refueller_kzn, tariff_winner_5d_velar, corp_program_wellcom, user_landing_bmw320d, blocked_fraud_no_video_selfie, cash_fine_debit, blocked_aggressive_driver_1week, user_refueling_active_msk, fine_pdd_12_19_5, push_test, for_testing_landing, landing_winner_5d_velar, leaf_discharged_landing_tag, credit_push_2, individual_discount_ozon_b2b, fine_yaauto_damage, fine_gibdd_speed, balashiha_landing_tag, longrent_push_2, tag_sms_test, promo_bonus_debit, producer_push, tariff_mir_7d_macan, fine_pdd_12_09_4, simple_car_tag, test_invisible_discount, dzerzhinsky_car_drop_landing, debt_sms_1, fine_fake_info, zxqfd555_tag, tariff_winner_3d_qashqai, user_character_fake_sim, тест_link, test_link_2, tariff_winner_5d_qashqai, tariff_mir_3d_edplus, tariff_mir_1d_edplus, porsche_start_land, porsche_macan_msc_launch_landing, old_fine_eva_msk, user_fix_start_kazan, user_landing, user_landing_intercity_bus_msc, user_landing_kazan_start, user_landing_macan_spb_launch, landing_weekend_tariff, user_refueling_active_kzn, fine_pdd_12_16_3, user_start_activation_tag, blocked_theft_fuel, blocked_blacklist, blocked_aggressive_driver_10day, volvoxc40_msc_landing, airport_home_push, aggressivedriver_push_10day, absent_sts_not_approved, fine_eva_porsche, mercedesc180_spb_launch, some_documents_not_ok, head_no_internet, blocked_aggressive_driver_3day, email_payed_parking, email_evacuation, user_start_20_v2_landing, discount_20pct_fixpoint_kzn_test, mercedesc180_spb_launch_test, ny_road_block_msc, porsche_panamera_update, push_sweet_november, violation_hard, test_link_4, landing_test_2, landing_winner_3d_qashqai, temp_action_cleaning_processing, longrent_push_1, user_landing_intercity_bus_spb, user_landing_intercity_bus_kazan, tariff_mir_3d_ed, fixpoint_murino, fix_zheleznodorozhnyi, fix_cola_transfer, holidays_vs_days_spb, landing_pack_evolution, landing_test_1, tariff_mir_3d_holidays, fine_pdd_12_15_2, blocked_selfie_screencap, tariff_winner_3d_panamera, tariff_mir_1d_ed, yandex_card_2, tariff_mir_1d_holidays, testpush, bonus_test, feedback_closed_area, violation_eva, head_screen_off_without_sounds, ny_game_bonus, sup_head_volume, august_launch_push, east_long_stay_2h
+                TagsToRemove: ny_game, email_mincost_zone, individual_discount_7pct, individual_discount_7pct_landing, individual_discount_7pct_push, registration_newchat, user_start_20_v2, start_20v2, taxi_promo_october_end, user_start_20_before_reg, first_order_non-reg-2, first_order_20_03.08, individual_discount, individual_discount_push, november_daily_10pct, user_push_sweet_november, landing_start_20v2, landing_november_spb, individual_discount_landing, yandex_card, abt_with_start, abt_no_start, push_yplus_for_inactive_users, landing_yplus_for_inactive_users, taxi_promo_october, first_order_non-reg, individual_start_discount_20pct, abt_start_one_week, bonus_msk_spb_no-ride, tarif_centr_push, tarif_centr, bonus300_non-riders, discount20_non-riders, individual_discount_velar, discount_7pct_and_velar_push, discount_7pct_and_velar_landing, multipolzovateli_15_5_push, ny_game_push, multipolzovateli_15_5_landing, tatarstan_full, landing_november_kzn, bonus_kazan_no-ride, push_300bonus_kazan, mega_kazan, landing_300bonus_kazan, u_kogo_business_multi_push, u_kogo_plus&business_push, kazan_launch, u_kogo_business_multi_landing, user_start_20_regular_fake, u_kogo_business_multi_landing_2, u_kogo_plus&business_landing, user_start_exp_fake_one_week, push_kotelniki, u_kogo_plus&business_landing_2, user_start_20, start_20, user_start_50, start_50, user_start_30, start_30, landing_start_20, landing_start_50, landing_start_30, u_kogo_nichego_multi_push, launch_odintsovo_push, balashiha_push, u_kogo_nichego_multi_landing_2, u_kogo_nichego_multi_landing, yac_push, u_kogo_plus_multi_push, disable_game_tag, yac_landing_tag, u_kogo_plus_multi_landing_2, u_kogo_plus_multi_landing, miki_birthday_1y_all, miki_birthday_1y_top10, yac_push_poehavshie, miki_birthday_1y_top, taxi_promo_september, reg_push_expired, user_landing_ny_block_road, user_start_20_v2_landing, yandex_card_2, august_launch_push
+                CleanerDiscretizationRecordsCount: 2500
+                Timetable: 0200, 0800, 2000
+                SyncStorageName: alerts_states
+                BillingTaskTypes: car_usage
+                AccountActions: update_data
+                FastCleanAccountTypes: 68
+                Period: 6h
+            </db_service>
+            <db_regular_service>
+                SyncStorageName: alerts_states
+                Type: db_regular_service
+                Notifier: db_service_notifier
+                Period: 1h
+            </db_regular_service>
+
+            <head_report>
+                Type: head_regular_report
+                SyncStorageName: alerts_states
+                Period: 1d
+                Description: ежедневный отчет по головам
+                NotifierName: head_report_notifier
+            </head_report>
+            <new_auto_report>
+                Type: new_auto_regular_report
+                SyncStorageName: alerts_states
+                Period: 1d
+                Description: ежедневный отчет по новым машинам
+                AdditionalTags: peterburg_tag
+                NotifierName: new_auto_report_notifier
+                <CarsFilter>
+                    TagsFilter: +new_car
+                </CarsFilter>
+            </new_auto_report>
+            <fueling_sessions_production>
+                Type: fueling_export
+                SyncStorageName: alerts_states
+                Period: 5m
+                YtDataPath: //home/scooter/production/fueling
+                TagsTypes: simple_fueling_tag,service_fueling_tag
+                NotifierName: fueling_chat
+            </fueling_sessions_production>
+            <service_sessions_export>
+                Type: fueling_export
+                SyncStorageName: alerts_states
+                Period: 5m
+                YtDataPath: //home/scooter/nsofya/service
+                TagsTypes: simple_car_tag,car_service_tag
+            </service_sessions_export>
+            <user_fueling_process_control>
+                Type: user_fueling
+                TagName: user_fueling_tag
+                Period: 5s
+                SyncStorageName: alerts_states
+            </user_fueling_process_control>
+            <takeout_regular>
+                Type: takeout_regular
+                SyncStorageName: test_states
+                TracksAPIName: scooter_graph_stable
+                Period: 1m
+            </takeout_regular>
+            <ban_actualizer>
+                Type: ban_actualizer
+                SyncStorageName: alerts_states
+                Period: 1m
+            </ban_actualizer>
+            <alerts_child_seats>
+                Type: alerts_child_seats
+                Period: 5m
+                TagName: child_seat
+                SyncStorageName: alerts_states
+                NotifierName: alerts_telegram_child_seats
+            </alerts_child_seats>
+        </Processes>
+    </BackgroundProcesses>
+</Server>

@@ -1,0 +1,25 @@
+handle: expire
+subclient: expirator
+
+yt-proxy: seneca-vla.yt.yandex.net
+yt-pool: crypta_cm
+
+src-dir: //home/crypta/production/cookie_matching/offline/expirator/to_expire
+err-dir: //home/crypta/production/cookie_matching/offline/expirator/errors
+backup-dir: //home/crypta/production/cookie_matching/offline/expirator/backup/to_expire
+backup-ttl-days: 3
+dst-hosts: ['sas.cm.crypta.yandex.net', 'vla.cm.crypta.yandex.net']
+drop-src: True
+
+job-config:
+    threads: 1000
+    timeout: 1.
+    max-rows-per-job: 1000000
+    max-rps-per-job: 1000
+    max-rps: 30000
+    max-fails: 100
+
+    tvm-src-id: 2012436
+    tvm-dst-id: 2002216
+
+    max-retries: 3

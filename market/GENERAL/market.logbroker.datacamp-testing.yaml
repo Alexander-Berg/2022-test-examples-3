@@ -1,0 +1,24 @@
+juggler:
+  checks:
+  - service: datacamp-logbroker-topic-write-lag
+    children:
+    - MONITORING_MULTIALERT%7c7352fb-493d-480d-b169-b5c194865dd1:all:all
+
+  - service: datacamp-logbroker-topic-write-quota-usage
+    children:
+    - MONITORING_MULTIALERT%8cdf5d2b-7061-4c21-ae18-37546438914c:all:all
+
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    check_options: {}
+    host: datacamp-logbroker-testing
+    tags:
+    - market_indexer_datacamp
+    - market_testing
+    - testing
+    namespace: market.datacamp
+    notifications: []
+    refresh_time: 60
+    ttl: 900

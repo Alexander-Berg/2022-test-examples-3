@@ -1,0 +1,36 @@
+{
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "proxy": {"type": "string"},
+            "path": {"type": "string"},
+            "params": {
+                "type": "array",
+                "minItems": 0,
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "key" : {
+                            "type" : "string",
+                            "pattern": "(val|der|age):.*"
+                        },
+                        "min": {"type": "number"},
+                        "max": {"type": "number"}
+                    },
+                    "required": ["key"]
+                }
+            },
+            "train_window": {"type": "string"},
+            "smooth_window": {"type": "string"},
+            "subscribers": {
+                "type": "array",
+                "minItems": 1,
+                "items": {"type": "string"}
+            }
+        },
+        "required": [
+            "proxy", "path", "params", "train_window", "subscribers"
+        ]
+    }
+}

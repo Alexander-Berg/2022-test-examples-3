@@ -1,0 +1,77 @@
+warehouse-timezone: Europe/Moscow
+spring.datasource:
+  url: &jdbc-url jdbc:h2:mem:SCPRD;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1;DB_CLOSE_ON_EXIT=FALSE
+  jdbc-url: *jdbc-url
+  separator: ^^^ END OF SCRIPT ^^^
+
+AppServer: localhost
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms.receiving: debug
+    org.springframework.jdbc.core: debug
+    root: info
+
+spring:
+  application:
+    name: wms-autostart
+  transaction.default-timeout: 30s
+  main:
+    allow-bean-definition-overriding: true
+  config:
+    import:
+      - application-fragment-common-test.yml
+  liquibase:
+    enabled: true
+  codec:
+    max-in-memory-size: 52428800 # 50 MB
+
+token: xxxxxxxxxxxxxxxxxxxxxxmarschrouteT.T.Tokenxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+oltp:
+  url: http://localhost:8383
+
+check:
+  authentication: 'no'
+
+servicebus:
+  api:
+    host: http://localhost:8382
+  tvm:
+    serviceId: 0
+
+replenishment:
+  api:
+    host: http://localhost:19100
+
+
+wms:
+  ordermanagement:
+    tvm:
+      serviceId: 0
+    host: http://localhost:8765
+  replenishment:
+    tvm:
+      serviceId: 0
+
+ldap:
+  context-source:
+    urls: ldap://localhost:389
+    base: ou=users,dc=test,dc=com
+    userDn: uid=admin
+    password: secret
+
+autostart:
+  launch-interval: 60000
+  tvm:
+    serviceId: 0
+    secret: "secret"
+    cache:
+      dir: ""
+
+application:
+  security:
+    use-tvm-auth: false
+
+s3.use: false

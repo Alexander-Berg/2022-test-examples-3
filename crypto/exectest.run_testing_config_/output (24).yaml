@@ -1,0 +1,103 @@
+logbroker:
+  pqlib:
+    worker_threads: 2
+
+  consumer:
+    server: "man.logbroker.yandex.net"
+    port: 2135
+    topics:
+    - "crypta@prod@graph--fingerprint-matching"
+    client_id: "crypta/test/cm/rt_duid_uploader_to_cm_consumer"
+    max_memory_usage: 16777216
+    max_infly_requests: 3
+    max_size: 102400
+    use_lock_session: false
+    read_mirrored_partitions: true
+    max_uncommitted_count: 5000
+
+  credentials:
+    use_secure_tvm: True
+    tvm:
+      client_tvm_id: 2018198
+
+  pqlib_log_name: pqlib
+
+reader:
+  read_timeout_ms: 1000
+
+parser:
+  threads: 2
+  sample_percent: 5
+  experiment_sources:
+      - beeline
+      - mts
+  banned_sources:
+    - adstat
+
+uploader:
+  threads: 2
+  max_in_flight_requests: 10000
+  request_timeout_ms: 1000
+  retry_timeout_ms: 1000
+  max_rps: 5000
+  poller_threads: 2
+
+solomon:
+  project: crypta_cm
+  service: rt_duid_uploader_to_cm
+  cluster: testing
+  labels:
+    dc: man
+
+logs:
+  main:
+    level: warning
+    targets:
+    - type: "stdout"
+    - type: "rotating"
+      file: "/logs/main.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  parser:
+    level: warning
+    targets:
+    - type: "rotating"
+      file: "/logs/parser.log"
+      max_file_size: 419430400
+      max_files: 1
+  uploader:
+    level: warning
+    targets:
+    - type: "rotating"
+      file: "/logs/uploader.log"
+      max_file_size: 419430400
+      max_files: 1
+  pqlib:
+    level: warning
+    targets:
+    - type: "rotating"
+      file: "/logs/pqlib.log"
+      max_file_size: 419430400
+      max_files: 1
+  tvm:
+    level: warning
+    targets:
+    - type: "rotating"
+      file: "/logs/tvm.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  graphite:
+    targets:
+    - type: rotating
+      file: "/logs/graphite.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  solomon:
+    targets:
+    - type: rotating
+      file: "/logs/solomon.log"
+      max_file_size: 419430400
+      max_files: 1

@@ -1,0 +1,25 @@
+base:
+  # E.g. for logging purporses
+  name: "Mage"
+log:
+  params: {root: ./log/}
+  type: file
+  logpath: "%(HOME)s/dev/Mage/log/mage-full.log"
+  format: "%(asctime)s %(threadName)s-%(process)s %(levelname)s %(message)s"
+  stdout: True
+database:
+  connectUri: "mongodb://msearch-precise-dev.mail.yandex.net:27018, msearch-precise-dev.mail.yandex.net:27019, msearch-precise-dev.mail.yandex.net:27020/?replicaSet=mage"
+  mongoDatabase: "mage"
+server:
+  serverThreads: "10"
+  httpServerPort: "1884"
+settings:
+  # Root dir - server.py
+  staticDir: "static"
+  cookieSecret: "123456789QWERASDF@"
+  loginUrl: "/login"
+  xsrf_cookies: "False"
+  indexfilename: "index.html"
+  debug: False
+  oauth_token: "%(_OAUTH_TOKEN_)s"
+  generator_configs: "./config/*.yaml"

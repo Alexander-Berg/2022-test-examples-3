@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+[ -z "${KEEP}" ] && set -e
+
+SCRIPTS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd) #"
+. "${SCRIPTS_DIR}"/config.sh
+
+PLAYLIST_SERVICE_SCHEMA=vh
+[ -z "$PROD" ] && . "${SCRIPTS_DIR}"/playlist_service
+
+set -x
+
+#prod curl https://internal.vh.yandex.net/playlist -X POST -d "{\"from\": \"ott-kp\", \"streams\": [{\"uuid\": \"400060804316376aaf9ae057e1beb134\", \"stream_type\": \"dash\", \"stream_id\": \"13326844955103681321\"}]}"
+
+if [ -n "$PG_PROD" ] || [ -n "$PROD" ]; then
+
+echo VH-13130
+${CURL} "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}" -X POST \
+    -d "{\"allow_non_active_streams\":true, \"from\": \"ott-kp\", \"streams\": [{\"uuid\": \"400060804316376aaf9ae057e1beb134\", \"stream_type\": \"dash\", \"stream_id\": \"13326844955103681321\"}]}" \
+    | jq --exit-status '.[0].output_stream_id'
+
+    # check cache miss without flag
+
+${CURL} "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}" -X POST \
+    -d "{\"from\": \"ott-kp\", \"streams\": [{\"uuid\": \"400060804316376aaf9ae057e1beb134\", \"stream_type\": \"dash\", \"stream_id\": \"13326844955103681321\"}]}" \
+    | jq --exit-status '.type!="array"'
+
+
+
+echo VH-13285
+#${CURL} "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}"  --data-raw '{ "abcid": 1234, "streams": [ { "uuid": "41d687bddce0c07aa9f0acc0bcf3630d" } ] }' | jq .
+    #curl --location -H 'X-Yandex-Internal-Request: 1' --request POST "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}"  --data-raw '{ "abc_id": 1234, "streams": [ { "uuid": "41d687bddce0c07aa9f0acc0bcf3630d" } ] }' | jq .
+${CURL} "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}"  --data-raw '{ "from": "test_unknown_from", "streams": [ { "uuid": "41d687bddce0c07aa9f0acc0bcf3630d" } ] }' \
+| jq --exit-status '.[0].streams[0].stream | test("from=test_unknown_from")'
+
+
+${CURL} "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}" -d '{  "abc_id": 1558, "from": "ya-video",  "streams": [    {      "uuid": "40e44abd12eb50219d666ea33e2713cb"    }  ] }' | jq .
+
+fi

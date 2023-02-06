@@ -1,0 +1,108 @@
+include sites-enabled/mail-upstreams.include;
+include sites-enabled/vars.include;
+
+server {
+    listen 80 default;
+    listen [::]:80 default ipv6only=on;
+    server_name mail.yandex.ru mail.yandex.by mail.yandex.com mail.yandex.com.tr mail.yandex.kz mail.yandex.fr mail.yandex.az mail.yandex.com.am mail.yandex.com.ge mail.yandex.co.il mail.yandex.kg mail.yandex.lt mail.yandex.lv mail.yandex.md mail.yandex.tj mail.yandex.tm mail.yandex.uz mail.yandex.ee bar-mail.yandex.ru mail-eto.yandex.ru mail-ugr.yandex.ru mail-iva.yandex.ru mail-myt.yandex.ru upload.mail.yandex.net ~web[0-9]+.yandex.ru api2-internal.mail.yandex.fr;
+    server_name_in_redirect off;
+
+    set $x_real_ip $remote_addr;
+    set $x_real_port $remote_port;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $x_real_ip;
+    proxy_set_header X-Real-Port $x_real_port;
+    proxy_set_header X-Original-Uri $request_uri;
+    proxy_set_header X-Original-Host $host;
+    proxy_set_header X-Request-Id $request_id;
+    proxy_set_header X-Forwarded-For $x_real_ip;
+
+    proxy_connect_timeout 500ms;
+    proxy_read_timeout 35s;
+    proxy_send_timeout 5s;
+
+    include sites-enabled/metrics.include;
+
+    include sites-enabled/ping.include;
+
+    location ~* ^/api/(v2/)(|[a-zA-Z]+/)([^/\s]+)?$ {
+        expires epoch;
+        add_header X-Frame-Options SAMEORIGIN;
+        add_header Cache-Control "private,no-cache,no-store,must-revalidate,max-age=0";
+        add_header X-Content-Type-Options nosniff;
+
+        set $version "$1";
+        set $caller "$2";
+        set $api_method "$3";
+
+        include sites-enabled/cors.include;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $x_real_ip;
+        proxy_set_header X-Real-Port $x_real_port;
+        proxy_set_header X-Original-Uri $request_uri;
+        proxy_set_header X-Original-Host $host;
+        proxy_set_header X-Request-Id $request_id;
+        proxy_set_header X-Forwarded-For $x_real_ip;
+
+        proxy_set_header X-Api-Method $api_method;
+        proxy_set_header X-Api-Version $version;
+        proxy_set_header X-Api-Caller $caller;
+
+        proxy_intercept_errors on;
+        error_page 401 =500 /500.html;
+
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        proxy_next_upstream error timeout http_502 http_503;
+        proxy_next_upstream_tries 2;
+
+        proxy_ssl_session_reuse on;
+        proxy_pass https://api-backend/api/$version$api_method$is_args$args;
+    }
+
+    location / {
+        rewrite ^ https://$host$request_uri? permanent;
+    }
+
+    access_log /var/log/nginx/mail/access.log proxy;
+    tskv_log /var/log/nginx/mail/access.tskv mail-nginx-access-log;
+    error_log /var/log/nginx/mail/error.log;
+}
+
+server {
+    listen 443 default ssl;
+    listen [::]:443 default ssl ipv6only=on;
+    server_name mail.yandex.ru mail.yandex.by mail.yandex.com mail.yandex.com.tr mail.yandex.kz mail.yandex.fr mail.yandex.az mail.yandex.com.am mail.yandex.com.ge mail.yandex.co.il mail.yandex.kg mail.yandex.lt mail.yandex.lv mail.yandex.md mail.yandex.tj mail.yandex.tm mail.yandex.uz mail.yandex.ee bar-mail.yandex.ru mail-eto.yandex.ru mail-ugr.yandex.ru mail-iva.yandex.ru mail-myt.yandex.ru upload.mail.yandex.net ~web[0-9]+.yandex.ru;
+    server_name_in_redirect off;
+
+    set $x_real_ip $remote_addr;
+    set $x_real_port $remote_port;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $x_real_ip;
+    proxy_set_header X-Real-Port $x_real_port;
+    proxy_set_header X-Original-Uri $request_uri;
+    proxy_set_header X-Original-Host $host;
+    proxy_set_header X-Request-Id $request_id;
+    proxy_set_header X-Forwarded-For $x_real_ip;
+    proxy_set_header X-Https-Request yes;
+    proxy_set_header SSL-Cipher $ssl_cipher;
+
+    proxy_connect_timeout 500ms;
+    proxy_read_timeout 35s;
+    proxy_send_timeout 5s;
+
+    include sites-enabled/metrics.include;
+
+    include sites-enabled/ping.include;
+
+    access_log /var/log/nginx/mail/access.log proxy;
+    tskv_log /var/log/nginx/mail/access.tskv mail-nginx-access-log;
+    error_log /var/log/nginx/mail/error.log info;
+
+    include sites-enabled/mail.include;
+    include sites-enabled/common.include;
+    include sites-enabled/secrets.include;
+}

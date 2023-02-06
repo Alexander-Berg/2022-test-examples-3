@@ -1,0 +1,55 @@
+context:
+  default:
+    service_name: sovetnik_backend
+    servername_regexp: (test\\.)?sovetnik\\.market\\.yandex\\.ru
+    vs: sovetnik
+    cert: sovetnik.market.yandex.ru
+    priority: 10
+    antirobot: false
+    balancing_method: active
+    health_check: '"GET /ping-balancer HTTP/1.1\r\nHost: sovetnik.market.yandex.ru\r\n\r\n"'
+
+  testing:
+    cert: sovetnik.market.yandex.ru
+
+servers:
+  default:
+    main:
+    - name: N%production_market_sovetnik_backend_iva@local
+      timeout: 11s
+      weight: 100
+      plain_http_backend: true
+    - name: N%production_market_sovetnik_backend_sas@local
+      timeout: 11s
+      weight: 100
+      plain_http_backend: true
+    - name: N%production_market_sovetnik_backend_vla@local
+      timeout: 11s
+      weight: 100
+      plain_http_backend: true
+    - name: N%production_market_sovetnik_backend_iva
+      timeout: 11s
+      plain_http_backend: true
+    - name: N%production_market_sovetnik_backend_sas
+      timeout: 11s
+      plain_http_backend: true
+    - name: N%production_market_sovetnik_backend_vla
+      timeout: 11s
+      plain_http_backend: true
+
+  testing:
+    main:
+    - name: N%testing_market_sovetnik_backend_sas@local
+      timeout: 30s
+      weight: 100
+      plain_http_backend: true
+    - name: N%testing_market_sovetnik_backend_vla@local
+      timeout: 30s
+      weight: 100
+      plain_http_backend: true
+    - name: N%testing_market_sovetnik_backend_sas
+      timeout: 30s
+      plain_http_backend: true
+    - name: N%testing_market_sovetnik_backend_vla
+      timeout: 30s
+      plain_http_backend: true

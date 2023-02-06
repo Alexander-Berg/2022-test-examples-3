@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug" packages="ru.yandex.market.log4j2">
+    <Appenders>
+        <Console name="MAIN" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %-5p [%c{1} %t] %m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="MAIN"/>
+        </Root>
+        <Logger name="org.springframework.jdbc.core.JdbcTemplate" level="DEBUG" additivity="false">
+            <AppenderRef ref="MAIN">
+                <RegexFilter regex="^Executing prepared SQL (query|update)$" useRawMsg="true" onMatch="DENY" onMismatch="ACCEPT"/>
+            </AppenderRef>
+        </Logger>
+        <Logger name="org.springframework.jdbc.core.StatementCreatorUtils" level="TRACE"  additivity="false">
+            <AppenderRef ref="MAIN"/>
+        </Logger>
+        <Logger name="org.apache.curator" level="INFO" additivity="false">
+            <AppenderRef ref="MAIN"/>
+        </Logger>
+        <Logger name="ru.yandex" level="DEBUG" additivity="false">
+            <AppenderRef ref="MAIN"/>
+        </Logger>
+        <Logger name="ru.yandex.commune.bazinga.impl.controller.ControllerTaskManager" level="INFO" additivity="false">
+            <AppenderRef ref="MAIN"/>
+        </Logger>
+        <Logger name="liquibase" level="DEBUG">
+            <AppenderRef ref="MAIN"/>
+        </Logger>
+    </Loggers>
+</Configuration>

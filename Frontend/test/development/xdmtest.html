@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="easyXDM-2.4.16.3/easyXDM.debug.js"></script>
+    <script>
+        easyXDM.DomHelper.requiresJSON("easyXDM-2.4.16.3/json2.js");
+    </script>
+</head>
+<body>
+    <script>
+
+//        var rpc = new easyXDM.Rpc({
+//                    remote : 'http://sitesearch-external.orion.lori.yandex-team.ru/version2.0/test/development/xdmtest_iframe.html?_' + Math.random(),
+////                    remoteHelper : 'http://sitesearch-external.orion.lori.yandex-team.ru/version2.0/test/development/easyXDM-2.4.16.3/name.html',
+////                    local : 'easyXDM-2.4.16.3/name.html',
+//                    protocol : '0',
+//                    swf : 'http://sitesearch-external.orion.lori.yandex.ru/version2.0/test/development/easyXDM-2.4.16.3/easyxdm.swf',
+//                    container : 'container',
+//                    onReady : function() {
+//                        alert('onReady, parent');
+//                    },
+//                    props : {
+//                        style : {
+//                            width : '100%',
+//                            height : '100px'
+//                        }
+//                    }
+//                },
+//                {
+//                    local : {
+//                        resizeIframe : function(height) {
+//                            alert('resizeIframe');
+//                            document.getElementById('container').getElementsByTagName('iframe')[0].style.height = height + 'px';
+//                        }
+//                    }
+//                });
+
+        var socket = new easyXDM.Socket({
+            remote : 'http://sitesearch-external.orion.lori.yandex-team.ru/version2.0/test/development/xdmtest_iframe.html?_' + Math.random(),
+//            remoteHelper : 'http://sitesearch-external.orion.lori.yandex-team.ru/version2.0/test/development/easyXDM-2.4.16.3/name.html',
+//            local : 'easyXDM-2.4.16.3/name.html',
+            protocol : '0',
+            swf : 'easyXDM-2.4.16.3/easyxdm.swf',
+            container : 'container',
+            onReady : function() {
+                alert('onReady, parent');
+            },
+            props : {
+                style : {
+                    height : '100px',
+                    width : '100%'
+                }
+            },
+            onMessage:function(message, origin) {
+                alert('onMessage, parent');
+                document.getElementById('container').getElementsByTagName('iframe')[0].style.height = message + 'px';
+            }
+        });
+    </script>
+    <div id="container"></div>
+    <div id="log" style="height: 200px; border: 1px solid #000; overflow: auto;"></div>
+</body>
+</html>

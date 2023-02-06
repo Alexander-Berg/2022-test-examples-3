@@ -1,0 +1,33 @@
+PRAGMA yt.InferSchema = "1";
+USE hahn;
+
+$addr_bld_table = '{{ addr_bld_table }}';
+$bld_fttype_table = '{{ bld_fttype_table }}';
+$input_table = '{{ input_table }}';
+$output_table = '{{ pre_processing_out }}';
+
+$get_address_id = ($key) -> {
+    $key_str = Yson::ConvertToString($key);
+    $capture = Re2::Capture('geocoder_id_(?P<addr_id>\\d+)(~.+)?');
+    RETURN CAST($capture($key_str).addr_id AS Int64); 
+};
+
+$house_address_ids = (
+    SELECT DISTINCT
+        addr_bld.address_id AS address_id
+    FROM $addr_bld_table AS addr_bld
+    JOIN $bld_fttype_table AS bld_fttype
+        ON addr_bld.building_id == bld_fttype.bld_id
+    WHERE
+        bld_fttype.ft_type_id == 101
+);
+
+INSERT INTO $output_table WITH TRUNCATE
+    SELECT 
+        Yson::ConvertToString(input.{{ permalink_field }}) AS {{ permalink_field }},
+        WeakField(input.{{ data_field }}, Yson) AS {{ data_field }}
+    FROM
+        $input_table AS input
+    JOIN $house_address_ids AS address_ids
+    ON $get_address_id(input.{{ permalink_field }}) == address_ids.address_id
+;

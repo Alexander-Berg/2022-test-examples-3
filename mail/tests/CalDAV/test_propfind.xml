@@ -1,0 +1,36 @@
+<?xml version="1.0" standalone="no"?>
+
+<!DOCTYPE caldavtest SYSTEM "caldavtest.dtd">
+
+<caldavtest>
+  <require-feature>
+    <feature>caldav</feature>
+  </require-feature>
+
+  <start/>
+
+  <test-suite name='regular home prop finds'>    
+    <test name='1'>
+      <description>PROPFIND of basic properties depth=1</description>
+      <request>
+        <method>PROPFIND</method>
+        <ruri>/calendars/caldavcompluser@yandex.ru/events-default</ruri>
+        <header>
+          <name>Depth</name>
+          <value>1</value>
+        </header>
+        <data>
+          <content-type>text/xml; charset=utf-8</content-type>
+          <filepath>Resource/CalDAV/propfinds/1.txt</filepath>
+        </data>
+        <verify>
+          <callback>statusCode</callback>
+        </verify>
+      </request>
+    </test>
+    
+  </test-suite>
+
+  <end/>
+  
+</caldavtest>

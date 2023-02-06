@@ -1,0 +1,116 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "pobeda",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+    "-u", "pobeda",
+    "--password", "pobeda",
+    "--date-from", "2020-02-06",
+    "--date-to", "2020-02-06",
+    "--test-only-local-path",  "%(test_only_local_path)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+    "local"
+    ]
+
+[local]
+
+[local.arc_paths]
+    test_only_local_path = "travel/cpa/tests/lib/data/collectors/pobeda/POBEDA-YANDEX-2020-02-06.xlsx"
+
+[yt]
+
+[yt.input.partner_table]
+    path = "//home/rasp/reference/partner"
+
+[[yt.input.partner_table.data]]
+    billing_order_id = 409
+    code = "pobeda"
+    partner_id = 58
+
+
+[lb]
+    topic = "topic-pobeda"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+[[lb.expected]]
+    partner_name = "pobeda"
+    travel_order_id = "pobeda:order_0"
+    partner_order_id = "order_0"
+    created_at = 1560643200
+    status = "cancelled"
+    label = "marker_0"
+    category = "avia"
+    source = "pobeda"
+    partner_id = 58
+    billing_order_id = 409
+    trip_type = "oneway"
+    order_amount = 0
+    currency_code = "RUB"
+    
+    
+[[lb.expected]]
+    partner_name = "pobeda"
+    travel_order_id = "pobeda:order_1"
+    partner_order_id = "order_1"
+    created_at = 1560643320
+    status = "cancelled"
+    label = "marker_1"
+    order_amount = 0.0
+    category = "avia"
+    source = "pobeda"
+    partner_id = 58
+    billing_order_id = 409
+    trip_type = "roundtrip"
+    currency_code = "RUB"
+
+[[lb.expected]]
+    partner_name = "pobeda"
+    travel_order_id = "pobeda:order_2"
+    partner_order_id = "order_2"
+    created_at = 1560644040
+    status = "confirmed"
+    label = "marker_2"
+    order_amount = 4198.0
+    category = "avia"
+    source = "pobeda"
+    partner_id = 58
+    billing_order_id = 409
+    trip_type = "oneway"
+    currency_code = "RUB"
+
+[[lb.expected]]
+    partner_name = "pobeda"
+    travel_order_id = "pobeda:order_3"
+    partner_order_id = "order_3"
+    created_at = 1560688440
+    status = "confirmed"
+    label = "marker_3"
+    order_amount = 2596.1
+    category = "avia"
+    source = "pobeda"
+    partner_id = 58
+    billing_order_id = 409
+    trip_type = "oneway"
+    currency_code = "RUB"
+
+[[lb.expected]]
+    partner_name = "pobeda"
+    travel_order_id = "pobeda:order_4"
+    partner_order_id = "order_4"
+    created_at = 1560729480
+    status = "confirmed"
+    label = "marker_4"
+    order_amount = 11998.0
+    category = "avia"
+    source = "pobeda"
+    partner_id = 58
+    billing_order_id = 409
+    trip_type = "roundtrip"
+    currency_code = "RUB"

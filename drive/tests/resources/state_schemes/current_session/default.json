@@ -1,0 +1,871 @@
+{
+  "area_common_user_info":
+    {
+      "display_name":"Алерт поддержки",
+      "required":true,
+      "structure":
+        {
+          "__additional_properties":true,
+          "phone":
+            {
+              "display_name":"Контактный телефон пользователя",
+              "required":true,
+              "type":"string"
+            },
+          "support_feedback_form":
+            {
+              "display_name":"Ссылка на форму обратной связи",
+              "required":true,
+              "type":"string"
+            },
+          "support_phone":
+            {
+              "display_name":"Телефон поддержки",
+              "required":true,
+              "type":"string"
+            },
+          "support_telegram":
+            {
+              "display_name":"Логин поддержки в телеграмм",
+              "required":true,
+              "type":"string"
+            },
+          "support_whatsapp":
+            {
+              "display_name":"Телефон поддержки в whatsapp",
+              "required":true,
+              "type":"string"
+            }
+        },
+      "type":"structure"
+    },
+  "car":
+    {
+      "display_name":"Информация об авто",
+      "structure":
+        {
+          "id":
+            {
+              "display_name":"Идентификатор",
+              "internal_type":"UUID",
+              "required":true,
+              "type":"string"
+            },
+          "location":
+            {
+              "display_name":"Местоположение",
+              "structure":
+                {
+                  "course":
+                    {
+                      "display_name":"course",
+                      "required":true,
+                      "type":"numeric"
+                    },
+                  "lat":
+                    {
+                      "display_name":"Широта",
+                      "required":true,
+                      "type":"numeric"
+                    },
+                  "lon":
+                    {
+                      "display_name":"Долгота",
+                      "required":true,
+                      "type":"numeric"
+                    }
+                },
+              "type":"structure"
+            },
+          "model_id":
+            {
+              "display_name":"Идентификатор модели",
+              "multi_select":false,
+              "required":true,
+              "type":"variants",
+              "variants":
+                [
+                  "kia_rio",
+                  "porsche_carrera"
+                ]
+            },
+          "number":
+            {
+              "display_name":"Гос. номер",
+              "required":true,
+              "type":"string"
+            },
+          "session_features":
+            {
+              "array_type":
+                {
+                  "__additional_properties":true,
+                  "performer":
+                    {
+                      "display_name":"performer",
+                      "type":"string"
+                    },
+                  "priority":
+                    {
+                      "display_name":"priority",
+                      "min":0,
+                      "type":"numeric"
+                    },
+                  "tag":
+                    {
+                      "display_name":"tag",
+                      "required":true,
+                      "type":"string"
+                    }
+                },
+              "display_name":"Спецификации авто",
+              "type":"array_types"
+            },
+          "sf":
+            {
+              "array_type":
+                {
+                  "type":"numeric"
+                },
+              "display_name":"Идентификаторы спецификаций авто",
+              "type":"array_types"
+            },
+          "telematics":
+            {
+              "display_name":"Показания телематики",
+              "structure":
+                {
+                  "fuel_distance":
+                    {
+                      "display_name":"Расстояние, которое автомобиль может проехать до следующей заправки (км)",
+                      "min":0,
+                      "required":true,
+                      "type":"numeric"
+                    },
+                  "fuel_level":
+                    {
+                      "display_name":"Уровень топлива (%)",
+                      "max":100,
+                      "min":0,
+                      "required":true,
+                      "type":"numeric"
+                    },
+                  "is_engine_on":
+                    {
+                      "display_name":"Флаг включеного двигателя",
+                      "type":"bool"
+                    },
+                  "is_front_left_door_open":
+                    {
+                      "display_name":"Флаг открытия передней левой двери",
+                      "type":"bool"
+                    },
+                  "is_front_right_door_open":
+                    {
+                      "display_name":"Флаг открытия передней правой двери",
+                      "type":"bool"
+                    },
+                  "is_hood_open":
+                    {
+                      "display_name":"Флаг открытия капота",
+                      "type":"bool"
+                    },
+                  "is_rear_left_door_open":
+                    {
+                      "display_name":"Флаг открытия задней левой двери",
+                      "type":"bool"
+                    },
+                  "is_rear_right_door_open":
+                    {
+                      "display_name":"Флаг открытия задней правой двери",
+                      "type":"bool"
+                    },
+                  "is_trunk_open":
+                    {
+                      "display_name":"Флаг открытия багажника",
+                      "type":"bool"
+                    },
+				  "ble_mac":
+                    {
+                      "display_name":"Флаг открытия багажника",
+                      "type":"bool"
+                    },
+				  "ble_passkey":
+                    {
+                      "display_name":"Флаг открытия багажника",
+                      "type":"bool"
+                    },
+          "ble_session_key":
+                    {
+                      "display_name":"ble_session_key",
+                      "type":"string"
+                    }
+                },
+              "type":"structure"
+            },
+          "photos":
+            {
+              "array_type":
+                {
+                  "__additional_properties":true
+                },
+              "display_name":"validated photos",
+              "type":"array_types"
+            },
+          "view":
+            {
+              "display_name":"Идентификатор финальной модели из массива view",
+              "min":0,
+              "required":true,
+              "type":"numeric"
+            }
+        },
+      "type":"structure"
+    },
+  "device_diff":
+    {
+      "display_name":"device_diff",
+      "structure":
+        {
+          "__additional_properties":true
+        },
+      "type":"structure"
+    },
+  "device_status":
+    {
+      "display_name":"device_status",
+      "multi_select":false,
+      "required":true,
+      "type":"variants",
+      "variants":
+        [
+          "CannotDeterm",
+          "Disabled",
+          "New",
+          "NoDevices",
+          "Verification",
+          "Verified"
+        ]
+    },
+  "feedback":
+    {
+      "display_name":"Ссылки на соцсети",
+      "structure":
+        {
+          "buttons":
+            {
+              "array_type":
+                {
+                  "icon":
+                    {
+                      "display_name":"Иконка",
+                      "required":true,
+                      "type":"string"
+                    },
+                  "link":
+                    {
+                      "display_name":"Ссылка",
+                      "required":true,
+                      "type":"string"
+                    },
+                  "title":
+                    {
+                      "display_name":"Заголовок",
+                      "required":true,
+                      "type":"string"
+                    }
+                },
+              "display_name":"buttons",
+              "type":"array_types"
+            },
+          "is_short_ride":
+            {
+              "type":"bool"
+            },
+          "set_id":
+            {
+              "display_name":"set_id",
+              "multi_select":false,
+              "type":"variants",
+              "variants":
+                [
+                  "feedback_acceptance",
+                  "feedback_accepting",
+                  "feedback_history",
+                  "feedback_post",
+                  "feedback_post_long",
+                  "feedback_reservation",
+                  "feedback_riding"
+                ]
+            }
+        },
+      "type":"structure"
+    },
+  "flags":
+    {
+      "display_name":"flags",
+      "required":true,
+      "structure":
+        {
+          "__additional_properties":true
+        },
+      "type":"structure"
+    },
+  "fueling_ability":
+    {
+      "display_name":"fueling_ability",
+      "type":"bool"
+    },
+  "additional_service_offers":
+    {
+      "array_type":
+      {
+          "__additional_properties":true
+      },
+      "display_name":"additional_service_offers",
+      "type":"array_types"
+    },
+  "tanker_fueling_ability":
+    {
+      "display_name":"tanker_fueling_ability",
+      "type":"bool"
+    },
+  "views":{
+    "array_type":
+    {
+      "__additional_properties":true
+    },
+    "display_name":"Пропатченные представления",
+    "type":"array_types"
+  },
+  "models":
+    {
+      "display_name":"Описание моделей",
+      "structure":
+        {
+          "(kia_rio|porsche_carrera)":
+            {
+              "display_name":"(kia_rio|porsche_carrera)",
+              "structure":
+                {
+                  "cars_count":
+                    {
+                      "display_name":"Количество машин",
+                      "min":0,
+                      "type":"numeric"
+                    },
+                  "code":
+                    {
+                      "display_name":"Идентификатор модели",
+                      "multi_select":false,
+                      "type":"variants",
+                      "variants":
+                        [
+                          "kia_rio",
+                          "porsche_carrera"
+                        ]
+                    },
+                  "first_maintenance_mileage":
+                    {
+                      "display_name":"Временной интервал между ТО",
+                      "type":"ignore"
+                    },
+                  "intermediate_maintenance_mileage":
+                    {
+                      "display_name":"Промежуточное ТО",
+                      "type":"ignore"
+                    },
+                  "maintenance_mileage":
+                    {
+                      "display_name":"Временной интервал между ТО",
+                      "type":"ignore"
+                    },
+                  "maintenance_period":
+                    {
+                      "display_name":"Временной интервал между ТО",
+                      "type":"ignore"
+                    },
+                  "fuel_cap_side":
+                    {
+                      "display_name":"С какой стороны лючек бензобака",
+                      "multi_select":false,
+                      "type":"variants",
+                      "variants":
+                        [
+                          "left",
+                          "right"
+                        ]
+                    },
+                  "fuel_icon_url":
+                    {
+                      "display_name":"Иконка заправки",
+                      "type":"string"
+                    },
+                  "fuel_type":
+                    {
+                      "display_name":"Тип топлива",
+                      "type":"string"
+                    },
+                  "image_angle_url":
+                    {
+                      "display_name":"image_angle_url",
+                      "type":"string"
+                    },
+                  "image_large_url":
+                    {
+                      "display_name":"image_large_url",
+                      "type":"string"
+                    },
+                  "image_map_url_2x":
+                    {
+                      "display_name":"image_map_url_2x",
+                      "type":"string"
+                    },
+                  "image_map_url_3x":
+                    {
+                      "display_name":"image_map_url_3x",
+                      "type":"string"
+                    },
+                  "image_pin_url_2x":
+                    {
+                      "display_name":"image_pin_url_2x",
+                      "type":"string"
+                    },
+                  "image_pin_url_3x":
+                    {
+                      "display_name":"image_pin_url_3x",
+                      "type":"string"
+                    },
+                  "image_small_url":
+                    {
+                      "display_name":"image_small_url",
+                      "type":"string"
+                    },
+                  "manufacturer":
+                    {
+                      "display_name":"Производитель",
+                      "type":"string"
+                    },
+                  "name":
+                    {
+                      "display_name":"Полное название",
+                      "type":"string"
+                    },
+                  "registry_manufacturer":
+                    {
+                      "display_name":"Производитель(для загрузки из файлов)",
+                      "type":"string"
+                    },
+                  "registry_model":
+                    {
+                      "display_name":"Модель(для загрузки из файла)",
+                      "type":"string"
+                    },
+                  "short_name":
+                    {
+                      "display_name":"Короткое название модели",
+                      "type":"string"
+                    },
+                  "specifications":
+                    {
+                      "array_type":
+                        {
+                          "id":
+                            {
+                              "display_name":"Идентификатор",
+                              "internal_type":"UUID",
+                              "type":"string"
+                            },
+                          "name":
+                            {
+                              "display_name":"Название",
+                              "required":true,
+                              "type":"string"
+                            },
+                          "position":
+                            {
+                              "display_name":"Позиция в выдаче",
+                              "min":0,
+                              "required":true,
+                              "type":"numeric"
+                            },
+                          "value":
+                            {
+                              "display_name":"Значение",
+                              "required":true,
+                              "type":"string"
+                            },
+                          "icon":
+                              {
+                                "display_name":"Иконка",
+                                "required":false,
+                                "type":"string"
+                              }
+                        },
+                      "display_name":"Особенности",
+                      "type":"array_types"
+                    },
+                  "visual":
+                    {
+                      "display_name":"Особенности отображения",
+                      "type":"ignore"
+                    },
+                  "meta":
+                    {
+                      "display_name":"Особенности",
+                      "type":"ignore"
+                    },
+				  "segment":
+                    {
+                      "display_name":"Сегмент",
+                      "type":"string"
+                    }
+                },
+              "type":"structure"
+            }
+        },
+      "type":"structure"
+    },
+  "notification":
+    {
+      "display_name":"notification",
+      "type":"string"
+    },
+  "poi":
+    {
+      "array_type":
+        {
+          "image":
+            {
+              "display_name":"Изображение",
+              "type":"string"
+            },
+          "message":
+            {
+              "display_name":"Сообщение",
+              "required":true,
+              "type":"string"
+            },
+          "title":
+            {
+              "display_name":"Заголовок",
+              "required":true,
+              "type":"string"
+            },
+          "url":
+            {
+              "display_name":"Ссылка",
+              "required":true,
+              "type":"string"
+            },
+          "text_color":
+            {
+              "display_name":"Цвет",
+              "required":true,
+              "type":"string"
+            },
+			"small_image":
+            {
+              "display_name":"Маленькое изображение",
+              "type":"string"
+            },
+			"top_color":
+            {
+              "display_name":"Цвет",
+              "type":"string"
+            },
+			"bottom_color":
+            {
+              "display_name":"Цвет",
+              "type":"string"
+            }
+        },
+      "display_name":"Интересные места в городе",
+      "type":"array_types"
+    },
+  "property_patches":
+    {
+      "display_name":"property_patches",
+      "type":"ignore"
+    },
+  "evolutions":
+    {
+      "display_name":"evolutions",
+      "type":"ignore"
+    },
+  "segment":
+    {
+      "display_name":"segment",
+      "structure":
+        {
+          "car_number":
+            {
+              "display_name":"Гос. номер",
+              "type":"string"
+            },
+          "meta":
+            {
+              "display_name":"meta",
+              "required":true,
+              "type":"ignore"
+            },
+          "multi_bill":
+            {
+              "display_name":"multi_bill",
+              "structure":
+                {
+                  "bills":
+                    {
+                      "array_type":
+                        {
+                          "array_type":
+                            {
+                              "cost":
+                                {
+                                  "display_name":"cost",
+                                  "required":true,
+                                  "type":"numeric"
+                                },
+                              "details":
+                                {
+                                  "display_name":"details",
+                                  "type":"string"
+                                },
+                              "distance":
+                                {
+                                  "display_name":"distance",
+                                  "min":0,
+                                  "type":"numeric"
+                                },
+                              "duration":
+                                {
+                                  "display_name":"duration",
+                                  "type":"numeric",
+                                  "visual":"timestamp"
+                                },
+                              "icon":
+                                {
+                                  "display_name":"icon",
+                                  "type":"string"
+                                },
+                              "id":
+                                {
+                                  "display_name":"id",
+                                  "type":"string"
+                                },
+                              "title":
+                                {
+                                  "display_name":"title",
+                                  "required":true,
+                                  "type":"string"
+                                },
+                              "type":
+                                {
+                                  "display_name":"type",
+                                  "required":true,
+                                  "type":"string"
+                                }
+                            },
+                          "type":"array_types"
+                        },
+                      "display_name":"bills",
+                      "type":"array_types"
+                    },
+                  "records":
+                    {
+                      "array_type":
+                        {
+                          "cost":
+                            {
+                              "display_name":"cost",
+                              "required":true,
+                              "type":"numeric"
+                            },
+                          "details":
+                            {
+                              "display_name":"details",
+                              "type":"string"
+                            },
+                          "distance":
+                            {
+                              "display_name":"distance",
+                              "min":0,
+                              "type":"numeric"
+                            },
+                          "duration":
+                            {
+                              "display_name":"duration",
+                              "type":"numeric",
+                              "visual":"timestamp"
+                            },
+                          "icon":
+                            {
+                              "display_name":"icon",
+                              "type":"string"
+                            },
+                          "id":
+                            {
+                              "display_name":"id",
+                              "type":"string"
+                            },
+                          "title":
+                            {
+                              "display_name":"title",
+                              "required":true,
+                              "type":"string"
+                            },
+                          "type":
+                            {
+                              "display_name":"type",
+                              "required":true,
+                              "type":"string"
+                            }
+                        },
+                      "display_name":"records",
+                      "type":"array_types"
+                    }
+                },
+              "type":"structure"
+            },
+          "session":
+            {
+              "display_name":"session",
+              "required":true,
+              "type":"ignore"
+            },
+          "session_acceptance_finish":
+            {
+              "display_name":"Время окончания приемки",
+              "type":"numeric",
+              "visual":"timestamp"
+            },
+          "session_acceptance_start":
+            {
+              "display_name":"Время начала приемки",
+              "type":"numeric",
+              "visual":"timestamp"
+            }
+        },
+      "type":"structure"
+    },
+  "server_time":
+    {
+      "display_name":"Серверное время",
+      "type":"numeric",
+      "visual":"timestamp"
+    },
+  "sf":
+    {
+      "display_name":"Спецификация авто",
+      "type":"ignore"
+    },
+  "transportation":
+    {
+      "display_name":"Способы добраться до машины",
+      "structure":
+        {
+          "first_mile":
+            {
+              "display_name":"first_mile",
+              "structure":
+                {
+                  "methods":
+                    {
+                      "array_type":
+                        {
+                          "__additional_properties":true
+                        },
+                      "display_name":"methods",
+                      "type":"array_types"
+                    }
+                },
+              "type":"structure"
+            }
+        },
+      "type":"structure"
+    },
+  "user":
+    {
+      "display_name":"Информация о пользователе",
+      "required": true,
+      "structure": {
+        "__additional_properties":true,
+        "billing": {
+          "display_name": "billing",
+          "required": true,
+          "structure": {
+            "__additional_properties": true,
+            "yandex_account": {
+              "display_name": "yandex_account",
+              "structure": {
+                "balance": {
+                  "type": "numeric",
+                  "required": true,
+                  "display_name": "balance"
+                }
+              },
+              "type": "structure"
+            },
+            "payment_methods": {
+              "display_name": "Способы оплаты",
+              "required":  true,
+              "array_type": {
+                "name": {
+                  "type": "string",
+                  "required": true,
+                  "display_name": "name"
+                },
+                "group_type": {
+                  "display_name": "group_type",
+                  "multi_select":false,
+                  "required":true,
+                  "type":"variants",
+                  "variants":
+                    [
+                      "radio",
+                      "switch"
+                    ]
+                },
+				"value": {
+                  "type": "string",
+                  "display_name": "value"
+                },
+				"id": {
+                  "type": "string",
+				  "required" : true,
+                  "display_name": "id"
+                },
+				"subid": {
+                  "type": "string",
+                  "display_name": "subid"
+                },
+				"icon": {
+                  "type": "string",
+                  "display_name": "icon"
+                },
+				"selected": {
+                  "type": "boolean",
+                  "display_name": "selected"
+                },
+				"type": {
+                  "display_name": "type",
+                  "multi_select":false,
+                  "required":true,
+                  "type":"variants",
+                  "variants":
+                    [
+                      "credit_card",
+                      "card",
+					  "wallet"
+                    ]
+                }
+              },
+              "type": "array_types"
+            }
+          },
+          "type": "structure"
+        }
+      },
+      "type":"structure"
+    }
+}

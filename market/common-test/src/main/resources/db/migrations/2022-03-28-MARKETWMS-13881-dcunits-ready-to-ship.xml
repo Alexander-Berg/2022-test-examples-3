@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="MARKETWMS-13881" author="j-sverhnova">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="wmwhse1" tableName="DCUNITS_READY_TO_SHIP"/>
+            </not>
+        </preConditions>
+        <createTable schemaName="wmwhse1" tableName="DCUNITS_READY_TO_SHIP">
+            <column name="DCUNITID" type="nvarchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TYPE" type="nvarchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PARENTID" type="nvarchar(50)"/>
+            <column name="INBOUNDTIME" type="datetime2"/>
+            <column name="INBOUNDEXTERNALID" type="bigint"/>
+            <column name="WHID" type="bigint"/>
+            <column name="UPDATEDAT" type="datetime2">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DELETEDAT" type="datetime2"/>
+        </createTable>
+        <rollback>
+            <dropTable schemaName="wmwhse1" tableName="DCUNITS_READY_TO_SHIP"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

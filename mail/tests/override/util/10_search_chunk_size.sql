@@ -1,0 +1,4 @@
+CREATE OR REPLACE FUNCTION util.search_chunk_size(
+) RETURNS int AS $$
+SELECT 3;
+$$ LANGUAGE SQL IMMUTABLE;

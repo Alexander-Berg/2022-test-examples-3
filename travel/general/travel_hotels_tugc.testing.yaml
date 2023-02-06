@@ -1,0 +1,249 @@
+name: Tugc ({{cluster}})
+parameters:
+  service: tugc
+  cluster: '*'
+  host: '*'
+rows:
+- panels:
+  - title: get_favorite_hotels RPC
+    subtitle: Incoming GRPC requests per second
+    graph: travel-tugc-grpc-requests-rate
+    selectors:
+      cluster: '{{cluster}}'
+      service: tugc
+      host: '{{host}}'
+      method: NTravelProto.NTugc.FavoriteInterfaceV1/GetFavoriteHotels
+  - title: get_geo_ids RPC
+    subtitle: Incoming GRPC requests per second
+    graph: travel-tugc-grpc-requests-rate
+    selectors:
+      cluster: '{{cluster}}'
+      service: tugc
+      host: '{{host}}'
+      method: NTravelProto.NTugc.FavoriteInterfaceV1/GetGeoIds
+  - title: add_favorite_hotel RPC
+    subtitle: Incoming GRPC requests per second
+    graph: travel-tugc-grpc-requests-rate
+    selectors:
+      cluster: '{{cluster}}'
+      service: tugc
+      host: '{{host}}'
+      method: NTravelProto.NTugc.FavoriteInterfaceV1/AddFavoriteHotel
+  - title: remove_faorite_hotels RPC
+    subtitle: Incoming GRPC requests per second
+    graph: travel-tugc-grpc-requests-rate
+    selectors:
+      cluster: '{{cluster}}'
+      service: tugc
+      host: '{{host}}'
+      method: NTravelProto.NTugc.FavoriteInterfaceV1/RemoveFavoriteHotels
+- panels:
+  - title: get_hotel_favorite_infos RPC
+    subtitle: Incoming GRPC requests per second
+    graph: travel-tugc-grpc-requests-rate
+    selectors:
+      cluster: '{{cluster}}'
+      service: tugc
+      host: '{{host}}'
+      method: NTravelProto.NTugc.FavoriteInterfaceV1/GetHotelFavoriteInfos
+- panels:
+  - title: get_favorite_hotels timing in ms
+    subtitle: Incoming GRPC requests timing in ms
+    graph: travel-tugc-grpc-calls-timings-percentile
+    selectors:
+      cluster: '{{cluster}}'
+      host: '{{host}}'
+      service: tugc
+      method: NTravelProto.NTugc.FavoriteInterfaceV1/GetFavoriteHotels
+  - title: get_geo_ids timing in ms
+    subtitle: Incoming GRPC requests timing in ms
+    graph: travel-tugc-grpc-calls-timings-percentile
+    selectors:
+      cluster: '{{cluster}}'
+      host: '{{host}}'
+      service: tugc
+      method: NTravelProto.NTugc.FavoriteInterfaceV1/GetGeoIds
+  - title: add_favorite_hotel timing in ms
+    subtitle: Incoming GRPC requests timing in ms
+    graph: travel-tugc-grpc-calls-timings-percentile
+    selectors:
+      cluster: '{{cluster}}'
+      host: '{{host}}'
+      service: tugc
+      method: NTravelProto.NTugc.FavoriteInterfaceV1/AddFavoriteHotel
+  - title: remove_faorite_hotels timing in ms
+    subtitle: Incoming GRPC requests timing in ms
+    graph: travel-tugc-grpc-calls-timings-percentile
+    selectors:
+      cluster: '{{cluster}}'
+      host: '{{host}}'
+      service: tugc
+      method: NTravelProto.NTugc.FavoriteInterfaceV1/RemoveFavoriteHotels
+- panels:
+  - title: get_hotel_favorite_infos timing in ms
+    subtitle: Incoming GRPC requests timing in ms
+    graph: travel-tugc-grpc-calls-timings-percentile
+    selectors:
+      cluster: '{{cluster}}'
+      host: '{{host}}'
+      service: tugc
+      method: NTravelProto.NTugc.FavoriteInterfaceV1/GetHotelFavoriteInfos
+- panels:
+  - title: JVM threads states
+    graph: travel-hotels-jvm-threads
+    selectors:
+      cluster: '{{cluster}}'
+      service: '*'
+      host: '{{host}}'
+  - title: JVM gc pause [Ms]
+    graph: travel-hotels-jvm-gc-time-aggregate
+    selectors:
+      cluster: '{{cluster}}'
+      service: '*'
+      host: '{{host}}'
+  - title: JVM gc memory allocation rate
+    graph: travel-hotels-jvm-gc-allocation-rate
+    selectors:
+      cluster: '{{cluster}}'
+      service: '*'
+      host: '{{host}}'
+  - title: JVM used memory
+    graph: travel-hotels-jvm-memory-aggregate
+    selectors:
+      cluster: '{{cluster}}'
+      service: '*'
+      host: '{{host}}'
+- panels:
+  - title: CPU Usage
+    graph: travel-cpu-usage
+    selectors:
+      cluster: '{{cluster}}'
+      service: sys
+      host: '{{host}}'
+  - title: Disk IO
+    graph: travel-disk-io
+    selectors:
+      cluster: '{{cluster}}'
+      service: sys
+      host: '{{host}}'
+  - title: Network
+    graph: travel-net-io
+    selectors:
+      cluster: '{{cluster}}'
+      service: sys
+      host: '{{host}}'
+  - title: MemUsage
+    graph: travel-memory-usage
+    selectors:
+      cluster: '{{cluster}}'
+      service: sys
+      host: '{{host}}'
+- panels:
+  - title: /logs disk space
+    graph: travel-disk-space
+    selectors:
+      cluster: '{{cluster}}'
+      service: sys
+      host: '{{host}}'
+      volume: /logs
+  - title: /cache disk space
+    graph: travel-disk-space
+    selectors:
+      cluster: '{{cluster}}'
+      service: sys
+      host: '{{host}}'
+      volume: /cache
+- panels:
+  - title: Database CPU
+    graph: travel-tugc-mdb-cpu
+    selectors:
+      project: travel
+      cluster: mdb_mdbogbekqat8urj8aqnq
+      service: mdb
+  - title: Database Memory
+    graph: travel-tugc-mdb-memory
+    selectors:
+      project: travel
+      cluster: mdb_mdbogbekqat8urj8aqnq
+      service: mdb
+  - title: Database Size
+    graph: travel-tugc-mdb-size
+    selectors:
+      project: travel
+      cluster: mdb_mdbogbekqat8urj8aqnq
+      service: mdb
+  - title: Database IO
+    graph: travel-tugc-mdb-io
+    selectors:
+      project: travel
+      cluster: mdb_mdbogbekqat8urj8aqnq
+      service: mdb
+- panels:
+  - title: Database RPS
+    graph: travel-tugc-mdb-rps
+    selectors:
+      project: travel
+      cluster: mdb_mdbogbekqat8urj8aqnq
+      service: mdb
+  - title: Database Logs
+    graph: travel-tugc-mdb-logs
+    selectors:
+      project: travel
+      cluster: mdb_mdbogbekqat8urj8aqnq
+      service: mdb
+  - title: Database Quantilte 0.99 query
+    graph: travel-tugc-mdb-query-99
+    selectors:
+      project: travel
+      cluster: mdb_mdbogbekqat8urj8aqnq
+      service: mdb
+  - title: Database Quantilte 0.99 transaction
+    graph: travel-tugc-mdb-transaction-99
+    selectors:
+      project: travel
+      cluster: mdb_mdbogbekqat8urj8aqnq
+      service: mdb
+- panels:
+  - title: Database Is Primary
+    graph: travel-tugc-mdb-is-primary
+    selectors:
+      project: travel
+      cluster: mdb_mdbogbekqat8urj8aqnq
+      service: mdb
+  - title: Database Is Replica
+    graph: travel-tugc-mdb-is-replica
+    selectors:
+      project: travel
+      cluster: mdb_mdbogbekqat8urj8aqnq
+      service: mdb
+  - title: Database Quantilte 0.999 query
+    graph: travel-tugc-mdb-query-999
+    selectors:
+      project: travel
+      cluster: mdb_mdbogbekqat8urj8aqnq
+      service: mdb
+  - title: Database Quantilte 0.999 transaction
+    graph: travel-tugc-mdb-transaction-999
+    selectors:
+      project: travel
+      cluster: mdb_mdbogbekqat8urj8aqnq
+      service: mdb
+- panels:
+  - title: Hikari database connection
+    graph: travel-tugc-database-connections
+    selectors:
+      project: travel
+      cluster: '{{cluster}}'
+      service: tugc
+  - title: Database pooler connection
+    graph: travel-tugc-mdb-pooler-connections
+    selectors:
+      project: travel
+      cluster: mdb_mdbogbekqat8urj8aqnq
+      service: mdb
+  - title: Database alive hosts
+    graph: travel-tugc-mdb-alive-hosts
+    selectors:
+      project: travel
+      cluster: mdb_mdbogbekqat8urj8aqnq
+      service: mdb

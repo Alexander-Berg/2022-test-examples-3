@@ -1,0 +1,289 @@
+{
+    "snippets": [
+        {
+            "id": "my-order-117299722",
+            "divData": {
+                "log_id": "my_order_log_id_117299722",
+                "states": [
+                    {
+                        "div": {
+                            "type": "order_with_separator",
+                            "order_card_content": [
+                                {
+                                    "type": "header_container",
+                                    "items": [
+                                        {
+                                            "type": "delivery_type",
+                                            "text": " Курьер",
+                                            "image_url": "https://avatars.mds.yandex.net/get-marketcms/1668019/img-6a9a7918-32ce-48de-9135-540ded4b8134.png/optimize"
+                                        },
+                                        {
+                                            "type": "order_id",
+                                            "text": "117299722"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "status_container",
+                                    "items": [
+                                        {
+                                            "type": "status",
+                                            "text_color": "#21201F",
+                                            "text": "Уже в пути",
+                                            "image_url": "https://avatars.mds.yandex.net/get-marketcms/1668019/img-f20b2f1e-f603-4e5b-b9b2-2e5aa82bed94.png/optimize",
+                                            "start_index": 10
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "substatus_container",
+                                    "items": [
+                                        {
+                                            "type": "substatus",
+                                            "text": "Заказ будет у вас сегодня с 12:00 до 13:00"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "items_gallery",
+                                    "items": [
+                                        {
+                                            "type": "image_item",
+                                            "image_url": "https://avatars.mds.yandex.net/get-mpic/5165418/img_id4223866982149989646.jpeg/orig",
+                                            "action": {
+                                                "log_id": "ProductNavigationAction_185025492"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "order_items_count",
+                                    "text": "1 товар • 1790₽"
+                                },
+                                {
+                                    "type": "buttons_separator"
+                                },
+                                {
+                                    "type": "delivered_question_container",
+                                    "delivered_yes_action": {
+                                        "log_id": "AlreadyDeliveredAnswerYes"
+                                    },
+                                    "delivered_no_action": {
+                                        "log_id": "AlreadyDeliveredAnswerNo"
+                                    }
+                                }
+                            ],
+                            "action": {
+                                "log_id": "OrderDetailsNavigationAction"
+                            },
+                            "visibility_actions": [
+                                {
+                                    "log_id": "OrderSnippetVisibleAction_117299722",
+                                    "visibility_duration": 0,
+                                    "visibility_percentage": 1
+                                },
+                                {
+                                    "log_id": "OrderListPageVisibleAction",
+                                    "visibility_duration": 0,
+                                    "visibility_percentage": 1
+                                }
+                            ]
+                        },
+                        "state_id": 0
+                    }
+                ]
+            },
+            "actions": {
+                "OrderDetailsNavigationAction": {
+                    "type": "ListAction",
+                    "actions": [
+                        {
+                            "type": "SendAnalyticsAction",
+                            "events": [
+                                {
+                                    "name": "ORDERS_GO_TO_CARD",
+                                    "type": "AppMetrica",
+                                    "once": false,
+                                    "key": "my-order-117299722",
+                                    "params": [
+                                        "my-order-117299722"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "OrderDetailsNavigationAction",
+                            "orderId": "117299722",
+                            "isArchived": false
+                        }
+                    ]
+                },
+                "ProductNavigationAction_185025492": {
+                    "type": "ListAction",
+                    "actions": [
+                        {
+                            "type": "SendAnalyticsAction",
+                            "events": [
+                                {
+                                    "name": "ORDERS_OPEN_OFFER",
+                                    "type": "AppMetrica",
+                                    "once": false,
+                                    "key": "my-order-117299722",
+                                    "params": [
+                                        "my-order-117299722-1"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "ProductNavigationAction",
+                            "skuId": "465606033",
+                            "modelId": "465606033",
+                            "offerId": "1Ski1sMUa4EbKKj0c0SM9w"
+                        }
+                    ]
+                },
+                "AlreadyDeliveredAnswerYes": {
+                    "type": "ListAction",
+                    "actions": [
+                        {
+                            "type": "SendAnalyticsAction",
+                            "events": [
+                                {
+                                    "name": "ORDERS_QUESTION",
+                                    "type": "AppMetrica",
+                                    "once": false,
+                                    "key": "my-order-117299722",
+                                    "params": [
+                                        "my-order-117299722-2"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "AlreadyDeliveredGradeNavigationAction",
+                            "orderId": "117299722",
+                            "isArchived": false,
+                            "onComplete": {
+                                "type": "UpdateSectionAction",
+                                "sectionId": "my-orders-test-section",
+                                "params": {
+                                    "orders.fromOrderId": 117299722,
+                                    "orders.toOrderId": 117299723
+                                }
+                            },
+                            "rootZone": "ORDERS"
+                        }
+                    ]
+                },
+                "AlreadyDeliveredAnswerNo": {
+                    "type": "ListAction",
+                    "actions": [
+                        {
+                            "type": "SendAnalyticsAction",
+                            "events": [
+                                {
+                                    "name": "ORDERS_QUESTION_BAD",
+                                    "type": "AppMetrica",
+                                    "once": false,
+                                    "key": "my-order-117299722",
+                                    "params": [
+                                        "my-order-117299722-3"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "AlreadyDeliveredQuestionnaireNavigationAction",
+                            "orderId": "117299722",
+                            "isArchived": false,
+                            "onComplete": {
+                                "type": "UpdateSectionAction",
+                                "sectionId": "my-orders-test-section",
+                                "params": {
+                                    "orders.fromOrderId": 117299722,
+                                    "orders.toOrderId": 117299723
+                                }
+                            },
+                            "rootZone": "ORDERS"
+                        }
+                    ]
+                },
+                "OrderSnippetVisibleAction_117299722": {
+                    "type": "SendAnalyticsAction",
+                    "events": [
+                        {
+                            "name": "ORDERS_ORDER-SNIPPET_VISIBLE",
+                            "type": "AppMetrica",
+                            "once": true,
+                            "key": "my-order-117299722",
+                            "params": [
+                                "my-order-117299722-4"
+                            ]
+                        }
+                    ]
+                },
+                "OrderListPageVisibleAction": {
+                    "type": "SendAnalyticsAction",
+                    "events": [
+                        {
+                            "name": "OPEN-PAGE_VISIBLE",
+                            "type": "AppMetrica",
+                            "once": true,
+                            "key": "my-order-117299722",
+                            "params": [
+                                "my-order-117299722-5"
+                            ]
+                        }
+                    ]
+                }
+            },
+            "@id": "my-order-117299722"
+        }
+    ],
+    "analytics": {
+        "my-order-117299722": {
+            "orderId": "117299722",
+            "status": "DELIVERY",
+            "substatus": "READY_FOR_LAST_MILE",
+            "deliveryType": "DELIVERY",
+            "deliveryDate": "13-03-2022 09:00:00"
+        },
+        "my-order-117299722-1": {
+            "orderId": "117299722",
+            "offerId": "1Ski1sMUa4EbKKj0c0SM9w"
+        },
+        "my-order-117299722-2": {
+            "orderId": "117299722",
+            "question": "Вы получили посылку?",
+            "answer": "Да"
+        },
+        "my-order-117299722-3": {
+            "orderId": "117299722",
+            "question": "Вы получили посылку?",
+            "answer": "Нет"
+        },
+        "my-order-117299722-4": {
+            "orderId": "117299722",
+            "status": "DELIVERY",
+            "substatus": "READY_FOR_LAST_MILE",
+            "statusText": "Уже в пути",
+            "substatusText": "Заказ будет у вас сегодня с 12:00 до 13:00",
+            "deliveryDate": "13-03-2022 09:00:00",
+            "cancellationRequest": false,
+            "deliveryType": "DELIVERY",
+            "model": "dbs",
+            "isOnDemand": false,
+            "isExpress": false,
+            "isBnpl": false,
+            "pageName": "ALL_ORDERS",
+            "deliveryFeedbackButton": "Да",
+            "howToGo": false,
+            "trackTheParcel": false,
+            "extendStorage": false
+        },
+        "my-order-117299722-5": {
+            "pageName": "ALL_ORDERS"
+        }
+    }
+}

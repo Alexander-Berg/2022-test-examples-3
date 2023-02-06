@@ -1,0 +1,124 @@
+{
+    "cgi": "pron=nogarbage",
+    "enrichmentOptions": {},
+    "launchTemplates": [
+        {
+            "cgi": "metahost2=^QUICK:FROZEN_QUICK",
+            "evaluation": "WEB",
+            "experimentConfig": {
+                "batchedMiscParameters": {
+                    "batchedRequests": true,
+                    "engine": "YandexBaobabHTMLParserDebugDump",
+                    "executable": "//home/metrics/metrics_executable/metrics",
+                    "ignoreProfileConflicts": true,
+                    "preparer": "YandexBaobabHTMLParserDebugDump",
+                    "soyApiUrlTemplate": "https://testing.soyproxy.yandex.net/%s",
+                    "tablePath": "//home/qe/scraper/production/nodiff_downloads",
+                    "tableTtl": "P4D",
+                    "ytPool": "robot-scraper"
+                }
+            },
+            "mergedCgi": "pron=nogarbage&metahost2=^QUICK:FROZEN_QUICK",
+            "name": "World",
+            "queryGroups": [
+                {
+                    "aspect": "default",
+                    "enrichmentOptions": {},
+                    "externalId": "442958",
+                    "filters": [
+                        {
+                            "externalId": null,
+                            "name": "web-world-validate-2021-01.beak"
+                        },
+                        {
+                            "name": "tail",
+                            "preFilters": [
+                                "db-1191"
+                            ]
+                        },
+                        {
+                            "name": "beak",
+                            "preFilters": [
+                                "db-1298"
+                            ]
+                        }
+                    ],
+                    "limitMs": 72000000,
+                    "metrics": [],
+                    "name": "web-world-validate-2021-01.beak"
+                },
+                {
+                    "aspect": "default",
+                    "enrichmentOptions": {},
+                    "externalId": "441589",
+                    "filters": [
+                        {},
+                        {
+                            "componentFilter": "skipRightAlign"
+                        },
+                        {
+                            "componentFilter": "wizardCorrectLeft"
+                        }
+                    ],
+                    "limitMs": 72000000,
+                    "metrics": [
+                        {
+                            "criticalCheckerJs": "left > 0.1 || right > 0.1 || diff > 0.0002",
+                            "enrichment": false,
+                            "externalId": "empty-serp",
+                            "name": "empty-serp"
+                        },
+                        {
+                            "criticalCheckerJs": "left > 0.002 || right > 0.002",
+                            "enrichment": false,
+                            "externalId": "serp-failed",
+                            "name": "serp-failed",
+                            "warnCheckerJs": "left > 0 || right > 0"
+                        }
+                    ],
+                    "name": "web-world-test-2021-01.sample_500",
+                    "refreshSleepMs": 900000
+                }
+            ],
+            "regional": "WORLD",
+            "servers": [
+                {
+                    "baseline": true,
+                    "config": {
+                        "checkBetaValidation": true,
+                        "importance": "acceptance",
+                        "numdoc": 10,
+                        "priority": 100,
+                        "profileId": "weak_consistency__web__desktop__hamster__tier0_tier1",
+                        "useScraper": true
+                    },
+                    "host": "upper-hamster.hamster.yandex.ru",
+                    "mergedCgi": "pron=nogarbage&metahost2=^QUICK:FROZEN_QUICK",
+                    "name": "priemka"
+                },
+                {
+                    "baseline": false,
+                    "config": {
+                        "checkBetaValidation": true,
+                        "importance": "acceptance",
+                        "numdoc": 10,
+                        "priority": 100,
+                        "profileId": "weak_consistency__web__desktop__hamster__tier0_tier1",
+                        "useScraper": true
+                    },
+                    "host": "upper-hamster.hamster.yandex.ru",
+                    "id": "d79fbe811d0143f082b37204d76237ff",
+                    "mergedCgi": "pron=nogarbage&metahost2=^QUICK:FROZEN_QUICK",
+                    "name": "noapache"
+                }
+            ]
+        }
+    ],
+    "name": "Runtime Acceptance (SoY Testing)",
+    "responsibleUsers": [
+        "morozyto",
+        "dynamic-pie",
+        "mdrachev"
+    ],
+    "slaProject": ""
+}

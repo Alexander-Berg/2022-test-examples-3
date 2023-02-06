@@ -1,0 +1,184 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_delivery_transport_manager-testing
+
+vars:
+  - &kwargs_with_service_api_points
+    args:
+      - --kwargs
+      - '[
+          { "service": "transportation_exist_new", "path": "/health/transportation/has-new" },
+          { "service": "transportation_has_no_errors", "path": "/health/transportation/has-no-errors" },
+          { "service": "db_health_broken_indices", "path": "/health/db/indices/broken" },
+          { "service": "db_health_duplicate_indices", "path": "/health/db/indices/duplicates" },
+          { "service": "db_health_missing_indices", "path": "/health/db/indices/missing-on-foreign-keys" }
+        ]'
+
+  # OK: jobs run on all hosts
+  # WARN: jobs fail on some hosts
+  # CRIT: jobs fail on all hosts
+  - &tms_kwargs
+    limits:
+      - day_start: 1
+        day_end: 7
+        time_start: 0
+        time_end: 23
+        crit: 99%
+        warn: 1%
+
+  - &tms_full_downtime_kwargs
+    limits:
+      - day_start: 1
+        day_end: 7
+        time_start: 0
+        time_end: 23
+        crit: 100%
+        warn: 1%
+juggler:
+  checks:
+
+    # Check disk_free_space
+    # https://juggler.yandex-team.ru/check_details/?host=market_delivery_transport_manager-testing&service=disk_free_space&last=1DAY&mode=edit
+    - service: disk_free_space
+
+    # Check fresh-hprof-files
+    # https://juggler.yandex-team.ru/check_details/?host=market_delivery_transport_manager-testing&service=fresh-hprof-files&last=1DAY&mode=edit
+    - service: fresh-hprof-files
+
+    # Check logrotate
+    # https://juggler.yandex-team.ru/check_details/?host=market_delivery_transport_manager-testing&service=logrotate&last=1DAY&mode=edit
+    - service: logrotate
+
+    # Check monitoring
+    # https://juggler.yandex-team.ru/check_details/?host=market_delivery_transport_manager-testing&service=monitoring&last=1DAY&mode=edit
+    - service: monitoring
+
+    # Check ping
+    # https://juggler.yandex-team.ru/check_details/?host=market_delivery_transport_manager-testing&service=ping&last=1DAY&mode=edit
+    - service: ping
+      aggregator_kwargs: *tms_full_downtime_kwargs
+      tags:
+      - blocks_release
+      - market_delivery_dev_phone_duty
+      # на тестинг могут быть завязаны интеграционные тесты других компонент: https://t.me/c/1097733328/55345
+      # зажигаем только в том случае если тестинг лежит полностью
+      check_options:
+        *kwargs_with_service_api_points
+
+    # Check push-client-status
+    # https://juggler.yandex-team.ru/check_details/?host=market_delivery_transport_manager-testing&service=push-client-status&last=1DAY&mode=edit
+    - service: push-client-status
+
+    # Check 4xx percentage
+    # https://juggler.yandex-team.ru/check_details/?host=market_delivery_transport_manager-testing&service=error-4xx-percentage&last=1DAY&mode=edit
+    - service: error-4xx-percent
+      aggregator_kwargs:
+        nodata_mode: force_ok
+      children:
+        - host: >-
+            (host=market_delivery_transport_manager-testing &
+            service=error-4xx-percent_*)
+          service: all
+          type: EVENTS
+          instance: all
+
+    # Check 5xx percentage
+    # https://juggler.yandex-team.ru/check_details/?host=market_delivery_transport_manager-testing&service=error-5xx-percentage&last=1DAY&mode=edit
+    - service: error-5xx-percent
+      aggregator_kwargs:
+        nodata_mode: force_ok
+      children:
+        - host: >-
+            (host=market_delivery_transport_manager-testing &
+            service=error-5xx-percent_*)
+          service: all
+          type: EVENTS
+          instance: all
+
+    # Check DbQueue queue sizes ( > x2)
+    # https://juggler.yandex-team.ru/check_details/?host=market_delivery_transport_manager-testing&service=queue-size&last=1DAY&mode=edit
+    - service: dbqueue-queue-size
+      aggregator_kwargs:
+        nodata_mode: force_ok
+      children:
+        - host: >-
+            (host=market_delivery_transport_manager-testing &
+            service=dbqueue-queue-size)
+          service: all
+          type: EVENTS
+          instance: all
+
+    # Check DbQueue queue too slow ( > 30 sec/task)
+    # https://juggler.yandex-team.ru/check_details/?host=market_delivery_transport_manager-testing&service=queue-slow&last=1DAY&mode=edit
+    - service: dbqueue-queue-slow
+      aggregator_kwargs:
+        nodata_mode: force_ok
+      children:
+        - host: >-
+            (host=market_delivery_transport_manager-testing &
+            service=dbqueue-queue-slow)
+          service: all
+          type: EVENTS
+          instance: all
+
+    # Check we have all required transportations on +7 days scale
+    - service: transportation_exist_new
+      check_options:
+        *kwargs_with_service_api_points
+
+      # Check no transportations on -7 days scale are in ERROR state
+      # disabled in testing
+
+      # DBQUEUE & TMS for TESTING are in market_delivery_transport_manager-testing-nonessential.yaml file
+      # Do not add them here
+
+    # DB index health: no 'isinvalid=true' indices
+    - service: db_health_broken_indices
+      check_options:
+        *kwargs_with_service_api_points
+
+    # DB index health: no duplicate indices
+    - service: db_health_duplicate_indices
+      check_options:
+        *kwargs_with_service_api_points
+
+    # DB index health: no missing indices on foreign keys (FK whitelist may be set up in the component)
+    - service: db_health_missing_indices
+      check_options:
+        *kwargs_with_service_api_points
+
+
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+        - crit: 30%
+          day_end: 7
+          day_start: 1
+          time_end: 20
+          time_start: 12
+          warn: '0'
+        - crit: 30%
+          day_end: 7
+          day_start: 1
+          time_end: 11
+          time_start: 21
+          warn: '0'
+      nodata_mode: force_crit
+    children:
+      - NANNY%testing_market_market_delivery_transport_manager_vla
+      - NANNY%testing_market_market_delivery_transport_manager_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_delivery_transport_manager-testing
+    namespace: market.common
+    notifications: [ ]
+    refresh_time: 60
+    tags:
+      - market_testing
+      - market_rtc
+      - deliverytransportmanager
+      - testing
+      - market
+      - _market_
+    ttl: 900

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <property name="TIMESTAMP_TIME_ZONE" value="datetimeoffset" dbms="mssql"/>
+    <property name="TIMESTAMP_TIME_ZONE" value="datetime" dbms="h2"/>
+
+    <property name="NOW" value="getutcdate()" dbms="mssql"/>
+    <property name="NOW" value="CURRENT_TIMESTAMP()" dbms="h2"/>
+
+    <property name="USER_NAME" value="user_name()" dbms="mssql"/>
+    <property name="USER_NAME" value="USER()" dbms="h2"/>
+
+    <changeSet id="1" author="al-iz">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists
+                        schemaName="wmwhse1"
+                        tableName="SKU_CARGOTYPES"
+                />
+            </not>
+        </preConditions>
+        <createTable tableName="SKU_CARGOTYPES" schemaName="wmwhse1">
+            <column name="SERIALKEY" type="int" autoIncrement="true" startWith="1" incrementBy="1" remarks="Row key">
+                <constraints
+                        unique="true"
+                        uniqueConstraintName="SKU_CARGOTYPES_SERIALKEY_UNIQUE"
+                        nullable="false"
+                />
+            </column>
+            <column name="STORERKEY" type="nvarchar(15)" remarks="Storer id aka vendor id">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SKU" type="nvarchar(50)" remarks="Warehouse SKU">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CARGOTYPE" type="int" remarks="Cargo type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDDATE" type="${TIMESTAMP_TIME_ZONE}" defaultValueComputed="${NOW}"
+                    remarks="Insertion date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDWHO" type="nvarchar(256)" defaultValueComputed="${USER_NAME}" remarks="Who added">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITDATE" type="${TIMESTAMP_TIME_ZONE}" defaultValueComputed="${NOW}"
+                    remarks="Last update date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITWHO" type="nvarchar(256)" defaultValueComputed="${USER_NAME}" remarks="Who edited">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey
+                columnNames="STORERKEY, SKU, CARGOTYPE"
+                constraintName="PK_SKU_CARGOTYPES"
+                schemaName="wmwhse1"
+                tableName="SKU_CARGOTYPES"
+        />
+        <addForeignKeyConstraint
+                baseColumnNames="SKU, STORERKEY"
+                baseTableName="SKU_CARGOTYPES"
+                baseTableSchemaName="wmwhse1"
+                constraintName="FK_SKU_CARGOTYPES_SKU"
+                referencedColumnNames="SKU, STORERKEY"
+                referencedTableName="SKU"
+                referencedTableSchemaName="wmwhse1"
+                onDelete="CASCADE"
+        />
+        <rollback>
+            <dropTable schemaName="wmwhse1" tableName="SKU_CARGOTYPES"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

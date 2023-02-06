@@ -1,0 +1,54 @@
+juggler:
+  default:
+    namespace: market-mbo
+    host: market.mbo.mdb.testing
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    flaps:
+      stable_time: 600
+      critical_time: 3000
+      boost_time: 0
+    tags:
+      - market.mbo.mdb.test
+      - market_testing
+      - testing
+      - market
+      - _market_
+  checks:
+    - service: disk_free_space
+      children:
+        - host: ((host=mdb.market_backoffice_dev & service=disk_free_space) | (host=mdb.market_backoffice_testing & service=disk_free_space) | (host=mdb.market_backoffice_mt* & service=disk_free_space))
+          service: all
+          type: EVENTS
+          instance: all
+        - host: ((host=mdb.market_mbo_site_catalog_testing & service=disk_free_space) | (host=mdb.market_site_catalog_mt* & service=disk_free_space))
+          service: all
+          type: EVENTS
+          instance: all
+        - host: (host=mdb.market_mbo_market_model_testing & service=disk_free_space)
+          service: all
+          type: EVENTS
+          instance: all
+        - host: (host=mdb.market_mbo_title_maker_testing & service=disk_free_space)
+          service: all
+          type: EVENTS
+          instance: all
+    - service: cpu_usage_percent
+      children:
+        - host: ((host=mdb.market_backoffice_dev & service=cpu_usage_percent) | (host=mdb.market_backoffice_testing & service=cpu_usage_percent) | (host=mdb.market_backoffice_mt* & service=cpu_usage_percent))
+          service: all
+          type: EVENTS
+          instance: all
+        - host: ((host=mdb.market_mbo_site_catalog_testing & service=cpu_usage_percent) | (host=mdb.market_site_catalog_mt* & service=cpu_usage_percent))
+          service: all
+          type: EVENTS
+          instance: all
+        - host: (host=mdb.market_mbo_market_model_testing & service=cpu_usage_percent)
+          service: all
+          type: EVENTS
+          instance: all
+        - host: (host=mdb.market_mbo_title_maker_testing & service=cpu_usage_percent)
+          service: all
+          type: EVENTS
+          instance: all

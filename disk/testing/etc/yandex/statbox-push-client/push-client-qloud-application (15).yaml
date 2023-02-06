@@ -1,0 +1,51 @@
+---
+ident: disk
+
+logger-mode: file
+logger-file: /var/log/statbox/watcher.log
+logger-level: 5
+
+watcher-method: inotify
+watcher-state: "/var/spool/push-client"
+watcher-drop_on_error: 1
+
+network-master-addr: "logbroker-pre.yandex.net"
+network-proto: rt
+
+files:
+  - name: /var/log/mpfs/storage-cleaner-worker.log.tskv
+    log_type: disk-mulca-clean-log
+  - name: /var/log/mpfs/event-history.log
+    log_type: ydisk-event-history-log
+
+  - name: /var/log/yandex/disk/worker2-tskv.log
+    ident: disk-pworker
+    log_type: ydisk-worker2-log
+
+  - name: /var/log/mpfs/service-tskv.log
+    ident: disk-pworker
+    log_type: ydisk-mpfs-service-log
+
+  - name: /var/log/mpfs/requests-tskv.log
+    ident: disk-pworker
+    log_type: ydisk-mpfs-requests-log
+
+  - name: /var/log/mpfs/default-tskv.log
+    ident: disk-pworker
+    log_type: ydisk-mpfs-default-log
+
+  - name: /var/log/mpfs/error-tskv.log
+    ident: disk-pworker
+    log_type: ydisk-mpfs-error-log
+
+  - name: /var/log/mpfs/stat-tskv.log
+    ident: disk-pworker
+    log_type: ydisk-mpfs-stat-log
+
+  - name: /var/log/nginx/access-tskv.log
+    ident: disk-pworker
+    log_type: ydisk-nginx-access-log
+
+  - name: /var/log/nginx/error.log
+    pipe: /usr/local/bin/nginx-error2tskv.pl ydisk-nginx-error-log-pworker
+    log_type: ydisk-nginx-error-log

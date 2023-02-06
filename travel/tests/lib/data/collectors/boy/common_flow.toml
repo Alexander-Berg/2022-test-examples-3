@@ -1,0 +1,76 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "boy",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--date-from", "2019-12-16",
+    "--date-to", "2020-01-01",
+    "--limit", "1"
+]
+
+checkers = [
+    "lb",
+    "partner",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "apllication/json"
+
+[[partner.responses]]
+    args = {"updated_at_from_utc"="2019-12-16T00:00:00"}
+    data_file = "partner_response_0.json"
+
+[[partner.responses]]
+    args = {"updated_at_from_utc"="2019-12-18T10:44:35"}
+    data_file = "partner_response_1.json"
+
+[lb]
+    topic = "topic-boy"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+# idex 0
+[[lb.expected]]
+    category = "generic"
+    partner_name = "boy"
+    display_type = "train"
+    travel_order_id = "boy:YA-0375-1396-6066"
+    partner_order_id = "YA-0375-1396-6066"
+    created_at = 1576665799
+    status = "cancelled"
+    currency_code = "RUB"
+    order_amount = 2169.38
+    profit_amount = 105.05
+    label = ""
+
+# idex 1
+[[lb.expected]]
+    category = "generic"
+    partner_name = "boy"
+    display_type = "suburban"
+    travel_order_id = "boy:YA-9249-7206-7931"
+    partner_order_id = "YA-9249-7206-7931"
+    created_at = 1580479665
+    status = "confirmed"
+    currency_code = "RUB"
+    order_amount = 2727.2
+    profit_amount = 0.0
+    label = "label2"
+
+# idex 2
+[[lb.expected]]
+    category = "generic"
+    partner_name = "boy"
+    display_type = "BUS"
+    travel_order_id = "boy:YA-0000-0026-2144"
+    partner_order_id = "YA-0000-0026-2144"
+    created_at = 1646309106
+    status = "refunded"
+    currency_code = "RUB"
+    order_amount = 1067.0
+    profit_amount = 0.0
+    label = ""

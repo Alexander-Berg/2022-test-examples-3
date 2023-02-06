@@ -1,0 +1,18 @@
+quota: default
+urls: urls
+
+headers:
+  service_token: X-Service-Token
+
+export:
+  - service_token
+
+router:
+  - regexp: service_token
+    data:
+      - key: "(tickets_[a-z0-9]{32})|(events_tickets_[a-z0-9]{32})|(events_tickets_new_[a-z0-9]{32})|(events_tickets_full_payout_[a-z0-9]{32})"
+        quota: always_allowed
+  - not-empty: service_token
+    quota: common
+  - empty: service_token
+    quota: anonymous

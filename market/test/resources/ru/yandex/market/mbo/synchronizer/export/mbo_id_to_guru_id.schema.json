@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "mbo id to guru id map",
+  "type": "object",
+  "properties": {
+    "is_active": {
+      "type": "number"
+    },
+    "category_parameters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "hid": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "params": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "mboId": {
+                  "type": "number"
+                },
+                "guruId": {
+                  "type": "number"
+                },
+                "values": {
+                  "type": "array",
+                  "items": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "mboId": {
+                      "type": "number"
+                    },
+                    "guruId": {
+                      "type": "number"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "name",
+                    "mboId",
+                    "guruId"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "required": ["name", "mboId", "guruId"]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": ["hid", "name", "params"]
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": ["is_active", "category_parameters"]
+}

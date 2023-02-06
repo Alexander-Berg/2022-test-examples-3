@@ -1,0 +1,56 @@
+config:
+    system:
+        daemon: 0
+        dir: .
+        libpath:
+        -   lib64/
+        -   lib64/modules
+        reactor:
+        -   { _io_threads: 1, _pool_count: 2, _name: global }
+        -   { _io_threads: 1, _pool_count: 2, _name: rnetch }
+    log:
+        Core: # настройки для boost log core
+            DisableLogging: 'false'
+#        'Sink:Console':
+#            Destination: Console
+#            AutoFlush: 'false'
+#            Asynchronous: 'true'
+#            Filter: '"not %CustomLog%"'
+#            Format: '"[%TimeStamp%] %Channel% %UniqID%: %_%"'
+        'Sink:File':
+            Destination: RotateTextFile
+            FileName: '"var/log/paxos_test/slave.log"'
+            AutoFlush: 'false'
+            Asynchronous: 'true'
+            Filter: '"%Severity% >= info and not %CustomLog%"'
+            Format: '"[%TimeStamp%] %Channel% %UniqID% %_%"'
+    modules:
+        module:
+        -   system:
+                name: stat_server
+                type: service_object
+                factory: ymod_stat_server::impl
+            configuration:
+                reactor: global
+                endpoints:
+                    listen:
+                    -   { _addr: '::', _port: 8191 }
+        -   system:
+                name: netch
+                type: service_object
+                factory: ymod_messenger::module
+            configuration:
+                reactor: rnetch
+                pool_min_size: 2
+                pool_max_size: 2
+                default: { no_delay: 1, keep_alive: { enable: 1 } }
+                endpoints:
+                    listen:
+                    -   { _addr: '::', _port: 8100 }
+        -   system:
+                name: acceptor
+                type: service_object
+                factory: ymod_paxos::acceptor_module
+            configuration:
+                paxos_message_base_type: 15000
+                use-disk-storage: 0

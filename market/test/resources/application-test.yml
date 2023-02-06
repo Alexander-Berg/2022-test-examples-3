@@ -1,0 +1,57 @@
+warehouse-timezone: Europe/Moscow
+AppServer: localhost
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms: debug
+    org.springframework.jdbc.core: debug
+    root: info
+
+spring:
+  datasource:
+    url: &jdbc-url jdbc:h2:mem:SCPRD;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1
+    jdbc-url: *jdbc-url
+  datasource-scprdd1.url: jdbc:h2:mem:SCPRDD1;MODE=MSSQLServer
+  archivedatasource.url: jdbc:h2:mem:SCPRDARC;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1
+  config:
+    import:
+      - application-fragment-common-test.yml
+  transaction.default-timeout: 30m
+  main:
+    allow-bean-definition-overriding: true
+  liquibase:
+    enabled: true
+  jackson:
+    default-property-inclusion: non_null
+
+token: xxxxxxxxxxxxxxxxxxxxxxmarschrouteT.T.Tokenxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+oltp:
+  url: http://localhost:8383
+
+print:
+  server:
+    host: localhost
+    port: 631
+    mock: true
+
+check:
+  authentication: 'no'
+
+iris:
+  url: https://logistics-iris.tst.vs.market.yandex.net
+  tvmServiceId: 2011668
+
+servicebus:
+  api:
+    host: http://localhost:8382
+
+warehouse:
+  id: 123
+
+identity:
+  cis:
+    gs: "#GS#"
+
+s3.use: false

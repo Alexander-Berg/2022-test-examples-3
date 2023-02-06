@@ -1,0 +1,32 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d] %-5p [%c{3}] [%X{requestId}][%t] %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="JSON_BETA" class="ch.qos.logback.core.FileAppender">
+        <file>json-beta.log</file>
+        <encoder>
+            <pattern>%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="JSON_BETA_DESERIALIZE" class="ch.qos.logback.core.FileAppender">
+        <file>json-beta-deserialize.log</file>
+        <encoder>
+            <pattern>%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="json-beta.log" level="INFO">
+        <appender-ref ref="JSON_BETA"/>
+    </logger>
+    <logger name="json-beta-deserialize.log" level="INFO">
+        <appender-ref ref="JSON_BETA_DESERIALIZE"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

@@ -1,0 +1,33 @@
+package NAuto;
+
+message Offer {
+    required uint64 price = 10;
+}
+
+message OfferGroup {
+    required int32 size = 1;
+}
+
+message AppUserInfo {
+    required string mobile_uuid = 1;
+}
+
+message WebUserInfo {
+    required string user_yandexuid = 1;
+}
+
+message UserInfo {
+    oneof ext_client_info {
+        WebUserInfo web_user_info = 8;
+        AppUserInfo app_user_info = 9;
+    }
+}
+
+message Event {
+    required string event_type = 4;
+    required UserInfo user_info = 7;
+    oneof object_info {
+        Offer offer = 30;
+        OfferGroup offer_group = 31;
+    }
+}

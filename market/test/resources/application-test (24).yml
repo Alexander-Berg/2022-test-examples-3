@@ -1,0 +1,239 @@
+app.scheduling.enable: false
+
+server:
+  servlet.context-path: /servicebus
+  port: 8282
+
+healthcheck:
+  ds.enabled: true
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:ServiceBus;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS DBO\;SET SCHEMA DBO
+    separator: ^^^ END OF SCRIPT ^^^
+  datasource-click-house:
+    url: jdbc:h2:mem:CLICKHOUSE;INIT=CREATE SCHEMA IF NOT EXISTS WMS\;SET SCHEMA WMS
+    driverClassName: org.h2.Driver
+    username: test
+    password: test
+  main:
+    allow-bean-definition-overriding: true
+  config:
+    import:
+      - application-fragment-mq-test.yml
+      - application-fragment-common-test.yml
+  liquibase:
+    enabled: false
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /monitoring
+      exposure.include: [ health, metrics, loggers, prometheus ]
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    metrics.enabled: true
+    loggers.enabled: true
+    prometheus.enabled: true
+
+logging.do-not-log-uri: /hc/**,/monitoring/**,/pagematch/**,/swagger-ui/**,/swagger-resources/**,/v3/**
+logging.log-requests: true
+
+
+oltp:
+  url: http://${Balancer}/scprd/wmwebservice_rest/
+  moduleName: oltp
+
+wrap:
+  api:
+    host: 'http://localhost:19000'
+    token: 'TEST_WRAP_TOKEN'
+
+lgw:
+  api:
+    host: 'https://lgw.tst.vs.market.yandex.net'
+    token: 'TEST_TOKEN'
+
+cte:
+  url: http://host.ru:123
+  tvm:
+    serviceId: 0
+
+wms:
+  api:
+    host: 'http://localhost:${wiremock.server.port}/api'
+    username: 'wmsuser'
+    password: 'wmspass'
+    tvm:
+      serviceId: 0
+  auth:
+    host: 'http://localhost:${wiremock.server.port}/auth'
+  autostart:
+    host: 'http://localhost:${wiremock.server.port}/autostart'
+    tvm:
+      serviceId: 0
+  core:
+    host: 'http://localhost:${wiremock.server.port}/core'
+    tvm:
+      serviceId: 0
+  ordermanagement:
+    host: 'http://localhost:${wiremock.server.port}/ordermanagement'
+    tvm:
+      serviceId: 0
+  receiving:
+    host: 'http://localhost:${wiremock.server.port}/receiving'
+    tvm:
+      serviceId: 0
+  reporter:
+    host: 'http://localhost:${wiremock.server.port}/reporter'
+    tvm:
+      serviceId: 0
+  packing:
+    host: 'http://localhost:${wiremock.server.port}/picking'
+  picking:
+    host: 'http://localhost:${wiremock.server.port}/picking'
+  transportation:
+    host: 'http://localhost:${wiremock.server.port}/transportation'
+    tvm:
+      serviceId: 0
+  shippingsorter:
+    host: 'http://localhost:${wiremock.server.port}/shippingsorter'
+    tvm:
+      serviceId: 0
+  consolidation:
+    host: 'http://localhost:${wiremock.server.port}/consolidation'
+  placement:
+    moduleName: placement
+    host: 'http://localhost:${wiremock.server.port}/placement'
+  inventorization:
+    moduleName: inventorization
+    host: 'http://localhost:${wiremock.server.port}/inventorization'
+  dropping:
+    moduleName: dropping
+    host: 'http://localhost:${wiremock.server.port}/dropping'
+    tvm:
+      serviceId: 0
+  shipping:
+    moduleName: shipping
+    host: 'http://localhost:${wiremock.server.port}/shipping'
+  replenishment:
+    moduleName: replenishment
+    host: 'http://localhost:${wiremock.server.port}/replenishment'
+  constraints:
+    moduleName: constraints
+    host: 'http://localhost:${wiremock.server.port}/replenishment'
+  dimension-management:
+    moduleName: dimension-management
+    host: 'http://localhost:${wiremock.server.port}/dimensionmanagement'
+  inbound-management:
+    moduleName: inbound-management
+    host: 'http://localhost:${wiremock.server.port}/inbound-management'
+    tvm:
+      serviceId: 0
+  pick-by-light:
+    moduleName: pick-by-light
+    host: 'http://localhost:${wiremock.server.port}/pick-by-light'
+  inventory-management:
+    moduleName: inventory-management
+    host: 'http://localhost:${wiremock.server.port}/inventory-management'
+  palletizer:
+    moduleName: palletizer
+    host: 'http://localhost:${wiremock.server.port}/palletizer'
+
+iris:
+  url: 'http://iris.local'
+  tvmServiceId: 0
+
+mbo:
+  category:
+    url: 'http://mbo.local'
+
+servicebus:
+  api:
+    host: http://servicebus.local
+  tvm:
+    serviceId: 0
+    secret: "secret"
+    cache:
+      dir: ""
+
+wiremock.server.port: 9999
+
+messaging:
+  MqProvider: embedded
+
+warehouse-id: 000
+
+trassir:
+  host: localhost
+  port: 2555
+combinator:
+  url: http://combinator.tst.vs.market.yandex.net
+
+startrek:
+  host: ${StartrekHost}
+  connection-timeout: 30s
+  socket-timeout: 30s
+  star-trek-token: ${StartrekToken}
+  max-connection: 10
+  star-trek-user: ${StartrekUser}
+  queue1P:
+    name: "WMSRECEIPTTEST"
+    issue-type: incident
+    tags:
+      - "аномалии"
+      - "спец"
+    x-doc-field: tipPostavki
+    delivery-number-field: orderNumber
+  queue3P:
+    name: "WMSTEST"
+    issue-type: task
+    tags:
+      - "аномалии"
+      - "спец"
+    delivery-number-field: orderNumber
+  warehouse-name: SOFINO
+  yandex-disk-properties:
+    username: ${YandexDiskUser}
+    token: ${YandexDiskToken}
+  constraints:
+    mdm:
+      queue: "MMDMCONSTRAINTSTEST"
+      baseTag: "MMDMCellSize"
+      receivingTag: "receiving"
+
+tts:
+  host: http://time-tracking-system.tst.vs.market.yandex.net
+  warehouse-name: SOF
+  tvm:
+    serviceId: 0
+
+rms:
+  host: localhost
+  tvm:
+    serviceId: 0
+
+s3.use: false
+
+core:
+  api:
+    host: http://localhost:8333
+
+vendor:
+  dematic:
+    outbound:
+      username: 'test'
+      password: 'test'
+    inbound:
+      username: 'test'
+      password: 'test'
+
+personal:
+  url: http://localhost
+  tvmServiceId: 000000
+  connectTimeoutMillis: 20000
+  readTimeoutMillis: 10000
+  maxConnTotal: 10

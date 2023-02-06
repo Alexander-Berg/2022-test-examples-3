@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<child xmlns:x="http://www.yandex.ru/xscript">
+    <x:xscript http-expire-time-delta="0" force-auth="yes">
+        <add-headers>
+            <header name="Cache-Control" value="max-age=0, proxy-revalidate"/>
+        </add-headers>
+    </x:xscript>
+
+    <x:auth-block>
+        <method>set_state_by_auth</method>
+        <param type="String">uid</param>
+        <param type="UID"/>
+    </x:auth-block>
+
+    <x:mist guard="uid">
+        <guard-not value="12345">uid</guard-not>
+
+        <method>set_state_string</method>
+        <param type="String">no_guard_key</param>
+        <param type="String">no_guard_value</param>
+    </x:mist>
+
+    <x:mist guard="uid">
+        <guard value="12345">uid</guard>
+
+        <method>set_state_string</method>
+        <param type="String">guard_key</param>
+        <param type="String">guard_value</param>
+    </x:mist>
+
+    <x:mist>
+        <guard-not value="no_guard_value">no_guard_key</guard-not>
+        <guard value="guard_value">guard_key</guard>
+
+        <method>set_state_string</method>
+        <param type="String">key</param>
+        <param type="String">value</param>
+    </x:mist>
+</child>
+
+
+
+

@@ -1,0 +1,203 @@
+[
+  {
+    "owners":["gav1995"],
+    "name": "hamster_company_wizard",
+    "host": "https://hamster.yandex.ru",
+    "box": "company_top_20.csv",
+    "flags": "json_dump=searchdata.docs_right",
+    "map": [
+      {
+        "path": "map.py",
+        "name": "check_contains",
+        "args": {
+          "path": "searchdata.docs_right/0/snippets/full/counter_prefix"
+        },
+        "output": "is_company_wizard"
+      }
+    ],
+    "reduce": [
+      {
+       "path": "reduce.py",
+       "name": "get_sum",
+       "args": {
+         "field": "is_company_wizard",
+         "type":"int"
+       },
+       "sensor_name": "hamster_company_wizards_count"
+      }
+    ]
+  },
+  {
+      "owners": [ "maxim98"],
+      "name": "hamster_geo_common_wizard_winner",
+      "host": "https://hamster.yandex.ru",
+      "box": "geo_common_wizard.tsv",
+      "flags": "json_dump=searchdata.docs",
+      "map": [
+          {
+              "path": "methods.py",
+              "name": "get_geo_common_wizard_winner_tab",
+              "args": { "tab": "rasp" },
+              "output": "winner_rasp"
+          },
+          {
+              "path": "methods.py",
+              "name": "get_geo_common_wizard_winner_tab",
+              "args": { "tab": "avia" },
+              "output": "winner_avia"
+          },
+          {
+              "path": "methods.py",
+              "name": "get_geo_common_wizard_winner_tab",
+              "args": { "tab": "bus" },
+              "output": "winner_bus"
+          }
+      ],
+      "reduce": [
+          {
+              "path": "reduce.py",
+              "name": "get_sum",
+              "args": {
+                 "field": "winner_rasp",
+                 "type": "int"
+              },
+              "sensor_name": "hamster_geo_common_wizard_rasp_winner"
+          },
+          {
+              "path": "reduce.py",
+              "name": "get_sum",
+              "args": {
+                 "field": "winner_avia",
+                 "type": "int"
+              },
+              "sensor_name": "hamster_geo_common_wizard_avia_winner"
+          },
+          {
+              "path": "reduce.py",
+              "name": "get_sum",
+              "args": {
+                 "field": "winner_bus",
+                 "type": "int"
+              },
+              "sensor_name": "hamster_geo_common_wizard_bus_winner"
+          }
+      ]
+  },
+  {
+    "owners":["gav1995"],
+    "name": "hamster_realty_phone",
+    "host": "https://hamster.yandex.ru",
+    "box": "realty.csv",
+    "flags": "json_dump=searchdata.docs_right",
+    "map": [
+      {
+        "path": "map.py",
+        "name": "check_realty_phone",
+        "args": {
+          "path": "searchdata.docs_right/0/snippets/full/data/GeoMetaSearchData/features/0/properties/Realty"
+        },
+        "output": "check_realty_phone"
+      }
+    ],
+    "reduce": [
+      {
+       "path": "reduce.py",
+       "name": "get_sum",
+       "args": {
+         "field": "check_realty_phone",
+         "type":"int"
+       },
+       "sensor_name": "hamster_realty_phone_count"
+      }
+    ]
+  },
+  {
+    "owners":["grand", "yourmary"],
+    "name": "hamster_transit_wizard",
+    "host": "https://hamster.yandex.ru",
+    "box": "transit.tsv",
+    "flags": "json_dump=searchdata.docs.*.snippets.full",
+    "map": [
+      {
+        "path": "map.py",
+        "name": "check_contains_snippet",
+        "args": {
+          "counter_prefix": "/snippet/maps/transit/"
+        },
+        "output": "is_transit_wizard"
+      }
+    ],
+    "reduce": [
+      {
+       "path": "reduce.py",
+       "name": "get_sum",
+       "args": {
+         "field": "is_transit_wizard",
+         "type":"int"
+       },
+       "sensor_name": "hamster_transit_wizards_count"
+      }
+    ]
+  },
+  {
+    "owners":["yourmary"],
+    "name": "hamster_weather_wizard",
+    "host": "https://hamster.yandex.ru",
+    "box": "weather.tsv",
+    "flags": "json_dump=searchdata.docs.*.snippets.full",
+    "map": [
+      {
+        "path": "map.py",
+        "name": "check_contains_snippet",
+        "args": {
+          "counter_prefix": "/snippet/weather/"
+        },
+        "output": "is_weather_wizard"
+      }
+    ],
+    "reduce": [
+      {
+       "path": "reduce.py",
+       "name": "get_sum",
+       "args": {
+         "field": "is_weather_wizard",
+         "type":"int"
+       },
+       "sensor_name": "hamster_weather_wizards_count"
+      }
+    ]
+  },
+  {
+    "type":"profile",
+    "owners":["gav1995"],
+    "name": "hamster_profile",
+    "host": "https://hamster.yandex.ru",
+    "box": "profile.csv",
+    "flags": "export=json",
+    "map": [
+      {
+        "path": "map.py",
+        "name": "check_contains",
+        "args": {
+          "path": "app_host/result/docs/0/snippets/full/GeoMetaSearchData/features/0/properties/name"
+        },
+        "output": "check_name"
+      }
+    ],
+    "reduce": [
+      {
+       "path": "reduce.py",
+       "name": "get_sum",
+       "args": {
+         "field": "check_name",
+         "type":"int"
+       },
+       "sensor_name": "check_name"
+      }
+    ]
+  }
+]
+
+
+
+

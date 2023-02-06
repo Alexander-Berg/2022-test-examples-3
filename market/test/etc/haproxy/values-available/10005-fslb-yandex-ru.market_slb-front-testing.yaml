@@ -1,0 +1,33 @@
+params:
+  default:
+    resolve: true
+    templates:
+    - user_mslb_triple_waterfall.tpl
+
+values:
+  default:
+    be_defaults:
+      check: check observe layer7
+      ssl: ssl verify none
+      on_error: fastinter
+    globals:
+      service_name: fslb.yandex.ru
+      service_port: 10005
+      ping_expect: rstring 0;OK
+      timeout_server: 600s
+    meta:
+      monrun_ignore: true
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    be1:
+    - name: N@testing_market_front_mbo_sas@local
+    - name: YP@testing-market-front-mbo-vla@local
+      dns_resolvers: yandex-ns
+      resolve: false
+    be3:
+    - name: N@testing_market_front_mbo_sas
+    - name: YP@testing-market-front-mbo-vla
+      dns_resolvers: yandex-ns
+      resolve: false

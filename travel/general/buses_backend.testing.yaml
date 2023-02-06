@@ -1,0 +1,20 @@
+import:
+  - buses_backend.base.yaml
+
+routes:
+  - input:
+      plugin: grpc
+      config:
+        uri: 127.0.0.1:16302
+    channel:
+      pipe:
+        - pipe_ref:
+            name: base_pipe
+      output:
+        plugin: logbroker
+        config:
+          endpoint: logbroker.yandex.net
+          topic: /sputnik/testing/backend/communication_log
+          oauth:
+            secret:
+              env: LOGBROKER_OAUTH_TOKEN

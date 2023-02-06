@@ -1,0 +1,31 @@
+<dataset>
+    <register id="1003" type="PLAN" status="NEW" date="2020-11-29 19:00:00.00 +0000"/>
+
+    <!--Register 3-->
+    <!-- Should produce an exception on duplicated units -->
+    <register_axapta_request
+            status="RECEIVED"
+            type="CHECK_AVAILABLE_QUANTITY"
+            register_id="1003"
+            partner_id="1"
+            external_id="3"
+            payload="{&quot;registerUnitIds&quot;:[1,2,3]}"
+            response="{&quot;units&quot;:[
+            {&quot;ssku&quot;:&quot;ssku1&quot;, &quot;merchantId&quot;:1, &quot;availPhysicalQty&quot;:100, &quot;stock&quot;:&quot;1F&quot;},
+            {&quot;ssku&quot;:&quot;ssku1&quot;, &quot;merchantId&quot;:1, &quot;availPhysicalQty&quot;:100, &quot;stock&quot;:&quot;1F&quot;},
+            {&quot;ssku&quot;:&quot;ssku1&quot;, &quot;merchantId&quot;:1, &quot;availPhysicalQty&quot;:100, &quot;stock&quot;:&quot;1F&quot;},
+            {&quot;ssku&quot;:&quot;ssku1&quot;, &quot;merchantId&quot;:1, &quot;availPhysicalQty&quot;:100, &quot;stock&quot;:&quot;1F&quot;}
+            ]}"
+            created="2021-05-06 12:00:00.0"
+    />
+
+    <!--All requests completed - OK-->
+    <transportation_task
+            id="3"
+            logistic_point_from_id="11"
+            logistic_point_to_id="12"
+            status="STOCK_AVAILABILITY_CHECKING"
+            register_id="1003"
+            external_id="3"
+            client_name="MBOC"/>
+</dataset>

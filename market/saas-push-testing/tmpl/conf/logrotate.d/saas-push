@@ -1,0 +1,13 @@
+/var/logs/yandex/saas-push/*.log {
+        daily
+        dateext
+        dateformat .%Y-%m-%d
+        missingok
+        rotate 7
+        compress
+        delaycompress
+        sharedscripts
+        postrotate
+                pgrep -f '^\S*saas-push' | xargs kill -HUP
+        endscript
+}

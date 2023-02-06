@@ -1,0 +1,17 @@
+<dataset>
+    <pipeline id="1" author="staff-login" name="QUICK_TRIP_CREATOR"
+              payload='{"type": "LINEHAUL", "runId": 10001, "courier": {"data": {"name": "Иван", "phone": "+79771234567", "surname": "Иванов", "patronymic": "Иванович"}, "companyId": 5, "existingCourierId": null}, "routeId": 1, "subtype": "DUTY", "transport": {"data": null, "existingTransportId": 1}, "pointParams": [{"index": 0, "maxPallet": null, "operation": null, "arrivalEndTime": "17:00:00", "transitionTime": 0, "logisticPointId": null, "arrivalStartTime": "16:00:00", "selectedTimeSlot": null, "calendaringServiceId": null}, {"index": 1, "maxPallet": null, "operation": null, "arrivalEndTime": "11:00:00", "transitionTime": 1020, "logisticPointId": null, "arrivalStartTime": "10:00:00", "selectedTimeSlot": null, "calendaringServiceId": null}], "transportInfo": {"price": null, "priceRuble": 2000, "movingPartnerId": 1, "numberOfPallets": 5}}' status="NEW"/>
+
+    <pipeline_cube id="1" name="ROOT_CUBE" status="NEW" pipeline_id="1"/>
+    <pipeline_cube id="2" name="CARRIER_COURIER_CREATOR" status="NEW" pipeline_id="1"/>
+    <pipeline_cube id="3" name="CARRIER_TRANSPORT_CREATOR" status="NEW" pipeline_id="1"/>
+    <pipeline_cube id="4" name="QUICK_TRIP_SCHEDULE_CONVERTER" status="NEW" pipeline_id="1"/>
+    <pipeline_cube id="5" name="ROUTE_SCHEDULE_CREATOR" status="NEW" pipeline_id="1"/>
+
+    <cube_relation from_cube_id="1" to_cube_id="2"/>
+    <cube_relation from_cube_id="1" to_cube_id="3"/>
+    <cube_relation from_cube_id="2" to_cube_id="4"/>
+    <cube_relation from_cube_id="3" to_cube_id="4"/>
+    <cube_relation from_cube_id="4" to_cube_id="5"/>
+
+</dataset>

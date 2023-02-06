@@ -1,0 +1,2769 @@
+{
+    "launchTemplates": [
+        {
+            "id": "aa82863865d2232f0165d2d7726f0294",
+            "name": "Russia",
+            "description": null,
+            "cgi": null,
+            "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0",
+            "regional": "RU",
+            "evaluation": "GEO_SEARCH",
+            "servers": [
+                {
+                    "id": "960eff21409b4e7fa35e496bf2b2eb16",
+                    "name": "production",
+                    "description": null,
+                    "cgi": "host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/&timeout=10000000&waitall=da",
+                    "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0&host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/&timeout=10000000&waitall=da",
+                    "host": "l7test.yandex.ru/maps",
+                    "baseline": true,
+                    "config": {
+                        "quota": "geosearch",
+                        "priority": 200,
+                        "profileId": "weak_consistency__geo__desktop__acceptance",
+                        "useScraper": true,
+                        "description": "production",
+                        "searchEngineType": "yandex-geo-json-protobuf",
+                        "checkBetaValidation": false,
+                        "scraperOverYt": true,
+                        "scraperOverYtParameters": {
+                            "scraper-over-yt-pool": "geo",
+                            "map-operation-type": "http"
+                        }
+                    },
+                    "componentFilter": null
+                },
+                {
+                    "id": "c8194d44283d47939e218753cbd3fae8",
+                    "name": "experimental",
+                    "description": null,
+                    "cgi": "host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/&timeout=10000000&waitall=da",
+                    "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0&host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/&timeout=10000000&waitall=da",
+                    "host": "l7test.yandex.ru/maps",
+                    "baseline": false,
+                    "config": {
+                        "quota": "geosearch",
+                        "priority": 200,
+                        "profileId": "weak_consistency__geo__desktop__acceptance",
+                        "useScraper": true,
+                        "description": "experimental",
+                        "searchEngineType": "yandex-geo-json-protobuf",
+                        "checkBetaValidation": false,
+                        "scraperOverYt": true,
+                        "scraperOverYtParameters": {
+                            "scraper-over-yt-pool": "geo",
+                            "map-operation-type": "http"
+                        }
+                    },
+                    "componentFilter": null
+                }
+            ],
+            "queryGroups": [
+                {
+                    "id": "a1961e50e1fe499bacb9e1ff2d92b94c",
+                    "externalId": "187809",
+                    "name": "geo_ru_accept",
+                    "description": null,
+                    "aspect": "test",
+                    "preprocessQueries": null,
+                    "absolute": null,
+                    "filters": [
+                        {
+                            "externalId": "query-187809",
+                            "name": "geo_ru_accept",
+                            "preFilters": [
+                                "query-187809"
+                            ],
+                            "postFilters": [],
+                            "componentFilter": null
+                        },
+                        {
+                            "externalId": "query-109469",
+                            "name": "geo_ru_accept_org1",
+                            "preFilters": [
+                                "query-109469"
+                            ],
+                            "postFilters": [],
+                            "componentFilter": null
+                        },
+                        {
+                            "externalId": "query-201150",
+                            "name": "geo_ru_accept_rubric&service",
+                            "preFilters": [
+                                "query-201150"
+                            ],
+                            "postFilters": [],
+                            "componentFilter": null
+                        }
+                    ],
+                    "metrics": [
+                        {
+                            "externalId": "judged1-geo_relevance_nr",
+                            "name": "judged1-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "judged5-geo_relevance_nr",
+                            "name": "judged5-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": "left < 0.999 || right < 0.999",
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "judged10-geo_relevance_nr",
+                            "name": "judged10-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-vital1_nr",
+                            "name": "geo-vital1_nr",
+                            "warnCheckerJs": "signification == 'LIGHT_RED'",
+                            "criticalCheckerJs": "signification == 'RED'",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-vital5_nr",
+                            "name": "geo-vital5_nr",
+                            "warnCheckerJs": "signification == 'LIGHT_RED'",
+                            "criticalCheckerJs": "signification == 'RED'",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-p1_nr",
+                            "name": "geo-p1_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-p5_nr",
+                            "name": "geo-p5_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-pfound10_nr",
+                            "name": "geo-pfound10_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-rel-10-nr",
+                            "name": "geo-rel-10-nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-has-irr-10",
+                            "name": "geo-has-irr-10",
+                            "warnCheckerJs": "signification == 'LIGHT_RED'",
+                            "criticalCheckerJs": "signification == 'RED'",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-irrel-10_all",
+                            "name": "geo-irrel-10_all",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "docs-found",
+                            "name": "docs-found",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "empty-serp",
+                            "name": "empty-serp",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "has_request_span",
+                            "name": "has_request_span",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "zoomout_kpi",
+                            "name": "zoomout_kpi",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "basic_zoomout",
+                            "name": "basic_zoomout",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "basic_params_zoomout_5x",
+                            "name": "basic_params_zoomout_5x",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "basic_params_move_50km",
+                            "name": "basic_params_move_50km",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "zoomout_only_5x_50km",
+                            "name": "zoomout_only_5x_50km",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "move_only_50km_5x",
+                            "name": "move_only_50km_5x",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "zoomout_and_move_5x_50km",
+                            "name": "zoomout_and_move_5x_50km",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo_is_rubric",
+                            "name": "geo_is_rubric",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo_rel_rating1",
+                            "name": "geo_rel_rating1",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo_rel_rating10",
+                            "name": "geo_rel_rating10",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo_rel_tradeoff_dcg10",
+                            "name": "geo_rel_tradeoff_dcg10",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo_tradeoff_auc",
+                            "name": "geo_tradeoff_auc",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo_tradeoff_auc10",
+                            "name": "geo_tradeoff_auc10",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        }
+                    ],
+                    "refreshSleepMs": 900000,
+                    "refreshSleep": "00:15:00",
+                    "refreshLimitMs": null,
+                    "refreshLimit": null,
+                    "limitMs": null,
+                    "limit": null,
+                    "warnLimitMs": null,
+                    "warnLimit": null,
+                    "criticalLimitMs": null,
+                    "criticalLimit": null,
+                    "priority": 200,
+                    "enrichmentOptions": {
+                        "options": {
+                            "angQuota": "GEO Acceptance",
+                            "priority": "75",
+                            "ignoreFailed": "true",
+                            "cancelRemoteEnrichment": "false"
+                        },
+                        "depth": 10,
+                        "limitMs": 54000000,
+                        "limit": "04:00:00",
+                        "warnLimitMs": 7200000,
+                        "warnLimit": "02:00:00",
+                        "criticalLimitMs": 10800000,
+                        "criticalLimit": "03:00:00"
+                    }
+                },
+                {
+                    "id": "015106404c944b72ab168c1ed6d37050",
+                    "externalId": "187809",
+                    "name": "geo_ru_accept",
+                    "description": null,
+                    "aspect": "duplicates",
+                    "preprocessQueries": null,
+                    "absolute": null,
+                    "filters": [
+                        {
+                            "externalId": null,
+                            "name": "No filter",
+                            "preFilters": [],
+                            "postFilters": [],
+                            "componentFilter": "catalogOnly"
+                        }
+                    ],
+                    "metrics": [
+                        {
+                            "externalId": "judged-sprav-dup-serps-10",
+                            "name": "judged-sprav-dup-serps-10",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": "left < 0.999 || right < 0.999",
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "sprav-dup-serps-10",
+                            "name": "sprav-dup-serps-10",
+                            "warnCheckerJs": "signification == 'LIGHT_RED'",
+                            "criticalCheckerJs": "signification == 'RED'",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        }
+                    ],
+                    "refreshSleepMs": 900000,
+                    "refreshSleep": "00:15:00",
+                    "refreshLimitMs": null,
+                    "refreshLimit": null,
+                    "limitMs": null,
+                    "limit": null,
+                    "warnLimitMs": null,
+                    "warnLimit": null,
+                    "criticalLimitMs": null,
+                    "criticalLimit": null,
+                    "priority": 100,
+                    "enrichmentOptions": {
+                        "options": {
+                            "project": "1282",
+                            "angQuota": "Справочник Кластеризатор",
+                            "priority": "75",
+                            "ignoreFailed": "true",
+                            "cancelRemoteEnrichment": "false"
+                        },
+                        "depth": 10,
+                        "limitMs": 54000000,
+                        "limit": "04:00:00",
+                        "warnLimitMs": 7200000,
+                        "warnLimit": "02:00:00",
+                        "criticalLimitMs": 10800000,
+                        "criticalLimit": "03:00:00"
+                    }
+                },
+                {
+                    "id": "80d243b01b184e2ba772d6f96ccae60a",
+                    "externalId": "116694",
+                    "name": "DrugsRu Accept 2017 Clean",
+                    "description": null,
+                    "aspect": null,
+                    "preprocessQueries": null,
+                    "absolute": null,
+                    "filters": [
+                        {
+                            "externalId": null,
+                            "name": "No filter",
+                            "preFilters": [],
+                            "postFilters": [],
+                            "componentFilter": null
+                        }
+                    ],
+                    "metrics": [
+                        {
+                            "externalId": "docs-found",
+                            "name": "docs-found",
+                            "warnCheckerJs": "Math.abs(diff) > 10",
+                            "criticalCheckerJs": "Math.abs(diff) > 20",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        }
+                    ],
+                    "refreshSleepMs": null,
+                    "refreshSleep": null,
+                    "refreshLimitMs": null,
+                    "refreshLimit": null,
+                    "limitMs": null,
+                    "limit": null,
+                    "warnLimitMs": null,
+                    "warnLimit": null,
+                    "criticalLimitMs": null,
+                    "criticalLimit": null,
+                    "enrichmentOptions": null,
+                    "priority": 100
+                },
+                {
+                    "id": "81e11391ed7d45ecb271b894354ec277",
+                    "externalId": "120183",
+                    "name": "AfishaRu Accept 2017",
+                    "description": null,
+                    "aspect": null,
+                    "preprocessQueries": null,
+                    "absolute": null,
+                    "filters": [
+                        {
+                            "externalId": null,
+                            "name": "No filter",
+                            "preFilters": [],
+                            "postFilters": [],
+                            "componentFilter": null
+                        }
+                    ],
+                    "metrics": [
+                        {
+                            "externalId": "docs-found",
+                            "name": "docs-found",
+                            "warnCheckerJs": "Math.abs(diff) > 30",
+                            "criticalCheckerJs": "Math.abs(diff) > 60",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        }
+                    ],
+                    "refreshSleepMs": null,
+                    "refreshSleep": null,
+                    "refreshLimitMs": null,
+                    "refreshLimit": null,
+                    "limitMs": null,
+                    "limit": null,
+                    "warnLimitMs": null,
+                    "warnLimit": null,
+                    "criticalLimitMs": null,
+                    "criticalLimit": null,
+                    "enrichmentOptions": null,
+                    "priority": 100
+                },
+                {
+                    "id": "05a951e67251431f877ba3f0e06c0dfb",
+                    "externalId": "239126",
+                    "name": "hotels_ru_accept_labeled",
+                    "description": null,
+                    "aspect": "test",
+                    "preprocessQueries": null,
+                    "absolute": null,
+                    "filters": [
+                        {
+                            "externalId": null,
+                            "name": "No filter",
+                            "preFilters": [],
+                            "postFilters": [],
+                            "componentFilter": null
+                        }
+                    ],
+                    "metrics": [
+                        {
+                            "externalId": "judged1-geo_relevance_nr",
+                            "name": "judged1-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "judged5-geo_relevance_nr",
+                            "name": "judged5-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": "left < 0.999 || right < 0.999",
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "judged10-geo_relevance_nr",
+                            "name": "judged10-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-vital1_nr",
+                            "name": "geo-vital1_nr",
+                            "warnCheckerJs": "signification == 'LIGHT_RED'",
+                            "criticalCheckerJs": "signification == 'RED'",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-vital5_nr",
+                            "name": "geo-vital5_nr",
+                            "warnCheckerJs": "signification == 'LIGHT_RED'",
+                            "criticalCheckerJs": "signification == 'RED'",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-p1_nr",
+                            "name": "geo-p1_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-p5_nr",
+                            "name": "geo-p5_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-pfound10_nr",
+                            "name": "geo-pfound10_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-rel-10-nr",
+                            "name": "geo-rel-10-nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-has-irr-10",
+                            "name": "geo-has-irr-10",
+                            "warnCheckerJs": "signification == 'LIGHT_RED'",
+                            "criticalCheckerJs": "signification == 'RED'",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-irrel-10_all",
+                            "name": "geo-irrel-10_all",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "docs-found",
+                            "name": "docs-found",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "empty-serp",
+                            "name": "empty-serp",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "has_request_span",
+                            "name": "has_request_span",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        }
+                    ],
+                    "refreshSleepMs": 900000,
+                    "refreshSleep": "00:15:00",
+                    "refreshLimitMs": null,
+                    "refreshLimit": null,
+                    "limitMs": null,
+                    "limit": null,
+                    "warnLimitMs": null,
+                    "warnLimit": null,
+                    "criticalLimitMs": null,
+                    "criticalLimit": null,
+                    "priority": 100,
+                    "enrichmentOptions": {
+                        "options": {
+                            "angQuota": "GEO Acceptance",
+                            "priority": "75",
+                            "ignoreFailed": "true",
+                            "cancelRemoteEnrichment": "false"
+                        },
+                        "depth": 10,
+                        "limitMs": 54000000,
+                        "limit": "04:00:00",
+                        "warnLimitMs": 7200000,
+                        "warnLimit": "02:00:00",
+                        "criticalLimitMs": 10800000,
+                        "criticalLimit": "03:00:00"
+                    }
+                }
+            ],
+            "acceptanceTestFactories": [],
+            "enrichmentOptions": {
+                "options": {},
+                "depth": null,
+                "limitMs": null,
+                "limit": null,
+                "warnLimitMs": null,
+                "warnLimit": null,
+                "criticalLimitMs": null,
+                "criticalLimit": null
+            },
+            "reloadOptions": {
+                "retryCount": 2,
+                "diffThreshold": 0,
+                "metric": "diff-2-serps-query-10",
+                "filter": null
+            },
+            "slaProject": null,
+            "serverConfig": null
+        },
+        {
+            "id": "aa82863865d2232f0165d2d7726f0295",
+            "name": "Russia (dupicates without grouping)",
+            "description": null,
+            "cgi": "search_experimental_experimental=relev_ranking_mse_formula=fml6414",
+            "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0&search_experimental_experimental=relev_ranking_mse_formula=fml6414",
+            "regional": "RU",
+            "evaluation": "GEO_SEARCH",
+            "servers": [
+                {
+                    "id": "1bdf38134c19414cb814ccc3fe784df9",
+                    "name": "production",
+                    "description": null,
+                    "cgi": "host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/&timeout=10000000&waitall=da&search_experimental_rearr=scheme_Local/Geo/SearchGroups/Enabled=0",
+                    "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0&search_experimental_experimental=relev_ranking_mse_formula=fml6414&host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/&timeout=10000000&waitall=da&search_experimental_rearr=scheme_Local/Geo/SearchGroups/Enabled=0",
+                    "host": "l7test.yandex.ru/maps",
+                    "baseline": true,
+                    "config": {
+                        "quota": "geosearch",
+                        "priority": 200,
+                        "profileId": "weak_consistency__geo__desktop__acceptance",
+                        "useScraper": true,
+                        "description": "production",
+                        "searchEngineType": "yandex-geo-json-protobuf",
+                        "checkBetaValidation": false,
+                        "scraperOverYt": true,
+                        "scraperOverYtParameters": {
+                            "scraper-over-yt-pool": "geo",
+                            "map-operation-type": "http"
+                        }
+                    },
+                    "componentFilter": null
+                },
+                {
+                    "id": "bce8eb3cb51742c2bbfc04784ca0e444",
+                    "name": "experimental",
+                    "description": null,
+                    "cgi": "host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/&timeout=10000000&waitall=da&search_experimental_rearr=scheme_Local/Geo/SearchGroups/Enabled=0",
+                    "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0&search_experimental_experimental=relev_ranking_mse_formula=fml6414&host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/&timeout=10000000&waitall=da&search_experimental_rearr=scheme_Local/Geo/SearchGroups/Enabled=0",
+                    "host": "l7test.yandex.ru/maps",
+                    "baseline": false,
+                    "config": {
+                        "quota": "geosearch",
+                        "priority": 200,
+                        "profileId": "weak_consistency__geo__desktop__acceptance",
+                        "useScraper": true,
+                        "description": "experimental",
+                        "searchEngineType": "yandex-geo-json-protobuf",
+                        "checkBetaValidation": false,
+                        "scraperOverYt": true,
+                        "scraperOverYtParameters": {
+                            "scraper-over-yt-pool": "geo",
+                            "map-operation-type": "http"
+                        }
+                    },
+                    "componentFilter": null
+                }
+            ],
+            "queryGroups": [
+                {
+                    "id": "2c173fcdd83f4dd09d15313404a4cc04",
+                    "externalId": "108421",
+                    "name": "geo_ru_accept_noctx",
+                    "description": null,
+                    "aspect": "duplicates",
+                    "preprocessQueries": null,
+                    "absolute": null,
+                    "filters": [
+                        {
+                            "externalId": null,
+                            "name": "No filter",
+                            "preFilters": [],
+                            "postFilters": [],
+                            "componentFilter": "catalogOnly"
+                        }
+                    ],
+                    "metrics": [
+                        {
+                            "externalId": "judged-sprav-dup-serps-10",
+                            "name": "judged-sprav-dup-serps-10",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": "left < 0.999 || right < 0.999",
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "sprav-dup-serps-10",
+                            "name": "sprav-dup-serps-10",
+                            "warnCheckerJs": "signification == 'LIGHT_RED'",
+                            "criticalCheckerJs": "signification == 'RED'",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        }
+                    ],
+                    "refreshSleepMs": 900000,
+                    "refreshSleep": "00:15:00",
+                    "refreshLimitMs": null,
+                    "refreshLimit": null,
+                    "limitMs": null,
+                    "limit": null,
+                    "warnLimitMs": null,
+                    "warnLimit": null,
+                    "criticalLimitMs": null,
+                    "criticalLimit": null,
+                    "priority": 100,
+                    "enrichmentOptions": {
+                        "options": {
+                            "project": "1282",
+                            "angQuota": "Справочник Кластеризатор",
+                            "priority": "75",
+                            "ignoreFailed": "true",
+                            "cancelRemoteEnrichment": "false"
+                        },
+                        "depth": 10,
+                        "limitMs": 54000000,
+                        "limit": "04:00:00",
+                        "warnLimitMs": 7200000,
+                        "warnLimit": "02:00:00",
+                        "criticalLimitMs": 10800000,
+                        "criticalLimit": "03:00:00"
+                    }
+                }
+            ],
+            "acceptanceTestFactories": [],
+            "enrichmentOptions": {
+                "options": {},
+                "depth": null,
+                "limitMs": null,
+                "limit": null,
+                "warnLimitMs": null,
+                "warnLimit": null,
+                "criticalLimitMs": null,
+                "criticalLimit": null
+            },
+            "reloadOptions": {
+                "retryCount": 2,
+                "diffThreshold": 0,
+                "metric": "diff-2-serps-query-10",
+                "filter": null
+            },
+            "slaProject": null,
+            "serverConfig": null
+        },
+        {
+            "id": "aa82863865d2232f0165d2d7726f0296",
+            "name": "Turkey",
+            "description": null,
+            "cgi": null,
+            "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0",
+            "regional": "TR",
+            "evaluation": "GEO_SEARCH",
+            "servers": [
+                {
+                    "id": "d39005d2ce2449ffa55d65b362bc030b",
+                    "name": "production",
+                    "description": null,
+                    "cgi": "host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/&timeout=10000000&waitall=da",
+                    "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0&host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/&timeout=10000000&waitall=da",
+                    "host": "l7test.yandex.com.tr/harita",
+                    "baseline": true,
+                    "config": {
+                        "quota": "geosearch",
+                        "priority": 200,
+                        "profileId": "weak_consistency__geo__desktop__acceptance",
+                        "useScraper": true,
+                        "description": "production",
+                        "searchEngineType": "yandex-geo-json-protobuf",
+                        "checkBetaValidation": false,
+                        "scraperOverYt": true,
+                        "scraperOverYtParameters": {
+                            "scraper-over-yt-pool": "geo",
+                            "map-operation-type": "http"
+                        }
+                    },
+                    "componentFilter": null
+                },
+                {
+                    "id": "1d2953a6a31044fcb73040261c732499",
+                    "name": "experimental",
+                    "description": null,
+                    "cgi": "host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/&timeout=10000000&waitall=da",
+                    "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0&host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/&timeout=10000000&waitall=da",
+                    "host": "l7test.yandex.com.tr/harita",
+                    "baseline": false,
+                    "config": {
+                        "quota": "geosearch",
+                        "priority": 200,
+                        "profileId": "weak_consistency__geo__desktop__acceptance",
+                        "useScraper": true,
+                        "description": "experimental",
+                        "searchEngineType": "yandex-geo-json-protobuf",
+                        "checkBetaValidation": false,
+                        "scraperOverYt": true,
+                        "scraperOverYtParameters": {
+                            "scraper-over-yt-pool": "geo",
+                            "map-operation-type": "http"
+                        }
+                    },
+                    "componentFilter": null
+                }
+            ],
+            "queryGroups": [
+                {
+                    "id": "4ba74657b264416abbcafb4151b7c3d3",
+                    "externalId": "187817",
+                    "name": "geo_tr_accept",
+                    "description": null,
+                    "aspect": "test",
+                    "preprocessQueries": null,
+                    "absolute": null,
+                    "filters": [
+                        {
+                            "externalId": "query-187817",
+                            "name": "geo_tr_accept",
+                            "preFilters": [
+                                "query-187817"
+                            ],
+                            "postFilters": [],
+                            "componentFilter": null
+                        },
+                        {
+                            "externalId": "query-110164",
+                            "name": "geo_tr_accept_org1",
+                            "preFilters": [
+                                "query-110164"
+                            ],
+                            "postFilters": [],
+                            "componentFilter": null
+                        }
+                    ],
+                    "metrics": [
+                        {
+                            "externalId": "judged1-geo_relevance_nr",
+                            "name": "judged1-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "judged5-geo_relevance_nr",
+                            "name": "judged5-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": "left < 0.999 || right < 0.999",
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "judged10-geo_relevance_nr",
+                            "name": "judged10-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-vital1_nr",
+                            "name": "geo-vital1_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-vital5_nr",
+                            "name": "geo-vital5_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-p1_nr",
+                            "name": "geo-p1_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-p5_nr",
+                            "name": "geo-p5_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-pfound10_nr",
+                            "name": "geo-pfound10_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-rel-10-nr",
+                            "name": "geo-rel-10-nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-has-irr-10",
+                            "name": "geo-has-irr-10",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-irrel-10_all",
+                            "name": "geo-irrel-10_all",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "docs-found",
+                            "name": "docs-found",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "empty-serp",
+                            "name": "empty-serp",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "has_request_span",
+                            "name": "has_request_span",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "zoomout_kpi",
+                            "name": "zoomout_kpi",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "basic_zoomout",
+                            "name": "basic_zoomout",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "basic_params_zoomout_5x",
+                            "name": "basic_params_zoomout_5x",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "basic_params_move_50km",
+                            "name": "basic_params_move_50km",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "zoomout_only_5x_50km",
+                            "name": "zoomout_only_5x_50km",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "move_only_50km_5x",
+                            "name": "move_only_50km_5x",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "zoomout_and_move_5x_50km",
+                            "name": "zoomout_and_move_5x_50km",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        }
+                    ],
+                    "refreshSleepMs": 900000,
+                    "refreshSleep": "00:15:00",
+                    "refreshLimitMs": null,
+                    "refreshLimit": null,
+                    "limitMs": null,
+                    "limit": null,
+                    "warnLimitMs": null,
+                    "warnLimit": null,
+                    "criticalLimitMs": null,
+                    "criticalLimit": null,
+                    "priority": 200,
+                    "enrichmentOptions": {
+                        "options": {
+                            "angQuota": "GEO Acceptance",
+                            "priority": "75",
+                            "ignoreFailed": "true",
+                            "cancelRemoteEnrichment": "false"
+                        },
+                        "depth": 10,
+                        "limitMs": 54000000,
+                        "limit": "04:00:00",
+                        "warnLimitMs": 7200000,
+                        "warnLimit": "02:00:00",
+                        "criticalLimitMs": 10800000,
+                        "criticalLimit": "03:00:00"
+                    }
+                },
+                {
+                    "id": "48dd516eba064bdbac52f165dbaf28f5",
+                    "externalId": "187817",
+                    "name": "geo_tr_accept",
+                    "description": null,
+                    "aspect": "duplicates",
+                    "preprocessQueries": null,
+                    "absolute": null,
+                    "filters": [
+                        {
+                            "externalId": null,
+                            "name": "No filter",
+                            "preFilters": [],
+                            "postFilters": [],
+                            "componentFilter": "catalogOnly"
+                        }
+                    ],
+                    "metrics": [
+                        {
+                            "externalId": "judged-sprav-dup-serps-10",
+                            "name": "judged-sprav-dup-serps-10",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": "left < 0.999 || right < 0.999",
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "sprav-dup-serps-10",
+                            "name": "sprav-dup-serps-10",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        }
+                    ],
+                    "refreshSleepMs": 900000,
+                    "refreshSleep": "00:15:00",
+                    "refreshLimitMs": null,
+                    "refreshLimit": null,
+                    "limitMs": null,
+                    "limit": null,
+                    "warnLimitMs": null,
+                    "warnLimit": null,
+                    "criticalLimitMs": null,
+                    "criticalLimit": null,
+                    "priority": 100,
+                    "enrichmentOptions": {
+                        "options": {
+                            "project": "1282",
+                            "angQuota": "Справочник Кластеризатор",
+                            "priority": "75",
+                            "ignoreFailed": "true",
+                            "cancelRemoteEnrichment": "false"
+                        },
+                        "depth": 10,
+                        "limitMs": 54000000,
+                        "limit": "04:00:00",
+                        "warnLimitMs": 7200000,
+                        "warnLimit": "02:00:00",
+                        "criticalLimitMs": 10800000,
+                        "criticalLimit": "03:00:00"
+                    }
+                },
+                {
+                    "id": "280f2bbb9d0245708fbacd1e278cf487",
+                    "externalId": "147150",
+                    "name": "sprav_accuracy_tr_org_accept",
+                    "description": null,
+                    "aspect": "accuracy",
+                    "preprocessQueries": null,
+                    "absolute": null,
+                    "filters": [
+                        {
+                            "externalId": null,
+                            "name": "No filter",
+                            "preFilters": [],
+                            "postFilters": [],
+                            "componentFilter": null
+                        }
+                    ],
+                    "metrics": [
+                        {
+                            "externalId": "sprav-accuracy-by-reference-base-1",
+                            "name": "sprav-accuracy-by-reference-base-1",
+                            "warnCheckerJs": "signification == 'LIGHT_RED'",
+                            "criticalCheckerJs": "signification == 'RED'",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "sprav-accuracy-by-reference-base-address-1",
+                            "name": "sprav-accuracy-by-reference-base-address-1",
+                            "warnCheckerJs": "signification == 'LIGHT_RED'",
+                            "criticalCheckerJs": "signification == 'RED'",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "sprav-accuracy-by-reference-base-name-1",
+                            "name": "sprav-accuracy-by-reference-base-name-1",
+                            "warnCheckerJs": "signification == 'LIGHT_RED'",
+                            "criticalCheckerJs": "signification == 'RED'",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "sprav-accuracy-by-reference-base-phone-1",
+                            "name": "sprav-accuracy-by-reference-base-phone-1",
+                            "warnCheckerJs": "signification == 'LIGHT_RED'",
+                            "criticalCheckerJs": "signification == 'RED'",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "sprav-accuracy-by-reference-base-publishing-status-1",
+                            "name": "sprav-accuracy-by-reference-base-publishing-status-1",
+                            "warnCheckerJs": "signification == 'LIGHT_RED'",
+                            "criticalCheckerJs": "signification == 'RED'",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "sprav-accuracy-by-reference-base-rubric-1",
+                            "name": "sprav-accuracy-by-reference-base-rubric-1",
+                            "warnCheckerJs": "signification == 'LIGHT_RED'",
+                            "criticalCheckerJs": "signification == 'RED'",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "sprav-accuracy-by-reference-base-url-1",
+                            "name": "sprav-accuracy-by-reference-base-url-1",
+                            "warnCheckerJs": "signification == 'LIGHT_RED'",
+                            "criticalCheckerJs": "signification == 'RED'",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "sprav-accuracy-by-reference-base-working-time-1",
+                            "name": "sprav-accuracy-by-reference-base-working-time-1",
+                            "warnCheckerJs": "signification == 'LIGHT_RED'",
+                            "criticalCheckerJs": "signification == 'RED'",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "judged-sprav-accuracy-by-reference-base-1",
+                            "name": "judged-sprav-accuracy-by-reference-base-1",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": "left < 0.99 || right < 0.99",
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        }
+                    ],
+                    "refreshSleepMs": 900000,
+                    "refreshSleep": "00:15:00",
+                    "refreshLimitMs": null,
+                    "refreshLimit": null,
+                    "limitMs": null,
+                    "limit": null,
+                    "warnLimitMs": null,
+                    "warnLimit": null,
+                    "criticalLimitMs": null,
+                    "criticalLimit": null,
+                    "priority": 100,
+                    "enrichmentOptions": {
+                        "options": {
+                            "project": "1282",
+                            "angQuota": "Справочник Кластеризатор",
+                            "priority": "75",
+                            "ignoreFailed": "true",
+                            "cancelRemoteEnrichment": "false"
+                        },
+                        "depth": 1,
+                        "limitMs": 86400000,
+                        "limit": "24:00:00",
+                        "warnLimitMs": 43200000,
+                        "warnLimit": "12:00:00",
+                        "criticalLimitMs": 64800000,
+                        "criticalLimit": "18:00:00"
+                    }
+                }
+            ],
+            "acceptanceTestFactories": [],
+            "enrichmentOptions": {
+                "options": {},
+                "depth": null,
+                "limitMs": null,
+                "limit": null,
+                "warnLimitMs": null,
+                "warnLimit": null,
+                "criticalLimitMs": null,
+                "criticalLimit": null
+            },
+            "reloadOptions": {
+                "retryCount": 2,
+                "diffThreshold": 0,
+                "metric": "diff-2-serps-query-10",
+                "filter": null
+            },
+            "slaProject": null,
+            "serverConfig": null
+        },
+        {
+            "name": "World",
+            "description": null,
+            "cgi": null,
+            "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0",
+            "regional": "WORLD",
+            "evaluation": "GEO_SEARCH",
+            "servers": [
+                {
+                    "name": "production",
+                    "description": null,
+                    "cgi": "host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/&timeout=10000000&waitall=da",
+                    "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0&host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/&timeout=10000000&waitall=da",
+                    "host": "l7test.yandex.ru/maps",
+                    "baseline": true,
+                    "config": {
+                        "quota": "geosearch",
+                        "priority": 200,
+                        "profileId": "weak_consistency__geo__desktop__acceptance",
+                        "useScraper": true,
+                        "description": "production",
+                        "searchEngineType": "yandex-geo-json-protobuf",
+                        "checkBetaValidation": false,
+                        "scraperOverYt": true,
+                        "scraperOverYtParameters": {
+                            "scraper-over-yt-pool": "geo",
+                            "map-operation-type": "http"
+                        }
+                    },
+                    "componentFilter": null
+                },
+                {
+                    "name": "experimental",
+                    "description": null,
+                    "cgi": "host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/&timeout=10000000&waitall=da",
+                    "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0&host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/&timeout=10000000&waitall=da",
+                    "host": "l7test.yandex.ru/maps",
+                    "baseline": false,
+                    "config": {
+                        "quota": "geosearch",
+                        "priority": 200,
+                        "profileId": "weak_consistency__geo__desktop__acceptance",
+                        "useScraper": true,
+                        "description": "experimental",
+                        "searchEngineType": "yandex-geo-json-protobuf",
+                        "checkBetaValidation": false,
+                        "scraperOverYt": true,
+                        "scraperOverYtParameters": {
+                            "scraper-over-yt-pool": "geo",
+                            "map-operation-type": "http"
+                        }
+                    },
+                    "componentFilter": null
+                }
+            ],
+            "queryGroups": [
+                {
+                    "externalId": "114495",
+                    "name": "geo_world_accept",
+                    "description": null,
+                    "aspect": "test",
+                    "preprocessQueries": null,
+                    "absolute": null,
+                    "filters": [
+                        {
+                            "externalId": "query-114495",
+                            "name": "geo_world_accept",
+                            "preFilters": [
+                                "query-114495"
+                            ],
+                            "postFilters": [],
+                            "componentFilter": null
+                        },
+                        {
+                            "externalId": "query-207380",
+                            "name": "geo_world_accept_org1",
+                            "preFilters": [
+                                "query-207380"
+                            ],
+                            "postFilters": [],
+                            "componentFilter": null
+                        },
+                        {
+                            "externalId": "query-115161",
+                            "name": "geo_by_accept_world",
+                            "preFilters": [
+                                "query-115161"
+                            ],
+                            "postFilters": [],
+                            "componentFilter": null
+                        },
+                        {
+                            "externalId": "query-109562",
+                            "name": "geo_by_accept_org1",
+                            "preFilters": [
+                                "query-109562"
+                            ],
+                            "postFilters": [],
+                            "componentFilter": null
+                        },
+                        {
+                            "externalId": "query-115165",
+                            "name": "geo_ua_accept_world",
+                            "preFilters": [
+                                "query-115165"
+                            ],
+                            "postFilters": [],
+                            "componentFilter": null
+                        },
+                        {
+                            "externalId": "query-109560",
+                            "name": "geo_ua_accept_org1",
+                            "preFilters": [
+                                "query-109560"
+                            ],
+                            "postFilters": [],
+                            "componentFilter": null
+                        },
+                        {
+                            "externalId": "query-115159",
+                            "name": "geo_uz_accept_world",
+                            "preFilters": [
+                                "query-115159"
+                            ],
+                            "postFilters": [],
+                            "componentFilter": null
+                        },
+                        {
+                            "externalId": "query-113819",
+                            "name": "geo_uz_accept_org1",
+                            "preFilters": [
+                                "query-113819"
+                            ],
+                            "postFilters": [],
+                            "componentFilter": null
+                        },
+                        {
+                            "externalId": "query-115162",
+                            "name": "geo_kz_accept_world",
+                            "preFilters": [
+                                "query-115162"
+                            ],
+                            "postFilters": [],
+                            "componentFilter": null
+                        },
+                        {
+                            "externalId": "query-122263",
+                            "name": "geo_kz_accept_org1",
+                            "preFilters": [
+                                "query-122263"
+                            ],
+                            "postFilters": [],
+                            "componentFilter": null
+                        },
+                        {
+                            "externalId": "query-200925",
+                            "name": "geo_exUSSR_accept_world",
+                            "preFilters": [
+                                "query-200925"
+                            ],
+                            "postFilters": [],
+                            "componentFilter": null
+                        },
+                        {
+                            "externalId": "query-200910",
+                            "name": "geo_exUSSR_accept_org1",
+                            "preFilters": [
+                                "query-200910"
+                            ],
+                            "postFilters": [],
+                            "componentFilter": null
+                        }
+                    ],
+                    "metrics": [
+                        {
+                            "externalId": "judged1-geo_relevance_nr",
+                            "name": "judged1-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "judged5-geo_relevance_nr",
+                            "name": "judged5-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": "left < 0.999 || right < 0.999",
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "judged10-geo_relevance_nr",
+                            "name": "judged10-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-vital1_nr",
+                            "name": "geo-vital1_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-vital5_nr",
+                            "name": "geo-vital5_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-p1_nr",
+                            "name": "geo-p1_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-p5_nr",
+                            "name": "geo-p5_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-pfound10_nr",
+                            "name": "geo-pfound10_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-rel-10-nr",
+                            "name": "geo-rel-10-nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-has-irr-10",
+                            "name": "geo-has-irr-10",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-irrel-10_all",
+                            "name": "geo-irrel-10_all",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "docs-found",
+                            "name": "docs-found",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "empty-serp",
+                            "name": "empty-serp",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "has_request_span",
+                            "name": "has_request_span",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "zoomout_kpi",
+                            "name": "zoomout_kpi",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "basic_zoomout",
+                            "name": "basic_zoomout",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "basic_params_zoomout_5x",
+                            "name": "basic_params_zoomout_5x",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "basic_params_move_50km",
+                            "name": "basic_params_move_50km",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "zoomout_only_5x_50km",
+                            "name": "zoomout_only_5x_50km",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "move_only_50km_5x",
+                            "name": "move_only_50km_5x",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "zoomout_and_move_5x_50km",
+                            "name": "zoomout_and_move_5x_50km",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        }
+                    ],
+                    "refreshSleepMs": 900000,
+                    "refreshSleep": "00:15:00",
+                    "refreshLimitMs": null,
+                    "refreshLimit": null,
+                    "limitMs": null,
+                    "limit": null,
+                    "warnLimitMs": null,
+                    "warnLimit": null,
+                    "criticalLimitMs": null,
+                    "criticalLimit": null,
+                    "priority": 200,
+                    "enrichmentOptions": {
+                        "options": {
+                            "angQuota": "GEO Acceptance",
+                            "priority": "75",
+                            "ignoreFailed": "true",
+                            "cancelRemoteEnrichment": "false"
+                        },
+                        "depth": 10,
+                        "limitMs": 54000000,
+                        "limit": "04:00:00",
+                        "warnLimitMs": 7200000,
+                        "warnLimit": "02:00:00",
+                        "criticalLimitMs": 10800000,
+                        "criticalLimit": "03:00:00"
+                    }
+                },
+                {
+                    "id": "d0e4e01eab424e1498ede00c21f55914",
+                    "externalId": "114495",
+                    "name": "geo_world_accept",
+                    "description": null,
+                    "aspect": "duplicates",
+                    "preprocessQueries": null,
+                    "absolute": null,
+                    "filters": [
+                        {
+                            "externalId": null,
+                            "name": "No filter",
+                            "preFilters": [],
+                            "postFilters": [],
+                            "componentFilter": "catalogOnly"
+                        }
+                    ],
+                    "metrics": [
+                        {
+                            "externalId": "judged-sprav-dup-serps-10",
+                            "name": "judged-sprav-dup-serps-10",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": "left < 0.999 || right < 0.999",
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "sprav-dup-serps-10",
+                            "name": "sprav-dup-serps-10",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        }
+                    ],
+                    "refreshSleepMs": 900000,
+                    "refreshSleep": "00:15:00",
+                    "refreshLimitMs": null,
+                    "refreshLimit": null,
+                    "limitMs": null,
+                    "limit": null,
+                    "warnLimitMs": null,
+                    "warnLimit": null,
+                    "criticalLimitMs": null,
+                    "criticalLimit": null,
+                    "priority": 100,
+                    "enrichmentOptions": {
+                        "options": {
+                            "project": "1282",
+                            "angQuota": "Справочник Кластеризатор",
+                            "priority": "75",
+                            "ignoreFailed": "true",
+                            "cancelRemoteEnrichment": "false"
+                        },
+                        "depth": 10,
+                        "limitMs": 54000000,
+                        "limit": "04:00:00",
+                        "warnLimitMs": 7200000,
+                        "warnLimit": "02:00:00",
+                        "criticalLimitMs": 10800000,
+                        "criticalLimit": "03:00:00"
+                    }
+                }
+            ],
+            "acceptanceTestFactories": [],
+            "enrichmentOptions": {
+                "options": {},
+                "depth": null,
+                "limitMs": null,
+                "limit": null,
+                "warnLimitMs": null,
+                "warnLimit": null,
+                "criticalLimitMs": null,
+                "criticalLimit": null
+            },
+            "reloadOptions": {
+                "retryCount": 2,
+                "diffThreshold": 0,
+                "metric": "diff-2-serps-query-10",
+                "filter": null
+            },
+            "slaProject": null,
+            "serverConfig": null
+        },
+        {
+            "id": "aa82863865d2232f0165d2d7726f029d",
+            "name": "TOPONYMS",
+            "description": "Toponyms acceptance",
+            "cgi": null,
+            "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0",
+            "regional": "RU",
+            "evaluation": "GEO_SEARCH",
+            "servers": [
+                {
+                    "id": "1407140c42ff48249658a8f626d321ff",
+                    "name": "Stable",
+                    "description": null,
+                    "cgi": "host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/",
+                    "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0&host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/",
+                    "host": "l7test.yandex.ru/maps",
+                    "baseline": true,
+                    "config": {
+                        "quota": "geosearch",
+                        "waitall": true,
+                        "priority": 0,
+                        "profileId": "weak_consistency__geo__desktop__acceptance",
+                        "storeMode": "SERP",
+                        "useScraper": true,
+                        "useQueryUid": false,
+                        "checkImagesUrls": false,
+                        "searchEngineType": "yandex-geo-json-protobuf",
+                        "checkBetaValidation": false,
+                        "scraperOverYt": true,
+                        "scraperOverYtParameters": {
+                            "scraper-over-yt-pool": "geo",
+                            "map-operation-type": "http"
+                        }
+                    },
+                    "componentFilter": null
+                },
+                {
+                    "id": "b7d7d03d7d8d41c193c62760403f19d1",
+                    "name": "Prestable",
+                    "description": null,
+                    "cgi": "host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/",
+                    "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0&host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/",
+                    "host": "l7test.yandex.ru/maps",
+                    "baseline": false,
+                    "config": {
+                        "quota": "geosearch",
+                        "waitall": true,
+                        "priority": 0,
+                        "profileId": "weak_consistency__geo__desktop__acceptance",
+                        "storeMode": "SERP",
+                        "useScraper": true,
+                        "useQueryUid": false,
+                        "checkImagesUrls": false,
+                        "searchEngineType": "yandex-geo-json-protobuf",
+                        "checkBetaValidation": false,
+                        "scraperOverYt": true,
+                        "scraperOverYtParameters": {
+                            "scraper-over-yt-pool": "geo",
+                            "map-operation-type": "http"
+                        }
+                    },
+                    "componentFilter": null
+                }
+            ],
+            "queryGroups": [
+                {
+                    "id": "9150ede3c7f8408489d4f0903b59081c",
+                    "externalId": "118496",
+                    "name": "geo_ru_accept_toponym",
+                    "description": null,
+                    "aspect": "test",
+                    "preprocessQueries": null,
+                    "absolute": null,
+                    "filters": [
+                        {
+                            "externalId": null,
+                            "name": "No filter",
+                            "preFilters": [],
+                            "postFilters": [],
+                            "componentFilter": null
+                        }
+                    ],
+                    "metrics": [
+                        {
+                            "externalId": "judged1-geo_relevance_nr",
+                            "name": "judged1-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": "left < 0.999 || right < 0.999",
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "judged5-geo_relevance_nr",
+                            "name": "judged5-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "judged10-geo_relevance_nr",
+                            "name": "judged10-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-vital1_nr",
+                            "name": "geo-vital1_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-vital5_nr",
+                            "name": "geo-vital5_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-p1_nr",
+                            "name": "geo-p1_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-p5_nr",
+                            "name": "geo-p5_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-rel-10-nr",
+                            "name": "geo-rel-10-nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-has-irr-10",
+                            "name": "geo-has-irr-10",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-irrel-5_nr",
+                            "name": "geo-irrel-5_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-irrel-10_nr",
+                            "name": "geo-irrel-10_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-dcg-20-v6i2_nr",
+                            "name": "geo-dcg-20-v6i2_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-pfound10_nr",
+                            "name": "geo-pfound10_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-jdcg-l10-v06i005",
+                            "name": "geo-jdcg-l10-v06i005",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-wiz-vital1_nr",
+                            "name": "geo-wiz-vital1_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-wiz-vital2_nr",
+                            "name": "geo-wiz-vital2_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-wiz-pfound3-rank1_nr",
+                            "name": "geo-wiz-pfound3-rank1_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-wiz-pfound3-rank2_nr",
+                            "name": "geo-wiz-pfound3-rank2_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "docs-found",
+                            "name": "docs-found",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "empty-serp",
+                            "name": "empty-serp",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        }
+                    ],
+                    "refreshSleepMs": 900000,
+                    "refreshSleep": "00:15:00",
+                    "refreshLimitMs": null,
+                    "refreshLimit": null,
+                    "limitMs": null,
+                    "limit": null,
+                    "warnLimitMs": null,
+                    "warnLimit": null,
+                    "criticalLimitMs": null,
+                    "criticalLimit": null,
+                    "priority": 100,
+                    "enrichmentOptions": {
+                        "options": {
+                            "angQuota": "GEO Toponyms",
+                            "priority": "75",
+                            "ignoreFailed": "true",
+                            "cancelRemoteEnrichment": "false"
+                        },
+                        "depth": 1,
+                        "limitMs": 54000000,
+                        "limit": "04:00:00",
+                        "warnLimitMs": 7200000,
+                        "warnLimit": "02:00:00",
+                        "criticalLimitMs": 10800000,
+                        "criticalLimit": "03:00:00"
+                    }
+                }
+            ],
+            "acceptanceTestFactories": [],
+            "enrichmentOptions": null,
+            "reloadOptions": {
+                "retryCount": 2,
+                "diffThreshold": 0,
+                "metric": "diff-2-serps-query-10",
+                "filter": null
+            },
+            "slaProject": null,
+            "serverConfig": null
+        },
+        {
+            "id": "aa82863865d2232f0165d2d7726f029e",
+            "name": "TOPONYMS TR",
+            "description": "Turkey toponyms acceptance",
+            "cgi": null,
+            "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0",
+            "regional": "TR",
+            "evaluation": "GEO_SEARCH",
+            "servers": [
+                {
+                    "id": "b5f2237811db45898cc50f7a88586419",
+                    "name": "Stable",
+                    "description": null,
+                    "cgi": "host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/",
+                    "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0&host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/",
+                    "host": "l7test.yandex.com.tr/harita",
+                    "baseline": true,
+                    "config": {
+                        "quota": "geosearch",
+                        "waitall": true,
+                        "priority": 0,
+                        "profileId": "weak_consistency__geo__desktop__acceptance",
+                        "storeMode": "SERP",
+                        "useScraper": true,
+                        "useQueryUid": false,
+                        "checkImagesUrls": false,
+                        "searchEngineType": "yandex-geo-json-protobuf",
+                        "checkBetaValidation": false,
+                        "scraperOverYt": true,
+                        "scraperOverYtParameters": {
+                            "scraper-over-yt-pool": "geo",
+                            "map-operation-type": "http"
+                        }
+                    },
+                    "componentFilter": null
+                },
+                {
+                    "id": "e6134fb843e74bd0b375441883a7dfc2",
+                    "name": "Prestable",
+                    "description": null,
+                    "cgi": "host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/",
+                    "mergedCgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0&host_config[inthosts][search]=http://addrs-testing.in.yandex.net/search/wizard/",
+                    "host": "l7test.yandex.com.tr/harita",
+                    "baseline": false,
+                    "config": {
+                        "quota": "geosearch",
+                        "waitall": true,
+                        "priority": 0,
+                        "profileId": "weak_consistency__geo__desktop__acceptance",
+                        "storeMode": "SERP",
+                        "useScraper": true,
+                        "useQueryUid": false,
+                        "checkImagesUrls": false,
+                        "searchEngineType": "yandex-geo-json-protobuf",
+                        "checkBetaValidation": false,
+                        "scraperOverYt": true,
+                        "scraperOverYtParameters": {
+                            "scraper-over-yt-pool": "geo",
+                            "map-operation-type": "http"
+                        }
+                    },
+                    "componentFilter": null
+                }
+            ],
+            "queryGroups": [
+                {
+                    "id": "8864170b979e4860bd2e7e1ac816d796",
+                    "externalId": "122502",
+                    "name": "geo_tr_accept_toponym",
+                    "description": null,
+                    "aspect": "test",
+                    "preprocessQueries": null,
+                    "absolute": null,
+                    "filters": [
+                        {
+                            "externalId": null,
+                            "name": "No filter",
+                            "preFilters": [],
+                            "postFilters": [],
+                            "componentFilter": null
+                        }
+                    ],
+                    "metrics": [
+                        {
+                            "externalId": "judged1-geo_relevance_nr",
+                            "name": "judged1-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": "left < 0.999 || right < 0.999",
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "judged5-geo_relevance_nr",
+                            "name": "judged5-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "judged10-geo_relevance_nr",
+                            "name": "judged10-geo_relevance_nr",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-vital1_nr",
+                            "name": "geo-vital1_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-vital5_nr",
+                            "name": "geo-vital5_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-p1_nr",
+                            "name": "geo-p1_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": true,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-p5_nr",
+                            "name": "geo-p5_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-rel-10-nr",
+                            "name": "geo-rel-10-nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-has-irr-10",
+                            "name": "geo-has-irr-10",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-irrel-5_nr",
+                            "name": "geo-irrel-5_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-irrel-10_nr",
+                            "name": "geo-irrel-10_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-dcg-20-v6i2_nr",
+                            "name": "geo-dcg-20-v6i2_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-pfound10_nr",
+                            "name": "geo-pfound10_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-jdcg-l10-v06i005",
+                            "name": "geo-jdcg-l10-v06i005",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-wiz-vital1_nr",
+                            "name": "geo-wiz-vital1_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-wiz-vital2_nr",
+                            "name": "geo-wiz-vital2_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-wiz-pfound3-rank1_nr",
+                            "name": "geo-wiz-pfound3-rank1_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "geo-wiz-pfound3-rank2_nr",
+                            "name": "geo-wiz-pfound3-rank2_nr",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "docs-found",
+                            "name": "docs-found",
+                            "warnCheckerJs": null,
+                            "criticalCheckerJs": null,
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        },
+                        {
+                            "externalId": "empty-serp",
+                            "name": "empty-serp",
+                            "warnCheckerJs": "(signification=='LIGHT_RED')",
+                            "criticalCheckerJs": "(signification=='RED')",
+                            "fatalCheckerJs": null,
+                            "readyCheckerJs": null,
+                            "evaluationCheckerJs": null,
+                            "enrichment": false,
+                            "enrichmentOptions": null
+                        }
+                    ],
+                    "refreshSleepMs": 900000,
+                    "refreshSleep": "00:15:00",
+                    "refreshLimitMs": null,
+                    "refreshLimit": null,
+                    "limitMs": null,
+                    "limit": null,
+                    "warnLimitMs": null,
+                    "warnLimit": null,
+                    "criticalLimitMs": null,
+                    "criticalLimit": null,
+                    "priority": 100,
+                    "enrichmentOptions": {
+                        "options": {
+                            "angQuota": "GEO Toponyms",
+                            "priority": "75",
+                            "ignoreFailed": "true",
+                            "cancelRemoteEnrichment": "false"
+                        },
+                        "depth": 1,
+                        "limitMs": 54000000,
+                        "limit": "04:00:00",
+                        "warnLimitMs": 7200000,
+                        "warnLimit": "02:00:00",
+                        "criticalLimitMs": 10800000,
+                        "criticalLimit": "03:00:00"
+                    }
+                }
+            ],
+            "acceptanceTestFactories": [],
+            "enrichmentOptions": null,
+            "reloadOptions": {
+                "retryCount": 2,
+                "diffThreshold": 0,
+                "metric": "diff-2-serps-query-10",
+                "filter": null
+            },
+            "slaProject": null,
+            "serverConfig": null
+        }
+    ],
+    "name": "Geosearch acceptance",
+    "taskProjectId": null,
+    "responsibleUsers": [
+        "evelkin",
+        "karas-pv",
+        "marvelstas",
+        "dengaleev",
+        "robot-geosearch",
+        "robot-geosearch-base",
+        "root-srch-releaser",
+        "yu-semichev",
+        "yurakura",
+        "zhvv117",
+        "danilchenko"
+    ],
+    "responsibleABC": "geosearch2:dutywork",
+    "description": null,
+    "cgi": "search_remove_type=direct&search_remove_type=collections&test-id=8894&search_replace=maxadv=0",
+    "enrichmentOptions": {
+        "options": {
+            "cancelRemoteEnrichment": true
+        }
+    },
+    "priority": null,
+    "slaProject": null,
+    "serverConfig": null
+}

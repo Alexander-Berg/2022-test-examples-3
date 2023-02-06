@@ -1,0 +1,93 @@
+package ru.yandex.autotests.direct.cmd.retargetings.goals;
+
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Test;
+import ru.yandex.aqua.annotations.project.Aqua;
+import ru.yandex.autotests.direct.cmd.data.retargeting.AjaxGetGoalsForRetargetingItem;
+import ru.yandex.autotests.direct.cmd.rules.DirectCmdRule;
+import ru.yandex.autotests.direct.cmd.tags.CmdTag;
+import ru.yandex.autotests.direct.cmd.tags.ObjectTag;
+import ru.yandex.autotests.direct.cmd.tags.TrunkTag;
+import ru.yandex.autotests.direct.httpclient.TestFeatures;
+import ru.yandex.qatools.Tag;
+import ru.yandex.qatools.allure.annotations.Description;
+import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Stories;
+
+import java.util.List;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static ru.yandex.autotests.irt.testutils.allure.TestSteps.assertThat;
+import static ru.yandex.autotests.irt.testutils.allure.TestSteps.assumeThat;
+
+@Aqua.Test
+@Description("Поля цели Метрики (cmd = ajaxGetGoalsForRetargeting)")
+@Stories(TestFeatures.Retargeting.AJAX_GET_GOALS_FOR_RETARGETING)
+@Features(TestFeatures.RETARGETING)
+@Tag(CmdTag.AJAX_GET_GOALS_FOR_RETARGETING)
+@Tag(ObjectTag.RETAGRETING)
+@Tag(TrunkTag.YES)
+public class AjaxGetGoalsForRetargetingFieldsTest {
+
+    private static final String CLIENT = "at-direct-b-getgoals-onegoal";
+
+    private static final Long GOAL_ID = 4028110402L;
+    private static final String GOAL_NAME = "counter2 :: посетил сайт";
+    private static final String GOAL_DOMAIN = "ya.ru";
+    private static final Long COUNTER_ID = 28110402L;
+
+    @ClassRule
+    public static DirectCmdRule cmdRule = DirectCmdRule.stepsClassRule().as(CLIENT);
+
+    private static AjaxGetGoalsForRetargetingItem actualGoal;
+
+    @BeforeClass
+    public static void beforeClass() {
+        List<AjaxGetGoalsForRetargetingItem> goals =
+                cmdRule.cmdSteps().retargetingSteps().getAjaxGetGoalsForRetargeting(CLIENT);
+        assumeThat("получили одну цель", goals, hasSize(1));
+        actualGoal = goals.get(0);
+    }
+
+    @Test
+    @Description("Поле goal_id цели Метрики (cmd = ajaxGetGoalsForRetargeting)")
+    @ru.yandex.qatools.allure.annotations.TestCaseId("9947")
+    public void testGoalIdAtAjaxGetGoalsForRetargeting() {
+        assertThat("id цели соответствует ожидаемому",
+                actualGoal.getGoalId(), equalTo(GOAL_ID));
+    }
+
+    @Test
+    @Description("Поле goal_name цели Метрики (cmd = ajaxGetGoalsForRetargeting)")
+    @ru.yandex.qatools.allure.annotations.TestCaseId("9948")
+    public void testGoalNameAtAjaxGetGoalsForRetargeting() {
+        assertThat("имя цели соответствует ожидаемому",
+                actualGoal.getGoalName(), equalTo(GOAL_NAME));
+    }
+
+    @Test
+    @Description("Поле goal_domain цели Метрики (cmd = ajaxGetGoalsForRetargeting)")
+    @ru.yandex.qatools.allure.annotations.TestCaseId("9949")
+    public void testGoalDomainAtAjaxGetGoalsForRetargeting() {
+        assertThat("домен цели соответствует ожидаемому",
+                actualGoal.getGoalDomain(), equalTo(GOAL_DOMAIN));
+    }
+
+    @Test
+    @Description("Поле counter_id цели Метрики (cmd = ajaxGetGoalsForRetargeting)")
+    @ru.yandex.qatools.allure.annotations.TestCaseId("9950")
+    public void testCounterIdAtAjaxGetGoalsForRetargeting() {
+        assertThat("id счетчика соответствует ожидаемому",
+                actualGoal.getCounterId(), equalTo(COUNTER_ID));
+    }
+
+    @Test
+    @Description("Поле allow_to_use цели Метрики (cmd = ajaxGetGoalsForRetargeting)")
+    @ru.yandex.qatools.allure.annotations.TestCaseId("9951")
+    public void testAllowToUseAtAjaxGetGoalsForRetargeting() {
+        assertThat("доступность цели соответствует ожидаемой",
+                actualGoal.getAllowToUse(), equalTo(1));
+    }
+}

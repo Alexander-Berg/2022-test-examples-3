@@ -1,0 +1,235 @@
+juggler:
+  checks:
+
+  - service: disk_free_space
+    nodata_mode: force_ok
+  - service: fresh-core-dumps
+    nodata_mode: force_ok
+  - service: fresh-hprof-files
+    nodata_mode: force_ok
+  - service: logrotate
+    nodata_mode: force_ok
+  - service: nginx
+  - service: push-client-status
+    nodata_mode: force_ok
+
+  # Check market-mailer-io-error-cnt
+  # https://juggler.yandex-team.ru/check_details/?host=mailer-testing&service=market-mailer-io-error-cnt&last=1DAY&mode=edit
+  - check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "market-mailer-io-error-cnt", "path": "/stat?monitoring=IO_ERROR_CNT"},
+        {"service": "market-mailer-no-new-spam", "path": "/stat?monitoring=NO_NEW_SPAM"},
+        {"service": "market-mailer-receipt-letters-errors", "path": "/stat?monitoring=ERRORS_WITH_RECEIPT_LETTERS"},
+        {"service": "market-mailer-receipt-letters-delay", "path": "/stat?monitoring=RECEIPT_LETTERS_DELAY"},
+        {"service": "market-mailer-no-triggers-in-error-state", "path": "/stat?monitoring=NO_TRIGGERS_IN_ERROR_STATE"},
+        {"service": "market-mailer-no-letters-for-last-day", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_DAY"},
+        {"service": "market-mailer-no-letters-for-last-hour", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_HOUR"},
+        {"service": "market-mailer-too-many-letters-not-sent", "path": "/stat?monitoring=TOO_MANY_LETTERS_NOT_SENT"},
+        {"service": "market-mailer-monitoring", "path": "/monitoring/monitor"} ]
+
+        '
+    service: market-mailer-io-error-cnt
+
+  # Check market-mailer-monitoring
+  # https://juggler.yandex-team.ru/check_details/?host=mailer-testing&service=market-mailer-monitoring&last=1DAY&mode=edit
+  - check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "market-mailer-io-error-cnt", "path": "/stat?monitoring=IO_ERROR_CNT"},
+        {"service": "market-mailer-no-new-spam", "path": "/stat?monitoring=NO_NEW_SPAM"},
+        {"service": "market-mailer-receipt-letters-errors", "path": "/stat?monitoring=ERRORS_WITH_RECEIPT_LETTERS"},
+        {"service": "market-mailer-receipt-letters-delay", "path": "/stat?monitoring=RECEIPT_LETTERS_DELAY"},
+        {"service": "market-mailer-no-triggers-in-error-state", "path": "/stat?monitoring=NO_TRIGGERS_IN_ERROR_STATE"},
+        {"service": "market-mailer-no-letters-for-last-day", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_DAY"},
+        {"service": "market-mailer-no-letters-for-last-hour", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_HOUR"},
+        {"service": "market-mailer-too-many-letters-not-sent", "path": "/stat?monitoring=TOO_MANY_LETTERS_NOT_SENT"},
+        {"service": "market-mailer-monitoring", "path": "/monitoring/monitor"} ]
+
+        '
+    service: market-mailer-monitoring
+
+  # Check market-mailer-no-letters-for-last-day
+  # https://juggler.yandex-team.ru/check_details/?host=mailer-testing&service=market-mailer-no-letters-for-last-day&last=1DAY&mode=edit
+  - check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "market-mailer-io-error-cnt", "path": "/stat?monitoring=IO_ERROR_CNT"},
+        {"service": "market-mailer-no-new-spam", "path": "/stat?monitoring=NO_NEW_SPAM"},
+        {"service": "market-mailer-receipt-letters-errors", "path": "/stat?monitoring=ERRORS_WITH_RECEIPT_LETTERS"},
+        {"service": "market-mailer-receipt-letters-delay", "path": "/stat?monitoring=RECEIPT_LETTERS_DELAY"},
+        {"service": "market-mailer-no-triggers-in-error-state", "path": "/stat?monitoring=NO_TRIGGERS_IN_ERROR_STATE"},
+        {"service": "market-mailer-no-letters-for-last-day", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_DAY"},
+        {"service": "market-mailer-no-letters-for-last-hour", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_HOUR"},
+        {"service": "market-mailer-too-many-letters-not-sent", "path": "/stat?monitoring=TOO_MANY_LETTERS_NOT_SENT"},
+        {"service": "market-mailer-monitoring", "path": "/monitoring/monitor"} ]
+
+        '
+    service: market-mailer-no-letters-for-last-day
+
+  # Check market-mailer-no-letters-for-last-hour
+  # https://juggler.yandex-team.ru/check_details/?host=mailer-testing&service=market-mailer-no-letters-for-last-hour&last=1DAY&mode=edit
+  - check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "market-mailer-io-error-cnt", "path": "/stat?monitoring=IO_ERROR_CNT"},
+        {"service": "market-mailer-no-new-spam", "path": "/stat?monitoring=NO_NEW_SPAM"},
+        {"service": "market-mailer-receipt-letters-errors", "path": "/stat?monitoring=ERRORS_WITH_RECEIPT_LETTERS"},
+        {"service": "market-mailer-receipt-letters-delay", "path": "/stat?monitoring=RECEIPT_LETTERS_DELAY"},
+        {"service": "market-mailer-no-triggers-in-error-state", "path": "/stat?monitoring=NO_TRIGGERS_IN_ERROR_STATE"},
+        {"service": "market-mailer-no-letters-for-last-day", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_DAY"},
+        {"service": "market-mailer-no-letters-for-last-hour", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_HOUR"},
+        {"service": "market-mailer-too-many-letters-not-sent", "path": "/stat?monitoring=TOO_MANY_LETTERS_NOT_SENT"},
+        {"service": "market-mailer-monitoring", "path": "/monitoring/monitor"} ]
+
+        '
+    service: market-mailer-no-letters-for-last-hour
+
+  # Check market-mailer-no-new-spam
+  # https://juggler.yandex-team.ru/check_details/?host=mailer-testing&service=market-mailer-no-new-spam&last=1DAY&mode=edit
+  - check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "market-mailer-io-error-cnt", "path": "/stat?monitoring=IO_ERROR_CNT"},
+        {"service": "market-mailer-no-new-spam", "path": "/stat?monitoring=NO_NEW_SPAM"},
+        {"service": "market-mailer-receipt-letters-errors", "path": "/stat?monitoring=ERRORS_WITH_RECEIPT_LETTERS"},
+        {"service": "market-mailer-receipt-letters-delay", "path": "/stat?monitoring=RECEIPT_LETTERS_DELAY"},
+        {"service": "market-mailer-no-triggers-in-error-state", "path": "/stat?monitoring=NO_TRIGGERS_IN_ERROR_STATE"},
+        {"service": "market-mailer-no-letters-for-last-day", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_DAY"},
+        {"service": "market-mailer-no-letters-for-last-hour", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_HOUR"},
+        {"service": "market-mailer-too-many-letters-not-sent", "path": "/stat?monitoring=TOO_MANY_LETTERS_NOT_SENT"},
+        {"service": "market-mailer-monitoring", "path": "/monitoring/monitor"} ]
+
+        '
+    service: market-mailer-no-new-spam
+
+  # Check market-mailer-no-triggers-in-error-state
+  # https://juggler.yandex-team.ru/check_details/?host=mailer-testing&service=market-mailer-no-triggers-in-error-state&last=1DAY&mode=edit
+  - check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "market-mailer-io-error-cnt", "path": "/stat?monitoring=IO_ERROR_CNT"},
+        {"service": "market-mailer-no-new-spam", "path": "/stat?monitoring=NO_NEW_SPAM"},
+        {"service": "market-mailer-receipt-letters-errors", "path": "/stat?monitoring=ERRORS_WITH_RECEIPT_LETTERS"},
+        {"service": "market-mailer-receipt-letters-delay", "path": "/stat?monitoring=RECEIPT_LETTERS_DELAY"},
+        {"service": "market-mailer-no-triggers-in-error-state", "path": "/stat?monitoring=NO_TRIGGERS_IN_ERROR_STATE"},
+        {"service": "market-mailer-no-letters-for-last-day", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_DAY"},
+        {"service": "market-mailer-no-letters-for-last-hour", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_HOUR"},
+        {"service": "market-mailer-too-many-letters-not-sent", "path": "/stat?monitoring=TOO_MANY_LETTERS_NOT_SENT"},
+        {"service": "market-mailer-monitoring", "path": "/monitoring/monitor"} ]
+
+        '
+    service: market-mailer-no-triggers-in-error-state
+
+  # Check market-mailer-receipt-letters-delay
+  # https://juggler.yandex-team.ru/check_details/?host=mailer-testing&service=market-mailer-receipt-letters-delay&last=1DAY&mode=edit
+  - check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "market-mailer-io-error-cnt", "path": "/stat?monitoring=IO_ERROR_CNT"},
+        {"service": "market-mailer-no-new-spam", "path": "/stat?monitoring=NO_NEW_SPAM"},
+        {"service": "market-mailer-receipt-letters-errors", "path": "/stat?monitoring=ERRORS_WITH_RECEIPT_LETTERS"},
+        {"service": "market-mailer-receipt-letters-delay", "path": "/stat?monitoring=RECEIPT_LETTERS_DELAY"},
+        {"service": "market-mailer-no-triggers-in-error-state", "path": "/stat?monitoring=NO_TRIGGERS_IN_ERROR_STATE"},
+        {"service": "market-mailer-no-letters-for-last-day", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_DAY"},
+        {"service": "market-mailer-no-letters-for-last-hour", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_HOUR"},
+        {"service": "market-mailer-too-many-letters-not-sent", "path": "/stat?monitoring=TOO_MANY_LETTERS_NOT_SENT"},
+        {"service": "market-mailer-monitoring", "path": "/monitoring/monitor"} ]
+
+        '
+    service: market-mailer-receipt-letters-delay
+
+  # Check market-mailer-receipt-letters-errors
+  # https://juggler.yandex-team.ru/check_details/?host=mailer-testing&service=market-mailer-receipt-letters-errors&last=1DAY&mode=edit
+  - check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "market-mailer-io-error-cnt", "path": "/stat?monitoring=IO_ERROR_CNT"},
+        {"service": "market-mailer-no-new-spam", "path": "/stat?monitoring=NO_NEW_SPAM"},
+        {"service": "market-mailer-receipt-letters-errors", "path": "/stat?monitoring=ERRORS_WITH_RECEIPT_LETTERS"},
+        {"service": "market-mailer-receipt-letters-delay", "path": "/stat?monitoring=RECEIPT_LETTERS_DELAY"},
+        {"service": "market-mailer-no-triggers-in-error-state", "path": "/stat?monitoring=NO_TRIGGERS_IN_ERROR_STATE"},
+        {"service": "market-mailer-no-letters-for-last-day", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_DAY"},
+        {"service": "market-mailer-no-letters-for-last-hour", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_HOUR"},
+        {"service": "market-mailer-too-many-letters-not-sent", "path": "/stat?monitoring=TOO_MANY_LETTERS_NOT_SENT"},
+        {"service": "market-mailer-monitoring", "path": "/monitoring/monitor"} ]
+
+        '
+    service: market-mailer-receipt-letters-errors
+
+  # Check market-mailer-too-many-letters-not-sent
+  # https://juggler.yandex-team.ru/check_details/?host=mailer-testing&service=market-mailer-too-many-letters-not-sent&last=1DAY&mode=edit
+  - check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "market-mailer-io-error-cnt", "path": "/stat?monitoring=IO_ERROR_CNT"},
+        {"service": "market-mailer-no-new-spam", "path": "/stat?monitoring=NO_NEW_SPAM"},
+        {"service": "market-mailer-receipt-letters-errors", "path": "/stat?monitoring=ERRORS_WITH_RECEIPT_LETTERS"},
+        {"service": "market-mailer-receipt-letters-delay", "path": "/stat?monitoring=RECEIPT_LETTERS_DELAY"},
+        {"service": "market-mailer-no-triggers-in-error-state", "path": "/stat?monitoring=NO_TRIGGERS_IN_ERROR_STATE"},
+        {"service": "market-mailer-no-letters-for-last-day", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_DAY"},
+        {"service": "market-mailer-no-letters-for-last-hour", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_HOUR"},
+        {"service": "market-mailer-too-many-letters-not-sent", "path": "/stat?monitoring=TOO_MANY_LETTERS_NOT_SENT"},
+        {"service": "market-mailer-monitoring", "path": "/monitoring/monitor"} ]
+
+        '
+    service: market-mailer-too-many-letters-not-sent
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=mailer-testing&service=ping&last=1DAY&mode=edit
+  - check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "market-mailer-io-error-cnt", "path": "/stat?monitoring=IO_ERROR_CNT"},
+        {"service": "market-mailer-no-new-spam", "path": "/stat?monitoring=NO_NEW_SPAM"},
+        {"service": "market-mailer-receipt-letters-errors", "path": "/stat?monitoring=ERRORS_WITH_RECEIPT_LETTERS"},
+        {"service": "market-mailer-receipt-letters-delay", "path": "/stat?monitoring=RECEIPT_LETTERS_DELAY"},
+        {"service": "market-mailer-no-triggers-in-error-state", "path": "/stat?monitoring=NO_TRIGGERS_IN_ERROR_STATE"},
+        {"service": "market-mailer-no-letters-for-last-day", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_DAY"},
+        {"service": "market-mailer-no-letters-for-last-hour", "path": "/stat?monitoring=NO_LETTERS_FOR_LAST_HOUR"},
+        {"service": "market-mailer-too-many-letters-not-sent", "path": "/stat?monitoring=TOO_MANY_LETTERS_NOT_SENT"},
+        {"service": "market-mailer-monitoring", "path": "/monitoring/monitor"} ]
+
+        '
+    service: ping
+
+  - service: memory_anon_usage
+    check_options:
+      args: [ "-crit-anon-usage", "90", "-warn-anon-usage", "80" ]
+
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_mailer_sas
+    - NANNY%testing_market_mailer_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: mailer-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - marketmailer
+    - testing
+    - market
+    - _market_
+    ttl: 900

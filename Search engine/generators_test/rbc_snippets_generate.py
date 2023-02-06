@@ -1,0 +1,59 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*
+
+import os
+import sys
+import json
+import argparse
+import requests
+import yt.wrapper as yt
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'system'))
+import misc
+import xml_validator
+from basic_mapper import BasicSnippetMapper
+
+
+PROVIDER_NAME = 'rbc'
+
+
+class RBCMapper(BasicSnippetMapper):
+
+    def __call__(self, row):
+        data =  {'key': '{provider}~{company_id}'.format(provider=PROVIDER_NAME,
+                                                         company_id=row.get('key')),
+                 'value': '{snip_name}={snip_text}'.format(snip_name=self.params.get('snippet_name'),
+                                                           snip_text=row.get('value'))}
+        if self.validator.validate(xml_validator.parse(row.get('value'))):
+            data.update({'@table_index': 0})
+        else:
+            data.update({'errors': str(self.validator.error_log),
+                         '@table_index': 1})
+        yield data
+
+def map(params, client):
+    if params.get('schema'):
+        files = [params.get('schema')]
+    else:
+        files = []
+    validation_errors = params.get('error_log')
+    client.run_map(RBCMapper(params),
+                   params.get('pre_processing_out') or params.get('input_table'),
+                   [params.get('generating_out') or params.get('processing_out'),
+                    validation_errors],
+                   format=yt.JsonFormat(control_attributes_mode="row_fields"),
+                   local_files=files)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Generates RBC snippets')
+    parser.add_argument('--cluster',type=str, help='YT cluster')
+    parser.add_argument('--parameters',
+                        type=str,
+                        help='Dict with job parameters')
+    args = parser.parse_args()
+    yt_client = misc.get_client(os.environ['YT_TOKEN'],
+                                args.cluster,
+                                generation_stage=True)
+    params = json.loads(args.parameters)
+    map(params, yt_client)

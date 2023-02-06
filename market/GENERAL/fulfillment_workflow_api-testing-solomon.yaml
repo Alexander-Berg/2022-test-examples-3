@@ -1,0 +1,84 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dfulfillment_workflow_api-testing-solomon
+
+juggler:
+  checks:
+  # Check http-code-4xx-percent
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 20%
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - fulfillment_workflow_api-testing:ff-workflow-api_TESTING_4xx-percent
+    service: http-code-4xx-percent
+
+  # Check http-code-5xx-percent
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 0
+        time_start: 23
+        warn: 20%
+      nodata_mode: force_ok
+    children:
+    - fulfillment_workflow_api-testing:ff-workflow-api_TESTING_5xx-percent
+    service: http-code-5xx-percent
+
+  # Check many-attemtps-for-some-task-in-dbQueue
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 0
+        time_start: 23
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - EVENTS%host=fulfillment_workflow_api-testing & service=fulfillment_workflow_api_testing_db_queue_many_attempts_number_*:all:all
+    service: many-attempts-for-some-task-in-dbQueue
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    check_options: {}
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: fulfillment_workflow_api-testing-solomon
+    namespace: market.ff
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - fulfillment_workflow_api
+    - market
+    - _market_
+    ttl: 900

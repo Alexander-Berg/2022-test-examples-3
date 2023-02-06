@@ -1,0 +1,19 @@
+context:
+  default:
+    service_name: ow_runtime_market
+    servername_regexp: '(ow\\.market\\.yandex\\.ru)|(ow\\.fslb\\.yandex\\.ru)'
+    vs: market
+    antirobot: true
+    antirobot_service_name: market
+    health_check: '"GET /ping HTTP/1.1\r\nHost: heartbeat-ow.market.yandex.ru\r\n\r\n"'
+    cert: fslb-testing
+
+servers:
+  default:
+    main:
+      - name: "N%testing_market_operator_window_vla"
+        timeout: "35s"
+        plain_http_backend: True
+      - name: "N%testing_market_operator_window_sas"
+        timeout: "35s"
+        plain_http_backend: True

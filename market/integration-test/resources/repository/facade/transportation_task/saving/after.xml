@@ -1,0 +1,98 @@
+<dataset>
+    <register
+            id="1000"
+            type="PLAN"
+            date="2020-10-22 13:17:29.00 +0000"
+            status="NEW"
+            comment="comment 1"
+    />
+    <register_unit
+            id="10001"
+            type="ITEM"
+            partial_ids='[{"VALUE": "31511473", "idType": "order_id"}, {"value": "arlt.024137", "idType": "article"}]'
+            counts='[{"quantity": 1000, "countType": "FIT"}]'
+            unit_meta='{"name": "встраиваемый светильник arlight cl-kardan-s102x102-9w warm (wh, 38 deg)", "price": 2206, "boxcount": 1,"vendorcodes": ["620849"]}'
+            width="46"
+            height="46"
+            length="46"
+            weight_gross="4"
+            register_id="1000"
+    />
+    <register_unit
+            id="10002"
+            type="PALLET"
+            register_id="1000"
+    />
+    <register_unit_relation
+            id="10001"
+            parent_id="10002"
+    />
+    <transportation_task
+            id="1"
+            logistic_point_from_id="10"
+            logistic_point_to_id="20"
+            register_id="1000"
+            status="PALLETS_CREATED"
+            client_name="unknown"
+            external_id="1234"
+    />
+    <!-- state before execution is above-->
+    <!-- after execution is below -->
+    <register
+            id="1"
+            type="PLAN"
+            status="NEW"
+            comment="comment 2"
+    />
+    <register_unit
+            id="1"
+            type="PALLET"
+            register_id="1"
+    />
+    <register_unit
+            id="2"
+            type="ITEM"
+            counts='[{"quantity": 1000, "countType": "FIT"}]'
+            register_id="1"
+    />
+    <register_unit_relation
+            id="2"
+            parent_id="1"
+    />
+    <transportation id="1"/>
+    <transportation_unit id="1" type="INBOUND"/>
+    <transportation_unit id="2" type="OUTBOUND"/>
+    <transportation_unit_register register_id="1" transportation_unit_id="2"/>
+
+    <register
+            id="2"
+            type="PLAN"
+            status="NEW"
+            comment="comment 2"
+    />
+    <register_unit
+            id="3"
+            type="PALLET"
+            register_id="2"
+    />
+    <register_unit
+            id="4"
+            type="ITEM"
+            counts='[{"quantity": 1000, "countType": "FIT"}]'
+            register_id="2"
+    />
+    <register_unit_relation
+            id="4"
+            parent_id="3"
+    />
+    <transportation id="2"/>
+    <transportation_unit id="3" type="INBOUND"/>
+    <transportation_unit id="4" type="OUTBOUND"/>
+    <transportation_unit_register register_id="2" transportation_unit_id="4"/>
+
+    <transportation_task_transportation transportation_id="1" transportation_task_id="1"/>
+    <transportation_task_transportation transportation_id="2" transportation_task_id="1"/>
+
+    <axapta_event id="1" type="NEW_TRANSPORTATION" transportation_id="1"/>
+    <axapta_event id="2" type="NEW_TRANSPORTATION" transportation_id="2"/>
+</dataset>

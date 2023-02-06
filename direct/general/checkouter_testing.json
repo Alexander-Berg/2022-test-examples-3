@@ -1,0 +1,270 @@
+{
+  "tableName": "checkouter_testing",
+  "splits": {
+    "method": "http_method",
+    "url": "url",
+    "dc": "if(dictGetString('dc', 'dc', sipHash64(host)) <> '', dictGetString('dc', 'dc', sipHash64(host)), substring(host, 1, 3))",
+    "context": "kv_values[indexOf(kv_keys, 'context')]"
+  },
+  "defaultFilter": "marketEnvironmentProfile = 'standard'",
+  "metrics": [
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.${dc}.${method}.${url}.5xx-percent",
+        "checkouter.TESTING.${dc}.${url}.5xx-percent",
+        "checkouter.TESTING.${method}.${url}.5xx-percent",
+        "checkouter.TESTING.${url}.5xx-percent"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code >=500 and http_code < 600) / count() * 100",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.context.${dc}.${method}.5xx-percent",
+        "checkouter.TESTING.context.${dc}.5xx-percent",
+        "checkouter.TESTING.context.${method}.5xx-percent",
+        "checkouter.TESTING.context.5xx-percent"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code >=500 and http_code < 600 and not service_url) / countIf(not service_url) * 100",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.${dc}.${method}.5xx-percent",
+        "checkouter.TESTING.${dc}.5xx-percent",
+        "checkouter.TESTING.${method}.5xx-percent",
+        "checkouter.TESTING.5xx-percent"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code >=500 and http_code < 600 and not service_url) / countIf(not service_url) * 100",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.${dc}.${method}.${url}.timings",
+        "checkouter.TESTING.${dc}.${url}.timings",
+        "checkouter.TESTING.${method}.${url}.timings",
+        "checkouter.TESTING.${url}.timings"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "resptime_ms",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.context.${context}.${dc}.${method}.${url}.timings",
+        "checkouter.TESTING.context.${context}.${dc}.${url}.timings",
+        "checkouter.TESTING.context.${context}.${method}.${url}.timings",
+        "checkouter.TESTING.context.${context}.${url}.timings"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "resptime_ms",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.${dc}.${method}.timings",
+        "checkouter.TESTING.${dc}.timings",
+        "checkouter.TESTING.${method}.timings",
+        "checkouter.TESTING.timings"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "resptime_ms",
+      "filter":"not service_url AND marketEnvironmentProfile = 'standard'",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.${dc}.${method}.${url}.errors",
+        "checkouter.TESTING.${dc}.${url}.errors",
+        "checkouter.TESTING.${method}.${url}.errors",
+        "checkouter.TESTING.${url}.errors"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code != 200 and not service_url) / countIf(not service_url)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.context.${context}.${dc}.${method}.${url}.errors",
+        "checkouter.TESTING.context.${context}.${dc}.${url}.errors",
+        "checkouter.TESTING.context.${context}.${method}.${url}.errors",
+        "checkouter.TESTING.context.${context}.${url}.errors"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code != 200 and not service_url) / countIf(not service_url)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.${dc}.${method}.errors",
+        "checkouter.TESTING.${dc}.errors",
+        "checkouter.TESTING.${method}.errors",
+        "checkouter.TESTING.errors"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code != 200 and not service_url) / countIf(not service_url)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.${dc}.${method}.${url}.rps",
+        "checkouter.TESTING.${dc}.${url}.rps",
+        "checkouter.TESTING.${method}.${url}.rps",
+        "checkouter.TESTING.${url}.rps"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "count()/(5*60)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.context.${context}.${dc}.${method}.${url}.rps",
+        "checkouter.TESTING.context.${context}.${dc}.${url}.rps",
+        "checkouter.TESTING.context.${context}.${method}.${url}.rps",
+        "checkouter.TESTING.context.${context}.${url}.rps"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "count()/(5*60)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.${dc}.${method}.rps",
+        "checkouter.TESTING.${dc}.rps",
+        "checkouter.TESTING.${method}.rps",
+        "checkouter.TESTING.rps"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(not service_url)/(5*60)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.${dc}.${method}.${url}.5xx",
+        "checkouter.TESTING.${dc}.${url}.5xx",
+        "checkouter.TESTING.${method}.${url}.5xx",
+        "checkouter.TESTING.${url}.5xx"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code >=500 and http_code < 600) / count()",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.${dc}.${method}.5xx",
+        "checkouter.TESTING.${dc}.5xx",
+        "checkouter.TESTING.${method}.5xx",
+        "checkouter.TESTING.5xx"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code >=500 and http_code < 600 and not service_url) / countIf(not service_url)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.${dc}.${method}.${url}.4xx-percent",
+        "checkouter.TESTING.${dc}.${url}.4xx-percent",
+        "checkouter.TESTING.${method}.${url}.4xx-percent",
+        "checkouter.TESTING.${url}.4xx"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code >=400 and http_code < 500) / count() * 100",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.context.${context}.${dc}.${method}.${url}.4xx-percent",
+        "checkouter.TESTING.context.${context}.${dc}.${url}.4xx-percent",
+        "checkouter.TESTING.context.${context}.${method}.${url}.4xx-percent",
+        "checkouter.TESTING.context.${context}.${url}.4xx"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code >=400 and http_code < 500) / count() * 100",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.${dc}.${method}.4xx-percent",
+        "checkouter.TESTING.${dc}.4xx-percent",
+        "checkouter.TESTING.${method}.4xx-percent",
+        "checkouter.TESTING.4xx-percent"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code >=400 and http_code < 500 and not service_url) / countIf(not service_url) * 100",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.${method}.${url}.hit-rate",
+        "checkouter.TESTING.${url}.hit-rate"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code = 420)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.${method}.hit-rate",
+        "checkouter.TESTING.hit-rate"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code = 420 and not service_url)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.pure.${dc}.${method}.${url}.timings",
+        "checkouter.TESTING.pure.${dc}.${url}.timings",
+        "checkouter.TESTING.pure.${method}.${url}.timings",
+        "checkouter.TESTING.pure.${url}.timings"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "pure_time_ms",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.pure.${dc}.${method}.timings",
+        "checkouter.TESTING.pure.${dc}.timings",
+        "checkouter.TESTING.pure.${method}.timings",
+        "checkouter.TESTING.pure.timings"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "pure_time_ms",
+      "filter":"not service_url AND marketEnvironmentProfile = 'standard'",
+      "type": "QUANTILE_TIMING"
+    }
+  ],
+  "dashboards": [
+    {
+      "metric": "checkouter.TESTING.${method}.timings",
+      "id": "checkouter-method-timings-testing",
+      "title": "checkouter method timings",
+      "graphsInRow": 2,
+      "tags": [
+        "checkouter"
+      ]
+    },
+    {
+      "metric": "checkouter.TESTING.${method}.errors",
+      "id": "checkouter-method-errors-testing",
+      "title": "checkouter method errors (5xx)",
+      "graphsInRow": 2,
+      "tags": [
+        "checkouter"
+      ]
+    },
+    {
+      "metric": "checkouter.TESTING.${method}.rps",
+      "id": "checkouter-method-rps-testing",
+      "title": "checkouter method rps",
+      "graphsInRow": 2,
+      "tags": [
+        "checkouter"
+      ]
+    }
+  ]
+}

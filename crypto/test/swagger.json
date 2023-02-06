@@ -1,0 +1,97 @@
+{
+    "info": {
+        "contact": {
+            "url": "https://wiki.yandex-team.ru/crypta/"
+        },
+        "description": "Provides ways to interact with Crypta",
+        "version": "8833718",
+        "title": "Crypta API"
+    },
+    "paths": {
+        "/lab/segment": {
+            "get": {
+                "description": "",
+                "parameters": [
+                    {
+                        "required": false,
+                        "type": "string",
+                        "name": "lang",
+                        "in": "query"
+                    }
+                ],
+                "tags": [
+                    "lab"
+                ],
+                "produces": [
+                    "application/json; charset=utf-8"
+                ],
+                "summary": "Get all segments",
+                "operationId": "getAllSegments",
+                "consumes": [
+                    "application/json; charset=utf-8"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "items": {
+                                "$ref": "#/definitions/ru.yandex.crypta.lab.proto.Segment"
+                            },
+                            "type": "array"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "lab"
+        }
+    ],
+    "basePath": "/",
+    "definitions": {
+        "ru.yandex.crypta.lab.proto.Segment.Export": {
+            "type": "object",
+            "properties": {
+                "exportTypeId" : {
+                    "type" : "string"
+                },
+                "keywordId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "segmentId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "tags": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            }
+        },
+        "ru.yandex.crypta.lab.proto.Segment": {
+            "type": "object",
+            "properties": {
+                "exports": {
+                    "$ref": "#/definitions/ru.yandex.crypta.lab.proto.Segment.Exports"
+                }
+            }
+        },
+        "ru.yandex.crypta.lab.proto.Segment.Exports": {
+            "type": "object",
+            "properties": {
+                "exports": {
+                    "items": {
+                        "$ref": "#/definitions/ru.yandex.crypta.lab.proto.Segment.Export"
+                    },
+                    "type": "array"
+                }
+            }
+        }
+    },
+    "swagger": "2.0"
+}

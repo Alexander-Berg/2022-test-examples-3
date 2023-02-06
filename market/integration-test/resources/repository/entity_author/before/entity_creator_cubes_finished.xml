@@ -1,0 +1,81 @@
+<dataset>
+    <pipeline id="1" author="staff-login" name="QUICK_TRIP_CREATOR"
+              payload='{"partnerId":1,"movingPartnerId":1, "name": "Дежурство на складе",
+              "interval":{"from":"2022-01-10T10:00:00","to":"2022-01-10T22:00:00"},"priceCents":600000,"pallets":33}'
+              status="EXECUTING"/>
+
+    <pipeline_cube id="1" name="ROOT_CUBE" status="FINISHED" pipeline_id="1" result="{}"/>
+    <pipeline_cube id="2" name="ROUTE_SCHEDULE_CREATOR" status="FINISHED" result='{"dutyId": 101}' pipeline_id="1"/>
+
+    <cube_relation from_cube_id="1" to_cube_id="2"/>
+
+
+    <pipeline id="2" author="staff-login-2" name="QUICK_TRIP_CREATOR"
+              payload='{"partnerId":1,"movingPartnerId":1, "name": "Дежурство на складе",
+              "interval":{"from":"2022-01-10T10:00:00","to":"2022-01-10T22:00:00"},"priceCents":600000,"pallets":33}'
+              status="EXECUTING"/>
+
+    <pipeline_cube id="3" name="ROOT_CUBE" status="FINISHED" pipeline_id="2" result="{}"/>
+    <pipeline_cube id="4" name="ROUTE_SCHEDULE_CREATOR" status="FINISHED" result='{"dutyId": 101}' pipeline_id="2"/>
+
+    <cube_relation from_cube_id="3" to_cube_id="4"/>
+
+
+    <pipeline id="3" author="staff-login-3" name="QUICK_TRIP_CREATOR"
+              payload='{"partnerId":1,"movingPartnerId":1, "name": "Дежурство на складе",
+              "interval":{"from":"2022-01-10T10:00:00","to":"2022-01-10T22:00:00"},"priceCents":600000,"pallets":33}'
+              status="EXECUTING"/>
+
+    <pipeline_cube id="5" name="ROOT_CUBE" status="FINISHED" pipeline_id="3" result="{}"/>
+    <pipeline_cube id="6" name="ROUTE_SCHEDULE_CREATOR" status="FINISHED" result='{"dutyId": 102}' pipeline_id="3"/>
+
+    <cube_relation from_cube_id="5" to_cube_id="6"/>
+
+
+    <pipeline id="4" author="staff-login-4" name="QUICK_TRIP_CREATOR"
+              payload='{"partnerId":1,"movingPartnerId":1, "name": "Дежурство на складе",
+              "interval":{"from":"2022-01-10T10:00:00","to":"2022-01-10T22:00:00"},"priceCents":600000,"pallets":33}'
+              status="EXECUTING"/>
+
+    <pipeline_cube id="7" name="ROOT_CUBE" status="FINISHED" pipeline_id="4" result="{}"/>
+    <pipeline_cube id="8" name="ROUTE_SCHEDULE_CREATOR" status="FINISHED" pipeline_id="4"/>
+
+    <cube_relation from_cube_id="7" to_cube_id="8"/>
+
+
+    <pipeline id="5" author="staff-login-5" name="QUICK_TRIP_CREATOR"
+              payload='{"partnerId":1,"movingPartnerId":1, "name": "Дежурство на складе",
+              "interval":{"from":"2022-01-10T10:00:00","to":"2022-01-10T22:00:00"},"priceCents":600000,"pallets":33}'
+              status="EXECUTING"/>
+
+    <pipeline_cube id="9" name="ROOT_CUBE" status="FINISHED" pipeline_id="5" result="{}"/>
+    <pipeline_cube id="10" name="ROUTE_SCHEDULE_CREATOR" status="EXECUTING" pipeline_id="5"/>
+
+    <cube_relation from_cube_id="9" to_cube_id="10"/>
+
+
+    <pipeline id="6" author="staff-login-6" name="QUICK_TRIP_CREATOR"
+              payload='{"partnerId":1,"movingPartnerId":1, "name": "Дежурство на складе",
+              "interval":{"from":"2022-01-10T10:00:00","to":"2022-01-10T22:00:00"},"priceCents":600000,"pallets":33}'
+              status="FINISHED"/>
+
+    <pipeline_cube id="11" name="ROOT_CUBE" status="FINISHED" pipeline_id="6" result='{}'/>
+    <pipeline_cube id="12" name="LOGISTIC_POINT_BY_PARTNER_EXTRACTOR" status="FINISHED"
+                   result='{"logisticPointIdByPartnerId": {"75001": 10001787222, "2001003": 10001754963}}'
+                   pipeline_id="6"/>
+
+    <cube_relation from_cube_id="11" to_cube_id="12"/>
+
+
+    <pipeline id="7" author="staff-login-7" name="ROUTE_SCHEDULE_CREATOR"
+              payload='{"type": "LINEHAUL", "runId": null, "status": "ACTIVE", "routeId": 227, "subtype": "MAIN", "pointParams": [{"index": 0, "maxPallet": null, "arrivalEndTime": "19:00:00", "transitionTime": 0, "arrivalStartTime": "17:30:00", "selectedTimeSlot": null, "calendaringServiceId": null}, {"index": 1, "maxPallet": null, "arrivalEndTime": "20:00:00", "transitionTime": 2880, "arrivalStartTime": "19:00:00", "selectedTimeSlot": null, "calendaringServiceId": null}], "scheduleInfo": {"days": [1, 2, 3, 4, 5, 6, 7], "endDate": "2022-07-30", "holidays": null, "startDate": "2022-02-08", "scheduleId": 272, "holidaysIntervals": [{"to": "2022-01-01", "from": "2022-01-01"}]}, "transportInfo": {"price": null, "priceRuble": 54167, "movingPartnerId": 187431, "numberOfPallets": 33}, "slotBookingEnabled": true}'
+              status="FINISHED"/>
+
+    <pipeline_cube id="13" status="FINISHED" pipeline_id="7" result="{}" name="ROOT_CUBE"/>
+    <pipeline_cube id="14" status="FINISHED" pipeline_id="7" result='{"date": null, "type": "LINEHAUL", "price": 5416700, "runId": null, "points": [{"index": 0, "maxPallet": null, "arrivalEndTime": [19, 0], "transitionTime": 0, "arrivalStartTime": [17, 30], "selectedTimeSlot": null, "calendaringServiceId": null}, {"index": 1, "maxPallet": null, "arrivalEndTime": [20, 0], "transitionTime": 2880, "arrivalStartTime": [19, 0], "selectedTimeSlot": null, "calendaringServiceId": null}], "status": "ACTIVE", "routeId": 227, "subtype": "MAIN", "holidays": [[2022, 1, 1]], "maxPallet": 33, "daysOfWeek": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"], "scheduleId": 272, "movingPartnerId": 187431, "scheduleEndDate": [2022, 7, 30], "scheduleStartDate": [2022, 2, 8]}' name="ROUTE_SCHEDULE_CONVERTER"/>
+    <pipeline_cube id="15" status="FINISHED" pipeline_id="7" result='{"routeScheduleId": 503}' name="ROUTE_SCHEDULE_CREATOR"/>
+
+    <cube_relation from_cube_id="13" to_cube_id="14"/>
+    <cube_relation from_cube_id="14" to_cube_id="15"/>
+
+</dataset>

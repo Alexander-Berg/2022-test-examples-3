@@ -1,0 +1,100 @@
+<dataset>
+    <return_box
+            return_id="1"
+            external_id="box-external-id"
+    />
+
+    <return_box
+            return_id="1"
+            external_id="new-box-id"
+    />
+
+    <return_segment
+            return_id="1"
+            return_box_id="2"
+            unique_id="e11c5e64-3694-40c9-b9b4-126efedaa098"
+            logistic_point_id="1000"
+            logistic_point_partner_id="100"
+            logistic_point_external_id="point-external-1000"
+            logistic_point_name="point-name-1000"
+            logistic_point_type="SORTING_CENTER"
+    />
+
+    <return_segment
+            return_id="1"
+            return_box_id="2"
+            unique_id="e11c5e64-3694-40c9-b9b4-126efedaa099"
+            logistic_point_id="2000"
+            logistic_point_partner_id="200"
+            logistic_point_external_id="point-external-2000"
+            logistic_point_name="point-name-2000"
+            logistic_point_type="SORTING_CENTER"
+    />
+
+    <return_event
+            return_id="1"
+            request_id="test-request-id/1"
+            type="RETURN_SEGMENT_CREATED"
+            payload='{
+                "id": 1,
+                "type": "RETURN_SEGMENT_CREATED",
+                "boxExternalId": "new-box-id",
+                "logisticPointInfo": {
+                    "type": "SORTING_CENTER",
+                    "partnerId": 100,
+                    "logisticPointId": 1000,
+                    "logisticPointExternalId": "point-external-1000"
+                },
+                "shipmentFieldsInfo": {
+                    "recipient": null,
+                    "shipmentTime": null,
+                    "destinationInfo": null
+                }
+            }'
+    />
+
+    <queue_tasks
+            queue_name="RETURN_SEGMENT_GET_ROUTE"
+            payload='{"requestId":"test-request-id/2","returnSegmentId":1,"sortingCenterPartnerIds":null,"useStartTime":false}'
+    />
+
+    <return_event
+            return_id="1"
+            request_id="test-request-id/3"
+            type="RETURN_SEGMENT_CREATED"
+            payload='{
+                "id": 2,
+                "type": "RETURN_SEGMENT_CREATED",
+                "boxExternalId": "new-box-id",
+                "logisticPointInfo": {
+                    "type": "SORTING_CENTER",
+                    "partnerId": 200,
+                    "logisticPointId": 2000,
+                    "logisticPointExternalId": "point-external-2000"
+                },
+                "shipmentFieldsInfo": {
+                    "recipient": null,
+                    "shipmentTime": null,
+                    "destinationInfo": null
+                }
+            }'
+    />
+
+    <queue_tasks
+            queue_name="RETURN_SEGMENT_GET_ROUTE"
+            payload='{"requestId":"test-request-id/4","returnSegmentId":2,"sortingCenterPartnerIds":null,"useStartTime":false}'
+    />
+
+    <return_event
+            return_id="1"
+            request_id="test-request-id/5"
+            type="RETURN_BOXES_CHANGED"
+            payload='{
+                "type": "RETURN_BOXES_CHANGED",
+                "boxes": [
+                    {"externalId": "box-external-id"},
+                    {"externalId": "new-box-id"}
+                ]
+            }'
+    />
+</dataset>

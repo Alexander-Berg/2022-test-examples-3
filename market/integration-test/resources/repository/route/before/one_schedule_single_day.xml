@@ -1,0 +1,136 @@
+<dataset>
+    <route
+            id="1"
+            name="Unnamed, created at 2020-08-08T00:00"
+            status="ACTIVE"
+    />
+    <route_point
+            id="100"
+            route_id="1"
+            index="0"
+            partner_id="1"
+            logistics_point_id="101"
+            type="OUTBOUND"
+    />
+    <route_point
+            id="200"
+            route_id="1"
+            index="2"
+            partner_id="5"
+            logistics_point_id="105"
+            type="INBOUND"
+    />
+    <route_point
+            id="300"
+            route_id="1"
+            index="1"
+            partner_id="2"
+            logistics_point_id="102"
+            type="OUTBOUND"
+    />
+    <route_point
+            id="400"
+            route_id="1"
+            index="3"
+            partner_id="5"
+            logistics_point_id="105"
+            type="INBOUND"
+    />
+    <route_point_relation
+            from_point_id="100"
+            to_point_id="200"
+    />
+    <route_point_relation
+            from_point_id="300"
+            to_point_id="400"
+    />
+    <route_schedule
+            id="100"
+            route_id="1"
+            status="ACTIVE"
+            type="LINEHAUL"
+            days_of_week='[1]'
+            start_date="2021-01-03"
+            end_date="2021-01-03"
+            name="test_schedule"
+    />
+    <route_schedule_point
+            id="100"
+            route_schedule_id="100"
+            index="0"
+            days_offset="0"
+            time_from="12:30:00"
+            time_to="14:00:00"
+            max_pallets="10"
+            calendaring_service_id="200"
+    />
+    <route_schedule_point
+            id="200"
+            route_schedule_id="100"
+            index="1"
+            days_offset="1"
+            time_from="11:30:00"
+            time_to="12:00:00"
+            calendaring_service_id="201"
+    />
+    <route_schedule_point
+            id="300"
+            route_schedule_id="100"
+            index="2"
+            days_offset="2"
+            time_from="15:30:00"
+            time_to="16:00:00"
+            calendaring_service_id="202"
+    />
+    <route_schedule_point
+            id="400"
+            route_schedule_id="100"
+            index="3"
+            days_offset="2"
+            time_from="16:00:00"
+            time_to="17:00:00"
+            calendaring_service_id="203"
+    />
+
+    <trip id="10" route_schedule_id="100" start_date="2020-03-01" created="2021-09-29 20:00:00"/>
+
+    <TRANSPORTATION_UNIT
+            ID="1"
+            STATUS="SENT"
+            TYPE="INBOUND"
+            REQUEST_ID="15"
+            LOGISTIC_POINT_ID="2"
+            PARTNER_ID="3"
+            PLANNED_INTERVAL_START="2020-03-01 00:00:00"
+            PLANNED_INTERVAL_END="2020-03-01 00:00:00"
+            ACTUAL_DATE_TIME="2020-03-03 00:00:00"
+    />
+    <TRANSPORTATION_UNIT
+            ID="2"
+            STATUS="ACCEPTED"
+            TYPE="OUTBOUND"
+            REQUEST_ID="1"
+            LOGISTIC_POINT_ID="2"
+            PARTNER_ID="4"
+            PLANNED_INTERVAL_START="2020-03-01 00:00:00"
+            PLANNED_INTERVAL_END="2020-03-01 00:00:00"
+            ACTUAL_DATE_TIME="2020-03-03 00:00:00"
+    />
+
+    <movement id="3" status="PARTNER_CREATED" partner_id="2"/>
+
+    <transportation id="1"
+                    status="OUTBOUND_CREATED"
+                    scheme="NEW"
+                    outbound_unit_id="2"
+                    inbound_unit_id="1"
+                    planned_launch_time="2020-01-01 00:00:00"
+                    movement_id="3"
+                    transportation_source="LMS_TM_MOVEMENT"
+                    transportation_type="ORDERS_OPERATION"
+                    regular="true"
+    />
+
+    <trip_point trip_id="10" transportation_unit_id="2" index="0"/>
+
+</dataset>

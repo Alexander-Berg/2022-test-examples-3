@@ -1,0 +1,46 @@
+# Устанавливаем значение текущей даты - Mon Sep 20 00:00:00 MSK 2021
+MOCK VAR $now
+SET DateTime::FromMilliseconds(1632085200000)
+
+
+# Проверяем вычисление медианной стоимости модели
+# Для проверки берём 3 модели
+# Для первой медианная стоимость в первой таблице
+# Для второй - во второй, для третьей - в 3ей
+MOCK DIR_TABLE //home/market/production/mstat/analyst/pricechart
+NAME 2021-09-19
+SCHEMA model_id:int64, median_price:double
+{"model_id":1, "median_price":100.0}
+{"model_id":2, "median_price":200.0}
+{"model_id":3, "median_price":300.0}
+
+MOCK DIR_TABLE //home/market/production/mstat/analyst/pricechart
+NAME 2021-09-18
+SCHEMA model_id:int64, median_price:double
+{"model_id":1, "median_price":95.0}
+{"model_id":2, "median_price":180.0}
+{"model_id":3, "median_price":350.0}
+
+MOCK DIR_TABLE //home/market/production/mstat/analyst/pricechart
+NAME 2021-09-17
+SCHEMA model_id:int64, median_price:double
+{"model_id":1, "median_price":105.0}
+{"model_id":2, "median_price":150.0}
+{"model_id":3, "median_price":325.0}
+
+
+# Смотрим на таблицу по количеству заказов
+# Надо проверить количество записей с типом - 0
+# В результате джойнов должны остаться только 3 модели (4ая для проверки, что не попадёт)
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/author/agitation_order_delivery/current
+SCHEMA entity_id:int64, type:int32
+{"entity_id":1, "type":0}
+{"entity_id":1, "type":0}
+{"entity_id":1, "type":0}
+{"entity_id":2, "type":0}
+{"entity_id":2, "type":0}
+{"entity_id":2, "type":1}
+{"entity_id":2, "type":1}
+{"entity_id":3, "type":0}
+{"entity_id":4, "type":0}
+{"entity_id":4, "type":1}

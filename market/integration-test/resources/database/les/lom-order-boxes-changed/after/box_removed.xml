@@ -1,0 +1,50 @@
+<dataset>
+    <return
+            id="1"
+            source="CANCELLATION"
+            order_external_id="order-id"
+    />
+
+    <return_box
+            id="1"
+            return_id="1"
+            external_id="box-external-id"
+    />
+
+    <return_segment
+            id="1"
+            return_id="1"
+            return_box_id="1"
+            logistic_point_type="SORTING_CENTER"
+    />
+
+    <return_box
+            id="2"
+            return_id="1"
+            external_id="second-box-external-id"
+    />
+
+    <return_segment
+            id="2"
+            return_id="1"
+            return_box_id="2"
+            logistic_point_type="SORTING_CENTER"
+    />
+
+    <queue_tasks
+            queue_name="CANCEL_SC_SEGMENT"
+            payload='{"requestId":"test-request-id/1","scSegmentId":2,"sortingCenterId":0,"courierDto":null}'
+    />
+
+    <return_event
+            return_id="1"
+            request_id="test-request-id/2"
+            type="RETURN_BOXES_CHANGED"
+            payload='{
+                "type": "RETURN_BOXES_CHANGED",
+                "boxes": [
+                    {"externalId": "box-external-id"}
+                ]
+            }'
+    />
+</dataset>

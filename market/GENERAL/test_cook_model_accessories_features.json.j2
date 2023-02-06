@@ -1,0 +1,479 @@
+{#
+    So, what's the tzimmes of this test?
+
+    In a big feature set, there are a number of features joined automatically (offer features,
+    model features, category features, etc.) and a number of features computed in-place (e.g.
+    vendor equality, which would be too expensive to store separately). And there are usually
+    a lot more automatic features than computed features.
+
+    In this test, we create a number of models to test computed features (all other features for
+    these models are set to 0, that is, tables with features have no records for them) manually,
+    and a lot of models to test automatically joined features automatically.
+
+
+#}
+{% from "include/model_accessories_features.j2" import
+        pair_model_features,
+        single_model_features,
+        pair_category_features,
+        single_category_features,
+        crypta_features
+    with context %}
+{% from "include/utility.j2" import skip_features %}
+
+{% macro model(model_id) %}
+    {% set float_fetures = [
+        "overall_rating",
+        "recommenders_share",
+        "median_price",
+        "min_price",
+        "max_price",
+        "max_discount",
+    ] %}
+    {% if table == "items_model_vendor_id" %}
+        {# vendor_id is the only non-numeric value, so we handle it separately. #}
+        {% if "vendor_id" in kwargs %}
+            ["{{ model_id }}", "{{ kwargs["vendor_id"] }}", "model", "{{ day }}"]
+        {% else %}
+            ["{{ model_id }}_junk", "junk_vendor", "model", "{{ day }}"]  {# See below. #}
+        {% endif %}
+    {% elif table.startswith("items_model") %}
+        {% for correlation_name, bank, feature_names in single_model_features %}
+            {% if table.replace("items_model_", "") == correlation_name %}
+                {% if any(map(kwargs.__contains__, feature_names)) %}
+                    [
+                        "{{ model_id }}",
+                        {% for feature in feature_names %}
+                            {{ kwargs.get(feature, 0) * (1.0 if feature in float_fetures else 1) }},
+                        {% endfor %}
+                        "model",
+                        "{{ day }}"
+                    ]
+                {% else %}
+                    {#  The macro call is usually followed by a comma, so we can't just
+                        leave blank space here. Thus we just set dummy values for a dummy
+                        model (model with model_id which certainly won't match anything). #}
+                    [
+                        "{{ model_id }}_junk",
+                        {% for feature in feature_names %}
+                            {{ 0.0 if feature in float_fetures else 0 }},
+                        {% endfor %}
+                        "model",
+                        "{{ day }}"
+                    ]
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endmacro %}
+
+{% macro recipe(recipe_id, category_id) %}
+    {% if table == "items_recipe_category_id" %}
+        ["{{ recipe_id }}", "{{ category_id }}", "recipe", "{{ day }}"]
+    {% endif %}
+{% endmacro %}
+
+{% macro rule(rule_id, category_id, linked_category_id) %}
+    {% set main_recipe_id = rule_id + "M" %}
+    {% set linked_recipe_id = rule_id + "L" %}
+    {% if table == "items_rule_recipes" %}
+        ["{{ rule_id }}", "{{ main_recipe_id }}", "{{ linked_recipe_id }}", "rule", "{{ day }}"]
+    {% elif table.startswith("items_recipe") %}
+        {{ recipe(main_recipe_id, category_id) }},
+        {{ recipe(linked_recipe_id, linked_category_id) }}
+    {% endif %}
+{% endmacro %}
+
+{% macro item_features(item_id, item_type, features) %}
+    {% for correlation_name, bank, feature_names in features %}
+        {% if table.replace("features_item_" + item_type + "_", "") == correlation_name %}
+            {% if "crypta" in table %}
+                {#  We don't use raw crypta features anywhere, thus they need special handling
+                    (or should be joined to the feature set as well, which is redundant). #}
+                {% set feature_names = crypta_features %}
+            {% endif %}
+            {% if any(map(kwargs.__contains__, feature_names)) %}
+            [
+                "{{ item_id }}",
+                {% for feature in feature_names %}
+                    {{ kwargs.get(feature, 0.0) }},
+                {% endfor %}
+                "{{ item_type }}",
+                "{{ day }}"
+            ]
+            {% else %}
+            [
+                "{{ item_id }}_junk",
+                {% for feature in feature_names %}
+                    0.0,
+                {% endfor %}
+                "{{ item_type }}",
+                "{{ day }}"
+            ]
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
+
+{% macro item_pair_features(item_id, linked_item_id, item_type, features) %}
+    {% for correlation_name, bank, feature_names in features %}
+        {% if table.replace("features_item_pair_" + item_type + "_" + item_type + "_", "") == correlation_name %}
+            {% if any(map(kwargs.__contains__, feature_names)) %}
+            [
+                "{{ item_id }}",
+                "{{ linked_item_id }}",
+                {% for feature in feature_names %}
+                    {{ kwargs.get(feature, 0.0) }},
+                {% endfor %}
+                "{{ item_type }}",
+                "{{ item_type }}",
+                "{{ day }}"
+            ]
+            {% else %}
+            [
+                "{{ item_id }}_junk",
+                "{{ linked_item_id }}_junk",
+                {% for feature in feature_names %}
+                    0.0,
+                {% endfor %}
+                "{{ item_type }}",
+                "{{ item_type }}",
+                "{{ day }}"
+            ]
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
+
+{% macro generate_items_with_features(item_type, item_id_template, features) %}
+    {% set comma = joiner(",") %}
+    {% for _, _, feature_names in features %}
+        {% set i = loop.index %}
+        {% for feature in feature_names %}
+            {% set j = loop.index %}
+            {{ comma() }}
+            {% if table.startswith("items_model") and item_type == "model" %}
+                {{ model(item_id_template % (i, j), **{feature: i * 100 + j}) }}
+            {% else %}
+                {{ item_features(item_id_template % (i, j), item_type, features, **{feature: i * 100.0 + j}) }}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+{% endmacro %}
+
+{% macro generate_item_pairs_with_features(item_type, item_id_template, features) %}
+    {% set comma = joiner(",") %}
+    {% for _, _, feature_names in features %}
+        {% set i = loop.index %}
+        {% for feature in feature_names %}
+            {% set j = loop.index %}
+            {{ comma() }}
+            {{ item_pair_features(
+                item_id_template % (i, j),
+                "linked_" + item_id_template % (i, j),
+                item_type,
+                features,
+                **{feature: i * 100.0 + j}) }}
+        {% endfor %}
+    {% endfor %}
+{% endmacro %}
+
+{% macro feature_storage_schema(table, features, pair=False) %}
+    [
+        {
+            "name": "item_id",
+            "type": "String"
+        },
+        {% if pair %}
+            {
+                "name": "linked_item_id",
+                "type": "String"
+            },
+        {% endif %}
+        {% if "crypta" in table %}
+            {% for feature in crypta_features %}
+                {
+                    "name": "{{ feature }}",
+                    "type": "Float"
+                },
+            {% endfor %}
+        {% else %}
+            {% for correlation_name, bank, feature_names in features %}
+                {% if correlation_name == table %}
+                    {% for feature in feature_names %}
+                        {
+                            "name": "{{ feature }}",
+                            "type": "Float"
+                        },
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {
+            "name": "item_type",
+            "type": "String"
+        },
+        {% if pair %}
+            {
+                "name": "linked_item_type",
+                "type": "String"
+            },
+        {% endif %}
+        {
+            "name": "day",
+            "type": "String"
+        }
+    ]
+{% endmacro %}
+
+{% macro feature_storage(table, features, pair=False) %}
+    {
+        "schema": {{ feature_storage_schema(table, features, pair) }},
+        "records": [
+            {{ caller() }}
+        ]
+    }
+{% endmacro %}
+
+{% macro skip_auto_features() %}
+    {{ skip_features(pair_model_features) }},
+    {{ skip_features(single_model_features) }},
+    {{ skip_features(single_model_features) }},
+    {{ skip_features(pair_category_features) }},
+    {{ skip_features(single_category_features) }},
+    {{ skip_features(single_category_features) }}
+{% endmacro %}
+
+{% macro skip_crypta_features() %}
+    {% for feature in crypta_features %}
+        0.0, 0.0, 0.0
+        {% if not loop.last %},{% endif %}
+    {% endfor %}
+{% endmacro %}
+
+{% macro result(
+        model_id,
+        linked_model_id,
+        category_id,
+        linked_category_id,
+        vendor_id=none,
+        linked_vendor_id=none,
+        category_distance=0.0,
+        model_features={},
+        linked_model_features={},
+        model_pair_features={},
+        category_features={},
+        linked_category_features={},
+        category_pair_features={},
+        model_pair_median_price_difference=0.0) %}
+    [
+        "{{ model_id }}",
+        "{{ linked_model_id }}",
+        "{{ category_id }}",
+        "{{ linked_category_id }}",
+        [0, 1],
+        {% if vendor_id is not none %}"{{ vendor_id }}"{% else %}null{% endif %},
+        {% if linked_vendor_id is not none %}"{{ linked_vendor_id }}"{% else %}null{% endif %},
+        0.0, {# priority_candidate #}
+        {{ category_distance }},
+        {% for features_source, features_definition in [
+            (model_pair_features, pair_model_features),
+            (model_features, single_model_features),
+            (linked_model_features, single_model_features),
+            (category_pair_features, pair_category_features),
+            (category_features, single_category_features),
+            (linked_category_features, single_category_features),
+        ] %}
+            {% for _, _, feature_names in features_definition %}
+                {% for feature in feature_names %}
+                    {{ features_source.get(feature, 0.0) }},
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+        0.0, {{ model_pair_median_price_difference }}, 0.0, 0.0, 0.0,
+        {{ skip_crypta_features() }},
+        "{{ day }}"
+    ]
+{% endmacro %}
+
+{% if table == "sets_model_accessories_features" %}
+    {# Result data. #}
+    {% table table %}
+        {# Check effect of category distance feature #}
+        {{ result("MCC", "MCCD", "CC", "CD", category_distance=42.0) }},
+        {{ result("MCCD", "MCC", "CD", "CC") }},
+        {# Check if single model features are passed correctly #}
+        {% for _, _, feature_names in single_model_features %}
+            {% set i = loop.index %}
+            {% for feature in feature_names %}
+                {% set j = loop.index %}
+                {# Median price difference affects some computed features. #}
+                {% if feature == "median_price" %}
+                    {{ result(
+                        "MF_%d_%d" % (i, j),
+                        "MF",
+                        "CMF",
+                        "CMF",
+                        model_features={feature: i * 100.0 + j},
+                        model_pair_median_price_difference=i * 100.0 + j) }},
+                    {{ result(
+                        "MF",
+                        "linked_MF_%d_%d" % (i, j),
+                        "CMF",
+                        "CMF",
+                        linked_model_features={feature: i * 100.0 + j},
+                        model_pair_median_price_difference=i * 100.0 + j) }},
+                {% else %}
+                    {{ result("MF_%d_%d" % (i, j), "MF", "CMF", "CMF", model_features={feature: i * 100.0 + j}) }},
+                    {{ result("MF", "linked_MF_%d_%d" % (i, j), "CMF", "CMF", linked_model_features={feature: i * 100.0 + j}) }},
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        {# Check if single category features are passed correctly #}
+        {% for _, _, feature_names in single_category_features %}
+            {% set i = loop.index %}
+            {% for feature in feature_names %}
+                {% set j = loop.index %}
+                {{ result("MCF_%d_%d" % (i, j), "MCF", "CF_%d_%d" % (i, j), "CF", category_features={feature: i * 100.0 + j}) }},
+                {{ result("MCF", "linked_MCF_%d_%d" % (i, j), "CF", "linked_CF_%d_%d" % (i, j), linked_category_features={feature: i * 100.0 + j}) }},
+            {% endfor %}
+        {% endfor %}
+        {# Check if pair model features are passed correctly #}
+        {% for _, _, feature_names in pair_model_features %}
+            {% set i = loop.index %}
+            {% for feature in feature_names %}
+                {% set j = loop.index %}
+                {{ result("MPF_%d_%d" % (i, j), "linked_MPF_%d_%d" % (i, j), "CMPF", "CMPF", model_pair_features={feature: i * 100.0 + j}) }},
+            {% endfor %}
+        {% endfor %}
+        {# Check if pair category features are passed correctly #}
+        {% for _, _, feature_names in pair_category_features %}
+            {% set i = loop.index %}
+            {% for feature in feature_names %}
+                {% set j = loop.index %}
+                {{ result("MCPF_%d_%d" % (i, j), "linked_MCPF_%d_%d" % (i, j), "CPF_%d_%d" % (i, j), "linked_CPF_%d_%d" % (i, j), category_pair_features={feature: i * 100.0 + j}) }},
+            {% endfor %}
+        {% endfor %}
+        {# Check if vendor equality, accessory_pair_target and guru_rule_target are evaluated correctly. #}
+        ["M1", "M2", "C1", "C2", [0, 1], "V1", "V1", 0.0, 3.0, {{ skip_auto_features() }}, 1.0, 0.0, 0.0, 0.0, 0.0, {{ skip_crypta_features() }}, "{{ day }}"],
+        ["M1", "M3", "C1", "C2", [0, 1], "V1", "V2", 0.0, 3.0, {{ skip_auto_features() }}, 0.0, 0.0, 0.0, 0.0, 0.0, {{ skip_crypta_features() }}, "{{ day }}"],
+        ["M1", "M4", "C1", "C2", [0, 1], "V1", null, 0.0, 3.0, {{ skip_auto_features() }}, 0.0, 0.0, 0.0, 1.0, 0.0, {{ skip_crypta_features() }}, "{{ day }}"],
+        {# Priority candidate #}
+        ["M1", "M5", "C1", "C3", [0, 1], "V1", null, 1.0, 4.0, {{ skip_auto_features() }}, 0.0, 0.0, 0.0, 0.0, 1.0, {{ skip_crypta_features() }}, "{{ day }}"]
+    {% endtable %}
+{% elif table == "sets_model_accessories_candidates" %}
+    {% table table %}
+        {# Check effect of category distance features #}
+        ["MCC", "MCCD", "CC", "CD", [0, 1],  0, 0, "{{ day }}"],
+        ["MCCD", "MCC", "CD", "CC", [0, 1], 0, 0, "{{ day }}"],
+        {% for _, _, feature_names in single_model_features %}
+            {% set i = loop.index %}
+            {% for feature in feature_names %}
+                {% set j = loop.index %}
+                ["MF_{{ i }}_{{ j }}", "MF", "CMF", "CMF", [0, 1], 0, 0, "{{ day }}"],
+                ["MF", "linked_MF_{{ i }}_{{ j }}", "CMF", "CMF", [0, 1], 0, 0, "{{ day }}"],
+            {% endfor %}
+        {% endfor %}
+        {% for _, _, feature_names in single_category_features %}
+            {% set i = loop.index %}
+            {% for feature in feature_names %}
+                {% set j = loop.index %}
+                ["MCF_{{ i }}_{{ j }}", "MCF", "CF_{{ i }}_{{ j }}", "CF", [0, 1], 0, 0, "{{ day }}"],
+                ["MCF", "linked_MCF_{{ i }}_{{ j }}", "CF", "linked_CF_{{ i }}_{{ j }}", [0, 1], 0, 0, "{{ day }}"],
+            {% endfor %}
+        {% endfor %}
+        {% for _, _, feature_names in pair_model_features %}
+            {% set i = loop.index %}
+            {% for feature in feature_names %}
+                {% set j = loop.index %}
+                ["MPF_{{ i }}_{{ j }}", "linked_MPF_{{ i }}_{{ j }}", "CMPF", "CMPF", [0, 1], 0, 0, "{{ day }}"],
+            {% endfor %}
+        {% endfor %}
+        {% for _, _, feature_names in pair_category_features %}
+            {% set i = loop.index %}
+            {% for feature in feature_names %}
+                {% set j = loop.index %}
+                [
+                    "MCPF_{{ i }}_{{ j }}",
+                    "linked_MCPF_{{ i }}_{{ j }}",
+                    "CPF_{{ i }}_{{ j }}",
+                    "linked_CPF_{{ i }}_{{ j }}",
+                    [0, 1],
+                    0,
+                    0,
+                    "{{ day }}"
+                ],
+            {% endfor %}
+        {% endfor %}
+        ["M1", "M2", "C1", "C2", [0, 1], 0, 0, "{{ day }}"],
+        ["M1", "M3", "C1", "C2", [0, 1], 0, 0, "{{ day }}"],
+        ["M1", "M4", "C1", "C2", [0, 1], 1, 0, "{{ day }}"],
+        {# Priority candidate #}
+        ["M1", "M5", "C1", "C3", [0, 1], 0, 1, "{{ day }}"]
+    {% endtable %}
+{% elif table.startswith("items_model") %}
+    {# Model parameters. #}
+    {% table table %}
+        {{ model("M1", vendor_id="V1") }},
+        {{ model("M2", vendor_id="V1") }},
+        {{ model("M3", vendor_id="V2") }},
+        {{ generate_items_with_features("model", "MF_%d_%d", single_model_features) }},
+        {{ generate_items_with_features("model", "linked_MF_%d_%d", single_model_features) }}
+    {% endtable %}
+{% elif table.startswith("items_r") %}
+    {# Rules and recipes. #}
+    {% table table %}
+        {{ rule("R1", "C1", "C3") }}
+    {% endtable %}
+{% elif table.startswith("features_item_model") %}
+    {# Model features. #}
+    {% call feature_storage(table.replace("features_item_model_", ""), single_model_features) %}
+        {{ generate_items_with_features("model", "MF_%d_%d", single_model_features) }},
+        {{ generate_items_with_features("model", "linked_MF_%d_%d", single_model_features) }}
+    {% endcall %}
+{% elif table.startswith("features_item_category") %}
+    {# Category features. #}
+    {% call feature_storage(table.replace("features_item_category_", ""), single_category_features) %}
+        {{ generate_items_with_features("category", "CF_%d_%d", single_category_features) }},
+        {{ generate_items_with_features("category", "linked_CF_%d_%d", single_category_features) }}
+    {% endcall %}
+{% elif table.startswith("features_item_pair_model_model") %}
+    {# Pair model features. #}
+    {% call feature_storage(table.replace("features_item_pair_model_model_", ""), pair_model_features, pair=True) %}
+        {{ generate_item_pairs_with_features("model", "MPF_%d_%d", pair_model_features) }}
+    {% endcall %}
+{% elif table == "features_item_pair_category_category_distance" %}
+    {% table table %}
+        {%- set list_of_categories = ["C1", "C2", "C3"] -%}
+        {% for ci in list_of_categories %}
+            {%- set i = loop.index -%}
+            {% for cj in list_of_categories %}
+                {%- set j = loop.index -%}
+                {%- if i != j %}
+                ["{{ ci }}", "{{ cj }}", {{ 0.0+i+j }}, 1.0, 2.0, "category", "category", "{{ day }}"],
+                {% endif -%}
+            {% endfor %}
+        {% endfor %}
+        ["CC", "CD", 42.0, 1.0, 2.0, "category", "category", "{{ day }}"]
+    {% endtable %}
+{% elif table.startswith("features_item_pair_category_category") %}
+    {# Pair category features. #}
+    {% call feature_storage(table.replace("features_item_pair_category_category_", ""), pair_category_features, pair=True) %}
+        {{ generate_item_pairs_with_features("category", "CPF_%d_%d", pair_category_features) }}
+    {% endcall %}
+{% elif table == "features_item_article_average_viewer_crypta_profile" %}
+    {% table "features_item_model_average_viewer_crypta_profile" %}
+        ["M1", 0.5, 0.5, 0.1, 0.2, 0.3, 0.4, 0.0, 0.0, 0.0, 0.30, 0.3, 0.40, 0.1, 0.2, 0.125, 0.275, "article", "{{ day }}"],
+        ["M2", 0.0, 1.0, 0.1, 0.2, 0.3, 0.4, 0.0, 0.0, 0.0, 0.45, 0.0, 0.55, 0.0, 0.0, 0.100, 0.450, "article", "{{ day }}"]
+    {% endtable %}
+{% elif table == "features_item_question_average_viewer_crypta_profile" %}
+    {% table "features_item_model_average_viewer_crypta_profile" %}
+        ["M1", 0.5, 0.5, 0.1, 0.2, 0.3, 0.4, 0.0, 0.0, 0.0, 0.30, 0.3, 0.40, 0.1, 0.2, 0.125, 0.275, "question", "{{ day }}"],
+        ["M2", 0.0, 1.0, 0.1, 0.2, 0.3, 0.4, 0.0, 0.0, 0.0, 0.45, 0.0, 0.55, 0.0, 0.0, 0.100, 0.450, "question", "{{ day }}"]
+    {% endtable %}
+{% elif table == "features_item_review_average_viewer_crypta_profile" %}
+    {% table "features_item_model_average_viewer_crypta_profile" %}
+        ["M1", 0.5, 0.5, 0.1, 0.2, 0.3, 0.4, 0.0, 0.0, 0.0, 0.30, 0.3, 0.40, 0.1, 0.2, 0.125, 0.275, "review", "{{ day }}"],
+        ["M2", 0.0, 1.0, 0.1, 0.2, 0.3, 0.4, 0.0, 0.0, 0.0, 0.45, 0.0, 0.55, 0.0, 0.0, 0.100, 0.450, "review", "{{ day }}"]
+    {% endtable %}
+{% endif %}

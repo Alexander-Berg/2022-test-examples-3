@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lom_order
+            id="100111"
+            barcode="777"
+            platform_client_id="1"
+            sender_id="1"
+            status="DRAFT"
+            created="2021-09-13 09:00:00 +0300"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="100111"
+            external_id="101"
+            partner_id="987654321"
+            partner_type="FULFILLMENT"
+            segment_type="FULFILLMENT"
+            waybill_segment_index="0"
+            shipment_date="2020-11-02"
+            partner_name="Тестовый склад"
+    />
+
+    <lom_waybill_segment
+            id="2"
+            order_id="100111"
+            external_id="123321"
+            partner_id="987654321"
+            partner_type="DELIVERY"
+            segment_type="COURIER"
+            waybill_segment_index="1"
+            partner_name="Почта"
+            tags='["CALL_COURIER"]'
+    />
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="2"
+            waybill_segment_type="COURIER"
+            expected_status="TRANSIT_COURIER_ARRIVED_TO_SENDER"
+            processing_status="ENQUEUED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2020-01-01 09:00:00 +0300"
+            schedule_time="2020-01-02 09:09:00 +0300"
+            data="[null]"
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="TRANSIT_COURIER_ARRIVED_TO_SENDER"
+            waybill_segment_type="COURIER"
+            aggregation_type="NONE"
+            rule_processor="STARTREK"
+            rule='{
+                "_type": ".ExpressCourierArrivingPayload",
+                "queue": "MQMEXPRESS",
+                "components": ["123"]
+            }'
+    />
+
+</dataset>

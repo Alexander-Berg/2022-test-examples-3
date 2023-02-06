@@ -1,0 +1,74 @@
+juggler:
+  checks:
+    - children:
+        - EVENTS%(host=platform-testing&tag=lb_read_lags):all:all
+      service: platform-lb-read-lags
+
+    - children:
+        - EVENTS%(host=market_platform-testing&tag=platform_api_errors):all:all
+      service: platform-api-errors
+      flaps:
+        boost_time: 0
+        critical_time: 300
+        stable_time: 60
+
+    # Check platform-db-hosts-state
+    # https://juggler.yandex-team.ru/check_details/?host=platform-testing&service=platform-db-hosts-state&last=1DAY
+    # Source: https://solomon.yandex-team.ru/admin/projects/market-lilucrm/alerts/platform_db_hosts_state
+    - children:
+        - EVENTS%(host=platform-testing&tag=db_hosts_state):all:all
+      service: platform-db-hosts-state
+
+    # Check platform-db-replica-lag
+    # https://juggler.yandex-team.ru/check_details/?host=platform-testing&service=platform-db-replica-lag&last=1DAY
+    # Source: https://solomon.yandex-team.ru/admin/projects/market-lilucrm/alerts/platform_db_replica_lag
+    - children:
+        - EVENTS%(host=platform-testing&tag=db_replica_lag):all:all
+      service: platform-db-replica-lag
+
+    # Check platform-db-disc-free-space
+    # https://juggler.yandex-team.ru/check_details/?host=platform-testing&service=platform-db-disc-free-space&last=1DAY
+    # Source: https://solomon.yandex-team.ru/admin/projects/market-lilucrm/alerts/platform_db_disc_free_space
+    - children:
+        - EVENTS%(host=platform-testing&tag=db_disc_free_space):all:all
+      service: platform-db-disc-free-space
+
+    - service: disk_free_space
+
+    - service: push-client-status
+
+    - service: logrotate
+
+    - service: fresh-core-dumps
+
+    - service: memory_anon_usage
+      check_options:
+        args: [ "-crit-anon-usage", "90", "-warn-anon-usage", "80" ]
+
+    - service: fresh-hprof-files
+
+    - service: nginx
+
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    check_options: {}
+    children:
+        - NANNY%testing_market_platform_sas
+        - NANNY%testing_market_platform_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: platform-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    tags:
+      - market_testing
+      - marketplatform
+      - testing
+      - market
+      - _market_
+    ttl: 900

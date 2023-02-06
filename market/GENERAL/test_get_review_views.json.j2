@@ -1,0 +1,70 @@
+{% macro metrika_event(eventtime, yandexuid, params) %}
+    [
+        "{{ eventtime }}",
+        "referer",
+        "goal://market.yandex.ru/product-reviews-page_product-review_visible",
+        "{{ params }}",
+        "{{ yandexuid }}",
+        "160656",
+        "0",
+        "browserinfo",
+        "0",
+        "watchid",
+        "clientip6",
+        "p123456"
+    ]
+{% endmacro %}
+
+{% macro review(review_id, model_id, category_id, vendor_id) %}
+    [
+        1,
+        "{{ category_id }}",
+        1,
+        "title",
+        "{{ model_id }}",
+        "{{ review_id }}",
+        "p123456",
+        "picture",
+        "{{ vendor_id }}",
+        1506963677001
+    ]
+{% endmacro %}
+
+{% macro view(timestamp, yandexuid, review_id, model_id, category_id, vendor_id) %}
+    [
+        {{ timestamp }},
+        {
+            "yandexuid": "{{ yandexuid }}",
+            "puid": "p123456"
+        },
+        "view",
+        "review",
+        "{{ review_id }}",
+        {
+            "category_id": "{{ category_id }}",
+            "host": "market.yandex.ru",
+            "model_id": "{{ model_id }}",
+            "vendor_id": "{{ vendor_id }}"
+        },
+        "{{ day }}"
+    ]
+{% endmacro %}
+
+{% if table == "events_review_views" %}
+    {# Result data. #}
+    {% table "events" %}
+        {{ view(1506963677000, "Y2", "01", "m01", "c01", "v01") }},
+        {{ view(1506963677000, "Y3", "02", "m02", "c02", "v02") }}
+    {% endtable %}
+{% elif table == "logfeller_bs_watch_log" %}
+    {% table table %}
+        {{ metrika_event(1506963677, "Y2", "{\\\"reviewId\\\":\\\"01\\\"}") }},
+        {{ metrika_event(1506963677, "Y3", "{\\\"reviewId\\\":\\\"02\\\"}") }}
+    {% endtable %}
+{% elif table == "dj_review" %}
+    {% table table %}
+        {{ review("01", "m01", "c01", "v01") }},
+        {{ review("02", "m02", "c02", "v02") }},
+        {{ review("fake", "fake", "fake", "fake") }}
+    {% endtable %}
+{% endif %}

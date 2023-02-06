@@ -1,0 +1,27 @@
+DROP TABLE IF EXISTS riverbank_testing.video_rt_vh_internal_drm_proxy;
+CREATE TABLE riverbank_testing.video_rt_vh_internal_drm_proxy (
+    iso_eventtime Nullable(String),
+    timestamp Nullable(String),
+    date Nullable(String),
+    vsid Nullable(String),
+    uuid Nullable(String),
+    method Nullable(String),
+    request_uri Nullable(String),
+    yandex_login Nullable(String),
+    webauth_login Nullable(String),
+    yandexuid Nullable(UInt64),
+    body_size Nullable(String),
+    status Nullable(String),
+    bytes_sent Nullable(String),
+    request_time Nullable(String),
+    error Nullable(String),
+    isFatal Nullable(String),
+    xffy Nullable(String),
+    cookie Nullable(String),
+    _rest Nullable(String),
+    _logfeller_timestamp UInt64,
+    _timestamp DateTime('Europe/Moscow'),
+    _partition String,
+    _offset UInt64,
+    _idx UInt32
+) ENGINE = Log();

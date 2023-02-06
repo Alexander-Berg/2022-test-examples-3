@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lom_order
+            id="1"
+            barcode="111"
+            platform_client_id="1"
+            status="CANCELLED"
+            cost_assessed_value="123"
+            created="2021-12-21 20:41:00 +0300"
+            items='[{"name": "item"}]'
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="1"
+            external_id="104"
+            partner_id="987654321"
+            partner_type="FULFILLMENT"
+            segment_type="FULFILLMENT"
+            waybill_segment_index="0"
+            shipment_date="2020-11-02"
+            partner_name="Cклад"
+    />
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="1"
+            expected_status="RETURNING"
+            processing_status="ENQUEUED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2021-12-21 20:41:00 +0300"
+            schedule_time="2020-11-07 07:00:00 +0000"
+            fact_status_datetime="[null]"
+    />
+
+    <lom_order
+            id="2"
+            barcode="222"
+            platform_client_id="1"
+            status="CANCELLED"
+            cost_assessed_value="123"
+            created="2021-12-21 20:41:00 +0300"
+            items='[{"name": "item"}]'
+    />
+
+    <lom_waybill_segment
+            id="2"
+            order_id="2"
+            external_id="102"
+            partner_id="987654321"
+            partner_type="FULFILLMENT"
+            segment_type="FULFILLMENT"
+            waybill_segment_index="0"
+            shipment_date="2020-11-02"
+            partner_name="Cклад"
+    />
+
+    <plan_fact
+            id="2"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="2"
+            expected_status="RETURNING"
+            processing_status="ENQUEUED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2021-12-21 20:41:00 +0300"
+            schedule_time="2020-11-07 07:00:00 +0000"
+            fact_status_datetime="[null]"
+    />
+
+    <plan_fact_group
+            id="1"
+            aggregation_key="key"
+            aggregation_type="FF_RETURN_PREPARING_SENDER"
+            processing_status="ENQUEUED"
+            expected_status="RETURN_PREPARING_SENDER"
+            schedule_time="2021-12-20 07:00:00 +0000"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2021, 12, 20],
+                        "partner": {
+                            "id": 123,
+                            "name": "TestPartner1",
+                            "type": "DROPSHIP"
+                        }
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="1"
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="2"
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="RETURN_PREPARING_SENDER"
+            aggregation_type="FF_RETURN_PREPARING_SENDER"
+            rule_processor="STARTREK"
+            rule='{
+                "_type": ".FfReturnPreparingSenderPayload",
+                "queue": "MONITORINGSNDBX",
+                "components": [106500]
+            }'
+    />
+
+</dataset>

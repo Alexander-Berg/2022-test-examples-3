@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       "
+       default-autowire="byName">
+
+    <bean id="testReportXmlParserFactory" class="ru.yandex.market.common.report.parser.MainReportXmlParserFactory">
+        <property name="parserSettings" ref="testReportXmlParserSettings"/>
+    </bean>
+
+    <bean id="testReportXmlParserSettings"
+          class="ru.yandex.market.common.report.parser.xml.MainMarketReportXmlParserSettings">
+        <property name="tagSearchResults" value="search_results"/>
+        <property name="attrSearchResultsTotal" value="total"/>
+        <property name="tagOffers" value="offers"/>
+        <property name="tagOffer" value="offer"/>
+        <property name="attrOffersFrom" value="from"/>
+        <property name="attrOffersTo" value="to"/>
+        <property name="attrStopQuery" value="stop-query"/>
+        <property name="attrOfferStopQuery" value="offer-stop-query"/>
+        <property name="attrNumOffers" value="found"/>
+        <property name="attrGenerationId" value="base_id"/>
+
+        <!-- offer and shop info -->
+        <property name="tagName" value="name"/>
+        <property name="tagDescription" value="description"/>
+        <property name="tagHyperCategId" value="hyper_categ_id"/>
+        <property name="tagHyperCategName" value="category"/>
+        <property name="tagHyperId" value="hyper_id"/>
+        <property name="tagShopCategoryId" value="ds_category"/>
+        <property name="attrShopId" value="shop-id"/>
+
+        <!-- price -->
+        <property name="tagPrice" value="prices"/>
+        <property name="attrCurrency" value="currency"/>
+        <property name="tagShopPrice" value="seller-price"/>
+        <property name="tagShopCurrency" value="seller-currency"/>
+        <property name="tagShopToUserExchRate" value="seller-to-user-exch-rate"/>
+
+        <!-- delivery -->
+        <property name="tagDelivery" value="delivery"/>
+        <property name="attrDeliveryPriority" value="priority"/>
+        <property name="attrDelivery" value="delivery"/>
+        <property name="attrDeliverySelf" value="self"/>
+        <property name="attrDeliveryStore" value="store"/>
+        <property name="attrDeliveryId" value="id"/>
+        <property name="attrDeliveryFree" value="free"/>
+        <property name="tagPriorityRegion" value="shop-priority-region"/>
+        <property name="attrPriorityRegionId" value="id"/>
+        <property name="tagOnStock" value="onstock"/>
+        <property name="tagLocalDeliveryPrice" value="local-delivery-price"/>
+        <property name="tagLocalDelivery" value="local-delivery"/>
+        <property name="tagLocalDeliveryOption" value="delivery-option"/>
+
+        <!-- offer identifier -->
+        <property name="tagClassifierMagicId" value="classifier_magic_id"/>
+        <property name="tagUrlHash" value="urlhash"/>
+        <property name="tagFeedCategoryId" value="feed_category_id"/>
+        <property name="tagDirectUrl" value="direct-url"/>
+        <property name="tagFeedId" value="feed_id"/>
+        <property name="tagShopOfferId" value="shop_offer_id"/>
+        <property name="tagWareMd5" value="ware_md5"/>
+
+        <property name="tagCpa" value="cpa"/>
+        <property name="tagFee" value="fee"/>
+        <property name="tagFeeSum" value="fee-sum"/>
+        <property name="tagFeeShow" value="fee-show"/>
+
+        <property name="attrWarranty" value="manufacturer-warranty"/>
+        <property name="tagOriginCountry" value="country-of-origin"/>
+        <property name="tagXparams" value="xparams/xparam"/>
+        <property name="attrSalesNotes" value="name"/>
+
+        <!--Promo-->
+        <property name="tagPromo" value="promo"/>
+        <property name="attrPromoMd5" value="key"/>
+
+        <property name="attrPromotedByVendor" value="is-promoted-by-vendor"/>
+
+        <!--Quantity-Limit -->
+        <property name="tagBundleSettings" value="bundle-settings"/>
+        <property name="tagQuantityLimits" value="quantity-limits"/>
+        <property name="tagMin" value="min"/>
+        <property name="tagStep" value="step"/>
+
+        <!-- filters -->
+        <property name="tagFilters" value="filters"/>
+        <property name="tagFilter" value="filter"/>
+        <property name="tagFilterClass" value="class"/>
+        <property name="attrFilterName" value="name"/>
+        <property name="attrCategoryOffersCount" value="count"/>
+        <property name="attrCategoryId" value="id"/>
+
+        <!--Model-->
+        <property name="tagModel" value="model"/>
+        <property name="attrModelId" value="id"/>
+    </bean>
+
+    <bean id="modelInfoReportXmlParserFactory"
+          class="ru.yandex.market.common.report.parser.xml.GeneralMarketReportXmlParserFactory">
+        <property name="parserSettings" ref="testReportXmlParserSettings"/>
+        <property name="parserClassName" value="ru.yandex.market.common.report.parser.xml.ModelInfoReportXmlParser"/>
+    </bean>
+</beans>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <SUPPLIER
+        ID="1"
+        NAME="supplier1"
+    />
+    <FULFILLMENT_SERVICE
+        ID="555"
+        NAME="test"
+        STATUS="1"
+        TYPE="1"
+    />
+    <SHOP_REQUEST
+        ID="2"
+        SUPPLIER_ID="1"
+        SERVICE_ID="555"
+        STATUS="0"
+        TYPE="25"
+        CREATED_AT="2018-1-1 10:10:10"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2018-01-06 10:10:10"
+        ITEMS_TOTAL_COUNT="6"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="2"
+        ARTICLE="1714984234"
+        BARCODES="4LJP"
+        COUNT="4"
+        NAME="Картридж HP CF218A"
+        SUPPLY_PRICE="3.50"
+    />
+    <REQUEST_ITEM
+        REQUEST_ID="2"
+        ARTICLE="1714984176"
+        BARCODES="884420588689"
+        COUNT="2"
+        NAME="Картридж HP CE285A"
+        SUPPLY_PRICE="99.99"
+    />
+    <queue_tasks
+        queue_name="PUBLISH_REQUEST_STATUS_CHANGE"
+        task='{"requestId":2,"requestType":25,"detailsLoaded":false,"preparedDetailsLoaded":false,"changedAt":"2018-01-01T10:10:10","oldStatus":0,"newStatus":20,"receivedChangeAt":"2018-01-01T10:10:10","topic":"REQUEST_STATUS_EVENTS"}'
+        attempt="0"
+    />
+
+    <queue_tasks
+        queue_name="PUT_FF_INBOUND_REGISTRY"
+        task='{"registryId":1,"inboundRegistry":{"items":[{"barcodes":[{"code":"4LJP"}],"inboundServices":[{"code":"MEASURE_ITEM","isOptional":true}],"unitInfo":{"counts":[{"countType":"FIT","quantity":4,"unitIds":[{"partialIds":[{"idType":"CIS","value":"FIT CIS_ID"}]},{"partialIds":[{"idType":"CIS","value":"FIT CIS_ID 2"}]},{"partialIds":[{"idType":"CIS","value":"FIT CIS_ID 3"}]},{"partialIds":[{"idType":"CIS","value":"FIT CIS_ID 4"}]}]}],"compositeId":{"partialIds":[{"idType":"ARTICLE","value":"1714984234"},{"idType":"VENDOR_ID","value":"1"},{"idType":"CONSIGNMENT_ID","value":"consignment_id_1"},{"idType":"CONSIGNMENT_ID","value":"consignment_id_3"}]},"description":"Картридж HP CF218A"},"name":"Картридж HP CF218A","price":3.50,"hasLifeTime":false,"contractor":{"id":"1","name":"supplier1"},"cisHandleMode":0,"snTemplate":{"check":1,"mask":"^([\\dA-Za-z\\/]{10,12}|[\\dA-Za-z\\/]{14,16}|[\\dA-Za-z\\/]{18,20})$"}},{"barcodes":[{"code":"884420588689"}],"unitInfo":{"counts":[{"countType":"FIT","quantity":2}],"compositeId":{"partialIds":[{"idType":"ARTICLE","value":"1714984176"},{"idType":"VENDOR_ID","value":"1"},{"idType":"CONSIGNMENT_ID","value":"consignment_id_2"}]},"description":"Картридж HP CE285A"},"name":"Картридж HP CE285A","price":99.99,"hasLifeTime":false,"contractor":{"id":"1","name":"supplier1"},"cisHandleMode":0}],"registryId":{"yandexId":"1"},"inboundId":{"yandexId":"2"},"registryType":6}}'
+        attempt="0"
+    />
+
+</dataset>

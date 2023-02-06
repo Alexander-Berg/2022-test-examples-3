@@ -1,0 +1,21 @@
+juggler:
+  checks:
+    - service: ping_respones
+      children:
+          -
+              host: market_incidents_bot_testing_vla
+              service: ping_respones
+              type: HOST
+          -
+              host: market_incidents_bot_testing_sas
+              service: ping_respones
+              type: HOST
+
+  default:
+    host: market_incidents_bot-testing
+    refresh_time: 90
+    ttl: 300
+    aggregator: logic_or
+    aggregator_kwargs:
+        nodata_mode: force_crit
+    namespace: market.incident_management

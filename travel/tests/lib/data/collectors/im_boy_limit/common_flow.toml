@@ -1,0 +1,254 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "im_boy",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--date-from", "2019-12-16",
+    "--date-to", "2020-01-01",
+    "--limit", "1"
+]
+
+checkers = [
+    "lb",
+    "partner",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "apllication/json"
+
+[[partner.responses]]
+    args = {"updated_at_from_utc"="2019-12-16T00:00:00"}
+    data_file = "partner_response_0.json"
+
+[[partner.responses]]
+    args = {"updated_at_from_utc"="2019-12-18T10:44:35"}
+    data_file = "partner_response_1.json"
+
+[lb]
+    topic = "topic-im-boy-limit"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+# idex 0
+[[lb.expected]]
+    partner_name = "im_boy"
+    travel_order_id = "im_boy:YA-0000-0419-4304"
+    partner_order_id = "YA-0000-0419-4304"
+    created_at = 1576665799
+    finished_at = 1576665858
+    status = "confirmed"
+    currency_code = "RUB"
+    category = "train"
+    snapshot_source = "collectors"
+    order_amount = 4638.48
+    profit_amount = 105.5
+    order_number = "78996914253695"
+    bandit_version = 321
+    bandit_type = "k-armed"
+    requested_bandit_type = "fix11"
+
+    arrival = 1577338200
+    coach_number = "08"
+    coach_owner = "ФПК СЕВ-ЗАПАДНЫЙ"
+    coach_type = "Compartment"
+    departure = 1577305800
+    gender = "Mixed"
+    partner_data_is_suburban = false
+    partner_data_operation_id = "1699064"
+    partner_data_im_order_id = 1750473
+    partner_data_provider = "P1"
+    payment_uid = "62cfbacf-4312-47f8-8b40-dcedce80639d"
+    payment_purchase_token = "payment_purchase_token999"
+    payment_use_deferred_clearing = true
+    rebooked = false
+    rebooking_available = false
+    label = ""
+
+    refunds_count = 1
+    refunded_ticket_count = 2
+    requested_ticket_count = 2
+    tickets_with_places_count = 1
+    tickets_without_places_count = 1
+    train_internal_status = "CONFIRMED"
+    train_number = "004А"
+    train_ticket_number = "004А"
+    two_storey = false
+    uid = "8ece0c7a-4cf0-4277-949d-cedad3878a40"
+    user_ip = "1.2.3.4"
+    user_passport_uid = "123"
+    user_region_id = 0
+    user_yandex_uid = "32431324"
+
+    adult_passengers_count = 1
+    active_ticket_count = 0
+    bought_insurance_count = 2
+    children_with_seats_count = 0
+    children_without_seats_count = 1
+    insurance_auto_return = false
+    passengers_count = 2
+    payment_attempts = 1
+    total_fee_amount = 359.48
+    total_insurance_amount = 270
+    total_insurance_profit_amount = 45.5
+    total_partner_fee_amount = 30
+    total_partner_refund_fee_amount = 30
+    total_refund_fee_amount = 299.48
+    total_refund_insurance_amount = 200
+    total_refund_ticket_amount = 3805.5
+    total_service_amount = 741
+    total_tariff_amount = 3268
+    total_ticket_count = 2
+    service_class = "class"
+    scheme_id = "88"
+    source_req_id = "reqId"
+    source_device = "desktop"
+    source_utm_source = "utmSource"
+    source_utm_medium = "utmMedium"
+    source_utm_campaign = "utmCampaign"
+    source_utm_term = "utmTerm"
+    source_utm_content = "utmContent"
+    source_from = "from"
+    source_gclid = "gugloid"
+    source_partner = "partner"
+    source_subpartner = "subpartner"
+    source_partner_uid = "partnerUid"
+    source_test_id = "testId"
+    source_test_buckets = "testBuckets"
+    source_icookie = "icookie"
+    source_is_transfer = true
+    source_serp_uuid = "serpUuid"
+    non_refundable_tickets_count = 0
+
+# idex 1
+[[lb.expected]]
+    partner_name = "im_boy"
+    travel_order_id = "im_boy:YA-9999-6644-5631:0"
+    partner_order_id = "YA-9999-6644-5631:0"
+    boy_order_id = "YA-9999-6644-5631"
+    item_state = "reserved"
+    created_at = 1580479665
+    status = "pending"
+    currency_code = "RUB"
+    category = "train"
+    snapshot_source = "collectors"
+    order_amount = 4560.1
+    profit_amount = 0
+
+    arrival = 1581139800
+    departure = 1581107400
+    coach_number = "09"
+    coach_owner = "ФПК СЕВ-ЗАПАДНЫЙ"
+    coach_type = "Compartment"
+    gender = "Mixed"
+    partner_data_operation_id = "1749399"
+    partner_data_im_order_id = 1791516
+    partner_data_is_suburban = false
+    payment_use_deferred_clearing = true
+    payment_uid = "297328c3-5f48-4bbb-89af-134af91cdcf4"
+    rebooked = true
+    rebooking_available = true
+    train_internal_status = "PAYMENT_FAILED"
+    train_number = "004А"
+    train_ticket_number = "004А"
+    two_storey = false
+    uid = "09a400cb-b9f8-4f7d-a171-efb94ec5cb08"
+    user_ip = "1.2.3.4"
+    user_region_id = 0
+    user_yandex_uid = "32431324"
+    user_passport_uid = ""
+    label = ""
+
+    refunds_count = 0
+    tickets_with_places_count = 0
+    tickets_without_places_count = 0
+    adult_passengers_count = 0
+    bought_insurance_count = 0
+    children_with_seats_count = 0
+    children_without_seats_count = 0
+    insurance_auto_return = false
+    passengers_count = 1
+    payment_attempts = 1
+    refunded_ticket_count = 0
+    requested_ticket_count = 1
+    total_fee_amount = 0
+    total_insurance_amount = 0
+    total_insurance_profit_amount = 0
+    total_partner_fee_amount = 0
+    total_partner_refund_fee_amount = 0
+    total_refund_fee_amount = 0
+    total_refund_insurance_amount = 0
+    total_refund_ticket_amount = 0
+    total_service_amount = 0
+    total_tariff_amount = 0
+    total_ticket_count = 0
+    active_ticket_count = 0
+    non_refundable_tickets_count = 0
+
+# idex 2
+[[lb.expected]]
+    partner_name = "im_boy"
+    travel_order_id = "im_boy:YA-9999-6644-5631:1"
+    partner_order_id = "YA-9999-6644-5631:1"
+    boy_order_id = "YA-9999-6644-5631"
+    item_state = "pending"
+    created_at = 1580479665
+    status = "pending"
+    currency_code = "RUB"
+    category = "train"
+    snapshot_source = "collectors"
+    order_amount = 1110.1
+    profit_amount = 0
+
+    arrival = 1581139800
+    departure = 1581107400
+    coach_number = "09"
+    coach_owner = "ФПК СЕВ-ЗАПАДНЫЙ"
+    coach_type = "Compartment"
+    gender = "Mixed"
+    partner_data_operation_id = "1749399"
+    partner_data_im_order_id = 1791516
+    partner_data_is_suburban = false
+    payment_use_deferred_clearing = true
+    payment_uid = "297328c3-5f48-4bbb-89af-134af91cdcf4"
+    rebooked = true
+    rebooking_available = true
+    train_internal_status = "PAYMENT_FAILED"
+    train_number = "004А"
+    train_ticket_number = "004А"
+    two_storey = false
+    uid = "09a400cb-b9f8-4f7d-a171-efb94ec5cb08"
+    user_ip = "1.2.3.4"
+    user_region_id = 0
+    user_yandex_uid = "32431324"
+    user_passport_uid = ""
+    label = ""
+
+    refunds_count = 0
+    tickets_with_places_count = 0
+    tickets_without_places_count = 0
+    adult_passengers_count = 0
+    bought_insurance_count = 0
+    children_with_seats_count = 0
+    children_without_seats_count = 0
+    insurance_auto_return = false
+    passengers_count = 1
+    payment_attempts = 1
+    refunded_ticket_count = 0
+    requested_ticket_count = 1
+    total_fee_amount = 0
+    total_insurance_amount = 0
+    total_insurance_profit_amount = 0
+    total_partner_fee_amount = 0
+    total_partner_refund_fee_amount = 0
+    total_refund_fee_amount = 0
+    total_refund_insurance_amount = 0
+    total_refund_ticket_amount = 0
+    total_service_amount = 0
+    total_tariff_amount = 1110.1
+    total_ticket_count = 0
+    active_ticket_count = 0
+    non_refundable_tickets_count = 0

@@ -1,0 +1,23 @@
+location ~* ^/subs {
+    add_header x-dns-prefetch-control "off";
+    add_header X-Request-Id $request_id always;
+    include sites-enabled/security-headers.include;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $x_real_ip;
+    proxy_set_header X-Real-Port $x_real_port;
+    proxy_set_header X-Original-Uri $request_uri;
+    proxy_set_header X-Original-Host $host;
+    proxy_set_header X-Request-Id $request_id;
+    proxy_set_header X-Https-Request yes;
+    proxy_set_header SSL-Cipher $ssl_cipher;
+    proxy_set_header X-Forwarded-For $x_real_ip;
+
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_next_upstream error timeout http_502;
+    proxy_next_upstream_tries 2;
+
+    proxy_ssl_session_reuse on;
+    proxy_pass https://subscriptions-backend$uri$is_args$args;
+}

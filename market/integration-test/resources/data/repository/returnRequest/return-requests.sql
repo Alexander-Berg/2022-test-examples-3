@@ -1,0 +1,63 @@
+INSERT
+INTO pickup_point(id, pvz_market_id)
+VALUES (1, '68710');
+
+INSERT
+INTO return_request(id,
+                    return_id,
+                    barcode,
+                    external_order_id,
+                    buyer_name,
+                    client_type,
+                    request_date,
+                    pickup_point_id,
+                    state)
+VALUES (101,
+        9701,
+        'VOZVRAT_SF_PVZ_9701',
+        167802871,
+        'Константин Вячеславович Воронцов',
+        'CLIENT',
+        '2021-01-01',
+        NULL,
+        'AWAITING_FOR_DATA'),
+
+       (102,
+        9702,
+        'VOZVRAT_SF_PVZ_9702',
+        167802872,
+        'Константин Вячеславович Воронцов',
+        'CLIENT',
+        '2021-01-02',
+        1,
+        'FINAL'),
+
+       (103,
+        9703,
+        'VOZVRAT_SF_PVZ_9703',
+        167802873,
+        'Константин Вячеславович Воронцов',
+        'CLIENT',
+        '2021-01-03',
+        NULL,
+        'AWAITING_FOR_DATA'),
+
+       (104,
+        9704,
+        'VOZVRAT_SF_PVZ_9704',
+        167802874,
+        'Константин Вячеславович Воронцов',
+        'CLIENT',
+        '2021-01-04',
+        1,
+        'CREATING_REQUESTS'),
+
+       (105,
+        9705,
+        'VOZVRAT_SF_PVZ_9705',
+        167802875,
+        'Константин Вячеславович Воронцов',
+        'CLIENT',
+        '2021-01-05',
+        1,
+        'FINAL');

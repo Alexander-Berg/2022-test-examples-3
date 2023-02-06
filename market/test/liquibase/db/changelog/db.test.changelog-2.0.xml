@@ -1,0 +1,34 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="dukeartem" id="1568186543778-1">
+        <createTable remarks="Таблица в которой хранятся связи между аккаунтами и статус мигрировали ли данные или нет" tableName="marketid_links">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="marketid_links_pk"/>
+            </column>
+            <column name="marketid" remarks="идентификатор смапленного пользователя" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="puid" remarks="идентификатор паспортного пользователя с кем слинкован marketid" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="linked" remarks="этот статус проверяет tms и если 0 запускаетcя задача на мёрдж, по окончанию проставляется 1" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="dukeartem" id="1568186543778-2">
+        <createIndex indexName="marketid_links_linked_index" tableName="marketid_links">
+            <column defaultValueNumeric="0" name="linked"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="dukeartem" id="1568186543778-3">
+        <createIndex indexName="marketid_links_marketid_uindex" tableName="marketid_links" unique="true">
+            <column name="marketid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="dukeartem" id="1568186543778-4">
+        <createIndex indexName="marketid_links_puid_uindex" tableName="marketid_links" unique="true">
+            <column name="puid"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,153 @@
+vars:
+- &telegram_notification_worktime
+  template_name: on_status_change
+  template_kwargs:
+    status: [CRIT, WARN]
+    method:
+      - telegram
+    login:
+      - ekkamalov
+      - levko
+      - adubrovin
+    day_start: 1
+    day_end: 7
+    time_start: '07:00'
+    time_end: '22:00'
+
+juggler:
+  default:
+    host: market_hyperion-testing
+    namespace: market.hyperion
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+        - check: market_walle:UNREACHABLE
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    refresh_time: 90
+    ttl: 900
+    tags:
+      - market_hyperion
+      - market
+      - _market_
+    children:
+      - CGROUP%market_hyperion-testing
+    notifications: [*telegram_notification_worktime]
+
+  checks:
+    - service: UNREACHABLE
+      active: icmpping
+      active_kwargs:
+        disable_ipv4: yes
+        use_all_dc: false
+
+    - service: unispace
+
+    - service: cpu_idle
+      active: graphite
+      active_kwargs:
+        CRIT: metric < 50
+        WARN: metric < 51
+        base_url: https://market-graphite.yandex-team.ru
+        metric: minSeries(movingAverage(one_min.HOST.hyperion-{app,db}01et_market_yandex_net.cpuload.id,'10min'))
+        timeout: 60
+        ignore_errors: true
+      aggregator_kwargs:
+        nodata_mode: force_ok
+        unreach_checks:
+        - market-infra-graphite:market-graphite.yandex-team.ru
+      children: []
+      refresh_time: 300
+
+    - service: free_mem
+      active: graphite
+      active_kwargs:
+        CRIT: metric < 41943040
+        WARN: metric < 62914560
+        base_url: https://market-graphite.yandex-team.ru
+        metric: minSeries(movingAverage(one_min.HOST.hyperion-{app,db}01et_market_yandex_net.meminfo.real_free, '5min'))
+        timeout: 60
+        ignore_errors: true
+      aggregator_kwargs:
+        nodata_mode: force_ok
+        unreach_checks:
+        - market-infra-graphite:market-graphite.yandex-team.ru
+      children: []
+      refresh_time: 300
+
+    - service: ess_request_time
+      active: graphite
+      active_kwargs:
+        CRIT: metric > 3600
+        WARN: metric > 3590
+        base_url: https://market-graphite.yandex-team.ru
+        metric: one_min.HOST.hyperion-db01et_market_yandex_net.oracle.ess_sessions.req_time1
+        timeout: 60
+        ignore_errors: true
+      aggregator_kwargs:
+        nodata_mode: force_ok
+        unreach_checks:
+        - market-infra-graphite:market-graphite.yandex-team.ru
+      children: []
+      refresh_time: 300
+      ttl: 7200
+
+    - service: hyp-backups
+      refresh_time: 3600
+      ttl: 10100
+
+    - service: OPMN
+
+    - service: APS
+      children:
+        - CGROUP%market_hyperion_app-testing
+
+    - service: AdminServer
+      children:
+        - CGROUP%market_hyperion_app-testing
+
+    - service: CalcMgr
+      children:
+        - CGROUP%market_hyperion_app-testing
+
+    - service: EAS
+      children:
+        - CGROUP%market_hyperion_app-testing
+
+    - service: FoundationServices
+      children:
+        - CGROUP%market_hyperion_app-testing
+
+    - service: OHS
+      children:
+        - CGROUP%market_hyperion_app-testing
+
+    - service: Planning
+      children:
+        - CGROUP%market_hyperion_app-testing
+
+    - service: RMI
+      children:
+        - CGROUP%market_hyperion_app-testing
+
+    - service: nginx
+      children:
+        - CGROUP%market_hyperion_app-testing
+
+    - service: ESS_agent
+      children:
+        - CGROUP%market_hyperion_db-testing
+
+    - service: FPA
+      notifications: []
+      children:
+        - CGROUP%market_hyperion_db-testing
+
+    - service: GAAP
+      notifications: []
+      children:
+        - CGROUP%market_hyperion_db-testing

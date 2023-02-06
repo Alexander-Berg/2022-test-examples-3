@@ -1,0 +1,47 @@
+{
+    "include": [
+        "mail/tools/push-client/delivery/package-base.json",
+        "mail/tools/push-client/delivery/package-secrets-testing.json"
+    ],
+    "meta": {
+        "name": "yamail-mx-push-client-mxback-testing",
+        "description": "Push-client configs for mxback-test",
+        "conflicts": [
+            "yamail-mx-push-client-mxfront",
+            "yamail-mx-push-client-forward",
+            "yamail-mx-push-client-yaback",
+            "yamail-config-pushclient-mxbacks"
+        ]
+    },
+    "data": [
+        {
+            "source": {
+                "type": "ARCADIA",
+                "path": "mail/tools/push-client/delivery/etc/push-client",
+                "files": [
+                    "mxback-*.yaml"
+                ]
+            },
+            "destination": {
+                "path": "/etc/push-client/"
+            }
+        },
+        {
+            "source": {
+                "type": "DIRECTORY"
+            },
+            "destination": {
+                "path": "/var/lib/push-client-historydb"
+            }
+        },
+        {
+            "source": {
+                "type": "ARCADIA",
+                "path": "mail/tools/push-client/delivery/etc/default/mxback-push-client-testing"
+            },
+            "destination": {
+                "path": "/etc/default/push-client"
+            }
+        }
+    ]
+}

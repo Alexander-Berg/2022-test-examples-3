@@ -1,0 +1,66 @@
+{
+    "GlobalLog": "./herschel.log",
+    "HttpServer": {
+        "Port": 80
+    },
+    "Logs": {
+        "Rules": [
+            {
+                "FilePath": "/dev/stdout",
+                "MinLevel": "Info"
+            },
+            {
+                "FilePath": "./herschel.log",
+                "ExcludeCategories": ["BigRT", "Main"],
+                "MinLevel": "Info"
+            }
+        ]
+    },
+    "YtRpc": {
+        "EnableRetries": true
+    },
+    "Suppliers": [
+        {
+            "Alias": "resharded_yt_log",
+            "YtSupplier": {
+                "QueueConsumer": "herschel",
+                "QueuePath": "//home/crypta/testing/rtsklejka/qyt/sharded_fprints",
+                "Cluster": "hahn"
+            }
+        }
+    ],
+    "ConsumingSystem": {
+        "Cluster": "hahn",
+        "MainPath": "//home/crypta/testing/rtsklejka/consuming_systems/herschel",
+        "Shards": {
+            "AutoResolve": {}
+        },
+        "MaxShardsAutoResolveRatio": 0.5,
+        "WorkerMinorName": "w_herschel"
+    },
+    "StatefulShardProcessorConfig": {
+        "MaxGroupingTasks": 10
+    },
+    "StateProcessorConfig": {
+        "Table": "//home/crypta/testing/rtsklejka/state/herschel_state",
+        "IdsLimit": 11,
+        "Codec": "zstd_6",
+        "DebounceCfg": {
+            "Lifetime": 30
+        },
+        "BanCfg": {
+            "DurationSec": 3600,
+            "HysteresisSec": 1200,
+            "IdsLimit": 30
+        },
+        "Brusilov": {
+            "Queue": "//home/crypta/testing/rtsklejka/qyt/vulture_events",
+            "ReshardingModule": 128,
+            "MaxMessagesCount": 10
+        }
+    },
+    "StateManagerConfig": {
+        "EpochStatesSizeQuota": 1000000,
+        "StateSizeDummy": 90000
+    }
+}

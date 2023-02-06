@@ -1,0 +1,2 @@
+TRUNCATE return_request RESTART IDENTITY CASCADE;
+TRUNCATE return_request_delivery_status_history RESTART IDENTITY CASCADE;

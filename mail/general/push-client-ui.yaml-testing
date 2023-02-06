@@ -1,0 +1,23 @@
+---
+ident: PUSH_CLIENT_IDENT
+
+logger-mode: file
+logger-file: /var/log/statbox/watcher.log
+logger-level: 5
+logger-timeformat: "%d.%m.%Y-%H.%M.%S"
+
+network:
+  tvm-client-id: 2026062
+  tvm-server-id: 2001059
+  tvm-secret: "PUSH_CLIENT_TVM_SECRET"
+  master-addr: logbroker.yandex.net
+  proto: pq
+  transport: ipv6
+
+migrate: push
+
+files:
+  - name: /var/log/%app%/access.log
+    log_type: access-log
+  - name: /var/log/%app%/typed-access.log
+    log_type: typed-access-log

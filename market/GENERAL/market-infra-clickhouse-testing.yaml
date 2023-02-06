@@ -1,0 +1,213 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket-infra-clickhouse-testing
+
+juggler:
+  default:
+    check_options: { }
+    children:
+      - CGROUP%market_health-clickhouse-testing
+    host: market-infra-clickhouse-testing
+    namespace: market.infra
+    notifications: [ ]
+    refresh_time: 60
+    tags:
+      - market_testing
+      - market-infra-testing
+      - market-infra
+      - market
+      - _market_
+    ttl: 900
+
+  checks:
+
+  # Check UNREACHABLE
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-clickhouse-testing&service=UNREACHABLE&last=1DAY&mode=edit
+  - active: icmpping
+    active_kwargs:
+      disable_ipv4: yes
+      use_all_dc: 'false'
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: '2'
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: UNREACHABLE
+
+  # Check welder-hw-watcher-disks-monitoring
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-clickhouse-testing&service=welder-hw-watcher-disks-monitoring&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    service: welder-hw-watcher-disks-monitoring
+
+  # Check welder_test_write_wait_millisec_avg
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-clickhouse-testing&service=welder_test_write_wait_millisec_avg&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_warn
+    children:
+    - EVENTS%(service=welder_test_WriteWaitMillisecAvg_*):all:all
+    notifications: []
+    service: welder_test_write_wait_millisec_avg
+    tags:
+    - market_testing
+    - market_testing_db
+    - market-infra-testing
+    - market-infra
+    - market-health-testing
+    - market
+    - _market_
+
+  # Check clickhouse-raid
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-clickhouse-testing&service=clickhouse-raid&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    service: clickhouse-raid
+
+  # Check clickhouse-health
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-clickhouse-testing&service=clickhouse-health&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    service: clickhouse-health
+
+  # Check clickhouse-server
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-clickhouse-testing&service=clickhouse-server&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    service: clickhouse-server
+
+  # Check iptruler
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-clickhouse-testing&service=iptruler&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: iptruler
+
+  # Check raid
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-clickhouse-testing&service=raid&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: raid
+
+  # Check ssh
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-clickhouse-testing&service=ssh&last=1DAY&mode=edit
+  - active: ssh
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: ssh
+
+  # Check unispace
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-clickhouse-testing&service=unispace&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: unispace
+
+  # Check welder-nginx-ping
+  # https://juggler.yandex-team.ru/check_details/?host=market-infra-clickhouse-testing&service=welder-nginx-ping&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      port: 8122
+      timeout: 30
+      path: /ping
+      regexp: ^1
+      warn_codes: []
+      always_show_body: true
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+        - crit: 15%
+          day_end: 7
+          day_start: 1
+          time_end: 23
+          time_start: 0
+          warn: 1%
+      nodata_mode: force_crit
+    service: welder-nginx-ping

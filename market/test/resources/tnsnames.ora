@@ -1,0 +1,36 @@
+
+billing.yandex.ru =
+ (DESCRIPTION_LIST =
+        (FAILOVER=on)
+        (DESCRIPTION =
+            (FAILOVER = on)
+            (LOAD_BALANCE = on)
+            (ADDRESS_LIST =
+                (ADDRESS =
+                    (PROTOCOL = TCP)
+                    (HOST = marketdevdb01h-vip.yandex.ru)
+                    (PORT = 1521)
+                )
+                (ADDRESS =
+                    (PROTOCOL = TCP)
+                    (HOST = marketdevdb02h-vip.yandex.ru)
+                    (PORT = 1521)
+                )
+                (ADDRESS =
+                    (PROTOCOL = TCP)
+                    (HOST = marketdevdb03h-vip.yandex.ru)
+                    (PORT = 1521)
+                )
+            )
+            (CONNECT_DATA =
+                (FAILOVER_MODE =
+                    (TYPE = select)
+                    (METHOD = basic)
+                    (RETRIES = 3)
+                    (DELAY = 5)
+                )
+                (SERVER = dedicated)
+                (SERVICE_NAME = billingutf)
+            )
+        )
+    )

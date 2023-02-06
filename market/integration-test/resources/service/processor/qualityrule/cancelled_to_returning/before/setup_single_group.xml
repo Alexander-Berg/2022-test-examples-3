@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lom_order
+            id="1"
+            barcode="111"
+            platform_client_id="1"
+            status="CANCELLED"
+            cost_assessed_value="123"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="1"
+            partner_id="987654321"
+            partner_type="DELIVERY"
+            segment_type="COURIER"
+            waybill_segment_index="0"
+            shipment_date="2020-11-02"
+            partner_name="Почта"
+    />
+
+    <lom_waybill_segment_status_history
+            waybill_segment_id="1"
+            status="CANCELLED"
+            date="2020-12-15 06:40:00 +0000"
+    />
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_ORDER"
+            entity_id="1"
+            expected_status="RETURNING"
+            processing_status="ENQUEUED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2020-11-07 11:11:50 +0300"
+            schedule_time="2020-11-07 07:00:00 +0000"
+            fact_status_datetime="[null]"
+    />
+
+    <plan_fact_group
+            id="1"
+            aggregation_key="key"
+            aggregation_type="CANCELLED_TO_RETURNING"
+            processing_status="ENQUEUED"
+            expected_status="RETURNING"
+            schedule_time="2021-12-20 07:00:00 +0000"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2021, 12, 20],
+                        "partner": {
+                            "id": 123,
+                            "name": "TestPartner1",
+                            "type": "DROPSHIP"
+                        }
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="1"
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="RETURNING"
+            aggregation_type="CANCELLED_TO_RETURNING"
+            rule_processor="STARTREK"
+            rule='{
+                "_type": ".CancelledToReturningPayload",
+                "queue": "MONITORINGSNDBX",
+                "components": [106399]
+            }'
+    />
+
+</dataset>

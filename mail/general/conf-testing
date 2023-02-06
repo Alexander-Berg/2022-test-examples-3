@@ -1,0 +1,166 @@
+searchmap = $(SEARCHMAP)
+#searchmap = searchmap-toolbar.txt
+
+[server]
+port = 1080
+connections = 20000
+syncserver_threads = 13
+syncserver_queue_size = 1000
+linger = 1
+headers-charset = utf-8
+
+[access_log]
+file = $(LOGDIR)/msearch-proxy/access.log
+buffer = 10000
+
+[full_log]
+file = $(LOGDIR)/msearch-proxy/full.log
+level.min = all
+date.format = yyyy-MM-dd HH:mm:ss.SSS
+#format= %{date}%{separator}%{level}%{separator}%{message}
+buffer = 100000
+
+[upstream]
+connections = 100
+
+[upstream./printkeys*]
+#remove-prefix = /print
+timeout.socket = 1s
+connections = 10
+fallback-delay = 100
+io-error-retries.count = 3
+io-error-retries.interval = 0
+
+
+[stat]
+prefix = qeqweqwe
+[stat./stat]
+prefix = ignore
+metrics =
+
+[error_log]
+file = $(LOGDIR)/msearch-proxy/error.log
+level.min = all
+buffer = 100000
+
+[search_proxy_searcher]
+connections = 100
+
+[search_proxy_indexer]
+connections = 100
+
+[searchmap]
+file = $(SEARCHMAP)
+#file = /var/cache/yamail/searchmap.txt
+#file = searchmap-toolbar.txt
+
+[searchmap_old]
+file = $(SEARCHMAP)
+#file = /var/cache/yamail/searchmap.txt
+#file = searchmap-toolbar.txt
+
+[api.ml]
+corp_db = mdb301
+
+[api.chemodan]
+#blackbox_url = http://pass-test.yandex.ru/blackbox/
+#blackbox_url = http://webtest9h.yandex.ru:8099/blackbox/
+blackbox_url = http://blackbox-mimino.yandex.net/blackbox/
+#new_filter_mode = 1
+
+new_filter_mode = 1
+new_filter_mode.blacklist = mdb171
+
+[wmi]
+filter_search_url = http://searchweb-qa.yandex.ru:9090/filter_search
+connections = 1
+
+[folderlist]
+folder_list_url = http://127.0.0.1:9090/folders
+#folder_list_url = http://searchweb-qa.yandex.ru:9090/folders
+
+#[api.suggest]
+#printkeys_cache_size = 1000
+#printkeys_cache_expire = 30000
+
+[api.toolbar]
+service_name = toolbar
+default_search_timeout = 3000
+default_index_timeout = 3000
+nostradamus = mostfrequent
+nostradamus_params = 10
+nostradamus-touch = null
+#nostradamus-touch_params = reply
+
+[api.ora.delete]
+proxy = http://localhost:8083
+connections = 100
+
+[msal]
+connections = 100
+host = http://localhost:8080
+
+[filter-search]
+connections = 100
+#uri = http://127.0.0.1:9091/filter_search
+#uri = http://sinx.mail.yandex.net:8171/filter_search
+uri = http://meta-search.mail.yandex.net:9090/filter_search
+proxy = 127.0.0.1:8118
+#host = http://localhost:8080
+batch-size = 100
+
+[corp-filter-search]
+connections = 100
+host = http://localhost:8080
+batch-size = 100
+
+[api.ora.delete.timeout]
+socket = 5s
+pool = 5s
+connect = 1s
+
+[api.ora.delete.io-error-retries]
+count = 3
+interval = 100ms
+
+[api.ora.delete.http-error-retries]
+count = 3
+interval = 0
+
+[api.postmaster]
+searchcache_expire = 30000
+searchcache_size = 100000000
+
+SEARCH_PREFETCH_WINDOW = 10000
+
+ORACLE_BATCH_SIZE = 200
+FAST_FILTER_ORACLE_BATCH_SIZE = 30000
+FAST_FILTER_ORACLE_BATCH_SIZE_OVERRIDE = mdb170:1111
+
+[search-filters]
+people = message_type:people
+sales = message_type:s_grouponsite
+social = message_type:s_social
+trips = message_type:((s_aviaticket OR s_travel OR s_zdticket) AND NOT (news OR personalnews OR people))
+news = message_type:news
+eshops = message_type:((s_eshops OR s_delivery) AND NOT (news OR personalnews OR people))
+pi = message_type:(* AND NOT (news OR personalnews))
+
+[blackbox]
+#host = http://blackbox-mimino.yandex.net
+host = http://blackbox-ipv6.yandex.net
+proxy = 127.0.0.1:8118
+connections = 100
+
+[blackbox.io-error-retries]
+count = 3
+interval = 0
+
+[corp-blackbox]
+host = http://blackbox.yandex-team.ru
+connections = 100
+
+[corp-blackbox.io-error-retries]
+count = 3
+interval = 0
+

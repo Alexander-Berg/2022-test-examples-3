@@ -1,0 +1,21 @@
+package ru.yandex.http.server.sync;
+
+public class BaseHttpServerHttpsBCLimiterTest
+    extends BaseHttpServerLimiterTestBase
+{
+    @Override
+    protected boolean https() {
+        return true;
+    }
+
+    @Override
+    protected boolean serverBc() {
+        return true;
+    }
+
+    @Override
+    protected boolean clientBc() {
+        return true;
+    }
+}
+

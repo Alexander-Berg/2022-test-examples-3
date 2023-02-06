@@ -1,0 +1,36 @@
+{
+  "logHosts": "*",
+  "logPath": "**/mbo-tms-dump-session-id-times.log",
+  "parser": {
+    "dateFormat": "yyyy-MM-dd'T'HH:mm:ssZ",
+    "separator": "\t",
+    "fields": [
+      "date",
+      "dump_name",
+      "dump_start",
+      "dump_finish",
+      "session_id"
+    ],
+    "columns": {
+      "dump_name": {
+        "type": "String"
+      },
+      "dump_start": {
+        "type": "Int64"
+      },
+      "dump_finish": {
+        "type": "Int64"
+      },
+      "session_id": {
+        "type": "String"
+      },
+      "host": {
+        "type": "String"
+      }
+    }
+  },
+  "clickhouseTable": "mbo_dump_session_id_times_testing",
+  "sources": [
+    "logbroker://market-health-testing--other"
+  ]
+}

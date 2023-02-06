@@ -1,0 +1,51 @@
+module.exports = {
+    'create-user-form': {
+        firstname: 'input[name="name[first][ru]"]',
+        lastname: 'input[name="name[last][ru]"]',
+        nickname: 'input[name*="nickname"]',
+        password: [
+            'input[name*="password__"]',
+            'input[name*="password_confirmation"]',
+        ],
+    },
+    'create-department-form': {
+        name: 'input[name="name[ru]"]',
+        description: 'input[name="description[ru]"]',
+        label: 'input[name="label"]',
+        password: [
+            'input[name*="password__',
+            'input[name*="password_confirmation"]',
+        ],
+    },
+    'create-contract-form': {
+        long_name: 'input[name="long_name"]',
+        phone: 'input[name="phone"]',
+        email: 'input[name="email"]',
+        postal_code: 'input[name="postal_code"]',
+        postal_address: 'input[name="postal_address"]',
+        legal_address: 'input[name="legal_address"]',
+        inn: 'input[name="inn"]',
+        kpp: 'input[name="kpp"]',
+        bik: 'input[name="bik"]',
+        account: 'input[name="account"]',
+        last_name: 'input[name="last_name"]',
+        first_name: 'input[name="first_name"]',
+        middle_name: 'input[name="middle_name"]',
+    },
+    'dns-form': {
+        name: '.edit-dns-record-modal__input_type_name input',
+        address: '.edit-dns-record-modal__input_type_content input',
+        ttl: '.edit-dns-record-modal__input_type_ttl input',
+        target: '.edit-dns-record-modal__input_type_content input',
+        priority: '.edit-dns-record-modal__input_type_priority input',
+        preference: '.edit-dns-record-modal__input_type_priority input',
+        weight: '.edit-dns-record-modal__input_type_weight input',
+        port: '.edit-dns-record-modal__input_type_port input',
+        strings: '.edit-dns-record-modal__input_type_content input',
+        exchange: '.edit-dns-record-modal__input_type_content input',
+    },
+    'change-user-password-form': {
+        password: 'input[name^="password__"]',
+        password_confirmation: 'input[name^="password_confirmation"]',
+    },
+};

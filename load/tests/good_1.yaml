@@ -1,0 +1,27 @@
+autostop:
+  autostop:
+  - time(25000ms,1m)
+  - http(5xx,10%,1m)
+  enabled: true
+  package: yandextank.plugins.Autostop
+  report_file: autostop_report.txt
+json_report:
+  enabled: true
+  package: yandextank.plugins.JsonReport
+phantom:
+  address: sometesthost.net:940
+  ammofile: https://proxy.sandbox.yandex-team.ru/1111111111111111
+  enabled: true
+  load_profile:
+    load_type: rps
+    schedule: const(0.5,10m)
+  package: yandextank.plugins.Phantom
+  timeout: 30s
+uploader:
+  enabled: true
+  job_name: test
+  meta:
+    use_tank_port: '11111'
+  operator: testuser
+  package: yandextank.plugins.DataUploader
+  task: YANDEXTANK-434

@@ -1,0 +1,18 @@
+import {makeSuite, prepareSuite} from 'ginny';
+
+import {PAGE_IDS_COMMON} from '@self/root/src/constants/pageIds';
+import {
+    modelPageRoute,
+} from '@self/project/src/spec/hermione/fixtures/express';
+import RecommendedOffersSuite
+    from '@self/platform/spec/hermione/test-suites/blocks/RecommendedOffers';
+
+export default makeSuite('Модель со вторым экспресс оффером', {
+    environment: 'kadavr',
+    story: prepareSuite(RecommendedOffersSuite, {
+        params: {
+            pageId: PAGE_IDS_COMMON.YANDEX_MARKET_PRODUCT,
+            pageRoute: modelPageRoute,
+        },
+    }),
+});

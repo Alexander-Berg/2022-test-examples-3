@@ -1,0 +1,31 @@
+---
+ident: disk
+
+logger-mode: file
+logger-file: /var/log/statbox/watcher.log
+logger-level: 6
+watcher-method: inotify
+watcher-state: "/var/spool/push-client"
+watcher-drop_on_error: 1
+
+network-master-addr: "logbroker-pre.yandex.net"
+network-transport: ipv6
+network-proto: rt
+
+files:
+  - name: /var/log/nginx/access-tskv.log
+    log_type: mpfs-access-log
+  - name: /var/log/yandex/disk/djfs-worker-access-tskv.log
+    ident: disk-mpfs
+    log_type: ydisk-mpfs-access-log
+  - name: /var/log/yandex/disk/djfs-worker-default-tskv.log
+    ident: disk-mpfs
+    log_type: ydisk-mpfs-default-log
+  - name: /var/log/yandex/disk/djfs-worker-event-history-tskv.log
+    log_type: ydisk-event-history-log
+  - name: /var/log/yandex/disk/djfs-worker-error-tskv.log
+    ident: disk-mpfs
+    log_type: ydisk-mpfs-error-log
+  - name: /var/log/yandex/disk/djfs-worker-requests-tskv.log
+    ident: disk-mpfs
+    log_type: ydisk-mpfs-requests-log

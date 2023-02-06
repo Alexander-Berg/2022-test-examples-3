@@ -1,0 +1,164 @@
+logbroker:
+  pqlib:
+    worker_threads: 2
+
+  consumer:
+    server: "localhost"
+    port: 20500
+    topics:
+      - "change-log"
+    client_id: "lb-consumer"
+    max_memory_usage: 16777216
+    max_infly_requests: 3
+    max_size: 102400
+    use_lock_session: false
+    read_mirrored_partitions: true
+    max_uncommitted_size: 67108864
+
+  credentials:
+    use_secure_tvm: False
+
+  pqlib_log_name: pqlib
+
+  evacuate_log_producer:
+    server: localhost
+    port: 20500
+    topic: evacuate-log
+    source_id_prefix: localhost
+    log_name: pqlib
+    drop_log_name: evacuate_dropped
+    max_bytes_in_flight: 536870912
+
+tracked_back_ref_tags:
+  - foo
+
+ttl:
+  default_ttl: 100000
+  extended_ttl: 300000
+  touch_timeout_sec: 86400
+  extend_ttl_timeout_sec: 86400
+  custom_tag_ttls:
+    foo: 3600
+    bar: 1800
+
+reader:
+  read_timeout_ms: 1000
+
+parser:
+  threads: 6
+
+processor:
+  count: 256
+  threads: 6
+  max_batching_time_ms: 1000
+  commit_retry_options:
+    initial_sleep_ms: 1000
+    random_delta_ms: 100
+    sleep_increment_ms: 100
+    exponental_multiplier_ms: 0
+
+  max_commands_per_transaction: 1000
+
+  deduplication_cache:
+    size: 2500000
+    max_age_sec: 600
+
+
+yt:
+  table:
+    cluster_url: "master.yt.yandex.net"
+    proxy_role: "default"
+    table_path: "//master/table/path"
+
+  logger:
+    file_name: "/tmp/yt-api"
+
+logs:
+  main:
+    level: "info"
+    targets:
+      - type: "stdout"
+      - type: "rotating"
+        file: "/tmp/main.log"
+        max_file_size: 419430400
+        max_files: 1
+
+  parser:
+    level: trace
+    targets:
+      - type: "rotating"
+        file: "/tmp/parser.log"
+        max_file_size: 419430400
+        max_files: 1
+  processor:
+    level: trace
+    targets:
+      - type: "rotating"
+        file: "/tmp/processor.log"
+        max_file_size: 419430400
+        max_files: 1
+  yt:
+    level: trace
+    targets:
+      - type: "rotating"
+        file: "/tmp/yt.log"
+        max_file_size: 419430400
+        max_files: 1
+  upload:
+    level: trace
+    targets:
+      - type: "rotating"
+        file: "/tmp/upload.log"
+        max_file_size: 419430400
+        max_files: 1
+  delete:
+    level: trace
+    targets:
+      - type: "rotating"
+        file: "/tmp/delete.log"
+        max_file_size: 419430400
+        max_files: 1
+  expire:
+    level: trace
+    targets:
+      - type: "rotating"
+        file: "/tmp/expire.log"
+        max_file_size: 419430400
+        max_files: 1
+  touch:
+    level: trace
+    targets:
+      - type: "rotating"
+        file: "/tmp/touch.log"
+        max_file_size: 419430400
+        max_files: 1
+  pqlib:
+    level: debug
+    targets:
+      - type: "rotating"
+        file: "/tmp/pqlib.log"
+        max_file_size: 419430400
+        max_files: 1
+
+  evacuate_dropped:
+    level: info
+    format: "%v"
+    targets:
+    - type: rotating
+      file: "/tmp/evacuate_dropped.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  graphite:
+    targets:
+    - type: rotating
+      file: "/tmp/graphite.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  solomon:
+    targets:
+    - type: rotating
+      file: "/tmp/solomon.log"
+      max_file_size: 419430400
+      max_files: 1

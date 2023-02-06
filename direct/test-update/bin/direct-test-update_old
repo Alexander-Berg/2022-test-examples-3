@@ -1,0 +1,58 @@
+#!/bin/bash -e
+
+case "$1" in
+test-cloud)
+ssh updater@ppctest-cloud-front.yandex.ru ${*:2}
+;;
+test-cloud2)
+ssh updater@ppctest-cloud2-front.yandex.ru ${*:2}
+;;
+test-load)
+ssh updater@ppctest-load-front.yandex.ru ${*:2}
+;;
+test-sand)
+ssh -o StrictHostKeyChecking=no updater@ppctest-sandbox1-front.ppc.yandex.ru ${*:2}
+;;
+test-sand2)
+ssh updater@ppctest-sandbox2-front.ppc.yandex.ru ${*:2}
+;;
+test1)
+#ssh -o StrictHostKeyChecking=no updater@ppctest-ts1-front.yandex.ru ${*:2}
+for i in "$(for h in direct-web perl-intapi perl-api; do direct-zkcli -H ppc-zk-1.da.yandex.ru cat /direct/np/test/hosts/$h; done)" ppctest-ts1-front.yandex.ru; do ssh -o StrictHostKeyChecking=no updater@"$i" ${*:2} ; done
+;;
+test-all)
+    WEB_HOSTS="$(direct-zkcli -H ppc-zk-1.da.yandex.ru cat /direct/np/test/hosts/direct-web | sed -z 's/\n$//' | sed -z 's/\n/,/g')"
+    API_HOSTS="$(direct-zkcli -H ppc-zk-1.da.yandex.ru cat /direct/np/test/hosts/perl-api | sed -z 's/\n$//' | sed -z 's/\n/,/g')"
+    INTAPI_HOSTS="$(direct-zkcli -H ppc-zk-1.da.yandex.ru cat /direct/np/test/hosts/perl-intapi | sed -z 's/\n$//' | sed -z 's/\n/,/g')"
+    ALL_PERL="$WEB_HOSTS,$API_HOSTS,$INTAPI_HOSTS" 
+    ALL_PERL="$(echo -n $ALL | sed 's/,,/,/g')"
+parallel-test-update --wait --hosts ppctest-ts1-front.yandex.ru,ppctest-scripts-ts.ppc.yandex.ru,ppctest-sandbox1-front.ppc.yandex.ru,"$ALL_PERL"  ${*:2}
+;;
+test2)
+ssh updater@ppctest-ts2-front.ppc.yandex.ru ${*:2}
+;;
+ts1-mysql)
+ssh updater@ppctest-ts1-mysql.ppc.yandex.ru ${*:2}
+;;
+ppcdev-all)
+parallel-test-update --wait --hosts ppcdev1.da.yandex.ru,ppcdev2.da.yandex.ru,ppcdev4.yandex.ru,ppcdev5.yandex.ru,ppcdev6.yandex.ru ${*:2}
+;;
+### https://wiki.yandex-team.ru/users/sco76/TS1-Direkta
+ts1-scripts-rtc)
+ssh -o StrictHostKeyChecking=no updater@vla1-4273-8609.vm.search.yandex.net ${*:2}
+;;
+ts1-api-rtc)
+ssh -o StrictHostKeyChecking=no updater@vla1-5093-8609.vm.search.yandex.net ${*:2}
+;;
+ts1-web-rtc)
+ssh -o StrictHostKeyChecking=no updater@vla1-5083-8609.vm.search.yandex.net ${*:2}
+;;
+ts1-sand-rtc)
+ssh -o StrictHostKeyChecking=no updater@vla1-5102-8609.vm.search.yandex.net ${*:2}
+;;
+###
+*)
+echo "unknown alias $1"
+echo "available aliases: test-cloud|test-load|test-sand|test-sand2|test1|test2|ts1-mysql|ppcdev-all|ts1-scripts-rtc|ts1-api-rtc|ts1-web-rtc|ts1-sand-rtc"
+;;
+esac

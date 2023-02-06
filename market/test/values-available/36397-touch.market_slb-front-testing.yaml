@@ -1,0 +1,23 @@
+# -> mproxy -> haproxy: 30008-market_front_touch.market_slb-front-testing.yaml
+# old: 105-touch-runtime-nodejs.market_slb-front-testing.yaml
+
+context:
+  default:
+    service_name: touch
+    servername_regexp: 'touch\\.tst\\.market\\.yandex\\.(ru|by|kz|ua|com)'
+    vs: touch
+    health_check: '"GET /ping HTTP/1.1\r\nHost: touch.tst.market.yandex.ru\r\n\r\n"'
+    exp_getter: True
+    antirobot: True
+    antirobot_service_name: market
+    cert: touch.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+
+servers:
+  default:
+    main:
+    - name: "GREY%market-front-touch.tst.vs.market.yandex.net"
+      plain_http_backend: True
+      port: 9080
+      timeout: "35s"

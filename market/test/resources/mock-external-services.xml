@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+       default-autowire="byName" default-lazy-init="true">
+
+    <!--TODO feed dispatcher -->
+
+    <tx:annotation-driven/>
+
+    <bean id="mbiApiClient" class="ru.yandex.market.abo.test.MockFactory" factory-method="getMbiApiClientMock"
+          scope="prototype"/>
+
+    <bean id="mbiOpenApiClient" class="ru.yandex.market.abo.test.MockFactory" factory-method="getMbiOpenApiClientMock"
+          scope="prototype"/>
+
+    <bean id="checkouterClient" class="ru.yandex.market.abo.test.MockFactory" factory-method="getCheckouterClientMock"/>
+    <bean id="checkouterPaymentClient" class="ru.yandex.market.abo.test.MockFactory" factory-method="getPaymentApiMock"/>
+    <bean id="checkouterRefundClient" class="ru.yandex.market.abo.test.MockFactory" factory-method="getRefundApiMock"/>
+    <bean id="checkouterReturnClient" class="ru.yandex.market.abo.test.MockFactory" factory-method="getReturnApiMock"/>
+    <bean id="checkouterOrderHistoryEventsClient" class="ru.yandex.market.abo.test.MockFactory" factory-method="getHistoryEventsApiMock"/>
+
+    <bean id="sandboxCheckouterClient" class="ru.yandex.market.abo.test.MockFactory"
+          factory-method="getCheckouterClientMock"/>
+
+    <bean id="checkoutRefereeClient" class="ru.yandex.market.abo.test.MockFactory"
+          factory-method="getCheckoutRefereeClientMock"/>
+    <alias name="checkoutRefereeClient" alias="checkoutRefereeJsonClient"/>
+
+    <import resource="market-report.xml"/>
+    <bean id="offerService" class="ru.yandex.market.abo.test.MockFactory"
+          factory-method="getOfferServiceMock"/>
+
+    <bean class="ru.yandex.market.abo.test.MockMds"/>
+    <bean class="ru.yandex.market.abo.test.MockZK"/>
+
+    <bean id="userService" class="ru.yandex.market.abo.test.MockFactory" factory-method="getBlackBoxServiceMock"/>
+
+    <bean id="startrekSessionProvider" class="ru.yandex.market.abo.test.MockFactory"
+          factory-method="getSessionProviderMock"/>
+
+    <bean id="mstatAntifraudOrdersClient" class="ru.yandex.market.abo.test.MockFactory"
+          factory-method="getMstatAntifraudOrdersClient"/>
+
+    <bean id="idxApiService" class="ru.yandex.market.abo.test.MockFactory" factory-method="getIdxApiService" primary="true"/>
+    <bean id="idxApiPlaneshiftService" class="ru.yandex.market.abo.test.MockFactory" factory-method="getIdxApiSandboxService"/>
+    <bean id="idxApiSandboxService" class="ru.yandex.market.abo.test.MockFactory" factory-method="getIdxApiSandboxService"/>
+    <bean id="yellowIdxApi" class="ru.yandex.market.abo.test.MockFactory" factory-method="getYellowIdxApi"/>
+
+    <bean id="dataCampClient" class="ru.yandex.market.abo.test.MockFactory" factory-method="getDataCampClient"/>
+    <bean id="deliveryCalculatorClient" class="ru.yandex.market.abo.test.MockFactory" factory-method="getDeliveryCalculatorClient"/>
+    <bean id="telegramClient" class="ru.yandex.market.abo.test.MockFactory" factory-method="getTelegramClient"/>
+
+    <bean id="whoisClient" class="ru.yandex.market.abo.test.MockFactory" factory-method="getWhoisClient"/>
+
+    <bean id="memCachingService" class="ru.yandex.market.abo.util.memcached.MemCachingServiceStub"/>
+
+    <bean id="aboPushApiClient" class="ru.yandex.market.abo.test.MockFactory" factory-method="getPushApiClient"/>
+
+    <bean id="regionGroupStatusApi" class="ru.yandex.market.abo.test.MockFactory" factory-method="getRegionGroupStatusApi"/>
+    <bean id="regionGroupApi" class="ru.yandex.market.abo.test.MockFactory" factory-method="getRegionGroupApi"/>
+    <bean id="aboBpmnClient" class="ru.yandex.market.abo.test.MockFactory" factory-method="getAboBpmnClient"/>
+    <bean id="personalRetrieveApi" class="ru.yandex.market.abo.test.MockFactory" factory-method="getPersonalRetrieveApi"/>
+    <bean id="personalBulkRetrieveApi" class="ru.yandex.market.abo.test.MockFactory" factory-method="getPersonalBulkRetrieveApi"/>
+    <bean id="personalMultiTypesRetrieveApi" class="ru.yandex.market.abo.test.MockFactory" factory-method="getPersonalMultiTypesRetrieveApi"/>
+    <bean id="callsApi" class="ru.yandex.market.abo.test.MockFactory" factory-method="getCallsApi"/>
+    <bean id="saasService" class="ru.yandex.market.abo.test.MockFactory" factory-method="getSaasService"/>
+</beans>

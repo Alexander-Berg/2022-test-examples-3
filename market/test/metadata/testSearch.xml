@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<m:config xmlns:c="urn:jmf:common:1.0"
+          xmlns:m="urn:jmf:metaclass:config:1.0"
+          xmlns:mse="urn:jmf:module:search:extension:config:1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+
+    <m:metaclass typed="false">
+        <m:fqn>testSearch</m:fqn>
+        <m:parent>bo</m:parent>
+        <m:title>
+            <c:value>Метакласс для тестирования поиска</c:value>
+        </m:title>
+        <m:logics>
+            <m:logic>withSearch</m:logic>
+        </m:logics>
+
+        <m:extensions>
+            <m:extension xsi:type="mse:search" globalSearchEnabled="true">
+                <mse:search>
+                    <mse:attribute code="title"/>
+                </mse:search>
+            </m:extension>
+        </m:extensions>
+    </m:metaclass>
+
+    <m:metaclass>
+        <m:fqn>pts</m:fqn>
+        <m:parent>bo</m:parent>
+        <m:title>
+            <c:value>Для тестирования поиска</c:value>
+        </m:title>
+        <m:logics>
+            <m:logic>withSearch</m:logic>
+        </m:logics>
+        <m:attributes>
+            <m:attribute>
+                <m:code>testCode</m:code>
+                <m:title>
+                    <c:value>code</c:value>
+                </m:title>
+                <m:type code="string"/>
+            </m:attribute>
+        </m:attributes>
+
+        <m:extensions>
+            <m:extension xsi:type="mse:search" globalSearchEnabled="true">
+                <mse:search>
+                    <mse:attribute code="title"/>
+                    <mse:attribute code="testCode"/>
+                </mse:search>
+            </m:extension>
+        </m:extensions>
+    </m:metaclass>
+    <m:metaclass>
+        <m:fqn>pts$child</m:fqn>
+        <m:parent>pts</m:parent>
+        <m:title>
+            <c:value>Потомок для тестирования поиска</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>testCode2</m:code>
+                <m:title>
+                    <c:value>code2</c:value>
+                </m:title>
+                <m:type code="string"/>
+            </m:attribute>
+        </m:attributes>
+
+        <m:extensions>
+            <m:extension xsi:type="mse:search">
+                <mse:search>
+                    <mse:attribute code="testCode2"/>
+                </mse:search>
+            </m:extension>
+        </m:extensions>
+    </m:metaclass>
+</m:config>

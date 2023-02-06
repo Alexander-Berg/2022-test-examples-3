@@ -1,0 +1,42 @@
+juggler:
+  checks:
+  # Check campaign-db-hosts-state
+  # https://juggler.yandex-team.ru/check_details/?host=market_campaign_management_solomon-testing&service=campaign-db-hosts-state&last=1DAY
+  # Source: https://solomon.yandex-team.ru/admin/projects/market-lilucrm/alerts/mcrm_db_hosts_state
+  - children:
+      - EVENTS%(host=market_campaign_management-testing&tag=db_hosts_state):all:all
+    service: campaign-db-hosts-state
+
+  # Check campaign-db-replica-lag
+  # https://juggler.yandex-team.ru/check_details/?host=market_campaign_management_solomon-testing&service=campaign-db-replica-lag&last=1DAY
+  # Source: https://solomon.yandex-team.ru/admin/projects/market-lilucrm/alerts/mcrm_db_replica_lag
+  - children:
+      - EVENTS%(host=market_campaign_management-testing&tag=db_replica_lag):all:all
+    service: campaign-db-replica-lag
+
+  # Check campaign-db-disc-free-space
+  # https://juggler.yandex-team.ru/check_details/?host=market_campaign_management_solomon-testing&service=campaign-db-disc-free-space&last=1DAY
+  # Source: https://solomon.yandex-team.ru/admin/projects/market-lilucrm/alerts/mcrm_db_disc_free_space
+  - children:
+      - EVENTS%(host=market_campaign_management-testing&tag=db_disc_free_space):all:all
+    service: campaign-db-disc-free-space
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    check_options: {}
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_campaign_management_solomon-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_campaign_management_test
+    - market_campaign_management
+    - market_lilucrm
+    - market
+    - _market_
+    ttl: 900

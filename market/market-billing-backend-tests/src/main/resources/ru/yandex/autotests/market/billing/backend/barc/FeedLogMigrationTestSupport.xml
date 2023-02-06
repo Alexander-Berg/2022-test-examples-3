@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="feedLogBoundaryDefinition"
+          class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.MigrationBoundaryDefinition">
+        <constructor-arg name="oracleLifeTime" value="#{T(java.time.Duration).ofDays(7)}"/>
+        <constructor-arg name="dateTimeAccuracy" value="DAYS"/>
+        <constructor-arg name="partitionsInterval" value="#{T(java.time.Duration).ofDays(1)}"/>
+        <property name="partitionKeyFormatter"
+                  value="#{T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd')}"/>
+    </bean>
+
+    <beans profile="migration">
+        <bean id="migrationProcess"
+              class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.MigrationProcessDefinition">
+            <constructor-arg name="oracleArchiverOperations" ref="feedLogAndDeltaRawRepository"/>
+            <constructor-arg name="samplesCount" value="10"/>
+            <constructor-arg name="boundaryDefinition" ref="feedLogBoundaryDefinition"/>
+            <property name="yqlTablePath" value="feed_log"/>
+        </bean>
+
+        <bean id="migrationJob"
+              class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.MigrationJobDefinition">
+            <constructor-arg name="jobName" value="migrateFeedLogExecutor"/>
+            <constructor-arg name="boundaryDefinition" ref="feedLogBoundaryDefinition"/>
+            <property name="yqlEntityName" value="FEED_LOG"/>
+        </bean>
+    </beans>
+</beans>

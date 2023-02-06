@@ -1,0 +1,45 @@
+{% if table == "sets_reasons_to_buy_customers_choice" %}
+    {% table "sets_reasons_to_buy" %}
+        ["M1", "model", "customers_choice", "consumerFactor", 0.8, {"rating": "5", "rating_threshold": "4", "recommenders_count": "7", "share_threshold": "0.7"}, "{{ day }}"],
+        ["M2", "model", "customers_choice", "consumerFactor", 0.8, {"rating": "5", "rating_threshold": "4.5", "recommenders_count": "7", "share_threshold": "0.99"}, "{{ day }}"],
+        ["M3", "model", "customers_choice", "consumerFactor", 0.8, {"rating": "5", "rating_threshold": "4.989999771118164", "recommenders_count": "7", "share_threshold": "0.8"}, "{{ day }}"],
+        ["M4", "model", "customers_choice", "consumerFactor", 0.9, {"rating": "5", "rating_threshold": "4", "recommenders_count": "7", "share_threshold": "0.7"}, "{{ day }}"],
+        ["M5", "model", "customers_choice", "consumerFactor", 0.8, {"rating": "4.5", "rating_threshold": "4.989999771118164", "recommenders_count": "7", "share_threshold": "0.8"}, "{{ day }}"],
+        ["M6", "model", "customers_choice", "consumerFactor", 0.8, {"rating": "3", "rating_threshold": "4", "recommenders_count": "7", "share_threshold": "0.7"}, "{{ day }}"]
+        {% if not version.startswith("blue") %}
+        ,["M1M", "model", "customers_choice", "consumerFactor", 0.8, {"rating": "5", "rating_threshold": "4", "recommenders_count": "7", "share_threshold": "0.7"}, "{{ day }}"]
+        {% endif %}
+    {% endtable %}
+{% elif table == "items_model_category_id" %}
+    {% table table %}
+        ["M1", "C1", "model", "{{ day }}"],
+        ["M2", "C2", "model", "{{ day }}"],
+        ["M3", "C3", "model", "{{ day }}"],
+        ["M4", "C4", "model", "{{ day }}"],
+        ["M5", "C3", "model", "{{ day }}"],
+        ["M6", "C4", "model", "{{ day }}"],
+        ["M1M", "C1", "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "items_model_feedback_statistics" %}
+    {% table table %}
+        ["M1", 5.0, 0, 0, 0, 7, 0.8, "model", "{{ day }}"],
+        ["M2", 5.0, 0, 0, 0, 7, 0.8, "model", "{{ day }}"],
+        ["M3", 5.0, 0, 0, 0, 7, 0.8, "model", "{{ day }}"],
+        ["M4", 5.0, 0, 0, 0, 7, 0.9, "model", "{{ day }}"],
+        {# These models should not pass because of small rating: #}
+        ["M5", 4.5, 0, 0, 0, 7, 0.8, "model", "{{ day }}"],
+        ["M6", 3.0, 0, 0, 0, 7, 0.8, "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "items_model_group" %}
+    {% table table %}
+        ["M1M", "M1", "model", "{{ day }}"],
+        {# this relation must be ignored, since there is some statistics for M4 #}
+        ["M4", "M1", "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "sets_customers_choice_thresholds" %}
+    {% table table %}
+        ["C1", 4.0, 0.7, "{{ day }}"],
+        ["C2", 4.5, 0.99, "{{ day }}"],
+        ["C3", 4.99, 0.8, "{{ day }}"]
+    {% endtable %}
+{% endif %}

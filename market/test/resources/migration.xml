@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans default-lazy-init="true" default-autowire="byName">
+
+    <bean id="dataSourceTemplate" class="ru.yandex.common.util.db.NamedDataSource" abstract="true" destroy-method="close">
+        <property name="maxWait" value="300000"/>
+        <property name="minEvictableIdleTimeMillis" value="3600000"/>
+        <property name="nativeJdbcExtractor">
+            <bean class="org.springframework.jdbc.support.nativejdbc.CommonsDbcpNativeJdbcExtractor"/>
+        </property>
+        <property name="moduleName" value="migration"/>
+    </bean>
+
+    <bean name="oldMarkupDataSource" parent="dataSourceTemplate">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://pgaas.mail.yandex.net:12000/market_markup?ssl=true&amp;prepareThreshold=0&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory"/>
+        <property name="username" value="market_markup_worker"/>
+        <property name="password" value="owHzTWe6LFMYqdRmwiNV0Gtbv4H6OCbHvFhwwXfhuC9mjJmBWOmnaIRhmQJZF5dK8iaAGVyNVb3NyDUgR9nPppkOfog9vsgakj5lMBffw1swpmYWFpNVFjjSq60ktFmQ"/>
+        <property name="queryTimeoutSeconds" value="300"/>
+    </bean>
+
+    <bean name="newMarkupDataSource" parent="dataSourceTemplate">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://pgaas.mail.yandex.net:12000/market_markup2_test?ssl=true&amp;prepareThreshold=0&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory"/>
+        <property name="username" value="market_markup2_worker"/>
+        <property name="password" value="NKrUaS8UYss9EbhofKmj0TP5fCmNSe8L6ajC8hUTSPLIGMzDh3VpHvd58hmDib34tYNc3GLcCrxsjiSwQkzfFJoZa9QA2XCfVLlLHisZTVxwL8LYoZhynFSJ80gIzzbB"/>
+        <property name="queryTimeoutSeconds" value="300"/>
+    </bean>
+
+    <bean id="oldMarkupNamedJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="oldMarkupDataSource"/>
+    </bean>
+
+    <bean id="newMarkupNamedJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="newMarkupDataSource"/>
+    </bean>
+
+    <bean id="oldMarkupJdbcTemplate" class="org.springframework.jdbc.core.JdbcOperations"
+          factory-bean="oldMarkupNamedJdbcTemplate" factory-method="getJdbcOperations"/>
+
+    <bean id="newMarkupJdbcTemplate" class="org.springframework.jdbc.core.JdbcOperations"
+          factory-bean="newMarkupNamedJdbcTemplate" factory-method="getJdbcOperations"/>
+
+    <bean id="newMarkupTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="newMarkupTransactionManager"/>
+    </bean>
+
+    <bean id="newMarkupTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="newMarkupDataSource"/>
+    </bean>
+
+    <bean name="abstractPersister" class="ru.yandex.market.markup2.dao.AbstractPersister" abstract="true">
+        <property name="jdbcTemplate" ref="newMarkupJdbcTemplate" />
+        <property name="schema" value="markup2" />
+    </bean>
+
+    <bean name="configGroupPersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.TaskConfigGroupPersister">
+    </bean>
+    <bean name="configGroupStatisticPersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.TaskConfigGroupStatisticPersister">
+    </bean>
+    <bean name="taskGroupMetricsPersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.TaskGroupMetricsPersister">
+    </bean>
+    <bean name="configPersister" parent="abstractPersister" class="ru.yandex.market.markup2.dao.TaskConfigPersister">
+    </bean>
+    <bean name="taskPersister" parent="abstractPersister" class="ru.yandex.market.markup2.dao.TaskPersister">
+    </bean>
+    <bean name="taskStatisticPersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.TaskStatisticPersister">
+    </bean>
+    <bean name="dataItemPersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.TaskDataItemPersister">
+    </bean>
+    <bean name="configGroupDataUniquePersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.dataUnique.ConfigGroupDataUniquePersister">
+    </bean>
+    <bean name="typeCategoryDataUniquePersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.dataUnique.TypeCategoryDataUniquePersister">
+    </bean>
+    <bean name="executionDataPersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.HitmanExecutionDataPersister">
+    </bean>
+    <bean name="executionToTaskItemsPersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.HitmanExecutionToTaskItemsPersister">
+    </bean>
+    <bean name="taskDataItemOperationStatusPersister" parent="abstractPersister"
+          class="ru.yandex.market.markup2.dao.TaskDataItemOperationStatusPersister">
+    </bean>
+
+    <bean name="taskTypesContainers" class="ru.yandex.market.markup2.workflow.TaskTypesContainers">
+        <property name="taskTypeContainers">
+            <map>
+                <entry key="#{T(ru.yandex.market.ir.http.Markup.TaskType).FILL_PARAMETERS_VALUE}"
+                       value-ref="fillParamValuesTypeContainer"/>
+                <entry key="#{T(ru.yandex.market.ir.http.Markup.TaskType).ETALON_PARAMETERS_VALUE}"
+                       value-ref="etalonParamValuesTypeContainer"/>
+                <entry key="#{T(ru.yandex.market.ir.http.Markup.TaskType).FILL_PARAMETERS_METRIC_VALUE}"
+                       value-ref="fillParamValuesMetricTypeContainer"/>
+                <entry key="#{T(ru.yandex.market.markup2.entries.type.ExperimentTaskType).MARKETIR3597.getId()}"
+                       value-ref="fillParamValuesTypeContainerMARKETIR3597"/>
+                <entry key="#{T(ru.yandex.market.markup2.entries.type.ExperimentTaskType).MARKETIR3441.getId()}"
+                       value-ref="etalonParamValuesTypeContainerMARKETIR3441"/>
+                <entry key="#{T(ru.yandex.market.markup2.entries.type.ExperimentTaskType).MARKETIR3562.getId()}"
+                       value-ref="etalonParamValuesTypeContainerMARKETIR3562"/>
+                <entry key="#{T(ru.yandex.market.ir.http.Markup.TaskType).CARD_DUBLICATES_VALUE}">
+                    <bean factory-bean="cardDuplicatesTaskContainerFactory" factory-method="getTaskTypeContainer" />
+                </entry>
+                <entry key="#{T(ru.yandex.market.ir.http.Markup.TaskType).MATCHING_ACCURACY_VALUE}   ">
+                    <bean factory-bean="matchingAccuracyTaskContainerFactory" factory-method="getTaskTypeContainer"/>
+                </entry>
+                <entry key="#{T(ru.yandex.market.ir.http.Markup.TaskType).NAME_OF_CARDS_VALUE}"
+                       value-ref="logsProcessingTaskTypeContainer"/>
+            </map>
+        </property>
+        <property name="devTaskTypes" value="${dev.task.types:#{null}}"/>
+    </bean>
+
+    <bean name="fillParamValuesTypeContainer"
+          class="ru.yandex.market.markup2.tasks.fill_param_values.FillParamValuesTypeContainerFactory"
+          factory-method="createTaskTypeContainer">
+        <constructor-arg>
+            <bean class="ru.yandex.market.markup2.tasks.TaskTypeContainerParams">
+                <property name="dataItemsProcessor">
+                    <bean class="ru.yandex.market.markup2.tasks.fill_param_values.FillParamValuesDataItemsProcessor"/>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean name="etalonParamValuesTypeContainer"
+          class="ru.yandex.market.markup2.tasks.fill_param_values_metric.etalon.EtalonParamValuesTypeContainerFactory"
+          factory-method="createTaskTypeContainer">
+        <constructor-arg>
+            <bean class="ru.yandex.market.markup2.tasks.TaskTypeContainerParams">
+                <property name="dataItemsProcessor">
+                    <bean class="ru.yandex.market.markup2.tasks.fill_param_values_metric.etalon.EtalonParamValuesDataProccessor"/>
+                </property>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <null/>
+        </constructor-arg>
+    </bean>
+
+    <bean name="fillParamValuesMetricTypeContainer"
+          class="ru.yandex.market.markup2.tasks.fill_param_values_metric.metric.FillParamValuesMetricTypeContainerFactory"
+          factory-method="createTaskTypeContainer">
+        <constructor-arg>
+            <bean class="ru.yandex.market.markup2.tasks.TaskTypeContainerParams">
+                <property name="dataItemsProcessor">
+                    <bean class="ru.yandex.market.markup2.tasks.fill_param_values_metric.metric.FillParamValuesMetricDataProccessor"/>
+                </property>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <null/>
+        </constructor-arg>
+    </bean>
+
+    <bean name="fillParamValuesTypeContainerMARKETIR3597"
+          class="ru.yandex.market.markup2.tasks.fill_param_values.FillParamValuesTypeContainerFactory"
+          factory-method="createTaskTypeContainer">
+        <constructor-arg>
+            <bean class="ru.yandex.market.markup2.tasks.TaskTypeContainerParams">
+                <property name="dataItemsProcessor">
+                    <bean class="ru.yandex.market.markup2.tasks.fill_param_values.FillParamValuesDataItemsProcessor"/>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean name="etalonParamValuesTypeContainerMARKETIR3562"
+          class="ru.yandex.market.markup2.tasks.fill_param_values_metric.etalon.EtalonParamValuesTypeContainerFactory"
+          factory-method="createTaskTypeContainer">
+        <constructor-arg>
+            <bean class="ru.yandex.market.markup2.tasks.TaskTypeContainerParams">
+                <property name="dataItemsProcessor">
+                    <bean class="ru.yandex.market.markup2.tasks.fill_param_values_metric.etalon.EtalonParamValuesDataProccessor"/>
+                </property>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <null/>
+        </constructor-arg>
+    </bean>
+
+    <bean name="etalonParamValuesTypeContainerMARKETIR3441"
+          class="ru.yandex.market.markup2.tasks.fill_param_values_metric.etalon.EtalonParamValuesTypeContainerFactory"
+          factory-method="createTaskTypeContainer">
+        <constructor-arg>
+            <bean class="ru.yandex.market.markup2.tasks.TaskTypeContainerParams">
+                <property name="dataItemsProcessor">
+                    <bean class="ru.yandex.market.markup2.tasks.fill_param_values_metric.etalon.EtalonParamValuesDataProccessor"/>
+                </property>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <null/>
+        </constructor-arg>
+    </bean>
+
+    <bean name="cardDuplicatesTaskContainerFactory"
+          class="ru.yandex.market.markup2.tasks.card_duplicates.CardDuplicatesTaskContainerFactory">
+    </bean>
+
+    <bean name="matchingAccuracyTaskContainerFactory"
+          class="ru.yandex.market.markup2.tasks.matching_accuracy.MatchingAccuracyTaskContainerFactory">
+    </bean>
+
+    <bean name="logsProcessingTaskTypeContainer"
+          class="ru.yandex.market.markup2.tasks.logs_processing_old.LogsProcessingTypeContainerFactory"
+          factory-method="createTypeContainer">
+        <constructor-arg>
+            <bean class="ru.yandex.market.markup2.tasks.TaskTypeContainerParams">
+                <property name="dataItemsProcessor">
+                    <bean class="ru.yandex.market.markup2.tasks.logs_processing_old.LogsProcessingDataItemsProcessor"/>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+</beans>

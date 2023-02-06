@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+import "search/resonance/proto/backend.proto";
+
+package NResonanceTester.NProto;
+
+message TLoadgenConfig {
+    message TPathGenerator {
+        map<string, int32> Paths = 1; // path-count dict
+        string RandomFormat = 2; // {path}?text={random} for example
+        int32 Seed = 3; // seed of random
+        int32 RandomSize = 4; // size of random string
+    }
+
+    int32 Threads = 1;
+    int32 Connections = 2;
+    int32 Rps = 3;
+
+    bool MultiplyConnections = 4; // real_connections = connections * len(backends)
+    bool MultiplyRps = 5; // real_rps = rps * len(backends)
+
+    TPathGenerator PathGenerator = 6;
+}
+
+message TSelectorConfig {
+    int32 Seed = 1; // seed of random
+    int32 SampleSize = 2; // how much items to choose
+    double SamplePart = 3; // how part items to choose
+    bool Inversed = 4; // inverse result
+}
+
+message TScript {
+    double SleepTime = 1;
+    int32 Repeat = 2;
+    repeated string Include = 3;
+    repeated TScript Script = 4;
+
+    repeated string BackendFile = 5;
+    repeated NResonance.NProto.TBackend Backend = 6;
+
+    bool ResetStates = 7;
+    bool StopBackends = 8;
+    bool StartBackends = 9;
+
+    TLoadgenConfig Loadgen = 10;
+
+    repeated TSelectorConfig BackendsSelector = 11;
+}

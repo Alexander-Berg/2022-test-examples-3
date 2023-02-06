@@ -1,0 +1,87 @@
+{
+    "YtCluster": "{{ yt_cluster }}",
+    "HttpServer": {
+        "Port": {{ port }}
+    },
+
+    "Logs": {
+        "Rules": [
+            {
+                "FilePath": "{{ global_log }}",
+            }
+        ]
+    },
+    "Destinations": [
+        {
+            "Name": "{{ output_queue }}",
+            "ShardsCount": {{ output_shards_count }},
+            "QytWriter": {
+                "Queues": [
+                    {
+                        "Cluster": "{{ yt_cluster }}",
+                        "Path": "{{ output_queue }}"
+                    }
+                ]
+            }
+        }
+    ],
+
+    "Instances": [
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "{{ consuming_system_main_path }}",
+                    "MaxShards": {{ shards_count }},
+                    "MaxShardsToCheck": 2,
+                    "WorkerMinorName": "{{ worker_minor_name }}",
+                    "LaunchShardProcessorInFiber": true, {# it is not an easy choice #}
+                    "MasterBalancing": {
+                        "MasterPath": "{{ master_path }}"
+                    },
+                    "Shards": {
+                        {# demo test specific, prefer AutoResolve #}
+                        "Range": {
+                            "Begin": 0,
+                            "End": {{ shards_count }}
+                        }
+                    }
+                },
+
+                "ShardsCount": {{ output_shards_count }},
+
+                "StatelessShardProcessorConfig": {
+                    "MaxEpochsInFlight": 3, {# it is not an easy choice #}
+                },
+                "MaxInflightBytes": 10000000, {# demo test specific #}
+
+                "Suppliers": [
+                    {
+                        "Alias": "soup_log",
+                        "YtSupplier": {
+                            "ChunkSize": 1, {# demo test specific #}
+                            "CommitPeriodMs": 100, {# demo test specific #}
+                            "DelayAfterEmptyReadMs": 0, {# demo test specific #}
+                            "FlushChunkIntervalMs": 0, {# demo test specific #}
+                            "MinCallbackBatchSize": 1, {# demo test specific #}
+                            "QueueConsumer": "{{ consumer }}",
+                            "QueuePath": "{{ input_queue }}",
+                            "Cluster": "{{ yt_cluster }}"
+                        }
+                    }
+                ]
+            },
+            "OutputQueue": "{{ output_queue }}",
+            "SampleShardsMax": 10,
+            "RowsProcessor": {
+                "MessageType": "SOUP",
+                "Parser": {
+                    "{{ parser }}": {
+                        "B64Encoding": true
+                    }
+                },
+                "ShardingAlgorithm": "RoundRobin"
+            }
+        }
+
+    ]
+}

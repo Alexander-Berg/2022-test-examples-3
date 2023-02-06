@@ -1,0 +1,50 @@
+<report>
+    <name>testShops</name>
+    <description><![CDATA[Тестовые магазины]]></description>
+    <title>Магазины: Тестовые магазины</title>
+    <jdbcTemplate>readOnlyJdbcTemplate</jdbcTemplate>
+    <graphReport>0</graphReport>
+    <defSortOrder>0</defSortOrder>
+    <query><![CDATA[
+    select distinct d.id, s3.campaign_id, d.name, s2.last_name, s2.first_name, s2.second_name, man.fullname,
+      count(1) over () cnt
+    from shops_web.datasource s1,
+    (
+      select distinct v1.campaign_id, c.last_name, c.first_name, c.second_name
+      from
+      (
+        select cl.contact_id, vcc.campaign_id
+        from shops_web.contact_link cl, shops_web.contact_role cr, market_billing.v_current_campaign vcc
+        where cl.campaign_id = vcc.campaign_id and cr.contact_link_id = cl.id
+      ) v1, shops_web.contact c, shops_web.contact_email ce
+      where c.id = v1.contact_id and ce.contact_id = c.id
+    ) s2,
+    (
+      select datasource_id, campaign_id
+      from market_billing.v_current_campaign
+    ) s3,
+    shops_web.datasource d,
+    (
+      select d.id datasource_id, ur.fullname
+      from shops_web.datasource d, shops_web.user_roles ur
+      where d.manager_id = ur.ID
+    ) man
+    where s1.id = s3.datasource_id
+      and s3.campaign_id = s2.campaign_id and s3.datasource_id = d.id and s3.datasource_id = man.datasource_id
+      and s1.id in (774, 707, 101663, 102665, 64407, 81832, 41870, 48398, 48401,
+       70608 , 70609, 70610, 70611, 70612, 70613
+      )
+    order by id
+]]></query>
+    <inputParameters/>
+    <outputColumns>
+        <column title="Количество" index="80"/>
+        <column title="Фамилия" index="40"/>
+        <column title="Имя" index="50"/>
+        <column title="ЯМенеджер" index="70"/>
+        <column title="URL" index="30" variable="shop_url"/>
+        <column title="Id Магазина" index="10"/>
+        <column title="Отчество" index="60"/>
+        <column title="Id Кампании" index="20" variable="campaign_id" campaignResolver="simpleCampaignResolver"/>
+    </outputColumns>
+</report>

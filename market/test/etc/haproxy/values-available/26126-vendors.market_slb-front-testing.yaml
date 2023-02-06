@@ -1,0 +1,30 @@
+# Параметры обработки
+params:
+  default:
+    resolve: yes
+    templates:
+      - user_mslb_http.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          "check observe layer7"
+      on_error:       fastinter
+      weight:         1
+    globals:
+      ping_expect:    string pong
+      service_name:   vendor.market.fslb.yandex.ru
+      service_port:   26126
+      timeout_server: 35s
+      ping_vhost:     heartbeat-vendor.market.fslb.yandex.ru
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+    - name: N@testing_market_front_vendors_sas
+    - name: YP@testing-market-front-vendors-vla
+      sort_order: shuffled
+      dns_resolvers: yandex-ns
+      resolve: false

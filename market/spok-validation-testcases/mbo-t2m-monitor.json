@@ -1,0 +1,87 @@
+{
+  "serviceId": "5aeb0a565448e1d9d450a533",
+  "abcGroupId": "mbo",
+  "arcadiaPath": "market/mbo/t2m-monitor",
+  "applicationType": "JAVA",
+  "description": "Всякие tms-ки и прочее для мониторинга time2market",
+  "name": "t2m-monitor",
+  "owners": [
+    "yuramalinov"
+  ],
+  "startrekTicket": "MBO-27285",
+  "itype": "marketmbot2mmonitor",
+  "itagprj": "market",
+  "javaPackage": "ru.yandex.market.t2mmonitor",
+  "resourceTypeName": "MARKET_T2M_MONITOR",
+  "yaMakeOwner": [
+    "yuramalinov"
+  ],
+  "environments": {
+    "TESTING": {
+      "instancesPerDc": 0,
+      "cpuCores": 0,
+      "memoryAmountGb": 0,
+      "postgreSql": {
+        "connectionLimit": 0,
+        "volumeSizeGb": 11
+      },
+      "volumeLogsGb": 30,
+      "volumeCoresGb": 0
+    },
+    "PRESTABLE": {
+      "instancesPerDc": 0,
+      "cpuCores": 0,
+      "memoryAmountGb": 0,
+      "postgreSql": {
+        "connectionLimit": 0,
+        "volumeSizeGb": 11
+      },
+      "volumeLogsGb": 30,
+      "volumeCoresGb": 0
+    },
+    "PRODUCTION": {
+      "locations": [
+        "SAS",
+        "VLA"
+      ],
+      "instancesPerDc": 1,
+      "cpuCores": 0.5,
+      "memoryAmountGb": 2,
+      "balancer": {
+        "needSsl": true,
+        "accessForUsers": "yandex_monetize_market_marketdev_business_mining",
+        "expectedRps": "3"
+      },
+      "postgreSql": {
+        "connectionLimit": 100,
+        "databaseName": "t2mmonitoring",
+        "instanceType": "s2.nano",
+        "volumeSizeGb": 11
+      },
+      "volumeLogsGb": 10,
+      "volumeCoresGb": 0,
+      "additionalJugglerTags": []
+    }
+  },
+  "liquibaseEnabled": true,
+  "optionalJugglerChecks": [
+    "monitoring"
+  ],
+  "additionalJugglerTags": [
+    "mbo"
+  ],
+  "javaAppTemplate": "QUARTZ_TMS_WITH_POSTGRES",
+  "balancerOption": "ENABLED",
+  "solomonProjectId": "market-mbo",
+  "javaTraceModuleName": "MARKET_TM_MONITOR",
+  "notification": {
+    "options": [
+      "STARTREK",
+      "TELEGRAM"
+    ],
+    "staffLoginsForTelegram": [
+      "yuramalinov"
+    ]
+  },
+  "serviceCategory": "/market/mbo/t2m-monitor/"
+}

@@ -1,0 +1,324 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dautoorder-testing
+
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=autoorder-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: skip
+    check_options: {}
+    service: disk_free_space
+
+  # Check fresh-hprof-files
+  # https://juggler.yandex-team.ru/check_details/?host=autoorder-testing&service=fresh-hprof-files&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: skip
+    check_options: {}
+    service: fresh-hprof-files
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=autoorder-testing&service=ping&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "tms", "path": "/health/jobs-status"},
+           {"service": "replenishment-import-status", "path": "/health/replenishment-import-status"},
+           {"service": "replenishment-import-status-interface", "path": "/health/replenishment-import-status-interface"},
+           {"service": "alerts", "path": "/health/alerts"}]'
+    service: ping
+
+  # Check replenishment-import-status
+  # https://juggler.yandex-team.ru/check_details/?host=autoorder-testing&service=replenishment-import-status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "tms", "path": "/health/jobs-status"},
+           {"service": "replenishment-import-status", "path": "/health/replenishment-import-status"},
+           {"service": "replenishment-import-status-interface", "path": "/health/replenishment-import-status-interface"},
+           {"service": "alerts", "path": "/health/alerts"}]'
+    service: replenishment-import-status
+
+  # Check replenishment-import-status-interface
+  # https://juggler.yandex-team.ru/check_details/?host=autoorder-testing&service=replenishment-import-status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "tms", "path": "/health/jobs-status"},
+           {"service": "replenishment-import-status", "path": "/health/replenishment-import-status"},
+           {"service": "replenishment-import-status-interface", "path": "/health/replenishment-import-status-interface"},
+           {"service": "alerts", "path": "/health/alerts"}]'
+    service: replenishment-import-status-interface
+
+  # Check tms
+  # https://juggler.yandex-team.ru/check_details/?host=autoorder-testing&service=tms&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "tms", "path": "/health/jobs-status"},
+           {"service": "replenishment-import-status", "path": "/health/replenishment-import-status"},
+           {"service": "replenishment-import-status-interface", "path": "/health/replenishment-import-status-interface"},
+           {"service": "alerts", "path": "/health/alerts"}]'
+    service: tms
+
+  # Check alerts
+  # https://juggler.yandex-team.ru/check_details/?host=autoorder-testing&service=alerts&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "tms", "path": "/health/jobs-status"},
+           {"service": "replenishment-import-status", "path": "/health/replenishment-import-status"},
+           {"service": "replenishment-import-status-interface", "path": "/health/replenishment-import-status-interface"},
+           {"service": "alerts", "path": "/health/alerts"}]'
+    service: alerts
+
+  - aggregator_kwargs:
+      nodata_mode: force_warn
+    refresh_time: 300
+    ttl: 900
+    flaps:
+      boost_time: 0
+      critical_time: 1500
+      stable_time: 900
+    check_options: {}
+    children: []
+    service: db_free_space
+    notifications:
+      - template_kwargs:
+          login: autoorder_team
+          method: telegram
+          status:
+            - CRIT
+            - WARN
+            - from: WARN
+              to: OK
+            - from: CRIT
+              to: OK
+        template_name: on_status_change
+      - template_kwargs:
+          login: C02F1DE3QTB
+          method: slack
+          status:
+            - CRIT
+            - WARN
+            - from: WARN
+              to: OK
+            - from: CRIT
+              to: OK
+        template_name: on_status_change
+      - template_name: solomon
+        template_kwargs: {}
+
+  - aggregator_kwargs:
+      limits:
+        - crit: 49%
+          day_end: 7
+          day_start: 1
+          time_end: 20
+          time_start: 12
+          warn: 49%
+        - crit: 101%
+          day_end: 7
+          day_start: 1
+          time_end: 11
+          time_start: 21
+          warn: 101%
+      nodata_mode: force_warn
+    refresh_time: 60
+    ttl: 180
+    flaps:
+      boost_time: 0
+      critical_time: 300
+      stable_time: 180
+    check_options: {}
+    children: []
+    service: db_is_alive
+    notifications:
+      - template_kwargs:
+          login: autoorder_team
+          method: telegram
+          status:
+            - CRIT
+            - WARN
+            - from: WARN
+              to: OK
+            - from: CRIT
+              to: OK
+        template_name: on_status_change
+      - template_kwargs:
+          login: C02F1DE3QTB
+          method: slack
+          status:
+            - CRIT
+            - WARN
+            - from: WARN
+              to: OK
+            - from: CRIT
+              to: OK
+        template_name: on_status_change
+      - template_name: solomon
+        template_kwargs: {}
+
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    children:
+    - NANNY%testing_market_autoorder_vla
+    - NANNY%testing_market_autoorder_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: autoorder-testing
+    namespace: market.common
+    notifications:
+    - template_kwargs:
+        login:
+        - autoorder_team
+        method: telegram
+        status:
+        - from: OK
+          to: CRIT
+        - from: CRIT
+          to: OK
+        - from: CRIT
+          to: WARN
+        - from: WARN
+          to: CRIT
+        - from: OK
+          to: WARN
+        - from: WARN
+          to: OK
+      template_name: on_status_change
+    - template_kwargs:
+        login:
+        - C02F1DE3QTB
+        method: slack
+        status:
+        - from: OK
+          to: CRIT
+        - from: CRIT
+          to: OK
+        - from: CRIT
+          to: WARN
+        - from: WARN
+          to: CRIT
+        - from: OK
+          to: WARN
+        - from: WARN
+          to: OK
+      template_name: on_status_change
+    - template_name: startrek
+      template_kwargs:
+          queue: TESTJUGGLER 
+          status:
+          - CRIT
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - marketautoorder
+    - testing
+    - market
+    - _market_
+    ttl: 900

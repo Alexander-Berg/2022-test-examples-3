@@ -1,0 +1,32 @@
+# Перенесено из 414-idxapi.market_slb-testing.yaml 
+# https://github.yandex-team.ru/cs-admin/haproxy-market-core/blob/master/src/etc/haproxy/values-available/414-idxapi.market_slb-testing.yaml
+params:
+  default:
+    resolve: true
+    templates:
+      - user_mslb_http.tpl
+    generate: no
+  "%market_slb_search-testing":
+    generate: yes
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          "check observe layer7"
+    globals:
+      retries:        2
+      service_name:   idxapi.tst.vs.market.yandex.net
+      service_port:   29334
+      ping_expect:    "string ok"
+      timeout_server: 10h
+    options:
+      http-server-close:
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+      - name: "YP@testing_market_idx-api.idxapi"
+        dns_resolvers: yandex-ns
+        resolve: false

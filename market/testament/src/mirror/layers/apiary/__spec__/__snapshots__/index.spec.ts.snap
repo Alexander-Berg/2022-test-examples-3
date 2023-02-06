@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`function as props packed function 1`] = `
+Object {
+  "isRobot": false,
+  "items": Array [
+    1,
+    2,
+  ],
+  "state": "none",
+  "touches": 0,
+}
+`;
+
+exports[`function as props return literal 1`] = `
+Object {
+  "isRobot": false,
+  "items": Array [
+    1,
+    2,
+  ],
+  "state": "none",
+  "touches": 0,
+}
+`;
+
+exports[`function as props return promise 1`] = `
+Object {
+  "isRobot": false,
+  "items": Array [
+    1,
+    2,
+  ],
+  "state": "none",
+  "touches": 0,
+}
+`;
+
+exports[`mountWidget isRobot 1`] = `
+Object {
+  "isRobot": true,
+  "items": Array [
+    1,
+    2,
+  ],
+  "state": "none",
+  "touches": 0,
+}
+`;
+
+exports[`mountWidget should work 1`] = `
+Object {
+  "isRobot": false,
+  "items": Array [
+    1,
+    2,
+  ],
+  "state": "none",
+  "touches": 0,
+}
+`;
+
+exports[`should apply remote-resolver transformer: backend 1`] = `
+Object {
+  "function": "(ctx, arg) => {
+    let result;
+
+    try {
+      result = impl(ctx, arg);
+    } catch (ex) {
+      result = Promise.reject(ex);
+    }
+
+    const actualHandler = _settings.errorHandler || defaultErrorHandler;
+    return result.catch(ex => actualHandler(ctx, {
+      ex,
+      arg,
+      _settings
+    }));
+  }",
+  "result": 1,
+}
+`;
+
+exports[`should apply remote-resolver transformer: client 1`] = `
+Object {
+  "function": "(_ctx, params) => {
+            const jestLayer = testamentMirror.getLayer('jest');
+            return jestLayer.backend.runCode(((key, params) => {
+                const ctx = getBackend('mandrel').getContext();
+                const resolver = require(\\"<rootDir>/src/mirror/layers/apiary/__spec__/resolvers/index.ts\\")[key];
+                return typeof resolver === 'function' ? resolver(ctx, params) : resolver;
+            }).toString(), [key, params]);
+        }",
+  "result": 1,
+}
+`;

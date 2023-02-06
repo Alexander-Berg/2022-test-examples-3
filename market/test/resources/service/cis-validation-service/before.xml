@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <environment_param
+        ID="2"
+        NAME="request-calendaring-enabled"
+        VALUE="true"
+    />
+
+    <fulfillment_service
+        ID="100"
+        NAME="test"
+        STATUS="1"
+        TYPE="1"
+    />
+
+    <SUPPLIER
+        ID="1"
+        NAME="supplier1p"
+        TYPE="1"
+    />
+
+    <SUPPLIER
+        ID="2"
+        NAME="supplier2p"
+        TYPE="1"
+    />
+
+    <!--failOnWrongNumberOfUniqueCisFound-->
+    <shop_request
+        ID="1"
+        SUPPLIER_ID="1"
+        SERVICE_ID="100"
+        STATUS="10"
+        TYPE="19"
+        CREATED_AT="2018-01-01 10:10:10.0"
+        UPDATED_AT="2018-01-01 10:10:10.0"
+        REQUESTED_DATE="2017-03-01 9:9:9"
+        ITEMS_TOTAL_COUNT="41"
+    />
+    <request_item ID="1" REQUEST_ID="1" ARTICLE="art2" COUNT="2" SUPPLY_PRICE="20.0"/>
+    <unit_identifier ID="1" item_id="1" type="DECLARED"
+                     identifiers='{"parts": [{"type": "CIS", "value": "000000011111"}]}'/>
+
+    <!--failWhenNonUniqueCisFound-->
+    <shop_request
+        ID="2"
+        SUPPLIER_ID="1"
+        SERVICE_ID="100"
+        STATUS="0"
+        TYPE="8"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="1999-9-9 9:9:9"
+        REQUESTED_DATE="2017-03-01 9:9:9"
+        ITEMS_TOTAL_COUNT="60"
+    />
+    <request_item ID="2" REQUEST_ID="2" ARTICLE="art1" COUNT="1" SUPPLY_PRICE="50.50"/>
+    <request_item ID="3" REQUEST_ID="2" ARTICLE="art1" COUNT="1" SUPPLY_PRICE="2.0"/>
+    <unit_identifier ID="2" item_id="2" type="DECLARED"
+                     identifiers='{"parts": [{"type": "CIS", "value": "000000011111"}]}'/>
+    <unit_identifier ID="3" item_id="3" type="DECLARED"
+                     identifiers='{"parts": [{"type": "CIS", "value": "000000011111"}]}'/>
+
+    <!--failWhenNonUniqueCisesFound-->
+    <shop_request
+        ID="3"
+        SUPPLIER_ID="1"
+        SERVICE_ID="100"
+        STATUS="0"
+        TYPE="8"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="1999-9-9 9:9:9"
+        REQUESTED_DATE="2017-03-01 9:9:9"
+        ITEMS_TOTAL_COUNT="60"
+    />
+    <request_item ID="4" REQUEST_ID="3" ARTICLE="art1" COUNT="2" SUPPLY_PRICE="50.50"/>
+    <request_item ID="5" REQUEST_ID="3" ARTICLE="art1" COUNT="2" SUPPLY_PRICE="2.0"/>
+    <unit_identifier ID="4" item_id="4" type="DECLARED"
+                     identifiers='{"parts": [{"type": "CIS", "value": "000000011111"}, {"type": "CIS", "value": "000000022222"}]}'/>
+    <unit_identifier ID="5" item_id="5" type="DECLARED"
+                     identifiers='{"parts": [{"type": "CIS", "value": "000000011111"}, {"type": "CIS", "value": "000000022222"}]}'/>
+
+    <!--failWhenNonUniqueCisesAndWrongNumberOfUniqueCisFound-->
+    <shop_request
+        ID="4"
+        SUPPLIER_ID="1"
+        SERVICE_ID="100"
+        STATUS="0"
+        TYPE="8"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="1999-9-9 9:9:9"
+        REQUESTED_DATE="2017-03-01 9:9:9"
+        ITEMS_TOTAL_COUNT="60"
+    />
+    <request_item ID="6" REQUEST_ID="4" ARTICLE="art1" COUNT="3" SUPPLY_PRICE="50.50"/>
+    <request_item ID="7" REQUEST_ID="4" ARTICLE="art1" COUNT="2" SUPPLY_PRICE="2.0"/>
+    <unit_identifier ID="6" item_id="6" type="DECLARED"
+                     identifiers='{"parts": [{"type": "CIS", "value": "000000011111"}, {"type": "CIS", "value": "000000022222"}]}'/>
+    <unit_identifier ID="7" item_id="7" type="DECLARED"
+                     identifiers='{"parts": [{"type": "CIS", "value": "000000011111"}, {"type": "CIS", "value": "000000022222"}]}'/>
+
+    <!--shouldNotReturnValidationErrorOnWrongCisHandleMode-->
+    <shop_request
+        ID="5"
+        SUPPLIER_ID="1"
+        SERVICE_ID="100"
+        STATUS="0"
+        TYPE="8"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="1999-9-9 9:9:9"
+        REQUESTED_DATE="2017-03-01 9:9:9"
+        ITEMS_TOTAL_COUNT="60"
+    />
+    <request_item ID="8" REQUEST_ID="5" ARTICLE="art3" COUNT="1" SUPPLY_PRICE="50.50"/>
+    <unit_identifier ID="8" item_id="8" type="DECLARED"
+                     identifiers='{"parts": [{"type": "CIS", "value": "000000011111"}]}'/>
+
+    <!--shouldNotReturnValidationErrorOnWrongCargoType-->
+    <shop_request
+        ID="6"
+        SUPPLIER_ID="1"
+        SERVICE_ID="100"
+        STATUS="0"
+        TYPE="8"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="1999-9-9 9:9:9"
+        REQUESTED_DATE="2017-03-01 9:9:9"
+        ITEMS_TOTAL_COUNT="60"
+    />
+    <request_item ID="9" REQUEST_ID="6" ARTICLE="art4" COUNT="1" SUPPLY_PRICE="50.50"/>
+    <unit_identifier ID="9" item_id="9" type="DECLARED"
+                     identifiers='{"parts": [{"type": "CIS", "value": "000000011111"}]}'/>
+
+    <!--failOnSupplierValidation-->
+    <shop_request
+        ID="7"
+        SUPPLIER_ID="2"
+        SERVICE_ID="100"
+        STATUS="0"
+        TYPE="0"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="1999-9-9 9:9:9"
+        REQUESTED_DATE="2017-03-01 9:9:9"
+        ITEMS_TOTAL_COUNT="60"
+    />
+    <request_item ID="10" REQUEST_ID="7" ARTICLE="art3" COUNT="1" SUPPLY_PRICE="50.50"/>
+    <request_item ID="11" REQUEST_ID="7" ARTICLE="art5" COUNT="1" SUPPLY_PRICE="50.50"/>
+
+</dataset>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <quality_rule
+            expected_status="TRANSIT_COURIER_ARRIVED_TO_SENDER"
+            waybill_segment_type="COURIER"
+            aggregation_type="NONE"
+            rule_processor="STARTREK"
+            rule='{
+                "_type": ".ExpressAssembleNotificationsPayload",
+                "sender": "test_sender",
+                "notificationRepeatInterval": "PT3M",
+                "detailedDelayLevels": [
+                    {
+                        "from": "PT3M",
+                        "to": "PT6M"
+                    },
+                    {
+                        "from": "PT6M",
+                        "to": "PT8M"
+                    }
+                ],
+                "channelsSettings": {
+                    "notification_for_brand_1": {
+                        "enabled": true,
+                        "channel": "test_channel",
+                        "threshold": 1,
+                        "thresholdDelay": "PT2M",
+                        "limit": 4,
+                        "partnersInMessage": 5,
+                        "ordersInMessage": 6,
+                        "cabinets": [
+                            {
+                                "id": 1,
+                                "name": "test_cabinet_1",
+                                "partners": [1, 2, 3]
+                            },
+                            {
+                                "id": 2,
+                                "name": "test_cabinet_2",
+                                "partners": [4, 5, 6]
+                            }
+                        ],
+                        "commonPartnerName": "test_common_name"
+                    }
+                }
+            }'
+    />
+
+</dataset>

@@ -1,0 +1,145 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_stock-storage-testing
+
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=market_stock-storage-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 23
+        time_start: 0
+        warn: '0'
+      nodata_mode: force_ok
+    check_options: { }
+    service: disk_free_space
+
+  # Check failedJobs
+  # https://juggler.yandex-team.ru/check_details/?host=market_stock-storage-testing&service=failedJobs&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 23
+        time_start: 0
+        warn: 20%
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    service: failedJobs
+
+  # Check hangingJobs
+  # https://juggler.yandex-team.ru/check_details/?host=market_stock-storage-testing&service=hangingJobs&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 23
+        time_start: 0
+        warn: 20%
+      nodata_mode: force_crit
+    service: hangingJobs
+
+  # Check lmsStocksSettingsSyncChecker
+  # https://juggler.yandex-team.ru/check_details/?host=market_stock-storage-testing&service=lmsStocksSettingsSyncChecker&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 23
+        time_start: 0
+        warn: 30%
+      nodata_mode: force_ok
+    service: lmsStocksSettingsSyncChecker
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=market_stock-storage-testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 23
+        time_start: 0
+        warn: 20%
+      nodata_mode: force_crit
+    check_options: { }
+    service: logrotate
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=market_stock-storage-testing&service=ping&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 23
+        time_start: 0
+        warn: 20%
+      nodata_mode: force_crit
+    service: ping
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=market_stock-storage-testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 23
+        time_start: 0
+        warn: 20%
+      nodata_mode: force_ok
+    check_options: { }
+    service: push-client-status
+
+  # Check warehousesDesync
+  # https://juggler.yandex-team.ru/check_details/?host=market_stock-storage-testing&service=warehousesDesync&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 23
+        time_start: 0
+        warn: 30%
+      nodata_mode: force_crit
+    service: warehousesDesync
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "ping", "path": "/ping"}, {"service": "hangingJobs", "path":
+        "/health/hangingJobs"}, {"service": "failedJobs", "path": "/health/failedJobs"},
+        {"service": "warehousesDesync", "path": "/health/warehousesDesync"}, {"service": "lmsStocksSettingsSyncChecker",
+        "path": "/health/lmsStockSync"} ]'
+    children:
+    - NANNY%testing_market_stock_storage_vla
+    - NANNY%testing_market_stock_storage_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_stock-storage-testing
+    namespace: market.ff
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_delivery
+    - market_rtc
+    - stock-storage
+    - market
+    - _market_
+    ttl: 900

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <include resource="appender/file.xml"/>
+    <include resource="appender/request-trace.xml"/>
+    <include resource="appender/dynamic-log-json.xml"/>
+    <include resource="appender/tskv.xml"/>
+    <include resource="appender/backlog-tskv.xml"/>
+    <include resource="appender/rest-in-tx.xml"/>
+    <include resource="appender/sentry.xml"/>
+
+    <logger name="ru.yandex" level="DEBUG" additivity="false">
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <logger name="requestTrace" level="TRACE" additivity="false">
+        <appender-ref ref="REQUEST_TRACE"/>
+    </logger>
+
+    <logger name="org.hibernate.engine.internal.StatisticalLoggingSessionEventListener" level="WARN">
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <logger name="REPORT_DYNAMIC_LOGGER" level="INFO" additivity="false">
+        <appender-ref ref="REPORT_DYNAMIC_LOGGER"/>
+    </logger>
+
+    <logger name="REST_IN_TX_LOGGER" level="INFO" additivity="false">
+        <appender-ref ref="REST_IN_TX_LOGGER"/>
+    </logger>
+
+    <logger name="capacityDayOffHistoryLogger" level="INFO" additivity="false">
+        <appender-ref ref="CAPACITY_DAY_OFF_HISTORY"/>
+    </logger>
+
+    <logger name="validationExceptionLogger" level="INFO" additivity="false">
+        <appender-ref ref="VALIDATION_EXCEPTION" />
+    </logger>
+
+    <logger name="backLogger" level="INFO" additivity="false">
+        <appender-ref ref="BACK_LOG"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="SENTRY"/>
+    </root>
+
+</configuration>

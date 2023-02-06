@@ -1,0 +1,62 @@
+# Test case for maillog.
+header = {'server': 'logship-dev01e.cmail.yandex.net',
+          'path': '/var/log/maillog'}
+
+data = """tskv	daemon=postfix	timestamp=2015-04-18 00:00:05	time_ms=0.274529	client_fqdn=mxback4o.mail.yandex.net	postfix_daemon_pid=5011	session_id=E49901301567	postfix_daemon=smtpd	tskv_format=mail-postfix-log	client_ip=2a02:6b8:0:1a2d::1e	localhost=forward1o
+tskv	daemon=postfix	timestamp=2015-04-18 00:00:05	time_ms=0.274529	postfix_daemon_pid=6825	session_id=E49901301567	postfix_daemon=cleanup	tskv_format=mail-postfix-log	message_id=20150417210003.7380132A6BBB@mxback4o.mail.yandex.net	localhost=forward1o
+tskv	status=queue active	daemon=postfix	from=drweb	nrcpt=1	timestamp=2015-04-18 00:00:06	time_ms=0.274529	postfix_daemon_pid=1398	session_id=E49901301567	postfix_daemon=qmgr	tskv_format=mail-postfix-log	localhost=forward1o	size=3187
+tskv	status=sent	dsn=2.0.0	daemon=postfix	timestamp=2015-04-18 00:00:06	time_ms=0.274529	status_msg=250 2.0.0 Ok: queued on mxback4o.mail.yandex.net as 160A732A6BBB	postfix_daemon_pid=6917	session_id=E49901301567	relay_fqdn=mxback4o.mail.yandex.net	delay=0.33	to=root@mxback4o.mail.yandex.net	delays=0.2/0.06/0.01/0.06	relay_ip=2a02:6b8:0:1a2d::1e	postfix_daemon=smtp	tskv_format=mail-postfix-log	port=25	localhost=forward1o
+tskv	status=removed	daemon=postfix	timestamp=2015-04-18 00:00:06	time_ms=0.974528	postfix_daemon_pid=1398	session_id=E49901301567	postfix_daemon=qmgr	tskv_format=mail-postfix-log	localhost=forward1o
+"""
+expected = {
+    'forward_from_sessionid': [['drweb_18446742644405145342_e42b88b68334fc48f62e8f4c75802037',
+                                {'cf:session_id': 'E49901301567',
+                                 'cf:timestamp': '2015-04-18 00:00:06'}]],
+    'forward_messageid_sessionid': [['29cf56d9ab6d8050a8bd6d35a6485437_e42b88b68334fc48f62e8f4c75802037',
+                                     {'cf:daemon': 'postfix',
+                                      'cf:message_id': '20150417210003.7380132A6BBB@mxback4o.mail.yandex.net',
+                                      'cf:session_id': 'E49901301567',
+                                      'cf:time_ms': '0.274529',
+                                      'cf:timestamp': '2015-04-18 00:00:05'}]],
+    'forward_sessionid_ts': [['e42b88b68334fc48f62e8f4c75802037_18446742644405146342',
+                              {'cf:client_fqdn': 'mxback4o.mail.yandex.net',
+                               'cf:client_ip': '2a02:6b8:0:1a2d::1e',
+                               'cf:daemon': 'postfix',
+                               'cf:session_id': 'E49901301567',
+                               'cf:time_ms': '0.274529',
+                               'cf:timestamp': '2015-04-18 00:00:05'}],
+                             ['e42b88b68334fc48f62e8f4c75802037_18446742644405146342',
+                              {'cf:daemon': 'postfix',
+                               'cf:message_id': '20150417210003.7380132A6BBB@mxback4o.mail.yandex.net',
+                               'cf:session_id': 'E49901301567',
+                               'cf:time_ms': '0.274529',
+                               'cf:timestamp': '2015-04-18 00:00:05'}],
+                             ['e42b88b68334fc48f62e8f4c75802037_18446742644405145342',
+                              {'cf:daemon': 'postfix',
+                               'cf:from': 'drweb',
+                               'cf:nrcpt': '1',
+                               'cf:session_id': 'E49901301567',
+                               'cf:size': '3187',
+                               'cf:status': 'queue active',
+                               'cf:time_ms': '0.274529',
+                               'cf:timestamp': '2015-04-18 00:00:06'}],
+                             ['e42b88b68334fc48f62e8f4c75802037_18446742644405145342',
+                              {'cf:daemon': 'postfix',
+                               'cf:delay': '0.33',
+                               'cf:delays': '0.2/0.06/0.01/0.06',
+                               'cf:dsn': '2.0.0',
+                               'cf:port': '25',
+                               'cf:relay_fqdn': 'mxback4o.mail.yandex.net',
+                               'cf:relay_ip': '2a02:6b8:0:1a2d::1e',
+                               'cf:session_id': 'E49901301567',
+                               'cf:status': 'sent',
+                               'cf:status_msg': '250 2.0.0 Ok: queued on mxback4o.mail.yandex.net as 160A732A6BBB',
+                               'cf:time_ms': '0.274529',
+                               'cf:timestamp': '2015-04-18 00:00:06',
+                               'cf:to': 'root@mxback4o.mail.yandex.net'}],
+                             ['e42b88b68334fc48f62e8f4c75802037_18446742644405144642',
+                              {'cf:daemon': 'postfix',
+                               'cf:session_id': 'E49901301567',
+                               'cf:status': 'removed',
+                               'cf:time_ms': '0.974528',
+                               'cf:timestamp': '2015-04-18 00:00:06'}]]}

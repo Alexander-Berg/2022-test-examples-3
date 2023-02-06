@@ -1,0 +1,58 @@
+autostop:
+  autostop:
+  - limit(20m)
+  - quantile(50,7000,20)
+    #  - http(5xx,25%,7)
+  package: yandextank.plugins.Autostop
+pandora:
+    enabled: true
+    pandora_cmd: ./yac
+    config_content:
+        pools:
+           - id: Custom
+             gun:
+                 type: my_custom_gun_name
+                 target: 84.201.172.228:4000 
+                 handler: /chat
+                 SleepBeforeSend: 5
+                 UserSendFactor: 2
+                 MsgPerUser: 1
+             ammo:
+                  type: ammo_provider
+                  source:
+                      type: file
+                      path: ./ammo-40000-new.json
+             result:
+                 type: phout
+                 destination: ./phout.log
+             rps: {type: once, times: 4020}
+               #- {type: line, from: 1, to: 10000, duration: 600s}
+               #- {type: once, times: 2000}
+             startup: {type: const, ops: 67, duration: 60s}
+               #- {type: step, from: 1, to: 3, step: 1, duration: 30s}
+               #- {type: line, from: 1, to: 15000, duration: 1200s}
+               #- {type: once, times: 2000}
+        log:
+            level: debug
+        monitoring:
+            expvar:
+                enabled: true
+                port: 1234
+phantom:
+  enabled: false
+telegraf:
+  config: monitoring.xml
+  enabled: false
+  package: yandextank.plugins.Telegraf
+overload:
+  api_address: https://overload.yandex.net/
+  enabled: true
+  package: yandextank.plugins.DataUploader
+  token_file: "overload.txt"
+uploader:
+  enabled: false
+  operator: ligreen
+  package: yandextank.plugins.DataUploader
+  task: LOAD-1216
+console:
+  enabled: true

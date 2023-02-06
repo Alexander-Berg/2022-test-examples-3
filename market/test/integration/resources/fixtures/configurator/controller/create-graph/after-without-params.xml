@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <service
+        id="123"
+        name="service"
+        initial_state_id="1"
+    />
+
+    <capacity
+        id="1"
+        name="FIRST"
+        value="10"
+    />
+
+    <capacity
+        id="2"
+        name="SECOND"
+        value="100"
+    />
+
+    <priority_function
+        id="1"
+        type="ARRIVAL_TIME"
+    />
+
+    <priority_function
+        id="2"
+        type="DEFAULT"
+    />
+
+    <state
+        id="1"
+        name="REGISTERED"
+        service_id="123"
+    />
+
+    <state
+        id="2"
+        name="ALLOCATED"
+        service_id="123"
+        capacity_id="1"
+    />
+
+    <state
+        id="3"
+        name="IN_QUEUE"
+        service_id="123"
+        capacity_id="1"
+        priority_function_id="1"
+    />
+
+    <state
+        id="4"
+        name="FINISHED"
+        service_id="123"
+        capacity_id="2"
+        priority_function_id="2"
+    />
+
+    <edge
+        id="1"
+        from_state_id="1"
+        to_state_id="2"
+        priority="1"
+    />
+
+    <edge_restriction
+        id="1"
+        type="EVENT_REQUIRED"
+        edge_id="1"
+    />
+
+    <edge_restriction
+        id="2"
+        type="DISJUNCTION"
+        edge_id="1"
+    />
+
+    <edge_action
+        id="1"
+        edge_id="1"
+        type="SEND_NOTIFICATION"
+    />
+
+    <edge
+        id="2"
+        from_state_id="2"
+        to_state_id="3"
+        priority="1"
+    />
+
+    <edge
+        id="3"
+        from_state_id="3"
+        to_state_id="4"
+        priority="1"
+    />
+
+    <edge_restriction
+        id="3"
+        type="EVENT_REQUIRED"
+        edge_id="3"
+    />
+
+    <edge
+        id="4"
+        from_state_id="1"
+        to_state_id="4"
+        priority="2"
+    />
+
+    <edge_restriction
+        id="4"
+        type="EVENT_REQUIRED"
+        edge_id="4"
+    />
+</dataset>

@@ -1,0 +1,133 @@
+# Проверяем, что весь контент правильно группируется.
+# Для проверки статусов отдельный тест. В этом тесте почти весь контент опубликованный
+# Модель
+# - отзыв 1 модель 1 пользователь 1 (предыдущая версия, актуальная - 4)
+#   - коммент 1 пользователь 1
+#     - вложенный коммент 2 пользователь 2
+# - отзыв 2 модель 2 пользователь 1
+#   - коммент 3 пользователь 2
+#   - коммент 4 пользователь 1
+# - отзыв 3 модель 1 пользователь 2
+# - отзыв 4 модель 1 пользователь 1 (fix_id = 1) - те же комменты
+# - вопрос 1 модель 1 пользователь 1
+#   - ответ 1 пользователь 1
+#     - коммент 10 пользователь 1
+#       - вложенный коммент 11 пользователь 2
+#     - коммент 12 пользователь 2
+#   - ответ 2 пользователь 2
+# - вопрос 2 модель 1 пользователь 2
+# - вопрос 3 модель 2 пользователь 1
+#
+# Магазин
+# - отзыв 10 магазин 1 пользователь 1 (бизнес 1)
+#   - коммент 100 пользователь 1
+#     - вложенный коммент 101 пользователь 2
+# - отзыв 11 магазин 2 пользователь 2 (бизнес 2)
+#   - коммент 102 пользователь 2
+#   - коммент 103 пользователь 1
+# - отзыв 12 магазин 3 пользователь 2 (бизнес 1)
+# - отзыв 13 магазин 4 пользователь 4 (бизнеса нет)
+#
+# Тесты:
+# - выгрузка по пользователю 1
+#   - отзыв 1 (с комментами)
+#   - отзыв 2 (с комментами)
+#   - отзыв 4 (с комментами от 1)
+#   - отзыв 10
+#   - вопрос 1 (с ответами и комментами)
+#   - вопрос 3
+#   - ответ 1 (с комментами)
+#   - комменты 1, 4, 10, 100, 103
+# - выгрузка по модели 1
+#   - отзыв 1 (с комментами)
+#   - отзыв 3
+#   - вопрос 1 (с комментами)
+#   - вопрос 2 (с комментами)
+# - выгрузка по магазину 1
+#  - отзыв 10  (с комментами)
+#  - отзыв 12
+# - выгрузка по бизнесу 2
+#  - отзыв 11 (с комментами)
+#
+# Ниже моки для описания этого дерева контента
+
+# Таблицы для отзывов
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_grade
+SCHEMA id:int64, fix_id:int64, state:int16, mod_state:int16
+SCHEMA type:int16, resource_id:int64, author_id:int64, cr_time:string
+#      эти поля неважны для теста, поэтому указываю в схеме, но опускаю в данных
+SCHEMA anonymous:int16, real_source:string, short_text:string, pro:string, contra:string
+SCHEMA yandexuid:string, grade_state:int16
+{"id": 1, "fix_id": 1, "state": 1, "mod_state": 3, "type": 1, "resource_id": 1, "author_id": 1, "cr_time": "2021-01-01T00:00:00"}
+{"id": 2, "fix_id": 2, "state": 0, "mod_state": 3, "type": 1, "resource_id": 2, "author_id": 1, "cr_time": "2021-01-01T00:00:00"}
+{"id": 3, "fix_id": 3, "state": 0, "mod_state": 3, "type": 1, "resource_id": 1, "author_id": 2, "cr_time": "2021-01-01T00:00:00"}
+{"id": 4, "fix_id": 1, "state": 0, "mod_state": 3, "type": 1, "resource_id": 1, "author_id": 1, "cr_time": "2021-01-01T00:00:00"}
+{"id": 10, "fix_id": 10, "state": 0, "mod_state": 3, "type": 0, "resource_id": 1, "author_id": 1, "cr_time": "2021-01-01T00:00:00"}
+{"id": 11, "fix_id": 11, "state": 0, "mod_state": 3, "type": 0, "resource_id": 2, "author_id": 2, "cr_time": "2021-01-01T00:00:00"}
+{"id": 12, "fix_id": 12, "state": 0, "mod_state": 3, "type": 0, "resource_id": 3, "author_id": 2, "cr_time": "2021-01-01T00:00:00"}
+{"id": 13, "fix_id": 12, "state": 0, "mod_state": 3, "type": 0, "resource_id": 4, "author_id": 4, "cr_time": "2021-01-01T00:00:00"}
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_security_data
+SCHEMA grade_id:int64, ip:string, port:int16
+{"grade_id":1, "ip":"test_ip", "port":123}
+{"grade_id":2, "ip":"test_ip_2"}
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_mod_grade_last
+SCHEMA grade_id:int64, mod_time:string
+{"grade_id":2, "mod_time":"2021-01-02T01:00:00"}
+
+# Таблицы для вопросов-ответов
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-qa/tables/qa_question
+SCHEMA id:int64, state:int16, mod_state:int16
+SCHEMA entity_type:int16, entity_id:string, user_type:int16, user_id:string, cr_time:string
+#      эти поля неважны для теста, поэтому указываю в схеме, но опускаю в данных
+SCHEMA title:string, text:string
+{"id":1, "state":0, "mod_state":7, "entity_type":0, "entity_id":"1", "user_type":0, "user_id":"1", "cr_time": "2021-01-01T00:00:00"}
+{"id":2, "state":0, "mod_state":7, "entity_type":0, "entity_id":"1", "user_type":0, "user_id":"2", "cr_time": "2021-01-01T00:00:00"}
+{"id":3, "state":0, "mod_state":7, "entity_type":0, "entity_id":"2", "user_type":0, "user_id":"1", "cr_time": "2021-01-01T00:00:00"}
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-qa/tables/qa_answer
+SCHEMA id:int64, state:int16, mod_state:int16
+SCHEMA question_id:int64, user_type:int16, user_id:string, cr_time:string
+#      эти поля неважны для теста, поэтому указываю в схеме, но опускаю в данных
+SCHEMA shop_id:int64, brand_id:int64, text:string
+{"id":1, "state":0, "mod_state":7, "question_id":1, "user_type":0, "user_id":"1", "cr_time": "2021-01-01T00:00:00"}
+{"id":2, "state":0, "mod_state":7, "question_id":1, "user_type":0, "user_id":"2", "cr_time": "2021-01-01T00:00:00"}
+
+# Таблицы для комментов
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-qa/tables/com_comment
+SCHEMA id:int64, state:int16, mod_state:int16
+SCHEMA project:int16, root_id:int64, user_type:int16, user_id:string, parent_id:int64
+SCHEMA cr_time:string, shop_id:int64, brand_id:int64, text:string
+# grade
+{"id":1,   "state":0, "mod_state":0, "project":9, "root_id":1,  "user_type":0, "user_id":"1", "parent_id":null, "cr_time": "2021-01-01T00:00:00", "text":"some comment text"}
+{"id":2,   "state":0, "mod_state":0, "project":9, "root_id":1,  "user_type":0, "user_id":"2", "parent_id":1, "cr_time": "2009-02-13T23:31:30"}
+{"id":3,   "state":0, "mod_state":0, "project":9, "root_id":2,  "user_type":0, "user_id":"2", "parent_id":null, "cr_time": "2009-02-13T23:31:30"}
+{"id":4,   "state":0, "mod_state":0, "project":9, "root_id":2,  "user_type":0, "user_id":"1", "parent_id":null, "cr_time": "2009-02-13T23:31:30", "text":"some other comment text"}
+{"id":100, "state":0, "mod_state":0, "project":9, "root_id":10, "user_type":0, "user_id":"1", "parent_id":null, "cr_time": "2021-01-01T00:00:00"}
+{"id":101, "state":0, "mod_state":0, "project":9, "root_id":10, "user_type":0, "user_id":"2", "parent_id":100, "cr_time": "2009-02-13T23:31:30"}
+{"id":102, "state":0, "mod_state":0, "project":9, "root_id":11, "user_type":0, "user_id":"2", "parent_id":null, "cr_time": "2009-02-13T23:31:30"}
+{"id":103, "state":0, "mod_state":0, "project":9, "root_id":11, "user_type":0, "user_id":"1", "parent_id":null, "cr_time": "2009-02-13T23:31:30"}
+# answer
+{"id":10,  "state":0, "mod_state":0, "project":5, "root_id":1,  "user_type":0, "user_id":"1", "parent_id":null, "cr_time": "2021-01-01T00:00:00"}
+{"id":11,  "state":0, "mod_state":0, "project":5, "root_id":1,  "user_type":0, "user_id":"2", "parent_id":10, "cr_time": "2009-02-13T23:31:30"}
+{"id":12,  "state":0, "mod_state":0, "project":5, "root_id":1,  "user_type":0, "user_id":"2", "parent_id":null, "cr_time": "2009-02-13T23:31:30"}
+
+
+# доп данные по ip/port для вопросов, ответов и комментов. Мокирую по одному от группы
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-qa/tables/qa_security_data
+SCHEMA entity_type:int16, entity_id:int64, ip:string, port:int64
+# question
+{"entity_type":0, "entity_id":1, "ip":"some_question_ip", "port":12345}
+# answer
+{"entity_type":1, "entity_id":1, "ip":"some_answer_ip", "port":123}
+# comment (ok, wrong project)
+{"entity_type":2, "entity_id":10, "ip":"correct_ip", "port":345}
+{"entity_type":99, "entity_id":10, "ip":"wrong_ip", "port":666}
+
+# бизнесы магазинов
+MOCK TABLE //home/market/production/mstat/dictionaries/partner_types/latest
+SCHEMA id:int64, business_id:string
+{"id":1, "business_id":"1"}
+{"id":2, "business_id":"2"}
+{"id":3, "business_id":"1"}

@@ -1,0 +1,12 @@
+'use strict';
+
+module.exports = {
+    applicationName: 'SaveFrom',
+    affId: 1020,
+    mbrApplication: true,
+    clid: 2210496,
+    offerEnabled: true,
+    optOutAccepted: true,
+    offerAccepted: null,
+    pricebarShown: true
+};

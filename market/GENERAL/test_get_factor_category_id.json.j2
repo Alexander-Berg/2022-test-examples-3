@@ -1,0 +1,68 @@
+{% if table == "items_factor_category_id" %}
+    {% table table %}
+        ["1", "C1", "factor", "{{ day }}"],
+        ["2", "C1", "factor", "{{ day }}"],
+        ["3", "C2", "factor", "{{ day }}"]
+    {% endtable %}
+{% elif table == "items_model_category_id" %}
+    {% table table %}
+        ["111", "C1", "model", "{{ day }}"],
+        ["222", "C1", "model", "{{ day }}"],
+        ["333", "C2", "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "pers_v_model_summary_result" %}
+    {
+        "schema": [
+            {
+                "name": "model_id",
+                "type": "Int64?"
+            },
+            {
+                "name": "factors",
+                "type": "Yson?"
+            }
+        ],
+        "records": [
+            [
+                111,
+                [
+                    {
+                        "factor_id": 1,
+                        "factor_name": "factor",
+                        "published": true
+                    },
+                    {
+                        "factor_id": 2,
+                        "factor_name": "factor",
+                        "published": true
+                    },
+                    {
+                        "factor_id": 4,
+                        "factor_name": "factor",
+                        "published": false
+                    }
+                ]
+            ],
+            [
+                222,
+                [
+                    {
+                        "factor_id": 1,
+                        "factor_name": "factor",
+                        "published": true
+                    }
+                ]
+            ],
+            [
+                333,
+                [
+                    {
+                        "factor_id": 3,
+                        "factor_name": "factor",
+                        "published": true
+                    }
+                ]
+            ]
+        ]
+    }
+{% endif %}

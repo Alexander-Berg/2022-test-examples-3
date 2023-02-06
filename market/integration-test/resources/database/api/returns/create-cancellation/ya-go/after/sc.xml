@@ -1,0 +1,92 @@
+<dataset>
+    <return
+        id="1"
+        source="CANCELLATION"
+        external_id="[null]"
+        order_external_id="order-external-id"
+        logistic_point_from_id="[null]"
+        pickup_point_partner_id="[null]"
+        pickup_point_external_id="[null]"
+        full_return="[null]"
+        order_items_info='[]'
+        committed="2022-03-02 11:12:13.0 +0000"
+        destination_point_partner_id="100"
+        destination_point_shop_id="[null]"
+        destination_point_go_shop_id="0"
+    />
+
+    <control_point
+        return_id="1"
+        type="EXTRA_LONG_TERM_STORAGE"
+        status="CREATED"
+        logistic_point_id="1"
+        partner_id="101"
+        to_partner_id="100"
+        expire_at="[null]"
+    />
+
+    <control_point_status_history
+        id="1"
+        control_point_id="1"
+        status="CREATED"
+        datetime="2022-03-02 11:12:13.0 +0000"
+    />
+
+    <return_box
+        return_id="1"
+        external_id="box-external-id"
+        weight_gross="100"
+        length="200"
+        width="300"
+        height="400"
+        destination_logistic_point_id="1"
+        destination_recipient_type="YA_GO_SHOP"
+    />
+
+    <return_item
+        return_id="1"
+        box_id="[null]"
+        supplier_id="200"
+        vendor_code="item-vendor-code"
+        instances="[null]"
+        return_reason="[null]"
+        return_subreason="[null]"
+        return_reason_type="[null]"
+    />
+
+    <return_event
+        id="1"
+        created="2022-03-02 11:12:13.0 +0000"
+        logbroker_id="[null]"
+        request_id="test-request-id/2"
+        type="RETURN_COMMITTED"
+        return_id="1"
+        payload='{
+                "type": "RETURN_COMMITTED",
+                "boxes": [
+                    {
+                        "externalId": "box-external-id"
+                    }
+                ],
+                "items": [
+                    {
+                        "instances": null,
+                        "supplierId": 200,
+                        "vendorCode": "item-vendor-code",
+                        "returnReason": null,
+                        "boxExternalId": null,
+                        "returnSubreason": null,
+                        "returnReasonType": null
+                    }
+                ],
+                "source": "CANCELLATION",
+                "externalId": null,
+                "orderItemsInfo": []
+            }'
+    />
+
+    <queue_tasks
+        queue_name="CREATE_START_SEGMENTS_BY_BOXES"
+        payload='{"requestId":"test-request-id/1","returnId":1,"sortingCenters":[{"partnerId":101,"logisticsPointId":1},{"partnerId":102,"logisticsPointId":2}]}'
+    />
+</dataset>

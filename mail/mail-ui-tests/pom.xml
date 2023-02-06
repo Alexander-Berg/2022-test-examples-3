@@ -1,0 +1,877 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.yandex.aqua</groupId>
+        <artifactId>aqua-parent</artifactId>
+        <version>2.5.0-SNAPSHOT</version>
+    </parent>
+
+
+    <groupId>ru.yandex.autotests.innerpochta</groupId>
+    <artifactId>verstkatests</artifactId>
+    <version>1.3-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>mail-web-xplat</module>
+        <module>mail-web-steps</module>
+        <module>mail-web-tests</module>
+        <module>mail-web-aspects</module>
+        <module>mail-web-screenka</module>
+        <module>calendar-web-tests</module>
+        <module>mail-touch-tests</module>
+        <module>mail-load-tests</module>
+    </modules>
+
+    <name>autotests-testpers-mail-web-root</name>
+    <description>Testing mail-web interface with TD</description>
+
+    <scm>
+        <url>https://git.yandex.ru/qa/autotests/mail/mail-web.git</url>
+        <connection>scm:git:ssh://git.yandex.ru/qa/autotests/mail/mail-web.git</connection>
+    </scm>
+
+    <issueManagement>
+        <system>StarTrek</system>
+        <url>https://st.yandex-team.ru/AUTOTESTPERS</url>
+    </issueManagement>
+
+    <ciManagement>
+        <system>Jenkins CI</system>
+        <url>https://jenkins.yandex-team.ru/job/autotests-testpers-mail-web/</url>
+    </ciManagement>
+
+    <developers>
+        <developer>
+            <id>lanwen</id>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceDirs>
+                        <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
+                    </sourceDirs>
+                    <jvmTarget>1.8</jvmTarget>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-maven-plugin</artifactId>
+                <version>2.12.1</version>
+            </plugin>
+        </plugins>
+    </build>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.12.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.12.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-java-commons</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-java-migration</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit4</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit4-aspect</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.yandex.qatools</groupId>
+            <artifactId>hazelcast-node</artifactId>
+            <version>${hazelcast.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>hazelcast-storage-eraser</artifactId>
+                    <groupId>ru.yandex.qatools</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-java-commons</artifactId>
+                <version>${allure.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-java-migration</artifactId>
+                <version>${allure.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-junit4</artifactId>
+                <version>${allure.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-junit4-aspect</artifactId>
+                <version>${allure.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.qameta.atlas</groupId>
+                <artifactId>atlas-webdriver</artifactId>
+                <version>1.8.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.autotests</groupId>
+                <artifactId>aspectj-weaver-only-ru</artifactId>
+                <version>${aspectj-weaver-only-ru.version}</version>
+            </dependency>
+
+            <!--https://code.google.com/p/guava-libraries/-->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>27.0.1-jre</version>
+            </dependency>
+
+            <!--для отпраки писем по смтп-->
+            <dependency>
+                <groupId>javax.mail</groupId>
+                <artifactId>mail</artifactId>
+                <version>1.4.7</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.5.7</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>4.4.11</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.qatools.selenium</groupId>
+                <artifactId>selenium-grid-client</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
+            <!--https://github.com/samskivert/jmustache-->
+            <dependency>
+                <groupId>com.samskivert</groupId>
+                <artifactId>jmustache</artifactId>
+                <version>1.9</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-mongodb</artifactId>
+                <version>1.1.1.RELEASE</version>
+            </dependency>
+
+            <!--for mongo-rule-->
+            <!--http://wiki.yandex-team.ru/Users/airinev/MongoApi-->
+            <dependency>
+                <groupId>ru.yandex.autotests</groupId>
+                <artifactId>mongo-api</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>junit</groupId>
+                        <artifactId>junit</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework.data</groupId>
+                        <artifactId>spring-data-mongodb</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-server</artifactId>
+                <version>${selenium.version}</version>
+                <!--
+                FIX FOR:
+                java.lang.RuntimeException
+                java.lang.SecurityException class
+                org.bouncycastle.asn1.ASN1ObjectIdentifier's
+                 signer information does not match signer information of other classes in the same package
+                 -->
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.bouncycastle</groupId>
+                        <artifactId>bcprov-jdk15on</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.bouncycastle</groupId>
+                        <artifactId>bcpkix-jdk15on</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>selenium-support</artifactId>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>selenium-api</artifactId>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!--mongo-rule-->
+
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-all</artifactId>
+                <!-- Needs to be the same version that REST Assured depends on -->
+                <version>2.4.16</version>
+            </dependency>
+
+            <!--fix javax.validation.ValidationException: Unable to find a default provider-->
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator-annotation-processor</artifactId>
+                <version>4.1.0.Final</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>1.3.173</version>
+            </dependency>
+
+            <dependency>
+                <groupId>xml-apis</groupId>
+                <artifactId>xml-apis</artifactId>
+                <version>1.4.01</version>
+            </dependency>
+
+
+            <!--Тулза для регистрации новых пользователей-->
+            <dependency>
+                <groupId>ru.yandex.autotests</groupId>
+                <artifactId>passport-api-tools</artifactId>
+                <version>1.5-SNAPSHOT</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>ru.yandex.autotests</groupId>
+                        <artifactId>junit-matchers</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.sonatype.sisu</groupId>
+                        <artifactId>sisu-guava</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.autotests</groupId>
+                <artifactId>dictionary</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>jaxb-impl</artifactId>
+                        <groupId>com.sun.xml.bind</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <artifactId>tune-websteps</artifactId>
+                <groupId>ru.yandex.autotests.tune</groupId>
+                <version>1.0-SNAPSHOT</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>ru.yandex.qa.aqua</groupId>
+                        <artifactId>config-gen</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>xstream</artifactId>
+                        <groupId>com.thoughtworks.xstream</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>selenium-java</artifactId>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>selenium-server</artifactId>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>thucydides-junit</artifactId>
+                        <groupId>net.thucydides</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>thucydides-core</artifactId>
+                        <groupId>net.thucydides</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.qatools.ashot</groupId>
+                <artifactId>ashot</artifactId>
+                <version>1.5.4</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>selenium-java</artifactId>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.screenshooter</groupId>
+                <artifactId>screenshooter-java</artifactId>
+                <version>2.1-SNAPSHOT</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>slf4j-log4j12</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>slf4j-api</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>selenium-java</artifactId>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.testlab.wiki</groupId>
+                <artifactId>wiki-tools</artifactId>
+                <version>1.1-SNAPSHOT</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>slf4j-log4j12</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>slf4j-api</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>uk.co.modular-it</groupId>
+                <artifactId>hamcrest-date</artifactId>
+                <version>0.9.5</version>
+            </dependency>
+
+            <!--https://github.com/derari/cthul/wiki/Matchers-->
+            <dependency>
+                <groupId>org.cthul</groupId>
+                <artifactId>cthul-matchers</artifactId>
+                <version>1.1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.lanwen.diff</groupId>
+                <artifactId>uri-differ-lib</artifactId>
+                <version>1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.qatools.htmlelements</groupId>
+                <artifactId>htmlelements-java</artifactId>
+                <version>1.20.0</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>selenium-java</artifactId>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.qatools.allure</groupId>
+                <artifactId>allure-model</artifactId>
+                <version>1.4.23</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.junitextensions</groupId>
+                <artifactId>junit-rules</artifactId>
+                <version>1.4-SNAPSHOT</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>xstream</artifactId>
+                        <groupId>com.thoughtworks.xstream</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>browsermob-proxy</artifactId>
+                        <groupId>net.lightbody.bmp</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>selenium-java</artifactId>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>jaxb-impl</artifactId>
+                        <groupId>com.sun.xml.bind</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-all</artifactId>
+                <version>1.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.22</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.7.22</version>
+            </dependency>
+
+            <!--https://github.com/mikaelhg/urlbuilder-->
+            <dependency>
+                <groupId>mikaelhg</groupId>
+                <artifactId>urlbuilder</artifactId>
+                <version>1.3.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-bundle</artifactId>
+                <version>1.17.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>mail-web-aspects</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>mail-web-steps</artifactId>
+                <version>${project.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>javax.ws.rs-api</artifactId>
+                        <groupId>javax.ws.rs</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>jersey-common</artifactId>
+                        <groupId>org.glassfish.jersey.core</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.autotests.diskweb</groupId>
+                <artifactId>web-common</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>jersey-client</artifactId>
+                        <groupId>org.glassfish.jersey.core</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>jersey-common</artifactId>
+                        <groupId>org.glassfish.jersey.core</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>allure-junit-adaptor</artifactId>
+                        <groupId>ru.yandex.qatools.allure</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.sonatype.sisu</groupId>
+                        <artifactId>sisu-guava</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.qatools.properties</groupId>
+                <artifactId>properties-loader</artifactId>
+                <version>1.5</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.googlecode.lambdaj</groupId>
+                <artifactId>lambdaj</artifactId>
+                <version>2.3.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.lanwen.verbalregex</groupId>
+                <artifactId>java-verbal-expressions</artifactId>
+                <version>1.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.qatools.matchers</groupId>
+                <artifactId>matcher-decorators</artifactId>
+                <version>${matchers.java.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.hamcrest</groupId>
+                        <artifactId>hamcrest-all</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.qatools.matchers</groupId>
+                <artifactId>webdriver-matchers</artifactId>
+                <version>${matchers.java.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>selenium-java</artifactId>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.hamcrest</groupId>
+                        <artifactId>hamcrest-all</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.qatools.matchers</groupId>
+                <artifactId>common-matchers</artifactId>
+                <version>${matchers.java.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.kohsuke</groupId>
+                <artifactId>wordnet-random-name</artifactId>
+                <version>1.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.autotests</groupId>
+                <artifactId>passport-api-core</artifactId>
+                <version>1.5-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex</groupId>
+                <artifactId>library-ticket_parser2-java</artifactId>
+            </dependency>
+
+            <dependency>
+                <groupId>org.littleshoot</groupId>
+                <artifactId>littleproxy</artifactId>
+                <version>1.1.2</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                        <artifactId>selenium</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>jcl-over-slf4j</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>guava</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>net.lightbody.bmp</groupId>
+                <artifactId>browsermob-core</artifactId>
+                <version>2.1.5</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                        <artifactId>selenium</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>jcl-over-slf4j</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>guava</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.autotests.passport</groupId>
+                <artifactId>passport-td-steps</artifactId>
+                <version>3.0-PW-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.detro</groupId>
+                <artifactId>phantomjsdriver</artifactId>
+                <version>1.2.0</version>
+            </dependency>
+
+            <!-- http://code.google.com/p/rest-assured/ -->
+            <dependency>
+                <groupId>io.rest-assured</groupId>
+                <artifactId>rest-assured</artifactId>
+                <version>3.0.3</version>
+            </dependency>
+
+            <!-- https://github.com/netty/netty -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-http</artifactId>
+                <version>4.1.33.Final</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-remote-driver</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.autotests</groupId>
+                <artifactId>selenium-box-properties</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.autotests</groupId>
+                <artifactId>passport-api-common</artifactId>
+                <version>1.5-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <artifactId>freemarker</artifactId>
+                <groupId>freemarker</groupId>
+                <version>2.3.6</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.qatools</groupId>
+                <artifactId>testrunner-annotations</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.16.14</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tngtech.java</groupId>
+                <artifactId>junit-dataprovider</artifactId>
+                <version>1.12.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.qatools</groupId>
+                <artifactId>driver-aspects</artifactId>
+                <version>2.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.yandex.autotests</groupId>
+                <artifactId>wmi-core</artifactId>
+                <version>1.4.1-SNAPSHOT</version>
+                <exclusions>
+                    <!-- Exclude Groovy because of classpath issue -->
+                    <exclusion>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>selenium-api</artifactId>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>slf4j-jdk14</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>guice-multibindings</artifactId>
+                        <groupId>com.google.inject.extensions</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>guice-servlet</artifactId>
+                        <groupId>com.google.inject.extensions</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>guice</artifactId>
+                        <groupId>com.google.inject</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>commons-logging</artifactId>
+                        <groupId>commons-logging</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>log4j</artifactId>
+                        <groupId>log4j</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>httpcore</artifactId>
+                        <groupId>org.apache.httpcomponents</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>jackson-mapper-asl</artifactId>
+                        <groupId>org.codehaus.jackson</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>selenium-grid-client</artifactId>
+                        <groupId>ru.yandex.qatools.selenium</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>selenium-java</artifactId>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>selenium-remote-driver</artifactId>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <properties>
+        <matchers.java.version>1.4.1</matchers.java.version>
+        <selenium.version>3.141.59</selenium.version>
+        <webdriver.driver>remote</webdriver.driver>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <aspectj.version>1.8.10</aspectj.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <allure.version>2.13.9</allure.version>
+        <allure-maven-plugin.version>2.7</allure-maven-plugin.version>
+        <kotlin.version>1.4.10</kotlin.version>
+        <aspectj-weaver-only-ru.version>1.2</aspectj-weaver-only-ru.version>
+    </properties>
+
+</project>

@@ -1,0 +1,89 @@
+#!/bin/bash
+
+# Что делает этот скрипт (init.d/mysql.ppcdict из пакета yandex-du-ppcdict-mysql-test):
+# управляет процессами mysql-ppcdict в chroot-окружениях. Контракт у него как
+# у init-скрипта: start | stop | restart | status
+#
+# Скрипт, предположительно, работает в одном из трёх случаев:
+# 1). когда запускается вручную при первоначальной конфигурации
+# 2). когда система (пере-)загружается
+# 3). когда запускается системой sync-db
+
+if [ ! -e /opt/root.ppcdict.1/ ]; then
+    echo "/opt/root.ppcdict.1/ not found, use ppcdict-create-jails"
+    exit 1
+fi
+
+set -e
+
+#set -v
+
+SELF=$(cd $(dirname $0); pwd -P)/$(basename $0)
+NODECOUNT=3
+if [ ! -e /opt/root.ppcdict.2/ ]; then
+    NODECOUNT=1
+fi
+
+PATH=/usr/sbin:$PATH
+
+case "${1:-''}" in
+    'start')
+
+        echo "Mounting directories"
+        for node in $(seq 1 $NODECOUNT); do
+            mountpoint -q /opt/root.ppcdict.$node/proc || mount -o bind /proc /opt/root.ppcdict.$node/proc
+        done
+
+        echo "Adjusting permissions"
+        for node in $(seq 1 $NODECOUNT); do
+            chroot /opt/root.ppcdict.$node/ chown -R mysql:mysql /opt/mysql.ppcdict
+        done
+
+        echo "Starting node1 in new-cluster mode"
+        chroot /opt/root.ppcdict.1/ /etc/init.d/mysql.ppcdict bootstrap-pxc
+
+        echo "Granting rights for innobackupex SST"
+        chroot /opt/root.ppcdict.1/ lm ppcdict mysql 'grant all on *.* to "backupuser"@"localhost" identified by "a671pqaqlmubckq5"'
+
+        for node in $(seq 2 $NODECOUNT); do
+            echo "Starting node$node"
+            rm -f /opt/root.ppcdict.$node/opt/mysql.ppcdict/grastate.dat
+            chroot /opt/root.ppcdict.$node/ /etc/init.d/mysql.ppcdict start
+        done
+
+    ;;
+
+    'stop')
+        set +e
+        for node in $(seq 1 $NODECOUNT); do
+            echo "Stopping node $node"
+            chroot /opt/root.ppcdict.$node/ /etc/init.d/mysql.ppcdict stop
+        done
+
+        echo "Unmounting directories"
+        for node in $(seq 1 $NODECOUNT); do
+            mountpoint -q /opt/root.ppcdict.$node/proc && umount /opt/root.ppcdict.$node/proc
+        done
+
+        exit 0
+    ;;
+
+    'restart')
+        set +e; $SELF stop; set -e
+        $SELF start
+    ;;
+
+    'status')
+        for node in $(seq 1 $NODECOUNT); do
+            echo "Node $node status:"
+            chroot /opt/root.ppcdict.$node/ /etc/init.d/mysql.ppcdict status
+        done
+
+        exit 0
+    ;;
+
+    *)
+        echo "Usage: $SELF start|stop|restart|status"
+        exit 1
+    ;;
+esac

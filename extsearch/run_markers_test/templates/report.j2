@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Markers test result</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"></head>
+<body>
+
+<div class="row">
+    <div class="container-fluid">
+        <h4>Statistics:</h4>
+        <table class="table table-hover table-bordered">
+            <thead class="thread-dark">
+                <tr>
+                    <td>Experiment</td>
+                    <td>Mean match</td>
+                    <td>Diff from stable</td>
+                    <td>T-Test Pvalue</td>
+                    <td>Important</td>
+                </tr>
+            </thead>
+            <tr>
+                <td>Stable</td>
+                <td>{{ production_mean }}</td>
+                <td> - </td>
+                <td> - </td>
+                <td> - </td>
+            </tr>
+            {% for exp_name, data in experiments.items() %}
+            <tr>
+                <td>{{ exp_name }}</td>
+                <td>{{ data['mean'] }}</td>
+                <td>{{ data['diff'] }} ( {{ '%0.2f' % data['diff_percentage']|float }}% )</td>
+                <td>{{ data['ttest_pvalue'] }}</td>
+                {% if data['diff_importance'] %}
+                <td style="background-color: {% if data["better"] %}forestgreen{% else %}indianred{% endif %}">Important!</td>
+                {% else %}
+                    <td style="background-color: gray">Not important</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="container-fluid">
+        <h4>Different results:</h4>
+        {% if diff_results|length > 0 %}
+        <table class="table table-hover table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <td>Query</td>
+                    <td>Etalon</td>
+                    <td>Stable</td>
+                    {% for exp_name in experiments %}
+                    <td>{{ exp_name }}</td>
+                    {% endfor %}
+                </tr>
+            </thead>
+            {% for diff in diff_results %}
+            <tr>
+                <td>{{ diff["query"] }}</td>
+                <td>
+                    <a href="{{  diff["etalon"]['url'] }}">{{ diff["etalon"]['url'] }}</a>
+                </td>
+                <td {% if diff['production']['is_different'] %}style="background-color: #f1868b"{% endif %}>
+                    <a href="{{ diff['production']['result']['url'] }}">{{ diff['production']['result']['url'] }}</a>
+                </td>
+                {% for exp_name, exp_data in diff["experiments"].items() %}
+                <td {% if exp_data['is_different'] %}style="background-color: #f1868b"{% endif %}>
+{#                    {{ exp_data['is_different'] }}#}
+                    <a href="{{ exp_data['result']['url'] }}">{{ exp_data['result']['url'] }}</a>
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>No difference from etalon!!! </p>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>

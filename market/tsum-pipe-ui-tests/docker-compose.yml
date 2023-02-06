@@ -1,0 +1,27 @@
+# Основано на http://aerokube.com/selenoid-ui/latest/#_with_docker_compose
+
+version: '3'
+services:
+
+  # Это нужно чтобы запуллить образ с браузером, запускать его будет selenoid
+  selenoid_fake_browser_to_pull_image_for_selenoid:
+    image: selenoid/vnc:firefox_57.0
+    entrypoint: 'true'
+
+  selenoid:
+    image: aerokube/selenoid:latest-release
+    restart: unless-stopped
+    network_mode: bridge
+    ports: ['4444:4444']
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - './selenoid/:/etc/selenoid/:ro'
+    command: '-timeout 15m -limit 15 -conf /etc/selenoid/browsers.json'
+
+  selenoid-ui:
+    image: aerokube/selenoid-ui
+    restart: unless-stopped
+    network_mode: bridge
+    ports: ['8080:8080']
+    links: ['selenoid']
+    command: '--selenoid-uri http://selenoid:4444'

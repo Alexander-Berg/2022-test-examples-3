@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<query>
+    <aliases>
+        <alias name="EMPTY"/>
+        <alias name="DATASOURCE_ID">main_datasource.id</alias>
+        <alias name="DATAFEED_ID">main_datafeed.id</alias>
+        <alias name="CONSTANT_VALUE">I'll break your SQL!</alias>
+    </aliases>
+
+    <base>
+        select ${SYS_PARAM_NAMES_BLOCK} from shops_web.datafeed main_datafeed
+        inner join shops_web.datasource main_datasource on main_datafeed.datasource_id = main_datasource.id
+        ${SYS_PARAM_QUERIES_BLOCK}
+    </base>
+
+    <description>I AM DESCRIPTION</description>
+
+    <templates>
+
+        <template name="FEED_PARAMETER">
+            <sql>select ${PARAM_VALUE}, datasource_id ds_id from shops_web.datafeed ${PARAM_EXTRA}</sql>
+            <condition>${SYS_QUERY_NAME}.ds_id = ${DATASOURCE_ID}</condition>
+        </template>
+
+    </templates>
+
+    <parameters>
+
+        <parameter name="shop_id" value="datasource_id" template="FEED_PARAMETER" description="Идентификатор магазина">
+            <argument name="extra"/>
+        </parameter>
+
+        <parameter name="url" value="url" template="feed_parameter" description="URL фида">
+            <argument name="extra">
+                <![CDATA[
+                    I'll break your SQL!
+                ]]>
+            </argument>
+        </parameter>
+
+        <parameter name="ConstAnt" value="${constant_value}" description="Константа global12345"/>
+
+        <!-- Описание параметра "shop_id" без использование шаблона -->
+        <!--<parameter name="shop_id" value="datasource_id">-->
+        <!--<sql>select datasource_id from datafeed</sql>-->
+        <!--<condition>${SYS_QUERY_NAME}.datasource_id = ${DATASOURCE_ID}</condition>-->
+        <!--<description>Идентификатор магазина</description>-->
+        <!--</parameter>-->
+
+        <parameter name="is_enabled" value="${SYS_QUERY_name}.value" description="Признак того что магазин включен">
+            <sql>
+                <![CDATA[
+                select 1 as value, 1 as datafeed_id from dual
+                ]]>
+            </sql>
+            <condition>${SYS_QUERY_NAME}.datafeed_id = ${DATAFEED_ID}</condition>
+        </parameter>
+
+    </parameters>
+
+</query>

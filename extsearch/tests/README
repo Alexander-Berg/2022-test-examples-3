@@ -1,0 +1,14 @@
+Instruction to add new tests for NEW_RANKER ranker:
+1. Create snippet contexts with cgi params of the ranker:
+    ./load_snippet_contexts.py -q test_queries.tsv -f ./query_filters.json -o NEW_RANKER.ctx  -p "&snip=use_custom_snippetizer=1&snip=exps=img_exp_images_ranker=NEW_RANKER"
+2. Upload NEW_RANKER.ctx to sandbox as resource:
+    ya upload -d="Snippet contexts to test NEW_RANKER"  --do-not-remove -t=YOUR_TOKEN  ./NEW_RANKER.ctx
+and get RESOURCE_ID
+3. Add path to new sandbox resource in CMakeLists.txt in DATA section:
+    sbr://RESOURCE_ID
+4. Add test in run_tests.py:
+    @SnippetizerTest('NEW_RUNKER.ctx')
+    def test_NEW_RANKER()
+        pass
+5. Canonize new test:
+    ya test run_tests.py::test_NEW_RNAKER --canonize

@@ -1,0 +1,3 @@
+TRUNCATE capacity_counter_notification RESTART IDENTITY CASCADE;
+TRUNCATE partner_capacity RESTART IDENTITY CASCADE;
+TRUNCATE capacity_counter RESTART IDENTITY CASCADE;

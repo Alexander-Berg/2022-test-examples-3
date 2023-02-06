@@ -1,0 +1,21 @@
+context:
+  default:
+    balancing_method: rr
+    cert: ipa-test.touch.market.yandex.ru
+    health_check: '"GET /ping HTTP/1.1\r\nHost: ipa-test.touch.market.yandex.ru\r\n\r\n"'
+    plain_http: false
+    # XXX: Приоритет должен быть ВЫШЕ, чем у встроенного хэндлера /ping, чтобы запросы на пинг обрабатывались haproxy
+    priority: 1000
+    servername_regexp: ipa-test\\.touch\\.market\\.yandex\\.ru
+    service_name: ipa_touch_white_test
+    vs: ipa_touch_white_test
+    antirobot: true
+    antirobot_service_name: market
+
+servers:
+  default:
+    main:
+    - name: "GREY%ipa.touch.white.tst.vs.market.yandex.net"
+      plain_http_backend: true
+      port: 80
+      timeout: 35s

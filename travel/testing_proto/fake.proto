@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "ru.yandex.travel.test.fake.proto";
+option java_outer_classname = "FakeProto";
+
+
+package ru.yandex.travel.test.fake;
+
+enum TTestState {
+	TS_UNKNOWN = 0;
+	TS_FIRST = 1;
+	TS_SECOND = 2;
+	TS_THIRD = 3;
+	TS_ALICE_NEW = 4;
+	TS_ALICE_SENT = 5;
+	TS_ALICE_ACKNOWLEDGED = 6;
+	TS_BOB_NEW = 7;
+	TS_BOB_RECEIVED = 8;
+}
+
+message TTestStartEvent {
+    string SomeValue = 1;
+}
+
+message TTestSomeEvent {
+	string SomeValue = 1;
+}
+
+message TTestMethodReq {
+	string TestValue = 1;
+}
+
+message TTestMethodRsp {}
+
+service FakeService {
+    rpc TestMethod(TTestMethodReq) returns (TTestMethodRsp) {}
+}
+
+enum ETestEnum {
+	TE_Undefined = 0;
+	TE_Foo = 4;
+	TE_Bar = 10;
+}

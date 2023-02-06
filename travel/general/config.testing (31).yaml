@@ -1,0 +1,25 @@
+redis:
+  addrs:
+    - man-upd00sddcy5w161j.db.yandex.net:26379
+    - sas-h9s1noy6qfonekmc.db.yandex.net:26379
+  master_name: raas__testing__http_proxy_cache
+log:
+  is_production_config: true
+  level: INFO
+server:
+  port: 8085
+  services:
+    -
+      base_path: /morda_backend
+      backend: https://testing.morda-backend.rasp.yandex.net
+      backend_timeout: 15s
+      caching:
+        ignore_query_params:
+          - _rid
+        include_request_headers:
+          - Accept-Encoding
+        time_to_live: 24h
+        time_to_refresh: 6h
+metrics:
+  addr: 127.0.0.1:9001
+

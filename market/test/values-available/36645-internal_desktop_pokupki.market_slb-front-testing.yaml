@@ -1,0 +1,22 @@
+context:
+  default:
+    service_name: internal_desktop_pokupki
+    servername_regexp: 'internal\\.desktop\\.pokupki\\.(tst\\.vs|fslb)\\.market\\.yandex\\.(net|ru)'
+    vs: internal_desktop_pokupki
+    health_check: '"GET /ping HTTP/1.1\r\nHost: internal.desktop.pokupki.tst.vs.market.yandex.net\r\n\r\n"'
+    attempts: 1
+    antirobot: True
+    antirobot_service_name: market
+    trust_upstream_headers: True
+    balancing_method: "active"
+    cert: internal.desktop.pokupki.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+
+servers:
+  default:
+    main:
+      - name: "GREY%internal.desktop.pokupki.tst.vs.market.yandex.net"
+        timeout: "35s"
+        port: 80
+        plain_http_backend: True

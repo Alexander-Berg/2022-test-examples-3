@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.yandex.autotests.direct</groupId>
+        <artifactId>direct-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>ru.yandex.autotests.direct</groupId>
+    <artifactId>direct-cmd-tests</artifactId>
+    <name>direct-cmd-tests</name>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <testpalm.project.id>directcmd</testpalm.project.id>
+        <aqua.tests>true</aqua.tests>
+    </properties>
+
+    <scm>
+        <url>https://git.yandex.ru/qa/autotests/direct/direct-cmd-tests.git</url>
+        <connection>scm:git:github.yandex-team.ru/direct-qa/direct-cmd-tests.git</connection>
+    </scm>
+
+    <issueManagement>
+        <system>Startrek</system>
+        <url>https://st.yandex-team.ru/TESTIRT</url>
+    </issueManagement>
+
+    <ciManagement>
+        <system>Jenkins</system>
+        <url>http://jenkins.qart.yandex.ru/job/build_direct_backend_tests</url>
+    </ciManagement>
+
+    <developers>
+        <developer>
+            <id>aleran</id>
+            <url>http://staff/aleran/</url>
+            <email>aleran@yandex-team.ru</email>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>kuhtich</id>
+            <url>http://staff/kuhtich</url>
+            <email>kuhtich@yandex-team.ru</email>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>silver</id>
+            <url>http://staff/silver</url>
+            <email>silver@yandex-team.ru</email>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>ssdmitriev</id>
+            <url>http://staff/ssdmitriev</url>
+            <email>ssdmitriev@yandex-team.ru</email>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <dependencies>
+        <dependency>
+            <groupId>ru.yandex.autotests.lib.listeners</groupId>
+            <artifactId>allure-elliptics-comments</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>allure-java-annotations</artifactId>
+                    <groupId>ru.yandex.qatools.allure</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>ru.yandex.autotests.allure</groupId>
+            <artifactId>allure-aqua-controls</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ru.yandex.autotests.direct</groupId>
+            <artifactId>direct-cmd-steps</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>direct-utils</artifactId>
+                    <groupId>ru.yandex.autotests.direct</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>ru.yandex.autotests.direct</groupId>
+            <artifactId>direct-utils</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-jdk14</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>ru.yandex.autotests.direct</groupId>
+            <artifactId>directapi-steps</artifactId>
+            <exclusions>
+                <!-- конфликтует с passport-api-tools -->
+                <exclusion>
+                    <artifactId>groovy-all</artifactId>
+                    <groupId>org.codehaus.groovy</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-jdk14</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.yandex.autotests.direct</groupId>
+            <artifactId>direct-darkside</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+        </dependency>
+
+        <!--&lt;!&ndash;for CaptchaActions&ndash;&gt;-->
+        <dependency>
+            <groupId>ru.yandex.autotests</groupId>
+            <artifactId>passport-api-tools</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>ru.yandex.qatools.elliptics</groupId>
+                    <artifactId>elliptics-fluent</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>ru.yandex.qatools.elliptics</groupId>
+            <artifactId>elliptics-fluent</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.restassured</groupId>
+            <artifactId>rest-assured</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ru.yandex.qatools</groupId>
+            <artifactId>hazelcast-client</artifactId>
+        </dependency>
+        <!--Иначе testpalm-import рукается java.lang.NoClassDefFoundError: org/hibernate/cfg/reveng/DelegatingReverseEngineeringStrategy -->
+        <!--Убрать после апдейта testpalm-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-tools</artifactId>
+            <version>3.2.3.GA</version>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.6.2</version>
+        </dependency>
+        <!---->
+
+    </dependencies>
+
+</project>

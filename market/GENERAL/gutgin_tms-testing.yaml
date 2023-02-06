@@ -1,0 +1,418 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый gutgin_tms-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dgutgin_tms-testing
+
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=gutgin_tms-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_gutgin_tms_vla
+    - NANNY%testing_market_gutgin_tms_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: disk_free_space
+    tags:
+    - market_testing
+    - market_rtc
+    - marketgutgintms
+    - marketir
+    - testing
+    - market_ir
+    - market
+    - _market_
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=gutgin_tms-testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_gutgin_tms_vla
+    - NANNY%testing_market_gutgin_tms_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: logrotate
+    tags:
+    - market_testing
+    - market_rtc
+    - marketgutgintms
+    - marketir
+    - testing
+    - market_ir
+    - market
+    - _market_
+
+  # Check monitoring_dev
+  # https://juggler.yandex-team.ru/check_details/?host=gutgin_tms-testing&service=monitoring_dev&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - gutgin_tms-testing:monitoring_dev_warn
+    - gutgin_tms-testing:monitoring_dev_crit
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: monitoring_dev
+    tags:
+    - market_testing
+    - market_rtc
+    - marketgutgintms
+    - marketir
+    - testing
+    - market_ir
+    - market
+    - _market_
+    - monitoring_dev
+
+  # Check monitoring_dev_crit
+  # https://juggler.yandex-team.ru/check_details/?host=gutgin_tms-testing&service=monitoring_dev_crit&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      - 500
+      path: /monitoring?resp=dev
+      regexp: ^(0|1);
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_gutgin_tms_vla:monitoring_dev_crit:all
+    - NANNY%testing_market_gutgin_tms_sas:monitoring_dev_crit:all
+    service: monitoring_dev_crit
+    tags:
+    - market_testing
+    - market_rtc
+    - marketgutgintms
+    - marketir
+    - testing
+    - market_ir
+    - market
+    - _market_
+
+  # Check monitoring_dev_warn
+  # https://juggler.yandex-team.ru/check_details/?host=gutgin_tms-testing&service=monitoring_dev_warn&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      - 500
+      path: /monitoring?resp=dev
+      regexp: ^(0|2);
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 146%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 146%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_gutgin_tms_vla:monitoring_dev_warn:all
+    - NANNY%testing_market_gutgin_tms_sas:monitoring_dev_warn:all
+    service: monitoring_dev_warn
+    tags:
+    - market_testing
+    - market_rtc
+    - marketgutgintms
+    - marketir
+    - testing
+    - market_ir
+    - market
+    - _market_
+
+  # Check monitoring_ops
+  # https://juggler.yandex-team.ru/check_details/?host=gutgin_tms-testing&service=monitoring_ops&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - gutgin_tms-testing:monitoring_ops_warn
+    - gutgin_tms-testing:monitoring_ops_crit
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: monitoring_ops
+    tags:
+    - market_testing
+    - market_rtc
+    - marketgutgintms
+    - marketir
+    - testing
+    - market_ir
+    - market
+    - _market_
+    - monitoring_ops
+
+  # Check monitoring_ops_crit
+  # https://juggler.yandex-team.ru/check_details/?host=gutgin_tms-testing&service=monitoring_ops_crit&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      - 500
+      path: /monitoring?resp=ops
+      regexp: ^(0|1);
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_gutgin_tms_vla:monitoring_ops_crit:all
+    - NANNY%testing_market_gutgin_tms_sas:monitoring_ops_crit:all
+    service: monitoring_ops_crit
+    tags:
+    - market_testing
+    - market_rtc
+    - marketgutgintms
+    - marketir
+    - testing
+    - market_ir
+    - market
+    - _market_
+
+  # Check monitoring_ops_warn
+  # https://juggler.yandex-team.ru/check_details/?host=gutgin_tms-testing&service=monitoring_ops_warn&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      - 500
+      path: /monitoring?resp=ops
+      regexp: ^(0|2);
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 146%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 146%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_gutgin_tms_vla:monitoring_ops_warn:all
+    - NANNY%testing_market_gutgin_tms_sas:monitoring_ops_warn:all
+    service: monitoring_ops_warn
+    tags:
+    - market_testing
+    - market_rtc
+    - marketgutgintms
+    - marketir
+    - testing
+    - market_ir
+    - market
+    - _market_
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=gutgin_tms-testing&service=ping&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /ping
+      regexp: ^0;
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 60%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 146%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_gutgin_tms_vla:ping:all
+    - NANNY%testing_market_gutgin_tms_sas:ping:all
+    service: ping
+    tags:
+    - market_testing
+    - market_rtc
+    - marketgutgintms
+    - marketir
+    - testing
+    - market_ir
+    - market
+    - _market_
+    - ping
+
+  # Check fresh-hprof-files 
+  # https://juggler.yandex-team.ru/check_details/?host=gutgin_tms-testing&service=fresh-hprof-files&last=1DAY&mode=edit 
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 0%
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 49%
+      nodata_mode: skip
+    children:
+    - NANNY%testing_market_gutgin_tms_sas
+    - NANNY%testing_market_gutgin_tms_vla
+    service: fresh-hprof-files
+    tags:
+    - market_testing
+    - market_ir
+    - market_rtc
+    - marketgutgintms
+    - marketir
+    - testing
+    - market
+    - _market_
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=gutgin_tms-testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_gutgin_tms_vla
+    - NANNY%testing_market_gutgin_tms_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: push-client-status
+    tags:
+    - market_testing
+    - market_rtc
+    - marketgutgintms
+    - marketir
+    - testing
+    - market_ir
+    - market
+    - _market_
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    check_options: {}
+    host: gutgin_tms-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    ttl: 900

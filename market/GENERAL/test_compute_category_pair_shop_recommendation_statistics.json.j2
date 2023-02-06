@@ -1,0 +1,42 @@
+{% macro offer(offer_id, category_id, shop_id, pricing_model="cpa") %}
+    {% if table == "items_offer_category_id" %}
+        ["{{ offer_id }}", "{{ category_id }}", "offer", "{{ day }}"]
+    {% elif table == "items_offer_pricing_model" %}
+        ["{{ offer_id }}", "{{ pricing_model }}", "offer", "{{ day }}"]
+    {% elif table == "items_offer_shop_id" %}
+        ["{{ offer_id }}", "{{ shop_id }}", "offer", "{{ day }}"]
+    {% endif %}
+{% endmacro %}
+
+{% if table == "features_item_pair_category_category_shop_recommendation_statistics" %}
+    {# Result data. #}
+    {% table table %}
+        ["C1", "CA1", 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, "category", "category", "{{ day }}"],
+        ["C1", "CA2", 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, "category", "category", "{{ day }}"],
+        ["C2", "CA1", 2.0, 2.0, 1.0, 2.0, 2.0, 5.0, 1.0, "category", "category", "{{ day }}"],
+        ["C2", "CA2", 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, "category", "category", "{{ day }}"]
+    {% endtable %}
+{% elif table == "mstat_dictionaries_accessory_offers" %}
+    {% table table %}
+        ["O1", ["A1", "A2", "A3"]],
+        ["O2", ["A2"]],
+        ["O2", ["A3"]],
+        ["O3", ["A4", "A5", "A6", "A7"]]
+    {% endtable %}
+{% elif table.startswith("items_offer") %}
+    {% table table %}
+        {{ offer("O1", "C1", "S1") }},
+        {{ offer("O2", "C2", "S1") }},
+
+        {{ offer("A1", "CA1", "S1") }},
+        {{ offer("A2", "CA1", "S1") }},
+        {{ offer("A3", "CA2", "S1", "cpc") }},
+
+        {{ offer("O3", "C2", "S2") }},
+
+        {{ offer("A4", "CA1", "S2", "cpc") }},
+        {{ offer("A5", "CA1", "S2", "cpc") }},
+        {{ offer("A6", "CA1", "S2", "cpc") }},
+        {{ offer("A7", "CA1", "S2", "cpc") }}
+    {% endtable %}
+{% endif %}

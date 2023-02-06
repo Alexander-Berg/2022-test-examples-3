@@ -1,0 +1,117 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "clickavia",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--token", "token",
+    "--date-from", "2020-01-01",
+    "--date-to", "2020-01-02",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "partner",
+    "yt",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "apllication/json"
+
+[[partner.responses]]
+    path = "/token/orders"
+    args = {date_from = "2019-12-31", date_to = "2020-01-02"}
+    data_file = "partner_response_2020_01_01.json"
+
+[[partner.responses]]
+    path = "/token/orders"
+    args = {date_from = "2020-01-01", date_to = "2020-01-03"}
+    data_file = "partner_response_2020_01_02.json"
+
+[yt.input.partner_table]
+    path = "//home/rasp/reference/partner"
+
+[[yt.input.partner_table.data]]
+    billing_order_id = 1016
+    code = "clickaviatravelab"
+    partner_id = 99
+
+[yt.input.station_table]
+    path = "//home/rasp/reference/station"
+
+[[yt.input.station_table.data]]
+    city_id = "c54"
+    iata = "SVX"
+    sirena = ""
+
+[[yt.input.station_table.data]]
+    city_id = "c213"
+    iata = "DME"
+    sirena = ""
+
+[[yt.input.station_table.data]]
+    city_id = "c2"
+    iata = "LED"
+    sirena = ""
+
+[lb]
+    topic = "topic-clickavia"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+[[lb.expected]]
+    partner_name = "clickavia"
+    travel_order_id = "clickavia:547242"
+    partner_order_id = "547242"
+    created_at = 1556826164
+    status = "cancelled"
+    label = "ddc2e505-a5e969-eddc-420a-bba0-deac300dbfc41"
+    currency_code = "RUB"
+    order_amount = 11951.0
+    category = "avia"
+    source = "clickavia"
+    partner_id = 99
+    billing_order_id = 1016
+    origin = "SIP"
+    destination = "OVB"
+    trip_type = "oneway"
+
+
+[[lb.expected]]
+    partner_name = "clickavia"
+    travel_order_id = "clickavia:547240"
+    partner_order_id = "547240"
+    created_at = 1556907529
+    status = "confirmed"
+    label = "750530ce-a5e969-148b-4f85-979a-106a3c9ba1961"
+    currency_code = "RUB"
+    order_amount = 10741.0
+    category = "avia"
+    source = "clickavia"
+    partner_id = 99
+    billing_order_id = 1016
+    origin = "PRG"
+    destination = "ROV"
+    trip_type = "oneway"
+
+
+[[lb.expected]]
+    partner_name = "clickavia"
+    travel_order_id = "clickavia:665406"
+    partner_order_id = "665406"
+    created_at = 1585325388
+    status = "pending"
+    label = "13ddaf05-a5e969-456a-45bb-be64-6051c05ad70d1"
+    currency_code = "RUB"
+    order_amount = 5830.0
+    category = "avia"
+    source = "clickavia"
+    partner_id = 99
+    billing_order_id = 1016
+    origin = "AER"
+    destination = "OVB"
+    trip_type = "oneway"

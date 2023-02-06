@@ -1,0 +1,28 @@
+{
+  "logHosts": "{s1,s2}.*",
+  "logPath": "/var/log/www/morda.access_log",
+  "clickhouseTable": "nginx_access",
+  "parser": {
+    "separator": "\t",
+    "tskvMatch": {
+      "unixtime": "timestamp"
+    },
+    "ignoreNoMatches": false,
+    "columns": {
+      "host": {
+        "type": "String"
+      },
+      "method": {
+        "type": "String",
+        "default": "Get"
+      },
+      "requestid": {
+        "type": "String"
+      },
+      "yandexuid": {
+        "type": "String",
+        "default": ""
+      }
+    }
+  }
+}

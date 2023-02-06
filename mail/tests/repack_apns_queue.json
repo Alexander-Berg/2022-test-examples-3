@@ -1,0 +1,163 @@
+{
+"defaults": {
+  "message": {
+    "bright": true,
+    "uid": "device_app",
+    "service": "apns_queue",
+    "operation": "queue push",
+    "transit_id": "Hsdfj5F6Yxu",
+    "local_id": 12345,
+    "raw_data": {
+      "some": "data",
+      "from": ["original", "push"],
+      "xiva": {
+        "svc": "mail",
+        "usr": "543"
+      }
+    }
+  },
+  "subscription": {
+    "id": "1234",
+    "platform": "apnsqueue",
+    "app_name": "ru.yandex.mail",
+    "push_token": "XYZxyz",
+    "device": "qqqqqqqWERTY"
+  }
+},
+"apns_queue basic repack": {
+  "expect": {
+    "messages": [ {
+      "payload": {
+        "some": "data",
+        "from": ["original", "push"],
+        "xiva": {
+          "svc": "mail",
+          "usr": "543",
+          "pos": 12345,
+          "device": "qqqqqWERTY"
+        }
+      },
+      "urlparams": {
+      }
+    } ]
+  }
+},
+"apns_queue short device": {
+  "subscription": {
+    "device": "123"
+  },
+  "expect": {
+    "messages": [ {
+      "payload": {
+        "some": "data",
+        "from": ["original", "push"],
+        "xiva": {
+          "svc": "mail",
+          "usr": "543",
+          "pos": 12345,
+          "device": "123"
+        }
+      },
+      "urlparams": {
+      }
+    } ]
+  }
+},
+"apns_queue repacks x-params": {
+  "message": {
+    "repack": {
+      "apnsqueue": {
+        "aps": {
+          "alert": "some aps repack",
+          "content-available": 0
+        }
+      }
+    }
+  },
+  "expect": {
+    "messages": [ {
+      "payload": {
+        "some": "data",
+        "from": ["original", "push"],
+        "xiva": {
+          "svc": "mail",
+          "usr": "543",
+          "pos": 12345,
+          "device": "qqqqqWERTY"
+        }
+      },
+      "urlparams": {
+        "x-aps": {
+          "alert": "some aps repack",
+          "content-available": 0
+        }
+      }
+    } ]
+  }
+},
+"apns_queue no position for fast notify": {
+  "message": {
+    "local_id": 0
+  },
+  "expect": {
+    "messages": [ {
+      "payload": {
+        "some": "data",
+        "from": ["original", "push"],
+        "xiva": {
+          "svc": "mail",
+          "usr": "543"
+        }
+      },
+      "urlparams": {
+      }
+    } ]
+  }
+},
+"apns_queue not mail": {
+  "message": {
+    "raw_data": {
+      "some": "data",
+      "from": ["original", "push"],
+      "xiva": {
+          "svc": "notmail",
+          "usr": "543"
+      }
+    }
+  },
+  "expect": {
+    "messages": [ {
+      "payload": {
+        "some": "data",
+        "from": ["original", "push"],
+        "xiva": {
+          "svc": "notmail",
+          "usr": "543",
+          "pos": 12345,
+          "device": "qqqqqWERTY"
+        }
+      },
+      "urlparams": {
+      }
+    } ]
+  }
+},
+"apns_queue repack suppression": {
+  "message": {
+    "raw_data": {
+      "some": "data",
+      "from": ["original", "push"]
+    }
+  },
+  "expect": {
+    "messages": [ {
+      "payload": {
+        "some": "data",
+        "from": ["original", "push"]
+      },
+      "urlparams": {
+      }
+    } ]
+  }
+}
+}

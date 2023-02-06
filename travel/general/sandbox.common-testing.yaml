@@ -1,0 +1,56 @@
+- gather_facts: false
+  hosts: localhost
+  roles:
+  - checks:
+    - dump_rasp_data
+    - rasp_check_aeroex_balance_task
+    - rasp_generate_archival_data_task
+    - rasp_generate_geometry_task
+    - rasp_generate_pathfinder_data_task
+    - rasp_min_prices
+    - rasp_pathfinder_maps_nearest_settlement_task
+    - rasp_script_example
+    - rasp_search_log_yt_schema
+    - rasp_solomon_generate_alerts
+    - rasp_suggests_generate
+    - rasp_suggests_generate_search_stat
+    - travel_content_admin_update_dicts
+    limits: '{{ crit_0_warn_0 }}'
+    flap: '{{ stable3h_critical6h }}'
+    role: chat_only
+    nodata_mode: force_ok
+    rtime: 60
+  - checks:
+    - rasp_build_chelyabinsk_bus_schedule
+    limits: '{{ crit_0_warn_0 }}'
+    flap: '{{ stable1h_critical1d }}'
+    role: chat_only
+    nodata_mode: force_ok
+    rtime: 60
+    ttl: 2400
+  - checks:
+    - rasp_build_odnakassa_schedule
+    - rasp_south_bus_station_parser
+    limits: '{{ crit_0_warn_0 }}'
+    flap: '{{ stable12h_critical1d }}'
+    role: chat_only
+    nodata_mode: force_ok
+    rtime: 60
+  - checks:
+    - rasp_generic_task.update_mdb_hosts.run
+    - rasp_build_rasp_data_and_update
+    limits: '{{ crit_0_warn_0 }}'
+    flap: '{{ stable1800critical3600 }}'
+    role: chat_only
+    nodata_mode: force_ok
+    rtime: 60
+  vars:
+    children:
+      - rasp_sandbox_testing
+    host: rasp_sandbox_testing
+    telegram_chats:
+      - 'rasp-achtung'
+  vars_files:
+  - ../vars/common.yml
+  - vars/rasp.yml
+

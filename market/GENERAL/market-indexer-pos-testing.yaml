@@ -1,0 +1,23 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket-indexer-pos-testing
+
+juggler:
+  checks:
+  - {}
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    check_options: {}
+    children:
+    - CGROUP%mi_master-testing-strat
+    host: market-indexer-pos-testing
+    namespace: market.indexer
+    notifications: []
+    refresh_time: 60
+    service: pos-used-percentage
+    tags:
+    - pos_alerts
+    - market
+    - _market_
+    - market_indexer_testing
+    ttl: 900

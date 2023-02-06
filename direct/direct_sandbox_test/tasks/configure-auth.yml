@@ -1,0 +1,13 @@
+# ssl [key & crt]
+- name: creating /etc/direct-ssl
+  file: path=/etc/direct-ssl owner=root group=root mode=0755 state=directory
+  tags: ts-front-ssl
+
+- copy: src={{ item }} dest=/etc/direct-ssl backup=yes force=yes owner=root group=root mode=0644
+  with_fileglob: direct-ssl/*
+  tags: ts-front-ssl
+
+- name: creating symlinks to api cert
+  file: src=/etc/direct-ssl/api.direct.yandex.ru.{{ item }} dest=/etc/direct-ssl/soap.direct.yandex.ru.{{ item }} state=link
+  with_items: [ crt, key ]
+  tags: ts-front-ssl

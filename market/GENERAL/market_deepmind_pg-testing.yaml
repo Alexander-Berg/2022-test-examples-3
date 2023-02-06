@@ -1,0 +1,44 @@
+juggler:
+  default:
+    namespace: market-deepmind
+    host: market_deepmind_pg_testing
+    children: [ ]
+    tags:
+      - market_production
+      - market_rtc
+      - marketdeepmind
+      - production
+      - market
+      - _market_
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    check_options: { }
+    refresh_time: 30 # кол-во секунд, как часто проверки будут выполняться (но ручка дергатся будет чаще, так как запросы идут от нескольких ДЦ)
+    ttl: 900 # кол-во секунд, когда проверка считается актуальной (по истечении времени мониторинг загорится в NO_DATA)
+    flaps:
+      stable_time: 60 # кол-во секунд с начала флапа, когда мы ждем, что он закончится
+      critical_time: 0 # отключено
+    notifications:
+      - template_kwargs:
+          login: deepmind_testing_chat # https://t.me/joinchat/GQwSt1s_hh-CSYin
+          method: telegram
+          status:
+            - CRIT
+            - WARN
+            - OK
+          min_interval: 60 # 1 минута, число секунд, чаще которых не будут отправляться оповещения.
+        template_name: on_status_change
+  checks:
+    # Алерты управляются из облака: https://yc.yandex-team.ru/folders/foo2u5pfn5s7or3qenu8/managed-postgresql/cluster/mdb6sou8u1oca8kp3qnd?section=alerts
+    # Там есть бага (https://st.yandex-team.ru/MDBSUPPORT-6104)
+    # Если не получается из облака, то можно отредактировать в соломоне
+    # https://solomon.yandex-team.ru/admin/projects/market-deepmind/alerts?text=mdb6sou8u1oca8kp3qnd&templateServiceProviderId=ALL
+    # События отправляются через канал https://solomon.yandex-team.ru/admin/projects/market-deepmind/channels/7bd2cc73-1185-4a6f-bf65-dd48f2fa291d
+    - service: deepmind_pg
+      children:
+        -
+          host: host=market_deepmind_pg_testing
+          service: all
+          type: EVENTS
+          instance: all

@@ -1,0 +1,47 @@
+USE hahn;
+
+PRAGMA yt.DefaultMaxJobFails = '1';
+
+$format = Python3::format(Callable<(Yson?)->Yson>, @@
+import cyson
+
+def format(l):
+    res = {}
+    for row in l:
+        rubric_id = row.get(b'rubric_id', None)
+        if rubric_id:
+            rubric_id = str(int(rubric_id))
+            image_url = row.get(b'image_url', None)
+            title = row.get(b'title', None)
+            if int(row.get(b'chain_id', None)) == 6002273 and rubric_id == "184105298":
+                image_url = 'https://avatars.mds.yandex.net/get-bunker/135516/e23df5c7e6047ed52a39db871e65713428e486d9/%s'
+            res[rubric_id] = dict(image_url=image_url, title=title)
+    return res
+
+format._yql_convert_yson = (cyson.loads, cyson.dumps)
+@@);
+
+
+$new_snippet = (
+    SELECT
+        'chain_id_' || CAST(chain_id AS String) AS Url,
+        Yson::SerializeJson($format(Yson::From(AGGREGATE_LIST(TableRow())))) AS advert_chain_filter_data
+    FROM `{{ input_table }}`
+    GROUP BY chain_id
+);
+
+$old_snippet = (
+    SELECT
+        'chain_id_' || CAST(chain_id AS String) AS Url,
+        title AS advert_chain_filter_name,
+        CAST(is_advert AS String) AS advert_chain_filter_is_advert
+    FROM `{{ input_table }}`
+    WHERE title IS NOT NULL
+);
+
+{% set output_table = processing_out[processing_out.rfind('//'):] %}
+INSERT INTO `{{ output_table }}` WITH TRUNCATE
+SELECT
+    *
+FROM $new_snippet AS new
+FULL JOIN $old_snippet AS old USING(Url);

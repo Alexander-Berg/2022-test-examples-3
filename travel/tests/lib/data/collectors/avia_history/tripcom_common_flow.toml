@@ -1,0 +1,57 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "tripcom_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 1025
+    confirm_dt = ""
+    created_at = "2020-01-31 01:55:35"
+    currency = ""
+    from = ""
+    marker = "5b803d1b-a5e969-caca-44ac-bf1f-fb052d5b5c841"
+    order_id = "12169663939"
+    partner = "tripcom"
+    partner_id = 110
+    price = 888.0
+    source = "tripcom"
+    status = "paid"
+    ticket_number = ""
+    to = ""
+    trip_type = ""
+    unixtime = 1580425373
+
+[lb]
+    topic = "topic-tripcom_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "partner_profit", "updated_at"]
+
+[[lb.expected]]
+    status = "confirmed"
+    category = "avia"
+    partner_id = 110
+    created_at = 1580435735
+    origin = ""
+    partner_order_id = "12169663939"
+    label = "5b803d1b-a5e969-caca-44ac-bf1f-fb052d5b5c841"
+    source = "history"
+    destination = ""
+    partner_name = "tripcom"
+    trip_type = ""
+    billing_order_id = 1025
+    order_amount = 888.0
+    travel_order_id = "tripcom:12169663939"
+    currency_code = "CNY"

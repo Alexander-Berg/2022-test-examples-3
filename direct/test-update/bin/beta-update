@@ -1,0 +1,20 @@
+#!/bin/bash -ex
+
+h=`hostname`
+
+case "$1" in
+"--ppcdev-all")
+direct-test-update ppcdev-all ${*:2}
+;;
+"--ppcmoddev-all")
+directmod-test-update ppcmoddev-all ${*:2}
+;;
+*)
+if [ "$1" = "dmove_stable" ] || expr "$1" : "dmove_stable " > /dev/null; then
+    # опции соответствуют командам, на которые выданы права в IDM, хорошо бы улучшить это место
+    sudo /usr/local/bin/ts-update.pl --conf=/etc/ts-updater/direct.conf --conf=/etc/ts-updater/dmove-testing.conf --conf=/etc/ts-updater/dmove-prestable.conf --conf=/etc/ts-updater/dmove-stable.conf $@
+else    
+    sudo /usr/local/bin/ts-update.pl --conf=/etc/ts-updater/direct.conf --conf=/etc/ts-updater/dmove-testing.conf --conf=/etc/ts-updater/dmove-prestable.conf $@
+fi
+;;
+esac

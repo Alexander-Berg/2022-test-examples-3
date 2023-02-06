@@ -1,0 +1,15 @@
+TRUNCATE TABLE pers.video;
+TRUNCATE TABLE pers.last_mod_state;
+TRUNCATE TABLE pers.video_info;
+TRUNCATE TABLE pers.history_mod_state;
+TRUNCATE TABLE pers.user_interest;
+TRUNCATE TABLE pers.interest_icon;
+TRUNCATE TABLE pers.hid_to_root_nid;
+TRUNCATE TABLE pers.expertise_diff;
+TRUNCATE TABLE pers.agitation_add;
+TRUNCATE TABLE pers.agitation_cancel;
+TRUNCATE TABLE pers.agitation_limit_users;
+TRUNCATE TABLE pers.live_stream;
+TRUNCATE TABLE pers.security_data;
+TRUNCATE TABLE pers.takeout;
+TRUNCATE TABLE pers.configuration;

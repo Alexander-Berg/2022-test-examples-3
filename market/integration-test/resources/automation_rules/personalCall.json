@@ -1,0 +1,21 @@
+{
+  "rules": [
+    {
+      "actions": [
+        {
+          "type": "edit",
+          "parameter": "ticket",
+          "properties": [
+            {
+              "code": "ticket@responsibleEmployee",
+              "value": {
+                "type": "script",
+                "value": "return api.db.of('employee').withFilters { eq('additionalNumber', ticket.additionalNumber) }.limit(1).get()"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

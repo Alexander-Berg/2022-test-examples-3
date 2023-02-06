@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="false"
+       default-autowire="no">
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource">
+            <bean class="ru.yandex.common.util.db.NamedDataSource" destroy-method="close">
+                <property name="driverClassName" value="${market_payment.billing.jdbc.driverClassName}"/>
+                <property name="url" value="${market_payment.billing.jdbc.url}"/>
+                <property name="username" value="${market_payment.billing.username}"/>
+                <property name="password" value="${market_payment.billing.password}"/>
+                <property name="validationQuery" value="select 1 from dual"/>
+                <property name="maxActive" value="${oracle.jdbc.maxActive}"/>
+                <property name="maxIdle" value="${oracle.jdbc.maxIdle}"/>
+                <property name="removeAbandoned" value="${oracle.jdbc.removeAbandoned}"/>
+                <property name="removeAbandonedTimeout" value="${oracle.jdbc.removeAbandonedTimeout}"/>
+                <property name="logAbandoned" value="true"/>
+                <property name="moduleName" value="market-checkout-push-api"/>
+                <property name="nativeJdbcExtractor">
+                    <bean class="org.springframework.jdbc.support.nativejdbc.CommonsDbcpNativeJdbcExtractor"/>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="mbiErrorsStoreService"
+          class="ru.yandex.market.checkout.pushapi.service.shop.MbiErrorsStoreService"
+          init-method="init">
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+        <property name="executorService">
+            <bean class="java.util.concurrent.ScheduledThreadPoolExecutor">
+                <constructor-arg value="1" />
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="geoRegionService" class="ru.yandex.market.checkout.pushapi.service.GeoRegionService">
+        <property name="regionService">
+            <bean id="regionService" class="ru.yandex.common.util.region.RegionService" >
+                <property name="regionTreeBuilder">
+                    <bean class="ru.yandex.market.checkout.pushapi.service.geo.CrutchBasedRegionTreeBuilder">
+                        <property name="timeoutMillis" value="3000"/>
+                        <property name="plainTextURL" value="${geobase.url}"/>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="zooClient" class="ru.yandex.market.common.zk.ZooClient" init-method="init">
+        <property name="connectString" value="${market.zookeeper.connectString}"/>
+        <property name="connectTimeout" value="${market.checkout.zookeeper.connectTimeout}"/>
+    </bean>
+
+    <bean id="settingsService"
+          class="ru.yandex.market.checkout.pushapi.service.shop.settings.ZooKeeperSettingsService">
+        <property name="zookeeperSettingsHelper">
+            <bean class="ru.yandex.market.checkout.pushapi.service.shop.settings.ZookeeperSettingsHelper">
+                <property name="zooClient" ref="zooClient" />
+                <property name="dateUtilBean">
+                    <bean class="ru.yandex.market.checkout.pushapi.client.util.DateUtilBean" />
+                </property>
+            </bean>
+        </property>
+        <property name="reloadDelayInMinutes" value="1" />
+        <property name="executor">
+            <bean class="java.util.concurrent.ScheduledThreadPoolExecutor">
+                <constructor-arg value="2" />
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="pushApiPingChecker" class="ru.yandex.market.checkout.pushapi.ping.PushApiPingChecker">
+        <property name="checkers">
+            <list>
+                <bean class="ru.yandex.market.common.ping.DBConnectionChecker">
+                    <property name="jdbcTemplate" ref="jdbcTemplate" />
+                    <property name="testSql" value="SELECT 1 FROM dual" />
+                    <property name="level" value="CRITICAL" />
+                    <property name="cacheTime" value="60000" />
+                </bean>
+                <bean class="ru.yandex.market.common.zk.ZooPingChecker">
+                    <property name="zooClient" ref="zooClient" />
+                    <property name="level" value="WARNING" />
+                    <property name="cacheTime" value="60000" />
+                </bean>
+                <bean class="ru.yandex.market.checkout.pushapi.ping.SettingsPingChecker">
+                    <property name="zooKeeperSettingsService" ref="settingsService" />
+                    <property name="level" value="CRITICAL" />
+                    <property name="cacheTime" value="60000" />
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="financialValidator" class="ru.yandex.market.checkout.common.pay.FinancialValidator">
+        <property name="validCurrencies">
+            <set />
+        </property>
+        <property name="validBuyerCurrencies">
+            <set />
+        </property>
+    </bean>
+
+    <bean id="metricsReportingBean" class="ru.yandex.market.checkout.pushapi.service.GraphiteReporterService">
+        <property name="graphiteHost" value="localhost" />
+        <property name="graphitePort" value="42000" />
+    </bean>
+
+</beans>

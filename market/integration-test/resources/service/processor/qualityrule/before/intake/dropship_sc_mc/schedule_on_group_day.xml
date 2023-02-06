@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lom_order
+            id="100111"
+            barcode="777"
+            platform_client_id="3"
+            sender_id="1"
+            status="ENQUEUED"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="100111"
+            partner_id="987654323"
+            partner_type="DROPSHIP"
+            segment_type="MOVEMENT"
+            waybill_segment_index="0"
+            partner_name="Тестовый Дропшип"
+    />
+
+    <lom_waybill_segment
+            id="2"
+            order_id="100111"
+            partner_id="987654321"
+            partner_type="SORTING_CENTER"
+            segment_type="SORTING_CENTER"
+            waybill_segment_index="1"
+            partner_name="Тестовый СЦ"
+    />
+
+    <lom_waybill_segment
+            id="3"
+            order_id="100111"
+            external_id="102"
+            partner_id="987654322"
+            partner_type="DELIVERY"
+            partner_subtype="MARKET_COURIER"
+            segment_type="MOVEMENT"
+            waybill_segment_index="2"
+            partner_name="Тестовая служба доставки"
+    />
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="3"
+            waybill_segment_type="MOVEMENT"
+            expected_status="IN"
+            processing_status="PROCESSED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2020-11-07 11:11:50 +0300"
+            schedule_time="2020-11-07 11:11:50 +0300"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <plan_fact_group
+            id="1"
+            aggregation_key="date:2020-11-07;partner:987654322;partnerFrom:987654321;"
+            aggregation_type="DROPSHIP_SORTING_CENTER_MARKET_COURIER_INTAKE"
+            processing_status="ENQUEUED"
+            expected_status="IN"
+            schedule_time="2020-11-05 11:11:50 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 7],
+                        "partner": {
+                            "id": 987654322,
+                            "name": "Тестовая служба доставки",
+                            "type": "DELIVERY",
+                            "subtype": "MARKET_COURIER"
+                        },
+                        "partnerFrom": {
+                            "id": 987654321,
+                            "name": "Тестовый СЦ",
+                            "type": "SORTING_CENTER"
+                        }
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="1"
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="IN"
+            aggregation_type="DROPSHIP_SORTING_CENTER_MARKET_COURIER_INTAKE"
+            rule_processor="STARTREK"
+            rule='{ "queue": "MONITORINGSNDBX", "_type": ".DropshipSortingCenterMarketCourierIntakePayload" }'
+    />
+
+</dataset>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <partner id="1" status="active" type="DROPSHIP" name="Partner 1"/>
+    <partner id="2" status="active" type="SORTING_CENTER" name="Partner 2"/>
+    <partner id="3" status="active" type="DELIVERY" name="Partner 3"/>
+
+    <address id="11"/>
+    <address id="12"/>
+    <address id="13"/>
+
+    <logistics_point
+            id="101"
+            name="Point 101"
+            external_id="warehouse_101"
+            type="WAREHOUSE"
+            address_id="11"
+            active="true"
+    />
+
+    <logistics_point
+            id="102"
+            name="Point 102"
+            external_id="warehouse_102"
+            type="WAREHOUSE"
+            address_id="12"
+            active="true"
+    />
+
+    <logistics_point
+            id="103"
+            name="Point 103"
+            external_id="pickup_point_103"
+            type="PICKUP_POINT"
+            address_id="12"
+            active="true"
+    />
+
+    <logistic_segments id="10001" partner_id="1" logistic_point_id="101" location_id="1001" type="warehouse"/>
+    <logistic_segments id="10002" partner_id="2" logistic_point_id="102" location_id="1002" type="movement"/>
+    <logistic_segments id="10003" partner_id="2" logistic_point_id="102" location_id="1002" type="warehouse"/>
+    <logistic_segments id="10004" partner_id="3" logistic_point_id="103" location_id="1003" type="movement"/>
+    <logistic_segments id="10005" partner_id="3" logistic_point_id="103" location_id="1003" type="linehaul"/>
+    <logistic_segments id="10006" partner_id="3" logistic_point_id="103" location_id="1003" type="pickup"/>
+    <logistic_segments id="10007" partner_id="3" logistic_point_id="[null]" location_id="1003" type="handing"/>
+
+    <logistic_edges id="10" from_segment_id="10001" to_segment_id="10002"/>
+    <logistic_edges id="20" from_segment_id="10002" to_segment_id="10003"/>
+    <logistic_edges id="30" from_segment_id="10003" to_segment_id="10004"/>
+    <logistic_edges id="40" from_segment_id="10004" to_segment_id="10005"/>
+    <logistic_edges id="50" from_segment_id="10005" to_segment_id="10006"/>
+    <logistic_edges id="60" from_segment_id="10005" to_segment_id="10007"/>
+</dataset>

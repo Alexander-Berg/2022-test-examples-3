@@ -1,0 +1,24 @@
+{% if table.endswith("pmi") %}
+    {# Result data. #}
+    {% table table %}
+        [
+            "I1",
+            "I2",
+            {{ 2.0 / (4.0 * 8.0) }},
+            {{ 10.0 / (40.0 * 20.0) }},
+            "{{ item_type }}",
+            "{{ item_type }}",
+            "{{ day }}"
+        ]
+    {% endtable %}
+{% elif table.startswith("features_item_pair") and table.endswith("statistics") %}
+    {% table table %}
+        ["I1", "I2", 2.0, 10.0, "{{ item_type }}", "{{ item_type }}", "{{ day }}"]
+    {% endtable %}
+{% elif table.startswith("features_item") and table.endswith("statistics") %}
+    {% table table %}
+        {# Note that here event count goes before user count. #}
+        ["I1", 40.0, 4.0, "{{ item_type }}", "{{ day }}"],
+        ["I2", 20.0, 8.0, "{{ item_type }}", "{{ day }}"]
+    {% endtable %}
+{% endif %}

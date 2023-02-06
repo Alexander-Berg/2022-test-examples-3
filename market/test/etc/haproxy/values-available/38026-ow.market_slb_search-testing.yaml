@@ -1,0 +1,42 @@
+# Параметры обработки
+params:
+  default:
+    resolve: true
+    templates:
+      - user_mslb_http.tpl
+    generate: no
+  "%market_slb_search-testing":
+    generate: yes
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          "check observe layer7"
+    globals:
+      ping:           "/ping"
+      ping_expect:    "rstring 0;(OK|Ok|ok)"
+      service_name:   "ow.tst.vs.market.yandex.net"
+      service_port:   80
+      listen_port:    39030
+    meta:
+      monrun_ignore:  yes
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+    - name: YP@testing-market-operator-window-vla@local
+      weight: 100
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing-market-operator-window-sas@local
+      weight: 100
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing-market-operator-window-sas
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing-market-operator-window-vla
+      dns_resolvers: yandex-ns
+      resolve: false

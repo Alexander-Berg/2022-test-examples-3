@@ -1,0 +1,27 @@
+config:
+    system:
+        dir: .
+        daemon: 0
+        reactor:
+            - { _io_threads: 2, _pool_count: 1, _name: global }
+            - { _io_threads: 1, _pool_count: 8, _name: python }
+    log:
+        global:
+            async: false
+            level: debug
+            format: "[%Y-%b-%d %H:%M:%S.%f] %l %v"
+            sinks:
+                type: file
+                path: /dev/null
+    modules:
+        module:
+        -   _name: mod_python
+            system:
+                name: mod_python
+                factory: ymod_python::impl
+            configuration:
+                reactor: python
+                program_name: my_python
+                python_home: .
+                python_path: .:/usr/lib/python
+                load: "module1.py"

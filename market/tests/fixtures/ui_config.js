@@ -1,0 +1,442 @@
+var CONSTANTS = {
+    "FEDERATED_URL":"http://federated.yandex-team.ru",
+    "DEFAULT_L7_HEAVY_UI_VERSION":7,
+    "ENABLE_PORTO_PERMITTED_ABC_SERVICE_IDS":[
+        730,
+        470
+    ],
+    "YP_BETA_ACCESS_USERS":[
+        "squirrel",
+        "slonnn",
+        "nekto0n",
+        "alonger",
+        "frolstas",
+        "romanovich",
+        "reddi",
+        "disafonov",
+        "max7255",
+        "bkht",
+        "avitella",
+        "babenko",
+        "ignat",
+        "robosova",
+        "amich",
+        "dmtrmonakhov",
+        "bidzilya",
+        "alximik",
+        "psushin",
+        "i-dyachkov",
+        "ferenets",
+        "se4min",
+        "k-malov",
+        "paxakor",
+        "dimrul",
+        "allazarev",
+        "dldmitry",
+        "glebskvortsov",
+        "chegoryu",
+        "rocco66",
+        "noiseless",
+        "ismagilas",
+        "lspliner",
+        "tedkon",
+        "svagalakov",
+        "warwish",
+        "zeebdo",
+        "lazuka23",
+        "mirage",
+        "aybekko97"
+    ],
+    "YA_VAULT_URL":"https://yav.yandex-team.ru",
+    "HQ_PROXY_TO_YP":{
+        "allowed_locations":[
+            "MSK",
+            "VLA",
+            "MAN",
+            "SAS"
+        ],
+        "service_prefixes":[
+            ""
+        ]
+    },
+    "LVM_EARLY_ADOPTERS":[
+        "dldmitry",
+        "glebskvortsov",
+        "robosova",
+        "i024",
+        "psushin",
+        "salmin",
+        "coffeeman",
+        "k-malov",
+        "okats",
+        "olegsenin",
+        "zeil",
+        "sivanichkin",
+        "max7255",
+        "ovov",
+        "dmtrmonakhov",
+        "dotdot",
+        "sempav",
+        "wwfq",
+        "alex-burmak",
+        "amatol",
+        "annkpx",
+        "arhipov",
+        "asalimonov",
+        "ayasensky",
+        "chapson",
+        "d0uble",
+        "dsarafan",
+        "efimkin",
+        "frisbeeman",
+        "godjan",
+        "iantonspb",
+        "irioth",
+        "isiv",
+        "jokserfn",
+        "kashinav",
+        "khattu",
+        "mialinx",
+        "munakoiso",
+        "ostinru",
+        "peevo",
+        "pervakovg",
+        "pperekalov",
+        "reshke",
+        "schizophrenia",
+        "secwall",
+        "sidh",
+        "super-botan",
+        "trootnev",
+        "velom",
+        "vgoshev",
+        "vksenz",
+        "vlbel",
+        "vovabogatyrev",
+        "wizard",
+        "x4mmm",
+        "saku",
+        "amich",
+        "odinmillion",
+        "vbushev",
+        "alex0512",
+        "exoron",
+        "bvdvlg",
+        "anikella",
+        "derrior",
+        "flyrise",
+        "easergeev",
+        "eeight"
+    ],
+    "INFRA_BUZZER_CONFIG":{
+        "url":"//infracloudui-cdn.s3.mds.yandex.net/infraBuzzer/1.7.0",
+        "services":[
+            {
+                "environmentId":431,
+                "serviceId":310
+            },
+            {
+                "environmentId":13,
+                "serviceId":6
+            },
+            {
+                "environmentId":388,
+                "serviceId":298
+            },
+            {
+                "environmentId":389,
+                "serviceId":298
+            },
+            {
+                "environmentId":390,
+                "serviceId":298
+            },
+            {
+                "environmentId":391,
+                "serviceId":298
+            },
+            {
+                "environmentId":564,
+                "serviceId":298
+            },
+            {
+                "environmentId":204,
+                "serviceId":154
+            },
+            {
+                "environmentId":499,
+                "serviceId":319
+            }
+        ]
+    },
+    "CAN_REMOVE_REPLICATION_POLICY_ABC_SERVICE_IDS":[
+        730,
+        470
+    ],
+    "JUGGLER_API_URL":"http://juggler.search.yandex.net:8998/api",
+    "VERSION":"0.17.1724",
+    "AWACS_URL":"//awacs.yandex-team.ru/api",
+    "STABLE_INSTANCECTL":{
+        "url":[
+            "rbtorrent:7b012021161f9d1732e17e0bf2b962447a2c981d"
+        ],
+        "fetchableMeta":{
+            "type":"SANDBOX_RESOURCE",
+            "sandboxResource":{
+                "resourceType":"INSTANCECTL",
+                "resourceId":"2571318078",
+                "taskId":"1132063753",
+                "taskType":""
+            }
+        },
+        "version":"2.66"
+    },
+    "WALLE_URL":"https://api.wall-e.n.yandex-team.ru",
+    "ENABLE_PORTO":[
+        {
+            "name":"Read-write access, show only sub-containers",
+            "value":"isolate"
+        },
+        {
+            "name":"Read-only access",
+            "value":"read-only"
+        }
+    ],
+    "L7_HEAVY_APPLY_ALL_BATCH_SIZE":30,
+    "DEFAULT_SHUTDOWN_POD_POLICY":"SPP_SKIP",
+    "ISS_STATES_HUMAN_READABLE_DESCRIPTIONS":{
+        "HOOK_SEMI_FAILED":{
+            "ru":" Контейнеры инстанса созданы, instancectl запущен, но внутри контейнеров пока не удалось корректно запустить пользовательские процесы. Популярные причины:<ul><li>Падает один из запускаемых процессов пользователя;</li><li>Все процессы запущены, но не может успешно завершиться проверка живости инстанса или <b>status_script</b></li></ul>",
+            "short":"Activating"
+        },
+        "PORTO_CONSTRAINTS_ERROR":{
+            "ru":"Поселенным на хост инстансам роздано ресурсов больше, чем на хосте есть по факту, из-за чего не удаётся собрать контейнер инстанса.",
+            "short":"Resource overcommit"
+        },
+        "PORTO_UNAVAILABLE":{
+            "short":"Porto unavailable"
+        },
+        "DAEMON_CANCELLED":{
+            "ru":"Запуск инстанса был отменён. Например, запуск конфигурации был отменён в пользу более свежей конфигурации.",
+            "short":"Cancelled"
+        },
+        "UNKNOWN":{
+            "ru":"Информации о состоянии инстанса нет. В большинстве случаев это означает, что с хоста, где был запущен инстанс, давно не поступало никакой информации. Возможные причины:<ul><li>Хост выключен</li><li>Хост находится в неуправляемом состоянии из-за проблем с железом или операционной системой или критичной поломкой ISS-agent</li></ul>",
+            "short":"Unknown"
+        },
+        "INVOCATION_FREQUENCY_LIMIT":{
+            "ru":"Предыдущий запуск хука (или другого рутинного действия) закончился неуспешно, выжидаем перерыв перед следующим повтором действия или запуска хука.",
+            "short":"Retrying"
+        },
+        "SKYNET_FAILURE":{
+            "short":"Skynet failure"
+        },
+        "DAEMON_EXITED":{
+            "ru":"Instancectl завершился. Это происходит как в случае штатного выключения инстанса, так и из-за проблем с инстансом, вызвавшим завершение instancectl, например, если из-за проблем с porto был разобран контейнер инстанса.",
+            "short":"Exited"
+        },
+        "DYNAMIC_RESOURCE_PREPARATION_FAILURE":{
+            "ru":"Не удалось вмонтировать скачанные динамические ресурсы в контейнер инстанса.",
+            "short":"Dynamic resource prepare failed"
+        },
+        "TIME_LIMIT_VIOLATION":{
+            "ru":"Превышено время выполнения одного из хуков. В большинстве случаев это означает один из вариантов:<ul><li>Превышено время выполнение init-контейнера или <b>prepare_script</b></li><li>Не удалось извлечь секреты, указанные в сервисе: они удалены из секретницы или в секрете не выдан доступ на сервис в случае Nanny Vault</li><li>Проблема с выполнением одного из хуков или instancectl из-за того, что хост-машина перегружена или не хватает ресурсов в контейнере</li></ul>",
+            "short":"Timed out"
+        },
+        "ACTIVE":{
+            "ru":"Инстанс активен.",
+            "short":"Active"
+        },
+        "PREPARED":{
+            "ru":"Инстанс готов к активации.",
+            "short":"Prepared"
+        },
+        "HOOK_FAILED":{
+            "ru":"Некорректно завершился хук инстанса. В большинстве случаев это проблема на PREPARE-фазе:<ul><li>Не отрабатывает init-контейнер или prepare_script</li><li>Не удалось извлечь секреты, указанные в сервисе: они удалены из секретницы или в секрете не выдан доступ на сервис в случае Nanny Vault</li></ul>",
+            "short":"Failing"
+        },
+        "HOOK_IN_PROGRESS":{
+            "ru":"Идёт исполнение одного из хуков инстанса, например, <b>iss_hook_stop</b> для остановки инстанса, или <b>iss_hook_uninstall</b> для его разбора.",
+            "short":"In progress"
+        },
+        "ISS_HOOK_INSTALL_JUST_SCHEDULED":{
+            "ru":"Хук <b>iss_hook_install</b> готов к исполнению.",
+            "short":"Install scheduled"
+        },
+        "DYNAMIC_RESOURCE_NOTIFY_EXECUTION":{
+            "ru":"Выполняется <b>notify_script</b> или <b>Notification Action</b>.",
+            "short":"Notifying"
+        },
+        "RESOURCE_CHECKSUM_INVALID":{
+            "ru":"Не сошлась чексумма одного из скачанных ресурсов.",
+            "short":"Invalid checksum"
+        },
+        "DOWNLOAD_FINISHED":{
+            "ru":"Загрузка завершена.",
+            "short":"Downloaded"
+        },
+        "SKYNET_TIMEOUT":{
+            "short":"Skynet timeout"
+        },
+        "DAEMON_WAS_TERMINATED_EXTERNALLY":{
+            "ru":"Контейнер инстанса был убит внешним сигналом. В большинстве случаев это OOM, т.е. убийство контейнера из-за превышения лимита потребляемой памяти.",
+            "short":"Killed"
+        },
+        "SHARD_SETUP_SUCCESS":{
+            "ru":"Настройка шарда успешно завершена.",
+            "short":"Shard installed"
+        },
+        "PORTO_FAILURE":{
+            "short":"Porto failure"
+        },
+        "NOTIFY_HOOK_FAILURE_STATE_INTERCEPTED":{
+            "ru":"Некорректно завершился <b>notify_script</b> или <b>Notification Action</b>, они будут перезапущены до тех пор, пока не завершатся успешно.",
+            "short":"Notify failed"
+        },
+        "REMOVED":{
+            "ru":"Инстанс удалён с хоста.",
+            "short":"Removed"
+        },
+        "SLOT_LOCKED":{
+            "ru":"Ожидаем выключения старой конфигурации инстанса, чтобы запустить текущую новую. Например, в предыдущей конфигурации выполняется <b>stop_script</b> или <b>Stop Policy</b>, как только они завершатся, мы начнём запускать новую конфигурацию.",
+            "short":"Pending"
+        },
+        "ENTITY_RESOURCES_NOT_READY":{
+            "ru":"В процессе скачивание файловых ресурсов, слоёв файловой системы и других запчастей инстанса.",
+            "short":"Downloading"
+        },
+        "ISS_HOOK_INSTALL_IN_PROGRESS":{
+            "ru":"Хук <b>iss_hook_install</b> исполняется",
+            "short":"Installing"
+        },
+        "ACTIVATED_INSTANCE_DYNAMIC_RESOURCES_NOT_READY":{
+            "ru":"Инстанс запущен и идёт скачивание динамических ресурсов.",
+            "short":"Downloading dynamic resource"
+        },
+        "HOOK_CANCELLED":{
+            "ru":"Исполнение одного из хуков инстанса было отменено (в контейнер хука прилетел SIGKILL). Например, после начала PREPARE-фазы она была отменена.",
+            "short":"Hook cancelled"
+        }
+    },
+    "SENTRY_DSN":null,
+    "GPU_MODELS":[
+        "gpu_tesla_k40",
+        "gpu_tesla_m40",
+        "gpu_tesla_p40",
+        "gpu_tesla_v100",
+        "gpu_tesla_v100_nvlink",
+        "gpu_geforce_1080ti",
+        "tesla_v100_pcie_32gb",
+        "gpu_tesla_a100_80g"
+    ],
+    "IS_PRODUCTION":true,
+    "DEFAULT_UNCONTROLLABLE_POD_POLICY":"UPP_EVICT",
+    "LIST_POD_SNAPSHOT_INSTANCES":true,
+    "L7_HEAVY_PUSH_TO_ITS_BATCH_SIZE":30,
+    "YP_NETWORK_PROJECT":"",
+    "NANNY_ROOT_USERS":[
+        "nekto0n",
+        "romanovich",
+        "alonger",
+        "frolstas",
+        "i-dyachkov",
+        "disafonov",
+        "reddi",
+        "nanny-robot",
+        "ferenets",
+        "altynbek",
+        "anttsov",
+        "torkve",
+        "bromigo",
+        "bkht",
+        "pirogov",
+        "lspliner",
+        "dmitriyt"
+    ],
+    "HOSTNAME":"api_server@sas1-4301.search.yandex.net:8016",
+    "ITS_DOWNTIME_BUDGETS":[
+        "incident",
+        "rtc",
+        "noc",
+        "dc",
+        "service"
+    ],
+    "YP_LITE_UI_API_URL":"https://yp-lite-ui.nanny.yandex-team.ru/api/yplite",
+    "VAULT_URL":"https://nanny-vault.yandex-team.ru",
+    "ENABLE_SNAPSHOT_INSTANCE_FILTERING":true,
+    "DEFAULT_CONTENT_SERVICE_ID":"default_content_service",
+    "IO_BANDWIDTH_CONSTRAINTS":{
+        "max_limit_guarantee_ratio":{
+            "ssd":2,
+            "hdd":3
+        },
+        "limit_allocation":true,
+        "limit_reallocation":false
+    },
+    "YP_CLUSTERS":[
+        {
+            "cluster":"SAS",
+            "is_public":true
+        },
+        {
+            "cluster":"MAN",
+            "is_public":true
+        },
+        {
+            "cluster":"VLA",
+            "is_public":true
+        },
+        {
+            "cluster":"MYT",
+            "is_public":true
+        },
+        {
+            "cluster":"IVA",
+            "is_public":true
+        },
+        {
+            "cluster":"MAN_PRE",
+            "is_public":true
+        },
+        {
+            "cluster":"TEST_SAS",
+            "is_public":false
+        },
+        {
+            "cluster":"XDC",
+            "is_public":false
+        }
+    ],
+    "ALLOCATIONS_BETA_ACCESS_USERS":[
+        "psushin",
+        "k-malov",
+        "verytable",
+        "gritukan",
+        "max42",
+        "dakovalkov",
+        "alexkolodezny",
+        "gepardo",
+        "prime",
+        "rebenkoy",
+        "savrus",
+        "akozhikhov",
+        "alexelexa",
+        "lukyan",
+        "ifsmirnov",
+        "starodub"
+    ],
+    "AUTH_ENABLED":true,
+    "DEFAULT_HQ_STATUS_REPORTER":"HSR_INSTANCECTL",
+    "YP_API_URLS":{
+        "man_pre":"https://man-pre.yp.yandex-team.ru:8443/ObjectService",
+        "iva":"https://iva.yp.yandex-team.ru:8443/ObjectService",
+        "vla":"https://vla.yp.yandex-team.ru:8443/ObjectService",
+        "myt":"https://myt.yp.yandex-team.ru:8443/ObjectService",
+        "sas_test":"https://sas-test.yp.yandex-team.ru:8443/ObjectService",
+        "sas":"https://sas.yp.yandex-team.ru:8443/ObjectService",
+        "test_sas":"https://sas-test.yp.yandex-team.ru:8443/ObjectService",
+        "man":"https://man.yp.yandex-team.ru:8443/ObjectService"
+    },
+    "NOTIFICATION_REAPPEAR_INTERVAL":604800,
+    "ITS_URL":"//ext.its.yandex-team.ru"
+};

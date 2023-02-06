@@ -1,0 +1,181 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Ddatacamp-mdm-dumper-testing
+
+juggler:
+  checks:
+
+  # Check empty_mdm_dimensions
+  # https://juggler.yandex-team.ru/check_details/?host=lbdumper-testing&service=empty_mdm_dimensions&last=1DAY&mode=edit
+  - service: empty_mdm_dimensions
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: yasm_alert:virtual-meta
+    children:
+    - yasm_alert:empty_mdm_dimensions_testing
+    flaps:
+      boost_time: 0
+      critical_time: 30
+      stable_time: 15
+    meta:
+      urls:
+      - title: Алерт в Головане
+        type: yasm_alert
+        url: https://yasm.yandex-team.ru/chart-alert/alerts=empty_mdm_dimensions_testing;
+      - title: Снапшот графика алерта
+        type: screenshot_url
+        url: https://s.yasm.yandex-team.ru/chart/signals%3Dpush-feedparser-StockStoreWorker-EmptyMdmDimensions_dmmm%3Bhosts%3DASEARCH%3Bitype%3Doffersrobot2%3Bctype%3Dtesting
+      yasm_alert_name: empty_mdm_dimensions_testing
+    refresh_time: 5
+    check_tags:
+    - a_itype_marketindexerlbdumper
+    - a_ctype_testing
+    - a_prj_market
+
+  # Check mdm_item_write_error
+  # https://juggler.yandex-team.ru/check_details/?host=lbdumper-testing&service=mdm_item_write_error&last=1DAY&mode=edit
+  - service: mdm_item_write_error
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: yasm_alert:virtual-meta
+    children:
+    - yasm_alert:mdm_item_write_error_testing
+    flaps:
+      boost_time: 0
+      critical_time: 30
+      stable_time: 15
+    meta:
+      urls:
+      - title: Алерт в Головане
+        type: yasm_alert
+        url: https://yasm.yandex-team.ru/chart-alert/alerts=mdm_item_write_error_testing;
+      - title: Снапшот графика алерта
+        type: screenshot_url
+        url: https://s.yasm.yandex-team.ru/chart/signals%3Dunistat-YtMdmInfoSender_error_counter_dmmm%3Bhosts%3DASEARCH%3Bitype%3Dmarketindexerlbdumper%3Bctype%3Dtesting%3Bprj%3Dmarket
+      yasm_alert_name: mdm_item_write_error_testing
+    refresh_time: 5
+    check_tags:
+    - a_itype_marketindexerlbdumper
+    - a_ctype_testing
+    - a_prj_market
+
+  # Check mdm-table-modification-time
+  # https://juggler.yandex-team.ru/check_details/?host=lbdumper-testing&service=mdm-table-modification-time&last=1DAY&mode=edit
+  - service: mdm-table-modification-time
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_warn
+      unreach_mode: "skip"
+      unreach_service:
+      - check: 'datacamp-mdm-dumper-testing:ping'
+    check_options:
+      args:
+      - --kwargs
+      - '[ {"service": "mdm-table-modification-time", "path": "/monitoring/mdm_table_modification_time", "port_offset": 2} ]'
+
+  # Check not_equal_mdm_dimensions
+  # https://juggler.yandex-team.ru/check_details/?host=lbdumper-testing&service=not_equal_mdm_dimensions&last=1DAY&mode=edit
+  - service: not_equal_mdm_dimensions
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: yasm_alert:virtual-meta
+    children:
+    - yasm_alert:not_equal_mdm_dimensions_testing
+    flaps:
+      boost_time: 0
+      critical_time: 30
+      stable_time: 15
+    meta:
+      urls:
+      - title: Алерт в Головане
+        type: yasm_alert
+        url: https://yasm.yandex-team.ru/chart-alert/alerts=not_equal_mdm_dimensions_testing;
+      - title: Снапшот графика алерта
+        type: screenshot_url
+        url: https://s.yasm.yandex-team.ru/chart/signals%3Dpush-feedparser-StockStoreWorker-NotEqual_dmmm%3Bhosts%3DASEARCH%3Bitype%3Doffersrobot2%3Bctype%3Dtesting
+      yasm_alert_name: not_equal_mdm_dimensions_testing
+    refresh_time: 5
+    tags:
+    - a_itype_offersrobot2
+    - a_ctype_testing
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-mdm-dumper-testing&service=ping&last=1DAY&mode=edit
+  - service: ping
+    check_tags:
+    - market_datacamp_disaster_no_night_calls
+    - market_disaster
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_crit
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-mdm-dumper-testing&service=disk_free_space&last=1DAY&mode=edit
+  - service: disk_free_space
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_warn
+      unreach_mode: "skip"
+      unreach_service:
+      - check: 'datacamp-mdm-dumper-testing:ping'
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-mdm-dumper-testing&service=logrotate&last=1DAY&mode=edit
+  - service: logrotate
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_warn
+      unreach_mode: "skip"
+      unreach_service:
+      - check: 'datacamp-mdm-dumper-testing:ping'
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-mdm-dumper-testing&service=push-client-status&last=1DAY&mode=edit
+  - service: push-client-status
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_warn
+      unreach_mode: "skip"
+      unreach_service:
+      - check: 'datacamp-mdm-dumper-testing:ping'
+
+  default:
+    host: datacamp-mdm-dumper-testing
+    namespace: market.datacamp
+    aggregator: more_than_limit_is_problem
+    children:
+    - NANNY%testing_market_lbdumper_vla
+    - NANNY%testing_market_lbdumper_sas
+    tags:
+    - market_indexer_datacamp
+    - market_testing
+    - testing
+    - market_datacamp_mdm_dumper
+    - market_rtc
+    - market
+    - _market_
+    check_options: {}
+    refresh_time: 60
+    ttl: 900
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications: []

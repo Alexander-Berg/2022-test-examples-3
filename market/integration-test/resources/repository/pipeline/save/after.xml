@@ -1,0 +1,28 @@
+<dataset>
+
+    <pipeline id="10" author="staff-login" name="TEST_SIMPLE_PIPELINE" payload='{"a" : "a", "b" : 1}' status="NEW"/>
+
+    <pipeline_cube id="101" name="ROOT_CUBE"       status="NEW" pipeline_id="10"/>
+    <pipeline_cube id="102" name="CARRIER_TRANSPORT_CREATOR" status="NEW" pipeline_id="10"/>
+
+    <cube_relation from_cube_id="101" to_cube_id="102"/>
+
+    <!-- new records are below-->
+    <pipeline id="1" author="staff-login" name="TEST_COMPLICATED_PIPELINE" payload='{"a" : "11", "b" : 11}' status="NEW"/>
+
+    <pipeline_cube id="1" name="ROOT_CUBE"              status="NEW" pipeline_id="1"/>
+    <pipeline_cube id="2" name="CARRIER_TRANSPORT_CREATOR"        status="NEW" pipeline_id="1"/>
+    <pipeline_cube id="3" name="CARRIER_TRANSPORT_CREATOR"        status="NEW" pipeline_id="1"/>
+    <pipeline_cube id="4" name="CARRIER_COURIER_CREATOR" status="NEW" pipeline_id="1"/>
+    <pipeline_cube id="5" name="CARRIER_COURIER_CREATOR" status="NEW" pipeline_id="1"/>
+    <pipeline_cube id="6" name="ROUTE_SCHEDULE_CREATOR"      status="NEW" pipeline_id="1"/>
+
+    <cube_relation from_cube_id="1" to_cube_id="2"/>
+    <cube_relation from_cube_id="1" to_cube_id="3"/>
+    <cube_relation from_cube_id="2" to_cube_id="4"/>
+    <cube_relation from_cube_id="3" to_cube_id="5"/>
+    <cube_relation from_cube_id="4" to_cube_id="6"/>
+    <cube_relation from_cube_id="5" to_cube_id="6"/>
+
+
+</dataset>

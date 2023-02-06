@@ -1,0 +1,15 @@
+package model
+
+const LabelCheckouterRecentOrders = "checkouter recent orders by uid"
+const LabelCheckouterOrdersByUID = "checkouter orders by uid "
+const LabelCheckouterOptionsAvailabilities = "checkouter options-availabilities of orders "
+const LabelCheckouterOrdersByID = "checkouter orders by orderId "
+const LabelCheckouterOrdersByID2 = "checkouter orders by orderId 2"
+const LabelCheckouterGetOrders = "checkouter GetOrders"
+const LabelSsGetAvailableAmounts = "ss get-available-amounts"
+const LabelSsUnfreezeStocks = "ss unfreeze-stocks"
+const LabelCheckouterCart = "checkouter cart"
+const LabelCheckouterUnfreeze = "checkouter unfreeze"
+const LabelCheckouterCheckout = "checkouter checkout"
+const LabelReportGetStocks = "report get-stocks"
+const LabelLoyaltyFetchBonusesForCart = "get-coins-for-cart"

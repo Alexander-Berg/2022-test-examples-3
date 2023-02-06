@@ -1,0 +1,132 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Ddatacamp-dispatcher-testing
+
+juggler:
+  checks:
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-dispatcher-testing&service=ping&last=1DAY&mode=edit
+  - service: ping
+    check_tags:
+      - market_datacamp_check_controllers_release_testing
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_crit
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-dispatcher-testing&service=disk_free_space&last=1DAY&mode=edit
+  - service: disk_free_space
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_warn
+      unreach_mode: "skip"
+      unreach_service:
+      - check: 'datacamp-dispatcher-testing:ping'
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-dispatcher-testing&service=logrotate&last=1DAY&mode=edit
+  - service: logrotate
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_warn
+      unreach_mode: "skip"
+      unreach_service:
+      - check: 'datacamp-dispatcher-testing:ping'
+
+  # Check logrotate-app
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-dispatcher-testing&service=logrotate-app&last=1DAY&mode=edit
+  - service: logrotate-app
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_warn
+      unreach_mode: "skip"
+      unreach_service:
+      - check: 'datacamp-dispatcher-testing:ping'
+
+  # Check memory_anon_usage
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-dispatcher-testing&service=memory_anon_usage&last=1DAY&mode=edit
+  - service: memory_anon_usage
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_warn
+      unreach_mode: "skip"
+      unreach_service:
+      - check: 'datacamp-dispatcher-testing:ping'
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-dispatcher-testing&service=push-client-status&last=1DAY&mode=edit
+  - service: push-client-status
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_warn
+      unreach_mode: "skip"
+      unreach_service:
+      - check: 'datacamp-dispatcher-testing:ping'
+
+  # Check crashes
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-dispatcher-testing&service=crashes&last=1DAY&mode=edit
+  # https://yasm.yandex-team.ru/template/alert/market_datacamp_ooms_and_crashes
+  - service: crashes
+    check_tags:
+      - market_datacamp_check_controllers_release_testing
+    meta:
+      urls:
+        - title: График алерта
+          url: https://yasm.yandex-team.ru/chart/signals=hsum(portoinst-cores_total_hgram);hosts=ASEARCH;itype=marketdatacampdispatcher;ctype=testing/
+    aggregator: logic_or
+    children:
+    - datacamp-dispatcher-testing-sas
+    - datacamp-dispatcher-testing-vla
+    aggregator_kwargs:
+      nodata_mode: force_warn
+
+  # Check ooms
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-dispatcher-testing&service=ooms&last=1DAY&mode=edit
+  # https://yasm.yandex-team.ru/template/alert/market_datacamp_ooms_and_crashes
+  - service: ooms
+    check_tags:
+      - market_datacamp_check_controllers_release_testing
+    meta:
+      urls:
+        - title: График алерта
+          url: https://yasm.yandex-team.ru/chart/signals=hsum(portoinst-cores_total_hgram);hosts=ASEARCH;itype=marketdatacampdispatcher;ctype=testing/
+    aggregator: logic_or
+    children:
+    - datacamp-dispatcher-testing-sas
+    - datacamp-dispatcher-testing-vla
+    aggregator_kwargs:
+      nodata_mode: force_warn
+
+  default:
+    host: datacamp-dispatcher-testing
+    namespace: market.datacamp
+    aggregator: more_than_limit_is_problem
+    children:
+    - 'DEPLOY%market-datacamp@stage=testing_market_datacamp-dispatcher;deploy_unit=datacamp-dispatcher'
+    tags:
+    - market_indexer_datacamp
+    - market_testing
+    - testing
+    - market_datacamp_dispatcher
+    - market_rtc
+    - market
+    - _market_
+    check_options: {}
+    refresh_time: 60
+    ttl: 900
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications: []

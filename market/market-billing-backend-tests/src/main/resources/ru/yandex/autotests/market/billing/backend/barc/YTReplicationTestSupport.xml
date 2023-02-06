@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- because boundaryDefinition is common part between tests -->
+    <import resource="AuctionHistoryMigrationTestSupport.xml"/>
+    <import resource="AuctionResultMigrationTestSupport.xml"/>
+    <import resource="ClicksMigrationTestSupport.xml"/>
+    <import resource="EntityHistoryMigrationTestSupport.xml"/>
+    <import resource="FeedLogMigrationTestSupport.xml"/>
+    <import resource="TestFeedLogMigrationTestSupport.xml"/>
+
+    <bean name="auctionHistoryReplicateDefinition"
+          class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.ReplicateEntityDefinition">
+        <constructor-arg name="entityName" value="auction_history"/>
+        <constructor-arg name="boundaryDefinition" ref="auctionHistoryBoundary"/>
+    </bean>
+
+    <bean name="auctionResultReplicateDefinition"
+          class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.ReplicateEntityDefinition">
+        <constructor-arg name="entityName" value="auction_result"/>
+        <constructor-arg name="boundaryDefinition" ref="auctionResultBoundary"/>
+    </bean>
+
+    <bean name="clicksReplicateDefinition"
+          class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.ReplicateEntityDefinition">
+        <constructor-arg name="entityName" value="clicks"/>
+        <constructor-arg name="boundaryDefinition" ref="clicksBoundaryDefinition"/>
+    </bean>
+
+    <bean name="entityHistoryReplicateDefinition"
+          class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.ReplicateEntityDefinition">
+        <constructor-arg name="entityName" value="entity_history"/>
+        <constructor-arg name="boundaryDefinition" ref="entityHistoryBoundaryDefinition"/>
+    </bean>
+
+    <bean name="feedLogReplicateDefinition"
+          class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.ReplicateEntityDefinition">
+        <constructor-arg name="entityName" value="feed_log"/>
+        <constructor-arg name="boundaryDefinition" ref="feedLogBoundaryDefinition"/>
+    </bean>
+
+    <bean name="testFeedLogReplicateDefinition"
+          class="ru.yandex.autotests.market.billing.backend.core.dao.barc.beans.ReplicateEntityDefinition">
+        <constructor-arg name="entityName" value="test_feed_log"/>
+        <constructor-arg name="boundaryDefinition" ref="testFeedLogBoundaryDefinition"/>
+    </bean>
+
+</beans>

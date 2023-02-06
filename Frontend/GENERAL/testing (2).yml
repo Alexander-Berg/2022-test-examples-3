@@ -1,0 +1,68 @@
+regexp_section:
+  matcher:
+    match_fsm:
+      host: lhci\\.tap-tst\\.yandex\\.ru
+  modules:
+    - report:
+        uuid: 'services'
+        ranges: 'default'
+    - report:
+        uuid: 'lhci'
+        ranges: 'default'
+    - threshold:
+        lo_bytes: 1024
+        hi_bytes: 1024
+        pass_timeout: 15s
+        recv_timeout: 5s
+        on_pass_timeout_failure:
+          errordocument:
+            status: 408
+            content: 'Request Timeout'
+    - balancer2:
+        attempts: !f count_backends()
+        rr: {weights_file: ./controls/traffic_control.weights}
+        backends:
+          - weight: 1
+            name: lhci_vla
+            modules:
+              - balancer2:
+                  attempts: 5
+                  connection_attempts: 5
+                  retry_non_idempotent: false
+                  attempts_rate_limiter:
+                    limit: 0.1
+                  dynamic:
+                    max_pessimized_share: 0.2
+                  generated_proxy_backends:
+                    proxy_options:
+                      backend_timeout: 30s
+                      connect_timeout: 100ms
+                      keepalive_count: 3
+                      fail_on_5xx: false
+                    include_backends:
+                      type: BY_ID
+                      ids: [tap_lhci_vla]
+          - weight: 1
+            name: lhci_sas
+            modules:
+              - balancer2:
+                  attempts: 5
+                  connection_attempts: 5
+                  retry_non_idempotent: false
+                  attempts_rate_limiter:
+                    limit: 0.1
+                  dynamic:
+                    max_pessimized_share: 0.2
+                  generated_proxy_backends:
+                    proxy_options:
+                      backend_timeout: 30s
+                      connect_timeout: 100ms
+                      keepalive_count: 3
+                      fail_on_5xx: false
+                    include_backends:
+                      type: BY_ID
+                      ids: [tap_lhci_sas]
+        on_error:
+          errordocument:
+            status: 503
+            content: 'Service unavailable'

@@ -1,0 +1,26 @@
+<!--
+Этот файл используется для определения где искать файлы репорта
+и как их предварительно паковать, обычно после сборки его можно найти в
+${project.build.directory}/classes/dep.xml
+-->
+
+<assembly>
+    <!--будет суфиксом после имени артифакта и перед расширением-->
+    <id>report</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <!--какую папку сжимаем-->
+            <directory>target/site/thucydides</directory>
+            <!--папка, в которую предварительно будут помещены файлы
+            (эта папка будет в архиве корневой) -->
+            <outputDirectory>report</outputDirectory>
+            <includes>
+                <include>*</include>
+                <include>*/*</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</assembly>

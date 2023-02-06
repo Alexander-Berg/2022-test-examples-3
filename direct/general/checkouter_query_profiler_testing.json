@@ -1,0 +1,23 @@
+{
+  "tableName": "checkouter_query_profiler_testing",
+  "splits": {
+    "dc": "if(dictGetString('dc', 'dc', sipHash64(host)) <> '', dictGetString('dc', 'dc', sipHash64(host)), substring(host, 1, 3))",
+    "host": "host",
+    "method": "method",
+    "url": "url",
+    "type": "type"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "checkouter.TESTING.queryprofiler.timings.${dc}.${type}",
+        "checkouter.TESTING.queryprofiler.timings.${dc}.paged.${method}.${url}.${type}",
+        "checkouter.TESTING.queryprofiler.timings.${type}",
+        "checkouter.TESTING.queryprofiler.timings.paged.${method}.${url}.${type}"
+      ],
+      "period": "FIVE_MIN",
+      "type" : "QUANTILE_TIMING",
+      "metricField": "duration_ms"
+    }
+  ]
+}

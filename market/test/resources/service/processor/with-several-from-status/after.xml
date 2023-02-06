@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<dataset>
+    <CARGOTYPE CODE="10" DESCRIPTION="Документы и ценные бумаги" ENABLED="1"/>
+    <CARGOTYPE CODE="40" DESCRIPTION="Ценное" ENABLED="0"/>
+    <CARGOTYPE CODE="80" DESCRIPTION="Драгоценности" ENABLED="1"/>
+    <CARGOTYPE CODE="100" DESCRIPTION="Товары народного потребления" ENABLED="1"/>
+    <CARGOTYPE CODE="470" DESCRIPTION="Пудры" ENABLED="1"/>
+    <CARGOTYPE CODE="600" DESCRIPTION="Одежда, обувь, аксессуары" ENABLED="1"/>
+
+    <CONSTRAINTS_ISSUE
+            ID="1"
+            SKU="ROV001"
+            STORERKEY="465852"
+            LOC="A1-01-01A1"
+            TYPE="DIMENSION"
+            STATUS="FIXED"
+            VALUE=""
+    />
+    <CONSTRAINTS_ISSUE
+            ID="2"
+            SKU="ROV002"
+            STORERKEY="465852"
+            LOC="A1-01-01A1"
+            TYPE="DIMENSION"
+            STATUS="FIXED"
+            VALUE=""
+    />
+    <CONSTRAINTS_ISSUE
+            ID="3"
+            SKU="ROV003"
+            STORERKEY="465852"
+            LOC="A1-01-01A1"
+            TYPE="DIMENSION"
+            STATUS="DECLINED"
+            VALUE=""
+    />
+    <CONSTRAINTS_ISSUE
+            ID="4"
+            SKU="ROV004"
+            STORERKEY="465852"
+            LOC="A1-01-01A1"
+            TYPE="CARGO_TYPE"
+            STATUS="DECLINED"
+            VALUE=""
+    />
+    <CONSTRAINTS_ISSUE
+            ID="5"
+            SKU="ROV005"
+            STORERKEY="465852"
+            LOC="B1-01-01A1"
+            TYPE="CARGO_TYPE"
+            STATUS="APPROVED"
+            VALUE=""
+    />
+    <CONSTRAINTS_ISSUE
+            ID="6"
+            SKU="ROV006"
+            STORERKEY="465852"
+            LOC="C1-01-01A1"
+            TYPE="CARGO_TYPE"
+            STATUS="NEW"
+            VALUE=""
+    />
+
+    <RULE_GROUP ID="1" OBJECT_TYPE="LOC"
+                TITLE="Ячейка для продуктов менее 1,5 кг" EDITWHO="TEST"/>
+
+    <RULES ID="1" OBJECT_TYPE="SKU" TITLE="Ячейка для продуктов менее 1,5 кг"/>
+
+    <RULE_RESTRICTION ID="1" RULE_ID="1" TYPE="CARGO_TYPE" PARAM="CARGO_TYPE" COLLATION="EQ" value="600"/>
+    <RULE_RESTRICTION ID="2" RULE_ID="1" TYPE="DIMENSION" PARAM="WEIGHT" COLLATION="LTE" value="1500"/>
+
+    <RULE_2_RULE_GROUP RULE_ID="1" RULE_GROUP_ID="1" />
+
+    <RANGE_GROUP ID="1" PUTAWAYZONE="MEZONIN_1" />
+
+    <RANGE ID="1" RANGE_GROUP_ID="1" START_LOC="A1-01-01A1" END_LOC="D1-10-01A1" RANGE_TYPE="TIER" TIER="A" />
+
+    <RANGE_GROUP_2_RULE_GROUP RANGE_GROUP_ID="1" RULE_GROUP_ID="1" COLLATION="ONLY"/>
+
+</dataset>

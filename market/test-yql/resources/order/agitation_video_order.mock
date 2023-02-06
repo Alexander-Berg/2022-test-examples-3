@@ -1,0 +1,30 @@
+
+# Таблица с видео, которые прикрепляют к отзывами на модели (entity_id - идентификатор модели)
+# Модели с id = 100, 101, 102 находятся в неподходящем статусе и не должны быть отобраны
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-author/tables/pers_video
+SCHEMA entity_id:utf8, state:int16, mod_state:int16, entity_type:int16
+{"entity_id":"1", "state":0, "mod_state":3, "entity_type":0}
+{"entity_id":"1", "state":0, "mod_state":3, "entity_type":0}
+{"entity_id":"4", "state":0, "mod_state":3, "entity_type":0}
+{"entity_id":"100", "state":1, "mod_state":3, "entity_type":0}
+{"entity_id":"101", "state":0, "mod_state":2, "entity_type":0}
+{"entity_id":"102", "state":0, "mod_state":3, "entity_type":1}
+
+
+
+# Делаем 3 приоритетные модели
+MOCK VAR_TABLE $priority_departments_models
+SCHEMA model_id:uint64
+{"model_id": 2}
+{"model_id": 3}
+{"model_id": 5}
+
+
+# Модели и их показатели gmv
+MOCK VAR_TABLE $pers_model_rank
+SCHEMA count_of_order:int64, gmv:double, median_price:double, model_id:int64
+{"count_of_order": 3, "gmv": 300.0, "median_price": 100.0, "model_id": 1}
+{"count_of_order": 2, "gmv": 360.0, "median_price": 180.0, "model_id": 2}
+{"count_of_order": 1, "gmv": 325.0, "median_price": 325.0, "model_id": 3}
+{"count_of_order": 4, "gmv": 1000.0, "median_price": 250.0, "model_id": 4}
+{"count_of_order": 100, "gmv": 2000.0, "median_price": 20.0, "model_id": 5}

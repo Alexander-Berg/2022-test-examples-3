@@ -1,0 +1,82 @@
+# DARIA-60804
+location ~* /unforgettable-ua(\.js|-empty.html)$ {
+    expires 24h;
+    add_header X-Frame-Options SAMEORIGIN;
+    root /var/wwwroot/mail/unforgettable-ua;
+
+    rewrite ^/unforgettable-ua/(.*) /$1 break;
+}
+
+location ~* ^/service-worker$ {
+    rewrite ^/(.*) /u2709/api/$1;
+}
+
+location /u2709-node {
+    rewrite ^/u2709-node(.*) /u2709-node/$1 redirect;
+}
+
+location /u2709-node/ {
+    rewrite ^/u2709-node/(.*) /u2709/$1;
+}
+
+location /u2709/ {
+    root /var/wwwroot/mail;
+    log_not_found off;
+
+    add_header x-dns-prefetch-control "off";
+    add_header Cache-Control "private,no-cache,no-store,must-revalidate,max-age=0";
+    add_header X-Request-Id $request_id always;
+    include sites-enabled/security-headers.include;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $x_real_ip;
+    proxy_set_header X-Real-Port $x_real_port;
+    proxy_set_header X-Original-Uri $request_uri;
+    proxy_set_header X-Original-Host $host;
+    proxy_set_header X-Request-Id $request_id;
+    proxy_set_header X-Forwarded-For $x_real_ip;
+    proxy_set_header X-Https-Request yes;
+    proxy_set_header SSL-Cipher $ssl_cipher;
+
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_next_upstream error timeout http_502 http_503;
+    proxy_next_upstream_tries 2;
+
+    proxy_buffer_size 128k;
+    proxy_buffers 8 128k;
+
+    proxy_ssl_session_reuse on;
+
+    location = /u2709/ {
+        proxy_pass https://u2709-backend$uri$is_args$args;
+    }
+
+    location ~* /u2709/api/models.jsx {
+        rewrite ^/u2709/api/models.jsx(.*) /web-api/models/liza1$1;
+    }
+
+    location ~* /u2709/api/(models|journal|upload-signature-image|upload-attachment|abook-export|abook-import|do-send|oauth-token) {
+        rewrite ^/u2709/api/([^/]*)(.*) /web-api/$1/liza1$2;
+    }
+
+    location ~* /u2709/api/yapic/(upload|delete) {
+        rewrite ^/u2709/api/yapic/([^/]*)(.*) /web-api/yapic/$1/liza1$2;
+    }
+
+    location ~* /u2709/message-source/\d+/\d+/yandex_email.eml {
+        rewrite ^/u2709/message-source/(\d+)/(\d+)/yandex_email.eml /web-api/message-source/liza1?mid=$2&_uid=$1;
+    }
+
+    location ~* /u2709/(print|go2lite|fatal|unsupported|compose-iframe) {
+        proxy_pass https://u2709-backend$uri$is_args$args;
+    }
+
+    location ~* /u2709/api/ {
+        proxy_pass https://u2709-backend$uri$is_args$args;
+    }
+
+    location ~* /u2709/unforgettable-ua/ {
+        rewrite ^/u2709/(.*) /$1 break;
+    }
+}

@@ -1,0 +1,36 @@
+<form data-headers="{{stringify Layout.headers}}">
+    <div class="field" data-id="request">
+        <select name="method">
+            {{#each Layout.METHODS}}
+            <option value="{{this}}"{{#if (or (is (uppercase ../Layout.query.method) this) (and (empty ../Layout.query.method) (is this "GET")))}} selected{{/if}}>{{this}}</option>
+            {{/each}}
+        </select>
+        <select name="api">
+            {{#each Layout.api}}
+            <option value="{{@key}}"{{#is @key "directory_admin"}} selected{{/is}}{{#if (lookup ../Layout.tvm_tickets @key)}} data-service-ticket="{{lookup ../Layout.tvm_tickets @key}}"{{/if}}>
+                {{this}}
+            </option>
+            {{/each}}
+        </select>
+        <input type="hidden" name="user_ticket" value="{{Layout.user_ticket}}">
+    </div>
+    <div class="field" data-id="path">
+        <input type="text" name="path" value="{{fallback Layout.query.action Layout.query.path "/organizations/"}}" placeholder="Request path" spellcheck="false" autofocus>
+    </div>
+    <div class="field" data-id="headers" hidden>
+        <textarea name="headers" placeholder="Request headers, JSON" spellcheck="false">{{stringify Layout.headers tab=2}}</textarea>
+    </div>
+    <div class="field" data-id="body">
+        <textarea name="body" placeholder="Request body" spellcheck="false">{{Layout.query.body}}</textarea>
+    </div>
+    <div class="actions field">
+        {{!--<button data-id="copy_curl">Copy as CURL</button>--}}
+        <button data-id="send">Send it</button>
+        <span class="filler"></span>
+        <span class="action-link" data-id="edit_headers">Edit headers</span>
+    </div>
+    <div class="field" data-id="response" hidden>
+        <textarea placeholder="Response" spellcheck="false"></textarea>
+    </div>
+    <div class="field" data-id="curl"></div>
+</form>

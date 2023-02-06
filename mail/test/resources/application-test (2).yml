@@ -1,0 +1,26 @@
+test-port: ${random.port}
+micronaut:
+  security:
+    enabled: false
+  server:
+    port: ${test-port}
+  http:
+    services:
+      cerberus:
+        url: http://localhost:${test-port}
+        read-idle-timeout: 10s
+        read-timeout: 10s
+        connect-timeout: 10s
+        num-of-threads: 1
+  caches:
+    grants-cache:
+      initial-capacity: 0
+      maximum-size: 0
+datasources:
+  master:
+    url: jdbc:postgresql://localhost:${pglocal.database.port}/${test.database.name}
+    username: testuser
+    password: ""
+    initializationFailTimeout: -1
+    autoCommit: false
+    poolName: master

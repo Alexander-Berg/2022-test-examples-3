@@ -1,0 +1,33 @@
+Configuration:
+  status: debug
+  Appenders:
+    Console:
+      name: Console
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    List:
+      - name: test-client-appender
+      - name: server-appender
+      - name: test-appender
+  Loggers:
+    logger:
+      -
+        name: test-client
+        level: info
+        AppenderRef:
+          ref: test-client-appender
+      -
+        name: server
+        level: info
+        AppenderRef:
+          ref: server-appender
+      -
+        name: test
+        level: info
+        AppenderRef:
+          ref: test-appender
+    Root:
+      level: trace
+      AppenderRef:
+        - ref: Console

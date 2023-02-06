@@ -1,0 +1,27 @@
+# Параметры обработки
+params:
+  default:
+    resolve: yes
+    templates:
+      - user_mslb_http.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          "check observe layer7"
+      on_error:       fastinter
+    globals:
+      service_name:   model-search-meta.tst.vs.market.yandex.net
+      listen_port:    17051
+      service_port:   8041
+    meta:
+      monrun_ignore:  yes
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+    - name: YP@test-report-meta-market-vla
+      dns_resolvers: yandex-ns
+      resolve: false

@@ -1,0 +1,171 @@
+
+{
+  "rules": [
+    {
+      "actions": [
+        {
+          "type": "httpRequest",
+          "method": "GET",
+          "url": "http://127.0.0.1",
+          "authorization": {
+            "type": "noAuth"
+          }
+        },
+        {
+          "type": "httpRequest",
+          "method": "GET",
+          "url": "http://127.0.0.1/local_resource",
+          "authorization": {
+            "type": "tvm",
+            "clientId": "99999999"
+          },
+          "processRedirect": false
+        },
+        {
+          "type": "httpRequest",
+          "method": "GET",
+          "url": "http://127.0.0.1",
+          "authorization": {
+            "type": "noAuth"
+          }
+        },
+        {
+          "type": "httpRequest",
+          "method": "POST",
+          "url": "http://127.0.0.1",
+          "authorization": {
+            "type": "noAuth"
+          }
+        },
+        {
+          "type": "create",
+          "metaclass": "ticket$market"
+        },
+        {
+          "type": "httpRequest",
+          "method": "GET",
+          "url": "http://localhost",
+          "authorization": {
+            "type": "noAuth"
+          },
+          "processRedirect": true
+        }
+      ],
+      "conditions": [
+        {
+          "predicate": {
+            "type": "or",
+            "predicates": [
+              {
+                "type": "and",
+                "predicates": [
+                  {
+                    "type": "or",
+                    "predicates": [],
+                    "blockId": "_krfy89wg"
+                  }
+                ],
+                "blockId": "_krfy87oz"
+              }
+            ]
+          },
+          "positiveBranch": {
+            "rules": [
+              {
+                "actions": [
+                  {
+                    "type": "httpRequest",
+                    "method": "DELETE",
+                    "url": "http://localhost/localresource",
+                    "authorization": {
+                      "type": "noAuth"
+                    },
+                    "processRedirect": true
+                  },
+                  {
+                    "type": "create",
+                    "metaclass": "ticket$beru"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "predicate": {
+            "type": "and",
+            "predicates": []
+          },
+          "positiveBranch": {
+            "rules": [
+              {
+                "actions": [
+                  {
+                    "type": "httpRequest",
+                    "method": "GET",
+                    "url": "http://localhost:154515/local",
+                    "authorization": {
+                      "type": "tvm",
+                      "clientId": "99999999"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "negativeBranch": {
+            "rules": [
+              {
+                "actions": [
+                  {
+                    "type": "create",
+                    "metaclass": "ticket$beruSocialMessagingReply"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "predicate": {
+            "type": "or",
+            "predicates": []
+          },
+          "positiveBranch": {
+            "rules": [
+              {
+                "actions": [
+                  {
+                    "type": "httpRequest",
+                    "method": "GET",
+                    "url": "http://localhost:8080/local",
+                    "authorization": {
+                      "type": "noAuth"
+                    },
+                    "processRedirect": true
+                  }
+                ]
+              }
+            ]
+          },
+          "negativeBranch": {
+            "rules": [
+              {
+                "actions": [
+                  {
+                    "type": "httpRequest",
+                    "method": "GET",
+                    "url": "http://localhost:80",
+                    "authorization": {
+                      "type": "noAuth"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

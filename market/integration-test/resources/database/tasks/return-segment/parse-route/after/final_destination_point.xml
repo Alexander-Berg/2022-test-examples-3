@@ -1,0 +1,80 @@
+<dataset>
+    <return_box
+            id="10"
+            destination_logistic_point_id="2000"
+            destination_recipient_type="SHOP"
+    />
+
+    <return_segment
+            id="1000"
+            return_id="1"
+            return_box_id="10"
+            shipment_time="2021-12-11 10:09:08 +0000"
+            shipment_destination='{
+                "name": "point-2300",
+                "type": "SHOP",
+                "partnerId": 230,
+                "logisticPointId": 2300,
+                "returnSegmentId": 1
+            }'
+            shipment_recipient='{
+                "name": "dropship-230",
+                "type": "SHOP",
+                "courier": null,
+                "partnerId": 230
+            }'
+            logistic_point_partner_id="[null]"
+            logistic_point_id="2000"
+            logistic_point_logistic_segment_id="[null]"
+            logistic_point_name="[null]"
+            logistic_point_type="SORTING_CENTER"
+            logistic_point_external_id="[null]"
+            current_route_history_id="100"
+    />
+
+    <return_segment
+            id="1"
+            return_id="1"
+            return_box_id="10"
+            unique_id="e11c5e64-3694-40c9-b9b4-126efedaa098"
+            shipment_time="[null]"
+            shipment_destination="[null]"
+            shipment_recipient="[null]"
+            logistic_point_partner_id="230"
+            logistic_point_id="2300"
+            logistic_point_logistic_segment_id="3400"
+            logistic_point_name="point-2300"
+            logistic_point_type="SHOP"
+            logistic_point_external_id="external-2300"
+            current_route_history_id="[null]"
+    />
+
+    <return_event
+            id="1"
+            logbroker_id="[null]"
+            request_id="test-request-id/1"
+            return_id="1"
+            type="RETURN_SEGMENT_CREATED"
+            payload='{
+                "id": 1,
+                "type": "RETURN_SEGMENT_CREATED",
+                "boxExternalId": "box-external-id",
+                "logisticPointInfo": {
+                    "type": "SHOP",
+                    "partnerId": 230,
+                    "logisticPointId": 2300,
+                    "logisticPointExternalId": "external-2300"
+                },
+                "shipmentFieldsInfo": {
+                    "recipient": null,
+                    "shipmentTime": null,
+                    "destinationInfo": null
+                }
+            }'
+    />
+
+    <queue_tasks
+            queue_name="CREATE_STORAGE_UNITS_IN_SC"
+            payload='{"requestId":"test-request-id/2","returnSegmentId":1000}'
+    />
+</dataset>

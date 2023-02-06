@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG">
+    <Properties>
+        <Property name="log-path">logs</Property>
+    </Properties>
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d  %-5level %t %X %logger{1.}: %msg%n"/>
+        </Console>
+        <Console name="ConsoleRequestLog" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %X %logger{1.}: %msg%n"/>
+        </Console>
+        <RollingFile name="STRESS_REPORT" fileName="stress-report.csv"
+                     filePattern="stress-report-%i.csv">
+            <PatternLayout pattern="%m%n"/>
+            <OnStartupTriggeringPolicy minSize="1"/>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${sys:log.dir}" maxDepth="1">
+                    <IfFileName glob="${sys:app.name}-stress-report-*.csv.gz"/>
+                    <IfLastModified age="7d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.zaxxer.hikari" level="WARN" additivity="false">
+            <AppenderRef ref="ConsoleRequestLog"/>
+        </Logger>
+
+        <!-- Request trace logging -->
+        <Logger name="requestTrace" level="TRACE" additivity="false">
+            <AppenderRef ref="ConsoleRequestLog"/>
+        </Logger>
+
+        <Logger name="ru.yandex.market.tpl.integration.tests.stress.StressStatCsv" level="TRACE" additivity="false">
+            <AppenderRef ref="STRESS_REPORT"/>
+        </Logger>
+
+        <Root level="INFO">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="MONITORING" level="ERROR">
+                <CompositeFilter>
+                    <Filters>
+                        <ThresholdFilter></ThresholdFilter>
+                        <BurstFilter level="ERROR" rate="1" maxBurst="2"/>
+                    </Filters>
+                </CompositeFilter>
+            </AppenderRef>
+        </Root>
+    </Loggers>
+</Configuration>

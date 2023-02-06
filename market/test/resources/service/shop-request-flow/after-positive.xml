@@ -1,0 +1,750 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <fulfillment_service
+            ID="171"
+            NAME="test"
+            STATUS="1"
+            TYPE="1"
+    />
+    <fulfillment_service
+            ID="147"
+            NAME="test"
+            STATUS="1"
+            TYPE="1"
+    />
+    <!-- Стандартные заявки на поставку-->
+
+    <SHOP_REQUEST ID="1"
+                  SUPPLIER_ID="1"
+                  SERVICE_ID="171"
+                  STATUS="1"
+                  TYPE="0"
+                  CREATED_AT="1999-9-9 9:9:9"
+
+                  REQUESTED_DATE="2017-10-10 9:9:9"
+                  ITEMS_TOTAL_COUNT="2"
+    />
+
+
+    <SHOP_REQUEST_DOC REQUEST_ID="1"
+                      TYPE="0"
+                      CREATED_AT="1999-9-9 9:9:9"
+                      FILE_URL="FILE_URL"
+                      EXTENSION="0"
+    />
+
+    <SHOP_REQUEST ID="2"
+                  SUPPLIER_ID="1"
+                  SERVICE_ID="171"
+                  STATUS="1"
+                  TYPE="0"
+                  CREATED_AT="1999-9-9 9:9:9"
+
+                  REQUESTED_DATE="2017-10-10 9:9:9"
+                  ITEMS_TOTAL_COUNT="2"
+    />
+
+    <SHOP_REQUEST_DOC REQUEST_ID="2"
+                      TYPE="0"
+                      CREATED_AT="1999-9-9 9:9:9"
+                      FILE_URL="FILE_URL"
+                      EXTENSION="0"
+    />
+
+    <SHOP_REQUEST ID="3"
+                  SUPPLIER_ID="1"
+                  SERVICE_ID="171"
+                  STATUS="10"
+                  TYPE="0"
+                  CREATED_AT="1999-9-9 9:9:9"
+
+                  REQUESTED_DATE="2017-10-10 9:9:9"
+                  COMMENT="some comment"
+                  ITEMS_TOTAL_COUNT="2"
+    />
+
+    <!-- Уже была поставка с SHOPSKU1 поэтому NEED_MANUAL_VERIFICATION="false"-->
+    <REQUEST_ITEM
+            ID="1"
+            REQUEST_ID="1"
+            ARTICLE="SHOPSKU1"
+            BARCODES="11;22"
+            COUNT="3"
+            SKU="1"
+            NAME="offer_1"
+            SUPPLY_PRICE="50.50"
+            UNTAXED_PRICE="50.50"
+            VAT_RATE="5"
+            HAS_EXPIRATION_DATE="true"
+            MARKET_NAME="market_name1"
+            VENDOR_CODE="vendorCode1"
+            NEED_MANUAL_VERIFICATION="false"
+            PACKAGE_NUM_IN_SPIKE="32"
+            BOX_COUNT="1"
+            SURPLUS_ALLOWED="true"
+    />
+
+    <!--Не было поставок/совпали вендоркоды/не совпали баркоды поэтому NEED_MANUAL_VERIFICATION="false"-->
+    <REQUEST_ITEM
+            ID="2"
+            REQUEST_ID="1"
+            ARTICLE="SHOPSKU2"
+            BARCODES="11;22"
+            COUNT="3"
+            SKU="2"
+            NAME="offer_2"
+            SUPPLY_PRICE="50"
+            UNTAXED_PRICE="45.45"
+            VAT_RATE="2"
+            HAS_EXPIRATION_DATE="true"
+            MARKET_NAME="market_name2"
+            VENDOR_CODE="vendorCode2"
+            NEED_MANUAL_VERIFICATION="false"
+            BOX_COUNT="1"
+            SURPLUS_ALLOWED="false"
+    />
+
+    <!-- Уже была поставка с SHOPSKU1 поэтому NEED_MANUAL_VERIFICATION="false"-->
+    <REQUEST_ITEM
+            ID="3"
+            REQUEST_ID="2"
+            ARTICLE="SHOPSKU1"
+            BARCODES="11;22"
+            COUNT="3"
+            SKU="1"
+            NAME="offer_1"
+            SUPPLY_PRICE="50.50"
+            UNTAXED_PRICE="50.50"
+            VAT_RATE="6"
+            HAS_EXPIRATION_DATE="true"
+            MARKET_NAME="market_name1"
+            VENDOR_CODE="vendorCode1"
+            NEED_MANUAL_VERIFICATION="false"
+            PACKAGE_NUM_IN_SPIKE="32"
+            BOX_COUNT="1"
+            SURPLUS_ALLOWED="true"
+    />
+
+    <!--Не было поставок/совпали баркоды/совпали вендоркоды поэтому NEED_MANUAL_VERIFICATION="false"-->
+    <REQUEST_ITEM
+            ID="4"
+            REQUEST_ID="2"
+            ARTICLE="SHOPSKU2"
+            BARCODES="barcode1"
+            COUNT="3"
+            SKU="2"
+            NAME="offer_2"
+            SUPPLY_PRICE="99.99"
+            UNTAXED_PRICE="84.74"
+            VAT_RATE="1"
+            HAS_EXPIRATION_DATE="true"
+            MARKET_NAME="market_name2"
+            VENDOR_CODE="vendorCode2"
+            NEED_MANUAL_VERIFICATION="false"
+            BOX_COUNT="1"
+            SURPLUS_ALLOWED="false"
+    />
+
+    <!--Не было поставок/не совпали баркоды/не совпали вендоркоды поэтому NEED_MANUAL_VERIFICATION="true"-->
+    <REQUEST_ITEM
+            ID="5"
+            REQUEST_ID="2"
+            ARTICLE="SHOPSKU3"
+            BARCODES="11;22"
+            COUNT="3"
+            SKU="3"
+            NAME="offer_2"
+            SUPPLY_PRICE="99.99"
+            UNTAXED_PRICE="84.74"
+            VAT_RATE="1"
+            HAS_EXPIRATION_DATE="false"
+            MARKET_NAME="market_name3"
+            VENDOR_CODE="vendorCode3"
+            NEED_MANUAL_VERIFICATION="true"
+            BOX_COUNT="1"
+    />
+
+    <!-- Оприходуется в другой поставке прямо сейчас, поэтому HAS_EXPIRATION_DATE = "false"
+    по тикету MARKETWMS-2974 HAS_EXPIRATION_DATE никогда не сбрасывается вне зависимости от
+    состояния приемки или наличия на складе-->
+    <REQUEST_ITEM
+            ID="6"
+            REQUEST_ID="2"
+            ARTICLE="SHOPSKU4"
+            BARCODES="11;22"
+            COUNT="3"
+            SKU="4"
+            NAME="offer_2"
+            SUPPLY_PRICE="99.99"
+            UNTAXED_PRICE="84.74"
+            VAT_RATE="1"
+            HAS_EXPIRATION_DATE="true"
+            MARKET_NAME="market_name4"
+            VENDOR_CODE=""
+            NEED_MANUAL_VERIFICATION="true"
+            BOX_COUNT="1"
+    />
+
+    <REQUEST_ITEM
+            ID="7"
+            REQUEST_ID="3"
+            ARTICLE="SHOPSKU1"
+            BARCODES="11;22"
+            COUNT="3"
+            FACT_COUNT="3"
+            DEFECT_COUNT="0"
+            NAME="offer_1"
+            SUPPLY_PRICE="50.50"
+            UNTAXED_PRICE="45"
+            VAT_RATE="6"
+            SKU="156"
+            BOX_COUNT="1"
+    />
+
+    <!-- Должны появиться маркетные баркоды и коды производителя -->
+    <REQUEST_ITEM_MARKET_VENDOR_CODE
+            ITEM_ID="1"
+            VENDOR_CODE="vendorCode1"
+    />
+    <REQUEST_ITEM_MARKET_VENDOR_CODE
+            ITEM_ID="2"
+            VENDOR_CODE="vendorCode1"
+    />
+    <REQUEST_ITEM_MARKET_VENDOR_CODE
+            ITEM_ID="2"
+            VENDOR_CODE="vendorCode2"
+    />
+    <REQUEST_ITEM_MARKET_VENDOR_CODE
+            ITEM_ID="3"
+            VENDOR_CODE="vendorCode1"
+    />
+    <REQUEST_ITEM_MARKET_VENDOR_CODE
+            ITEM_ID="4"
+            VENDOR_CODE="vendorCode1"
+    />
+    <REQUEST_ITEM_MARKET_VENDOR_CODE
+            ITEM_ID="4"
+            VENDOR_CODE="vendorCode2"
+    />
+    <REQUEST_ITEM_MARKET_VENDOR_CODE
+            ITEM_ID="5"
+            VENDOR_CODE="vendorCode1"
+    />
+    <REQUEST_ITEM_MARKET_VENDOR_CODE
+            ITEM_ID="5"
+            VENDOR_CODE="vendorCode2"
+    />
+    <REQUEST_ITEM_MARKET_VENDOR_CODE
+            ITEM_ID="3001"
+            VENDOR_CODE="vendorCode1"
+    />
+    <REQUEST_ITEM_MARKET_VENDOR_CODE
+            ITEM_ID="3002"
+            VENDOR_CODE="vendorCode1"
+    />
+    <REQUEST_ITEM_MARKET_VENDOR_CODE
+            ITEM_ID="3002"
+            VENDOR_CODE="vendorCode2"
+    />
+
+    <REQUEST_ITEM_MARKET_BARCODE
+            ITEM_ID="1"
+            BARCODE="barcode1"
+    />
+    <REQUEST_ITEM_MARKET_BARCODE
+            ITEM_ID="2"
+            BARCODE="barcode1"
+    />
+    <REQUEST_ITEM_MARKET_BARCODE
+            ITEM_ID="2"
+            BARCODE="barcode2"
+    />
+    <REQUEST_ITEM_MARKET_BARCODE
+            ITEM_ID="3"
+            BARCODE="barcode1"
+    />
+    <REQUEST_ITEM_MARKET_BARCODE
+            ITEM_ID="4"
+            BARCODE="barcode1"
+    />
+    <REQUEST_ITEM_MARKET_BARCODE
+            ITEM_ID="4"
+            BARCODE="barcode2"
+    />
+    <REQUEST_ITEM_MARKET_BARCODE
+            ITEM_ID="5"
+            BARCODE="barcode1"
+    />
+    <REQUEST_ITEM_MARKET_BARCODE
+            ITEM_ID="5"
+            BARCODE="barcode2"
+    />
+    <REQUEST_ITEM_MARKET_BARCODE
+            ITEM_ID="3001"
+            BARCODE="barcode1"
+    />
+    <REQUEST_ITEM_MARKET_BARCODE
+            ITEM_ID="3002"
+            BARCODE="barcode1"
+    />
+    <REQUEST_ITEM_MARKET_BARCODE
+            ITEM_ID="3002"
+            BARCODE="barcode2"
+    />
+
+    <!-- Возвраты и возвратные заявки на поставку-->
+
+    <SHOP_REQUEST
+            ID="4"
+            SERVICE_ID="171"
+            STATUS="1"
+            TYPE="2"
+            CREATED_AT="1999-9-9 9:9:9"
+
+            REQUESTED_DATE="2017-10-10 9:9:9"
+            ITEMS_TOTAL_COUNT="2"
+    />
+
+    <REQUEST_ITEM
+            ID="8"
+            REQUEST_ID="4"
+            ARTICLE="SHOPSKU1"
+            COUNT="1"
+            BARCODES="11;22"
+            NAME="offer_1"
+            SUPPLY_PRICE="50.50"
+            UNTAXED_PRICE="45"
+            VAT_RATE="6"
+            SKU="1"
+            HAS_EXPIRATION_DATE="true"
+            MARKET_NAME="market_name1"
+            VENDOR_CODE="vendorCode1"
+            PACKAGE_NUM_IN_SPIKE="32"
+            BOX_COUNT="1"
+    />
+
+    <!-- Должны появиться маркетные баркоды и коды производителя -->
+    <REQUEST_ITEM_MARKET_VENDOR_CODE
+            ITEM_ID="8"
+            VENDOR_CODE="vendorCode1"
+    />
+    <REQUEST_ITEM_MARKET_BARCODE
+            ITEM_ID="8"
+            BARCODE="barcode1"
+    />
+
+    <CUSTOMER_RETURN
+            ID="return1"
+            CREATED_AT="2017-10-10 10:10:10"
+            STATUS="1"
+            REQUEST_ID="4"
+    />
+
+    <CUSTOMER_RETURN_ITEM
+            RETURN_ID="return1"
+            SUPPLIER_ID="1"
+            ARTICLE="SHOPSKU1"
+    />
+
+    <!-- Возвратная поставка с service_id=2 -->
+    <SHOP_REQUEST
+            ID="4747"
+            SERVICE_ID="147"
+            STATUS="1"
+            TYPE="2"
+            CREATED_AT="1999-9-9 9:9:9"
+
+            REQUESTED_DATE="2017-10-10 9:9:9"
+            ITEMS_TOTAL_COUNT="2"
+    />
+
+    <REQUEST_ITEM
+            ID="8888"
+            REQUEST_ID="4747"
+            ARTICLE="SHOPSKU1"
+            COUNT="1"
+            BARCODES="11;22"
+            NAME="offer_1"
+            SUPPLY_PRICE="50.50"
+            UNTAXED_PRICE="45"
+            VAT_RATE="6"
+            SKU="1"
+            HAS_EXPIRATION_DATE="true"
+            MARKET_NAME="market_name1"
+            VENDOR_CODE="vendorCode1"
+            PACKAGE_NUM_IN_SPIKE="32"
+            BOX_COUNT="1"
+    />
+
+    <CUSTOMER_RETURN
+            ID="return2"
+            CREATED_AT="2017-10-10 10:10:10"
+            STATUS="1"
+            REQUEST_ID="4747"
+    />
+
+    <CUSTOMER_RETURN_ITEM
+            RETURN_ID="return2"
+            SUPPLIER_ID="1"
+            ARTICLE="SHOPSKU1"
+    />
+
+    <!-- Должны появиться маркетные баркоды и коды производителя -->
+    <REQUEST_ITEM_MARKET_VENDOR_CODE
+            ITEM_ID="8888"
+            VENDOR_CODE="vendorCode1"
+    />
+    <REQUEST_ITEM_MARKET_BARCODE
+            ITEM_ID="8888"
+            BARCODE="barcode1"
+    />
+
+    <!-- Изъятия -->
+    <SHOP_REQUEST
+            ID="5"
+            SERVICE_ID="171"
+            SUPPLIER_ID="1"
+            STATUS="1"
+            TYPE="1"
+            CREATED_AT="1999-9-9 9:9:9"
+
+            REQUESTED_DATE="2017-10-10 9:9:9"
+            ITEMS_TOTAL_COUNT="2"
+    />
+
+    <REQUEST_ITEM
+            ID="9"
+            REQUEST_ID="5"
+            ARTICLE="SHOPSKU1"
+            COUNT="2"
+            BARCODES="11;22"
+            NAME="offer_1"
+            SUPPLY_PRICE="50.50"
+            UNTAXED_PRICE="45"
+            VAT_RATE="6"
+            SKU="156"
+            HAS_EXPIRATION_DATE="false"
+            BOX_COUNT="1"
+    />
+    <!-- История статусов -->
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="1"
+            STATUS="0"
+            UPDATED_AT="1999-9-9 9:9:9"
+    />
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="2"
+            STATUS="0"
+            UPDATED_AT="1999-9-9 9:9:9"
+    />
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="3"
+            STATUS="0"
+            UPDATED_AT="1999-9-9 9:9:9"
+    />
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="3"
+            STATUS="10"
+            UPDATED_AT="1999-9-9 9:9:9"
+    />
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="4"
+            STATUS="0"
+            UPDATED_AT="1999-9-9 9:9:9"
+    />
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="5"
+            STATUS="0"
+            UPDATED_AT="1999-9-9 9:9:9"
+    />
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="1"
+            STATUS="1"
+            UPDATED_AT="2018-1-1 10:10:10"
+    />
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="2"
+            STATUS="1"
+            UPDATED_AT="2018-1-1 10:10:10"
+    />
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="4"
+            STATUS="1"
+            UPDATED_AT="2018-01-01 10:10:10"
+    />
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="5"
+            STATUS="1"
+            UPDATED_AT="2018-01-01 10:10:10"
+    />
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="4747"
+            STATUS="1"
+            UPDATED_AT="2018-01-01 10:10:10"
+    />
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="2000"
+            STATUS="1"
+            UPDATED_AT="2018-01-01 10:10:10"
+    />
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="2001"
+            STATUS="1"
+            UPDATED_AT="2018-01-01 10:10:10"
+    />
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="2002"
+            STATUS="1"
+            UPDATED_AT="2018-01-01 10:10:10"
+    />
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="3001"
+            STATUS="12"
+            UPDATED_AT="2018-1-1 10:10:10"
+    />
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="3002"
+            STATUS="1"
+            UPDATED_AT="2018-01-01 10:10:10"
+    />
+
+    <!-- Старые поставки для проверки того, что некоторые товары уже поставляли -->
+    <SHOP_REQUEST ID="999"
+                  SUPPLIER_ID="1"
+                  SERVICE_ID="171"
+                  STATUS="10"
+                  TYPE="0"
+                  CREATED_AT="1999-9-9 9:9:9"
+
+                  REQUESTED_DATE="1999-9-9 9:9:9"
+                  ITEMS_TOTAL_COUNT="3"
+    />
+    <REQUEST_ITEM
+            ID="999"
+            REQUEST_ID="999"
+            ARTICLE="SHOPSKU1"
+            BARCODES="11;22"
+            COUNT="3"
+            NAME="offer_1"
+            SUPPLY_PRICE="50.50"
+            VAT_RATE="5"
+            FACT_COUNT="3"
+            DEFECT_COUNT="0"
+            NEED_MANUAL_VERIFICATION="true"
+            BOX_COUNT="1"
+    />
+    <!-- Ну учтется, так как fact_count=0-->
+    <SHOP_REQUEST ID="1000"
+                  SUPPLIER_ID="1"
+                  SERVICE_ID="171"
+                  STATUS="10"
+                  TYPE="0"
+                  CREATED_AT="1999-9-9 9:9:9"
+
+                  REQUESTED_DATE="1999-9-9 9:9:9"
+                  ITEMS_TOTAL_COUNT="3"
+    />
+    <REQUEST_ITEM
+            ID="1000"
+            REQUEST_ID="1000"
+            ARTICLE="SHOPSKU2"
+            BARCODES="11;22"
+            COUNT="3"
+            NAME="offer_1"
+            SUPPLY_PRICE="50.50"
+            VAT_RATE="5"
+            FACT_COUNT="0"
+            DEFECT_COUNT="0"
+            NEED_MANUAL_VERIFICATION="true"
+            BOX_COUNT="1"
+    />
+    <!-- Не учтется, так как service_id другой-->
+    <SHOP_REQUEST ID="1001"
+                  SUPPLIER_ID="1"
+                  SERVICE_ID="147"
+                  STATUS="10"
+                  TYPE="0"
+                  CREATED_AT="1999-9-9 9:9:9"
+
+                  REQUESTED_DATE="1999-9-9 9:9:9"
+                  ITEMS_TOTAL_COUNT="3"
+    />
+    <REQUEST_ITEM
+            ID="1001"
+            REQUEST_ID="1001"
+            ARTICLE="SHOPSKU2"
+            BARCODES="11;22"
+            COUNT="3"
+            NAME="offer_2"
+            SUPPLY_PRICE="50.50"
+            VAT_RATE="5"
+            FACT_COUNT="3"
+            DEFECT_COUNT="0"
+            NEED_MANUAL_VERIFICATION="true"
+            BOX_COUNT="1"
+    />
+
+    <!-- Оприходуемая в настоящий момент поставка, чтобы проверить, что не передается флаг срока годности -->
+    <SHOP_REQUEST ID="1002"
+                  SUPPLIER_ID="1"
+                  SERVICE_ID="171"
+                  STATUS="6"
+                  TYPE="0"
+                  CREATED_AT="1999-9-9 9:9:9"
+
+                  REQUESTED_DATE="1999-9-9 9:9:9"
+                  ITEMS_TOTAL_COUNT="3"
+    />
+    <REQUEST_ITEM
+            ID="1002"
+            REQUEST_ID="1002"
+            ARTICLE="SHOPSKU4"
+            BARCODES="11;22"
+            COUNT="3"
+            NAME="offer_1"
+            SUPPLY_PRICE="50.50"
+            VAT_RATE="5"
+            FACT_COUNT="3"
+            DEFECT_COUNT="0"
+            NEED_MANUAL_VERIFICATION="true"
+            BOX_COUNT="1"
+    />
+
+    <!--  Заявки на инвентаризацию  -->
+    <SHOP_REQUEST ID="2000"
+                  SUPPLIER_ID="1"
+                  SERVICE_ID="171"
+                  STATUS="1"
+                  TYPE="13"
+                  CREATED_AT="1999-9-9 9:9:9"
+
+                  REQUESTED_DATE="2017-10-10 9:9:9"
+                  ITEMS_TOTAL_COUNT="0"
+    />
+
+    <SHOP_REQUEST ID="2001"
+                  SUPPLIER_ID="1"
+                  SERVICE_ID="171"
+                  STATUS="1"
+                  TYPE="14"
+                  CREATED_AT="1999-9-9 9:9:9"
+
+                  REQUESTED_DATE="2017-10-10 9:9:9"
+                  ITEMS_TOTAL_COUNT="0"
+    />
+
+    <SHOP_REQUEST ID="2002"
+                  SUPPLIER_ID="1"
+                  SERVICE_ID="171"
+                  STATUS="1"
+                  TYPE="15"
+                  CREATED_AT="1999-9-9 9:9:9"
+
+                  REQUESTED_DATE="2017-10-10 9:9:9"
+                  ITEMS_TOTAL_COUNT="0"
+    />
+
+    <!--  Заявки по межскладским перемещениям-->
+
+    <SHOP_REQUEST ID="3001"
+                  SUPPLIER_ID="1"
+                  SERVICE_ID="171"
+                  STATUS="12"
+                  TYPE="16"
+                  CREATED_AT="1999-9-9 9:9:9"
+
+                  REQUESTED_DATE="2017-10-10 9:9:9"
+                  ITEMS_TOTAL_COUNT="2"
+                  NEED_CONFIRMATION="true"
+    />
+
+    <SHOP_REQUEST_DOC REQUEST_ID="3001"
+                      TYPE="0"
+                      CREATED_AT="1999-9-9 9:9:9"
+                      FILE_URL="FILE_URL"
+                      EXTENSION="0"
+    />
+
+    <REQUEST_ITEM
+            ID="3001"
+            REQUEST_ID="3001"
+            ARTICLE="SHOPSKU1"
+            BARCODES="11;22"
+            COUNT="3"
+            SKU="1"
+            NAME="offer_1"
+            SUPPLY_PRICE="50.50"
+            UNTAXED_PRICE="45"
+            VAT_RATE="6"
+            HAS_EXPIRATION_DATE="true"
+            MARKET_NAME="market_name1"
+            VENDOR_CODE="vendorCode1"
+            NEED_MANUAL_VERIFICATION="false"
+            PACKAGE_NUM_IN_SPIKE="32"
+            BOX_COUNT="1"
+            SURPLUS_ALLOWED="true"
+    />
+
+    <REQUEST_ITEM
+            ID="3002"
+            REQUEST_ID="3001"
+            ARTICLE="SHOPSKU2"
+            BARCODES="11;22"
+            COUNT="3"
+            SKU="2"
+            NAME="offer_2"
+            SUPPLY_PRICE="50.50"
+            UNTAXED_PRICE="[null]"
+            VAT_RATE="5"
+            HAS_EXPIRATION_DATE="true"
+            MARKET_NAME="market_name2"
+            VENDOR_CODE="vendorCode2"
+            NEED_MANUAL_VERIFICATION="false"
+            BOX_COUNT="1"
+            SURPLUS_ALLOWED="false"
+    />
+
+    <SHOP_REQUEST
+            ID="3002"
+            SERVICE_ID="171"
+            SUPPLIER_ID="1"
+            STATUS="1"
+            TYPE="17"
+            CREATED_AT="1999-9-9 9:9:9"
+
+            REQUESTED_DATE="2017-10-10 9:9:9"
+            ITEMS_TOTAL_COUNT="2"
+    />
+
+    <REQUEST_ITEM
+            ID="3003"
+            REQUEST_ID="3002"
+            ARTICLE="SHOPSKU1"
+            COUNT="2"
+            BARCODES="11;22"
+            NAME="offer_1"
+            SUPPLY_PRICE="50.50"
+            UNTAXED_PRICE="45"
+            VAT_RATE="6"
+            SKU="156"
+            HAS_EXPIRATION_DATE="false"
+            BOX_COUNT="1"
+    />
+
+</dataset>

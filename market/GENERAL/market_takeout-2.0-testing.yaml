@@ -1,0 +1,56 @@
+juggler:
+  default:
+    tags:
+      - market
+      - market_takeout
+      - testing
+      - market
+    host: market_takeout-2.0-testing
+    namespace: market.antifraud
+    refresh_time: 60
+    flaps:
+      boost_time: 0
+      critical_time: 0
+      stable_time: 600
+    ttl: 900
+  checks:
+    - service: internal_errors
+      aggregator_kwargs:
+        nodata_mode: skip
+      aggregator: logic_or
+      children:
+        - host: (host=market_takeout_internal_errors_TESTING)
+          service: all
+          type: EVENTS
+    - service: internal_sla
+      aggregator_kwargs:
+        nodata_mode: skip
+      aggregator: logic_or
+      children:
+        - host: (host=market_takeout_internal_sla_TESTING)
+          service: all
+          type: EVENTS
+    - service: external_errors
+      aggregator_kwargs:
+        nodata_mode: skip
+      aggregator: logic_or
+      children:
+        - host: (host=market_takeout_external_errors_TESTING & service=errors)
+          service: all
+          type: EVENTS
+    - service: external_sla
+      aggregator_kwargs:
+        nodata_mode: skip
+      aggregator: logic_or
+      children:
+        - host: (host=market_takeout_external_sla_TESTING & service=sla)
+          service: all
+          type: EVENTS
+    - service: detetlag
+      aggregator_kwargs:
+        nodata_mode: force_warn
+      aggregator: logic_or
+      children:
+        - host: (host=market_takeout_queue_lag_TESTING & service=lag)
+          service: all
+          type: EVENTS

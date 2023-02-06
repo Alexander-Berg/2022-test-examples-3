@@ -1,0 +1,50 @@
+---
+##################################################
+# Install deb packages on remote machine.
+#
+## Parameters:
+#
+# deb_name:
+#   deb file name
+# tmp_dir:
+#   Temp directory path
+#
+- name: Clear temp dir
+  file:
+    path: "{{ tmp_dir }}"
+    state: absent
+  become: yes
+
+- name: Copy deb file to remote
+  copy:
+    src: "{{ deb_name }}"
+    dest: "{{ tmp_dir }}/"
+  become: yes
+
+- name: Inform about dependencies
+  shell: >
+    dpkg
+    --force-depends
+    --force-overwrite
+    --force-confnew
+    --install
+    "{{ tmp_dir }}/{{ deb_name }}"
+  become: yes
+  ignore_errors: yes
+
+- name: Satisfy package dependencies
+  shell: >
+    apt-get
+    --fix-broken
+    --assume-yes
+    install
+  become: yes
+
+- name: Install package
+  shell: >
+    dpkg
+    --install
+    --force-confnew
+    --force-overwrite
+    "{{ tmp_dir }}/{{ deb_name }}"
+  become: yes

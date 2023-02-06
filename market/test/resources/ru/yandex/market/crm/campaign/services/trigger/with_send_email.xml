@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:custom="http://lilucrm.market.yandex.ru/schema/1.0/triggers"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+    <bpmn:process id="waiting" name="Waiting trigger" processType="None" isClosed="false" isExecutable="true">
+        <bpmn:startEvent id="StartEvent_1" camunda:asyncAfter="true">
+            <bpmn:extensionElements>
+                <camunda:executionListener delegateExpression="${cartItemChangeListener}" event="end"/>
+            </bpmn:extensionElements>
+            <bpmn:outgoing>SequenceFlow_1mtbfje</bpmn:outgoing>
+            <bpmn:messageEventDefinition messageRef="Message_10e82q8"/>
+        </bpmn:startEvent>
+        <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_14gusbx" camunda:asyncAfter="true">
+            <bpmn:incoming>SequenceFlow_1mtbfje</bpmn:incoming>
+            <bpmn:outgoing>SequenceFlow_1pdo0ge</bpmn:outgoing>
+            <bpmn:timerEventDefinition>
+                <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
+            </bpmn:timerEventDefinition>
+        </bpmn:intermediateCatchEvent>
+        <bpmn:sequenceFlow id="SequenceFlow_1mtbfje" sourceRef="StartEvent_1"
+                           targetRef="IntermediateThrowEvent_14gusbx"/>
+        <bpmn:serviceTask id="ServiceTask_0on2ad4"
+                          implementation="##WebService"
+                          custom:customType="email"
+                          custom:templateId="b25a69f8-e9f0-4ca4-9c4d-74cd89f28196:1"
+                          custom:subscriptionType="2"
+                          custom:subscriptionType2="11"
+                          custom:utmCampaign="iddqd"
+                          camunda:delegateExpression="${sendEmailTrigger}">
+            <bpmn:incoming>SequenceFlow_1pdo0ge</bpmn:incoming>
+            <bpmn:outgoing>SequenceFlow_1mi9qdz</bpmn:outgoing>
+        </bpmn:serviceTask>
+        <bpmn:sequenceFlow id="SequenceFlow_1pdo0ge" sourceRef="IntermediateThrowEvent_14gusbx"
+                           targetRef="ServiceTask_0on2ad4"/>
+        <bpmn:endEvent id="EndEvent_0p6l9dv">
+            <bpmn:incoming>SequenceFlow_1mi9qdz</bpmn:incoming>
+        </bpmn:endEvent>
+        <bpmn:sequenceFlow id="SequenceFlow_1mi9qdz" sourceRef="ServiceTask_0on2ad4" targetRef="EndEvent_0p6l9dv"/>
+    </bpmn:process>
+    <bpmn:message id="Message_10e82q8" name="CART_ITEM_ADDED"/>
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="waiting">
+            <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+                <dc:Bounds x="173" y="232" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="146" y="268" width="90" height="20"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="IntermediateCatchEvent_1soovk9_di" bpmnElement="IntermediateThrowEvent_14gusbx">
+                <dc:Bounds x="315" y="232" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="333" y="271" width="0" height="13"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge id="SequenceFlow_1mtbfje_di" bpmnElement="SequenceFlow_1mtbfje">
+                <di:waypoint x="209" y="250"/>
+                <di:waypoint x="315" y="250"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="262" y="228" width="0" height="13"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNShape id="ServiceTask_0on2ad4_di" bpmnElement="ServiceTask_0on2ad4">
+                <dc:Bounds x="453" y="223" width="72" height="54"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge id="SequenceFlow_1pdo0ge_di" bpmnElement="SequenceFlow_1pdo0ge">
+                <di:waypoint x="351" y="250"/>
+                <di:waypoint x="453" y="250"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="402" y="228.5" width="0" height="13"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNShape id="EndEvent_0p6l9dv_di" bpmnElement="EndEvent_0p6l9dv">
+                <dc:Bounds x="639" y="232" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="657" y="271" width="0" height="13"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge id="SequenceFlow_1mi9qdz_di" bpmnElement="SequenceFlow_1mi9qdz">
+                <di:waypoint x="525" y="250"/>
+                <di:waypoint x="639" y="250"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="582" y="228.5" width="0" height="13"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</bpmn:definitions>

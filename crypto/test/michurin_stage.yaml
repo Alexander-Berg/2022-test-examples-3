@@ -1,0 +1,152 @@
+annotations:
+  stagectl_epoch: 786
+  stagectl_vcs:
+    svn_branch: stage_controller/stable-139-1
+    svn_revision: 8837154
+    svn_tag: stage_controller/stable-139-1
+labels:
+  deploy_engine: env_controller
+  du_patchers_target_revision:
+    docker: 9
+  du_sidecar_target_revision:
+    docker:
+      podBin: 2460258894
+  notifications_last_timestamp: 1638178334293171000
+  stagectl_epoch: 589
+  stagectl_vcs:
+    svn_branch: stage_controller/stable-108-2
+    svn_revision: 7951591
+    svn_tag: stage_controller/stable-108-2
+  tags: []
+meta:
+  account_id: abc:service:1547
+  acl:
+  - action: allow
+    permissions:
+    - read
+    - write
+    - create
+    - ssh_access
+    - root_ssh_access
+    - read_secrets
+    subjects:
+    - robot-drug-deploy
+  id: crypta-rtsklejka-michurin-test
+  inherit_acl: true
+  project_id: crypta
+spec:
+  deploy_units:
+    docker:
+      endpoint_sets:
+      - port: 80
+      images_for_boxes:
+        docker:
+          digest: EMPTY
+          name: crypta/rtsklejka-michurin
+          registry_host: registry.yandex.net
+          tag: 8881742-trunk
+      logbroker_tools_sandbox_info:
+        revision: 2249562029
+      logrotate_configs:
+        docker:
+          raw_config: "/michurin/*.log {\n  daily\n  rotate 10\n  create\n  maxsize
+            1G\n  compress\n  delaycompress\n  notifempty\n  missingok\n}"
+          run_period_millisecond: 300000
+      network_defaults:
+        network_id: _CRYPTADEVNETS_
+      pod_agent_sandbox_info:
+        revision: 2460258894
+      replica_set:
+        per_cluster_settings:
+          man:
+            deployment_strategy:
+              max_unavailable: 5
+            pod_count: 10
+          sas:
+            deployment_strategy:
+              max_unavailable: 5
+            pod_count: 10
+        replica_set_template:
+          constraints:
+            antiaffinity_constraints:
+            - key: rack
+              max_pods: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+              - id: disk-0
+                labels:
+                  used_by_infra: true
+                quota_policy:
+                  bandwidth_guarantee: 31457280
+                  bandwidth_limit: 62914560
+                  capacity: 12884901888
+                storage_class: hdd
+              pod_agent_payload:
+                spec:
+                  boxes:
+                  - compute_resources:
+                      memory_limit: 4294967296
+                      vcpu_limit: 2000
+                    id: docker
+                    resolv_conf: nat64
+                    rootfs: {}
+                  mutable_workloads:
+                  - workload_ref: main
+                  resources: {}
+                  workloads:
+                  - box_ref: docker
+                    env:
+                    - name: CRYPTA_TVM_ID
+                      value:
+                        literal_env:
+                          value: '2017217'
+                    - name: CRYPTA_TVM_SECRET
+                      value:
+                        secret_env:
+                          alias: sec-01dv8s7w8p432bctjes0z2vw8d:ver-01dv8s7w9jmgw17c82s99q2f97
+                          id: client_secret
+                    - name: YT_TOKEN
+                      value:
+                        secret_env:
+                          alias: sec-01csvzgg3mdasmdygkr5s8n6mz:ver-01d7q23zq6gqhxdcpggs5epbdk
+                          id: token
+                    - name: YT_PROXY
+                      value:
+                        literal_env:
+                          value: hahn
+                    - name: CRYPTA_ENV
+                      value:
+                        literal_env:
+                          value: test
+                    id: main
+                    liveness_check:
+                      http_get:
+                        expected_answer: Ok
+                        path: /ping
+                        port: 80
+                    readiness_check: {}
+                    start:
+                      command_line: /bin/bash /root/entrypoint.sh
+                    transmit_logs: true
+              resource_requests:
+                memory_guarantee: 4294967296
+                memory_limit: 4294967296
+                network_bandwidth_guarantee: 10485760
+                network_bandwidth_limit: 10485760
+                vcpu_guarantee: 2000
+                vcpu_limit: 2000
+              secrets:
+                sec-01csvzgg3mdasmdygkr5s8n6mz:ver-01d7q23zq6gqhxdcpggs5epbdk:
+                  delegation_token: cX0G_A7QTPfHRLxpCMgZifORBC6ytz9ECe-kobqAs1c.1.b6d67c6ee6982183
+                  secret_id: sec-01csvzgg3mdasmdygkr5s8n6mz
+                  secret_version: ver-01d7q23zq6gqhxdcpggs5epbdk
+                sec-01dv8s7w8p432bctjes0z2vw8d:ver-01dv8s7w9jmgw17c82s99q2f97:
+                  delegation_token: ifbEto9oaHws04Si9hj4Er3L0a0Kmo6JPVt99O2nyxo.1.47be551f7e54ee6a
+                  secret_id: sec-01dv8s7w8p432bctjes0z2vw8d
+                  secret_version: ver-01dv8s7w9jmgw17c82s99q2f97
+      revision: 223
+  revision: 79
+  revision_info:
+    description: 'Ticket applied due to autocommit policy: '
+

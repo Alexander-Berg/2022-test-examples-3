@@ -1,0 +1,175 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "text": {
+            "type": "object",
+            "properties": {
+                "required": {
+                    "type": "integer",
+                    "enum": [
+                        3
+                    ]
+                },
+                "parts": {
+                    "type": "array",
+                    "minItems": 3,
+                    "maxItems": 3,
+                    "uniqueItems": false,
+                    "items": [
+                        {
+                            "type": "object",
+                            "properties": {
+                                "index": {
+                                    "type": "integer",
+                                    "enum": [
+                                        0
+                                    ]
+                                },
+                                "value": {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "enum": [
+                                        "Москва → Барселона"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "index": {
+                                    "type": "integer",
+                                    "enum": [
+                                        1
+                                    ]
+                                },
+                                "required": {
+                                    "type": "integer",
+                                    "enum": [
+                                        2
+                                    ]
+                                },
+                                "parts": {
+                                    "type": "array",
+                                    "uniqueItems": false,
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "index": {
+                                                "type": "integer",
+                                                "enum": [
+                                                    0
+                                                ]
+                                            },
+                                            "value": {
+                                                "type": "string",
+                                                "minLength": 1,
+                                                "enum": [
+                                                    "\n(20 мар.,"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "index": {
+                                    "type": "integer",
+                                    "enum": [
+                                        2
+                                    ]
+                                },
+                                "value": {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "enum": [
+                                        "\nв Sindbad"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "required": [
+                "required",
+                "parts"
+            ]
+        },
+        "buttons": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "uniqueItems": false,
+            "items": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "index": {
+                            "type": "integer",
+                            "enum": [
+                                0
+                            ]
+                        },
+                        "title": {
+                            "type": "string",
+                            "minLength": 1,
+                            "enum": [
+                                "Посмотреть"
+                            ]
+                        },
+                        "link": {
+                            "type": "string",
+                            "minLength": 1
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "index": {
+                            "type": "integer",
+                            "enum": [
+                                1
+                            ]
+                        },
+                        "title": {
+                            "type": "string",
+                            "minLength": 1,
+                            "enum": [
+                                "Еще предложения"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "link": {
+            "type": "string",
+            "minLength": 1
+        },
+        "requireInteraction": {
+            "type": "boolean",
+            "enum": [
+                true
+            ]
+        },
+        "duration": {
+            "type": "integer",
+            "enum": [
+                30000
+            ]
+        }
+    },
+    "required": [
+        "text",
+        "buttons",
+        "link",
+        "requireInteraction",
+        "duration"
+    ]
+}

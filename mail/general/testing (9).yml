@@ -1,0 +1,83 @@
+base: /etc/furita/base.yml
+config:
+    system:
+        uid: furita
+        gid: furita
+    modules:
+        module:
+        -   _name: bb_client
+            configuration:
+                url: "https://pass-test.yandex.ru/blackbox"
+                host_file: /etc/yamail/blackbox_list.conf
+        -   _name: furita_processor
+            configuration:
+                search:
+                    fetch_url: "mail-msearch-proxy-qa2.search.yandex.net:10430"
+                usettings:
+                    primary: "http://settings-test.mail.yandex.net:80"
+                    fallback: "http://settings-test.mail.yandex.net:80"
+                mops:
+                    primary: "http://mops-test.mail.yandex.net:80"
+                    fallback: "http://mops-test.mail.yandex.net:80"
+                smtp_addr: "smtp://yabacks-test.mail.yandex.net:25"
+
+        -   _name: so_check_client
+            configuration:
+                hosts: "http://checkform2-test.n.yandex-team.ru"
+
+        -   _name: tupita_http_client
+            configuration:
+                hosts: "http://mail-tupita-test.n.yandex-team.ru"
+
+        -   _name: blackbox_http_client
+            configuration:
+                hosts: "https://blackbox-test.yandex.net"
+
+        -   _name: smtp_client
+            configuration:
+                net_settings:
+                    host: "mxbacktst1o.cmail.yandex.net:25"
+        -   _name: furita_pq
+            configuration:
+                sharpei:
+                    host: "http://sharpei-testing.mail.yandex.net"
+                    port: 80 
+                pgg:
+                    dbuser: "furita"
+        -   _name: furitadb
+            configuration:
+                pg:
+                    connection_string: "host=sas-l1rsh3l0i3j5raai.db.yandex.net,vla-5zb4siqq0unaj5b1.db.yandex.net port=6432 dbname=furitadb sslmode=verify-full"
+        -   _name: furita_api
+            configuration:
+                blackbox_environment: &bb_env blackbox-test
+        -   _name: tvm
+            configuration:
+                blackbox_environments:
+                -   *bb_env
+                destinations:
+                -   name: msearch
+                    id: 186
+                -   name: mops
+                    id: 2000577
+                my_tvm_id: 2016043
+        -   _name: tvm_guard
+            configuration:
+                guard:
+                    bb_env: *bb_env
+                    clients:
+                    -   name: api360
+                        id: 2032924
+                    -   name: api360_dev
+                        id: 2032928
+                    -   name: nsls
+                        id: 2008447
+                    rules:
+                    -   name: domain_rules_set
+                        paths: ["/v1/domain/rules/set"]
+                        default_action: reject
+                        accept_by_service: [api360, api360_dev]
+                    -   name: domain_rules_get
+                        paths: ["/v1/domain/rules/get"]
+                        default_action: reject
+                        accept_by_service: [api360, api360_dev, nsls]

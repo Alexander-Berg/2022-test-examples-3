@@ -1,0 +1,221 @@
+{
+    "items": [
+      {
+        "id": "intro",
+        "action_type": "tree",
+        "fallback_node": "entered_intro",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "welcome_text",
+            "text": "Добро пожаловать в службу поддержки!"
+          }
+        ],
+        "next_step": null,
+        "schema": {
+            "type": "options",
+            "options": [
+              {
+                "message_text": "!classify_default",
+                "node": "classify_default",
+                "type": "message",
+                "text": "Хочу классификацию"
+              },
+              {
+                "message_text": "!classify_override",
+                "node": "classify_override",
+                "type": "message",
+                "text": "Хочу классификацию с дополнительными опциями"
+              },
+              {
+                "message_text": "!classify_suggest",
+                "node": "node_suggest",
+                "type": "message",
+                "text": "Хочу саджест для пользователя"
+              },
+              {
+                "message_text": "!finish_it",
+                "history_text": "Заканчиваем",
+                "node": "chat_completed",
+                "type": "message",
+                "text": "Другое"
+              }
+            ]
+        }
+      },
+      {
+        "id": "entered_intro",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+        ],
+        "next_step": "entered_intro",
+        "use_classifier": false
+      },
+      {
+        "id": "classify_default",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "classify_default"
+          }
+        ],
+        "next_step": null,
+        "use_classifier": true
+      },
+      {
+        "id": "classify_override",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "classify_override"
+          }
+        ],
+        "next_step": null,
+        "use_classifier": true,
+        "classification_override": {
+          "default_node_id": "classification_default",
+          "type": "test",
+          "resolve_parameters": [
+              {
+                  "classification_result": "class_1",
+                  "node_id": "node_class_1",
+                  "min_confidence": 35,
+                  "max_confidence": 100
+              },
+              {
+                  "classification_result": "result2",
+                  "node_id": "node_class_2",
+                  "min_confidence": 10,
+                  "max_confidence": 30
+              }
+          ]
+        }
+      },
+      {
+        "id": "node_suggest",
+        "action_type": "suggest",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "node suggest"
+          }
+        ],
+        "next_step": "suggest_message" 
+      },
+      {
+        "id": "node_class_1",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "node_class_1"
+          }
+        ],
+        "next_step": "node_class_1"          
+      },
+      {
+        "id": "node_class_2",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "node_class_2"
+          }
+        ],
+        "next_step": "node_class_2"          
+      },
+      {
+        "id": "classification_result_default",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "classification_result_default"
+          }
+        ],
+        "next_step": "classification_result_default"          
+      },
+      {
+        "id": "classification_result_override",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "classification_result_override"
+          }
+        ],
+        "next_step": "classification_result_override"          
+      },
+      {
+        "id": "classification_result_fallback",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "classification_result_fallback"
+          }
+        ],
+        "next_step": "classification_result_fallback"          
+      },
+      {
+        "id": "suggest_message",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "suggest message"
+          }
+        ],
+        "next_step": "suggest_message"          
+      },
+      {
+        "id": "chat_completed",
+        "action_type": "chat_closed",
+        "action_button_text": "В этом чате давно ничего не происходило и написать сюда не получится",
+        "pre_action_messages": [
+        ],
+        "next_step": null
+      }
+    ],
+    "classification": {
+        "type": "test",
+        "default_node_id": "classification_result_default",
+        "fallback_node_id": "classification_result_fallback",
+        "resolve_parameters": [
+            {
+                "classification_result": "class_1",
+                "node_id": "node_class_1",
+                "min_confidence": 35,
+                "max_confidence": 100,
+                "schema": {
+                  "node": "node_class_2",
+                  "text": ""
+                }
+            },
+            {
+                "classification_result": "class_2",
+                "node_id": "node_class_2",
+                "min_confidence": 50,
+                "max_confidence": 99,
+                "schema": {
+                  "node": "node_class_1",
+                  "text": "Option 1"
+                }
+            }
+        ]
+    },
+    "faq_url": null,
+    "support_url": null
+}

@@ -1,0 +1,67 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:WMS;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS dimension_management\;SET SCHEMA dimension_management
+    username: dimension-management
+    separator: ^^^ END OF SCRIPT ^^^
+  config:
+    import:
+      - application-fragment-common-test.yml
+  main:
+    allow-bean-definition-overriding: true
+  liquibase:
+    enabled: true
+
+AppServer: localhost
+
+WarehouseTimezone: Europe/Moscow
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms: debug
+    org.springframework.jdbc.core: debug
+    root: info
+
+check:
+  authentication: 'no'
+
+servicebus:
+  api:
+    host: http://localhost:8382
+
+wiremock.server.port: 9999
+
+wms:
+  dimension-management:
+    encryption:
+      aes:
+        key: pwdABC12
+        salt: pwdSalt8
+    tvm:
+      serviceId: 0
+      secret: xxxxxx
+      log-only-mode: false
+      check-user-ticket: false
+      cache:
+        dir: /var/cache/tvm
+  core:
+    tvm:
+      serviceId: 0
+  receiving:
+    host: http://receiving.local
+    tvm:
+      serviceId: 0
+  transportation:
+    host: 'http://transportation.local'
+    tvm:
+      serviceId: 0
+  picking:
+    host: http://picking.local
+    tvm:
+      serviceId: 0
+
+s3.use: false
+
+core:
+  api:
+    host: http://core.local

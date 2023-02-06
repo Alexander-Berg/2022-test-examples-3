@@ -1,0 +1,90 @@
+{
+  "title": "search result schema",
+  "type": "object",
+  "required": [
+    "name", "vendor", "reviewsCount", "rating", "gradeCount", "prices", "offersCount", "mainPhoto", "photo", "url",
+      "buttonUrl", "reviewsUrl"
+  ],
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "vendor": {
+      "type": "string"
+    },
+    "reviewsCount": {
+      "type": "number",
+      "minimum": 0
+    },
+    "rating": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 5
+    },
+    "gradeCount": {
+      "type": "number",
+      "minimum": 0
+    },
+    "prices": {
+      "type": "object",
+      "required": ["max", "min", "avg", "curCode", "curName"],
+      "properties": {
+        "max": {
+          "type": "number",
+          "minimum": 0
+        },
+        "min": {
+          "type": "number",
+          "minimum": 0
+        },
+        "avg": {
+          "type": "number",
+          "minimum": 0
+        },
+        "curCode": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 3
+        },
+        "curName": {
+          "type": "string"
+        }
+      }
+    },
+    "offersCount": {
+      "type": "number",
+      "minimum": 0
+    },
+    "mainPhoto": {
+      "type": "object",
+      "required": ["url", "width", "height"],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "width": {
+          "type": "number",
+          "minimum": 1
+        },
+        "height": {
+          "type": "number",
+          "minimum": 1
+        }
+      }
+    },
+    "photo": {
+      "type": "string",
+      "format": "uri"
+    },
+    "url": {
+      "type": "string"
+      },
+    "buttonUrl":{
+      "type": "string"
+    },
+    "reviewsUrl":{
+      "type": "string"
+    }
+  }
+}

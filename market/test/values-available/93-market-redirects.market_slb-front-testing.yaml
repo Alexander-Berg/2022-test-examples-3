@@ -1,0 +1,17 @@
+context:
+  default:
+    service_name: market_redirects
+    servername_regexp: ((www\\.)?market\\.([\\w\\d]+\\.)?yandex\\.(ru|ua|kz|by)(\\.)?)
+    vs: market
+    antirobot: true
+    antirobot_service_name: market
+    cert: fslb-testing
+    plain_http: true
+    special: true
+    starttime_cookie: true
+    service_type: redirect
+    rewrite_regexp: .*(ru|ua|kz|by)(\\.)?$
+    rewrite_url: https://market.fslb.yandex.%1%{url}
+  testing:
+    cert: fslb-testing
+

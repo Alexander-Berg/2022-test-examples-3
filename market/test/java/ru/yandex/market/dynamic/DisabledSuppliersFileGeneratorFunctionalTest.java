@@ -1,0 +1,36 @@
+package ru.yandex.market.dynamic;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import ru.yandex.market.billing.FunctionalTest;
+import ru.yandex.market.common.test.db.DbUnitDataSet;
+import ru.yandex.market.common.test.util.StringTestUtil;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * @see DisabledSuppliersFileGenerator
+ */
+class DisabledSuppliersFileGeneratorFunctionalTest extends FunctionalTest {
+    @Autowired
+    FileGenerator disabledSuppliersFileGenerator;
+
+    @Test
+    @DbUnitDataSet(before = "DisabledSuppliersFileGeneratorFunctionalTest.before.csv")
+    void shouldCreateDynamicFile() {
+        // when
+        var file = disabledSuppliersFileGenerator.generate(200100300L);
+
+        // then
+        try {
+            assertThat(file).hasContent(StringTestUtil.getString(
+                    getClass(),
+                    "DisabledSuppliersFileGeneratorFunctionalTest.after.txt"
+            ));
+        } finally {
+            FileUtils.deleteQuietly(file);
+        }
+    }
+}

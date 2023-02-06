@@ -1,0 +1,58 @@
+tilte: Service mock definition
+type: object
+
+required:
+  - scope
+  - method
+  - status
+  - path
+  - response
+
+properties:
+  scope:
+    title: Nock scope
+    type: string
+    format: uri
+  method:
+    title: HTTP method
+    type: string
+    enum:
+      - GET
+      - POST
+      - PUT
+  path:
+    title: Request path
+    type: string
+  reqheaders:
+    allOf:
+      - title: Request headers
+      - $ref: '#/definitions/headers'
+  query:
+    title: Request query params
+    type: object
+    additionalProperties:
+      type: [ array, string ]
+  body:
+    title: Request body
+    type: object
+  status:
+    title: Response status
+    type: integer
+  rawHeaders:
+    allOf:
+      - title: Response headers
+      - $ref: '#/definitions/headers'
+  response:
+    title: Response body
+  socketDelay:
+    title: Socket delay
+    type: integer
+
+definitions:
+  headers:
+    type: object
+    propertyNames:
+      type: string
+      pattern: ^[-a-z]+$
+    additionalProperties:
+      type: string

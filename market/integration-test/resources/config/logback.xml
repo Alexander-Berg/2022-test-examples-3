@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+    <property scope="context" name="LOG_PATH" value="${java.io.tmpdir}/test"/>
+
+    <appender name="GODD_ERROR_LOG_JSON"
+              class="ru.yandex.market.logistics.logging.appender.logback.RotatableFileAppender">
+        <file>${LOG_PATH}/json-reports/godd-error-log-json.log</file>
+        <rollingPolicy class="ru.yandex.market.logistics.logging.appender.logback.NoopRollingPolicy"/>
+        <triggeringPolicy class="ru.yandex.market.logistics.logging.appender.logback.RotationBasedTriggeringPolicy"/>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="GODD_RESULT_LOG_JSON"
+              class="ru.yandex.market.logistics.logging.appender.logback.RotatableFileAppender">
+        <file>${LOG_PATH}/json-reports/godd-result-log-json.log</file>
+        <rollingPolicy class="ru.yandex.market.logistics.logging.appender.logback.NoopRollingPolicy"/>
+        <triggeringPolicy class="ru.yandex.market.logistics.logging.appender.logback.RotationBasedTriggeringPolicy"/>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <logger name="GODD_RESULT_LOG_JSON" additivity="false">
+        <appender-ref ref="GODD_RESULT_LOG_JSON"/>
+    </logger>
+    <logger name="GODD_ERROR_LOG_JSON" additivity="false">
+        <appender-ref ref="GODD_ERROR_LOG_JSON"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

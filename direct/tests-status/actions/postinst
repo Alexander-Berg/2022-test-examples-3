@@ -1,0 +1,18 @@
+#!/bin/bash -e
+
+case "$1" in
+    configure)
+        chown ppc:ppc /var/spool/tests-status/perl-unit-tests /var/spool/tests-status/js-data2-tests
+        chmod -R a+w  /var/spool/tests-status
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+exit 0

@@ -1,0 +1,28 @@
+vars:
+- &ping_options
+    args:
+    - --kwargs
+    - '[{"service": "ping", "path": "/health"},
+        {"service": "ping_app", "path": "/health", "port": 8888}]'
+
+juggler:
+  default:
+    host: testing_market_mbo-mdm-dqc
+    namespace: market.sre
+    refresh_time: 60
+    ttl: 300
+    aggregator: logic_or
+    children:
+    - DEPLOY%market-mbo@stage=testing_market_mbo-mdm-dqc;deploy_unit=mdm-dqc
+
+  checks:
+  - service: logrotate
+    nodata_mode: force_ok
+  - service: disk_free_space
+    nodata_mode: force_ok
+  - service: nginx
+  - service: memory_anon_usage
+  - service: ping
+    check_options: *ping_options
+  - service: ping_app
+    check_options: *ping_options

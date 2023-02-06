@@ -1,0 +1,27 @@
+# Параметры обработки
+params:
+  default:
+    resolve: true
+    templates:
+      - user_mslb_tcp.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    globals:
+      addr_ip6:       2a02:6b8:0:3400:0:3c9:0:253
+      service_name:   market-graphouse.tst.vs.market.yandex.net
+      service_port:   2024
+      timeout_server: 24h
+    meta:
+      monrun_ignore:  yes
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+      - name: "YP@market-infra_market-graphouse_testing.graphouse"
+        dns_resolvers: "yandex-ns"
+        resolve: false
+        track_name: market-graphouse-monitor.tst.vs.market.yandex.net:2005
+        track_port: 2005

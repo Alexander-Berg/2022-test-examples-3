@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<m:config xmlns:c="urn:jmf:common:1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:a="urn:jmf:attribute:type:default:config:1.0"
+          xmlns:be="urn:jmf:bcp:extension:config:1.0"
+          xmlns:m="urn:jmf:metaclass:config:1.0">
+    <m:metaclass>
+        <m:fqn>computeIfAbsentTest</m:fqn>
+        <m:parent>entity</m:parent>
+        <m:title>
+            <c:value>Тест расширения</c:value>
+        </m:title>
+        <m:logics>
+            <m:logic>db</m:logic>
+        </m:logics>
+        <m:interfaces>
+            <m:interface>ru.yandex.market.jmf.bcp.test.internal.ComputeIfAbsentTest</m:interface>
+        </m:interfaces>
+        <m:attributes>
+            <m:attribute>
+                <m:code>computeIfAbsent1</m:code>
+                <m:title>
+                    <c:value>Атрибут для теста</c:value>
+                </m:title>
+                <m:type xsi:type="a:string"/>
+                <m:extensions>
+                    <m:extension xsi:type="be:computeIfAbsent">
+                        <be:strategy xsi:type="be:bean" id="computeIfAbsentTestStrategy1"/>
+                    </m:extension>
+                </m:extensions>
+            </m:attribute>
+            <m:attribute>
+                <m:code>computeIfAbsent2</m:code>
+                <m:title>
+                    <c:value>Атрибут для теста</c:value>
+                </m:title>
+                <m:type xsi:type="a:string"/>
+                <m:extensions>
+                    <m:extension xsi:type="be:computeIfAbsent">
+                        <be:strategy xsi:type="be:bean" id="computeIfAbsentTestStrategy2"/>
+                    </m:extension>
+                </m:extensions>
+            </m:attribute>
+            <m:attribute>
+                <m:code>computeIfAbsentByScript</m:code>
+                <m:title>
+                    <c:value>Атрибут для теста</c:value>
+                </m:title>
+                <m:type xsi:type="a:string"/>
+                <m:extensions>
+                    <m:extension xsi:type="be:computeIfAbsent">
+                        <be:strategy xsi:type="be:script">
+                            <be:script scriptCode="computeIfAbsentScript"/>
+                        </be:strategy>
+                    </m:extension>
+                </m:extensions>
+            </m:attribute>
+            <m:attribute>
+                <m:code>staticValue</m:code>
+                <m:title>
+                    <c:value>Статический атрибут</c:value>
+                </m:title>
+                <m:type xsi:type="a:string"/>
+                <m:store xsi:type="m:constAttributeStore">
+                    <m:value>static value</m:value>
+                </m:store>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+</m:config>

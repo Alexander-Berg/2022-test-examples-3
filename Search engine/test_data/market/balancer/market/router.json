@@ -1,0 +1,31 @@
+{
+    "router": {
+        "sections": [
+            {
+                "prefixPathRouter": {
+                    "router": {
+                        "/ping": {
+                            "quota": "ping"
+                        }
+                    }
+                }
+            },
+            {
+                "headerRouter": {
+                    "key": "host",
+                    "router": {
+                        "litmus-.slb[.]vs.*": {
+                            "quota": "litmus-production"
+                        },
+                        "litmus-.slb[.]tst[.]vs.*": {
+                            "quota": "litmus-testing"
+                        }
+                    }
+                }
+            },
+            {
+                "quota": "default"
+            }
+        ]
+    }
+}

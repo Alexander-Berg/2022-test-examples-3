@@ -1,0 +1,21 @@
+logging: &logging-configuration
+  enabled: true
+  log-request-params: true
+  log-request-body: true
+  log-request-headers: true
+  log-response-body: true
+  log-response-headers: true
+  sensitive-headers: [X-Sensitive]
+  sensitive-params: [password]
+
+port: ${random.port}
+micronaut:
+  server:
+    port: ${port}
+    logging: *logging-configuration
+  http:
+    services:
+      test-client:
+        urls:
+          - http://localhost:${port}
+        logging: *logging-configuration

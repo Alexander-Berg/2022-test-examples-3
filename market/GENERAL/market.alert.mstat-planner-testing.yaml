@@ -1,0 +1,43 @@
+juggler:
+  default:
+    host: market_planner-app-testing
+    namespace: market.devexp
+    ttl: 900
+    flaps:
+      stable_time: 600
+      critical_time: 3000
+      boost_time: 0
+
+  checks:
+
+    - aggregator: logic_or
+      aggregator_kwargs:
+        nodata_mode: force_crit
+      children:
+        - EVENTS%(service=market-planner_solomon_shard_ag_testing__*):all:all
+      notifications: []
+      service: mstat-planner_solomon_quota_monitoring
+      tags:
+        - market-devexp-testing
+        - market-devexp
+        - market_testing
+        - market_rtc
+        - market_planner
+        - market
+        - _market_
+
+    - aggregator: logic_or
+      aggregator_kwargs:
+        nodata_mode: force_ok
+      children:
+        - EVENTS%(service=mstat-planner_rps_errors_testing_*):all:all
+      notifications: []
+      service: mstat-planner_rps_errors_monitoring
+      tags:
+        - market-devexp-testing
+        - market-devexp
+        - market_testing
+        - market_rtc
+        - market_planner
+        - market
+        - _market_

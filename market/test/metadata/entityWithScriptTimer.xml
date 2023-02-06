@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<m:config xmlns:c="urn:jmf:common:1.0"
+          xmlns:m="urn:jmf:metaclass:config:1.0"
+          xmlns:a="urn:jmf:attribute:type:default:config:1.0"
+          xmlns:ta="urn:jmf:timing:engine:attributes:config:1.0"
+          xmlns:t="urn:jmf:timing:engine:timers:config:2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <m:metaclass typed="false">
+        <m:fqn>entityWithScriptTimer</m:fqn>
+        <m:parent>bo</m:parent>
+        <m:title>
+            <c:value lang="ru">Тестовый БО с атрибутом "Счетчик времени"</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>timerSync</m:code>
+                <m:title>
+                    <c:value lang="ru">Действие с таймером</c:value>
+                </m:title>
+                <m:description>
+                    <c:value lang="ru">
+                        Вспомогательный атрибут, значение которого будет использоваться в скриптах для определения действия с таймером
+                    </c:value>
+                </m:description>
+                <m:type code="string"/>
+            </m:attribute>
+
+            <m:attribute required="true">
+                <m:code>timeZone</m:code>
+                <m:title>
+                    <c:value lang="ru">Часовой пояс</c:value>
+                </m:title>
+                <m:type xsi:type="a:catalogItem" fqn="timeZone"/>
+                <m:default>Europe/Moscow</m:default>
+            </m:attribute>
+            <m:attribute required="true">
+                <m:code>serviceTime</m:code>
+                <m:title>
+                    <c:value lang="ru">Время обслуживания</c:value>
+                </m:title>
+                <m:type xsi:type="a:catalogItem" fqn="serviceTime"/>
+            </m:attribute>
+
+            <m:attribute versioned="true">
+                <m:code>timer</m:code>
+                <m:title>
+                    <c:value lang="ru">Счетчик времени</c:value>
+                </m:title>
+                <m:type xsi:type="ta:timer">
+                    <ta:condition xsi:type="t:scriptCondition">
+                        <t:startCode scriptCode="start"/>
+                        <t:restartCode scriptCode="restart"/>
+                        <t:stopCode scriptCode="stop"/>
+                        <t:pauseCode scriptCode="pause"/>
+                        <t:resumeCode scriptCode="resume"/>
+                    </ta:condition>
+                    <ta:metric xsi:type="t:serviceMetric">
+                        <t:timeZone xsi:type="t:attributeTimerParameter" name="timeZone"/>
+                        <t:serviceTime xsi:type="t:attributeTimerParameter" name="serviceTime"/>
+                    </ta:metric>
+                </m:type>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+ </m:config>

@@ -1,0 +1,44 @@
+{
+  "owner": "mdb",
+  "tableName": "testmdbforarcadia_nginx",
+  "splits": {
+    "environment": "environment"
+  },
+  "commonSolomonLabels": {
+    "project": "market-delivery",
+    "service": "testmdbforarcadia",
+    "cluster": "stable"
+  },
+  "solomonSensors": [
+    {
+      "labelsArray": [
+        {
+          "sensor": "response_time"
+        },
+        {
+          "sensor": "response_time",
+          "environment": "${environment}"
+        }
+      ],
+      "period": "ONE_MIN",
+      "metricField": "resptime_ms",
+      "filter": "http_code >= 200 AND http_code <= 299 AND url != '/ping' AND url != '/monitoring'",
+      "type": "QUANTILE_TIMING",
+      "valueOnNan": 0
+    },
+    {
+      "labelsArray": [
+        {
+          "sensor": "response_code"
+        },
+        {
+          "sensor": "response_code",
+          "environment": "${environment}"
+        }
+      ],
+      "period": "ONE_MIN",
+      "metricField": "countIf(url != '/ping' AND url != '/monitoring')",
+      "type": "SIMPLE"
+    }
+  ]
+}

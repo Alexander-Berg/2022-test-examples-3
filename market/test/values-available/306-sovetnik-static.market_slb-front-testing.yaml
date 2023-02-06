@@ -1,0 +1,46 @@
+context:
+  default:
+    service_name: sovetnik_static
+    servername_regexp: (static|ss-test)\\.sovetnik\\.yandex\\.net
+    vs: sovetnik
+    cert: static.sovetnik.yandex.net
+    antirobot: false
+    balancing_method: active
+    health_check: '"GET /ping-balancer HTTP/1.1\r\nHost: static.sovetnik.yandex.net\r\n\r\n"'
+
+  testing:
+    health_check: '"GET /ping-balancer HTTP/1.1\r\nHost: ss-test.sovetnik.yandex.net\r\n\r\n"'
+
+servers:
+  default:
+    main:
+    - name: N%production_market_sovetnik_backend_iva@local
+      timeout: 11s
+      weight: 100
+      plain_http_backend: true
+    - name: N%production_market_sovetnik_backend_sas@local
+      timeout: 11s
+      weight: 100
+      plain_http_backend: true
+    - name: N%production_market_sovetnik_backend_vla@local
+      timeout: 11s
+      weight: 100
+      plain_http_backend: true
+    - name: N%production_market_sovetnik_backend_iva
+      timeout: 11s
+      plain_http_backend: true
+    - name: N%production_market_sovetnik_backend_sas
+      timeout: 11s
+      plain_http_backend: true
+    - name: N%production_market_sovetnik_backend_vla
+      timeout: 11s
+      plain_http_backend: true
+
+  testing:
+    main:
+    - name: N%testing_market_sovetnik_backend_sas
+      timeout: 11s
+      plain_http_backend: true
+    - name: N%testing_market_sovetnik_backend_vla
+      timeout: 11s
+      plain_http_backend: true

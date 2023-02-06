@@ -1,0 +1,29 @@
+{
+  "logHosts": "*",
+  "logPath": "**/health.log",
+  "parser": {
+    "dateFormat": "dd/MMM/yyyy:HH:mm:ss Z",
+    "separator": "\t",
+    "fields": [
+      "date", "method", "work_time_ms", "offers_count"
+    ],
+    "columns": {
+      "method": {
+        "type": "String"
+      },
+      "work_time_ms": {
+        "type": "UInt32"
+      },
+      "offers_count": {
+        "type": "UInt32"
+      },
+      "host": {
+        "type": "String"
+      }
+    }
+  },
+  "clickhouseTable": "skutcher_health_testing",
+  "sources": [
+    "logbroker://market-health-testing--other"
+  ]
+}

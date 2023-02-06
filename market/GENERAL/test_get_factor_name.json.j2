@@ -1,0 +1,51 @@
+{% if table == "items_factor_name" %}
+    {% table table %}
+        ["1", "Useless factor", "factor", "{{ day }}"],
+        ["2", "Another useless factor", "factor", "{{ day }}"]
+    {% endtable %}
+{% elif table == "pers_v_model_summary_result" %}
+    {
+        "schema": [
+            {
+                "name": "model_id",
+                "type": "Int64?"
+            },
+            {
+                "name": "factors",
+                "type": "Yson?"
+            }
+        ],
+        "records": [
+            [
+                111,
+                [
+                    {
+                        "factor_id": 1,
+                        "factor_name": "Useless factor",
+                        "published": true
+                    },
+                    {
+                        "factor_id": 2,
+                        "factor_name": "Another useless factor",
+                        "published": true
+                    },
+                    {
+                        "factor_id": 3,
+                        "factor_name": "Unpublished factor",
+                        "published": false
+                    }
+                ]
+            ],
+            [
+                222,
+                [
+                    {
+                        "factor_id": 1,
+                        "factor_name": "Useless factor",
+                        "published": true
+                    }
+                ]
+            ]
+        ]
+    }
+{% endif %}

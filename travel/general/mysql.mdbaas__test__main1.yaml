@@ -1,0 +1,19 @@
+- gather_facts: false
+  hosts: localhost
+  roles:
+  - checks:
+    - mysql_primary_changed
+    limits: '{{ crit_0_warn_0 }}'
+    role: chat_only
+    flap: '{{ stable0critical0 }}'
+    rtime: 60
+  vars:
+    children:
+      - sas-ghvi9a0wa8vpvm8p.db.yandex.net
+      - vla-arvmexo1kkk37712.db.yandex.net
+    host: mysql__mdbaas__test__main1
+    telegram_chats:
+      - 'rasp-achtung'
+  vars_files:
+  - ../vars/common.yml
+  - vars/rasp.yml

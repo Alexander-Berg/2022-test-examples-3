@@ -1,0 +1,22 @@
+version: '3.4'
+services:
+    collectors_container:
+        build:
+            context: $collectors
+            network: host
+            args:
+                deploydir: /deploy
+                installdir: /install
+        network_mode: "host"
+        environment:
+          - TEST_TVM_SECRET=$tvm_secret
+          - TEST_ENV=$test_env
+        volumes:
+          - ./var:/var
+        depends_on:
+            - db_container
+    db_container:
+        build:
+            context: $db
+            network: host
+        network_mode: "host"

@@ -1,0 +1,22 @@
+context:
+  default:
+    service_name: touch_test
+    servername_regexp: 'touch-test\\.tst\\.vs\\.market\\.yandex\\.net|touch-test.tst.market.yandex.(ru|by|kz|ua|com)'
+    vs: touch_test
+    health_check: '"GET /ping HTTP/1.1\r\nHost: touch-test.tst.vs.market.yandex.net\r\n\r\n"'
+    exp_getter: True
+    attempts: 1
+    antirobot: True
+    antirobot_service_name: market
+    balancing_method: "active"
+    cert: touch-test.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+
+servers:
+  default:
+    main:
+      - name: "GREY%touch-test.tst.vs.market.yandex.net"
+        timeout: "35s"
+        port: 9080
+        plain_http_backend: True

@@ -1,0 +1,133 @@
+{
+    "description": "https://testpalm.yandex-team.ru/testcase/serp-2885",
+    "properties": {
+        "address": {
+            "minLength": 1,
+            "type": "string"
+        },
+        "applicable": {
+            "enum": [
+                1
+            ],
+            "type": "integer"
+        },
+        "counter_prefix": {
+            "pattern": "^/",
+            "type": "string"
+        },
+        "mode": {
+            "enum": [
+                "found"
+            ],
+            "type": "string"
+        },
+        "ranges": {
+            "items": [
+                {
+                    "properties": {
+                        "off": {
+                            "$ref": "../core.json#time"
+                        },
+                        "on": {
+                            "$ref": "../core.json#time"
+                        },
+                        "vendors": {
+                            "items": [
+                                {
+                                    "properties": {
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "url": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "name",
+                                        "url"
+                                    ],
+                                    "type": "object"
+                                }
+                            ],
+                            "minItems": 1,
+                            "type": "array"
+                        }
+                    },
+                    "required": [
+                        "off",
+                        "on",
+                        "vendors"
+                    ],
+                    "type": "object"
+                }
+            ],
+            "minItems": 1,
+            "type": "array"
+        },
+        "serp_info": {
+            "properties": {
+                "flat": {
+                    "$comment": "WTF FIXME",
+                    "enum": [
+                        1,
+                        "1",
+                        true
+                    ],
+                    "type": [
+                        "integer",
+                        "string",
+                        "boolean"
+                    ]
+                }
+            },
+            "required": [
+                "flat"
+            ],
+            "type": "object"
+        },
+        "slot": {
+            "type": "string"
+        },
+        "template": {
+            "enum": [
+                "hot_water"
+            ],
+            "type": "string"
+        },
+        "type": {
+            "enum": [
+                "hot_water"
+            ],
+            "type": "string"
+        },
+        "types": {
+            "properties": {
+                "all": {
+                    "items": [
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "type": "array"
+                },
+                "kind": {
+                    "type": "string"
+                },
+                "main": {
+                    "enum": [
+                        "hot_water"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "all",
+                "kind",
+                "main"
+            ],
+            "type": "object"
+        }
+    },
+    "title": "Отключение горячей воды - Отключение горячей воды - Проброс запроса",
+    "type": "object"
+}

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <environment_param
+        ID="1"
+        NAME="utilization-cargo-type-groups"
+        VALUE="500,501;600,700"
+    />
+    <fulfillment_service
+        ID="100"
+        NAME="test"
+        STATUS="1"
+        TYPE="1"
+    />
+    <supplier
+        ID="1"
+        NAME="supplier1"
+    />
+
+    <SHOP_REQUEST ID="1"
+                  SUPPLIER_ID="1"
+                  SERVICE_ID="100"
+                  STATUS="7"
+                  TYPE="3"
+                  REQUESTED_DATE="1999-9-9 9:9:9"
+                  ITEMS_TOTAL_COUNT="1"
+                  STOCK="1"
+                  TO_STOCK_TYPE="4"
+                  DETAILS_LOADED="true"
+    />
+    <REQUEST_ITEM
+        ID="1"
+        REQUEST_ID="1"
+        ARTICLE="art1"
+        BARCODES="11;22"
+        COUNT="10"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="11.40"
+        VAT_RATE="2"
+        FACT_COUNT="1"
+        CREATED_AT="2021-07-30 21:08:00"
+    />
+    <!-- cargo type (500) for this ^ sku appeared in latter transfer (101) -->
+    <REQUEST_ITEM
+        ID="2"
+        REQUEST_ID="1"
+        ARTICLE="art2"
+        BARCODES="11;22"
+        COUNT="20"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="11.40"
+        VAT_RATE="2"
+        FACT_COUNT="2"
+    />
+    <REQUEST_ITEM_CARGO_TYPE ITEM_ID="2" CARGO_TYPE="501"/>
+    <REQUEST_ITEM
+        ID="3"
+        REQUEST_ID="1"
+        ARTICLE="art3"
+        BARCODES="11;22"
+        COUNT="30"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="11.40"
+        VAT_RATE="2"
+        FACT_COUNT="3"
+    />
+    <!-- cargo type for this ^ sku appeared only at time of outbound in MBO mapping (600) -->
+    <REQUEST_ITEM
+        ID="4"
+        REQUEST_ID="1"
+        ARTICLE="art4"
+        BARCODES="11;22"
+        COUNT="40"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="11.40"
+        VAT_RATE="2"
+        FACT_COUNT="4"
+    />
+    <!--  This cargo type will not appear in actual data from MBO, thus will be not in effect  -->
+    <REQUEST_ITEM_CARGO_TYPE ITEM_ID="4" CARGO_TYPE="700"/>
+    <REQUEST_ITEM_CARGO_TYPE ITEM_ID="4" CARGO_TYPE="701"/>
+    <REQUEST_ITEM
+        ID="5"
+        REQUEST_ID="1"
+        ARTICLE="art5"
+        BARCODES="11;22"
+        COUNT="50"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="11.40"
+        VAT_RATE="2"
+        FACT_COUNT="5"
+    />
+    <!-- Айтем попадет только в одну группу, в которой будет один из карготипов айтема
+         (ближайшую с начала в порядке определения в проперте).
+         В данном случае это карготип 500 из 1-ой группы -->
+    <REQUEST_ITEM_CARGO_TYPE ITEM_ID="5" CARGO_TYPE="700"/>
+    <REQUEST_ITEM_CARGO_TYPE ITEM_ID="5" CARGO_TYPE="500"/>
+    <SHOP_REQUEST ID="101"
+                  SUPPLIER_ID="1"
+                  SERVICE_ID="100"
+                  STATUS="7"
+                  TYPE="3"
+                  REQUESTED_DATE="1999-9-9 9:9:9"
+                  ITEMS_TOTAL_COUNT="1"
+                  STOCK="1"
+                  TO_STOCK_TYPE="4"
+                  DETAILS_LOADED="true"
+    />
+    <REQUEST_ITEM
+        ID="101"
+        REQUEST_ID="101"
+        ARTICLE="art1"
+        BARCODES="11;22"
+        COUNT="1010"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="11.40"
+        VAT_RATE="2"
+        FACT_COUNT="0"
+        CREATED_AT="2021-07-30 21:36:00"
+    />
+    <!--  because of fact that count = 0 it does not affect the total count,
+        but what will be taken from it is the actual cargo type,
+        because it appears later -->
+    <REQUEST_ITEM_CARGO_TYPE ITEM_ID="101" CARGO_TYPE="500"/>
+
+</dataset>

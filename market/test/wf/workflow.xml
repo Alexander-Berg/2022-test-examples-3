@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<w:config xmlns:c="urn:jmf:common:1.0"
+          xmlns:w="urn:jmf:logic:wf:config:1.0">
+
+    <w:workflow metaclass="root">
+        <w:statuses initial="statusRootInitial">
+            <w:status code="statusRootInitial">
+                <w:title>
+                    <c:value>statusRootInitial</c:value>
+                </w:title>
+            </w:status>
+            <w:status code="statusRoot1">
+                <w:title>
+                    <c:value>statusRoot1</c:value>
+                </w:title>
+                <w:attributes>
+                    <w:attribute code="attr1" preCondition="OFFER"/>
+                </w:attributes>
+            </w:status>
+            <w:status code="statusRoot2">
+                <w:title>
+                    <c:value>statusRoot2</c:value>
+                </w:title>
+            </w:status>
+        </w:statuses>
+        <w:transitions>
+            <w:transition from="statusRootInitial" to="statusRoot1">
+                <w:title>
+                    <c:value>init to 1</c:value>
+                </w:title>
+            </w:transition>
+        </w:transitions>
+    </w:workflow>
+
+    <w:workflow metaclass="root$entityChild">
+        <w:statuses initial="statusChildInitial">
+            <w:status code="statusChildInitial">
+                <w:title>
+                    <c:value>statusChildInitial</c:value>
+                </w:title>
+            </w:status>
+            <w:status code="statusChild1">
+                <w:title>
+                    <c:value>statusChild1</c:value>
+                </w:title>
+                <w:attributes>
+                    <w:attribute code="attrChild1" preCondition="OFFER"/>
+                </w:attributes>
+            </w:status>
+            <w:status code="statusChild2">
+                <w:title>
+                    <c:value>statusChild2</c:value>
+                </w:title>
+            </w:status>
+        </w:statuses>
+        <w:transitions>
+            <w:transition from="statusChildInitial" to="statusChild1">
+                <w:title>
+                    <c:value>init to 1</c:value>
+                </w:title>
+            </w:transition>
+            <w:transition from="statusChild1" to="statusChild2">
+                <w:title>
+                    <c:value>1 to 2</c:value>
+                </w:title>
+            </w:transition>
+        </w:transitions>
+    </w:workflow>
+
+</w:config>

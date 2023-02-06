@@ -1,0 +1,80 @@
+{
+  "owner": "marketinfra",
+  "tableName": "common_kv_testing",
+  "splits": {
+    "subkey": "subkey",
+    "status": "replaceRegexpOne(key, '.*-', '')"
+  },
+  "metrics": [
+    {
+      "metricName": "tsum.testing.multitestings.project.${subkey}.status.${status}",
+      "period": "ONE_MIN",
+      "filter": "module = 'multitesting-metrics' AND key LIKE 'tsum-tms-mt-status-%'",
+      "metricField": "argMax(value, timestamp)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "tsum.testing.multitestings.cleanupFailed",
+      "period": "ONE_MIN",
+      "filter": "module = 'multitesting-metrics' AND key LIKE 'tsum-tms-mt-status-%'",
+      "metricField": "argMaxIf(value, timestamp, key = 'tsum-tms-mt-status-CLEANUP_FAILED')",
+      "type": "SIMPLE"
+    },
+
+    {
+      "metricName": "tsum.testing.multitestings.project.${subkey}.nannyServices.total",
+      "period": "FIVE_MIN",
+      "filter": "module = 'multitesting-metrics' AND key LIKE 'tsum-tms-mt-nanny-services-%'",
+      "metricField": "argMaxIf(value, timestamp, key = 'tsum-tms-mt-nanny-services-count')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "tsum.testing.multitestings.project.${subkey}.nannyServices.orphans",
+      "period": "FIVE_MIN",
+      "filter": "module = 'multitesting-metrics' AND key LIKE 'tsum-tms-mt-nanny-services-%'",
+      "metricField": "argMaxIf(value, timestamp, key = 'tsum-tms-mt-nanny-services-orphans-count')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "tsum.testing.multitestings.project.${subkey}.nannyServices.archived",
+      "period": "FIVE_MIN",
+      "filter": "module = 'multitesting-metrics' AND key LIKE 'tsum-tms-mt-nanny-services-%'",
+      "metricField": "argMaxIf(value, timestamp, key = 'tsum-tms-mt-nanny-services-archived-count')",
+      "type": "SIMPLE"
+    },
+
+    {
+      "metricName": "tsum.testing.multitestings.project.${subkey}.autocleanup.cleanups",
+      "period": "FIVE_MIN",
+      "filter": "module = 'multitesting-metrics' AND key LIKE 'tsum-tms-mt-cleanup-%'",
+      "metricField": "sumIf(value, key = 'tsum-tms-mt-cleanup-cleanup')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "tsum.testing.multitestings.project.${subkey}.autocleanup.comments",
+      "period": "FIVE_MIN",
+      "filter": "module = 'multitesting-metrics' AND key LIKE 'tsum-tms-mt-cleanup-%'",
+      "metricField": "sumIf(value, key = 'tsum-tms-mt-cleanup-comment')",
+      "type": "SIMPLE"
+    }
+  ],
+
+  "commonSolomonLabels": {
+    "project": "market-infra",
+    "service": "tsum-tms",
+    "cluster": "testing"
+  },
+  "solomonSensors": [
+    {
+      "labels": {
+        "sensor": "mt-count",
+        "tsum_project": "${subkey}",
+        "status": "${status}"
+      },
+      "period": "ONE_MIN",
+      "filter": "module = 'multitesting-metrics' AND key LIKE 'tsum-tms-mt-status-%'",
+      "metricField": "argMax(value, timestamp)",
+      "type": "SIMPLE"
+    }
+  ]
+}

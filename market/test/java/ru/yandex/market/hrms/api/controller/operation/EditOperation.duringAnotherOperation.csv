@@ -1,0 +1,55 @@
+
+public.employee
+id,staff_login,name,position,type,hired_at,fired_at
+5317,test1,Иванов Иван,Бригадир,EXTERNAL,2019-10-01,null
+5318,test2,Петров Петр,Кладовщик,EXTERNAL,2019-10-01,null
+1,any,Павлов Павел,Босс,EXTERNAL,2019-10-01,null
+9527,any-2,Павлов Павел Аутстафф,Босс Аутстаффа,EXTERNAL,2019-10-01,null
+
+public.outstaff_company
+id,name
+326611127,"Тестовая компания"
+
+public.outstaff_company_login
+id,company_id,yandex_login
+1,326611127,"Company test login"
+
+public.outstaff
+id,yt_id,area_type,area,last_name,first_name,mid_name,login_hrms,work_started,russian_citizenship,deactivated,birthday,gender,passport,phone,position,medbook,hygiene_cert_date,psycho_exam_date,pre_med_exam_date,url_photo,url_access_docs,url_psycho_exam,url_pre_med_exam,url_docs_legality,deactivation_reason,company_login_id
+9876,129205766,СЦ,СЦ Екатеринбург,тестовый,Сергей,тестович,test-login-0,2020-06-01,false,null,2021-07-01,0,12 34 567890,+79153453432,Оператор ПРТ,1212 4433,2021-07-02,2021-07-03,2021-07-04,http://disk.yandex.ru/photo.jpg,http://disk.yandex.ru/access_docs.jpg,http://disk.yandex.ru/psycho.jpg,http://disk.yandex.ru/med.jpg,http://disk.yandex.ru/legality.jpg,null,1
+1337,129205766,СЦ,СЦ Екатеринбург,тестовый,Сергей,тестович,test-login-0,2020-06-01,false,null,2021-07-01,0,12 34 567890,+79153453432,Оператор ПРТ,1212 4433,2021-07-02,2021-07-03,2021-07-04,http://disk.yandex.ru/photo.jpg,http://disk.yandex.ru/access_docs.jpg,http://disk.yandex.ru/psycho.jpg,http://disk.yandex.ru/med.jpg,http://disk.yandex.ru/legality.jpg,null,1
+
+public.employee_assignment
+employee_id,oebs_assignment_id,schedule_id,month,start_date,end_date,deleted
+5317,89089-1296,8,2021-03-01,2020-11-01,null,false
+5317,89089-1296,8,2021-04-01,2021-04-01,null,false
+5317,89089-1296,8,2021-04-01,2020-11-01,null,true
+5317,89089-1296,6,2021-05-01,2021-05-01,null,false
+5317,89089-1296,8,2021-05-01,2021-04-01,null,true
+5317,89089-1296,6,2021-06-01,2021-05-01,null,false
+5318,89089-1297,7,2021-04-01,2020-11-01,null,false
+5318,89089-1297,7,2021-05-01,2020-11-01,null,false
+5318,89089-1297,7,2021-06-01,2020-11-01,null,false
+
+
+public.employee_group
+employee_id,group_id,group_role,joined_at,removed_at
+5317,94,REGULAR,2021-02-02 16:30:51.152568,2021-04-30 21:00:00.000000
+5317,96,REGULAR,2021-04-30 21:00:00.000000,null
+5318,226,REGULAR,2021-02-02 16:30:51.152568,null
+
+
+public.non_production_operation
+id,employee_id,domain_id,wms_login,shift_number,is_full_shift,operation_type,started_at,ended_at,created_at,created_by_login,outstaff_id
+1,5318,1,sof-petrov,3,false,MENTORING,2021-04-28 00:00:00,2021-04-28 09:00:00,2021-04-26 12:00:00,any,null
+2,5317,1,sof-test2,1,true,IDLE_TIME,2021-04-28 21:00:00,2021-04-29 09:00:00,2021-04-26 12:00:00,any,null
+3,5317,1,sof-test2,4,false,OTHER_WORK,2021-04-28 10:00:00,2021-04-28 18:00:00,2021-04-26 12:00:00,any,1337
+4,9527,1,test-login-outstaff,1,true,MENTORING,2021-04-28 00:00:00,2021-04-28 09:00:00,2021-04-26 12:00:00,any-2,9876
+5,9527,1,test-login-outstaff,1,true,MENTORING,2021-04-30 00:00:00,2021-04-30 09:00:00,2021-04-28 12:00:00,any-2,9876
+
+
+public.wms_user
+login,domain_id,employee_id,outstaff_id,state
+sof-test,1,null,null,READY
+sof-petrov,1,5318,null,READY
+user-100,1,null,1337,INACTIVE

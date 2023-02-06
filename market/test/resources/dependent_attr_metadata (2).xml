@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<m:config xmlns:c="urn:jmf:common:1.0"
+          xmlns:m="urn:jmf:metaclass:config:1.0">
+
+    <m:logic>
+        <m:id>testLogic</m:id>
+        <m:attributes>
+            <m:attribute>
+                <m:code>dep0</m:code>
+                <m:title>
+                    <c:value>Dependency attribute from testLogic</c:value>
+                </m:title>
+                <m:type code="string"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>attr0</m:code>
+                <m:title>
+                    <c:value>Attribute from logic</c:value>
+                </m:title>
+                <m:type code="string"/>
+                <m:filtrationScript code="depends_on_logic_attribute"/>
+            </m:attribute>
+        </m:attributes>
+    </m:logic>
+
+    <m:metaclass>
+        <m:fqn>testEntity</m:fqn>
+        <m:title>
+            <c:value>Test entity</c:value>
+        </m:title>
+        <m:logics>
+            <m:logic>testLogic</m:logic>
+        </m:logics>
+        <m:attributes>
+            <m:attribute>
+                <m:code>dep1</m:code>
+                <m:title>
+                    <c:value>Dependency attribute from testEntity</c:value>
+                </m:title>
+                <m:type code="string"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>attr1</m:code>
+                <m:title>
+                    <c:value>Attribute 1</c:value>
+                </m:title>
+                <m:type code="string"/>
+                <m:filtrationScript code="depends_on_current_entity_attribute"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+    <m:metaclass>
+        <m:fqn>testEntityChild</m:fqn>
+        <m:parent>testEntity</m:parent>
+        <m:title>
+            <c:value>Test entity child</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>dep2</m:code>
+                <m:title>
+                    <c:value>Dependency attribute from testEntityChild</c:value>
+                </m:title>
+                <m:type code="string"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>attr2</m:code>
+                <m:title>
+                    <c:value>Attribute 2</c:value>
+                </m:title>
+                <m:type code="string"/>
+                <m:filtrationScript code="depends_on_parent_and_current_entities_attributes"/>
+            </m:attribute>
+            <m:attributeOverride>
+                <m:code>attr1</m:code>
+                <m:filtrationScript code="dependsOn_dep0_dep1"/>
+            </m:attributeOverride>
+        </m:attributes>
+    </m:metaclass>
+
+    <m:metaclassOverride>
+        <m:fqn>testEntity</m:fqn>
+        <m:attributes>
+            <m:attribute>
+                <m:code>dep3</m:code>
+                <m:title>
+                    <c:value>Dependency attribute from testEntity override</c:value>
+                </m:title>
+                <m:type code="string"/>
+            </m:attribute>
+            <m:attribute>
+                <m:code>attr3</m:code>
+                <m:title>
+                    <c:value>Attribute 3</c:value>
+                </m:title>
+                <m:type code="string"/>
+                <m:filtrationScript code="depends_on_current_overridden_entity_attribute"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclassOverride>
+
+    <m:metaclass>
+        <m:fqn>testEntityWithNotExistentDependency</m:fqn>
+        <m:title>
+            <c:value>Test entity with not existent dependency</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>attr</m:code>
+                <m:title>
+                    <c:value>Attribute</c:value>
+                </m:title>
+                <m:type code="string"/>
+                <m:filtrationScript code="depends_on_not_existent_attribute"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+    <m:metaclass>
+        <m:fqn>testEntityWithCircularDependency</m:fqn>
+        <m:title>
+            <c:value>Test entity with circular dependency</c:value>
+        </m:title>
+        <m:attributes>
+            <m:attribute>
+                <m:code>attr</m:code>
+                <m:title>
+                    <c:value>Attribute</c:value>
+                </m:title>
+                <m:type code="string"/>
+                <m:filtrationScript code="depends_on_self"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+</m:config>

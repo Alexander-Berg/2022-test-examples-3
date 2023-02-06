@@ -1,0 +1,29 @@
+module: market-events
+operators:
+- id: main
+  visibility: public
+  value#processing-queue:
+    scope: market
+    queue: oevents
+    stq-queue: market_events_processing
+    stq-starter: market_procaas_starter
+    static-event-traits:
+      is-create: true
+    keys-mapping:
+      rules: []
+      default-keys:
+      - default_key
+    state-manager#xget: /external/state-manager/state-manager
+    logbroker-producers:
+      procaas-event-bus:
+        tvm-service-name: logbroker
+        topic: $order-event-procaas-bus
+        source-id: processing
+        global-endpoint: lbkx.logbroker.yandex.net
+      testic-topic:
+        tvm-service-name: logbroker
+        topic: $testic-topic
+        source-id: processing
+        global-endpoint: lbkx.logbroker.yandex.net
+    event-processor:
+    - value#xget: /external/oevent-pipeline/oevent-pipeline

@@ -1,0 +1,99 @@
+{% macro question(question_id, model_id, category_id, vendor_id) %}
+    [
+        "{{ category_id }}",
+        "{{ model_id }}",
+        "title",
+        "{{ question_id }}",
+        "p123456",
+        "y123456",
+        "picture",
+        "{{ vendor_id }}",
+        1506963677001
+    ]
+{% endmacro %}
+
+{% macro view(timestamp, yandexuid, puid, question_id, model_id, category_id, vendor_id, host, request_id) %}
+    [
+        {{ timestamp }},
+        {
+            "yandexuid": "{{ yandexuid }}",
+            "puid": {% if puid %}"{{ puid }}"{% else %}null{% endif %}
+        },
+        "view",
+        "question",
+        "{{ question_id }}",
+        {
+            "category_id": "{{ category_id }}",
+            "host": "{{ host }}",
+            "request_id": "{{ request_id }}",
+            "model_id": "{{ model_id }}",
+            "vendor_id": "{{ vendor_id }}"
+        },
+        "{{ day }}"
+    ]
+{% endmacro %}
+
+{% if table == "events_question_views" %}
+    {# Result data. #}
+    {% table "events" %}
+        {{ view(1506963677000, "y1", 1, "1756786", "475729020", "c01", "v01", "market.yandex.ru", "50fb99f08444952ac4f4c80ce1b64932") }},
+        {{ view(1506963677000, "y2", null, "1756786", "475729020", "c01", "v01", "market.yandex.ru", "50fb99f08444952ac4f4c80ce1b64933") }},
+        {{ view(1506963677000, "y3", null, "1756786", "475729020", "c01", "v01", "m.market.yandex.ru", "3a78353ec4193654888b6d58d207ac9a") }},
+        {{ view(1506963677000, "y4", 4, "1756786", "475729020", "c01", "v01", "m.market.yandex.ru", "3a78353ec4193654888b6d58d207ac92") }}
+    {% endtable %}
+{% elif table == "mstat_analyst_market_access_log" %}
+    {
+        "schema": [
+            {
+                "name": "timestamp",
+                "type": "String?"
+            },
+            {
+                "name": "timezone",
+                "type": "String?"
+            },
+            {
+                "name": "status",
+                "type": "String?"
+            },
+            {
+                "name": "request",
+                "type": "String?"
+            },
+            {
+                "name": "canonized_vhost",
+                "type": "String?"
+            },
+            {
+                "name": "page_id",
+                "type": "String?"
+            },
+            {
+                "name": "req_id",
+                "type": "String?"
+            },
+            {
+                "name": "yandexuid",
+                "type": "String?"
+            },
+            {
+                "name": "puid",
+                "type": "Uint64?"
+            }
+        ],
+        "records": [
+            ["2017-10-02T20:01:17", "+0300", "200", "/product--braslet-samsung-galaxy-fit/475729020/question--chem-lite-otlichaetsia-ot-ne-lite/1756786", "m.market.yandex.ru", "touch:product-question", "3a78353ec4193654888b6d58d207ac92", "y4", 4],
+            ["2017-10-02T20:01:17", "+0300", "200", "/product/475729020/question/1756786", "m.market.yandex.ru", "touch:product-question-no-slug", "3a78353ec4193654888b6d58d207ac9a", "y3", null],
+            ["2017-10-02T20:01:17", "+0300", "200", "/product--braslet-samsung-galaxy-fit/475729020/question--chem-lite-otlichaetsia-ot-ne-lite/1756786?page=1", "market.yandex.ru", "market:product-question", "50fb99f08444952ac4f4c80ce1b64933", "y2", null],
+            ["2017-10-02T20:01:17", "+0300", "200", "/product/475729020/question/1756786?page=1", "market.yandex.ru", "market:product-question-no-slug", "50fb99f08444952ac4f4c80ce1b64932", "y1", 1],
+            
+            {# filtered out #}
+            ["2017-10-02T20:01:17", "+0300", "200", "/product--braslet-samsung-galaxy-fit/475729020/questions?track=tabs", "m.market.yandex.ru", "touch:product-questions", "2a08b5d961bd482afa932b0395c5c704", "y1", 1]
+        ]
+    }
+{% elif table == "dj_question" %}
+    {% table table %}
+        {{ question("1756786", "475729020", "c01", "v01") }},
+        {{ question("fake", "fake", "fake", "fake") }}
+    {% endtable %}
+{% endif %}

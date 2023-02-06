@@ -1,0 +1,128 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "gogate",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log"
+
+[[yt.input.avia_partner_booking_log.data]]
+    unixtime = 1580971308
+    source = "avia-success-book-log"
+    partner = "gogate"
+    partner_id = 112
+    billing_order_id = 1027
+    marker = "marker_0"
+    status = "booking"
+    created_at = "2020-01-23 19:59:27"
+    order_id = "order_0"
+    price = 128.65
+    currency = "EUR"
+    confirm_dt = ""
+    from = ""
+    to = ""
+    trip_type = ""
+    ticket_number = ""
+
+[[yt.input.avia_partner_booking_log.data]]
+    unixtime = 1580971309
+    source = "avia-success-book-log"
+    partner = "gogate"
+    partner_id = 112
+    billing_order_id = 1027
+    marker = "marker_0"
+    status = "paid"
+    created_at = "2020-01-23 19:59:27"
+    order_id = "order_0"
+    price = 128.65
+    currency = "EUR"
+    confirm_dt = ""
+    from = ""
+    to = ""
+    trip_type = ""
+    ticket_number = ""
+
+[[yt.input.avia_partner_booking_log.data]]
+    unixtime = 1580971160
+    source = "avia-success-book-log"
+    partner = "supersaver"
+    partner_id = 109
+    billing_order_id = 1024
+    marker = "marker_1"
+    status = "paid"
+    created_at = "2020-01-23 00:14:17"
+    order_id = "order_1"
+    price = 70980
+    currency = "RUB"
+    confirm_dt = ""
+    from = ""
+    to = ""
+    trip_type = ""
+    ticket_number = ""
+
+
+[[yt.input.avia_partner_booking_log.data]]
+    unixtime = 1580971231
+    source = "avia-success-book-log"
+    partner = "trip_ru"
+    partner_id = 17
+    billing_order_id = 48
+    marker = "marker_2"
+    status = "paid"
+    created_at = "2020-01-23 15:56:27"
+    order_id = "order_2"
+    price = 41219.36
+    currency = "RUB"
+    confirm_dt = ""
+    from = ""
+    to = ""
+    trip_type = ""
+    ticket_number = ""
+
+[[yt.input.avia_partner_booking_log.data]]
+    unixtime = 1579728671
+    source = "kupibilet"
+    partner = "kupibilet"
+    partner_id = 90
+    billing_order_id = 1014
+    marker = "marker_3"
+    status = "paid"
+    created_at = "2020-01-22 00:00:00"
+    order_id = "order_3"
+    price = 10123
+    currency = "RUB"
+    from = "BEY"
+    to = "DOH"
+    confirm_dt = ""
+    trip_type = ""
+    ticket_number = ""
+
+[lb]
+    topic = "topic-gogate"
+    fields_to_skip = ["origin", "destination", "trip_type", "last_seen", "_timestamp", "updated_at"]
+
+[[lb.expected]]
+    partner_name = "gogate"
+    travel_order_id = "gogate:order_0"
+    partner_order_id = "order_0"
+    created_at = 1579809567
+    status = "confirmed"
+    label = "marker_0"
+    currency_code = "EUR"
+    order_amount = 128.65
+    category = "avia"
+    source = "gogate"
+    partner_id = 112
+    billing_order_id = 1027
+    source_updated_at = 1580971309

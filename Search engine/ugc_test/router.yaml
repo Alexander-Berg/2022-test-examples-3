@@ -1,0 +1,22 @@
+quota: test
+urls: urls
+
+router:
+  - regexp: urls
+    data:
+      - key: "/ugc/user/\\d+/poll.*"
+        quota: old_poll_handler_test
+      - key: "/ugcpub/generate_poll.*"
+        quota: ugcpub_generatepoll
+      - key: "/api/v1/users/\\d+/searchapp-status.*"
+        quota: user_status_handler_test
+      - key: "/ugcpub/cabinet.*"
+        quota: ugcpub_cabinet_test
+      - key: "/api/users/.*/polls.*"
+        quota: new_poll_handler_test
+  - map: urls
+    data:
+      - key: /ugcpub/iznanka
+        quota: iznanka_test
+      - key: /ugcpub/upload-photo
+        quota: ugcpub_upload_photo_test

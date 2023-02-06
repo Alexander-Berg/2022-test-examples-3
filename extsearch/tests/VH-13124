@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+[ -z "${KEEP}" ] && set -e
+
+SCRIPTS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd) #"
+. "${SCRIPTS_DIR}"/config.sh
+. "${SCRIPTS_DIR}"/make_fast_settings
+. "${SCRIPTS_DIR}"/make_flat_const
+export FAST_SETTINGS=${DATA_DIR}/fast_settings
+export FLAT_CONST=${DATA_DIR}/flat.const
+export REDIS_SERVICE_SERVICE=yabs_playlist
+[ -z "$PROD" ] && . "${SCRIPTS_DIR}"/redis_service
+
+CUR_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd) #"
+
+# TODO! test filler
+if false && [ ! -f ${DATA_DIR}/yabs_filled.flag ]; then
+    # https://nanny.yandex-team.ru/ui/#/services/catalog/test_redis_playlist_sender/
+
+    [ ! -f ${ARCADIA_ROOT}/extsearch/video/vh/playlist_service/redis_playlist/lb_2_redis/lb_2_redis ] && ${YA_MAKE} ${ARCADIA_ROOT}/extsearch/video/vh/playlist_service/redis_playlist/lb_2_redis
+
+echo '{
+    "topic": "video-rt-vhs/ugc-needindex",
+    "endpoint": "lbkx.logbroker.yandex.net",
+    "source": "'${HOST}'",
+    "tvm_secret": "'${TVM_SECRET}'",
+    "tvm_client": 2026794,
+    "tvm_ds": 2001059,
+    "client": "video-rt-vhs/playlist-redis"
+}' > ${DATA_DIR}/consumer.json
+
+    time \
+    ${ARCADIA_ROOT}/extsearch/video/vh/playlist_service/redis_playlist/lb_2_redis/lb_2_redis \
+        --consumer-config ${DATA_DIR}/consumer.json \
+        --redis-host "${REDIS_HOST}" \
+        --redis-password "${REDIS_PASSWORD}" \
+
+    redis-cli -h "${REDIS_HOST}" -a "${REDIS_PASSWORD}" dbsize
+    touch ${DATA_DIR}/yabs_filled.flag
+fi
+
+[ ! -f ${ARCADIA_ROOT}/apphost/tools/grpc_client/grpc_client ] && ${YA_MAKE} ${ARCADIA_ROOT}/apphost/tools/grpc_client
+
+set -x
+
+${ARCADIA_ROOT}/apphost/tools/grpc_client/grpc_client --proto-to-json --address "${HOST}:${REDIS_SERVICE_GRPC}/yabs_playlist" --plan ${CUR_DIR}/VH-13124-data

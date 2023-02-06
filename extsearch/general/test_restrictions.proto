@@ -1,0 +1,35 @@
+import "extsearch/kinopoisk/search/restrictions/proto/fields.proto";
+
+package NKinopoisk.NSearch;
+
+message TSimpleRestrictions {
+    optional string First = 1 [(property_name) = "s_foo"];
+    optional string Second = 2 [(property_name) = "s_bar"];
+    optional uint32 Third = 3 [(property_name) = "i_kek"];
+}
+
+
+message TComplexRestrictionsPart1 {
+    option (operation_type) = OR;
+
+    optional string First = 1 [(property_name) = "s_foo"];
+    optional string Second = 2 [(property_name) = "s_bar"];
+}
+
+message TComplexRestrictionsAndNotGroup {
+    option (operation_type) = AND_NOT;
+
+    optional string And = 1 [(property_name) = "s_and"];
+    optional string Not = 2 [(property_name) = "s_not"];
+}
+
+message TComplexRestrictions {
+    optional TComplexRestrictionsPart1 Part1 = 1;
+    optional TComplexRestrictionsPart1 MissingPart = 2;
+    optional string StringWithNoValue = 3 [(property_name) = "s_foo_2"];
+    optional string SomeString = 4 [(property_name) = "s_bar_2"];
+    optional uint32 IntValue = 5 [(property_name) = "i_foo"];
+    optional bool BoolValue = 6 [(property_name) = "i_bool"];
+    optional string NotAnnotated = 7;
+    optional TComplexRestrictionsAndNotGroup AndNot = 8;
+}

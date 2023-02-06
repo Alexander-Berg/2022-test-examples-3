@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+       default-lazy-init="true" default-autowire="byName">
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          lazy-init="false">
+        <property name="locations">
+            <list>
+                <value>file:/etc/datasources/market-markup-worker-secrets.properties</value>
+                <value>file:/etc/datasources/market-markup-worker2-secrets.properties</value>
+                <value>file:/etc/yandex/market-datasources/datasources.properties</value>
+                <value>file:/etc/datasources/market-markup-worker2.properties</value>
+                <value>file:/etc/datasources/pgaas.properties</value>
+                <value>classpath:market-markup-worker2.properties</value>
+                <value>classpath:market-markup-worker2-development.properties</value>
+                <value>classpath:market-markup-worker2-tool-development.properties</value>
+            </list>
+        </property>
+
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+    <import resource="tool-common.xml"/>
+
+</beans>

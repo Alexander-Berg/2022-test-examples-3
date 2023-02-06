@@ -1,0 +1,14 @@
+context:
+  default:
+    service_name: market_redirects_to_ru
+    servername_regexp: (www\\.)?market\\.([\\w\\d]+\\.)?yandex\\.com(\\.)?|((www\\.)?podberi\\.ru)|((www\\.)?(tovar|guru|shop|newmarket)\\.yandex\\.ru)
+    vs: market
+    cert: market.com
+    plain_http: true
+    special: true
+    service_type: redirect
+    rewrite_url: https://market.yandex.ru%{url}
+
+  testing:
+    cert: fslb-testing
+

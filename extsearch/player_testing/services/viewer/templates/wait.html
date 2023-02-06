@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block main %}
+<script>
+(function poll() {
+    setTimeout(function() {
+        $.ajax({
+            url: "/status?job_id={{job_id}}",
+            success: function(data) {
+                if (data == "1") {
+                    window.location.href="/results?job_id={{job_id}}";
+                } else {
+                    poll();
+                }
+            }});
+    }, 1000);
+})();
+</script>
+<img width="75" height="75" src="https://i.gifer.com/Iih1.gif">
+{% endblock %}

@@ -1,0 +1,82 @@
+http:
+  host: "[::1]"
+  port: 8000
+  check_auth: true
+
+trust:
+  base_url: https://trust-payments-test.paysys.yandex.net:8028/trust-payments/
+  tvm_dst: trust
+  debug: true
+  retries:
+    count: 3
+    wait_time: 50
+    max_wait_time: 300
+
+sandbox_trust:
+  base_url: https://trust-payments-test.paysys.yandex.net:8028/trust-payments/
+  tvm_dst:
+  debug: true
+  retries:
+    count: 3
+    wait_time: 50
+    max_wait_time: 300
+
+bindings:
+  base_url: https://trust-paysys-test.paysys.yandex.net:8025/bindings-external/v2.0
+  tvm_dst: trust
+  debug: true
+  retries:
+    count: 3
+    wait_time: 50
+    max_wait_time: 300
+
+yapay:
+  base_url: https://payments-test.mail.yandex.net/v1/sdk/
+  tvm_dst: ya-payments
+  debug: true
+  retries:
+    count: 3
+    wait_time: 50
+    max_wait_time: 300
+
+nspk:
+  gozora_url: http://go.zora.yandex.net:1080
+  base_url: https://qr.nspk.ru/
+  tvm_dst: gozora
+  debug: true
+
+payment:
+  licence_url: https://yandex.ru/legal/payer_termsofuse
+  hide_sbp_qr: false
+  services:
+    - x_service_token: oplata_yakassa_fb3f6eb3270157b3135c4cd19a635553
+      verify_cvv: false
+    - x_service_token: zapravki_ec6942354de13b309fd5324e965a94f9
+      verify_cvv: false
+      check_anti_fraud: false
+    - x_service_token: payment_sdk_19d9962ddd08e7d52a2668cbcd5f7b7e
+      verify_cvv: false
+      check_anti_fraud: false
+    - x_service_token: blue_market_payments_5fac16d65c83b948a5b10577f373ea7c
+      verify_cvv: true
+      check_anti_fraud: true
+  default_acquirer: kassa
+  ya_payments_acquirers:
+    kassa: oplata_yakassa_fb3f6eb3270157b3135c4cd19a635553
+    tinkoff: messenger_4e7abffd245bf1a7cae68fb4fd5b5ce4
+  family_pay:
+    unlimited_balance_in_fractional_units: 1000000000
+  google_pay:
+    enabled: true
+    gateway:
+      ya_pay: cef9b25f1d6444d7bd8a9e8500248d19
+    per_service:
+      yandex_games_b9b09e9dcc29ef3063e10482b942aa59: false
+  apple_pay:
+    enabled: true
+    per_service:
+      yandex_games_b9b09e9dcc29ef3063e10482b942aa59: false
+  partner_payment_options_enabled: true
+  sandbox_service_token: oplata_mock_ac9508db05ecf5f0fa0f96d03f7bab04
+  bound_payment_methods_whitelist:
+    - card

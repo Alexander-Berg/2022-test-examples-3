@@ -1,0 +1,178 @@
+{
+  "owner": "marketlogistics",
+  "tableName": "common_kv_testing",
+  "splits": {
+    "module": "module",
+    "key": "key",
+    "subkey": "subkey"
+  },
+  "commonSolomonLabels": {
+    "project": "market-tpl",
+    "service": "tpl",
+    "cluster": "TESTING"
+  },
+  "metrics": [
+    {
+      "metricName": "tpl.key-value.TESTING.sum.${key}.${subkey}",
+      "periodArray": [
+        "ONE_MIN",
+        "HOUR"
+      ],
+      "metricField": "sum(value)",
+      "filter": "notEmpty(subkey) AND module IN ('tpl-api', 'tpl-int', 'tpl-tms')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "tpl.key-value.TESTING.sum.${key}",
+      "periodArray": [
+        "ONE_MIN",
+        "HOUR"
+      ],
+      "metricField": "sum(value)",
+      "filter": "empty(subkey) AND module IN ('tpl-api', 'tpl-int', 'tpl-tms')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "tpl.key-value.TESTING.last.${key}.${subkey}",
+      "periodArray": [
+        "ONE_MIN",
+        "HOUR"
+      ],
+      "metricField": "argMax(value, timestamp)",
+      "filter": "notEmpty(subkey) AND module IN ('tpl-api', 'tpl-int', 'tpl-tms')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "tpl.key-value.TESTING.last.${key}",
+      "periodArray": [
+        "ONE_MIN",
+        "HOUR"
+      ],
+      "metricField": "argMax(value, timestamp)",
+      "filter": "empty(subkey) AND module IN ('tpl-api', 'tpl-int', 'tpl-tms')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "tpl.key-value.TESTING.quantile.${key}.${subkey}",
+      "periodArray": [
+        "ONE_MIN",
+        "HOUR"
+      ],
+      "metricField": "quantile(0.99)(value)",
+      "filter": "notEmpty(subkey) AND module IN ('tpl-api', 'tpl-int', 'tpl-tms')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricName": "tpl.key-value.TESTING.quantile.${key}",
+      "periodArray": [
+        "ONE_MIN",
+        "HOUR"
+      ],
+      "metricField": "quantile(0.99)(value)",
+      "filter": "empty(subkey) AND module IN ('tpl-api', 'tpl-int', 'tpl-tms')",
+      "type": "SIMPLE"
+    }
+  ],
+
+  "solomonSensors": [
+    {
+      "labelsArray":[
+        {
+          "sensor": "key_value_sum",
+          "key": "${key}",
+          "subkey": "${subkey}"
+        }
+      ],
+      "periodArray": [
+        "ONE_MIN",
+        "HOUR"
+      ],
+      "type": "SIMPLE",
+      "metricField": "sum(value)",
+      "valueOnNan": 0,
+      "filter": "notEmpty(subkey) AND module IN ('tpl-api', 'tpl-int', 'tpl-tms')"
+    },
+    {
+      "labelsArray":[
+        {
+          "sensor": "key_value_sum",
+          "key": "${key}"
+        }
+      ],
+      "periodArray": [
+        "ONE_MIN",
+        "HOUR"
+      ],
+      "type": "SIMPLE",
+      "metricField": "sum(value)",
+      "valueOnNan": 0,
+      "filter": "empty(subkey) AND module IN ('tpl-api', 'tpl-int', 'tpl-tms')"
+    },
+    {
+      "labelsArray":[
+        {
+          "sensor": "key_value_last",
+          "key": "${key}",
+          "subkey": "${subkey}"
+        }
+      ],
+      "periodArray": [
+        "ONE_MIN",
+        "HOUR"
+      ],
+      "type": "SIMPLE",
+      "metricField": "argMax(value, timestamp)",
+      "valueOnNan": 0,
+      "filter": "notEmpty(subkey) AND module IN ('tpl-api', 'tpl-int', 'tpl-tms')"
+    },
+    {
+      "labelsArray":[
+        {
+          "sensor": "key_value_last",
+          "key": "${key}"
+        }
+      ],
+      "periodArray": [
+        "ONE_MIN",
+        "HOUR"
+      ],
+      "type": "SIMPLE",
+      "metricField": "argMax(value, timestamp)",
+      "valueOnNan": 0,
+      "filter": "empty(subkey) AND module IN ('tpl-api', 'tpl-int', 'tpl-tms')"
+    },
+    {
+      "labelsArray":[
+        {
+          "sensor": "key_value_quantile",
+          "key": "${key}",
+          "subkey": "${subkey}"
+        }
+      ],
+      "periodArray": [
+        "ONE_MIN",
+        "HOUR"
+      ],
+      "type": "SIMPLE",
+      "metricField": "quantile(0.99)(value)",
+      "valueOnNan": 0,
+      "filter": "notEmpty(subkey) AND module IN ('tpl-api', 'tpl-int', 'tpl-tms')"
+    },
+    {
+      "labelsArray":[
+        {
+          "sensor": "key_value_quantile",
+          "key": "${key}"
+        }
+      ],
+      "periodArray": [
+        "ONE_MIN",
+        "HOUR"
+      ],
+      "type": "SIMPLE",
+      "metricField": "quantile(0.99)(value)",
+      "valueOnNan": 0,
+      "filter": "empty(subkey) AND module IN ('tpl-api', 'tpl-int', 'tpl-tms')"
+    }
+  ]
+}

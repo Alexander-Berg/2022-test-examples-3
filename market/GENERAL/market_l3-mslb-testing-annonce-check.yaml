@@ -1,0 +1,35 @@
+# https://st.yandex-team.ru/CSADMIN-34339
+
+juggler:
+  default:
+    host: market_l3-mslb-testing-annonce-check
+    namespace: market.sre
+    aggregator: logic_and
+    aggregator_kwargs:
+      nodata_mode: skip
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    refresh_time: 90
+    ttl: 3600
+    tags:
+      - market
+      - _market_
+      - market_l3
+    children:
+      - EVENTS%(service=mbi-crm-proxy.tst.vs.market.yandex.net
+                | service=ow.tst.market.yandex-team.ru
+        )
+        & host=slbcloghandler_service_down:all:all
+    notifications:
+      - template_name: startrek
+        template_kwargs:
+          queue: CSADMIN
+          status:
+            - WARN
+            - CRIT
+        description: Ticket to CSADMIN
+
+  checks:
+    - service: all

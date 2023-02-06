@@ -1,0 +1,17 @@
+environment:
+    username: {{ username }}
+    mode: {{ env.get('CRYPTA_ENVIRONMENT', 'develop') }}
+
+yt:
+    proxy:
+        url: hahn.yt.yandex.net
+        name: hahn
+
+    auto_merge_output:
+        action: merge
+
+    pool: "{{ env['CUSTOM_YT_POOL'] | default('crypta_graph') }}"
+
+    token: "{{ env['CUSTOM_YT_TOKEN'] | default(file['~/.yt/token']) | default(env['YT_TOKEN']) | default('no-token') }}"
+
+    main_transaction_timeout: 180000

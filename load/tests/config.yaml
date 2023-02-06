@@ -1,0 +1,36 @@
+core:
+  artifacts_base_dir: logs
+  lock_dir: /var/lock
+neuploader:
+  api_address: http://test-back.luna.yandex-team.ru
+  db_name: luna_test
+  enabled: true
+  meta:
+    use_tank: peony.tanks.yandex.net
+    use_tank_port: 8083
+    operator: szypulka
+    some_key: 42
+  package: yandextank.plugins.NeUploader
+  test_name: init from firestarter
+phantom:
+  address: mocks-1.mocks.testing-acceptance.yandextank.load.prestable.qloud-d.yandex.net:443
+  autocases: 1
+  enabled: true
+  load_profile:
+    load_type: rps
+    schedule: line(1,10, 30s)
+  package: yandextank.plugins.Phantom
+  ssl: true
+  uris:
+  - /status
+  - /start
+telegraf:
+  enabled: false
+  package: yandextank.plugins.Telegraf
+uploader:
+  enabled: true
+  job_name: from firestarter
+  meta:
+    metafield: from data_uploader
+  package: yandextank.plugins.DataUploader
+  task: L

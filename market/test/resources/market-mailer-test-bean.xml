@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+       default-lazy-init="false" default-autowire="byName">
+
+    <context:property-placeholder/>
+
+    <context:component-scan base-package="ru.yandex.market.pers.notify">
+        <context:exclude-filter type="regex" expression="ru\.yandex\.market\.pers\.notify\.external\..*"/>
+        <context:exclude-filter type="regex" expression="ru\.yandex\.market\.pers\.notify\.executor\.listener..*"/>
+    </context:component-scan>
+
+    <import resource="classpath:market-mailer/market-mailer-internal.xml"/>
+    <import resource="classpath:mail-core/xiva.xml"/>
+
+	<!-- Mocks -->
+
+	<import resource="classpath:mock.xml"/>
+	<import resource="classpath:mock-market-mailer.xml"/>
+    <import resource="classpath:market-mailer-test-datasource.xml"/>
+
+    <!-- Utils -->
+    <bean class="ru.yandex.market.pers.notify.test.MailProcessorInvoker"/>
+    <bean class="ru.yandex.market.pers.notify.test.MarketMailerTestEnvironment"/>
+
+    <!-- using RestTemplate/HttpClient mocks -->
+    <bean id="staffApiClient" class="ru.yandex.market.pers.notify.external.staff.StaffApiClient"/>
+    <bean id="qaClient" class="ru.yandex.market.pers.notify.external.qa.QAClient"/>
+
+</beans>

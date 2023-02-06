@@ -1,0 +1,38 @@
+{% set table = table|default("statistics_previews") %}
+
+{% set history = history|default(1) %}
+
+{% macro event(place, batch) %}
+    [
+        1516620000000,
+        {"yandexuid": "987654321", "uuid": null, "puid": null},
+        "preview",
+        "model",
+        "1731461904",
+        {"place": "{{ place }}", "batch": "{{ batch + day|string }}"},
+        "{{ day }}"
+    ],
+    [
+        1516620000000,
+        {"yandexuid": "987654321", "uuid": null, "puid": null},
+        "preview",
+        "model",
+        "1731461905",
+        {"place": "{{ place }}", "batch": "{{ batch + day|string }}"},
+        "{{ day }}"
+    ]
+{% endmacro %}
+
+{% if table == "statistics_previews" %}
+    {% table "statistics" %}
+        ["DesktopEmptySERPEndless", "Total", "total", {{ 2.0 * history }}, "{{ day }}"],
+        ["Desktop", "Total", "total", {{ 2.0 * history }}, "{{ day }}"],
+        ["Market", "Total", "total", {{ 2.0 * history }}, "{{ day }}"],
+        ["DesktopSERP", "Total", "total", {{ 2.0 * history }}, "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_previews" %}
+    {% table "events" %}
+        {{ event("DesktopEmptySERPEndless", "1") }},
+        {{ event("DesktopEmptySERPEndless", "2") }}
+    {% endtable %}
+{% endif %}

@@ -1,0 +1,72 @@
+{
+    "debug": {
+        "id": 186601,
+        "prefetchResources": [
+            {
+                "resolver": "firstResolver",
+                "version": "v1",
+                "params": {
+                    "skk": 123123
+                },
+                "alias": "simpleAlias",
+                "requiresAuth": false
+            },
+            {
+                "resolver": "anotherResolver",
+                "version": "v1",
+                "params": {},
+                "requiresAuth": false
+            }
+        ]
+    },
+    "sections": [
+        {
+            "type": "EngineTestSection",
+            "id": "111240982",
+            "resources": [
+                {
+                    "assembler": {
+                        "type": "EngineTestMulti"
+                    },
+                    "resolvers": [
+                        {
+                            "version": "v1",
+                            "alias": "simpleAlias",
+                            "requiresAuth": false
+                        },
+                        {
+                            "resolver": "secondResolver",
+                            "version": "v1",
+                            "params": {
+                                "fixedParam": "fixedValue",
+                                "staticParam": "staticValue",
+                                "sku": "skuValue"
+                            },
+                            "requiresAuth": false
+                        }
+                    ]
+                }
+            ],
+            "content": [
+                {
+                    "testField": "someValue",
+                    "testData": 1
+                },
+                {
+                    "testField": "not data",
+                    "testData": 2
+                }
+            ]
+        }
+    ],
+    "errors": [
+        {
+            "message": "Fapi error. HandlerOfPrimeError - Some message",
+            "kind": "resolver_error"
+        },
+        {
+            "message": "requested resources in sections",
+            "kind": "internal_flag_usage_detected"
+        }
+    ]
+}

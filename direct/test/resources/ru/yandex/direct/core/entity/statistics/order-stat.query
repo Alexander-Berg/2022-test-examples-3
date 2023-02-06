@@ -1,0 +1,40 @@
+SELECT
+  CAMP.OrderID AS OrderID,
+  CAMP.cid AS cid,
+  CAMP.__shard__ AS __shard__,
+  CAMP.type AS type,
+  IF(is_null(CAMP.shows), 0, CAMP.shows) AS oldShows,
+  CAMP.sum_spent AS oldSumSpent,
+  IF(CAMP.type = 'internal_free', IF(is_null(CAMP.sum_spent_units), 0, CAMP.sum_spent_units), 0) AS oldSpentUnits,
+  ORDERSTAT.Clicks AS newClicks,
+  ORDERSTAT.Shows AS newShows,
+  IF(CURRENCY.CurrencyID = 0, ORDERSTAT.Cost, (ORDERSTAT.CostCur * CURRENCY.Ratio)) AS newSumSpent,
+  IF(is_null(IF(CAMP.type = 'internal_free', IF(CAMP.restriction_type = 'shows', newShows, IF(CAMP.restriction_type = 'clicks', newClicks, IF(CAMP.restriction_type = 'days', ORDERSTAT.Days, 0))), 0)), 0, IF(CAMP.type = 'internal_free', IF(CAMP.restriction_type = 'shows', newShows, IF(CAMP.restriction_type = 'clicks', newClicks, IF(CAMP.restriction_type = 'days', ORDERSTAT.Days, 0))), 0)) AS newSpentUnits,
+  CAMP.sum AS sum,
+  IF(is_null(CAMP.restriction_value), 0, CAMP.restriction_value) AS units,
+  CAMP.wallet_cid AS wallet_cid,
+  CAMP.archived AS archived,
+  ORDERSTAT.Cost AS Cost,
+  ORDERSTAT.CostCur AS CostCur,
+  ORDERSTAT.UpdateTime AS UpdateTime
+FROM yt.campaignstable_direct AS CAMP
+  JOIN yt.CaesarOrderInfo_bs AS ORDERINFO
+  ON CAMP.OrderID = ORDERINFO.OrderID
+  JOIN yt.OrderStat_bs AS ORDERSTAT
+  ON (
+    (ORDERINFO.ExportID, ORDERINFO.EngineID) = (ORDERSTAT.ExportID, ORDERSTAT.EngineID)
+    AND ORDERSTAT.EngineID IN (
+      7, 67
+    )
+  )
+  LEFT OUTER JOIN yt.Currency_bs AS CURRENCY
+  ON ORDERINFO.CurrencyID = CURRENCY.CurrencyID
+WHERE (
+  CAMP.__hash__ BETWEEN 0 AND 7
+  AND (
+    ORDERSTAT.Shows <> CAMP.shows
+    OR ORDERSTAT.Clicks <> CAMP.clicks
+    OR newSumSpent <> CAMP.sum_spent
+    OR newSpentUnits <> oldSpentUnits
+  )
+)

@@ -1,0 +1,38 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "circularReference::Type": {
+            "properties": {"a": {"$ref": "#/definitions/circularReference::Type"}},
+            "type": "object",
+            "required": ["a"]
+        },
+        "circularReference::Interface": {
+            "properties": {
+                "a": {"$ref": "#/definitions/circularReference::Interface"}
+            },
+            "type": "object",
+            "required": ["a"]
+        },
+        "circularReference::Class": {
+            "properties": {"a": {"$ref": "#/definitions/circularReference::Class"}},
+            "type": "object",
+            "required": ["a"]
+        },
+        "circularReference::B": {
+            "properties": {"a": {"$ref": "#/definitions/circularReference::A"}},
+            "type": "object",
+            "required": ["a"]
+        },
+        "circularReference::A": {
+            "properties": {
+                "Type": {"$ref": "#/definitions/circularReference::Type"},
+                "Interface": {"$ref": "#/definitions/circularReference::Interface"},
+                "Class": {"$ref": "#/definitions/circularReference::Class"},
+                "a": {"$ref": "#/definitions/circularReference::A"},
+                "b": {"$ref": "#/definitions/circularReference::B"}
+            },
+            "type": "object",
+            "required": ["Type", "Interface", "Class", "a", "b"]
+        }
+    }
+}

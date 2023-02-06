@@ -1,0 +1,12 @@
+### CDN: 
+
+disk_regional_http=awk '{ if ($6 !~ /(\/ping|\/timetail|\/traffic)/) print }' | cut -d '"' -f 3 | awk '{ x[$0]++;}END{for(i in x)print x[i],i}'
+disk_regional_cache_tx=awk {' if ($6 !~ /(\/ping|\/timetail|\/traffic)/) print '} | cut -d '"' -f 11 | awk '{ sum[$2] += $9;}END{ for (i in sum ) print sum[i]*8,i }' | tr -d '()'
+disk_regional_cache_status=awk '{ if ($6 !~ /(\/ping|\/timetail|\/traffic)/) print }' | cut -d '"' -f 11 | awk '{x[$2]++;}END{for(i in x)print x[i],i}' | tr -d '()'
+disk_regional_request_time=awk '{print $NF}'
+disk_regional_upstream_time=cut -d '"' -f 11 | awk '{print $5}'
+
+
+disk_downloader_access=grep -vf /usr/share/yandex-configs/disk_downloader/downloader-tskv-access.exclude | /usr/bin/downloader.stat-tskv-access.py
+
+

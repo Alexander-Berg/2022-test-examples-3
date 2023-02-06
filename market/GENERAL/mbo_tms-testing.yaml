@@ -1,0 +1,1352 @@
+vars:
+  - &uri_args '[ {"service": "mbo-tms-frozen-dumps", "path": "/servlet/extractorStat?action=check-frozen"},
+        {"service": "mbo-tms-failed-dumps", "path": "/servlet/extractorStat?action=check"},
+        {"service": "mbo-tms-increased-time", "path": "/servlet/extractorStat?action=check-time"},
+        {"service": "export-model-transitions-lb", "path": "/servlet/check/export-model-transitions-lb"},
+        {"service": "export-sku-transitions-lb", "path": "/servlet/check/export-sku-transitions-lb"},
+        {"service": "not-exported-transitions", "path": "/servlet/check/not-exported-transitions"},
+        {"service": "check-redis-categories", "path": "/servlet/check/check-redis-categories"},
+
+        {"service": "mbo-billing", "path": "/servlet/monitoring?service=mbo-billing"},
+        {"service": "mbo-classifier-indexer-logs", "path": "/servlet/monitoring?service=mbo-classifier-indexer-logs"},
+        {"service": "mbo-classifier-indexer-tasks", "path": "/servlet/monitoring?service=mbo-classifier-indexer-tasks"},
+        {"service": "mbo-classifier-tasks", "path": "/servlet/monitoring?service=mbo-classifier-tasks"},
+        {"service": "mbo-dump-oracle", "path": "/servlet/monitoring?service=mbo-dump-oracle"},
+        {"service": "mbo-falsch", "path": "/servlet/monitoring?service=mbo-falsch"},
+        {"service": "ir_tms.mbo-logs-rotate-oracle", "path": "/servlet/monitoring?service=ir_tms.mbo-logs-rotate-oracle"},
+        {"service": "ir_tms.mbo-logs-sc-offer-param", "path": "/servlet/monitoring?service=ir_tms.mbo-logs-sc-offer-param"},
+        {"service": "mbo-logs-sc-sessioncopy", "path": "/servlet/monitoring?service=mbo-logs-sc-sessioncopy"},
+        {"service": "mbo-matcher-reloader", "path": "/servlet/monitoring?service=mbo-matcher-reloader"},
+        {"service": "mbo-modifications", "path": "/servlet/monitoring?service=mbo-modifications"},
+        {"service": "mbo-services-ping", "path": "/servlet/monitoring?service=mbo-services-ping"},
+        {"service": "mbo-statistics", "path": "/servlet/monitoring?service=mbo-statistics"},
+        {"service": "fill-model-tasklist", "path": "/servlet/monitoring?service=fill-model-tasklist"},
+        {"service": "health_job_status", "path": "/servlet/monitoring?service=health_job_status"},
+        {"service": "log-check-tasks", "path": "/servlet/monitoring?service=log-check-tasks"},
+        {"service": "offers-stat", "path": "/servlet/monitoring?service=offers-stat"},
+        {"service": "mbo-svn-ping", "path": "/servlet/monitoring?service=mbo-svn-ping"},
+        {"service": "robot_tms_turkey_change", "path": "/servlet/monitoring?service=robot_tms_turkey_change"},
+        {"service": "robot_tms_turkey_export", "path": "/servlet/monitoring?service=robot_tms_turkey_export"}
+  ]'
+
+juggler:
+  checks:
+
+    # Check check-redis-categories
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=check-redis-categories&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications: []
+      service: check-redis-categories
+
+    # Check disk_free_space
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=disk_free_space&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 0%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+      check_options: {}
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+      service: disk_free_space
+
+    # Check export-model-transitions-lb
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=export-model-transitions-lb&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications: []
+      service: export-model-transitions-lb
+
+    # Check export-sku-transitions-lb
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=export-sku-transitions-lb&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications: []
+      service: export-sku-transitions-lb
+
+    # Check fresh-hprof-files
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=fresh-hprof-files&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 0%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+      check_options: {}
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+      service: fresh-hprof-files
+
+    # Check logrotate
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=logrotate&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+      check_options: {}
+      notifications: []
+      service: logrotate
+
+    # Check mbo-tms-failed-dumps
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=mbo-tms-failed-dumps&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications: []
+      service: mbo-tms-failed-dumps
+
+    # Check mbo-tms-frozen-dumps
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=mbo-tms-frozen-dumps&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications: []
+      service: mbo-tms-frozen-dumps
+
+    # Check mbo-tms-increased-time
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=mbo-tms-increased-time&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications: []
+      service: mbo-tms-increased-time
+
+    # Check not-exported-transitions
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=not-exported-transitions&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications: []
+      service: not-exported-transitions
+
+    # Check ping
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=ping&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: force_crit
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications: []
+      service: ping
+
+    # Check push-client-status
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=push-client-status&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+      check_options: {}
+      notifications: []
+      service: push-client-status
+
+      # Check mbo-billing
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=mbo-billing&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: mbo-billing
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check mbo-classifier-indexer-logs
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=mbo-classifier-indexer-logs&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: mbo-classifier-indexer-logs
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check mbo-classifier-indexer-tasks
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=mbo-classifier-indexer-tasks&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: mbo-classifier-indexer-tasks
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check mbo-classifier-tasks
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=mbo-classifier-tasks&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: mbo-classifier-tasks
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check mbo-dump-oracle
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=mbo-dump-oracle&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: mbo-dump-oracle
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check mbo-falsch
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=mbo-falsch&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: mbo-falsch
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check ir_tms.mbo-logs-rotate-oracle
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=ir_tms.mbo-logs-rotate-oracle&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: ir_tms.mbo-logs-rotate-oracle
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check ir_tms.mbo-logs-sc-offer-param
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=ir_tms.mbo-logs-sc-offer-param&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: ir_tms.mbo-logs-sc-offer-param
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check mbo-logs-sc-sessioncopy
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=mbo-logs-sc-sessioncopy&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: mbo-logs-sc-sessioncopy
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check mbo-matcher-reloader
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=mbo-matcher-reloader&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: mbo-matcher-reloader
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check mbo-modifications
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=mbo-modifications&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: mbo-modifications
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check mbo-services-ping
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=mbo-services-ping&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: mbo-services-ping
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check mbo-statistics
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=mbo-statistics&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: mbo-statistics
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check fill-model-tasklist
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=fill-model-tasklist&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: fill-model-tasklist
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check health_job_status
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=health_job_status&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: health_job_status
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check log-check-tasks
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=log-check-tasks&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: log-check-tasks
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check offers-stat
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=offers-stat&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: offers-stat
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check mbo-svn-ping
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=mbo-svn-ping&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: mbo-svn-ping
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check robot_tms_turkey_change
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=robot_tms_turkey_change&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: robot_tms_turkey_change
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+
+      # Check robot_tms_turkey_export
+      # https://juggler.yandex-team.ru/check_details/?host=mbo_tms-testing&service=robot_tms_turkey_export&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options:
+        args:
+          - --kwargs
+          - *uri_args
+      notifications:
+        - template_kwargs:
+            login: market_mbo_monitoring
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+      meta:
+        solomon:
+          market_branch: mbo
+          market_mbo_service: mbo-tms
+          market_mbo_environment: testing
+      service: robot_tms_turkey_export
+      tags:
+        - market_testing
+        - market_rtc
+        - marketmbotms
+        - testing
+        - market
+        - _market_
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    children:
+      - NANNY%testing_market_mbo_tms_vla
+      - NANNY%testing_market_mbo_tms_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: mbo_tms-testing
+    namespace: market.common
+    refresh_time: 60
+    tags:
+      - market_testing
+      - market_rtc
+      - marketmbotms
+      - testing
+      - market
+      - _market_
+    ttl: 900

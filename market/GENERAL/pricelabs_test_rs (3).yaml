@@ -1,0 +1,30 @@
+- name: myt-yl804bi9z2iyuvke.db.yandex.net
+  cluster_id: 41ed8553-731e-48b7-9307-5def9e37da48
+  zone_id: myt
+  resources:
+    resource_preset_id: db1.nano
+    disk_size: "10737418240"
+    disk_type_id: local-ssd
+  role: MASTER
+  health: ALIVE
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+    health: ALIVE
+- name: sas-bncback1j09ae7of.db.yandex.net
+  cluster_id: 41ed8553-731e-48b7-9307-5def9e37da48
+  zone_id: sas
+  resources:
+    resource_preset_id: db1.nano
+    disk_size: "10737418240"
+    disk_type_id: local-ssd
+  role: REPLICA
+  health: ALIVE
+  services:
+  - type: POSTGRESQL
+    health: ALIVE
+  - type: POOLER
+    health: ALIVE
+  replica_type: SYNC
+

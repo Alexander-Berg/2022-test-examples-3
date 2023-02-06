@@ -1,0 +1,24 @@
+context:
+  default:
+    service_name: mapi
+    servername_regexp: 'mapi\\.tst\\.vs\\.market\\.yandex\\.net'
+    vs: mapi
+    health_check: '"GET /ping HTTP/1.1\r\nHost: mapi.tst.vs.market.yandex.net\r\n\r\n"'
+    attempts: 1
+    antirobot: True
+    antirobot_service_name: marketmapi
+    balancing_method: "active"
+    cert: mapi.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+    access_policy: webauth
+    webauth_external: true
+    allowed_path: (/api/.*)|(/pagematch)
+
+servers:
+  default:
+    main:
+      - name: "GREY%mapi.tst.vs.market.yandex.net"
+        timeout: "35s"
+        port: 80
+        plain_http_backend: True

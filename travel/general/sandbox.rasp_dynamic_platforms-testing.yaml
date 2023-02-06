@@ -1,0 +1,21 @@
+  # SB-tasks with daily schedule or run occasionally has an e-mail notification
+  # - rasp_dynamic_platforms.clean_dynamic_platforms
+- gather_facts: false
+  hosts: localhost
+  roles:
+  - checks:
+    - rasp_dynamic_platforms.update_dynamic_platforms
+    limits: '{{ crit_0_warn_0 }}'
+    flap: '{{ stable1800critical3600 }}'
+    role: chat_only
+    nodata_mode: force_ok
+    rtime: 60
+  vars:
+    children:
+      - rasp_sandbox_testing
+    host: rasp_sandbox_testing
+    telegram_chats:
+      - 'rasp-achtung'
+  vars_files:
+  - ../vars/common.yml
+  - vars/rasp.yml

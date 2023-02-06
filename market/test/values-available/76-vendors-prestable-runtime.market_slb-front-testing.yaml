@@ -1,0 +1,22 @@
+context:
+  default:
+    service_name: vendor_prestable_runtime_market
+    servername_regexp: vendor-prestable\\.market\\.([\\w\\d]+\\.)?yandex\\.ru
+    vs: market
+    antirobot: true
+    antirobot_service_name: market
+    health_check: '"GET /ping HTTP/1.1\r\nHost: heartbeat-vendor.market.yandex.ru\r\n\r\n"'
+    cert: vendor.market
+
+  testing:
+    # XXX: Приоритет должен быть ВЫШЕ, чем у встроенного хэндлера /ping, чтобы запросы на пинг обрабатывались haproxy
+    priority: 1000
+    cert: fslb-testing
+
+servers:
+  default:
+    main:
+    - name: GREY%vendor-prestable.market.fslb.yandex.ru
+      plain_http_backend: true
+      port: 26133
+      timeout: 35s

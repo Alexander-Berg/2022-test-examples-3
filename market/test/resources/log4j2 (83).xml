@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <properties>
+        <property name="pattern">%d %-5p [%t] %X{jobId} %c{1.} - %m%n</property>
+    </properties>
+
+    <appenders>
+        <console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern}"/>
+        </console>
+    </appenders>
+
+    <Loggers>
+        <logger name="ru.yandex" level="debug" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </logger>
+
+        <logger name="org.springframework.jdbc.core.JdbcTemplate" level="debug" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </logger>
+
+        <logger name="ru.yandex.clickhouse.ClickHouseStatementImpl" level="info" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </logger>
+
+        <logger name="ru.yandex.yql.YqlStatementImpl" level="info" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </logger>
+
+        <logger name="http.access" level="trace" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </logger>
+
+        <logger name="perf_profile" level="warn" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </logger>
+
+        <root level="info">
+            <AppenderRef ref="CONSOLE"/>
+        </root>
+    </Loggers>
+</configuration>

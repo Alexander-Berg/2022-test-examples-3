@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="false">
+
+<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" lazy-init="false">
+        <property name="locations">
+            <list>
+                <value>classpath:test.properties</value>
+            </list>
+        </property>
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+    <bean name="robotMdsS3Configuration" class="ru.yandex.market.robot.db.mds.RobotMdsS3Configuration">
+        <property name="accessKey" value="${ir.mds.s3.access.key.id}"/>
+        <property name="secretKey" value="${ir.mds.s3.secret.key.id}"/>
+        <property name="endpoint" value="${market.mds.s3.path}"/>
+    </bean>
+
+    <bean name="amazonS3" factory-bean="robotMdsS3Configuration" factory-method="amazonS3"/>
+    <bean name="mdsS3Client" factory-bean="robotMdsS3Configuration" factory-method="mdsS3Client">
+        <constructor-arg ref="amazonS3"/>
+    </bean>
+
+
+    <bean name="mdsS3FileStorageService" class="ru.yandex.market.robot.db.mds.MdsS3FileStorageService">
+        <property name="bucketName" value="${ir.mds.s3.bucket}"/>
+        <property name="mdsS3Client" ref="mdsS3Client"/>
+    </bean>
+</beans>

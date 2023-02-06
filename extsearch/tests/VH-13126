@@ -1,0 +1,209 @@
+#!/usr/bin/env bash
+
+#set -e
+
+SCRIPTS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd) #"
+. "${SCRIPTS_DIR}"/config.sh
+PLAYLIST_SERVICE_SCHEMA=vh
+[ -z "$PROD" ] && . "${SCRIPTS_DIR}"/playlist_service
+set -x
+set +e
+# select *, "vh"."ContentGroup"."UUID" from "vh"."OutputStream" left join "vh"."ContentVersionGroup" using ("ContentVersionID") left join "vh"."ContentGroup" USING ("ContentGroupID")  where "Data" like 's3%' and "PlaylistGeneration"='from-vod' limit 10;
+
+if [ -z "$PG_PROD" ] && [ -z "$PROD" ]; then
+
+curl --location --request POST "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}" \
+    --header 'x-yandex-internal-request: 1' \
+    --header 'Content-Type: text/plain' \
+    --data-raw '{
+  "from": "zen",
+  "abc_id": 967,
+  "service_flag": "ya-video",
+  "streams": [
+    {
+        "uuid": "4a40ae06fde13769ae434f97804b94ca",
+        "stream_type": "mss",
+        "vsid": "123456"
+    }
+  ]
+}' \
+    | jq --exit-status '.[0].streams[0].master_playlist | test("mss.ism/manifest.ismc")'
+
+curl --location --request POST "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}" \
+    --header 'x-yandex-internal-request: 1' \
+    --header 'Content-Type: text/plain' \
+    --data-raw '{
+  "from": "zen",
+  "abc_id": 967,
+  "service_flag": "ya-video",
+  "streams": [
+    {
+        "uuid": "4a40ae06fde13769ae434f97804b94ca",
+        "vsid": "123456"
+    }
+  ]
+}' \
+    | jq --exit-status '.[0].streams[0].stream_type | test("mss") | not'
+
+fi
+
+
+if [ -n "$PG_PROD" ] || [ -n "$PROD" ]; then
+
+# select *, "vh"."ContentGroup"."UUID" from "vh"."OutputStream" left join "vh"."ContentVersionGroup" using ("ContentVersionID") left join "vh"."ContentGroup" USING ("ContentGroupID")  where "Data" like 's3%' and "PlaylistGeneration"='from-vod' AND "ContentVersionID" IN (select "ContentVersionID"  from "vh"."OutputStream" WHERE  "StreamType"!='MSS' AND "Options"!='deleted') limit 10;
+# select * from "vh"."OutputStream" where "ContentVersionID"='3477619525043186307';
+${CURL} --location --request POST "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}" \
+    --header 'x-yandex-internal-request: 1' \
+    --header 'Content-Type: text/plain' \
+    --data-raw '{ "from": "zen", "abc_id": 967, "service_flag": "ya-video", "streams": [ {
+        "uuid": "4c76816e6cc024f88bb9fa3782afe165",
+        "vsid": "123456"
+    } ] }' \
+    | jq
+# --exit-status '. | type == "array"'
+
+echo "должен быть ответ"
+${CURL} --location --request POST "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}" --header 'Content-Type: text/plain' --data-raw '{ "from": "zen", "abc_id": 967, "service_flag": "ya-video", "streams": [ {
+        "uuid": "4c76816e6cc024f88bb9fa3782afe165",
+        "stream_id": "4706090726624124409", "vsid": "123456", "stream_type": "mss"
+    } ] }' \
+    | jq --exit-status '.[] | .streams[] | select(.stream_type=="mss")'
+#    | jq
+# --exit-status '. | type == "array"'
+echo "должен быть ответ"
+# PLAYLIST_SERVICE_SCHEMA==ugc
+${CURL} -X POST "https://internal.vh.yandex.net/stream_by_uuid?${URL_ADD}${SRCRWR}" -d '{
+  "abc_id": 1558,
+  "from": "ya-video",
+  "service_flag": "ya-video",
+  "streams": [
+    {
+      "uuid": "vAZFtvicwcmM", "stream_type": "mss", "ott_session_id": "123", "vsid": "234"
+    }
+  ]
+}' \
+    | jq --exit-status '.stream_info[] | .streams[] | select(.stream_type=="mss")'
+
+echo "1. без StreamType в базе и stream_type в запросе – возвращается hls + dash (важно, тут без mss!)"
+# select *, "vh"."ContentGroup"."UUID" from "vh"."OutputStream" left join "vh"."ContentVersionGroup" using ("ContentVersionID") left join "vh"."ContentGroup" USING ("ContentGroupID")  where "Data" like 's3%' and "PlaylistGeneration"='from-vod' and "StreamType" != '' and "StreamType" != 'MSS' limit 10;
+# select *, "vh"."ContentGroup"."UUID" from "vh"."OutputStream" left join "vh"."ContentVersionGroup" using ("ContentVersionID") left join "vh"."ContentGroup" USING ("ContentGroupID")  where "Data" like 's3%' and "PlaylistGeneration"='from-vod' AND "ContentVersionID" IN (select "ContentVersionID"  from "vh"."OutputStream" WHERE  "StreamType"!='MSS' AND "Options"!='deleted') limit 10
+
+# select * from "vh"."OutputStream" where "ContentVersionID"='7543083917318547526';
+${CURL} --location --request POST "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}" \
+    --header 'x-yandex-internal-request: 1' \
+    --header 'Content-Type: text/plain' \
+    --data-raw '{ "from": "zen", "abc_id": 967, "service_flag": "ya-video", "streams": [ {
+        "uuid": "46d2d3dfc22af21b93374cc81145f397",
+        "vsid": "123456"
+    } ] }' \
+    | jq  --exit-status '.[] | .streams[] | select(.stream_type!="mss") | .stream'
+
+echo "2. без StreamType в базе и stream_type == mss в запросе – возвращается mss"
+${CURL} --location --request POST "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}" \
+    --header 'x-yandex-internal-request: 1' \
+    --header 'Content-Type: text/plain' \
+    --data-raw '{ "from": "zen", "abc_id": 967, "service_flag": "ya-video", "streams": [ {
+        "uuid": "46d2d3dfc22af21b93374cc81145f397",
+        "stream_type": "mss",
+        "vsid": "123456"
+    } ] }' \
+    | jq '. | type == "array"'
+#    | jq  --exit-status '.[] | .streams[] | select(.stream_type="mss") | .stream'
+
+# 4212be238fbf9f488dad28df6ddd60a9
+# 43d0eb69e39b4fa98c50ddfbf7c7fc1c
+${CURL} --location --request POST "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}" \
+    --header 'x-yandex-internal-request: 1' \
+    --header 'Content-Type: text/plain' \
+    --data-raw '{ "from": "zen", "abc_id": 967, "service_flag": "ya-video", "streams": [ {
+        "uuid": "424b0a1c37ab4d08aba60bb41739ea88",
+        "stream_type": "mss",
+        "vsid": "123456"
+    } ] }' \
+    | jq --exit-status '.[] | .streams[] | select(.stream_type!="mss") | not'
+
+${CURL} --location --request POST "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}" \
+    --header 'x-yandex-internal-request: 1' \
+    --header 'Content-Type: text/plain' \
+    --data-raw '{ "from": "zen", "abc_id": 967, "service_flag": "ya-video", "streams": [ {
+        "uuid": "4c76816e6cc024f88bb9fa3782afe165",
+        "vsid": "123456"
+    } ] }' \
+    | jq --exit-status '.[] | .streams[] | select(.stream_type!="mss") | not'
+#    | jq
+
+
+# select * from "vh"."OutputStream" where "ContentVersionID"='9477457122590205104';
+${CURL} --location --request POST "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}" \
+    --header 'x-yandex-internal-request: 1' \
+    --header 'Content-Type: text/plain' \
+    --data-raw '{ "from": "zen", "abc_id": 967, "service_flag": "ya-video", "streams": [ {
+        "uuid": "4c76816e6cc024f88bb9fa3782afe165",
+        "stream_type": "mss",
+        "vsid": "123456"
+    } ] }' \
+#    | jq --exit-status '.[] | .streams[] | select(.stream_type="mss")'
+#    | jq
+#    | jq '. | type == "array"'
+#    | jq
+echo "3. StreamType == MSS в базе и stream_type == mss в запросе – возвращается mss"
+# select *, "vh"."ContentGroup"."UUID" from "vh"."OutputStream" left join "vh"."ContentVersionGroup" using ("ContentVersionID") left join "vh"."ContentGroup" USING ("ContentGroupID")  where "Data" like 's3%' and "PlaylistGeneration"='from-vod' AND "ContentVersionID" IN (select "ContentVersionID"  from "vh"."OutputStream" WHERE  "StreamType"='MSS' AND "Options"!='deleted') limit 10;
+# select * from "vh"."OutputStream" where "ContentVersionID"='18363530018685459912';
+${CURL} --location --request POST "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}" \
+    --header 'x-yandex-internal-request: 1' \
+    --header 'Content-Type: text/plain' \
+    --data-raw '{ "from": "zen", "abc_id": 967, "service_flag": "ya-video", "streams": [ {
+        "uuid": "4eea0fe4356d0a12a60a46900e765ace",
+        "stream_type": "mss",
+        "vsid": "123456"
+    } ] }' \
+    | jq --exit-status '.[] | .streams[] | select(.stream_type!="mss") | not'
+# --exit-status '.[0].streams[0].master_playlist | test("mss.ism/manifest.ismc")'
+
+echo "4. StreamType == MSS в базе и без stream_type в запросе – вообще хз что должно быть, по идее такого кейса не должно быть в проде (можно просто задокументировать поведение)"
+
+${CURL} --location --request POST "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}" \
+    --header 'x-yandex-internal-request: 1' \
+    --header 'Content-Type: text/plain' \
+    --data-raw '{ "from": "zen", "abc_id": 967, "service_flag": "ya-video", "streams": [ {
+        "uuid": "4eea0fe4356d0a12a60a46900e765ace",
+        "vsid": "123456"
+    } ] }' \
+    | jq
+#--exit-status '.[0].streams[0].master_playlist | test("mss.ism/manifest.ismc")'
+
+# select *, "vh"."ContentGroup"."UUID" from "vh"."OutputStream" left join "vh"."ContentVersionGroup" using ("ContentVersionID") left join "vh"."ContentGroup" USING ("ContentGroupID")  where "UUID"='424b0a1c37ab4d08aba60bb41739ea88' limit 10;
+${CURL} --location --request POST "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}" \
+    --header 'x-yandex-internal-request: 1' \
+    --header 'Content-Type: text/plain' \
+    --data-raw '{ "from": "zen", "abc_id": 967, "service_flag": "ya-video", "streams": [ {
+        "uuid": "424b0a1c37ab4d08aba60bb41739ea88",
+        "vsid": "123456"
+    } ] }' \
+    | jq #--exit-status '. | not'
+
+#1. без StreamType в базе и stream_type в запросе – возвращается hls + dash (важно, тут без mss!)
+#2. без StreamType в базе и stream_type == mss в запросе – возвращается mss
+#3. StreamType == MSS в базе и stream_type == mss в запросе – возвращается mss
+#4. StreamType == MSS в базе и без stream_type в запросе – вообще хз что должно быть, по идее такого кейса не должно быть в проде (можно просто задокументировать поведение)
+
+curl --location --request POST "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}" \
+    --header 'x-yandex-internal-request: 1' \
+    --header 'Content-Type: text/plain' \
+    --data-raw '{ "from": "zen", "abc_id": 967, "service_flag": "ya-video", "streams": [ {
+        "uuid": "43d0eb69e39b4fa98c50ddfbf7c7fc1c",
+        "stream_type": "mss",
+        "vsid": "123456"
+    } ] }' \
+    | jq --exit-status '.[0].streams[0].master_playlist | test("mss.ism/manifest.ismc")'
+
+curl --location --request POST "https://internal.vh.yandex.net/playlist?${URL_ADD}${SRCRWR}" \
+    --header 'x-yandex-internal-request: 1' \
+    --header 'Content-Type: text/plain' \
+    --data-raw '{ "from": "zen", "abc_id": 967, "service_flag": "ya-video", "streams": [ {
+        "uuid": "43d0eb69e39b4fa98c50ddfbf7c7fc1c",
+        "vsid": "123456"
+    } ] }' \
+    | jq --exit-status '.[0].streams[0].stream | test("mss.ism/manifest.ismc") | not'
+
+fi

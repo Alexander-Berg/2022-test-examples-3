@@ -1,0 +1,59 @@
+---
+##################################################
+# Set up test bench.
+#
+## Parameters:
+#
+# component_name:
+#   mpfs | api
+# mpfs_version:
+#   Component's package version to be installed
+#
+## Usage:
+#
+# Пропустить выкатку стабильной версии на не
+# тестируемую компоненту:
+#
+#   $ ansible-playbook \
+#         set-up-testbench.yml \
+#         --extra-vars "component_name=api mpfs_version=2.53-59" \
+#         --skip-tags "update-stable"
+#
+- hosts: 127.0.0.1
+  connection: local
+  gather_facts: no
+  tasks:
+
+    - include: tasks/check-for-testing.yml
+      tags:
+        - check
+
+    # Устанавливаем текущую стабильную версию на не тестируемую компоненту,
+    # чтобы проверяемая компонента была в таком же окружении, в каком окажется
+    # после установки в production.
+    - include: tasks/install-stable-version.yml
+      when: release_issue is defined
+      tags:
+        - update-stable
+
+    - include: tasks/deploy.yml
+      package_name: "{{ component.package_name }}"
+      version: "{{ mpfs_version }}"
+      deploy_groups: "{{ component.deploy_groups }}"
+      issue: "{{ release_issue.key }}"
+      when: release_issue is defined
+
+    - include: tasks/qloud_deploy.yml
+      package_name: "{{ queue.package_name }}"
+      version: "{{ mpfs_version }}"
+      qloud_deploy_env: "{{ queue.qloud_deploy_env }}"
+      issue: "{{ release_issue.key }}"
+      when:
+        - component.name == "mpfs"
+        - release_issue is defined
+
+
+    - include: tasks/run-tests.yml
+      when: release_issue is defined
+      tags:
+        - tests

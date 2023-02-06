@@ -1,0 +1,25 @@
+context:
+  default:
+    service_name: pokupki_exp_testing
+    servername_regexp: '[a-z0-9-_]+\\.exp(-test)?\\.pokupki(\\.tst\\.vs)?\\.market\\.yandex\\.(net|ru)'
+    vs: exp_test_pokupki
+    health_check: '"GET /ping HTTP/1.1\r\nHost: heartbeat-touch-exp-pokupki.market.yandex.ru\r\n\r\n"'
+    attempts: 3
+    antirobot: True
+    antirobot_service_name: market
+    balancing_method: "active"
+    cert: exp.pokupki.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1001
+    exp_getter: true
+    uaas_service_name: market
+    no_yandex_uid: true
+    testid_from_host: true
+
+servers:
+  default:
+    main:
+      - name: "GREY%market-front-blue-desktop.tst.vs.market.yandex.net"
+        timeout: "35s"
+        port: 80
+        plain_http_backend: True

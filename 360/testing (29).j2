@@ -1,0 +1,34 @@
+{% extends "base.yaml" %}
+{% from "secrets/default.j2" import secrets %}
+{% from "tvm/default.j2" import tvm %}
+{% from "demo-app.j2" import demo_app_url %}
+
+{% block infra_environment %}{% endblock %}
+{% block network_macro %}_MAILFRONTDEVNETS_{% endblock %}
+{% block l3_ip_ptr_value %}tavern.testing.mail.yandex.net{% endblock %}
+
+{% set ENVIRONMENT_TYPE = "testing" %}
+{% set ENVIRONMENT = "testing" %}
+
+{% set enable_push_client = True %}
+
+{% set enable_destroy_hook = False %}
+
+{%
+set deploy_units = {
+    "tavern": {
+        " version": "unstable",
+        " app": "",
+        " settings": "",
+        "demoapp": demo_app_url,
+        "max_unavailable": 1,
+        "clusters": {
+            "iva": 1
+        },
+        "memory_guarantee": 2,
+        "vcpu_guarantee": 500,
+        "disk_capacity": 4,
+        "duffman_workers": 2
+    },
+}
+%}

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <return
+            source="CANCELLATION"
+            order_external_id="order-external-id"
+            logistic_point_from_id="[null]"
+    />
+
+    <return_segment
+            return_id="1"
+            return_box_id="1"
+            logistic_point_id="10001700279"
+            logistic_point_partner_id="75735"
+            logistic_point_external_id="logistics-point-external-id-10001700279"
+            logistic_point_name="logistics-point-name-10001700279"
+            logistic_point_type="SORTING_CENTER"
+    />
+
+    <return_segment
+            return_id="1"
+            return_box_id="1"
+            logistic_point_id="10001686443"
+            logistic_point_partner_id="55468"
+            logistic_point_external_id="logistics-point-external-id-10001686443"
+            logistic_point_name="logistics-point-name-10001686443"
+            logistic_point_type="DROPOFF"
+    />
+
+    <return_event
+            id="1"
+            logbroker_id="[null]"
+            request_id="test-request-id/2"
+            return_id="1"
+            type="RETURN_SEGMENT_CREATED"
+            payload='{
+                "id": 1,
+                "type": "RETURN_SEGMENT_CREATED",
+                "boxExternalId": "box-external-id",
+                "logisticPointInfo": {
+                    "type": "SORTING_CENTER",
+                    "partnerId": 75735,
+                    "logisticPointId": 10001700279,
+                    "logisticPointExternalId": "logistics-point-external-id-10001700279"
+                },
+                "shipmentFieldsInfo": {
+                    "recipient": null,
+                    "shipmentTime": null,
+                    "destinationInfo": null
+                }
+            }'
+    />
+
+    <return_event
+            id="2"
+            logbroker_id="[null]"
+            request_id="test-request-id/4"
+            return_id="1"
+            type="RETURN_SEGMENT_CREATED"
+            payload='{
+                "id": 2,
+                "type": "RETURN_SEGMENT_CREATED",
+                "boxExternalId": "box-external-id",
+                "logisticPointInfo": {
+                    "type": "DROPOFF",
+                    "partnerId": 55468,
+                    "logisticPointId": 10001686443,
+                    "logisticPointExternalId": "logistics-point-external-id-10001686443"
+                },
+                "shipmentFieldsInfo": {
+                    "recipient": null,
+                    "shipmentTime": null,
+                    "destinationInfo": null
+                }
+            }'
+    />
+
+    <queue_tasks
+            queue_name="RETURN_SEGMENT_GET_ROUTE"
+            payload='{"requestId":"test-request-id/3","returnSegmentId":1,"sortingCenterPartnerIds":null,"useStartTime":false}'
+    />
+
+    <queue_tasks
+            queue_name="RETURN_SEGMENT_GET_ROUTE"
+            payload='{"requestId":"test-request-id/5","returnSegmentId":2,"sortingCenterPartnerIds":null,"useStartTime":false}'
+    />
+</dataset>

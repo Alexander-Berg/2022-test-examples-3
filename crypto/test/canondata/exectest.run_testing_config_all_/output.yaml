@@ -1,0 +1,34 @@
+yt:
+  proxy: hahn.yt.yandex.net
+  pool: crypta_lookalike
+
+lals_table: //home/crypta/testing/lookalike/scopes/direct/lals
+versions_dir: //home/crypta/testing/lookalike/scopes/direct/versions
+errors_dir: //home/crypta/testing/lookalike/scopes/direct/errors/segment_dssm_applier
+errors_ttl_days: 3
+
+mapper:
+  mode: ALL
+  writer:
+    pqlib:
+      worker_threads: 1
+      compression_threads: 1
+      grpc_threads: 1
+
+    credentials:
+      use_secure_tvm: True
+      tvm:
+        client_tvm_id: 2019247
+        destination_tvm_id: 2001059
+
+    producer:
+      server: logbroker.yandex.net
+      port: 2135
+      topic: /crypta/test/lookalike/update-lal-fast-log
+      source_id_prefix: yt
+      log_name: pqlib
+      max_bytes_in_flight: 104857600
+      max_chunk_size_bytes: 10240
+      max_flush_interval_seconds: 1
+      producers_count: 1
+      bind_producers_to_partitions: false

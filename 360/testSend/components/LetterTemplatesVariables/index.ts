@@ -1,0 +1,1 @@
+export { LetterTemplatesVariables } from './LetterTemplatesVariables';

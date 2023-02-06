@@ -1,0 +1,55 @@
+base: etc/collectors/dev.yml
+config:
+    modules:
+        module:
+        -   _name: storage_client
+            configuration:
+                hosts: http://localhost:10010
+        -   _name: nw_client
+            configuration:
+                hosts: http://localhost:8027
+        -   _name: web
+            configuration:
+                internal_api:
+                    port: 10080
+        -   _name: streamer
+            configuration:
+                internal_api:
+                    port: 10080
+                allowed_system_labels:
+                -   "attached_label"
+                -   "spam_label"
+                -   "answered_label"
+                -   "recent_label"
+                -   "draft_label"
+                -   "deleted_label"
+                -   "forwarded_label"
+                -   "important_label"
+                -   "forMe_label"
+                -   "noBody_label"
+                -   "noAnswer_label"
+                -   "hasUserLabels_label"
+                -   "seen_label"
+                -   "pinned_label"
+                -   "postmaster_label"
+                -   "mulcaShared_label"
+                -   "imap_label"
+                -   "append_label"
+                -   "copy_label"
+                -   "synced_label"
+                -   "remindNoAnswer_label"
+                -   "notifyNoAnswer_label"
+                -   "remindMessage_label"
+                -   "notifyMessage_label"
+                -   "mute_label"
+                -   "delayed_message"
+                -   "undo_message"
+                -   "hamon_label"
+                -   "encrypted_label"
+                -   "mention_label"
+                -   "mention_unvisited_label"
+                -   "sending_failed_label"
+                -   "from_favorite_user_label"
+                -   "reply_later_started"
+                -   "reply_later_finished"
+                allowed_label_types: ["user", "social", "system", "status", "imap", "threadWide", "rpop", "phone", "so", "so2"]

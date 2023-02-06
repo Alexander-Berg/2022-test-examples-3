@@ -1,0 +1,12 @@
+/var/log/nginx/*.log {
+    daily
+    missingok
+    rotate 7
+    nocompress
+    notifempty
+    create 0640 www-data adm
+    sharedscripts
+    postrotate
+        nginx -s reload
+    endscript
+}

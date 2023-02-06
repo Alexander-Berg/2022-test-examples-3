@@ -1,0 +1,103 @@
+package ru.yandex.market.mboc.monetization.validation.validators;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import org.assertj.core.api.Assertions;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.test.context.ContextConfiguration;
+
+import ru.yandex.market.mboc.app.controller.web.DisplayGroupingConfig;
+import ru.yandex.market.mboc.common.db.jooq.generated.monetization.enums.ConfigParameterType;
+import ru.yandex.market.mboc.common.db.jooq.generated.monetization.tables.pojos.ConfigParameter;
+import ru.yandex.market.mboc.common.db.jooq.generated.monetization.tables.pojos.ConfigValidationError;
+import ru.yandex.market.mboc.common.db.jooq.generated.monetization.tables.pojos.GroupingConfig;
+import ru.yandex.market.mboc.common.utils.BaseDbTestClass;
+import ru.yandex.market.mboc.monetization.config.MonetizationJooqConfig;
+
+/**
+ * @author eremeevvo
+ * @since 24.10.2019
+ */
+@ContextConfiguration(classes = {MonetizationJooqConfig.class})
+@SuppressWarnings("checkstyle:magicNumber")
+public class UniqueParametersValidatorTest extends BaseDbTestClass {
+
+    private GroupingConfigValidator uniqueParametersValidator;
+
+    @Before
+    public void setUp() {
+        uniqueParametersValidator = new UniqueParametersValidator();
+    }
+
+    @Test
+    public void testValidateWithErrors() {
+        GroupingConfig groupingConfig = new GroupingConfig().setId(1L);
+
+        ConfigParameter param1 = new ConfigParameter()
+            .setConfigId(groupingConfig.getId())
+            .setParamGroupingType(ConfigParameterType.NORM_COEFFICIENT)
+            .setParamId(11L)
+            .setId(1L);
+
+        ConfigParameter param2 = new ConfigParameter()
+            .setConfigId(groupingConfig.getId())
+            .setParamGroupingType(ConfigParameterType.DETERMINANT)
+            .setParamId(22L)
+            .setId(2L);
+
+        ConfigParameter param3 = new ConfigParameter()
+            .setConfigId(groupingConfig.getId())
+            .setParamGroupingType(ConfigParameterType.SIGNIFICANT_PARAMETER)
+            .setParamId(11L)
+            .setId(3L);
+
+        DisplayGroupingConfig config = new DisplayGroupingConfig()
+            .setGroupingConfig(groupingConfig)
+            .setConfigParameters(Arrays.asList(param1, param2, param3));
+
+        List<ConfigValidationError> errors = uniqueParametersValidator
+            .validate(Collections.singleton(config));
+
+        ConfigValidationError expectedError = new ConfigValidationError()
+            .setConfigId(groupingConfig.getId())
+            .setMessage(UniqueParametersValidator.errorMessage(groupingConfig.getId(), param1));
+
+        Assertions.assertThat(errors).isNotEmpty();
+        Assertions.assertThat(errors).containsExactly(expectedError);
+    }
+
+    @Test
+    public void testValidateWithoutErrors() {
+        GroupingConfig groupingConfig = new GroupingConfig().setId(1L);
+
+        ConfigParameter param1 = new ConfigParameter()
+            .setConfigId(groupingConfig.getId())
+            .setParamGroupingType(ConfigParameterType.NORM_COEFFICIENT)
+            .setParamId(11L)
+            .setId(1L);
+
+        ConfigParameter param2 = new ConfigParameter()
+            .setConfigId(groupingConfig.getId())
+            .setParamGroupingType(ConfigParameterType.DETERMINANT)
+            .setParamId(22L)
+            .setId(2L);
+
+        ConfigParameter param3 = new ConfigParameter()
+            .setConfigId(groupingConfig.getId())
+            .setParamGroupingType(ConfigParameterType.SIGNIFICANT_PARAMETER)
+            .setParamId(33L)
+            .setId(3L);
+
+        DisplayGroupingConfig config = new DisplayGroupingConfig()
+            .setGroupingConfig(groupingConfig)
+            .setConfigParameters(Arrays.asList(param1, param2, param3));
+
+        List<ConfigValidationError> errors = uniqueParametersValidator
+            .validate(Collections.singleton(config));
+
+        Assertions.assertThat(errors).isEmpty();
+    }
+}

@@ -1,0 +1,56 @@
+context:
+  default:
+    service_name: app_exp
+    servername_regexp: '[a-z0-9-]+\\.market-exp-app\\.yandex\\.ru'
+    health_check: '"GET /ping HTTP/1.1\r\nHost: heartbeat.market.yandex.ru\r\n\r\n"'
+    vs: market_exp
+    antirobot: true
+    antirobot_service_name: market
+    priority: 1
+    exp_getter: true
+    testid_from_host: true
+    cert: market-exp-app
+    uaas_service_name: marketapps
+  testing:
+    servername_regexp: '[a-z0-9-]+\\.market-exp-app\\.fslb\\.yandex\\.ru'
+
+servers:
+  default:
+    main:
+    - name: N%production_market_front_touch_sas@local
+      timeout: 35s
+      weight: 100
+    - name: N%production_market_front_touch_vla@local
+      timeout: 35s
+      weight: 100
+    - name: N%production_market_front_touch_iva@local
+      timeout: 35s
+      weight: 100
+    - name: N%production_market_front_touch_sas
+      timeout: 35s
+    - name: N%production_market_front_touch_vla
+      timeout: 35s
+    - name: N%production_market_front_touch_iva
+      timeout: 35s
+  default@man:
+    main:
+    - name: N%production_market_front_touch_sas
+      timeout: 35s
+    - name: N%production_market_front_touch_vla
+      timeout: 35s
+      weight: 100
+    - name: N%production_market_front_touch_iva
+      timeout: 35s
+      weight: 90
+  testing:
+    main:
+    - name: N%testing_market_front_touch_sas@local
+      timeout: 35s
+      weight: 100
+    - name: N%testing_market_front_touch_vla@local
+      timeout: 35s
+      weight: 100
+    - name: N%testing_market_front_touch_sas
+      timeout: 35s
+    - name: N%testing_market_front_touch_vla
+      timeout: 35s

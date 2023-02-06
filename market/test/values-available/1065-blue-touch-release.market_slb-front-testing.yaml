@@ -1,0 +1,21 @@
+context:
+  default:
+    service_name: market_blue_touch
+    servername_regexp: touch\\.(checkout\\.market|bluemarket)\\.(fslb[\\w\\d]*\\.)?(yandex|beru)\\.(ru|ua|kz|by)
+    cert: bluemarket
+    vs: market
+    exp_getter: true
+    antirobot: true
+    antirobot_service_name: marketblue
+    balancing_method: active
+    health_check: '"GET /ping HTTP/1.1\r\nHost: heartbeat-blue-touch.market.yandex.ru\r\n\r\n"'
+    uaas_service_name: blue-market
+    no_yandex_uid: true
+
+servers:
+  default:
+    main:
+    - name: GREY%market-front-blue-touch.tst.vs.market.yandex.net
+      timeout: 35s
+      plain_http_backend: true
+      port: 9080

@@ -1,0 +1,142 @@
+{
+    "properties": {
+        "applicable": {
+            "enum": [
+                1
+            ],
+            "type": "integer"
+        },
+        "counter_prefix": {
+            "enum": [
+                "/snippet/infected/"
+            ],
+            "type": "string"
+        },
+        "infected": {
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "provider": {
+                    "enum": [
+                        "virustotal_avr"
+                    ],
+                    "type": "string"
+                },
+                "providers": {
+                    "items": [
+                        {
+                            "properties": {
+                                "date": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "provider": {
+                                    "type": "string"
+                                },
+                                "type_for_counter": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "date",
+                                "name",
+                                "provider",
+                                "type_for_counter"
+                            ],
+                            "type": "object"
+                        }
+                    ],
+                    "type": "array"
+                },
+                "type_for_counter": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "date",
+                "name",
+                "provider",
+                "providers",
+                "type_for_counter"
+            ],
+            "type": "object"
+        },
+        "info_url": {
+            "allOf": [
+                {
+                    "$ref": "../core.json#cgi"
+                },
+                {
+                    "properties": {
+                        "data": {
+                            "properties": {
+                                "path": {
+                                    "enum": [
+                                        "/search/infected"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                }
+            ],
+            "type": "object"
+        },
+        "template": {
+            "enum": [
+                "infected"
+            ],
+            "type": "string"
+        },
+        "type": {
+            "enum": [
+                "infected"
+            ],
+            "type": "string"
+        },
+        "types": {
+            "properties": {
+                "all": {
+                    "items": [
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "type": "array"
+                },
+                "extra": {
+                    "items": [{"type": "object"}],
+                    "type": "array"
+                },
+                "kind": {
+                    "type": "string"
+                },
+                "main": {
+                    "enum": [
+                        "infected"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "all",
+                "extra",
+                "kind",
+                "main"
+            ],
+            "type": "object"
+        }
+    },
+    "type": "object"
+}
+
+

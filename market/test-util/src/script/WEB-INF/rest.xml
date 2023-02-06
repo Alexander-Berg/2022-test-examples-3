@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+       default-autowire="no"
+       default-lazy-init="false">
+
+    <bean id="shopRestErrorHandler" class="ru.yandex.market.checkout.pushapi.shop.error.ShopRestErrorHandler" />
+    <bean id="restTemplateHandlers" class="ru.yandex.market.checkout.pushapi.shop.RestTemplateHandlers" />
+
+    <bean abstract="true"
+          id="abstractHttpRequestFactory"
+          class="ru.yandex.market.checkout.pushapi.shop.CustomHttpComponentsClientHttpRequestFactory">
+        <property name="trustManager">
+            <bean class="ru.yandex.market.checkout.pushapi.shop.DynamicTrustManager">
+                <constructor-arg value="${customTrustStore.filename}" />
+            </bean>
+        </property>
+    </bean>
+    
+    <bean id="thickHttpRequestFactory"
+          parent="abstractHttpRequestFactory"
+          class="ru.yandex.market.checkout.pushapi.shop.CustomHttpComponentsClientHttpRequestFactory">
+        <property name="connectTimeout" value="2000" />
+        <property name="readTimeout" value="10000" />
+    </bean>
+    <bean id="thinHttpRequestFactory"
+          parent="abstractHttpRequestFactory"
+          class="ru.yandex.market.checkout.pushapi.shop.CustomHttpComponentsClientHttpRequestFactory">
+        <property name="connectTimeout" value="2000" />
+        <property name="readTimeout" value="5500" />
+    </bean>
+
+    <bean id="thickXmlShopApiRestClient"
+          class="ru.yandex.market.checkout.pushapi.shop.ShopApiRestClient">
+        <property name="apiSelectorUtil" ref="apiSelectorUtil"/>
+        <property name="restTemplate">
+            <bean class="org.springframework.web.client.RestTemplate">
+                <property name="messageConverters">
+                    <list merge="true">
+                        <ref bean="classMappingXmlMessageConverter" />
+                    </list>
+                </property>
+                <property name="requestFactory" ref="thickHttpRequestFactory" />
+                <property name="errorHandler" ref="shopRestErrorHandler" />
+            </bean>
+        </property>
+        <property name="restTemplateHandlers" ref="restTemplateHandlers" />
+    </bean>
+    <bean id="thinXmlShopApiRestClient"
+          class="ru.yandex.market.checkout.pushapi.shop.ShopApiRestClient">
+        <property name="apiSelectorUtil" ref="apiSelectorUtil"/>
+        <property name="restTemplate">
+            <bean class="org.springframework.web.client.RestTemplate">
+                <property name="messageConverters">
+                    <list merge="true">
+                        <ref bean="classMappingXmlMessageConverter" />
+                    </list>
+                </property>
+                <property name="requestFactory" ref="thinHttpRequestFactory" />
+                <property name="errorHandler" ref="shopRestErrorHandler" />
+            </bean>
+        </property>
+        <property name="restTemplateHandlers" ref="restTemplateHandlers" />
+    </bean>
+    
+    <bean id="thickJsonShopApiRestClient"
+          class="ru.yandex.market.checkout.pushapi.shop.ShopApiRestClient">
+        <property name="apiSelectorUtil" ref="apiSelectorUtil"/>
+        <property name="restTemplate">
+            <bean class="org.springframework.web.client.RestTemplate">
+                <property name="messageConverters">
+                    <list merge="true">
+                        <ref bean="classMappingJsonMessageConverter" />
+                    </list>
+                </property>
+                <property name="requestFactory" ref="thickHttpRequestFactory" />
+                <property name="errorHandler" ref="shopRestErrorHandler" />
+            </bean>
+        </property>
+        <property name="restTemplateHandlers" ref="restTemplateHandlers" />
+    </bean>
+    <bean id="thinJsonShopApiRestClient"
+          class="ru.yandex.market.checkout.pushapi.shop.ShopApiRestClient">
+        <property name="apiSelectorUtil" ref="apiSelectorUtil"/>
+        <property name="restTemplate">
+            <bean class="org.springframework.web.client.RestTemplate">
+                <property name="messageConverters">
+                    <list merge="true">
+                        <ref bean="classMappingJsonMessageConverter" />
+                    </list>
+                </property>
+                <property name="requestFactory" ref="thinHttpRequestFactory" />
+                <property name="errorHandler" ref="shopRestErrorHandler" />
+            </bean>
+        </property>
+        <property name="restTemplateHandlers" ref="restTemplateHandlers" />
+    </bean>
+
+    <bean id="apiSelectorUtil" class="ru.yandex.market.checkout.pushapi.shop.ApiSelectorUtil">
+        <property name="stubHost" value="${market.shopadmin.stub.host}"/>
+        <property name="stubPort" value="${market.shopadmin.stub.port}"/>
+    </bean>
+    
+</beans>

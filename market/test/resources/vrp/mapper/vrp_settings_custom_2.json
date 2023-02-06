@@ -1,0 +1,127 @@
+{
+    "shift_defaults": {
+        "CAR": {
+            "hard_window": false,
+            "balanced_group_id": "Car",
+            "penalty": {
+                "out_of_time": {
+                    "fixed": 0,
+                    "minute": 40
+                }
+            }
+        },
+        "NONE": {
+            "hard_window": false,
+            "balanced_group_id": "Foot",
+            "penalty": {
+                "out_of_time": {
+                    "fixed": 0,
+                    "minute": 20
+                }
+            }
+        },
+        "ROVER": {
+            "hard_window": false,
+            "penalty": {
+                "out_of_time": {
+                    "fixed": 0,
+                    "minute": 20
+                }
+            }
+        }
+    },
+    "vehicle_defaults": {
+        "CAR": {
+            "routing_mode": "driving",
+            "capacity": {
+                "weight_kg": 200
+            },
+            "tags": [
+                "carOnly"
+            ],
+            "return_to_depot": true,
+            "max_runs": 1,
+            "priority": 300,
+            "cost": "distance_km*8 + duration_h*100 + runs*0"
+        },
+        "NONE": {
+            "routing_mode": "walking",
+            "capacity": {
+                "weight_kg": 15
+            },
+            "return_to_depot": true,
+            "max_runs": 1,
+            "priority": 100,
+            "cost": "distance_km*8 + duration_h*100 + runs*0"
+        },
+        "ROVER": {
+            "routing_mode": "walking",
+            "capacity": {
+                "weight_kg": 40
+            },
+            "return_to_depot": true,
+            "max_runs": 1,
+            "priority": 100,
+            "cost": "distance_km*8 + duration_h*100 + runs*0"
+        }
+    },
+    "location_defaults": {
+        "hard_window": false,
+        "type": "delivery",
+        "shipment_size": {
+            "weight_kg": 1
+        },
+        "penalty": {
+            "drop": 1000000,
+            "out_of_time": {
+                "fixed": 1000,
+                "minute": 17
+            }
+        },
+        "shared_service_duration_s": 400,
+        "service_duration_s": 200
+    },
+    "depot_defaults": {
+        "finish_service_duration_s": 300,
+        "service_duration_s": 300,
+        "flexible_start_time": false,
+        "hard_window": true
+    },
+    "vrp_options": {
+        "balanced_groups": [
+            {
+                "penalty": {
+                    "stop": 10,
+                    "hour": 50
+                },
+                "id": "Car"
+            },
+            {
+                "penalty": {
+                    "stop": 25,
+                    "hour": 10
+                },
+                "id": "Foot"
+            }
+        ],
+        "minimize_lateness_risk": false,
+        "penalize_late_service": true,
+        "quality": "normal",
+        "routing_mode": "driving",
+        "weighted_drop_penalty": false,
+        "proximity_factor": 1,
+        "absolute_time": false,
+        "restart_on_drop": false,
+        "merge_multiorders": false,
+        "minimize": "cost",
+        "time_zone": 3,
+        "matrix_router": "main"
+    },
+    "tpl_options": {
+        "include_waiting_time": true,
+        "merge_multi_orders": true
+    },
+    "user_shift_overrides": {},
+    "user_vehicle_overrides": {},
+    "location_overrides": {}
+}

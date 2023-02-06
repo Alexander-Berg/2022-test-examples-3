@@ -1,0 +1,33 @@
+{
+  "id": "mdb_pg_disk_free_space_some_real_long_service_name_produc_stable",
+  "name": "MDB disk free space alert for some_real_long_service_name_production (stable)",
+  "annotations": {
+    "juggler_service": "some-real-long-service-name_mdb_pg_disk_free_space_stable_{{expression.mdb_id}}_{{labels.shard}}",
+    "mdb_link": "Link to MDB monitoring: https://yc.yandex-team.ru/folders/{{labels.shard}}/managed-postgresql/cluster/{{expression.mdb_id}}?section\u003dmonitoring",
+    "free_last_gb": "{{expression.free_last_gb}}",
+    "total_last": "{{expression.total_last_gb}}",
+    "service_name": "{{expression.service_name}}",
+    "free_percent": "{{expression.free_percent}}"
+  },
+  "channels": [
+    {
+      "id": "juggler_spok",
+      "config": {}
+    }
+  ],
+  "createdBy": "robot-market-infra",
+  "groupByLabels": [
+    "shard"
+  ],
+  "noPointsPolicy": "NO_POINTS_DEFAULT",
+  "periodMillis": 3600000,
+  "projectId": "market-service",
+  "resolvedEmptyPolicy": "RESOLVED_EMPTY_DEFAULT",
+  "state": "ACTIVE",
+  "type": {
+    "expression": {
+      "checkExpression": "",
+      "program": "let free_bytes \u003d {\n  project\u003d\u0027internal-mdb\u0027,\n  service\u003d\u0027mdb\u0027,\n  node\u003d\u0027primary\u0027,\n  host\u003d\u0027by_node\u0027,\n  sensor\u003d\u0027disk-free_bytes_/var/lib/postgresql\u0027,\n  name\u003d\u0027disk-free_bytes_/var/lib/postgresql\u0027,\n  cluster\u003d\u0027mdb_clusterId\u0027,\n  shard\u003d\u0027*\u0027\n};\n\nlet free_last \u003d last(free_bytes);\nlet free_last_gb \u003d free_last / 1000000000;\nlet mdb_cluster \u003d get_label(free_bytes, \u0027cluster\u0027);\n\nlet mdb_id \u003d mdb_cluster \u003d\u003d \u0027mdb_clusterId\u0027 ? \u0027clusterId\u0027 : mdb_cluster;\n\nlet service_name \u003d  mdb_cluster;\n\nlet total_bytes \u003d {\n    project\u003d\u0027internal-mdb\u0027, \n    service\u003d\u0027mdb\u0027,\n    node\u003d\u0027primary\u0027,\n    host\u003d\u0027by_node\u0027,\n    sensor\u003d\u0027disk-total_bytes_/var/lib/postgresql\u0027,\n    name\u003d\u0027disk-total_bytes_/var/lib/postgresql\u0027,\n    cluster\u003d\u0027mdb_clusterId\u0027,\n    shard\u003d\u0027*\u0027\n};\n\nlet total_last \u003d last(total_bytes);\nlet total_last_gb \u003d total_last / 1000000000;\n\nlet free_percent \u003d 100 * free_last / total_last;\n\nalarm_if(free_percent \u003c 10);\nwarn_if(free_last \u003c 20);"
+    }
+  }
+}

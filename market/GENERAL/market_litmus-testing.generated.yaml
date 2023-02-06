@@ -1,0 +1,44 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый market_litmus-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_litmus-testing
+
+juggler:
+  checks:
+
+  # Check market_litmus_crc_status
+  # https://juggler.yandex-team.ru/check_details/?host=market_litmus-testing&service=market_litmus_crc_status&last=1DAY&mode=edit
+  - service: market_litmus_crc_status
+
+  # Check market_litmus_cross_dc
+  # https://juggler.yandex-team.ru/check_details/?host=market_litmus-testing&service=market_litmus_cross_dc&last=1DAY&mode=edit
+  - service: market_litmus_cross_dc
+
+  # Check market_litmus_status_codes_500x
+  # https://juggler.yandex-team.ru/check_details/?host=market_litmus-testing&service=market_litmus_status_codes_500x&last=1DAY&mode=edit
+  - service: market_litmus_status_codes_500x
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    check_options: {}
+    children:
+    - testing_fslb_sas
+    - testing_fslb_vla
+    - testing_mslb_sas
+    - testing_mslb_vla
+    - testing_mslb_iva
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_litmus-testing
+    namespace: market.sre
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_litmus
+    - market
+    - _market_
+    ttl: 900

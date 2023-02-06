@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+import "crypta/lib/proto/user_data/enums.proto";
+import "crypta/lib/proto/user_data/math.proto";
+import "crypta/lib/proto/user_data/user_data.proto";
+
+
+message TUserDataWithDate {
+    message TAttributes {
+        optional NLab.TAge Age = 1;
+        optional NLab.TGender Gender = 3;
+        optional NLab.TIncome Income = 5;
+    }
+    message TSegments {
+        repeated NLab.TSegment Segment = 1;
+    }
+
+    optional TAttributes Attributes = 3;
+    optional NLab.TVectors Vectors = 4;
+    optional TSegments Segments = 5;
+    optional string CryptaID = 9;
+    required string date = 10;
+    optional NLab.TAffinities Affinities = 11;
+}

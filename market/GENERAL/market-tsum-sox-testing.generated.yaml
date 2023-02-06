@@ -1,0 +1,56 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый market-tsum-sox-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket-tsum-sox-testing
+
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=market-tsum-sox-testing&service=disk_free_space&last=1DAY&mode=edit
+  - service: disk_free_space
+    nodata_mode: force_ok
+
+  # Check fresh-hprof-files
+  # https://juggler.yandex-team.ru/check_details/?host=market-tsum-sox-testing&service=fresh-hprof-files&last=1DAY&mode=edit
+  - service: fresh-hprof-files
+    nodata_mode: force_ok
+
+  # Check monitoring
+  # https://juggler.yandex-team.ru/check_details/?host=market-tsum-sox-testing&service=monitoring&last=1DAY&mode=edit
+  - service: monitoring
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=market-tsum-sox-testing&service=ping&last=1DAY&mode=edit
+  - service: ping
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=market-tsum-sox-testing&service=push-client-status&last=1DAY&mode=edit
+  - service: push-client-status
+    nodata_mode: force_ok
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    check_options: {}
+    children:
+    - NANNY%testing_market_tsum_sox_vla
+    - NANNY%testing_market_tsum_sox_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market-tsum-sox-testing
+    namespace: market.devexp
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market-devexp-testing
+    - market-devexp
+    - markettsumsox
+    - testing
+    - market_testing
+    - market_rtc
+    - market
+    - _market_
+    ttl: 900

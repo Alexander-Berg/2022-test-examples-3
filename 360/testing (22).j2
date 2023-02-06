@@ -1,0 +1,28 @@
+{% extends "base.yaml" %}
+{% from "secrets/testing.j2" import secrets %}
+{% from "tvm/testing.j2" import tvm %}
+
+{% block network_macro %}_MAILTESTNETS_{% endblock %}
+
+{% set ENVIRONMENT_TYPE = "testing" %}
+{% set ENVIRONMENT = "testing" %}
+
+{%
+set deploy_units = {
+    "mobapi": {
+        "per_cluster": False,
+        "max_unavailable": 1,
+        "clusters": {
+            "iva": 1,
+            "sas": 1,
+        },
+        "memory_guarantee": 2,
+        "vcpu_guarantee": 500,
+        "network_bandwidth_guarantee": 1,
+        "disk_capacity": 4,
+        "disk_bandwidth_guarantee": 1,
+        "disk_bandwidth_limit": 8,
+        "duffman_workers": 2
+    },
+}
+%}

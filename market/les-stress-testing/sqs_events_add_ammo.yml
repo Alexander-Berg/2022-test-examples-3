@@ -1,0 +1,106 @@
+540 _events_add_lom_out_postamat
+POST /events/add HTTP/1.1
+Host: logistics-event-service.tst.vs.market.yandex.net
+User-Agent: Tank
+Accept: */*
+Content-Length: 378
+Content-Type: application/json
+
+{
+    "queue": "lom_out",
+    "event": {
+        "source": "postamat",
+        "event_id": 234,
+        "timestamp": "12128729384",
+        "event_type": "NEW_CODE",
+        "description": "description",
+        "payload": {
+            "_type": "ru.yandex.market.logistics.les.boxbot.CodeEvent",
+            "externalOrderId": "1",
+            "code": "test"
+        }
+    }
+}
+
+647 _events_add_sc_out_courier
+POST /events/add HTTP/1.1 
+Host: logistics-event-service.tst.vs.market.yandex.net
+User-Agent: Tank
+Accept: */*
+Content-Length: 484
+Content-Type: application/json
+
+{
+    "queue": "sc_out",
+    "event": {
+        "source": "courier",
+        "event_id": 234,
+        "timestamp": "12128729384",
+        "event_type": "PICKUP_ORDER_DELIVERED",
+        "description": "description",
+        "payload": {
+            "_type": "ru.yandex.market.logistics.les.ScOrderEvent",
+            "externalOrderId": "1",
+            "sortingCenterId": 1,
+            "cellId": 1,
+            "ffStatus": "test",
+            "dispatchPersonId": 1
+        }
+    }
+}
+
+757 _events_add_lom_out_triggers
+POST /events/add HTTP/1.1
+Host: logistics-event-service.tst.vs.market.yandex.net
+User-Agent: Tank
+Accept: */*
+Content-Length: 595
+Content-Type: application/json
+
+{
+    "queue": "lom_out",
+    "event": {
+        "source": "triggers",
+        "event_id": 234,
+        "timestamp": "12128729384",
+        "event_type": "ORDER_ARRIVED_PICKUP_POINT",
+        "description": "description",
+        "payload": {
+            "_type": "ru.yandex.market.logistics.les.lom.OrderArrivedPickupPointEvent",
+            "orderId": 1,
+            "barcode": "test",
+            "recipientPhone": "+77777777777",
+            "verificationCode": "test",
+            "address": "test",
+            "recipientGeoId": 1,
+            "deliveryDate": 1112112211
+        }
+    }
+}
+
+691 _events_add_courier_out_courier
+POST /events/add HTTP/1.1
+Host: logistics-event-service.tst.vs.market.yandex.net
+User-Agent: Tank
+Accept: */*
+Content-Length: 529
+Content-Type: application/json
+
+{
+    "queue": "courier_out",
+    "event": {
+        "source": "courier",
+        "event_id": "102806440",
+        "timestamp": "12128729384",
+        "event_type": "ORDER_IS_DAMAGED",
+        "description": "STRESS_TEST_EVENT",
+        "payload": {
+            "_type": "ru.yandex.market.logistics.les.CourierOrderEvent",
+            "externalOrderId": "7786696",
+            "origin": 184697420,
+            "rollback": false,
+            "requestId": "InTransit",
+            "rawEvent": "STRESS_TEST_EVENT"
+        }
+    }
+}

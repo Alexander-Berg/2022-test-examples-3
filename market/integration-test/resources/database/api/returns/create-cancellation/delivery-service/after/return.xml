@@ -1,0 +1,142 @@
+<dataset>
+    <return
+            id="1"
+            source="CANCELLATION"
+            external_id="[null]"
+            order_external_id="order-external-id"
+            logistic_point_from_id="1001"
+            pickup_point_partner_id="2001"
+            pickup_point_external_id="withdraw-logistic-point-external-id"
+            full_return="[null]"
+            order_items_info='[{
+                "supplierId" : 300,
+                "vendorCode" : "item-vendor-code",
+                "instances" : [{"CIS":"876IUYkjh"}]
+            }]'
+            committed="2022-03-02 11:12:13.0 +0000"
+    />
+
+    <return_box
+            return_id="1"
+            external_id="box-external-id"
+            weight_gross="100"
+            length="200"
+            width="300"
+            height="400"
+    />
+
+    <return_item
+            return_id="1"
+            box_id="[null]"
+            supplier_id="200"
+            vendor_code="item-vendor-code"
+            instances="[null]"
+            return_reason="[null]"
+            return_subreason="[null]"
+            return_reason_type="[null]"
+    />
+
+    <return_event
+            id="1"
+            created="2022-03-02 11:12:13.0 +0000"
+            logbroker_id="[null]"
+            request_id="test-request-id/1"
+            return_id="1"
+            type="RETURN_SEGMENT_CREATED"
+            payload='{
+                "id": 1,
+                "type": "RETURN_SEGMENT_CREATED",
+                "boxExternalId": "box-external-id",
+                "logisticPointInfo": {
+                    "type": "PICKUP",
+                    "partnerId": 2001,
+                    "logisticPointId": 1001,
+                    "logisticPointExternalId": "withdraw-logistic-point-external-id"
+                },
+                "shipmentFieldsInfo": {
+                    "recipient": {
+                        "name": "shop-name",
+                        "partnerId": 2002,
+                        "partnerType": "SHOP",
+                        "courier": null
+                    },
+                    "shipmentTime": 1646219533,
+                    "destinationInfo": {
+                        "name": "shop-name",
+                        "type": "SHOP",
+                        "partnerId": 2002,
+                        "logisticPointId": 1002,
+                        "returnSegmentId": null
+                    }
+                }
+            }'
+    />
+
+    <return_event
+            id="2"
+            created="2022-03-02 11:12:13.0 +0000"
+            logbroker_id="[null]"
+            request_id="test-request-id/2"
+            return_id="1"
+            type="RETURN_SEGMENT_CREATED"
+            payload='{
+                "id": 2,
+                "type": "RETURN_SEGMENT_CREATED",
+                "boxExternalId": "box-external-id",
+                "logisticPointInfo": {
+                    "type": "SHOP",
+                    "partnerId": 2002,
+                    "logisticPointId": 1002,
+                    "logisticPointExternalId": "shop-logistic-point-external-id"
+                },
+                "shipmentFieldsInfo": {
+                    "recipient": null,
+                    "shipmentTime": null,
+                    "destinationInfo": null
+                }
+            }'
+    />
+
+    <return_event
+            id="3"
+            created="2022-03-02 11:12:13.0 +0000"
+            logbroker_id="[null]"
+            request_id="test-request-id/4"
+            type="RETURN_COMMITTED"
+            return_id="1"
+            payload='{
+                "type": "RETURN_COMMITTED",
+                "boxes": [
+                    {
+                        "externalId": "box-external-id"
+                    }
+                ],
+                "items": [
+                    {
+                        "instances": null,
+                        "supplierId": 200,
+                        "vendorCode": "item-vendor-code",
+                        "returnReason": null,
+                        "boxExternalId": null,
+                        "returnSubreason": null,
+                        "returnReasonType": null
+                    }
+                ],
+                "source": "CANCELLATION",
+                "externalId": null,
+                "orderItemsInfo": [{
+                    "instances": [{
+                        "CIS": "876IUYkjh"
+                    }],
+                    "supplierId": 300,
+                    "vendorCode": "item-vendor-code"
+                }]
+            }'
+    />
+
+    <queue_tasks
+            queue_name="PROCESS_SEGMENT_STATUSES"
+            payload='{"requestId":"test-request-id/3","segments":[{"uniqueId":"e11c5e64-3694-40c9-b9b4-126efedaa091","statusHistory":[{"status":"CREATED","timestamp":"2022-03-02T11:12:13Z"}]}],"statusSource":"SYSTEM","historyMessage":null}'
+    />
+
+</dataset>

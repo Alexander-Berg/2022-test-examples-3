@@ -1,0 +1,27 @@
+{% extends "base.yaml" %}
+{% from "secrets/testing.j2" import secrets %}
+{% from "tvm/testing.j2" import tvm %}
+
+{% block network_macro %}_MAILTESTNETS_{% endblock %}
+
+{% set ENVIRONMENT_TYPE = "testing" %}
+{% set ENVIRONMENT = "testing" %}
+
+{%
+set deploy_units = {
+    "extapi": {
+        "per_cluster": False,
+        "#app": "sbr:NNN",
+        "#settings": "sbr:NNN",
+        "max_unavailable": 1,
+        "clusters": {
+            "sas": 1,
+            "iva": 1,
+        },
+
+        "memory_guarantee": 2,
+        "vcpu_guarantee": 1000,
+        "disk_capacity": 6,
+    },
+}
+%}

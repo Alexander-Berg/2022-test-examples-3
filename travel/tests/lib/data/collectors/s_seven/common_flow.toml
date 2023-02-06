@@ -1,0 +1,89 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "s_seven",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--password", "password",
+    "--date-from", "2020-12-01",
+    "--date-to", "2020-12-01",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "partner",
+    "yt",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "apllication/json"
+
+[[partner.responses]]
+    args = {date1 = "2020-12-01", date2 = "2020-12-01"}
+    data_file = "partner_response_2020_12_01.json"
+
+[yt.input.partner_table]
+    path = "//home/rasp/reference/partner"
+
+[[yt.input.partner_table.data]]
+    billing_order_id = 307
+    code = "s_seven"
+    partner_id = 43
+
+[yt.input.station_table]
+    path = "//home/rasp/reference/station"
+
+[[yt.input.station_table.data]]
+    city_id = "c51"
+    iata = "KUF"
+    sirena = ""
+
+[[yt.input.station_table.data]]
+    city_id = "c65"
+    iata = "OVB"
+    sirena = ""
+
+[lb]
+    topic = "topic-s-seven"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+[[lb.expected]]
+    status = "confirmed"
+    category = "avia"
+    partner_id = 43
+    created_at = 1606826095
+    origin = "KUF"
+    partner_order_id = "MCCFW3E"
+    label = "e5afb600-a5e969-6761-4993-9afe-e755b5c4dc531"
+    source = "s_seven"
+    destination = "OVB"
+    partner_name = "s_seven"
+    trip_type = "roundtrip"
+    billing_order_id = 307
+    order_amount = 22760.0
+    service_fee = 800.0
+    travel_order_id = "s_seven:MCCFW3E"
+    currency_code = "RUB"
+    partner_profit = 461.17
+
+[[lb.expected]]
+    status = "cancelled"
+    category = "avia"
+    partner_id = 43
+    created_at = 1606835296
+    partner_order_id = "MZ85BGD"
+    label = "b7ec3ba7-a5e969-00db-430d-81dd-72f5830b0e2b1"
+    source = "s_seven"
+    partner_name = "s_seven"
+    trip_type = "oneway"
+    billing_order_id = 307
+    order_amount = 9853.0
+    service_fee = 200.0
+    travel_order_id = "s_seven:MZ85BGD"
+    currency_code = "RUB"
+    partner_profit = 0.0

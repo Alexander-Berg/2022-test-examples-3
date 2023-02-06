@@ -1,0 +1,44 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket-wms-apps-testing
+
+juggler:
+  default:
+    check_options: {}
+    host: market-wms-apps-testing
+    namespace: market.wms
+    ttl: 900
+    refresh_time: 60
+    notifications: []
+    tags:
+    - market_testing
+    - wms
+
+  checks:
+
+  # Check unispace
+  # https://juggler.yandex-team.ru/check_details/?host=market-wms-apps-testing&service=unispace&last=1DAY&mode=edit
+
+  - aggregator: logic_or
+    service: unispace
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    notifications:
+    - template_kwargs:
+        ignore_gaps: true
+        login: WMS_release_chat
+        method: telegram
+        min_interval: 330
+        status: CRIT
+      template_name: on_status_change
+    children:
+    - host: wms-load-app01e.market.yandex.net
+      service: unispace
+      type: HOST
+    - host: wms-load-app02e.market.yandex.net
+      service: unispace
+      type: HOST
+    - host: market_wms-testing
+      service: unispace
+      type: CGROUP

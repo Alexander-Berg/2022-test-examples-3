@@ -1,0 +1,23 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+			http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <changeSet id="arbitrage" author="antipov93">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM information_schema.schemata
+                WHERE schema_name = 'arbitrage'
+            </sqlCheck>
+        </preConditions>
+        <sql>CREATE SCHEMA arbitrage;</sql>
+    </changeSet>
+
+    <include file="classpath:table/changelog.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:sequence/changelog.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:function/changelog.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:precondition.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>

@@ -1,0 +1,45 @@
+const messages = {
+    'users': [{
+        'username': 'egorkutz',
+        'last_name': 'Куц',
+        'first_name': 'Егор',
+        'setup': {},
+        'pn': '(админка)',
+        'id': '64e0f242-c10b-4217-8220-9f1676139691',
+    }, {
+        'username': 'andreevich',
+        'last_name': 'Семченко',
+        'first_name': 'Александр',
+        'setup': {},
+        'pn': '(staff)',
+        'id': 'c3e64a2c-cddd-4390-a79c-bbe17456acd4',
+    }],
+    'calls': [{
+        'tag_data': {
+            'tag_id': '3440fdfe-3b0c-4df5-9317-a498589a6282',
+            'tag': 'cc_internal_carsharing',
+            'meta': 'null',
+            'original_support_line': '',
+            'performer': 'c3e64a2c-cddd-4390-a79c-bbe17456acd4',
+            'topic_link': '11',
+            'object_id': '64e0f242-c10b-4217-8220-9f1676139691',
+            'call_id': '',
+            'status': 'enter_queue',
+            'priority': 0,
+        },
+    }],
+    'tags': [{
+        'tag_flow': '',
+        'index': 591,
+        'url_template': 'https://tel.yandex-team.ru/queuemetricscallrec?callid=[call_id]',
+        'display_name': 'Звонок из Москвы',
+        'call_queue': 'carsharing',
+        'name': 'cc_internal_carsharing',
+        'comment': 'Тег очереди звонков https://st.yandex-team.ru/DRIVESUP-5111',
+        'tag_flow_priority': 0,
+        'chats': { 'urgent': [] },
+        'allChatsLength': 0,
+        'allUnread': 0,
+    }],
+};
+export { messages };

@@ -1,0 +1,29 @@
+#!/bin/bash
+name1=${1}
+name2=${2}
+array1=()
+for i in ${name1}"_"[0-9]".json";
+do
+  array1=(${array1[*]} $i)     
+ # echo $i;
+done
+#echo ${array1[*]}
+array2=()
+for i in ${name2}"_"[0-9]".json";
+do
+   array2=(${array2[*]} $i)
+   # echo $i;
+done
+echo "replace:"
+echo ${array2[*]}
+echo "with:"
+echo ${array1[*]}
+len1=${#array1[*]}
+len2=${#array2[*]}
+mn=$(( len1 > len2 ? len2 : len1 ))
+echo $mn
+for i in `seq 1 $mn`;
+do
+  ## echo $i
+  #mv ${array1[$i]} ${array2[$i]}
+done

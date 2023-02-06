@@ -1,0 +1,1 @@
+TRUNCATE partner_external_params

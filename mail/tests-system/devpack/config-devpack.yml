@@ -1,0 +1,75 @@
+config:
+    system:
+        daemon: 1
+        dir: {dir}
+        pid: {pid}
+        reactor:
+        -   _name: global
+            _io_threads: 1
+            _pool_count: 1
+    log:
+        global:
+            level: debug
+            format: '[%Y-%b-%d %H:%M:%S.%f] %t %v'
+            async: true
+            queue_size: 1048576
+            overflow_policy: discard_log_msg
+            sinks:
+            -   type: reopenable_file
+                path: var/log/apq_tester/yplatform.log
+                force_flush: true
+        access:
+            level: debug
+            format: "tskv\ttskv_format=apq_tester\ttimestamp=%Y-%m-%dT%H:%M:%S.%f%z\t%v"
+            async: true
+            queue_size: 1048576
+            overflow_policy: discard_log_msg
+            sinks:
+            -   type: reopenable_file
+                path: var/log/apq_tester/access.tskv
+                force_flush: true
+        apq_tester:
+            level: debug
+            format: '%v'
+            async: true
+            queue_size: 1048576
+            overflow_policy: discard_log_msg
+            sinks:
+            -   type: reopenable_file
+                path: var/log/apq_tester/apq_tester.tskv
+                force_flush: true
+    modules:
+        module:
+        -   system:
+                name: http_server
+                type: service_object
+                factory: ymod_webserver::impl
+            configuration:
+                reactor: global
+                log_headers:
+                -   X-Request-Id
+                -   connection_id
+                socket:
+                    tls_timeout: 1000
+                    read_timeout: 1000
+                    write_timeout: 1000
+                    keep_alive:
+                        enable: true
+                    ipv6_only: true
+                    listen_backlog: 32768
+                    detect_leaks: false
+                    no_delay: true
+                endpoints:
+                    listen:
+                        _addr: '::'
+                        _port: {webserver_port}
+                access_log:
+                    typed:
+                        logger: access
+                        format: tskv
+                        log_timings: on
+        -   system:
+                name: apq_tester_http
+                type: service_object
+                factory: apq_tester::server::impl
+            configuration:

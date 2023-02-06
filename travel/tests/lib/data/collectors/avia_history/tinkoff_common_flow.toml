@@ -1,0 +1,59 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "tinkoff_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 1023
+    confirm_dt = ""
+    created_at = "2019-06-01 00:00:00"
+    currency = "RUB"
+    from = "MRV"
+    marker = "a20014d7-a5e969-7dae-4e5e-ae0b-842f7473774e1"
+    order_id = "USZHNA"
+    partner = "tinkoff1"
+    partner_id = 108
+    price = 3505.0
+    source = "tinkoff"
+    status = "paid"
+    ticket_number = ""
+    to = "DME"
+    trip_type = ""
+    unixtime = 1559350985
+
+[lb]
+    topic = "topic-tinkoff_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "trip_type", "updated_at"]
+
+[[lb.expected]]
+    origin = "MRV"
+    adults = 1
+    billing_order_id = 1023
+    order_amount = 3505.0
+    partner_id = 108
+    children = 0
+    category = "avia"
+    partner_name = "tinkoff"
+    destination = "DME"
+    label = "a20014d7-a5e969-7dae-4e5e-ae0b-842f7473774e1"
+    source = "history"
+    status = "confirmed"
+    partner_order_id = "USZHNA"
+    travel_order_id = "tinkoff:USZHNA"
+    created_at = 1559347200
+    infants = 0
+    currency_code = "RUB"

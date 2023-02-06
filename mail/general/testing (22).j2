@@ -1,0 +1,24 @@
+{% extends "base.yml" %}
+{% from "secrets/testing.j2" import secrets %}
+
+{% block infra_environment %}2061{% endblock %}
+{% block environment %}testing{% endblock %}
+{% block network_macro %}_MAILTESTNETS_{% endblock %}
+{% block l3_ip_ptr_value %}mail-sheltie-test.stable.qloud-b.yandex.net{% endblock %}
+
+{% set enable_push_client = False %}
+{% set enable_juggler = False %}
+
+{% set deploy_units = {
+    "sheltie": {
+      "version": "geo-tag-to-unistat",
+      "max_unavailable": 1,
+      "clusters": {
+        "sas": 1,
+        "vla": 1,
+        "myt": 1,
+        "iva": 1,
+      }
+    }
+  }
+%}

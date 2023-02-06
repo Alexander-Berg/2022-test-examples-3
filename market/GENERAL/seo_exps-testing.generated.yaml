@@ -1,0 +1,393 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый seo_exps-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dseo_exps-testing
+
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=seo_exps-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options: {}
+    children:
+    - NANNY%testing_market_seo_exps_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    namespace: market.common
+    refresh_time: 60
+    service: disk_free_space
+    tags:
+    - market_testing
+    - market_rtc
+    - seoexps
+    - testing
+    - market
+    - _market_
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=seo_exps-testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options: {}
+    children:
+    - NANNY%testing_market_seo_exps_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    namespace: market.common
+    refresh_time: 60
+    service: logrotate
+    tags:
+    - market_testing
+    - market_rtc
+    - seoexps
+    - testing
+    - market
+    - _market_
+
+  # Check market-seo-exps-testing-400-alert
+  # https://juggler.yandex-team.ru/check_details/?host=seo_exps-testing&service=market-seo-exps-testing-400-alert&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+      unreach_mode: force_ok
+      unreach_service:
+      - check: yasm_alert:virtual-meta
+    children:
+    - yasm_alert
+    meta:
+      urls:
+      - title: Алерт в Головане
+        type: yasm_alert
+        url: https://yasm.yandex-team.ru/chart-alert/alerts=market-seo-exps-testing-400-alert;
+      - title: Снапшот графика алерта
+        type: screenshot_url
+        url: https://s.yasm.yandex-team.ru/chart/signals%3Dunistat-request_400_count_deee%3Bhosts%3DASEARCH%3Bgeo%3Dmsk%2Csas%2Cvla%3Bitype%3Dseoexps%3Bctype%3Dtesting%3Bprj%3Dmarket
+      - title: График алерта
+        type: graph_url
+        url: https://yasm.yandex-team.ru/chart/signals%3Dunistat-request_400_count_deee%3Bhosts%3DASEARCH%3Bgeo%3Dmsk%2Csas%2Cvla%3Bitype%3Dseoexps%3Bctype%3Dtesting%3Bprj%3Dmarket
+      yasm_alert_name: market-seo-exps-testing-400-alert
+    namespace: market-seo-exps
+    refresh_time: 5
+    service: market-seo-exps-testing-400-alert
+    tags:
+    - a_itype_seoexps
+    - a_ctype_testing
+    - a_geo_msk
+    - a_geo_sas
+    - a_geo_vla
+    - a_prj_market
+
+  # Check market-seo-exps-testing-404-alert
+  # https://juggler.yandex-team.ru/check_details/?host=seo_exps-testing&service=market-seo-exps-testing-404-alert&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+      unreach_mode: force_ok
+      unreach_service:
+      - check: yasm_alert:virtual-meta
+    children:
+    - yasm_alert
+    meta:
+      urls:
+      - title: Алерт в Головане
+        type: yasm_alert
+        url: https://yasm.yandex-team.ru/chart-alert/alerts=market-seo-exps-testing-404-alert;
+      - title: Снапшот графика алерта
+        type: screenshot_url
+        url: https://s.yasm.yandex-team.ru/chart/signals%3Dunistat-request_404_count_deee%3Bhosts%3DASEARCH%3Bitype%3Dseoexps%3Bgeo%3Dmsk%2Csas%2Cvla%3Bctype%3Dtesting%3Bprj%3Dmarket
+      - title: График алерта
+        type: graph_url
+        url: https://yasm.yandex-team.ru/chart/signals%3Dunistat-request_404_count_deee%3Bhosts%3DASEARCH%3Bitype%3Dseoexps%3Bgeo%3Dmsk%2Csas%2Cvla%3Bctype%3Dtesting%3Bprj%3Dmarket
+      yasm_alert_name: market-seo-exps-testing-404-alert
+    namespace: market-seo-exps
+    refresh_time: 5
+    service: market-seo-exps-testing-404-alert
+    tags:
+    - a_itype_seoexps
+    - a_ctype_testing
+    - a_geo_msk
+    - a_geo_sas
+    - a_geo_vla
+    - a_prj_market
+
+  # Check market-seo-exps-testing-499-alert
+  # https://juggler.yandex-team.ru/check_details/?host=seo_exps-testing&service=market-seo-exps-testing-499-alert&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+      unreach_mode: force_ok
+      unreach_service:
+      - check: yasm_alert:virtual-meta
+    children:
+    - yasm_alert
+    meta:
+      urls:
+      - title: Алерт в Головане
+        type: yasm_alert
+        url: https://yasm.yandex-team.ru/chart-alert/alerts=market-seo-exps-testing-499-alert;
+      - title: Снапшот графика алерта
+        type: screenshot_url
+        url: https://s.yasm.yandex-team.ru/chart/signals%3Dunistat-request_499_count_deee%3Bhosts%3DASEARCH%3Bitype%3Dseoexps%3Bgeo%3Dmsk%2Csas%2Cvla%3Bctype%3Dtesting%3Bprj%3Dmarket
+      - title: График алерта
+        type: graph_url
+        url: https://yasm.yandex-team.ru/chart/signals%3Dunistat-request_499_count_deee%3Bhosts%3DASEARCH%3Bitype%3Dseoexps%3Bgeo%3Dmsk%2Csas%2Cvla%3Bctype%3Dtesting%3Bprj%3Dmarket
+      yasm_alert_name: market-seo-exps-testing-499-alert
+    namespace: market-seo-exps
+    refresh_time: 5
+    service: market-seo-exps-testing-499-alert
+    tags:
+    - a_itype_seoexps
+    - a_ctype_testing
+    - a_geo_msk
+    - a_geo_sas
+    - a_geo_vla
+    - a_prj_market
+
+  # Check market-seo-exps-testing-502-alert
+  # https://juggler.yandex-team.ru/check_details/?host=seo_exps-testing&service=market-seo-exps-testing-502-alert&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+      unreach_mode: force_ok
+      unreach_service:
+      - check: yasm_alert:virtual-meta
+    children:
+    - yasm_alert
+    meta:
+      urls:
+      - title: Алерт в Головане
+        type: yasm_alert
+        url: https://yasm.yandex-team.ru/chart-alert/alerts=market-seo-exps-testing-502-alert;
+      - title: Снапшот графика алерта
+        type: screenshot_url
+        url: https://s.yasm.yandex-team.ru/chart/signals%3Dunistat-request_502_count_deee%3Bhosts%3DASEARCH%3Bitype%3Dseoexps%3Bgeo%3Dmsk%2Csas%2Cvla%3Bctype%3Dtesting%3Bprj%3Dmarket
+      - title: График алерта
+        type: graph_url
+        url: https://yasm.yandex-team.ru/chart/signals%3Dunistat-request_502_count_deee%3Bhosts%3DASEARCH%3Bitype%3Dseoexps%3Bgeo%3Dmsk%2Csas%2Cvla%3Bctype%3Dtesting%3Bprj%3Dmarket
+      yasm_alert_name: market-seo-exps-testing-502-alert
+    namespace: market-seo-exps
+    refresh_time: 5
+    service: market-seo-exps-testing-502-alert
+    tags:
+    - a_itype_seoexps
+    - a_ctype_testing
+    - a_geo_msk
+    - a_geo_sas
+    - a_geo_vla
+    - a_prj_market
+
+  # Check market-seo-exps-testing-503-alert
+  # https://juggler.yandex-team.ru/check_details/?host=seo_exps-testing&service=market-seo-exps-testing-503-alert&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+      unreach_mode: force_ok
+      unreach_service:
+      - check: yasm_alert:virtual-meta
+    children:
+    - yasm_alert
+    meta:
+      urls:
+      - title: Алерт в Головане
+        type: yasm_alert
+        url: https://yasm.yandex-team.ru/chart-alert/alerts=market-seo-exps-testing-503-alert;
+      - title: Снапшот графика алерта
+        type: screenshot_url
+        url: https://s.yasm.yandex-team.ru/chart/signals%3Dunistat-request_503_count_deee%3Bhosts%3DASEARCH%3Bitype%3Dseoexps%3Bgeo%3Dmsk%2Csas%2Cvla%3Bctype%3Dtesting%3Bprj%3Dmarket
+      - title: График алерта
+        type: graph_url
+        url: https://yasm.yandex-team.ru/chart/signals%3Dunistat-request_503_count_deee%3Bhosts%3DASEARCH%3Bitype%3Dseoexps%3Bgeo%3Dmsk%2Csas%2Cvla%3Bctype%3Dtesting%3Bprj%3Dmarket
+      yasm_alert_name: market-seo-exps-testing-503-alert
+    namespace: market-seo-exps
+    refresh_time: 5
+    service: market-seo-exps-testing-503-alert
+    tags:
+    - a_itype_seoexps
+    - a_ctype_testing
+    - a_geo_msk
+    - a_geo_sas
+    - a_geo_vla
+    - a_prj_market
+
+  # Check market-seo-exps-testing-99-timings-alert
+  # https://juggler.yandex-team.ru/check_details/?host=seo_exps-testing&service=market-seo-exps-testing-99-timings-alert&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+      unreach_mode: force_ok
+      unreach_service:
+      - check: yasm_alert:virtual-meta
+    children:
+    - yasm_alert
+    flaps:
+      boost_time: 0
+      critical_time: 900
+      stable_time: 180
+    meta:
+      urls:
+      - title: Алерт в Головане
+        type: yasm_alert
+        url: https://yasm.yandex-team.ru/chart-alert/alerts=market-seo-exps-testing-99-timings-alert;
+      - title: Снапшот графика алерта
+        type: screenshot_url
+        url: https://s.yasm.yandex-team.ru/chart/signals%3Dquant%28unistat-request_time_hgram%2C99%29%3Bhosts%3DASEARCH%3Bgeo%3Dmsk%2Csas%2Cvla%3Bitype%3Dseoexps%3Bctype%3Dtesting%3Bprj%3Dmarket
+      - title: График алерта
+        type: graph_url
+        url: https://yasm.yandex-team.ru/chart/signals%3Dquant%28unistat-request_time_hgram%2C99%29%3Bhosts%3DASEARCH%3Bgeo%3Dmsk%2Csas%2Cvla%3Bitype%3Dseoexps%3Bctype%3Dtesting%3Bprj%3Dmarket
+      yasm_alert_name: market-seo-exps-testing-99-timings-alert
+    namespace: market-seo-exps
+    refresh_time: 5
+    service: market-seo-exps-testing-99-timings-alert
+    tags:
+    - a_itype_seoexps
+    - a_ctype_testing
+    - a_geo_msk
+    - a_geo_sas
+    - a_geo_vla
+    - a_prj_market
+
+  # Check monitoring
+  # https://juggler.yandex-team.ru/check_details/?host=seo_exps-testing&service=monitoring&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options: {}
+    children:
+    - NANNY%testing_market_seo_exps_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    namespace: market.common
+    refresh_time: 60
+    service: monitoring
+    tags:
+    - market_testing
+    - market_rtc
+    - seoexps
+    - testing
+    - market
+    - _market_
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=seo_exps-testing&service=ping&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options: {}
+    children:
+    - NANNY%testing_market_seo_exps_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    namespace: market.common
+    refresh_time: 60
+    service: ping
+    tags:
+    - market_testing
+    - market_rtc
+    - seoexps
+    - testing
+    - market
+    - _market_
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=seo_exps-testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options: {}
+    children:
+    - NANNY%testing_market_seo_exps_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    namespace: market.common
+    refresh_time: 60
+    service: push-client-status
+    tags:
+    - market_testing
+    - market_rtc
+    - seoexps
+    - testing
+    - market
+    - _market_
+  default:
+    host: seo_exps-testing
+    notifications: []
+    ttl: 900

@@ -1,0 +1,12 @@
+/var/log/nginx/opsm/access.log  /var/log/nginx/opsm/error.log {
+    daily
+    compress
+    start 0
+    missingok
+    rotate 11
+    sharedscripts
+    nodateext
+    postrotate
+        [ ! -f /var/run/nginx.pid ] || kill -USR1 `cat /var/run/nginx.pid`
+    endscript
+}

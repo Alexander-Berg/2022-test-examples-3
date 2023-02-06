@@ -1,0 +1,59 @@
+juggler:
+  default:
+    namespace: market-deepmind
+    host: market_deepmind-testing
+    children:
+      - NANNY%testing_market_mbo_category_iva
+      - NANNY%testing_market_mbo_category_sas
+    tags:
+      - market_testing
+      - market_rtc
+      - marketdeepmind
+      - testing
+      - market
+      - _market_
+    refresh_time: 30 # кол-во секунд, как часто проверки будут выполняться (но ручка дергатся будет чаще, так как запросы идут от нескольких ДЦ)
+    ttl: 900 # кол-во секунд, когда проверка считается актуальной (по истечении времени мониторинг загорится в NO_DATA)
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    notifications:
+      - template_kwargs:
+          login: deepmind_testing_chat # https://t.me/joinchat/GQwSt1s_hh-CSYin
+          method: telegram
+          status:
+            - CRIT
+            - WARN
+            - OK
+        template_name: on_desc_change
+  checks:
+    - service: deepmindMonitoring
+      active: https
+      children: [ ]
+      active_kwargs:
+        host: cm-api.tst.vs.market.yandex.net
+        path: /deepmindMonitoring
+        ok_codes:
+          - 200
+        warn_codes:
+          - 201
+    - service: deepmindYtAvailabilitiesMonitoring
+      active: https
+      children: [ ]
+      active_kwargs:
+        host: cm-api.tst.vs.market.yandex.net
+        path: /deepmindYtAvailabilitiesMonitoring
+        ok_codes:
+          - 200
+        warn_codes:
+          - 201
+    - service: deepmindYtAvailabilitiesBackupLinkMonitoring
+      active: https
+      children: [ ]
+      active_kwargs:
+        host: cm-api.tst.vs.market.yandex.net
+        path: /deepmindYtAvailabilitiesBackupLinkMonitoring
+        ok_codes:
+          - 200
+        warn_codes:
+          - 201

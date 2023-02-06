@@ -1,0 +1,307 @@
+#%RAML 0.8
+title: sendbernar
+baseUri: https://{host}
+baseUriParameters:
+    host:
+        default: localhost
+
+traits:
+- common:
+    queryParameters:
+        uid:
+            description: uid пользователя
+            required: true
+        caller:
+            description: имя вызывающего сервиса
+            required: true
+- recipients:
+    body:
+        application/x-www-form-urlencoded:
+            formParameters:
+                to:
+                    description: список получателей письма
+                cc:
+                    description: список получателей копии письма
+                bcc:
+                    description: список получателей скрытой копии письма
+
+- sender:
+    body:
+        application/x-www-form-urlencoded:
+            formParameters:
+                from_mailbox:
+                    description: если не передан, или не прошёл валидацию, то берётся значение параметра настроек "default_email"
+                from_name:
+                    description: если не передан, то берётся значение параметра настроек "from_name"
+
+- message:
+    body:
+        application/x-www-form-urlencoded:
+            formParameters:
+                subj:
+                    description: тема письма
+                    default: "No subject"
+                text:
+                    description: текст письма
+                html:
+                    description: флаг разметки письма как html
+                    enum: ["yes", "no"]
+                    default: "no"
+                source_mid:
+                    description: |
+                        mid письма, на основании которого сформировано данное письмо.
+                        Если source_mid имеет метку draft_label, то письмо пересохраняется или удаляется в зависимости от применимости алгоритма быстрого сохранения.
+                message_id:
+                    description: если не передан, генерируется в композе
+
+- attaches:
+    body:
+        application/x-www-form-urlencoded:
+            formParameters:
+                uploaded_attach_stids:
+                    description: список stid'ов, загруженных в хранилище вложений
+                disk_attaches:
+                    description: ссылки на вложения, размещённые в Яндекс.Диск
+                parts_json:
+                    description: |
+                        список вложений из частей письма в формате \{"mid":<mid>,"hid":<hid>,"rotate":<rotate>\}, где mid - mid письма,
+                        hid - hid части письма mid, rotate - угол поворота картинки, если применимо
+                forward_mids:
+                    description: список mid'ов пересылаемых сообщений в виде вложений
+
+- delayed:
+    body:
+        application/x-www-form-urlencoded:
+            formParameters:
+                phone:
+                    description: телефон для посылки уведомления по СМС
+                noanswer_remind_period:
+                    description: период в который ожидается ответ на отсылаемое письмо
+                confirm_delivery:
+                    description: посылать ли запрос на подтверждение доставки письма
+                    enum: ["yes", "no"]
+                    default: "no"
+                lids:
+                    description: |
+                        идентификатор метки данного письма. Для установки нескольких меток нужно указать несколько раз параметр lid, например &lid=1&lid=2&lid=666
+                inreplyto_mid:
+                    description: mid письма на которое отвечаем, в случае удачной отправки mid будет помечен меткой answered_label
+                references:
+                    description: заголовок *references* письма на которое отвечаем/пересылаем
+                captcha_entered:
+                    description: введённая пользователем captcha
+                captcha_key:
+                    description: ключ введённой captcha
+                send_time:
+                    description: задержка перед отправкой письма
+
+- delayed_callback:
+    queryParameters:
+        mid:
+            description: mid письма
+            required: true
+        remote_ip:
+            description: айпишник пользователя
+        in_reply_to:
+            description: in_reply_to хедер письма
+        forwarded:
+            description: письма, которые надо пометить как пересланные
+        message_id:
+            description: message_id письма, нужно для напоминания о неответе
+        no_answer_period:
+            description: время для напоминания о неответе
+
+/save_draft:
+    post:
+        description: Метод служит для сохранения черновика письма
+        is: [common, recipients, sender, message, attaches]
+        body:
+            application/x-www-form-urlencoded:
+                formParameters:
+                    lids:
+                        description: |
+                            идентификатор метки данного письма. Для установки нескольких меток нужно указать несколько раз параметр lid,
+                            например lid=1&lid=2&lid=666
+                    inreplyto:
+                        description: mid письма на которое отвечаем, в случае удачной отправки mid будет помечен меткой answered_label
+                    references:
+                        description: заголовок *references* письма на которое отвечаем/пересылаем
+
+/save_template:
+    post:
+        description: Метод служит для сохранения шаблонов письма
+        is: [common, recipients, sender, message, attaches]
+        body:
+            application/x-www-form-urlencoded:
+                formParameters:
+                    lids:
+                        description: |
+                            идентификатор метки данного письма. Для установки нескольких меток нужно указать несколько раз параметр lid, например &lid=1&lid=2&lid=666
+
+/send_message:
+    post:
+        description: Метод служит для отправки письма
+        is: [common, recipients, sender, message, attaches]
+        body:
+            application/x-www-form-urlencoded:
+                formParameters:
+                    phone:
+                        description: телефон для посылки уведомления по СМС
+                    noanswer_remind_period:
+                        description: период в который ожидается ответ на отсылаемое письмо
+                    confirm_delivery:
+                        description: посылать ли запрос на подтверждение доставки письма
+                        enum: ["yes", "no"]
+                        default: "no"
+                    lids:
+                        description: |
+                            идентификатор метки данного письма. Для установки нескольких меток нужно указать несколько раз параметр lid, например &lid=1&lid=2&lid=666
+                    inreplyto:
+                        description: message_id письма на которое отвечаем, в случае удачной отправки будет помечен меткой. Не работает без mark_as
+                    mark_as:
+                        description: чем пометить письмо inreplyto
+                        enum: ["replied", "forwarded"]
+                    references:
+                        description: заголовок *references* письма на которое отвечаем/пересылаем
+                    captcha_entered:
+                        description: введённая пользователем captcha
+                    captcha_key:
+                        description: ключ введённой captcha
+
+/send_delayed:
+    post:
+        description: Метод служит для отправки письма
+        is: [common, recipients, sender, message, attaches, delayed]
+
+/cancel_send_delayed:
+    post:
+        description: Метод служит для отмены отложенной отправки письма
+        is: [common]
+        body:
+            application/x-www-form-urlencoded:
+                formParameters:
+                    mid:
+                        description: идентификатор письма
+                        required: true
+
+/send_undo:
+    post:
+        description: Метод служит для отправки отменяемого письма
+        is: [common, recipients, sender, message, attaches, delayed]
+
+/cancel_send_undo:
+    post:
+        description: Метод служит для отмены отменяемой отправки письма
+        is: [common]
+        body:
+            application/x-www-form-urlencoded:
+                formParameters:
+                    mid:
+                        description: идентификатор письма
+                        required: true
+
+
+/compose_draft:
+    post:
+        description: Метод нужен для составления черновика для Xeno
+        is: [common]
+        body:
+            application/x-www-form-urlencoded:
+                formParameters:
+                    uploaded_attach_stids:
+                        description: список stid'ов, загруженных в хранилище вложений
+                    message_id:
+                        description: если не передан, генерируется в композе
+
+/compose_message:
+    post:
+        description: Метод нужен для составления письма для Xeno
+        is: [common, recipients, sender, message, attaches]
+        body:
+            application/x-www-form-urlencoded:
+                formParameters:
+                    lids:
+                        description: идентификатор метки данного письма
+                    disk_attaches:
+                        description: ссылки на вложения, размещённые в Яндекс.Диск
+                    message_id:
+                        description: если не передан, генерируется в композе
+
+/callback/send_delayed_message:
+    get:
+        description: Колбек для отправки отложенных писем
+        is: [common, delayed_callback]
+
+/callback/send_undo_message:
+    get:
+        description: Колбек для отправки отменяемых писем
+        is: [common, delayed_callback]
+
+/set_msg_reminder:
+    get:
+        description: Устанавливает напоминание о письме
+        is: [common]
+        queryParameters:
+            mid:
+                description: mid письма
+                required: true
+            date:
+                description: дата создания ремайндера
+                required: true
+
+/callback/remind_message:
+    post:
+        description: Колбек для отправки напоминания о письме
+        is: [common]
+        queryParameters:
+            mid:
+                description: mid письма
+                required: true
+            lang:
+                description: язык пользователя
+                required: true
+            date:
+                description: дата создания ремайндера
+                required: true
+            account:
+                description: адрес пользователя
+                required: true
+
+/callback/no_answer_remind:
+    post:
+        description: Колбек для отправки напоминания о неответе
+        is: [common]
+        queryParameters:
+            message_id:
+                description: message_id письма
+                required: true
+            lang:
+                description: язык пользователя
+                required: true
+            date:
+                description: дата создания ремайндера
+                required: true
+
+/write_attachment:
+    post:
+        description: Метод служит для сохранения вложения
+        is: [common]
+        queryParameters:
+            filename:
+                description: имя файла вложения
+                required: true
+
+/list_unsubscribe:
+    post:
+        description: Метод для отправки писем об отписке на рассылку
+        is: [common]
+        queryParameters:
+            to:
+                description: адрес получателя
+                required: true
+            subject:
+                description: тема письма
+            body:
+                description: тело письма
+            from_mailbox:
+                description: адрес отправителя

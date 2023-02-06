@@ -1,0 +1,105 @@
+---
+development:
+  table_name: 'test_relation'
+  mdm_entity_type_id: 3327361071
+  auto_compaction_period: 21600000
+  tablet_cell_bundle_meta: 'market-mdm-development'
+  tablet_cell_bundle_replicas: 'market-mdm-development'
+  tablet_count: 1
+  compression_codec: 'LZ4' # r.y.m.yt.util.table.constants.CompressionCodec#name()
+  primary_medium: 'SSD_BLOBS' # r.y.m.yt.util.table.constants.Medium#name()
+  audit: false
+  indices:
+    - index:
+      primary: true
+      name_postfix: '_to_idx'
+      columns:
+        - search_column:
+          name: 'to_entity_id'
+          mdm_attribute_path: [ 3327361073 ]
+          type: 'UINT64' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+          mdm_type: 'REFERENCE' # MdmAttributeDataType#name()
+        - search_column:
+          name: 'from_entity_id'
+          mdm_attribute_path: [ 3327361074 ]
+          type: 'UINT64' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+          mdm_type: 'REFERENCE' # MdmAttributeDataType#name()
+    - index:
+      index_type: 'ONE_2_MANY_CARTESIAN' # SecondaryIndexType#name()
+      name_postfix: '_from_idx'
+      columns:
+        - search_column:
+          name: 'from_entity_id'
+          mdm_attribute_path: [ 3327361074 ]
+          type: 'UINT64' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+          mdm_type: 'REFERENCE' # MdmAttributeDataType#name()
+
+testing:
+  table_name: 'test_relation'
+  mdm_entity_type_id: 3327361071
+  auto_compaction_period: 21600000
+  tablet_cell_bundle_meta: 'market-mdm-testing'
+  tablet_cell_bundle_replicas: 'market-mdm-testing'
+  tablet_count: 1
+  compression_codec: 'LZ4' # r.y.m.yt.util.table.constants.CompressionCodec#name()
+  primary_medium: 'SSD_BLOBS' # r.y.m.yt.util.table.constants.Medium#name()
+  audit: false
+  indices:
+    - index:
+      primary: true
+      name_postfix: '_to_idx'
+      columns:
+        - search_column:
+          name: 'to_entity_id'
+          mdm_attribute_path: [ 3327361073 ]
+          type: 'UINT64' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+          mdm_type: 'REFERENCE' # MdmAttributeDataType#name()
+        - search_column:
+          name: 'from_entity_id'
+          mdm_attribute_path: [ 3327361074 ]
+          type: 'UINT64' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+          mdm_type: 'REFERENCE' # MdmAttributeDataType#name()
+    - index:
+      index_type: 'ONE_2_MANY_CARTESIAN' # SecondaryIndexType#name()
+      name_postfix: '_from_idx'
+      columns:
+        - search_column:
+          name: 'from_entity_id'
+          mdm_attribute_path: [ 3327361074 ]
+          type: 'UINT64' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+          mdm_type: 'REFERENCE' # MdmAttributeDataType#name()
+
+production:
+  table_name: 'test_relation'
+  mdm_entity_type_id: 3327361071
+  auto_compaction_period: 21600000
+  tablet_cell_bundle_meta: 'market-mdm-production'
+  tablet_cell_bundle_replicas: 'market-mdm-production'
+  tablet_count: 10
+  compression_codec: 'LZ4' # r.y.m.yt.util.table.constants.CompressionCodec#name()
+  primary_medium: 'SSD_BLOBS' # r.y.m.yt.util.table.constants.Medium#name()
+  audit: false
+  indices:
+    - index:
+      primary: true
+      name_postfix: '_to_idx'
+      columns:
+        - search_column:
+          name: 'to_entity_id'
+          mdm_attribute_path: [ 3327361073 ]
+          type: 'UINT64' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+          mdm_type: 'REFERENCE' # MdmAttributeDataType#name()
+        - search_column:
+          name: 'from_entity_id'
+          mdm_attribute_path: [ 3327361074 ]
+          type: 'UINT64' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+          mdm_type: 'REFERENCE' # MdmAttributeDataType#name()
+    - index:
+      index_type: 'ONE_2_MANY_CARTESIAN' # SecondaryIndexType#name()
+      name_postfix: '_from_idx'
+      columns:
+        - search_column:
+          name: 'from_entity_id'
+          mdm_attribute_path: [ 3327361074 ]
+          type: 'UINT64' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+          mdm_type: 'REFERENCE' # MdmAttributeDataType#name()

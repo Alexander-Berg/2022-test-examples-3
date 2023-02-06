@@ -1,0 +1,104 @@
+min_delete_interval_sec: 100500
+
+logbroker:
+  pqlib:
+    worker_threads: 2
+
+  consumer:
+    server: "localhost"
+    port: 20500
+    topics:
+      - "change-log"
+    client_id: "lb-consumer"
+    max_memory_usage: 16777216
+    max_infly_requests: 3
+    max_size: 102400
+    use_lock_session: false
+    read_mirrored_partitions: true
+    max_uncommitted_size: 33554432
+
+  credentials:
+    use_secure_tvm: False
+
+  pqlib_log_name: pqlib
+
+reader:
+  read_timeout_ms: 1000
+
+parser:
+  threads: 4
+
+processor:
+  count: 16
+  threads: 4
+  max_batching_time_ms: 1000
+  commit_retry_options:
+    initial_sleep_ms: 1000
+    random_delta_ms: 100
+    sleep_increment_ms: 100
+    exponental_multiplier_ms: 0
+
+  max_commands_per_transaction: 1000
+
+
+yt:
+  table:
+    cluster_url: "master.yt.yandex.net"
+    proxy_role: "default"
+    table_path: "//master/table/path"
+
+  logger:
+    file_name: "/tmp/yt-api"
+
+logs:
+  main:
+    level: "info"
+    targets:
+      - type: "stdout"
+      - type: "rotating"
+        file: "/tmp/main.log"
+        max_file_size: 419430400
+        max_files: 1
+
+  parser:
+    level: trace
+    targets:
+      - type: "rotating"
+        file: "/tmp/parser.log"
+        max_file_size: 419430400
+        max_files: 1
+  processor:
+    level: trace
+    targets:
+      - type: "rotating"
+        file: "/tmp/processor.log"
+        max_file_size: 419430400
+        max_files: 1
+  pqlib:
+    level: trace
+    targets:
+      - type: "rotating"
+        file: "/tmp/pqlib.log"
+        max_file_size: 419430400
+        max_files: 1
+  yt:
+    level: trace
+    targets:
+      - type: "rotating"
+        file: "/tmp/yt.log"
+        max_file_size: 419430400
+        max_files: 1
+
+  graphite:
+    targets:
+    - type: rotating
+      file: "/tmp/graphite.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  solomon:
+    targets:
+    - type: rotating
+      file: "/tmp/solomon.log"
+      max_file_size: 419430400
+      max_files: 1

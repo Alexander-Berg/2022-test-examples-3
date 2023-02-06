@@ -1,0 +1,322 @@
+{
+  "owner": "marketapi",
+  "splits": {
+    "partnerId": "partnerId",
+    "responseCode": "responseCode",
+    "service": "service",
+    "host": "host",
+    "dc": "if(substring(host, 1, 3) in ('iva', 'man', 'vla', 'sas'), substring(host, 1, 3), if(endsWith(host, 'yp-c.yandex.net'), substring(host, position(host, '.') + 1, 3), if(dictGetString('dc', 'dc', sipHash64(host)) <> '', dictGetString('dc', 'dc', sipHash64(host)), 'undefined_dc')))",
+    "resource": "resource",
+    "type": "type"
+  },
+  "metrics": [
+    // !!! marketapi_access !!!
+    // Request counts
+    {
+      // TOTAL counts - daily
+      "metricNameArray": [
+        "market_api_test.requests.count.TOTAL",
+        "market_api_test.requests.count.${responseCode}",
+        "market_api_test.resources.${resource}.count.TOTAL",
+        "market_api_test.resources.${resource}.count.${responseCode}",
+        "market_api_test.dc.${dc}.requests.count.TOTAL",
+        "market_api_test.dc.${dc}.requests.count.${responseCode}",
+        "market_api_test.dc.${dc}.resources.${resource}.count.TOTAL",
+        "market_api_test.dc.${dc}.resources.${resource}.count.${responseCode}",
+        "market_api_test.hosts.${host}.requests.count.TOTAL",
+        "market_api_test.hosts.${host}.requests.count.${responseCode}",
+        "market_api_test.hosts.${host}.resources.${resource}.count.TOTAL",
+        "market_api_test.hosts.${host}.resources.${resource}.count.${responseCode}"
+      ],
+      "tableName": "marketapi_access_test",
+      "period": "DAY",
+      "metricField": "count()",
+      "type": "SIMPLE"
+    },
+    {
+      // 2XX counts - daily
+      "metricNameArray": [
+        "market_api_test.requests.count.2XX",
+        "market_api_test.resources.${resource}.count.2XX",
+        "market_api_test.dc.${dc}.requests.count.2XX",
+        "market_api_test.dc.${dc}.resources.${resource}.count.2XX",
+        "market_api_test.hosts.${host}.requests.count.2XX",
+        "market_api_test.hosts.${host}.resources.${resource}.count.2XX"
+      ],
+      "tableName": "marketapi_access_test",
+      "period": "DAY",
+      "metricField": "countIf(200<=responseCode and responseCode<300)",
+      "type": "SIMPLE"
+    },
+    {
+      // 4XX counts - daily
+      "metricNameArray": [
+        "market_api_test.requests.count.4XX",
+        "market_api_test.resources.${resource}.count.4XX",
+        "market_api_test.dc.${dc}.requests.count.4XX",
+        "market_api_test.dc.${dc}.resources.${resource}.count.4XX",
+        "market_api_test.hosts.${host}.requests.count.4XX",
+        "market_api_test.hosts.${host}.resources.${resource}.count.4XX"
+
+      ],
+      "tableName": "marketapi_access_test",
+      "period": "DAY",
+      "metricField": "countIf(400<=responseCode and responseCode<500)",
+      "type": "SIMPLE"
+    },
+    {
+      // 5XX counts - daily
+      "metricNameArray": [
+        "market_api_test.requests.count.5XX",
+        "market_api_test.resources.${resource}.count.5XX",
+        "market_api_test.dc.${dc}.requests.count.5XX",
+        "market_api_test.dc.${dc}.resources.${resource}.count.5XX",
+        "market_api_test.hosts.${host}.requests.count.5XX",
+        "market_api_test.hosts.${host}.resources.${resource}.count.5XX"
+      ],
+      "tableName": "marketapi_access_test",
+      "period": "DAY",
+      "metricField": "countIf(500<=responseCode and responseCode<600)",
+      "type": "SIMPLE"
+    },
+
+    // RPS
+    {
+      // TOTAL RPS - 1min
+      "metricNameArray": [
+        "market_api_test.requests.rps.TOTAL",
+        "market_api_test.requests.rps.${responseCode}",
+        "market_api_test.resources.${resource}.rps.TOTAL",
+        "market_api_test.resources.${resource}.rps.${responseCode}",
+        "market_api_test.dc.${dc}.requests.rps.TOTAL",
+        "market_api_test.dc.${dc}.requests.rps.${responseCode}",
+        "market_api_test.dc.${dc}.resources.${resource}.rps.TOTAL",
+        "market_api_test.dc.${dc}.resources.${resource}.rps.${responseCode}",
+        "market_api_test.hosts.${host}.requests.rps.TOTAL",
+        "market_api_test.hosts.${host}.requests.rps.${responseCode}",
+        "market_api_test.hosts.${host}.resources.${resource}.rps.TOTAL",
+        "market_api_test.hosts.${host}.resources.${resource}.rps.${responseCode}",
+        "market_api_test.partners.${partnerId}.requests.rps.TOTAL",
+        "market_api_test.partners.${partnerId}.requests.rps.${responseCode}",
+        "market_api_test.partners.${partnerId}.resources.${resource}.rps.TOTAL",
+        "market_api_test.partners.${partnerId}.resources.${resource}.rps.${responseCode}"
+      ],
+      "tableName": "marketapi_access_test",
+      "period": "ONE_MIN",
+      "metricField": "count() / 60",
+      "type": "SIMPLE"
+    },
+    {
+      // 2XX RPS - 1min
+      "metricNameArray": [
+        "market_api_test.requests.rps.2XX",
+        "market_api_test.resources.${resource}.rps.2XX",
+        "market_api_test.dc.${dc}.requests.rps.2XX",
+        "market_api_test.dc.${dc}.resources.${resource}.rps.2XX",
+        "market_api_test.hosts.${host}.requests.rps.2XX",
+        "market_api_test.hosts.${host}.resources.${resource}.rps.2XX",
+        "market_api_test.partners.${partnerId}.requests.rps.2XX",
+        "market_api_test.partners.${partnerId}.resources.${resource}.rps.2XX"
+      ],
+      "tableName": "marketapi_access_test",
+      "period": "ONE_MIN",
+      "metricField": "countIf(200<=responseCode and responseCode<300) / 60",
+      "type": "SIMPLE"
+    },
+    {
+      // 4XX RPS - 1min
+      "metricNameArray": [
+        "market_api_test.requests.rps.4XX",
+        "market_api_test.resources.${resource}.rps.4XX",
+        "market_api_test.dc.${dc}.requests.rps.4XX",
+        "market_api_test.dc.${dc}.resources.${resource}.rps.4XX",
+        "market_api_test.hosts.${host}.requests.rps.4XX",
+        "market_api_test.hosts.${host}.resources.${resource}.rps.4XX",
+        "market_api_test.partners.${partnerId}.requests.rps.4XX",
+        "market_api_test.partners.${partnerId}.resources.${resource}.rps.4XX"
+      ],
+      "tableName": "marketapi_access_test",
+      "period": "ONE_MIN",
+      "metricField": "countIf(400<=responseCode and responseCode<500) / 60",
+      "type": "SIMPLE"
+    },
+    {
+      // 5XX RPS - 1min
+      "metricNameArray": [
+        "market_api_test.requests.rps.5XX",
+        "market_api_test.resources.${resource}.rps.5XX",
+        "market_api_test.dc.${dc}.requests.rps.5XX",
+        "market_api_test.dc.${dc}.resources.${resource}.rps.5XX",
+        "market_api_test.hosts.${host}.requests.rps.5XX",
+        "market_api_test.hosts.${host}.resources.${resource}.rps.5XX",
+        "market_api_test.partners.${partnerId}.requests.rps.5XX",
+        "market_api_test.partners.${partnerId}.resources.${resource}.rps.5XX"
+      ],
+      "tableName": "marketapi_access_test",
+      "period": "ONE_MIN",
+      "metricField": "countIf(500<=responseCode and responseCode<600) / 60",
+      "type": "SIMPLE"
+    },
+
+    // Timings
+    {
+      // TOTAL timings - 1min,daily
+      "metricNameArray": [
+        "market_api_test.requests.timings.TOTAL",
+        "market_api_test.resources.${resource}.timings.TOTAL",
+        "market_api_test.dc.${dc}.requests.timings.TOTAL",
+        "market_api_test.dc.${dc}.resources.${resource}.timings.TOTAL",
+        "market_api_test.hosts.${host}.requests.timings.TOTAL",
+        "market_api_test.hosts.${host}.resources.${resource}.timings.TOTAL",
+        "market_api_test.partners.${partnerId}.requests.timings.TOTAL",
+        "market_api_test.partners.${partnerId}.resources.${resource}.timings.TOTAL"
+      ],
+      "tableName": "marketapi_access_test",
+      "periodArray": ["ONE_MIN", "DAY"],
+      "metricField": "duration",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      // 2XX timings - 1min,daily
+      "metricNameArray": [
+        "market_api_test.requests.timings.2XX",
+        "market_api_test.resources.${resource}.timings.2XX",
+        "market_api_test.dc.${dc}.requests.timings.2XX",
+        "market_api_test.dc.${dc}.resources.${resource}.timings.2XX",
+        "market_api_test.hosts.${host}.requests.timings.2XX",
+        "market_api_test.hosts.${host}.resources.${resource}.timings.2XX",
+        "market_api_test.partners.${partnerId}.requests.timings.2XX",
+        "market_api_test.partners.${partnerId}.resources.${resource}.timings.2XX"
+      ],
+      "tableName": "marketapi_access_test",
+      "periodArray": ["ONE_MIN", "DAY"],
+      "metricField": "duration",
+      "filter": "200<=responseCode and responseCode<300",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      // 4XX timings - 1min,daily
+      "metricNameArray": [
+        "market_api_test.requests.timings.4XX",
+        "market_api_test.resources.${resource}.timings.4XX",
+        "market_api_test.dc.${dc}.requests.timings.4XX",
+        "market_api_test.dc.${dc}.resources.${resource}.timings.4XX",
+        "market_api_test.hosts.${host}.requests.timings.4XX",
+        "market_api_test.hosts.${host}.resources.${resource}.timings.4XX",
+        "market_api_test.partners.${partnerId}.requests.timings.4XX",
+        "market_api_test.partners.${partnerId}.resources.${resource}.timings.4XX"
+      ],
+      "tableName": "marketapi_access_test",
+      "periodArray": ["ONE_MIN", "DAY"],
+      "metricField": "duration",
+      "filter": "400<=responseCode and responseCode<500",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      // 5XX timings - 1min,daily
+      "metricNameArray": [
+        "market_api_test.requests.timings.5XX",
+        "market_api_test.resources.${resource}.timings.5XX",
+        "market_api_test.dc.${dc}.requests.timings.5XX",
+        "market_api_test.dc.${dc}.resources.${resource}.timings.5XX",
+        "market_api_test.hosts.${host}.requests.timings.5XX",
+        "market_api_test.hosts.${host}.resources.${resource}.timings.5XX",
+        "market_api_test.partners.${partnerId}.requests.timings.5XX",
+        "market_api_test.partners.${partnerId}.resources.${resource}.timings.5XX"
+      ],
+      "tableName": "marketapi_access_test",
+      "periodArray": ["ONE_MIN", "DAY"],
+      "metricField": "duration",
+      "filter": "500<=responseCode and responseCode<600",
+      "type": "QUANTILE_TIMING"
+    },
+
+    // Errors percentage
+    {
+      // 5XX errors % - 1min,daily
+      "metricNameArray": [
+        "market_api_test.requests.percentageOfErrors",
+        "market_api_test.resources.${resource}.percentageOfErrors",
+        "market_api_test.dc.${dc}.requests.percentageOfErrors",
+        "market_api_test.dc.${dc}.resources.${resource}.percentageOfErrors",
+        "market_api_test.hosts.${host}.requests.percentageOfErrors",
+        "market_api_test.hosts.${host}.resources.${resource}.percentageOfErrors",
+        "market_api_test.partners.${partnerId}.requests.percentageOfErrors",
+        "market_api_test.partners.${partnerId}.resources.${resource}.percentageOfErrors"
+      ],
+      "tableName": "marketapi_access_test",
+      "periodArray": ["ONE_MIN", "DAY"],
+      "metricField": "countIf(500<=responseCode and responseCode<600) * 100 / count()",
+      "type": "SIMPLE"
+    },
+
+
+    // !!!marketapi_metrics!!!
+
+    // Request per second
+    {
+      // RPS - 1min
+      "metricNameArray": [
+        "market_api_test.${type}.${service}.rps",
+        "market_api_test.dc.${dc}.${type}.${service}.rps",
+        "market_api_test.hosts.${host}.${type}.${service}.rps"
+      ],
+      "tableName": "marketapi_metrics_test",
+      "period": "ONE_MIN",
+      "metricField": "count() / 60",
+      "type": "SIMPLE"
+    },
+    // Errors per second
+    {
+      // EPS - 1min
+      "metricNameArray": [
+        "market_api_test.${type}.${service}.errors",
+        "market_api_test.dc.${dc}.${type}.${service}.errors",
+        "market_api_test.hosts.${host}.${type}.${service}.errors"
+      ],
+      "tableName": "marketapi_metrics_test",
+      "period": "ONE_MIN",
+      "metricField": "countIf(error=1) / 60",
+      "type": "SIMPLE"
+    },
+    // Retries per second
+    {
+      // RetrPS - 1min
+      "metricNameArray": [
+        "market_api_test.${type}.${service}.retry",
+        "market_api_test.dc.${dc}.${type}.${service}.retry",
+        "market_api_test.hosts.${host}.${type}.${service}.retry"
+      ],
+      "tableName": "marketapi_metrics_test",
+      "period": "ONE_MIN",
+      "metricField": "countIf(retry=1) / 60",
+      "type": "SIMPLE"
+    },
+    // Timings
+    {
+      // Timings - 1min
+      "metricNameArray": [
+        "market_api_test.${type}.${service}.timings",
+        "market_api_test.dc.${dc}.${type}.${service}.timings",
+        "marketapi_access_test.hosts.${host}.${type}.${service}.timings"
+      ],
+      "tableName": "marketapi_metrics_test",
+      "period": "ONE_MIN",
+      "metricField": "duration",
+      "type": "QUANTILE_TIMING"
+    },
+
+    //Warnings
+    {
+      "metricNameArray": [
+        "market_api_test.warn.${type}",
+        "market_api_test.warn.dc.${dc}.${type}",
+        "market_api_test.warn.hosts.${host}.${type}"
+      ],
+      "tableName": "marketapi_warn_test",
+      "period": "ONE_MIN",
+      "metricField": "count(*) / 60",
+      "type": "SIMPLE"
+    }
+  ]
+}

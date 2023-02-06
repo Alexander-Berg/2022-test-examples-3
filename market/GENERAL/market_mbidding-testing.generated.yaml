@@ -1,0 +1,56 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый market_mbidding-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_mbidding-testing
+
+juggler:
+  checks:
+
+  # Check mbi-bidding
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbidding-testing&service=mbi-bidding&last=1DAY&mode=edit
+  - service: mbi-bidding
+
+  # Check mbi-bidding-vendor
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbidding-testing&service=mbi-bidding-vendor&last=1DAY&mode=edit
+  - service: mbi-bidding-vendor
+
+  # Check unispace
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbidding-testing&service=unispace&last=1DAY&mode=edit
+  - service: unispace
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 0
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 0
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    check_options: {}
+    children:
+    - CGROUP%market_mbidding-testing
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_mbidding-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_mbi
+    - market
+    - _market_
+    ttl: 300

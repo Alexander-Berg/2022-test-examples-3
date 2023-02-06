@@ -1,0 +1,234 @@
+{
+  "meta": {
+    "fields": [
+      {
+        "name": "created",
+        "title": "Время создания сегмента",
+        "type": "DATE_TIME",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "updated",
+        "title": "Время последнего обновления сегмента",
+        "type": "DATE_TIME",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "uniqueId",
+        "title": "Уникальный идентификатор",
+        "type": "STRING",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "returnReference",
+        "title": "Возврат",
+        "type": "REFERENCE",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "returnBox",
+        "title": "Грузоместо",
+        "type": "REFERENCE",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "status",
+        "title": "Статус",
+        "type": "LIST",
+        "editable": false,
+        "options": [
+          {
+            "id": null,
+            "displayName": "—",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "CREATED",
+            "displayName": "Создан",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "IN",
+            "displayName": "Принят",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "TRANSIT_PREPARED",
+            "displayName": "Подготовлен к отгрузке",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "OUT",
+            "displayName": "Отгружен",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "CANCELLED",
+            "displayName": "Отменён",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "EXPIRED",
+            "displayName": "Просрочен",
+            "slug": null,
+            "openNewTab": false
+          }
+        ],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "routeReference",
+        "title": "Маршрут",
+        "type": "REFERENCE",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      }
+    ],
+    "actions": [
+      {
+        "title": "Создать маршрут",
+        "description": "Создать маршрут для возвратного сегмента",
+        "slug": "../return-routes/new",
+        "identifiedBy": [],
+        "type": "ROW_ACTION",
+        "method": "GO_TO",
+        "icon": null,
+        "authorities": [
+          "ROLE_LRM_EDITOR"
+        ]
+      }
+    ],
+    "mode": "VIEW",
+    "deletable": false,
+    "children": [
+      {
+        "title": "Данные об отгрузке",
+        "slug": "shipment",
+        "parentSlug": "returns/boxes/segments",
+        "type": "DETAILS",
+        "parentColumn": "segmentId",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "Данные о логистической точке",
+        "slug": "logistic-point",
+        "parentSlug": "returns/boxes/segments",
+        "type": "DETAILS",
+        "parentColumn": "segmentId",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "История изменения статусов",
+        "slug": "returns/boxes/segments/status-history",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "segmentId",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "Плановые даты изменения статусов",
+        "slug": "returns/boxes/segments/status-plan",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "segmentId",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "Фоновые процессы",
+        "slug": "business-process-states",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "segmentId",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "История изменения маршрута",
+        "slug": "return-routes/search",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "segmentId",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "Запросы на изменение сегмента",
+        "slug": "returns/boxes/segments/changes",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "segmentId",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      }
+    ],
+    "tabs": []
+  },
+  "item": {
+    "id": 1,
+    "values": {
+      "returnReference": {
+        "id": "1",
+        "displayName": "1",
+        "slug": "lrm/returns",
+        "openNewTab": false
+      },
+      "created": "2021-11-11T15:00:00",
+      "returnBox": {
+        "id": "1",
+        "displayName": "box-external-id-1",
+        "slug": "lrm/returns/boxes",
+        "openNewTab": false
+      },
+      "updated": "2021-11-11T16:00:00",
+      "routeReference": {
+        "id": null,
+        "displayName": null,
+        "slug": null,
+        "openNewTab": false
+      }
+    },
+    "title": "Возвратный сегмент 1"
+  }
+}

@@ -1,0 +1,23 @@
+/var/log/yandex/sovetnik-redir/sovetnik.log {
+    daily
+    rotate 7
+    compress
+    missingok
+    notifempty
+    delaycompress
+    postrotate
+        kill -HUP `cat /var/run/node-init-cluster/yandex-sovetnik-redir/master.pid`
+    endscript
+}
+
+/var/log/yandex/sovetnik-redir/sovetnik-eb-errors.log {
+    daily
+    rotate 7
+    compress
+    missingok
+    notifempty
+    delaycompress
+    postrotate
+        kill -HUP `cat /var/run/node-init-cluster/yandex-sovetnik-redir/master.pid`
+    endscript
+}

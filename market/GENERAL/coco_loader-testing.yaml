@@ -1,0 +1,405 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый coco_loader-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dcoco_loader-testing
+
+juggler:
+  checks:
+
+  # Check coco-mass-fail
+  # https://juggler.yandex-team.ru/check_details/?host=coco_loader-testing&service=coco-mass-fail&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /status/ch_mass_fail
+      regexp: ^0;.*
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_coco_loader_man:coco-mass-fail:all
+    - NANNY%testing_market_coco_loader_sas:coco-mass-fail:all
+    refresh_time: 600
+    service: coco-mass-fail
+    ttl: 1300
+
+  # Check coco-sla-loads
+  # https://juggler.yandex-team.ru/check_details/?host=coco_loader-testing&service=coco-sla-loads&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /status/sla_loads
+      regexp: ^0;.*
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_coco_loader_man:coco-sla-loads:all
+    - NANNY%testing_market_coco_loader_sas:coco-sla-loads:all
+    refresh_time: 600
+    service: coco-sla-loads
+    ttl: 1300
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=coco_loader-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_coco_loader_man
+    - NANNY%testing_market_coco_loader_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    refresh_time: 60
+    service: disk_free_space
+    ttl: 900
+
+  # Check fresh-hprof-files
+  # https://juggler.yandex-team.ru/check_details/?host=coco_loader-testing&service=fresh-hprof-files&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_coco_loader_man
+    - NANNY%testing_market_coco_loader_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    refresh_time: 60
+    service: fresh-hprof-files
+    ttl: 900
+
+  # Check leader-down
+  # https://juggler.yandex-team.ru/check_details/?host=coco_loader-testing&service=leader-down&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /status/ping_leader
+      regexp: ^0;.*
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 95%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 95%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_coco_loader_man:leader-down:all
+    - NANNY%testing_market_coco_loader_sas:leader-down:all
+    refresh_time: 60
+    service: leader-down
+    ttl: 300
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=coco_loader-testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_coco_loader_man
+    - NANNY%testing_market_coco_loader_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    refresh_time: 60
+    service: logrotate
+    ttl: 900
+
+  # Check monitoring
+  # https://juggler.yandex-team.ru/check_details/?host=coco_loader-testing&service=monitoring&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_coco_loader_man
+    - NANNY%testing_market_coco_loader_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    refresh_time: 60
+    service: monitoring
+    ttl: 900
+
+  # Check olap2-etl-sla-loads
+  # https://juggler.yandex-team.ru/check_details/?host=coco_loader-testing&service=olap2-etl-sla-loads&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /status/sla_loads
+      regexp: ^0;.*
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_coco_loader_man:olap2-etl-sla-loads:all
+    - NANNY%testing_market_coco_loader_sas:olap2-etl-sla-loads:all
+    refresh_time: 600
+    service: olap2-etl-sla-loads
+    ttl: 1300
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=coco_loader-testing&service=ping&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_coco_loader_man
+    - NANNY%testing_market_coco_loader_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    refresh_time: 60
+    service: ping
+    ttl: 900
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=coco_loader-testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_coco_loader_man
+    - NANNY%testing_market_coco_loader_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    refresh_time: 60
+    service: push-client-status
+    ttl: 900
+
+    # Check coco-ch-replica-lag
+    # https://juggler.yandex-team.ru/check_details/?host=coco_loader-testing&service=coco-ch-replica-lag&last=1DAY&mode=edit
+  - active: http
+    service: coco-ch-replica-lag
+    active_kwargs:
+      ok_codes:
+        - 200
+      path: /status/ch_replicas_lag
+      regexp: ^0;.*
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+      - NANNY%testing_market_coco_loader_vla:coco-ch-replica-lag:all
+      - NANNY%testing_market_coco_loader_sas:coco-ch-replica-lag:all
+    refresh_time: 1800
+    ttl: 4000
+
+    # Check coco-ch-replica-sanity
+    # https://juggler.yandex-team.ru/check_details/?host=coco_loader-testing&service=coco-ch-replica-sanity&last=1DAY&mode=edit
+  - active: http
+    service: coco-ch-replica-sanity
+    active_kwargs:
+      ok_codes:
+        - 200
+      path: /status/ch_sanity_check
+      regexp: ^0;.*
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+      - NANNY%testing_market_coco_loader_vla:coco-ch-replica-sanity:all
+      - NANNY%testing_market_coco_loader_sas:coco-ch-replica-sanity:all
+    refresh_time: 1800
+    ttl: 4000
+
+  # Check too-many-elections
+  # https://juggler.yandex-team.ru/check_details/?host=coco_loader-testing&service=too-many-elections&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /status/too_many_elections
+      regexp: ^0;.*
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_coco_loader_man:too-many-elections:all
+    - NANNY%testing_market_coco_loader_sas:too-many-elections:all
+    refresh_time: 600
+    service: too-many-elections
+    ttl: 1300
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    check_options: {}
+    host: coco_loader-testing
+    namespace: market.common
+    notifications: []
+    tags:
+    - market_testing
+    - market_rtc
+    - marketmstatcocoloader
+    - testing
+    - market
+    - _market_

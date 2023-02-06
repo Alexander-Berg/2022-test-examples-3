@@ -1,0 +1,50 @@
+{
+  "tableName": "clusterizer_quality_assessor_testing",
+  "splits": {
+    "category_id": "category_id",
+    "sample_id": "sample_id",
+    "host": "host"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "ir.models-clusterizer.testing.quality_assessor.${host}.category.${category_id}.precision",
+        "ir.models-clusterizer.testing.quality_assessor.${host}.sample.${sample_id}.precision",
+        "ir.models-clusterizer.testing.quality_assessor.${host}.precision"
+      ],
+      "period": "ONE_MIN",
+      "type": "SIMPLE",
+      "metricField": "sum(tp)/(sum(tp+fp))*100"
+    },
+    {
+      "metricNameArray": [
+        "ir.models-clusterizer.testing.quality_assessor.${host}.category.${category_id}.recall",
+        "ir.models-clusterizer.testing.quality_assessor.${host}.sample.${sample_id}.recall",
+        "ir.models-clusterizer.testing.quality_assessor.${host}.recall"
+      ],
+      "period": "ONE_MIN",
+      "type": "SIMPLE",
+      "metricField": "sum(tp)/(sum(tp+fn))*100"
+    },
+    {
+      "metricNameArray": [
+        "ir.models-clusterizer.testing.quality_assessor.${host}.category.${category_id}.f_measure",
+        "ir.models-clusterizer.testing.quality_assessor.${host}.sample.${sample_id}.f_measure",
+        "ir.models-clusterizer.testing.quality_assessor.${host}.f_measure"
+      ],
+      "period": "ONE_MIN",
+      "type": "SIMPLE",
+      "metricField": "2*sum(tp)/sum(2*tp+fp+fn)*100"
+    },
+    {
+      "metricNameArray": [
+        "ir.models-clusterizer.testing.quality_assessor.${host}.category.${category_id}.used_pair_number",
+        "ir.models-clusterizer.testing.quality_assessor.${host}.sample.${sample_id}.used_pair_number",
+        "ir.models-clusterizer.testing.quality_assessor.${host}.used_pair_number"
+      ],
+      "period": "ONE_MIN",
+      "type": "SIMPLE",
+      "metricField": "sum(tp+tn+fp+fn)"
+    }
+  ]
+}

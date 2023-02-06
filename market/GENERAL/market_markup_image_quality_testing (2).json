@@ -1,0 +1,44 @@
+{
+  "logHosts": "*",
+  "logPath": "/var/log/yandex/market-markup-worker2/markup-worker-image-quality.log",
+  "clickhouseTable": "markup_worker_image_quality_testing",
+  "parser": {
+    "dateFormat": "yyyy-MM-dd'T'HH:mm:ssZ",
+    "separator": "\t",
+    "tskvMatch": {},
+    "columns": {
+      "category_id": {
+        "type": "UInt32"
+      },
+      "total_count": {
+        "type": "UInt32"
+      },
+      "main_count": {
+        "type": "UInt32"
+      },
+      "problems_count": {
+        "type": "UInt32"
+      },
+      "published": {
+        "type": "String",
+        "default": "all"
+      },
+      "watermark_ratio": {
+        "type": "Float64"
+      },
+      "low_quality_ratio": {
+        "type": "Float64"
+      },
+      "cropped_ratio": {
+        "type": "Float64"
+      },
+      "bad_background_ratio": {
+        "type": "Float64"
+      }
+    }
+  },
+
+  "sources": [
+    "logbroker://market-health-testing--other"
+  ]
+}

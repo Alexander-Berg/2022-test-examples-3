@@ -1,0 +1,83 @@
+<dataset>
+    <return
+            id="1"
+            source="PICKUP_POINT"
+            order_external_id="order-external-id"
+            logistic_point_from_id="1234"
+            committed="2021-08-30 11:12:13 +0000"
+    />
+
+    <return_box
+            id="1"
+            return_id="1"
+            external_id="box-external-id"
+    />
+
+    <return_segment
+            return_id="1"
+            return_box_id="1"
+            logistic_point_id="1234"
+            logistic_point_type="PICKUP"
+            shipment_time="2021-09-06 11:12:13 +0000"
+            shipment_destination='{
+              "type": "SORTING_CENTER",
+              "partnerId": 100,
+              "logisticPointId": 200,
+              "name": "склад сц",
+              "returnSegmentId": 2
+            }'
+            shipment_recipient='{
+              "name": "partner name",
+              "type": "DELIVERY_SERVICE_WITH_COURIER",
+              "courier": {
+                "id": 123,
+                "uid": 234,
+                "name": "courier",
+                "carNumber": "car",
+                "phoneNumber": "+7-000-000-00-00",
+                "carDescription": null
+              },
+              "partnerId": 200
+            }'
+    />
+
+    <return_segment
+            return_id="1"
+            return_box_id="1"
+            logistic_point_id="200"
+            logistic_point_partner_id="100"
+            logistic_point_external_id="300"
+            logistic_point_name="склад сц"
+            logistic_point_type="SORTING_CENTER"
+            unique_id="e11c5e64-3694-40c9-b9b4-126efedaa098"
+    />
+
+    <return_event
+            created="2021-09-06 11:12:13 +0000"
+            logbroker_id="[null]"
+            request_id="test-request-id/2"
+            type="RETURN_SEGMENT_CREATED"
+            return_id="1"
+            payload='{
+                "id": 2,
+                "type": "RETURN_SEGMENT_CREATED",
+                "boxExternalId": "box-external-id",
+                "logisticPointInfo": {
+                    "type": "SORTING_CENTER",
+                    "partnerId": 100,
+                    "logisticPointId": 200,
+                    "logisticPointExternalId": "300"
+                },
+                "shipmentFieldsInfo": {
+                    "recipient": null,
+                    "shipmentTime": null,
+                    "destinationInfo": null
+                }
+            }'
+    />
+
+    <queue_tasks
+            queue_name="RETURN_SEGMENT_GET_ROUTE"
+            payload='{"requestId":"test-request-id/3","returnSegmentId":2,"sortingCenterPartnerIds":null,"useStartTime":false}'
+    />
+</dataset>

@@ -1,0 +1,713 @@
+monitoring:
+  port: 16300
+
+status:
+  port: 16301
+
+storages:
+- name: nginx-access-log
+  plugin: fs
+  config:
+    directory: /logs/nginx-access-log
+    max_partition_size: 1gb
+    data_retention:
+      by_age: 2d
+- name: java-log
+  plugin: fs
+  config:
+    directory: /logs/java-log
+    max_partition_size: 5gb
+    data_retention:
+      by_age: 2d
+
+routes:
+- input:
+    plugin: syslog
+    id: nginx-access-log
+    config:
+      path: /tmp/unified-nginx-access-log.sock
+      format: rfc3164
+  channel:
+    pipe:
+      - storage_ref:
+          storage: nginx-access-log
+      - filter:
+          plugin: batch
+          config:
+            delimiter: "\n"
+            flush_period: 50ms
+            limit:
+              bytes: 256kb
+      - filter:
+          plugin: assign
+          config:
+            session:
+              - file: dummy-path/access.log
+    output:
+      plugin: logbroker
+      config:
+        endpoint: logbroker-prestable.yandex.net
+        topic: direct-test/nginx-access-log
+        codec: gzip
+        tvm:
+          destination_id: 2001147
+          client_id: 2001808
+          secret:
+            file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+        export_session_meta_keys:
+          - file
+
+- input:
+    plugin: grpc
+    config:
+      uri: localhost:16400
+  channel:
+    pipe:
+      - filter:
+          plugin: assign
+          config:
+            message:
+              - type: '{logger_name}'
+      - filter:
+          plugin: assign
+          config:
+            message:
+              - type: messages
+          enable_if:
+            session:
+              is_messages: 1
+      - filter:
+          plugin: assign
+          config:
+            message:
+              - type: error-booster
+          enable_if:
+            session:
+              is_error_booster: 1
+      - storage_ref:
+          storage: java-log
+          flow_control:
+            inflight:
+              limit: 100mb
+    case:
+      - when:
+          message:
+            logger_name: TRACE.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    - file: dummy-path/trace-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct-test/direct-trace-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file
+      - when:
+          message:
+            logger_name: PPCLOG_CMD.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    - file: dummy-path/webapi-ppclog-cmd-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct-test/direct-ppclog-cmd-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file
+      - when:
+          message:
+            logger_name: ACCESS_LOG.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    - file: dummy-path/access-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct-test/access-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file
+      - when:
+          message:
+            logger_name: ACTIVE_ORDERS.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    - file: dummy-path/active-orders-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct-test/direct-active-orders-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file
+      - when:
+          message:
+            logger_name: BALANCE_CALLS
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    - file: dummy-path/balance-calls-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct-test/direct-balance-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file
+      - when:
+          message:
+            logger_name: BS_EXPORT_ESS.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    - file: dummy-path/bs-export-ess-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct-test/direct-bs-export-ess-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file
+      - when:
+          message:
+            logger_name: CAMPAIGN_BALANCE.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    - file: dummy-path/campaign-balance-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct-test/direct-common-data-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file
+      - when:
+          message:
+            logger_name: COMMON_DATA.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    - file: dummy-path/common-data-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct-test/direct-common-data-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file
+      - when:
+          message:
+            logger_name: DBSHARDS_IDS.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    - file: dummy-path/dbshards-ids-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct-test/direct-dbshards-ids-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file
+      - when:
+          message:
+            logger_name: LOGAPI.data
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    - file: dummy-path/ppclog-api.log-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct-test/direct-ppclog-api-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file
+      - when:
+          message:
+            logger_name: MAILS.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    - file: dummy-path/mails-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct-test/direct-mails-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file
+      - when:
+          message:
+            logger_name: METRICS.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    - file: dummy-path/metrics-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct-test/direct-metrics-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file
+      - when:
+          message:
+            logger_name: MODERATION.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    - file: dummy-path/ess-moderation-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct/direct-ess-moderation-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file
+      - when:
+          message:
+            logger_name: PPCLOG_INTAPI.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    - file: dummy-path/ppclog-intapi-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct-test/direct-ppclog-cmd-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file
+      - when:
+          message:
+            logger_name: PPCLOG_PRICE.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    - file: dummy-path/ppclog-price-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct-test/direct-ppclog-price-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file
+      - when:
+          message:
+            logger_name: UAAS_DATA.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    - file: dummy-path/uaas-data-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct-test/direct-uaas-data-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file
+      - when:
+          message:
+            logger_name: ru.yandex.direct.bannersystem.handles.BsUriFactory
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+          output:
+            plugin: dev_null
+      - when:
+          message:
+            logger_name: INTAPI.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+          output:
+            plugin: dev_null
+      - when:
+          message:
+            logger_name: WEB-API.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+          output:
+            plugin: dev_null
+      - when:
+          message:
+            logger_name: PPCLOG_BIDMODIFIERS.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+          output:
+            plugin: dev_null
+      - when:
+          message:
+            logger_name: YT_QUERIES.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+          output:
+            plugin: dev_null
+      - when:
+          message:
+            logger_name: YTSYNC.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+          output:
+            plugin: dev_null
+      - when:
+          session:
+            deploy_logger_name: JAVA_THREADDUMP.log
+        channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    -   file: dummy-path/java-threaddump-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct-test/direct-java-threaddump-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file
+      - channel:
+          pipe:
+            - filter:
+                plugin: batch
+                config:
+                  delimiter: "\n"
+                  flush_period: 50ms
+                  limit:
+                    bytes: 256kb
+            - filter:
+                plugin: assign
+                config:
+                  session:
+                    -   file: dummy-path/messages-log
+          output:
+            plugin: logbroker
+            config:
+              endpoint: logbroker-prestable.yandex.net
+              topic: direct-test/direct-messages-log
+              codec: gzip
+              tvm:
+                destination_id: 2001147
+                client_id: 2001808
+                secret:
+                  file: /etc/direct-tokens/tvm2_logbroker-prestable-ident-direct-test
+              export_session_meta_keys:
+                - file

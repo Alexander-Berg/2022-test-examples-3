@@ -1,0 +1,34 @@
+# Параметры обработки
+params:
+  default:
+    resolve: yes
+    templates:
+      - user_mslb_http.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          check observe layer7
+      on_error:       fastinter
+
+    globals:
+      service_name:   eda-ssl-proxy.tst.vs.market.yandex.net
+      service_port:   80
+      timeout_server: 60s
+      timeout_client: 60s
+
+    options:
+      tcp-check:
+
+    no_options:
+      httpchk:
+
+    meta:
+      monrun_ignore:  yes
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+      - name: api-proxy.taxi.tst.yandex.net

@@ -1,0 +1,99 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+			http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <!-- под aboreader к нам заходит mstat -->
+    <changeSet id="add_user_abo_reader" author="artemmz">
+        <sql>create role aboreader;</sql>
+    </changeSet>
+
+    <!-- для генерации паролей ч/з idm -->
+    <changeSet id="create_role_reader_and_writer" author="zilzilok">
+        <sql>
+            create role reader;
+            create role writer;
+        </sql>
+    </changeSet>
+
+    <include file="classpath:enum.changelog.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:table.changelog.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:function.changelog.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:view.changelog.xml" relativeToChangelogFile="true"/>
+    <include file="classpath:mview.changelog.xml" relativeToChangelogFile="true"/>
+
+    <include file="classpath:precondition.xml" relativeToChangelogFile="true"/>
+
+    <include file="classpath:after/changelog.xml" relativeToChangelogFile="true"/>
+
+    <!--В отчете ссылаемся на схему arbitrage
+    Чтобы не падал ServantletTest добавим таблицу -->
+    <changeSet id="schema_arbitrage" author="kukabara">
+        <sql>CREATE SCHEMA arbitrage;</sql>
+    </changeSet>
+
+    <changeSet author="antipov" id="a_conversation">
+        <createTable tableName="a_conversation" schemaName="arbitrage">
+            <column name="conversation_id" type="numeric(10, 0)"
+                    remarks="Уникальный идентификатор диалога, предоставляется хранилищем">
+                <constraints primaryKey="true" primaryKeyName="pk_a_conversation"/>
+            </column>
+            <column name="shop_id" type="numeric"/>
+            <column name="order_id" type="numeric(10, 0)"
+                    remarks="ID заказа, возможно несколько товаров, но заказаны в одном магазине">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_status" type="numeric(1, 0)" remarks="Текущий статус диалога">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resolution_type" type="numeric" remarks="Тип решения"/>
+            <column name="resolution_subtype" type="numeric" remarks="Подтип решения"/>
+            <column name="created_ts" type="timestamptz" remarks="Дата старта диалога">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resolution_ts" type="timestamptz"/>
+            <column name="check_type" type="varchar(30)" defaultValue="MANUAL">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="antipov93" id="a_order">
+        <createTable tableName="a_order" schemaName="arbitrage">
+            <column name="order_id" type="numeric">
+                <constraints primaryKey="true" primaryKeyName="pk_a_order"/>
+            </column>
+            <column name="shop_order_id" type="varchar(50)"/>
+            <column name="user_id" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_name" type="varchar(50)"/>
+            <column name="user_email" type="varchar(50)"/>
+            <column name="shop_id" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order_ts" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order_status" type="numeric(6, 0)"/>
+            <column name="order_substatus" type="numeric(6, 0)"/>
+            <column name="payment_type" type="numeric(6, 0)"/>
+            <column name="payment_method" type="numeric(6, 0)"/>
+            <column name="delivery_date" type="timestamptz"/>
+            <column name="processing_date" type="timestamptz"/>
+            <column name="delivery_to_date" type="timestamptz"/>
+            <column name="fake" type="boolean" defaultValueBoolean="false"/>
+            <column name="is_booked" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="context" type="numeric(6, 0)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cpa20" type="boolean" defaultValueBoolean="false"/>
+            <column name="delivered_date" type="timestamptz"/>
+            <column name="rgb" type="smallint" remarks="0=GREEN, 1=BLUE, 2=RED"/>
+            <column name="is_global" type="boolean"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

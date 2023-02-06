@@ -1,0 +1,50 @@
+name: mdm-testing
+parameters: {}
+rows:
+- panels:
+  - title: MDM to MBO total queue size
+    colspan: 2
+    url: /?project=market-mbo&cluster=mdm-testing&service=mdm&l.sensor=mdm_to_mbo_queue_size&l.category_id=0&graph=auto&stack=false&b=1d
+  - title: uploadUpdatedMasterDataToMskuExecutor exec time (3600K = 1 hour)
+    colspan: 2
+    url: /?project=market-mbo&cluster=mdm-testing&service=mdm&l.sensor=job_execution_time&l.job_name=uploadUpdatedMasterDataToMskuExecutor&graph=auto&stack=false&b=1d&l.job_host=*&secondaryGraphMode=none&downsamplingFill=previous
+- panels:
+  - title: MDM-IRIS receive time (minutes)
+    colspan: 1
+    url: https://solomon.yandex-team.ru/?project=market-mbo-mdm&cluster=TESTING&service=mbo-mdm&l.sensor=receive_time&l.period=one_min&l.quantile=0.95&graph=auto&stack=false&hideNoData=true&limit=200&b=1d&e=&graphOnly=y
+  - title: Send to Datacamp queue
+    colspan: 1
+    url: https://solomon.yandex-team.ru/?project=market-mbo&cluster=mdm-testing&service=mdm&l.sensor=datacamp_queue_size&graph=auto&stack=false&b=1d&graphOnly=y
+  - title: updateMskuMasterDataExecutor exec time (3600K = 1 hour)
+    colspan: 2
+    url: /?project=market-mbo&cluster=mdm-testing&service=mdm&l.sensor=job_execution_time&l.job_name=updateMskuMasterDataExecutor&graph=auto&stack=false&b=1d&l.job_host=*&secondaryGraphMode=none&downsamplingFill=previous
+- panels:
+  - title: MSKU queue size
+    rowspan: 1
+    colspan: 1
+    url: /?project=market-mbo&cluster=mdm-testing&service=mdm&l.sensor=msku_queue_size&graph=auto&stack=false&b=1d
+  - title: SSKU queue size
+    rowspan: 1
+    colspan: 1
+    url: /?project=market-mbo&cluster=mdm-testing&service=mdm&l.sensor=ssku_queue_size&graph=auto&stack=false&b=1d
+  - title: uploadMasterDataToYtHahnExecutor exec time (3600K = 1 hour)
+    rowspan: 1
+    colspan: 1
+    url: /?project=market-mbo&cluster=mdm-testing&service=mdm&l.sensor=job_execution_time&l.job_name=uploadMasterDataToYtHahnExecutor&graph=auto&stack=false&b=1d&secondaryGraphMode=none&downsamplingFill=previous
+  - title: uploadMasterDataToYtArnoldExecutor exec time (3600K = 1 hour)
+    rowspan: 1
+    colspan: 1
+    url: /?project=market-mbo&cluster=mdm-testing&service=mdm&l.sensor=job_execution_time&l.job_name=uploadMasterDataToYtArnoldExecutor&graph=auto&stack=false&b=1d&l.job_host=*&secondaryGraphMode=none&downsamplingFill=previous
+- panels:
+  - title: Tables size
+    rowspan: 1
+    colspan: 1
+    graph: mdm_tables_size_test
+  - title: Tables number of rows approximation
+    rowspan: 1
+    colspan: 1
+    graph: mdm_tables_number_of_rows_approximation_test
+  - title: Number of unprocessed reference items
+    rowspan: 1
+    colspan: 2
+    graph: number_of_unprocessed_reference_items_test

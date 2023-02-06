@@ -1,0 +1,11 @@
+apply plugin: 'mbuild-application'
+
+mainClassName = 'gradle_multi.app_plugin.Main'
+applicationDefaultJvmArgs = ['-Xmx4g', '-Xms4g', '-Xss2m', '-XX:+UseG1GC', '-XX:MaxGCPauseMillis=100']
+mbuild {
+    appPlugin {
+        packageName='yandex-market-project-builder-gradle-app-plugin-sub-project'
+        jvmVariableParameters = ['-XX:HeapDumpPath=${LOG_DIR}/hprof/', '-Xloggc:${LOG_GC}']
+        sandboxResourceType='MULTI_PROJECT_TYPE'
+    }
+}

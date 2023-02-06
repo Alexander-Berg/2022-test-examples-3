@@ -1,0 +1,1 @@
+update managers m inner join (select id, name, family, exists(select z, x, y from coords where coods.user_id = id) from users where family = ? and (group_id = ? or manager_id in (...)) and salary > ?) as b on a.name_a = b.name_b set validation_check = if(start_dts > end_dts, ?, ?), family = b.family where m.id = ?

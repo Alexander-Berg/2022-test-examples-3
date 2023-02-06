@@ -1,0 +1,133 @@
+logbroker:
+  pqlib:
+    worker_threads: 2
+
+  consumer:
+    server: "localhost"
+    port: 20500
+    topics:
+      - "crypta@prod@ext-fp--fp-event-log"
+    client_id: "lb-consumer"
+    max_memory_usage: 33554432
+    max_size: 204800
+    use_lock_session: false
+    read_mirrored_partitions: true
+    max_uncommitted_size: 67108864
+    skip_older_than_sec: 60
+
+  credentials:
+    use_secure_tvm: False
+
+  pqlib_log_name: pqlib
+
+  ext_fp_match_log_producer:
+    server: localhost
+    port: 20500
+    topic: ext-fp-match-log
+    source_id_prefix: localhost
+    log_name: pqlib
+    drop_log_name: ext_fp_match_dropped
+    max_bytes_in_flight: 536870912
+
+reader:
+  read_timeout_ms: 1000
+
+parser:
+  threads: 4
+  prefiltered_source_ids:
+    - ertelecom
+    - mts
+    - rostelecom
+    - fake_one
+  sampler:
+    denominator: 1
+    rest: 0
+
+processor:
+  threads: 2
+  matchers:
+    beeline:
+      api_url: "beeline:8888"
+      use_authentication: False
+      api_call_timeout_ms: 10000
+
+    er_telecom:
+      api_url: "localhost:8888"
+      use_authentication: False
+      api_call_timeout_ms: 5000
+
+    intentai:
+      api_url: "intentai:2222"
+      use_authentication: False
+
+    mts:
+      api_url: "localhost:7777"
+      use_authentication: False
+      api_call_timeout_ms: 10000
+
+    rostelecom:
+      api_url: "[64:ff9b::1020:3040]:9999"
+      api_call_timeout_ms: 15000
+
+
+logs:
+  main:
+    level: "info"
+    targets:
+      - type: "stdout"
+      - type: "rotating"
+        file: "/tmp/main.log"
+        max_file_size: 419430400
+        max_files: 1
+
+  handler:
+    level: trace
+    targets:
+      - type: "rotating"
+        file: "/tmp/handler.log"
+        max_file_size: 419430400
+        max_files: 1
+  parser:
+    level: trace
+    targets:
+      - type: "rotating"
+        file: "/tmp/parser.log"
+        max_file_size: 419430400
+        max_files: 1
+  processor:
+    level: trace
+    targets:
+      - type: "rotating"
+        file: "/tmp/processor.log"
+        max_file_size: 419430400
+        max_files: 1
+  pqlib:
+    level: trace
+    targets:
+      - type: "rotating"
+        file: "/tmp/pqlib.log"
+        max_file_size: 419430400
+        max_files: 1
+
+  ext_fp_match_dropped:
+    level: info
+    format: "%v"
+    targets:
+    - type: rotating
+      file: "/tmp/ext_fp_match_dropped.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  graphite:
+    targets:
+    - type: rotating
+      file: "/tmp/graphite.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  solomon:
+    targets:
+    - type: rotating
+      file: "/tmp/solomon.log"
+      max_file_size: 419430400
+      max_files: 1

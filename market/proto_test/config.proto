@@ -1,0 +1,46 @@
+import "library/cpp/getoptpb/proto/confoption.proto";
+
+message TMyConfig {
+
+  optional string Cluster = 1 [default = "hahn",
+    (NGetoptPb.Conf).Descr  = "name cluster",
+    (NGetoptPb.Conf).Short  = 'y',
+    (NGetoptPb.Conf).Long   = "cluster"
+  ];
+
+  optional string HeavyPath = 2 [default = "//tmp/Azzzik/heavy_place",
+    (NGetoptPb.Conf).Descr = "heavy-path",
+    (NGetoptPb.Conf).Short = "h1",
+    (NGetoptPb.Conf).Long = "THeavyTable"
+  ];
+  optional string SavePathHeavy = 3 [default = "heavy.bin",
+    (NGetoptPb.Conf).Descr  = "heavy save path",
+    (NGetoptPb.Conf).Long   = "heavy",
+    (NGetoptPb.Conf).Type   = "<HeavyPath>"
+  ];
+
+  optional string LightPath = 4 [default = "//tmp/Azzzik/light_place",
+    (NGetoptPb.Conf).Descr = "light-path",
+    (NGetoptPb.Conf).Short = "l",
+    (NGetoptPb.Conf).Long = "TLightTable"
+  ];
+
+  optional string SavePathLight = 5 [default = "light.bin",
+    (NGetoptPb.Conf).Descr  = "light save path",
+    (NGetoptPb.Conf).Long   = "light",
+    (NGetoptPb.Conf).Type   = "<LightPath>"
+  ];
+
+  optional string StatsPath = 6 [default = "//tmp/Azzzik/min_max_percentile",
+    (NGetoptPb.Conf).Descr = "stats-path",
+    (NGetoptPb.Conf).Short = "s",
+    (NGetoptPb.Conf).Long = "TPlaceStatTable"
+  ];
+
+  optional string SavePathStats = 7 [default = "min_max_percentile.bin",
+    (NGetoptPb.Conf).Descr  = "stats save path",
+    (NGetoptPb.Conf).Long   = "States",
+    (NGetoptPb.Conf).Type   = "<StatsPath>"
+  ];
+
+    }

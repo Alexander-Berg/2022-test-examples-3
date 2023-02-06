@@ -1,0 +1,50 @@
+SELECT
+  P.pid AS pid,
+  P.cid AS cid,
+  first(P.statusModerate) AS statusModerate,
+  first(P.statusPostModerate) AS statusPostModerate,
+  first(P.adgroup_type) AS adgroup_type,
+  first(P.group_name) AS group_name,
+  first(P.criterion_type) AS criterion_type
+FROM yt.phrasestable_direct AS P
+WHERE (
+  P.pid IN (22)
+  AND (
+    P.adgroup_type IN (
+      'base', 'mobile_content', 'mcbanner'
+    )
+    OR (
+      P.adgroup_type = 'cpm_banner'
+      AND P.criterion_type = 'keyword'
+    )
+    OR P.adgroup_type IN (
+      'base', 'mobile_content'
+    )
+    OR P.adgroup_type IN (
+      'base', 'mobile_content'
+    )
+    OR P.adgroup_type IN (
+      'base', 'mobile_content'
+    )
+    OR P.adgroup_type IN (
+      'cpm_video', 'cpm_indoor', 'cpm_outdoor'
+    )
+    OR (
+      P.adgroup_type = 'cpm_banner'
+      AND P.criterion_type = 'user_profile'
+    )
+    OR P.adgroup_type IN ('dynamic')
+    OR P.adgroup_type IN (
+      'dynamic', 'performance'
+    )
+  )
+)
+GROUP BY
+  pid,
+  cid,
+  P.__hash__,
+  P.__shard__
+ORDER BY
+  cid,
+  pid
+LIMIT 1000

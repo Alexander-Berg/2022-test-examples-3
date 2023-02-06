@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <return
+            id="1"
+            created="2021-11-11 12:00:00 +0000"
+            updated="2021-11-11 13:00:00 +0000"
+            source="COURIER"
+            order_external_id="order-external-id-1"
+            logistic_point_from_id="111"
+    />
+    <return_box
+            id="1"
+            return_id="1"
+            external_id="box-external-id-1"
+    />
+    <return_box
+            id="2"
+            return_id="1"
+            external_id="box-external-id-2"
+    />
+
+    <!--invalid for retry-->
+    <business_process_state
+            id="1"
+            created="2021-11-10 12:00:00 +0000"
+            updated="2021-11-11 13:00:00 +0000"
+            type="DELETE_SEGMENT_IN_SC"
+            request_id="test-request-id-1"
+            payload='{"requestId":"test-request-id-1","returnSegmentId":1}'
+            status="REQUEST_SENT"
+    />
+    <business_process_state_entity_id
+            id="1"
+            business_process_state_id="1"
+            entity_type="RETURN_BOX"
+            entity_id="1"
+    />
+
+    <business_process_state
+            id="2"
+            created="2022-01-10 12:00:00 +0000"
+            updated="2022-01-11 13:00:00 +0000"
+            type="DELETE_SEGMENT_IN_SC"
+            request_id="request-id-test-2"
+            payload='{"requestId": "request-id-test-2", "courierDto": {"carNumber": "123456789", "courierName": "Super courier", "phoneNumber": null, "deliveryServiceId": 123}, "scSegmentId": 2, "sortingCenterId": 123}'
+            status="FAIL"
+            comment="Failed to process"
+    />
+    <business_process_state_entity_id
+            id="2"
+            business_process_state_id="2"
+            entity_type="RETURN_BOX"
+            entity_id="1"
+    />
+    <business_process_state
+            id="3"
+            created="2022-01-10 13:00:00 +0000"
+            updated="2022-01-11 14:00:00 +0000"
+            type="DELETE_SEGMENT_IN_SC"
+            request_id="request-id-test-3"
+            payload='{"requestId":"bp-test-request-id-3","returnSegmentId":1}'
+            status="CREATED"
+    />
+
+    <!--valid for retry-->
+    <business_process_state
+            id="4"
+            created="2022-01-10 13:00:00 +0000"
+            updated="2022-01-11 14:00:00 +0000"
+            type="DELETE_SEGMENT_IN_SC"
+            request_id="request-id-test-8"
+            payload='{"requestId": "bp-request-id-test-8", "courierDto": {"carNumber": "123456789", "courierName": "Super courier", "phoneNumber": null, "deliveryServiceId": 123}, "scSegmentId": 2, "sortingCenterId": 123}'
+            status="FAIL"
+            comment="Failed to process"
+    />
+    <business_process_state_entity_id
+            id="4"
+            business_process_state_id="4"
+            entity_type="RETURN_BOX"
+            entity_id="2"
+    />
+    <business_process_state
+            id="5"
+            created="2022-01-10 13:00:00 +0000"
+            updated="2022-01-11 14:00:00 +0000"
+            type="CREATE_STORAGE_UNITS_IN_SC"
+            request_id="request-id-test-9"
+            payload='{"requestId":"bp-test-request-id-9","returnSegmentId":1}'
+            status="FAIL"
+            comment="Failed to process"
+    />
+    <business_process_state_entity_id
+            id="5"
+            business_process_state_id="5"
+            entity_type="RETURN_BOX"
+            entity_id="2"
+    />
+    <business_process_state
+            id="6"
+            created="2022-01-10 13:00:00 +0000"
+            updated="2022-01-11 14:00:00 +0000"
+            type="CREATE_STORAGE_UNITS_IN_SC"
+            request_id="request-id-test-10"
+            payload='{"requestId":"bp-test-request-id-9","returnSegmentId":1}'
+            status="RETRIED"
+            comment="Failed to process"
+    />
+    <business_process_state_entity_id
+            id="6"
+            business_process_state_id="6"
+            entity_type="RETURN_BOX"
+            entity_id="2"
+    />
+    <business_process_state
+            id="7"
+            created="2022-01-10 13:00:00 +0000"
+            updated="2022-01-11 14:00:00 +0000"
+            type="CREATE_STORAGE_UNITS_IN_SC"
+            request_id="request-id-test-11"
+            payload='{"requestId":"bp-test-request-id-9","returnSegmentId":1}'
+            status="FAIL_CANT_BE_RETRIED"
+            comment="Failed to process"
+    />
+    <business_process_state_entity_id
+            id="7"
+            business_process_state_id="7"
+            entity_type="RETURN_BOX"
+            entity_id="2"
+    />
+</dataset>

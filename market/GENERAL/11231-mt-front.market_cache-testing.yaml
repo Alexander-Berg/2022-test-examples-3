@@ -1,0 +1,30 @@
+# Параметры обработки
+params:
+  default:
+    templates:
+      - get_localhost.tpl
+
+values:
+  default:
+    defaults:
+      mcrouter_port: 11231
+      memcached_port: 21231
+      env: production
+      cache_name: mt-front
+      memory: 1024
+  testing:
+    defaults:
+      env: testing
+      
+  
+servers:
+  default:
+    main:
+      - name: "%market_cache-stable@local"
+    global:
+      - name: "%market_cache-stable"
+  testing:
+    main:
+      - name: "%market_cache-testing@local"
+    global:
+      - name: "%market_cache-testing"

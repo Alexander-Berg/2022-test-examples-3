@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<script type="text/javascript">
+function pushHost() {
+    var host = $("#host").val();
+    $("#host").prop("disabled", true);
+    $.ajax({
+        url: "{{ url_for('host_push') }}?host=" + host,
+        context: document.body,
+        timeout: 10 * 1000
+    }).done(function(data) {
+        $("#errorAlert").hide();
+        $("#successAlert").text(data).show();
+    }).fail(function(xhr, error) {
+        $("#successAlert").hide();
+        $("#errorAlert").text("Error: " + (xhr.responseText != null ? xhr.responseText : error)).show();
+    }).always(function() {
+        $("#host").val("").prop("disabled", false);
+    });
+}
+</script>
+<div class="alert alert-danger m-3" role="alert" id="errorAlert" style="display:none"></div>
+<div class="alert alert-success m-3" role="alert" id="successAlert" style="display:none"></div>
+<form class="w-50 p-3">
+ <div class="form-group px-auto py-auto">
+  <label for="host">Host name</label>
+  <input type="host" class="form-control" id="host" name="host" aria-describedby="hostHelp" placeholder="Host">
+  <small id="hostHelp" class="form-text text-muted">Enter host name to check for players</small>
+ </div>
+ <button type="button" class="btn btn-primary" onclick="pushHost()">Submit</button>
+</form>
+{% endblock %}

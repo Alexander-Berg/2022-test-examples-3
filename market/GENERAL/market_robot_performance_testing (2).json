@@ -1,0 +1,39 @@
+{
+  "logHosts": "*",
+  "logPath": "{/var/log/yandex/robot-tms/robot-performance.log,**/robot-tms-robot-performance.log}",
+  "clickhouseTable": "market_robot_performance_testing",
+  "parser": {
+    "dateFormat": "yyyy-MM-dd HH:mm:ss,SSSZ",
+    "separator": "\t",
+    "fields": [
+      "date", "task_exec_status", "task_exec_spent_time_ms", "source_name", "task_name",
+      "task_message", "result_string"
+    ],
+    "columns": {
+      "host": {
+        "type": "String"
+      },
+      "task_exec_status": {
+        "type": "String"
+      },
+      "task_exec_spent_time_ms": {
+        "type": "UInt64"
+      },
+      "source_name": {
+        "type": "String"
+      },
+      "task_name": {
+        "type": "String"
+      },
+      "task_message": {
+        "type": "String"
+      },
+      "result_string": {
+        "type": "String"
+      }
+    }
+  },
+  "sources": [
+    "logbroker://market-health-testing--other"
+  ]
+}

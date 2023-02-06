@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <platform_client id="1" name="Beru"/>
+
+    <partner_subtype
+            id="8"
+            name="Такси-Лавка"
+            partner_type="DELIVERY"
+    />
+
+    <regions
+            id="120994"
+            parent_id="1"
+            name="Городской округ Королёв"
+            type="10"
+            path="10000.10001.225.3.1.120994"
+    />
+
+    <partner
+            id="1"
+            name="Delivery service 1"
+            readable_name="first Delivery"
+            status="active"
+            type="DELIVERY"
+            billing_client_id="123"
+            rating="1"
+    />
+
+    <partner
+            id="2"
+            name="Fulfillment service 1"
+            readable_name="first FF"
+            status="active"
+            type="FULFILLMENT"
+            billing_client_id="123"
+            rating="1"
+    />
+
+    <partner
+            id="3"
+            name="SC MK"
+            readable_name="SC MK"
+            status="active"
+            type="DELIVERY"
+            billing_client_id="123"
+            rating="1"
+            subtype_id="8"
+    />
+
+    <address
+            id="10"
+            location_id="21651"
+            latitude="100"
+            longitude="200"
+            settlement="Ульяновск"
+            post_code="555666"
+            street="Московское шоссе"
+            house="11Б"
+            housing="3"
+            building="2"
+            apartment="1"
+            comment="comment1"
+            address_string="Строка адреса 1"
+            short_address_string="Строка адреса 1"
+    />
+
+    <logistics_point
+            id="2000"
+            partner_id="2"
+            external_id="8530-47e5-93c5-d44320e55dc4"
+            type="WAREHOUSE"
+            address_id="10"
+            active="true"
+    />
+
+    <logistics_point
+            id="3000"
+            partner_id="3"
+            external_id="8f9c720d-c1e3-4614-b980-499bd37e7118"
+            type="WAREHOUSE"
+            address_id="10"
+            active="true"
+    />
+
+    <partner_route
+            id="1"
+            partner_id="1"
+            location_from="225"
+            location_to="213"
+    />
+
+    <partner_route
+            id="2"
+            partner_id="1"
+            location_from="225"
+            location_to="21651"
+    />
+
+    <partner_route
+            id="3"
+            partner_id="1"
+            location_from="225"
+            location_to="120994"
+    />
+
+    <partner_capacity
+            id="1"
+            partner_id="1"
+            location_from="225"
+            location_to="1"
+            platform_client_id="1"
+            value="700"
+            type="regular"
+            counting_type="order"
+            service_type="delivery"
+    />
+
+    <partner_capacity
+            id="2"
+            partner_id="1"
+            location_from="225"
+            location_to="213"
+            platform_client_id="1"
+            value="700"
+            type="regular"
+            counting_type="order"
+            service_type="delivery"
+    />
+
+    <partner_capacity
+            id="3"
+            partner_id="1"
+            location_from="225"
+            location_to="213"
+            platform_client_id="1"
+            value="500"
+            type="regular"
+            counting_type="order"
+            service_type="delivery"
+            delivery_type="pickup"
+    />
+
+    <partner_capacity
+            id="4"
+            partner_id="1"
+            location_from="225"
+            location_to="213"
+            platform_client_id="1"
+            value="200"
+            type="regular"
+            counting_type="order"
+            service_type="delivery"
+            delivery_type="courier"
+    />
+
+    <partner_capacity
+            id="5"
+            partner_id="1"
+            location_from="225"
+            location_to="21651"
+            platform_client_id="1"
+            value="100"
+            type="regular"
+            counting_type="order"
+            service_type="delivery"
+            delivery_type="pickup"
+    />
+
+    <partner_capacity_migration id="100" partner_id="1" created="[now-1d]" last_migration_ts="[now-1d]" />
+
+    <service_capacity id="11" path="11" name="1 root"/>
+    <service_capacity id="12" parent_id="11" path="11.12" name="delivery root"/>
+    <service_capacity id="13" parent_id="12" path="11.12.13" name="to 213"/>
+    <service_capacity id="14" parent_id="13" path="11.12.13.14" name="to 213 courier"/>
+    <service_capacity id="15" parent_id="13" path="11.12.13.15" name="to 213 pickup"/>
+    <service_capacity id="16" parent_id="11" path="11.16" name="movements root"/>
+    <service_capacity id="17" parent_id="11" path="11.17" name="linehauls root"/>
+
+    <service_capacity_value id="3" capacity_id="13" unit_type="order" value="700" partner_capacity_id="2"/>
+    <service_capacity_value id="4" capacity_id="14" unit_type="order" value="200" partner_capacity_id="4"/>
+    <service_capacity_value id="5" capacity_id="15" unit_type="order" value="500" partner_capacity_id="3"/>
+
+    <logistic_segments
+            id="1001"
+            partner_id="1"
+            type="movement"
+            name="забор откуда-то из 1 региона"
+    />
+
+    <logistic_segments_services
+            id="10001"
+            segment_id="1001"
+            status="active"
+            code="554"
+            duration="0"
+            duration_delta="0"
+            price="0"
+    />
+
+    <logistic_segments
+            id="1002"
+            partner_id="1"
+            type="movement"
+            name="забор откуда-то из 1 региона для лавки"
+    />
+
+    <logistic_segments_services
+            id="10021"
+            segment_id="1002"
+            status="active"
+            code="554"
+            duration="0"
+            duration_delta="0"
+            price="0"
+    />
+
+    <logistic_segments_services
+            id="10022"
+            segment_id="1002"
+            status="active"
+            code="551"
+            duration="0"
+            duration_delta="0"
+            price="0"
+            capacity_id="13"
+    />
+
+    <logistic_segments
+            id="1003"
+            partner_id="3"
+            type="warehouse"
+            name="склад СЦ для лавки"
+            location_id="213"
+            logistic_point_id="3000"
+    />
+
+    <logistic_segments_services
+            id="10031"
+            segment_id="1003"
+            status="active"
+            code="563"
+            duration="180"
+            duration_delta="0"
+            price="0"
+    />
+
+    <logistic_segments
+            id="1005"
+            partner_id="1"
+            type="linehaul"
+            location_id="213"
+            name="магистраль в 213"
+            partner_route_id="1"
+    />
+
+    <logistic_segments_services
+            id="10007"
+            segment_id="1005"
+            status="active"
+            code="553"
+            duration="0"
+            duration_delta="0"
+            price="0"
+    />
+
+    <logistic_segments_services
+            id="10008"
+            segment_id="1005"
+            status="active"
+            code="555"
+            duration="0"
+            duration_delta="0"
+            price="0"
+    />
+    <logistic_segments_services
+            id="10009"
+            segment_id="1005"
+            status="active"
+            code="551"
+            duration="0"
+            duration_delta="0"
+            price="0"
+            delivery_type="pickup"
+            capacity_id="15"
+    />
+    <logistic_segments_services
+            id="10010"
+            segment_id="1005"
+            status="active"
+            code="551"
+            duration="0"
+            duration_delta="0"
+            price="0"
+            delivery_type="courier"
+            capacity_id="14"
+    />
+
+    <logistic_segments
+            id="1007"
+            partner_id="1"
+            type="linehaul"
+            location_id="120994"
+            name="магистраль в 120994"
+            partner_route_id="3"
+    />
+
+    <logistic_segments_services
+            id="10071"
+            segment_id="1007"
+            status="active"
+            code="553"
+            duration="0"
+            duration_delta="0"
+            price="0"
+    />
+
+    <logistic_segments_services
+            id="10072"
+            segment_id="1007"
+            status="active"
+            code="555"
+            duration="0"
+            duration_delta="0"
+            price="0"
+    />
+    <logistic_segments_services
+            id="10073"
+            segment_id="1007"
+            status="active"
+            code="551"
+            duration="0"
+            duration_delta="0"
+            price="0"
+            delivery_type="pickup"
+    />
+    <logistic_segments_services
+            id="10074"
+            segment_id="1007"
+            status="active"
+            code="551"
+            duration="0"
+            duration_delta="0"
+            price="0"
+            delivery_type="courier"
+    />
+
+    <logistic_segments
+            id="1008"
+            partner_id="1"
+            type="linehaul"
+            location_id="21651"
+            name="магистраль в 21651"
+            partner_route_id="2"
+    />
+
+    <logistic_segments_services
+            id="10081"
+            segment_id="1008"
+            status="active"
+            code="553"
+            duration="0"
+            duration_delta="0"
+            price="0"
+    />
+
+    <logistic_segments_services
+            id="100082"
+            segment_id="1008"
+            status="active"
+            code="555"
+            duration="0"
+            duration_delta="0"
+            price="0"
+    />
+    <logistic_segments_services
+            id="100083"
+            segment_id="1008"
+            status="active"
+            code="551"
+            duration="0"
+            duration_delta="0"
+            price="0"
+            delivery_type="pickup"
+    />
+    <logistic_segments_services
+            id="100084"
+            segment_id="1008"
+            status="active"
+            code="551"
+            duration="0"
+            duration_delta="0"
+            price="0"
+            delivery_type="courier"
+    />
+
+    <logistic_segments
+            id="1006"
+            partner_id="2"
+            type="warehouse"
+            location_id="21651"
+            logistic_point_id="2000"
+    />
+
+    <logistic_edges
+            from_segment_id="1006"
+            to_segment_id="1001"
+    />
+
+    <logistic_edges
+            from_segment_id="1001"
+            to_segment_id="1005"
+    />
+
+    <logistic_edges
+            from_segment_id="1001"
+            to_segment_id="1008"
+    />
+
+    <logistic_edges
+            from_segment_id="1001"
+            to_segment_id="1007"
+    />
+
+    <logistic_edges
+            from_segment_id="1002"
+            to_segment_id="1003"
+    />
+
+</dataset>

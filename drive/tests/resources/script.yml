@@ -1,0 +1,199 @@
+---
+flow:
+  - action_group_id: "test_first_ok"
+  - action_group_id: "test_second_ok"
+  - action_group_id: "3"
+  - action_group_id: "4"
+  - action_group_id: "5"
+  - action_group_id: "6"
+  - action_group_id: "7"
+  - action_group_id: "8"
+  - action_group_id: "9"
+  - action_group_id: "10"
+  - action_group_id: "11"
+
+action_groups:
+  - id: "test_first_ok"
+    pre_action:
+      - type: text_block
+        params:
+          messages:
+            - "Здравствуйте. Я робот Яндекс.Драйва. Моя работа — регистрировать новых пользователей."
+            - "Наш сервис заработает в Москве где-то в конце ноября. Но вы можете зарегистрироваться прямо сейчас и кататься на наших машинах раньше всех."
+            - "Для регистрации вам надо будет сфотографировать две страницы паспорта, водительские права (нужен стаж от двух лет) и банковскую карту."
+            - "Ну что, начнём?"
+    action:
+      - type: ok
+        params:
+          text: "Да, поехали"
+    post_action: []
+
+  - id: "test_second_ok"
+    pre_action:
+      - type: text_block
+        params:
+          messages:
+            - "Сначала разберёмся с бюрократией."
+            - "Нужно, чтобы вы разрешили обрабатывать ваши персональные данные. Я и сервис «Яндекс.Драйв» обещаем не передавать их третьим лицам."
+    action:
+      - type: ok
+        params:
+          text: "Разрешаю"
+    post_action: []
+
+  - id: "3"
+    pre_action:
+      - type: text_block
+        params:
+          messages:
+            - "Ещё, разрешите, пожалуйста, отправлять вам пуш-сообщения."
+            - "Они будут только по делу, не буду беспокоить вас лишний раз."
+    action:
+      - type: allow_pushes
+        params:
+          allow_text: "Разрешаю"
+          reject_text: "НЕТ"
+    post_action:
+      - type: text_block
+        params:
+          messages:
+            - "Я понимаю, никто не любит назойливые пуши. Но без вашего разрешения мы не сможем дальше общаться :("
+        when:
+          eq:
+            - status
+            - reject
+      - type: retry_action
+        params: {}
+        when:
+          eq:
+            - status
+            - reject
+
+  - id: "4"
+    pre_action:
+      - type: text_block
+        params:
+          messages:
+            - "И последнее (из скучного) разрешите доступ к вашей геолокации."
+            - "Не спрашивайте."
+    action:
+      - type: allow_geo
+        params:
+          allow_text: "Да, хорошо"
+          reject_text: "НЕТ"
+    post_action:
+      - type: text_block
+        params:
+          messages:
+            - "Вы не на ту кнопочку нажали"
+        when:
+          eq:
+            - status
+            - reject
+      - type: retry_action
+        params: {}
+        when:
+          eq:
+            - status
+            - reject
+
+  - id: "5"
+    pre_action:
+      - type: text_block
+        params:
+          messages:
+            - "Давайте к документам."
+            - "Возьмите водительские права и сфотографируйте максимально ровно сторону с вашим фото"
+    action:
+      - type: license_front
+        params:
+          text: "Сделать фото"
+    post_action: {}
+
+  - id: "6"
+    pre_action:
+      - type: text_block
+        params:
+          messages:
+            - "Прекрасно, теперь точно так же обратную сторону."
+    action:
+      - type: license_back
+        params:
+          text: "Сделать фото"
+    post_action: {}
+
+  - id: "7"
+    pre_action:
+      - type: text_block
+        params:
+          messages:
+            - "Здорово. Сергей, теперь селфи с паспортом."
+            - "Нужно, чтобы ваше лицо и основной разворот были на одном кадре. Убедитесь, что хватает света и постарайтесь держать паспорт параллельно телефону."
+            - "Примерно вот так должно получиться:"
+      - type: image
+        params:
+          url: "http://i0.kym-cdn.com/photos/images/newsfeed/000/417/099/955.jpg"
+    action:
+      - type: passport_selfie
+        params:
+          text: "Сделать селфи"
+    post_action: {}
+
+  - id: "8"
+    pre_action:
+      - type: text_block
+        params:
+          messages:
+            - "Сергей, отлично!"
+            - "Теперь страницу в паспорте с пропиской. Опять же, лучше всего держать паспорт и телефон параллельно."
+    action:
+      - type: passport_reg
+        params:
+          text: "Сделать фото"
+    post_action: {}
+
+  - id: "9"
+    pre_action:
+      - type: text_block
+        params:
+          messages:
+            - "И последнее из документов – ваша банковская карта. Только сторона с номером карты и вашей фамилией."
+            - "Вы знаете, что делать."
+    action:
+      - type: credit_card
+        params:
+          text: "Сделать фото"
+    post_action: {}
+
+  - id: "10"
+    pre_action:
+      - type: text_block
+        params:
+          messages:
+            - "Красота."
+            - "Осталось последнее. Подтвердите, что согласны с пользовательским соглашением:"
+    action:
+      - type: ok
+        params:
+          text: "Конечно да"
+    post_action: {}
+
+  - id: "11"
+    pre_action:
+      - type: text_block
+        params:
+          messages:
+            - "Это хорошо, что вы согласны"
+            - "Но вообще я вас обманул, это не был последний шаг регистрации, он будет сейчас."
+            - "Я вам сейчас позвоню и попрошу произнести скороговорку :) Нажмите на кнопку как будете готовы."
+    action:
+      - type: call_verify
+        params:
+          text: "Боже, ну ладно"
+    post_action:
+      - type: text_block
+        params:
+          messages:
+            - "Ну вот теперь точно всё!"
+            - "Сергей, я отправил документы своим коллегам. Они всё ещё раз перепроверят и я сразу же сообщу вам о результатах."
+            - "Это не займёт больше нескольких часов."

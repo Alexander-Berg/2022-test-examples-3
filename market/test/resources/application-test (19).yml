@@ -1,0 +1,93 @@
+warehouse-timezone: Europe/Moscow
+spring.datasource:
+  url: jdbc:h2:mem:SCPRD;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1
+  separator: ^^^ END OF SCRIPT ^^^
+spring.archivedatasource.url: jdbc:h2:mem:SCPRDARC;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1
+spring.datasource-scprdd1.url: jdbc:h2:mem:SCPRDD1;MODE=MSSQLServer
+spring.datasource-placement.url: jdbc:h2:mem:WMS;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS PLACEMENT\;SET SCHEMA PLACEMENT
+
+AppServer: localhost
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms.receiving: debug
+    org.springframework.jdbc.core: debug
+    root: info
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  transaction.default-timeout: 30s
+  liquibase:
+    enabled: true
+  config:
+    import:
+      - application-fragment-common-test.yml
+      - application-fragment-mq-test.yml
+  jackson:
+    deserialization:
+      wrap-exceptions: false
+
+cte:
+  url: http://host.ru:123
+
+print:
+  server:
+    host: localhost
+    port: 631
+    mock: true
+
+oltp:
+  url: http://localhost:8383
+
+wms:
+  api:
+    host: 'http://wms.local'
+    username: 'wmsuser'
+    password: 'wmspass'
+  receiving:
+    host: 'http://wms.local'
+    tvm:
+      serviceId: 0
+  transportation:
+    host: 'http://localhost:${wiremock.server.port}/transportation'
+    tvm:
+      serviceId: 0
+  constraints:
+    tvm:
+      serviceId: 0
+    api:
+      host: 'http://localhost:${wiremock.server.port}/constraints'
+
+check:
+  authentication: 'no'
+
+servicebus:
+  api:
+    host: http://localhost:8382
+
+identity:
+  cis:
+    gs: "#GS#"
+
+core:
+  tvm:
+    serviceId: 0
+  api:
+    host: 'http://wms.local'
+
+s3.use: false
+
+placement:
+  job-monitoring:
+    config-by-job-name:
+      job1:
+        runs-to-consider: 3
+        warn-failed-runs: 1
+        max-failed-runs: 3
+      job2:
+        runs-to-consider: 3
+        warn-failed-runs: 1
+        max-failed-runs: 3
+

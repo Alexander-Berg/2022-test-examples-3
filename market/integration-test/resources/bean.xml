@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+       default-lazy-init="false">
+
+    <bean id="namedMbiStatsJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="mbiStatsJdbcTemplate"/>
+    </bean>
+
+    <bean id="fastGroupService" class="ru.yandex.market.mbi.msapi.grouping.DbFastGroupService">
+        <property name="jdbcTemplate" ref="mbiStatsJdbcTemplate"/>
+        <property name="transactionTemplate" ref="mbiStatsTransactionTemplate"/>
+        <property name="tmpRowidsTable" value="mb_stat_report.tmp_stat_task_group"/>
+    </bean>
+
+    <bean id="marketstatCommander" class="ru.yandex.market.mbi.msapi.MarketstatCommander">
+        <property name="timeout" value="1800000"/>
+        <property name="httpClientFactory">
+            <bean class="ru.yandex.common.util.http.HttpClientFactoryImpl"/>
+        </property>
+        <property name="marketstatScriptUrl" value="${marketstat.api.url}"/>
+    </bean>
+
+    <bean id="rawMarketstatReceiverService"
+          class="ru.yandex.market.mbi.msapi.receiver.db.OracleDBMarketstatReceiverService">
+        <property name="jdbcTemplate" ref="mbiStatsJdbcTemplate"/>
+        <property name="transactionTemplate" ref="mbiStatsTransactionTemplate"/>
+        <property name="tableDataSetMap" ref="tableDataSetMap"/>
+        <property name="queueTableName" value="wuser.mst_rcv_queue"/>
+        <property name="queueSequenceName" value="wuser.s_mst_rcv_queue"/>
+        <property name="queueTransIdsTypeName" value="WUSER.T_TRANS_ID_LIST"/>
+        <property name="maxJobVolume" value="8000"/>
+        <property name="maxQueueVolume" value="15000000"/>
+        <property name="newJobsOrder" value="BY_RANDOM"/>
+        <property name="marketstatCommander" ref="marketstatCommander"/>
+    </bean>
+
+    <bean id="mbiStatsJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" lazy-init="false">
+        <property name="dataSource" ref="mbiStatsDataSource"/>
+        <property name="fetchSize" value="500"/>
+    </bean>
+
+    <bean id="abstactOracleDataSource" abstract="true" class="ru.yandex.common.util.db.NamedDataSource"
+          destroy-method="close">
+        <property name="validationQuery" value="select 1 from dual"/>
+        <property name="maxActive" value="${oracle.jdbc.maxActive}"/>
+        <property name="maxIdle" value="${oracle.jdbc.maxIdle}"/>
+        <property name="minIdle" value="${oracle.jdbc.minIdle}"/>
+        <property name="minEvictableIdleTimeMillis" value="${oracle.jdbc.minEvictableIdleTimeMillis}"/>
+        <property name="timeBetweenEvictionRunsMillis" value="${oracle.jdbc.timeBetweenEvictionRunsMillis}"/>
+        <property name="moduleName" value="${servant.name}"/>
+    </bean>
+
+    <bean id="mbiStatsTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="mbiStatsTransactionManager"/>
+    </bean>
+
+    <bean id="mbiStatsTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="mbiStatsDataSource"/>
+    </bean>
+
+    <bean id="mbiStatsDataSource" parent="abstactOracleDataSource">
+        <property name="driverClassName" value="${mb_stat_report.marketstat.jdbc.driverClassName}"/>
+        <property name="url" value="${mb_stat_report.billing.jdbc.url}"/>
+        <property name="username" value="${mb_stat_report.billing.username}"/>
+        <property name="password" value="${mb_stat_report.billing.password}"/>
+    </bean>
+
+    <bean id="integerBinder" class="ru.yandex.market.mbi.msapi.clicks.IntegerBinder"/>
+    <bean id="longBinder" class="ru.yandex.market.mbi.msapi.clicks.LongBinder"/>
+    <bean id="booleanBinder" class="ru.yandex.market.mbi.msapi.clicks.BooleanBinder"/>
+    <bean id="stringBinder" class="ru.yandex.market.mbi.msapi.clicks.StringBinder"/>
+    <bean id="string200Binder" class="ru.yandex.market.mbi.msapi.clicks.LimitedStringBinder">
+        <property name="length" value="200"/>
+    </bean>
+    <bean id="string1000Binder" class="ru.yandex.market.mbi.msapi.clicks.LimitedStringBinder">
+        <property name="length" value="1000"/>
+    </bean>
+    <bean id="string2000Binder" class="ru.yandex.market.mbi.msapi.clicks.LimitedStringBinder">
+        <property name="length" value="2000"/>
+    </bean>
+    <bean id="string4000Binder" class="ru.yandex.market.mbi.msapi.clicks.LimitedStringBinder"/>
+    <bean id="clobBinder" class="ru.yandex.market.mbi.msapi.clicks.ClobBinder"/>
+    <bean id="bigNumberBinder" class="ru.yandex.market.mbi.msapi.clicks.BigNumberBinder"/>
+    <bean id="dateBinder" class="ru.yandex.market.mbi.msapi.clicks.DateBinder">
+        <property name="sdf" value="${marketstat.eventime.dateFormat}"/>
+    </bean>
+    <bean id="timestampBinder" class="ru.yandex.market.mbi.msapi.clicks.TimestampBinder"/>
+    <bean id="unixtimeBinder" class="ru.yandex.market.mbi.msapi.clicks.UnixtimeBinder"/>
+    <bean id="nullableIntegerBinder" class="ru.yandex.market.mbi.msapi.clicks.NullableBinder">
+        <constructor-arg ref="integerBinder"/>
+    </bean>
+    <bean id="nullableLongBinder" class="ru.yandex.market.mbi.msapi.clicks.NullableBinder">
+        <constructor-arg ref="longBinder"/>
+    </bean>
+    <bean id="nullableBooleanBinder" class="ru.yandex.market.mbi.msapi.clicks.NullableBinder">
+        <constructor-arg ref="booleanBinder"/>
+    </bean>
+    <bean id="nullableStringBinder" class="ru.yandex.market.mbi.msapi.clicks.NullableBinder">
+        <constructor-arg ref="stringBinder"/>
+    </bean>
+    <bean id="nullableString200Binder" class="ru.yandex.market.mbi.msapi.clicks.NullableBinder">
+        <constructor-arg ref="string200Binder"/>
+    </bean>
+    <bean id="nullableString1000Binder" class="ru.yandex.market.mbi.msapi.clicks.NullableBinder">
+        <constructor-arg ref="string1000Binder"/>
+    </bean>
+    <bean id="nullableString2000Binder" class="ru.yandex.market.mbi.msapi.clicks.NullableBinder">
+        <constructor-arg ref="string2000Binder"/>
+    </bean>
+    <bean id="nullableString4000Binder" class="ru.yandex.market.mbi.msapi.clicks.NullableBinder">
+        <constructor-arg ref="string4000Binder"/>
+    </bean>
+    <bean id="nullableBigNumberBinder" class="ru.yandex.market.mbi.msapi.clicks.NullableBinder">
+        <constructor-arg ref="bigNumberBinder"/>
+    </bean>
+    <bean id="nullableDateBinder" class="ru.yandex.market.mbi.msapi.clicks.NullableBinder">
+        <constructor-arg ref="dateBinder"/>
+    </bean>
+    <bean id="nullableBinder" class="ru.yandex.market.mbi.msapi.clicks.NullableBinder">
+        <constructor-arg ref="dateBinder"/>
+    </bean>
+    <bean id="nullableTimestampBinder" class="ru.yandex.market.mbi.msapi.clicks.NullableBinder">
+        <constructor-arg ref="timestampBinder"/>
+    </bean>
+    <bean id="nullableUnixtimeBinder" class="ru.yandex.market.mbi.msapi.clicks.NullableBinder">
+        <constructor-arg ref="unixtimeBinder"/>
+    </bean>
+    <bean id="silentBinder" class="ru.yandex.market.mbi.msapi.clicks.SilentBinder">
+        <constructor-arg ref="unixtimeBinder"/>
+    </bean>
+
+    <bean id="silentNullableLongBinder" class="ru.yandex.market.mbi.msapi.clicks.SilentBinder">
+        <constructor-arg ref="nullableLongBinder"/>
+    </bean>
+
+    <util:map id="tableDataSetMap">
+        <entry key="lb_plog_click" value="clicks_raw"/>
+        <entry key="click_rollback" value="clicks_rollbacks_raw"/>
+        <entry key="plog_show" value="shows_raw"/>
+        <entry key="show_rollback" value="shows_rollbacks_raw"/>
+        <entry key="plog_click_cpa" value="cpa_clicks_raw"/>
+        <entry key="click_cpa_rollback" value="cpa_clicks_rollbacks_raw"/>
+        <entry key="plog_rasp_redir" value="rasp_redir_raw"/>
+        <entry key="rasp_redir_rollback" value="rasp_redir_rollbacks_raw"/>
+        <entry key="uslugi_click_rollback" value="uslugi_clicks_rollback_raw"/>
+        <entry key="plog_click_uslugi" value="uslugi_clicks_raw"/>
+    </util:map>
+
+</beans>

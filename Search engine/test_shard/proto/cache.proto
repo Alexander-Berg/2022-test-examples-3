@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package NProto;
+
+enum ECacheType {
+    Dict = 0;
+    Flat = 1;
+}
+
+message TAttrPair {
+    uint32 Doc = 1;
+    bytes Attribute = 2;
+}
+
+message TDict {
+    repeated TAttrPair Data = 1;
+}
+
+message TFlat {
+    repeated bytes Data = 1;
+}
+
+message TCache {
+    ECacheType Type = 1;
+    bytes Prefix = 2;
+    bytes Suffix = 3;
+
+    oneof Cache {
+        TDict Dict = 4;
+        TFlat Flat = 5;
+    }
+}

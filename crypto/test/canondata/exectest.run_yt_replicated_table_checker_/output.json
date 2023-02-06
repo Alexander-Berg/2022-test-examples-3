@@ -1,0 +1,108 @@
+[
+    {
+        "master": {
+            "name": "markov", 
+            "replication_lag_threshold": 60.0, 
+            "expected_attributes": {
+                "tablet_cell_bundle": "crypta-cm", 
+                "replicated_table_options": {
+                    "enable_replicated_table_tracker": true, 
+                    "tablet_cell_bundle_name_ttl": 300000, 
+                    "sync_replica_lag_threshold": 600000, 
+                    "tablet_cell_bundle_name_failure_interval": 60000, 
+                    "max_sync_replica_count": 1
+                }
+            }, 
+            "proxy": "markov.yt.yandex.net", 
+            "path": "//home/crypta/production/cookie_matching/rt/db/master", 
+            "sync_count": 1
+        }, 
+        "replicas": [
+            {
+                "path": "//home/crypta/production/cookie_matching/rt/db/replica", 
+                "expected_replication_attributes": {
+                    "replicated_table_tracker_enabled": true
+                }, 
+                "expected_attributes": {
+                    "tablet_cell_bundle": "crypta-cm", 
+                    "enable_dynamic_store_read": false, 
+                    "in_memory_mode": "uncompressed"
+                }, 
+                "name": "seneca-sas", 
+                "proxy": "seneca-sas.yt.yandex.net"
+            }, 
+            {
+                "path": "//home/bigb/crypta_replicas/replica", 
+                "expected_replication_attributes": {
+                    "replicated_table_tracker_enabled": false
+                }, 
+                "expected_attributes": {}, 
+                "name": "seneca-sas", 
+                "proxy": "seneca-sas.yt.yandex.net"
+            }, 
+            {
+                "path": "//home/crypta/production/cookie_matching/rt/db/replica", 
+                "expected_replication_attributes": {
+                    "replicated_table_tracker_enabled": true
+                }, 
+                "expected_attributes": {
+                    "tablet_cell_bundle": "crypta-cm", 
+                    "enable_dynamic_store_read": true, 
+                    "in_memory_mode": "uncompressed"
+                }, 
+                "name": "seneca-vla", 
+                "proxy": "seneca-vla.yt.yandex.net"
+            }, 
+            {
+                "path": "//home/bigb/crypta_replicas/replica", 
+                "expected_replication_attributes": {
+                    "replicated_table_tracker_enabled": false
+                }, 
+                "expected_attributes": {}, 
+                "name": "seneca-vla", 
+                "proxy": "seneca-vla.yt.yandex.net"
+            }
+        ]
+    }, 
+    {
+        "master": {
+            "name": "markov", 
+            "replication_lag_threshold": 60.0, 
+            "expected_attributes": {
+                "tablet_cell_bundle": "crypta-cm", 
+                "replicated_table_options": {
+                    "enable_replicated_table_tracker": true, 
+                    "tablet_cell_bundle_name_ttl": 300000, 
+                    "sync_replica_lag_threshold": 600000, 
+                    "tablet_cell_bundle_name_failure_interval": 60000, 
+                    "max_sync_replica_count": 1
+                }
+            }, 
+            "proxy": "markov.yt.yandex.net", 
+            "path": "//home/crypta/production/resource_service/master", 
+            "sync_count": 1
+        }, 
+        "replicas": [
+            {
+                "path": "//home/crypta/production/resource_service/replica", 
+                "expected_replication_attributes": {}, 
+                "expected_attributes": {
+                    "tablet_cell_bundle": "crypta-cm", 
+                    "in_memory_mode": "uncompressed"
+                }, 
+                "name": "seneca-vla", 
+                "proxy": "seneca-vla.yt.yandex.net"
+            }, 
+            {
+                "path": "//home/crypta/production/resource_service/replica", 
+                "expected_replication_attributes": {}, 
+                "expected_attributes": {
+                    "tablet_cell_bundle": "crypta-cm", 
+                    "in_memory_mode": "uncompressed"
+                }, 
+                "name": "seneca-sas", 
+                "proxy": "seneca-sas.yt.yandex.net"
+            }
+        ]
+    }
+]

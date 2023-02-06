@@ -1,0 +1,30 @@
+base: app/config/config.yml
+config:
+    system:
+        dir: {dir}
+        reactor:
+        -   _name: global
+            _pool_count: 12
+    modules:
+        module:
+        -   _name: web_server
+            configuration:
+                endpoints:
+                    listen:
+                    -   _addr: '::'
+                        _port: {webserver_port}
+        -   _name: mopsdb
+            configuration:
+                pg:
+                    connection_string: host=localhost port={mopsdb_port} user=mops dbname=mopsdb
+        -   _name: stat_server
+            configuration:
+                endpoints:
+                    listen:
+                        _port: {statserver_port}
+        -   _name: maildb
+            configuration:
+                geodata_path: null
+                uatraits:
+                    config: null
+                    profiles: null

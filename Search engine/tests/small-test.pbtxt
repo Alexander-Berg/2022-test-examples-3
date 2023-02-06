@@ -1,0 +1,34 @@
+PoolTable: "//home/search-runtime/bogdanovilya/pipeline-aggregator-joiner/small-test/main-table"
+SortPool: true
+CleanAggregatorOutput: false
+TmpDir: "//home/search-runtime/bogdanovilya"
+TableConfig {
+   ParamTable: "//home/search-runtime/bogdanovilya/pipeline-aggregator-joiner/small-test/features-table"
+   SortParamTable: true
+   Gap: 0
+   FeatureConfig {
+      Key: "model_id"
+      ToKey: "model_id_for_user_over_last_2_seconds"
+      Limit: 2
+   }
+   FeatureConfig {
+      Key: "title"
+      ToKey: "title_for_user_over_last_2_seconds"
+      Limit: 2
+   }
+}
+TableConfig {
+   ParamTable: "//home/search-runtime/bogdanovilya/pipeline-aggregator-joiner/small-test/features-table-2"
+   SortParamTable: true
+   Gap: 0
+   FeatureConfig {
+      Key: "Model_id"
+      ToKey: "Model_id_for_user_over_last_2_seconds"
+      Limit: 2
+   }
+   FeatureConfig {
+      Key: "Title"
+      ToKey: "Title_for_user_over_last_2_seconds"
+      Limit: 2
+   }
+}

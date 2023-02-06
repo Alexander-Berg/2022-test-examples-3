@@ -1,0 +1,233 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый mstat_antifraud_yql-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmstat_antifraud_yql-testing
+
+juggler:
+  checks:
+
+  # Check antifraud-yql-no-sessions
+  # https://juggler.yandex-team.ru/check_details/?host=mstat_antifraud_yql-testing&service=antifraud-yql-no-sessions&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /status/sessions
+      regexp: ^0;.*
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 100%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_mstat_antifraud_yql_sas:antifraud-yql-no-sessions:all
+    refresh_time: 600
+    service: antifraud-yql-no-sessions
+    tags:
+    - market_antifraud_testing
+    - market_testing
+    - market_rtc
+    - mstatantifraudyql
+    - testing
+    - market
+    - _market_
+    ttl: 1250
+
+  # Check antifraud-yql-no-updates
+  # https://juggler.yandex-team.ru/check_details/?host=mstat_antifraud_yql-testing&service=antifraud-yql-no-updates&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /status/updates
+      regexp: ^0;.*
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 100%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_mstat_antifraud_yql_sas:antifraud-yql-no-updates:all
+    refresh_time: 600
+    service: antifraud-yql-no-updates
+    tags:
+    - market_antifraud_testing
+    - market_testing
+    - market_rtc
+    - mstatantifraudyql
+    - testing
+    - market
+    - _market_
+    ttl: 1250
+
+  # Check antifraud-yql-ping
+  # https://juggler.yandex-team.ru/check_details/?host=mstat_antifraud_yql-testing&service=antifraud-yql-ping&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /ping
+      regexp: ^0;.*
+      warn_codes: []
+    aggregator_kwargs:
+      limits:
+      - crit: 100%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_mstat_antifraud_yql_sas:antifraud-yql-ping:all
+    refresh_time: 100
+    service: antifraud-yql-ping
+    tags:
+    - market_antifraud_testing
+    - market_testing
+    - market_rtc
+    - mstatantifraudyql
+    - testing
+    - market
+    - _market_
+    - ping
+    ttl: 900
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=mstat_antifraud_yql-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 100%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_mstat_antifraud_yql_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    refresh_time: 60
+    service: disk_free_space
+    tags:
+    - market_antifraud_testing
+    - market_testing
+    - market_rtc
+    - mstatantifraudyql
+    - testing
+    - market
+    - _market_
+    ttl: 900
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=mstat_antifraud_yql-testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 100%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_mstat_antifraud_yql_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    refresh_time: 60
+    service: logrotate
+    tags:
+    - market_antifraud_testing
+    - market_testing
+    - market_rtc
+    - mstatantifraudyql
+    - testing
+    - market
+    - _market_
+    ttl: 900
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=mstat_antifraud_yql-testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 100%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_mstat_antifraud_yql_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    refresh_time: 60
+    service: push-client-status
+    tags:
+    - market_antifraud_testing
+    - market_testing
+    - market_rtc
+    - mstatantifraudyql
+    - testing
+    - market
+    - _market_
+    ttl: 900
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    check_options: {}
+    host: mstat_antifraud_yql-testing
+    namespace: market.antifraud
+    notifications: []

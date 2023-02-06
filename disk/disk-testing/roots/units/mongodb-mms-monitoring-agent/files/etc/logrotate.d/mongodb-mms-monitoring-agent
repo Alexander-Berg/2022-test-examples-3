@@ -1,0 +1,13 @@
+/var/log/mongodb-mms/monitoring-agent.log {
+    daily
+    compress
+    start 0
+    missingok
+    rotate 7
+    sharedscripts
+    nodateext
+    create 0644 mongodb-mms-agent mongodb-mms-agent
+    postrotate
+        pgrep -f mongodb-mms-monitoring-agent >/dev/null && initctl restart mongodb-mms-monitoring-agent
+    endscript
+}

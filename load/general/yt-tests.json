@@ -1,0 +1,69 @@
+{
+  "variables": {
+    "tmpdir": "/tmp/bootstrap"
+  },
+  "builders": [
+    {
+      "type":      "yandex",
+      "endpoint":  "{{ user `endpoint` }}",
+      "token":     "{{ user `token` }}",
+      "folder_id": "{{ user `folder_id` }}",
+      "subnet_id": "{{ user `subnet_id` }}",
+      "zone":      "{{ user `zone` }}",
+
+      "use_ipv4_nat": false,
+      "use_ipv6":     true,
+
+      "image_name":        "cloud-tank-test-{{ timestamp }}",
+      "image_family":      "cloud-tank-test",
+      "image_description": "Yandex Tank for test build by: {{ user `ssh_bastion_username` }}",
+
+      "source_image_family": "cloud-yandex-tank",
+      "source_image_folder_id": "{{ user `folder_id` }}",
+      "disk_type":           "network-hdd",
+      "disk_size_gb": "15",
+      "metadata": {
+        "enable-oslogin": "true"
+      },
+      "ssh_username":                 "{{ user `ssh_username`}}",
+      "ssh_agent_auth":               true, 
+      "ssh_disable_agent_forwarding": true,
+
+      "ssh_bastion_host":       "{{ user `ssh_bastion_host` }}",
+      "ssh_bastion_port":       "{{ user `ssh_bastion_port` }}",
+      "ssh_bastion_username":   "{{ user `ssh_bastion_username` }}",
+      "ssh_bastion_agent_auth": true
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "mkdir -p {{ user `tmpdir` }}/tests"
+      ]
+    },
+    {
+       "destination": "{{ user `tmpdir` }}/tests",
+       "source": "tests/",
+       "type": "file"
+    },
+    {
+       "destination": "{{ user `tmpdir` }}/tests/ammo",
+       "source": "tests/ammo/",
+       "type": "file"
+    },
+    {
+       "destination": "{{ user `tmpdir` }}/tests/configs",
+       "source": "tests/configs/",
+       "type": "file"
+    },
+    {
+      "execute_command": "chmod +x {{ .Path }}; sudo {{ .Vars }} {{ .Path }}",
+      "type": "shell",
+      "inline": [
+        "mkdir -p /etc/tank",
+        "cp -r {{ user `tmpdir` }}/tests /etc/tank/"
+      ]
+    }
+  ]
+}

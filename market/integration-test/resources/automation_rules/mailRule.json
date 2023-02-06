@@ -1,0 +1,63 @@
+{
+  "rules": [
+    {
+      "conditions": [
+        {
+          "predicate": {
+            "type": "attribute",
+            "parameter": "mail",
+            "filter": {
+              "type": "contains",
+              "attribute": "mailMessage$in@title",
+              "value": [
+                "срочный"
+              ]
+            }
+          },
+          "positiveBranch": {
+            "rules": [
+              {
+                "actions": [
+                  {
+                    "type": "edit",
+                    "parameter": "ticket",
+                    "properties": [
+                      {
+                        "code": "ticket@service",
+                        "value": {
+                          "type": "raw",
+                          "value": "automationRuleTestVipService"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "negativeBranch": {
+            "rules": [
+              {
+                "actions": [
+                  {
+                    "type": "edit",
+                    "parameter": "ticket",
+                    "properties": [
+                      {
+                        "code": "ticket@service",
+                        "value": {
+                          "type": "raw",
+                          "value": "automationRuleTestService"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

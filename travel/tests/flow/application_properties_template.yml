@@ -1,0 +1,88 @@
+server:
+    port: {http_port}
+
+label-service:
+    lb-connection:
+        hosts:
+            local: localhost
+        port: {lb_port}
+        timeout: 1s
+        init-timeout: 1s
+        reader-restart-timeout: 1s
+        queue-access-timeout: 1s
+        retries: 5
+        messages-per-request: 100
+        consumer-close-timeout: 2s
+
+    logbroker-avia:
+        topic: topic_label_avia
+        consumer: consumer
+
+    logbroker-hotels:
+        topic: topic_label_hotels
+        consumer: consumer
+
+    logbroker-train:
+        topic: topic_label_train
+        consumer: consumer
+
+    logbroker-suburban:
+        topic: topic_label_suburban
+        consumer: consumer
+
+    logbroker-tours:
+        topic: topic_label_tours
+        consumer: consumer
+
+    logbroker-buses:
+      topic: topic_label_buses
+      consumer: consumer
+
+    yt-connection:
+        proxy-name: {yt_proxy}
+        global-timeout: 20s
+        failover-timeout: 5s
+        ping-timeout: 5s
+        request-timeout: 20s
+
+    yt-tables:
+        labels:
+            path: {yt_root}/labels
+        order-queue:
+            path: {yt_root}/order_queue
+        order-purgatory:
+            path: {yt_root}/order_purgatory
+
+snapshot-service:
+    lb-connection:
+        hosts:
+            local: localhost
+        port: {lb_port}
+        timeout: 1s
+        init-timeout: 1s
+        reader-restart-timeout: 1s
+        queue-access-timeout: 1s
+        retries: 5
+        messages-per-request: 100
+        consumer-close-timeout: 2s
+
+    logbroker:
+        topic: topic_snapshot
+        consumer: consumer
+
+    yt-connection:
+        proxy-name: {yt_proxy}
+        global-timeout: 20s
+        failover-timeout: 5s
+        ping-timeout: 5s
+        request-timeout: 20s
+
+    yt-tables:
+        processed-snapshots:
+            path: {yt_root}/processed_snapshots
+        snapshots:
+            path: {yt_root}/snapshots
+        snapshot-errors:
+            path: {yt_root}/snapshot_errors
+        order-queue:
+            path: {yt_root}/order_queue

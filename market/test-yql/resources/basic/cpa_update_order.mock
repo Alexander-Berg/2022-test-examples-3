@@ -1,0 +1,35 @@
+# Получаем размеченные cpa отзывы без order_id
+# 1631577600000 = 2021-09-14T03:00:00 MSK
+MOCK VAR $gradeThresholdDate
+SET DateTime::FromMilliseconds(1631577700000) - Interval("P365D")
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_grade
+SCHEMA id:int64, state:int16, type:int16
+SCHEMA resource_id:int64, author_id:int64
+SCHEMA cr_time:utf8, cpa:int16
+# grades to match purchases (UID)
+{"id":1, "state":0, "type":1, "resource_id":1, "author_id":123, "cr_time":"2021-09-10T13:17:08+00:00", "cpa":1}
+{"id":2, "state":0, "type":1, "resource_id":2, "author_id":124, "cr_time":"2021-09-10T13:17:08+00:00", "cpa":1}
+{"id":7, "state":0, "type":1, "resource_id":3, "author_id":125, "cr_time":"2021-09-10T13:17:08+00:00", "cpa":1}
+{"id":8, "state":0, "type":1, "resource_id":4, "author_id":126, "cr_time":"2021-09-10T13:17:08+00:00", "cpa":0}
+{"id":9, "state":0, "type":1, "resource_id":5, "author_id":127, "cr_time":"2021-09-10T20:00:00+00:00", "cpa":0}
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_grade_model
+SCHEMA grade_id:int64, model_order_id:int64
+{"grade_id":1, "model_order_id":null}
+{"grade_id":2, "model_order_id":124}
+{"grade_id":7, "model_order_id":null}
+{"grade_id":8, "model_order_id":null}
+{"grade_id":9, "model_order_id":null}
+
+
+MOCK DIR_TABLE //home/market/production/mstat/analyst/regular/cubes_vertica/fact_new_order_item_dict_flattened
+NAME 2021-12
+SCHEMA order_puid:int64, order_order_status:string, model_id:int64, msku_model_id:int64, order_creation_datetime:string, order_id:int64
+# ок
+{"order_puid":1, "order_order_status":"DELIVERED", "order_puid":123, "model_id":1, "order_creation_datetime":"2021-09-02T...", "order_id":123}
+{"order_puid":2, "order_order_status":"DELIVERED", "order_puid":124, "model_id":2, "order_creation_datetime":"2021-09-02T...", "order_id":124}
+{"order_puid":3, "order_order_status":"DELIVERED", "order_puid":125, "model_id":3, "order_creation_datetime":"2021-09-02T...", "order_id":125}
+{"order_puid":4, "order_order_status":"DELIVERED", "order_puid":126, "model_id":4, "order_creation_datetime":"2021-09-02T...", "order_id":126}
+{"order_puid":5, "order_order_status":"DELIVERED", "order_puid":127, "model_id":5, "order_creation_datetime":"2021-09-02T...", "order_id":127}
+{"order_puid":6, "order_order_status":"DELIVERED", "order_puid":125, "model_id":3, "order_creation_datetime":"2021-09-02T...", "order_id":128}

@@ -1,0 +1,98 @@
+<dataset>
+    <return_segment
+            id="1"
+            return_id="1"
+            return_box_id="1"
+            logistic_point_type="COURIER"
+            status="IN"
+    />
+
+    <return_segment
+            id="2"
+            return_id="1"
+            return_box_id="1"
+            logistic_point_id="200"
+            logistic_point_partner_id="100"
+            logistic_point_external_id="300"
+            logistic_point_name="склад сц"
+            logistic_point_type="SORTING_CENTER"
+            unique_id="e11c5e64-3694-40c9-b9b4-126efedaa098"
+    />
+
+    <return_event
+            id="1"
+            logbroker_id="[null]"
+            request_id="test-request-id/1"
+            return_id="1"
+            type="RETURN_SEGMENT_CREATED"
+            payload='{
+                "id": 2,
+                "type": "RETURN_SEGMENT_CREATED",
+                "boxExternalId": "box-external-id",
+                "logisticPointInfo": {
+                    "type": "SORTING_CENTER",
+                    "partnerId": 100,
+                    "logisticPointId": 200,
+                    "logisticPointExternalId": "300"
+                },
+                "shipmentFieldsInfo": {
+                    "recipient": null,
+                    "shipmentTime": null,
+                    "destinationInfo": null
+                }
+            }'
+    />
+
+    <return_event
+            id="2"
+            logbroker_id="[null]"
+            request_id="test-request-id/4"
+            return_id="1"
+            type="RETURN_SEGMENT_STATUS_CHANGED"
+            payload='{
+                "id": 1,
+                "type": "RETURN_SEGMENT_STATUS_CHANGED_PAYLOAD",
+                "status": "IN",
+                "logisticPointInfo": {
+                    "type": "COURIER",
+                    "partnerId": null,
+                    "logisticPointId": null,
+                    "logisticPointExternalId": null
+                },
+                "shipmentFieldsInfo": {
+                    "recipient": {
+                        "name": "partner name",
+                        "courier": {
+                            "id": 123,
+                            "uid": 234,
+                            "name": "name",
+                            "carNumber": "number",
+                            "phoneNumber": "phone",
+                            "carDescription": null
+                        },
+                        "partnerId": 200,
+                        "partnerType": "DELIVERY_SERVICE_WITH_COURIER"
+                    },
+                    "shipmentTime": 1646392333,
+                    "destinationInfo": {
+                        "name": "склад сц",
+                        "type": "SORTING_CENTER",
+                        "partnerId": 100,
+                        "logisticPointId": 200,
+                        "returnSegmentId": 2
+                    }
+                }
+            }'
+    />
+
+    <queue_tasks
+            queue_name="RETURN_SEGMENT_GET_ROUTE"
+            payload='{"requestId":"test-request-id/2","returnSegmentId":2,"sortingCenterPartnerIds":[],"useStartTime":false}'
+    />
+
+    <queue_tasks
+            queue_name="UPDATE_RETURN_STATUSES"
+            payload='{"requestId":"test-request-id/3","segmentId":1,"segmentStatus":"IN"}'
+    />
+
+</dataset>

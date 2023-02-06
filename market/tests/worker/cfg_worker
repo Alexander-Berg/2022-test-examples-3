@@ -1,0 +1,79 @@
+Core {
+    Log {
+        Level: DEBUG
+
+        # comment for writting to stdout
+        Target {
+            FilePath: "logs/amore-worker2/amore-worker2.log"
+        }
+    }
+
+    Identity {
+        Name: "amore-worker2"
+    }
+
+    TraceLog {
+        Target {
+            FilePath: "logs/amore-worker2/amore-worker2-trace.log"
+        }
+    }
+}
+
+ErrorsLog {
+    Path : "logs/amore-worker2/errors-tskv.log"
+}
+
+LoopLog {
+    Path : "logs/amore-worker2/loop-tskv.log"
+}
+
+AutostrategyLog {
+    Path : "logs/amore-worker2/autostrategy-tskv.log"
+}
+
+Logbroker {
+    Topic : "default-topic"
+    MaxDataCampBatchSize : 2
+    MaxQueueSize : 4
+    SourceIdPrefix : "amore_pytest_src_id"
+    Endpoint : "localhost"
+}
+
+LogbrokerBeru {
+    Topic : "default-topic"
+    MaxDataCampBatchSize : 2
+    MaxQueueSize : 4
+    SourceIdPrefix : "amore_blue_vendor_pytest_src_id"
+    Endpoint : "localhost"
+}
+
+PriceLabs {
+    BlueVirtualFeedId : 475690
+    MaxShopsPerYtSelect : 3
+    IdColumnName : "shop_id"
+}
+
+PriceLabsVendors {
+    BlueVirtualFeedId : 475690
+    MaxShopsPerYtSelect : 3
+    IdColumnName : "id"
+}
+
+Work {
+    MaxRecomputeDelay : 900
+    MaxShopsPerWorkerTask : 20
+    MaxOffersPerWorkerTask : 2000
+    MaxPipelineLiveTokens : 2
+    PossibleDelay : 1
+    WaitOnEmptyTask : 1
+    WaitOnException : 1
+
+    BeruShopId : 431782
+}
+
+RunEnv {
+    IsLocalRun : true
+    UseOptimDrr : false
+    UseLbdumperCleaner : false
+    UseVendorsCleaner : false
+}

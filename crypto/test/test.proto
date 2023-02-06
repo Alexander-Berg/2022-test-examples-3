@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+import "mapreduce/yt/interface/protos/extension.proto";
+
+message Record {
+
+    enum Enum {
+        A = 0;
+        B = 1;
+    };
+
+    message Message {
+        string value = 1;
+    };
+
+    string string_value = 1;
+    uint64 uint64_value = 2 [(NYT.key_column_name) = "uint64_value"];
+    int64 int64_value = 3;
+    Enum enum_value = 4;
+    Message message_value = 5;
+
+}

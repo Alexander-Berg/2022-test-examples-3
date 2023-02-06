@@ -1,0 +1,36 @@
+<html>
+<head>
+    <title>Send to test: [% action.id %]</title>
+    <script type="text/javascript" src="//yandex.st/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//yandex.st/jquery-ui/1.8.16/jquery-ui.min.js"></script>
+</head>
+<body>
+[% SET mode="test_res" %]
+[% INCLUDE header.tt2 %]
+[% IF res.errors.size %]
+<b>Error while copying to test server:</b><br />
+<pre>
+    [% FOR e IN res.errors %]
+    [% e %]
+    -----------------------------
+    [% END %]
+</pre>
+[% ELSE %]
+<br /><br />
+Components (
+[% FOREACH p IN res.components.keys %]
+[% NEXT IF p == 'meta' %]
+[% p %][% ', ' %]
+[% END %]
+) is queueing for testing.<br/>
+You can view status of process on objects page.<br/><br/>
+
+Beta link: <a target="_blank" href="http://yandex.ru/search/?text=тест&exp_flags=fastres_test_data&srcrwr=BEGEMOT_WORKER_P:man1-4322.search.yandex.net:31991:1000000">тест</a><br/>
+[% END %]
+<form action="[% cgi_url %]admin.cgi" method="GET" name="export_back_form">
+<input type="hidden" name="mode" value="edit">
+<input type="hidden" name="id" value="[% action.id %]">
+<input type="submit" value="Back to edit page">
+</form>
+</body>
+</html>

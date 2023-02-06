@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "fields": [
+      {
+        "name": "partner",
+        "title": "Партнёр",
+        "type": "REFERENCE",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "cargoTypeNumber",
+        "title": "cargoTypeNumber",
+        "type": "NUMBER",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": {
+          "optionsSlug": "lms/cargo-type",
+          "multiple": false,
+          "authorities": [
+            "ROLE_CARGO_TYPE"
+          ],
+          "titleFieldName": "description",
+          "idFieldName": "cargoType",
+          "hint": "Карго-тип",
+          "pageSize": 500,
+          "queryParamName": "searchQuery"
+        },
+        "secret": null
+      },
+      {
+        "name": "partnerId",
+        "title": "partnerId",
+        "type": "NUMBER",
+        "editable": false,
+        "options": [],
+        "hidden": true,
+        "autocomplete": null,
+        "secret": null
+      }
+    ],
+    "actions": [
+      {
+        "title": "Добавить",
+        "description": "Добавить выбранный карго-тип в чёрный список",
+        "slug": "add",
+        "identifiedBy": [],
+        "type": "ROW_ACTION",
+        "method": "POST_BODY",
+        "icon": "add",
+        "authorities": [
+          "ROLE_CARGO_TYPE_EDIT"
+        ]
+      }
+    ],
+    "mode": "VIEW",
+    "deletable": false,
+    "children": [
+      {
+        "title": "Запрещённые карго-типы",
+        "slug": "forbidden-partner-cargo-type/viewonly",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "partnerId",
+        "idFieldName": "partnerId",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      }
+    ],
+    "tabs": []
+  },
+  "item": {
+    "id": 1,
+    "values": {
+      "partnerId": 1,
+      "partner": {
+        "id": "1",
+        "displayName": "test delivery service",
+        "slug": "lms/partner",
+        "openNewTab": false
+      }
+    },
+    "title": "Добавить карго-тип в чёрный список партнёра"
+  }
+}

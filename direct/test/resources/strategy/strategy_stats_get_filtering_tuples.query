@@ -1,0 +1,12 @@
+SELECT 
+  S.ExportID AS effectiveCampaignId, 
+  S.UpdateTime AS UpdateTime, 
+  IF(is_null(S.AutobudgetStrategyID), -1, S.AutobudgetStrategyID) AS EffectiveStrategyId
+FROM yt.DirectGridStat_bs AS S
+WHERE (S.ExportID, UpdateTime) IN (
+  (1, 1658091600), 
+  (1, 1658178000), 
+  (2, 1658005200), 
+  (2, 1658091600), 
+  (2, 1658178000)
+)

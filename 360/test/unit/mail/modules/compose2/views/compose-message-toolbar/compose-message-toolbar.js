@@ -1,0 +1,3 @@
+describe('Daria.vComposeMessageToolbar', function() {
+});
+

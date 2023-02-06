@@ -1,0 +1,43 @@
+[
+  {
+    "id": 1,
+    "enabled": true,
+    "expectedStatus": "TRANSIT_COURIER_SEARCH",
+    "waybillSegmentType": "COURIER",
+    "aggregationType": "NONE",
+    "ruleProcessor": "STARTREK",
+    "rule": {
+      "queue": "MONITORINGSNDBX",
+      "closeResolution": "fixed",
+      "allowedToCloseAssigned": true,
+      "createTicketEnabled": true,
+      "closeTransitions": [
+        "close",
+        "closed"
+      ],
+      "reopenTransition": "reopen",
+      "numberOfAttempts": 5
+    }
+  },
+  {
+    "id": 2,
+    "enabled": true,
+    "expectedStatus": "TRANSIT_COURIER_SEARCH",
+    "waybillSegmentType": "MOVEMENT",
+    "aggregationType": "NONE",
+    "ruleProcessor": "TSKV_LOG",
+    "rule": {
+      "_type": ".TskvLoggerPayload",
+      "logEveryPlanFact": true
+    }
+  },
+  {
+    "id": 4,
+    "enabled": true,
+    "expectedStatus": "TRANSIT_PICKUP",
+    "waybillSegmentType": "COURIER",
+    "aggregationType": "DATE_PARTNER",
+    "ruleProcessor": "TSKV_LOG",
+    "rule": null
+  }
+]

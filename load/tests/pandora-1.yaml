@@ -1,0 +1,72 @@
+autostop:
+  autostop:
+  - time(500,10)
+  - http(4xx,25%,3)
+  - http(5xx,25%,3)
+  - total_net(1xx,400,20)
+  enabled: true
+  package: yandextank.plugins.Autostop
+pandora:
+  config_content:
+    log:
+      level: error
+    monitoring:
+      expvar:
+        enabled: true
+        port: 1234
+    pools:
+    - ammo:
+        file: https://storage-int.mds.yandex.net/get-load-ammo/21533/fbde58698f0852d68891e5c94e427102
+        type: uri
+      gun:
+        target: '[some.host]:25405'
+        type: http
+      id: HTTP
+      result:
+        destination: ./phout.log
+        type: phout
+      rps:
+      - duration: 1m
+        ops: 30
+        type: const
+      - duration: 10m
+        ops: 1
+        type: const
+      - duration: 10m
+        from: 1
+        to: 1000
+        type: line
+      - duration: 2m
+        from: 10
+        step: 10
+        to: 100
+        type: step
+      startup:
+      - times: 1000
+        type: once
+  enabled: true
+  expvar: true
+  package: yandextank.plugins.Pandora
+  pandora_cmd: /usr/local/bin/pandora
+phantom:
+  address: '[some.host]:25405'
+  ammo_type: uri
+  ammofile: https://storage-int.mds.yandex.net/get-load-ammo/21533/fbde58698f0852d68891e5c94e427102
+  enabled: false
+  header_http: '1.1'
+  load_profile:
+    load_type: rps
+    schedule: const(30,1m) const(1, 10m) line(1,1000,10m) step(10,100, 10, 2m)
+  package: yandextank.plugins.Phantom
+  port: '25405'
+  writelog: proto_warning
+uploader:
+  api_address: https://lunapark.yandex-team.ru/
+  component: null
+  enabled: true
+  job_name: Geocoder
+  lock_targets:
+  - sas1-1008.search.yandex.net
+  operator: lunapark
+  package: yandextank.plugins.DataUploader
+  task: LOAD-2

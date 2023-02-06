@@ -1,0 +1,99 @@
+{
+  "owner": "mbo",
+  "tableName": "mbo_backend_nginx_testing",
+  "splits": {
+    "dc": "if(substring(host, 1, 3) in ('iva', 'man', 'vla', 'sas'), substring(host, 1, 3), if(endsWith(host, 'yp-c.yandex.net'), substring(host, position(host, '.') + 1, 3), if(dictGetString('dc', 'dc', sipHash64(host)) <> '', dictGetString('dc', 'dc', sipHash64(host)), 'undefined_dc')))",
+    "host": "host",
+    "method": "cutQueryStringAndFragment(url)"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "mbo-solr.nginx-testing.${dc}.timings-with-errors.ALLMETHODS",
+        "mbo-solr.nginx-testing.${dc}.${host}.timings-with-errors.ALLMETHODS"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "resptime_ms",
+      "filter": "vhost like 'mbo-solr%.market.yandex.net:8983' and dynamic = 1",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "mbo-solr.nginx-testing.${dc}.timings-with-errors-seconds.ALLMETHODS",
+        "mbo-solr.nginx-testing.${dc}.${host}.timings-with-errors-seconds.ALLMETHODS"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "toInt64(resptime_ms / 1000)",
+      "filter": "vhost like 'mbo-solr%.market.yandex.net:8983' and dynamic = 1",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "mbo-solr.nginx-testing.${dc}.rps.ALLMETHODS",
+        "mbo-solr.nginx-testing.${dc}.rps.${method}",
+        "mbo-solr.nginx-testing.${dc}.${host}.rps.ALLMETHODS",
+        "mbo-solr.nginx-testing.${dc}.${host}.rps.${method}"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(vhost like 'mbo-solr%.market.yandex.net:8983' and http_code >= 200 and http_code < 300 and dynamic = 1) / 300",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "mbo-solr.nginx-testing.${dc}.timings.ALLMETHODS",
+        "mbo-solr.nginx-testing.${dc}.timings.${method}",
+        "mbo-solr.nginx-testing.${dc}.${host}.timings.ALLMETHODS",
+        "mbo-solr.nginx-testing.${dc}.${host}.timings.${method}"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "resptime_ms",
+      "filter": "vhost like 'mbo-solr%.market.yandex.net:8983' and http_code >= 200 and http_code < 300 and dynamic = 1",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "mbo-solr.nginx-testing.${dc}.timings-seconds.ALLMETHODS",
+        "mbo-solr.nginx-testing.${dc}.timings-seconds.${method}",
+        "mbo-solr.nginx-testing.${dc}.${host}.timings-seconds.ALLMETHODS",
+        "mbo-solr.nginx-testing.${dc}.${host}.timings-seconds.${method}"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "toInt64(resptime_ms / 1000)",
+      "filter": "vhost like 'mbo-solr%.market.yandex.net:8983' and http_code >= 200 and http_code < 300 and dynamic = 1",
+      "type": "QUANTILE_TIMING"
+    },
+    {
+      "metricNameArray": [
+        "mbo-solr.nginx-testing.${dc}.errors.5XX-percent.ALLMETHODS",
+        "mbo-solr.nginx-testing.${dc}.errors.5XX-percent.${method}",
+        "mbo-solr.nginx-testing.${dc}.${host}.errors.5XX-percent.ALLMETHODS",
+        "mbo-solr.nginx-testing.${dc}.${host}.errors.5XX-percent.${method}"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code >= 500 and http_code < 600 and vhost like 'mbo-solr%.market.yandex.net:8983' and dynamic = 1) * 100 / countIf(vhost like 'mbo-solr%.market.yandex.net:8983' and dynamic = 1)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "mbo-solr.nginx-testing.${dc}.errors.4XX-percent.ALLMETHODS",
+        "mbo-solr.nginx-testing.${dc}.errors.4XX-percent.${method}",
+        "mbo-solr.nginx-testing.${dc}.${host}.errors.4XX-percent.ALLMETHODS",
+        "mbo-solr.nginx-testing.${dc}.${host}.errors.4XX-percent.${method}"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code >= 400 and http_code < 500 and vhost like 'mbo-solr%.market.yandex.net:8983' and dynamic = 1) * 100 / countIf(vhost like 'mbo-solr%.market.yandex.net:8983' and dynamic = 1)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "mbo-solr.nginx-testing.${dc}.errors.3XX-percent.ALLMETHODS",
+        "mbo-solr.nginx-testing.${dc}.errors.3XX-percent.${method}",
+        "mbo-solr.nginx-testing.${dc}.${host}.errors.3XX-percent.ALLMETHODS",
+        "mbo-solr.nginx-testing.${dc}.${host}.errors.3XX-percent.${method}"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "countIf(http_code >= 300 and http_code < 400 and vhost like 'mbo-solr%.market.yandex.net:8983' and dynamic = 1) * 100 / countIf(vhost like 'mbo-solr%.market.yandex.net:8983' and dynamic = 1)",
+      "type": "SIMPLE"
+    }
+  ]
+}

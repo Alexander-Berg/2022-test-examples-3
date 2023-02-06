@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:c="urn:jmf:dataimport:converter:1.0"
+        xmlns:d="urn:jmf:dataimport:datasource:1.0"
+        xmlns:r="urn:jmf:dataimport:resolver:1.0"
+        xmlns:cu="urn:jmf:dataimport:customizer:1.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="urn:jmf:dataimport:config:1.0">
+
+    <process name="ticket">
+        <mode>CREATE</mode>
+        <mode>UPDATE</mode>
+
+        <parameter name="fqn">removeCustomizerTest</parameter>
+
+        <dataSource xsi:type="d:CSV" delimeter="," columnsByHeader="true"
+                    url="classpath:/removeCustomizerTest.data.csv">
+            <d:column name="naturalId" key="natural_id"/>
+        </dataSource>
+
+        <idColumn>naturalId</idColumn>
+
+        <metaclass xsi:type="r:constant" fqn="${fqn}"/>
+
+        <searcher xsi:type="c:entity" attr="naturalId" fqn="${fqn}"/>
+
+        <attr name="naturalId"/>
+
+        <customizer xsi:type="cu:removeNotImported" fqn="${fqn}"/>
+    </process>
+
+</config>

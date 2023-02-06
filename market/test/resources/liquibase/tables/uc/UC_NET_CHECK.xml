@@ -1,0 +1,79 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+			http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <changeSet id="uc_net_check" author="imelnikov">
+        <createTable tableName="UC_NET_CHECK">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="URL" type="VARCHAR2(4000 BYTE)"/>
+            <column name="HTTP_STATUS" type="NUMBER"/>
+            <column name="STARTED_TIME" type="TIMESTAMP(6)"/>
+            <column name="FINISHED_TIME" type="TIMESTAMP(6)"/>
+            <column name="ENTITY_ID" type="NUMBER"/>
+            <column name="GEN_TYPE" type="NUMBER">
+                <constraints foreignKeyName="FK_GEN_TYPE" references="UC_GENERATOR (ID)" deleteCascade="true"/>
+            </column>
+            <column name="STATE" type="NUMBER" defaultValue="0"/>
+            <column name="CREATION_TIME" type="TIMESTAMP(6)" defaultValueDate="now()"/>
+            <column name="SESSION_ID" type="NUMBER">
+                <constraints foreignKeyName="FK_SESSION_ID" references="UC_SESSION (ID)" deleteCascade="true"/>
+            </column>
+            <column name="ANSWER_TIME" type="NUMBER" defaultValue="0"/>
+            <column name="CONTENT_SIZE" type="NUMBER" defaultValue="0"/>
+            <column name="PLATFORM" type="TEXT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="s_uc_net_check" author="imelnikov">
+        <createSequence sequenceName="s_uc_net_check"/>
+    </changeSet>
+    <changeSet id="s_uc_net_check_" author="imelnikov">
+        <alterSequence sequenceName="s_uc_net_check" incrementBy="100"/>
+    </changeSet>
+
+    <changeSet id="i_uc_net_check" author="imelnikov">
+        <createIndex tableName="UC_NET_CHECK" indexName="IDX_UC_NET_CHECK_CREATION_TIME">
+            <column name="CREATION_TIME"/>
+        </createIndex>
+
+        <createIndex tableName="UC_NET_CHECK" indexName="IDX_UC_NET_CHECK_FINISHED_TIME">
+            <column name="FINISHED_TIME"/>
+        </createIndex>
+
+        <createIndex tableName="UC_NET_CHECK" indexName="IDX_UC_NET_CHECK_GEN_TYP">
+            <column name="GEN_TYPE"/>
+        </createIndex>
+
+        <createIndex tableName="UC_NET_CHECK" indexName="IDX_UC_NET_CHECK_HTTP_STATUS">
+            <column name="HTTP_STATUS"/>
+        </createIndex>
+
+        <createIndex tableName="UC_NET_CHECK" indexName="IDX_UC_NET_CHECK_SES_ID">
+            <column name="SESSION_ID"/>
+        </createIndex>
+
+        <createIndex tableName="UC_NET_CHECK" indexName="IDX_UC_NET_CHECK_STATE_GTYPE">
+            <column name="STATE"/>
+            <column name="GEN_TYPE"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="alter_uc_net_check" author="kukabara">
+        <addColumn tableName="UC_NET_CHECK">
+            <column name="error_message" type="TEXT"/>
+        </addColumn>
+        <addColumn tableName="UC_NET_CHECK">
+            <column name="host" type="TEXT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="zora_status" author="">
+        <addColumn tableName="UC_NET_CHECK">
+            <column name="ZORA_STATUS" type="NUMBER"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

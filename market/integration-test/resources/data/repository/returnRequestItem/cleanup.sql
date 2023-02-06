@@ -1,0 +1,1 @@
+TRUNCATE return_request_item RESTART IDENTITY CASCADE;

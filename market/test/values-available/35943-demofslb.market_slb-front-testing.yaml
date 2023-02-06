@@ -1,0 +1,23 @@
+context:
+  default:
+    service_name: demofslb
+    servername_regexp: '.*\\.demofslb\\.(market\\.(yandex|yandex-team)\\.(ru|ua|kz|by|com)|beru\\.ru|bringly\\.ru)(:\\d+)?'
+    vs: demofslb
+    balancing_method: rr
+    health_check: '"GET /ping HTTP/1.1\r\nHost: demofslb.tst.vs.market.yandex.net\r\n\r\n"'
+    antirobot: True
+    antirobot_service_name: market
+    cert: demofslb
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+    exp_getter: true
+    uaas_service_name: market
+
+servers:
+  default:
+    main:
+      - name: GREY%demofslb.tst.vs.market.yandex.net
+        timeout: "35s"
+        port: 80
+        web_sockets: True
+        plain_http_backend: True

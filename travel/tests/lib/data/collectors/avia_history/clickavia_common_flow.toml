@@ -1,0 +1,57 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "clickavia_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 1016
+    confirm_dt = ""
+    created_at = "2020-01-31 17:38:45"
+    currency = "RUB"
+    from = "DWC"
+    marker = "22af618d-a5e969-60ab-4ecd-aa1e-2832c6a6b2b71"
+    order_id = "655222"
+    partner = "clickaviatravelab"
+    partner_id = 99
+    price = 3810.0
+    source = "clickavia"
+    status = "paid"
+    ticket_number = ""
+    to = "KRR"
+    trip_type = "oneway"
+    unixtime = 1581339768
+
+[lb]
+    topic = "topic-clickavia_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "updated_at"]
+
+[[lb.expected]]
+    status = "confirmed"
+    category = "avia"
+    partner_id = 99
+    created_at = 1580492325
+    origin = "DWC"
+    partner_order_id = "655222"
+    label = "22af618d-a5e969-60ab-4ecd-aa1e-2832c6a6b2b71"
+    source = "history"
+    destination = "KRR"
+    partner_name = "clickavia"
+    trip_type = "oneway"
+    billing_order_id = 1016
+    order_amount = 3810.0
+    travel_order_id = "clickavia:655222"
+    currency_code = "RUB"

@@ -1,0 +1,29 @@
+# Параметры обработки
+params:
+  default:
+    templates:
+      - report_sharding.tpl
+
+values:
+  default:
+    defaults:
+      mcrouter_port: 11249
+      memcached_port: 21249
+      env: testing
+      cache_name: repredir
+      memory: 3072
+
+servers:
+  default:
+    main:
+      - name: "%market_cache-testing@local"
+    sas:
+      - name: "%market_cache-testing@sas"
+    vla:
+      - name: "%market_cache-testing@vla"
+    sas_not_local:
+      - name: "%market_cache-testing@sas"
+      - name: "-%market_cache-testing@local"
+    vla_not_local:
+      - name: "%market_cache-testing@vla"
+      - name: "-%market_cache-testing@local"

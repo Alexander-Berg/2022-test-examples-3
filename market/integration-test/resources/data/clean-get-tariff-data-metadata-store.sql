@@ -1,0 +1,1 @@
+DELETE FROM get_tariff_data_metadata_store;

@@ -1,0 +1,1 @@
+DELETE FROM create_parcel_order_metadata_store

@@ -1,0 +1,20 @@
+{% extends "base.yml" %}
+{% from "secrets/testing.j2" import secrets %}
+
+{% block infra_environment %}2158{% endblock %}
+{% block environment %}testing{% endblock %}
+{% block network_macro %}_MAILTESTNETS_{% endblock %}
+
+{% set deploy_units = {
+    "retriever": {
+      "version": "202205041507.retrieverits",
+      "max_unavailable": 2,
+      "clusters": {
+        "sas": 1,
+        "vla": 1,
+        "myt": 1,
+        "iva": 1,
+      }
+    }
+  }
+%}

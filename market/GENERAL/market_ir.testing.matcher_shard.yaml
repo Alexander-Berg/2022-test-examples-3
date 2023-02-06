@@ -1,0 +1,236 @@
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=market_matcher_shard-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_matcher_shard_sas
+    - NANNY%testing_market_matcher_shard_man
+    - NANNY%testing_market_matcher_shard_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: disk_free_space
+    tags:
+    - market_testing
+    - market_ir
+    - market_rtc
+    - matcher_shard
+    - market
+    - _market_
+
+  # Check fresh-hprof-files
+  # https://juggler.yandex-team.ru/check_details/?host=market_matcher_shard-testing&service=fresh-hprof-files&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_matcher_shard_sas
+    - NANNY%testing_market_matcher_shard_man
+    - NANNY%testing_market_matcher_shard_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: fresh-hprof-files
+    tags:
+    - market_testing
+    - market_ir
+    - market_rtc
+    - matcher_shard
+    - market
+    - _market_
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=market_matcher_shard-testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_matcher_shard_sas
+    - NANNY%testing_market_matcher_shard_man
+    - NANNY%testing_market_matcher_shard_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: logrotate
+    tags:
+    - market_testing
+    - market_ir
+    - market_rtc
+    - matcher_shard
+    - market
+    - _market_
+
+  # Check monitoring_dev
+  # https://juggler.yandex-team.ru/check_details/?host=market_matcher_shard-testing&service=monitoring_dev&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    children:
+    - market_matcher_shard-testing:monitoring_dev_warn
+    - market_matcher_shard-testing:monitoring_dev_crit
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: monitoring_dev
+    tags:
+    - market_testing
+    - market_ir
+    - market_rtc
+    - matcher_shard
+    - market
+    - _market_
+    - monitoring_dev
+
+  # Check monitoring_dev_crit
+  # https://juggler.yandex-team.ru/check_details/?host=market_matcher_shard-testing&service=monitoring_dev_crit&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      - 500
+      path: /monitoring?resp=dev
+      regexp: ^(0|1);
+      warn_codes: []
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_matcher_shard_sas:monitoring_dev_crit:all
+    - NANNY%testing_market_matcher_shard_man:monitoring_dev_crit:all
+    - NANNY%testing_market_matcher_shard_vla:monitoring_dev_crit:all
+    service: monitoring_dev_crit
+    tags:
+    - market_testing
+    - market_ir
+    - market_rtc
+    - matcher_shard
+    - market
+    - _market_
+
+  # Check monitoring_dev_warn
+  # https://juggler.yandex-team.ru/check_details/?host=market_matcher_shard-testing&service=monitoring_dev_warn&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      - 500
+      path: /monitoring?resp=dev
+      regexp: ^(0|2);
+      warn_codes: []
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 146%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 146%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_matcher_shard_sas:monitoring_dev_warn:all
+    - NANNY%testing_market_matcher_shard_man:monitoring_dev_warn:all
+    - NANNY%testing_market_matcher_shard_vla:monitoring_dev_warn:all
+    service: monitoring_dev_warn
+    tags:
+    - market_testing
+    - market_ir
+    - market_rtc
+    - matcher_shard
+    - market
+    - _market_
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=market_matcher_shard-testing&service=ping&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      ok_codes:
+      - 200
+      path: /ping
+      regexp: ^0;
+      warn_codes: []
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: '2'
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: '2'
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_matcher_shard_sas:ping:all
+    - NANNY%testing_market_matcher_shard_man:ping:all
+    - NANNY%testing_market_matcher_shard_vla:ping:all
+    service: ping
+    tags:
+    - market_testing
+    - market_ir
+    - market_rtc
+    - matcher_shard
+    - market
+    - _market_
+    - ping
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=market_matcher_shard-testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    children:
+    - NANNY%testing_market_matcher_shard_sas
+    - NANNY%testing_market_matcher_shard_man
+    - NANNY%testing_market_matcher_shard_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: push-client-status
+    tags:
+    - market_testing
+    - market_ir
+    - market_rtc
+    - matcher_shard
+    - market
+    - _market_
+  default:
+    check_options: {}
+    host: market_matcher_shard-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    ttl: 900

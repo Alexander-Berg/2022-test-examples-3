@@ -1,0 +1,57 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "svyaznoy_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 270
+    confirm_dt = ""
+    created_at = "2020-01-30 15:15:39"
+    currency = ""
+    from = "LED"
+    marker = "eb7e4e64-a5e969-7b39-4286-8b0d-889a945b8e2d1"
+    order_id = "29404510"
+    partner = "svyaznoy"
+    partner_id = 42
+    price = 2673.0
+    source = "svyaznoy"
+    status = "paid"
+    ticket_number = ""
+    to = "KRR"
+    trip_type = ""
+    unixtime = 1580419913
+
+[lb]
+    topic = "topic-svyaznoy_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "updated_at"]
+
+[[lb.expected]]
+    status = "confirmed"
+    category = "avia"
+    partner_id = 42
+    created_at = 1580397339
+    origin = "LED"
+    partner_order_id = "29404510"
+    label = "eb7e4e64-a5e969-7b39-4286-8b0d-889a945b8e2d1"
+    source = "history"
+    destination = "KRR"
+    partner_name = "svyaznoy"
+    trip_type = ""
+    billing_order_id = 270
+    order_amount = 2673.0
+    travel_order_id = "svyaznoy:29404510"
+    currency_code = "RUB"

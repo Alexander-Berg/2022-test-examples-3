@@ -1,0 +1,19 @@
+context:
+  default:
+    service_name: market_front_ipa_ext
+    servername_regexp: '(market-front-ipa-ext\\.tst\\.vs|ipa-ext-test)\\.market\\.yandex\\.(net|ru)'
+    vs: market_front_ipa_ext
+    health_check: '"GET /ping HTTP/1.1\r\nHost: ipa-ext-test.market.yandex.ru\r\n\r\n"'
+    antirobot: True
+    antirobot_service_name: market
+    cert: market-front-ipa-ext.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+
+servers:
+  default:
+    main:
+      - name: "GREY%market-front-ipa-ext.tst.vs.market.yandex.net"
+        timeout: "35s"
+        port: 80
+        plain_http_backend: True

@@ -1,0 +1,111 @@
+<dataset>
+    <return
+            id="1"
+            source="COURIER"
+            order_external_id="order-external-id-1"
+            logistic_point_from_id="11111"
+    />
+
+    <!--No FF segments-->
+    <return_box
+            id="1"
+            return_id="1"
+            external_id="box-with-no-ff-segments"
+    />
+    <return_segment
+            id="1"
+            return_box_id="1"
+            logistic_point_type="PICKUP"
+    />
+    <return_segment
+            id="2"
+            return_box_id="1"
+            logistic_point_type="SORTING_CENTER"
+    />
+    <return_segment
+            id="3"
+            return_box_id="1"
+            logistic_point_type="SORTING_CENTER"
+    />
+
+    <!-- Multiple FF segments(only on error data state)-->
+    <return_box
+            id="2"
+            return_id="1"
+            external_id="box-multiple-ff-segments"
+    />
+    <return_segment
+            id="4"
+            return_box_id="2"
+            logistic_point_type="SORTING_CENTER"
+    />
+    <return_segment
+            id="5"
+            return_box_id="2"
+            logistic_point_type="FULFILLMENT"
+    />
+    <return_segment
+            id="6"
+            return_box_id="2"
+            logistic_point_type="FULFILLMENT"
+    />
+
+    <!--Correct for event-->
+    <return_box
+            id="3"
+            return_id="1"
+            external_id="box-with-ff-segment"
+    />
+    <return_segment
+            id="7"
+            return_box_id="3"
+            logistic_point_type="SORTING_CENTER"
+            status="OUT"
+    />
+    <return_segment
+            id="8"
+            return_box_id="3"
+            logistic_point_type="SORTING_CENTER"
+            status="OUT"
+    />
+    <return_segment
+            id="9"
+            return_box_id="3"
+            logistic_point_type="FULFILLMENT"
+            status="IN"
+    />
+    <return_segment_status_history
+            return_segment_id="9"
+            status="IN"
+            datetime="2021-11-11 11:11:11 +0000"
+    />
+
+    <return_event
+            created="2021-11-11 11:11:11 +0000"
+            logbroker_id="[null]"
+            request_id="test-request-id/1"
+            type="RETURN_SEGMENT_STATUS_CHANGED"
+            return_id="1"
+            payload='{
+                "id": 9,
+                "type": "RETURN_SEGMENT_STATUS_CHANGED_PAYLOAD",
+                "status": "IN",
+                "logisticPointInfo": {
+                    "type": "FULFILLMENT",
+                    "partnerId": null,
+                    "logisticPointId": null,
+                    "logisticPointExternalId": null
+                },
+                "shipmentFieldsInfo": {
+                    "recipient": null,
+                    "shipmentTime": null,
+                    "destinationInfo": null
+                }
+            }'
+    />
+
+    <queue_tasks
+            queue_name="UPDATE_RETURN_STATUSES"
+            payload='{"requestId":"test-request-id/2","segmentId":9,"segmentStatus":"IN"}'
+    />
+</dataset>

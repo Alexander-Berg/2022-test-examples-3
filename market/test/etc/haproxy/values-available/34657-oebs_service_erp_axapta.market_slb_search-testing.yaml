@@ -1,0 +1,29 @@
+# Параметры обработки
+params:
+  default:
+    resolve: yes
+    templates:
+      - user_mslb_http.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          check observe layer7
+      inter:          2s
+      on_error:       fastinter
+      ssl:            ssl verify none
+    globals:
+      service_name:   oebs-service.erp-axapta.tst.vs.market.yandex.net
+      listen_port:    80
+      service_port:   443
+      ping_expect:    status 200
+    meta:
+      monrun_ignore:  yes
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+      - name: orion-tst-aos.ld.yandex-team.ru
+        port: 44333

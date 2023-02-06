@@ -1,0 +1,481 @@
+{
+    "TMultiApplierTest" : [
+        {
+            "testData" : { "Factors": [ 0, 0, 0, 0, 0, 0 ] },
+            "input" : { "a" : 100, "b" : 200, "ab" : 300, "aa" : 400, "bb" : 500 },
+            "config" : {
+              "appliers" : [
+                  {
+                      "name" : "TFlatDictPropertyWriter",
+                      "prefix" : "Dst_"
+                  },
+                  {
+                      "name" : "TDynamicFactorsWriter",
+                      "name_to_index" : { "a" : 0, "b" : 1, "aa" : 2, "ab" : 3, "bb" : 4 }
+                  }
+              ]
+            },
+            "answer" : {
+              "Ctx" : { "Dst_a" : 100, "Dst_b" : 200, "Dst_aa" : 400, "Dst_ab" : 300, "Dst_bb" : 500 },
+              "Factors" : [ 100, 200, 400, 300, 500, 0 ]
+            }
+        },
+        {
+            "testData" : { "Scheme" : { "foo" : null, "bar" : 42 } },
+            "input" : "some_word",
+            "config" : {
+                "appliers" : [
+                    {
+                        "name" : "TSchemeWriter",
+                        "destination": "zoo"
+                    },
+                    {
+                        "name" : "TPropertyWriter",
+                        "destination" : "DumperTest"
+                    },
+                    {
+                        "name" : "TSchemeWriter",
+                        "destination" : "foo"
+                    }
+                ]
+            },
+            "answer" : {
+                "Scheme" : { "foo" : "some_word", "bar" : 42, "zoo" : "some_word" },
+                "Ctx" : { "DumperTest" : "some_word" } 
+            }
+        }
+    ],
+
+    "TMapConverter": [
+        {
+            "config": {
+                "mode": "filter",
+                "parameters": {
+                    "vars": [
+                        { "name": "a", "path": "train/test", "default": 0 },
+                        { "name": "b", "path": "train/train", "default": 0 },
+                        { "name": "c", "path": "test", "default": 0 }
+                    ],
+                    "condition": "a + b + c == 0"
+                }
+            },
+            "input": [ 
+                { "train": { "test": 10, "train": -10 }, "test": 0 },
+                { "train": { "test": 10, "train": -10 }, "test": 10 },
+                { "train": { "test": 10, "train": -10 } }
+            ],
+            "answer": [
+                { "train": { "test": 10, "train": -10 }, "test": 0 },
+                { "train": { "test": 10, "train": -10 } }
+            ]
+        },
+        {
+            "config": {
+                "mode": "filter",
+                "parameters": {
+                    "vars": [
+                        { "name": "a", "path": "train/train", "default": 0 },
+                        { "name": "b", "path": "train/train", "default": 0 },
+                        { "name": "c", "path": "test", "default": 0 }
+                    ],
+                    "condition": "a + b + c == 0"
+                }
+            },
+            "input": [ 
+                { "train": { "test": 10, "train": -10 }, "test": 0 },
+                { "train": { "test": 10, "train": -10 }, "test": 10 },
+                { "train": { "test": 10, "train": -10 } }
+            ],
+            "answer": [
+            ]
+        },
+        {
+            "config": {
+                "mode": "filter",
+                "parameters" : {
+                    "vars": [
+                        { "name": "a", "path": "train/test", "default": 0 },
+                        { "name": "b", "path": "train/train", "default": 0 },
+                        { "name": "c", "path": "test", "default": 1 }
+                    ],
+                    "condition": "a + b + c == 0"
+                }
+            },
+            "input": [ 
+                { "train": { "test": 10, "train": -10 }, "test": 0 },
+                { "train": { "test": 10, "train": -10 }, "test": 10 },
+                { "train": { "test": 10, "train": -10 } }
+            ],
+            "answer": [
+                { "train": { "test": 10, "train": -10 }, "test": 0 }
+            ]
+        },
+        {
+            "config": {
+                "mode": "filter",
+                "parameters": {
+                    "vars": [
+                        { "name": "a", "path": "train/test", "default": 0 },
+                        { "name": "b", "path": "train/train", "default": 0 },
+                        { "name": "c", "path": "test", "default": 1 }
+                    ],
+                    "condition": "(a == 10) && (c > 0)"
+                }
+            },
+            "input": [ 
+                { "train": { "test": 10, "train": -10 }, "test": 0 },
+                { "train": { "test": 10, "train": -10 }, "test": 10 },
+                { "train": { "test": 10, "train": -10 } },
+                { "train": { "test":  0, "train": -10 } }
+            ],
+            "answer": [
+                { "train": { "test": 10, "train": -10 }, "test": 10 },
+                { "train": { "test": 10, "train": -10 } }
+            ]
+        },
+        {
+            "config": {
+                "mode": "filter",
+                "parameters" : {
+                    "vars": [
+                      { "name": "a", "path": "train/test", "default": 0 },
+                      { "name": "b", "path": "train/train", "default": 0 },
+                      { "name": "c", "path": "test", "default": 1 }
+                    ],
+                    "condition": "(a == 10) || (c > 0)"
+                }
+            },
+            "input": [ 
+                { "train": { "test": 10, "train": -10 }, "test": 0 },
+                { "train": { "test": 10, "train": -10 }, "test": 10 },
+                { "train": { "test": 10, "train": -10 } },
+                { "train": { "test":  0, "train": -10 } }
+            ],
+            "answer": [
+                { "train": { "test": 10, "train": -10 }, "test": 0 },
+                { "train": { "test": 10, "train": -10 }, "test": 10 },
+                { "train": { "test": 10, "train": -10 } },
+                { "train": { "test":  0, "train": -10 } }
+            ]
+        },
+        {
+            "config": {
+                "mode": "filter",
+                "parameters" : {
+                    "vars": [
+                        { "name": "a", "path": "train/test", "default": 0 },
+                        { "name": "b", "path": "train/train", "default": 0 },
+                        { "name": "c", "path": "test", "default": 1 }
+                    ],
+                    "condition": "(a == 10) || (c > 0)"
+                }
+            },
+            "input": [ 
+                { "train": { "test": 10, "train": -10 }, "test": 0 },
+                { "train": { "test": 10, "train": -10 }, "test": 10 },
+                { "train": { "test": 10, "train": -10 } },
+                { "train": { "test":  0, "train": -10 } }
+            ],
+            "answer": [
+                { "train": { "test": 10, "train": -10 }, "test": 0 },
+                { "train": { "test": 10, "train": -10 }, "test": 10 },
+                { "train": { "test": 10, "train": -10 } },
+                { "train": { "test":  0, "train": -10 } }
+            ]
+        },
+        {
+            "config": {
+                "mode": "filter",
+                "parameters": {
+                    "vars": [
+                        { "name": "a", "path": "train/test", "default": 0 },
+                        { "name": "b", "path": "train/train", "default": 0 },
+                        { "name": "c", "path": "test", "default": 0 }
+                    ],
+                    "condition": "a + b + c == 0"
+                }
+            },
+            "input": { 
+                "A": { "train": { "test": 10, "train": -10 }, "test": 0 },
+                "B": { "train": { "test": 10, "train": -10 }, "test": 10 },
+                "C": { "train": { "test": 10, "train": -10 } }
+            },
+            "answer": {
+                "A": { "train": { "test": 10, "train": -10 }, "test": 0 },
+                "C": { "train": { "test": 10, "train": -10 } }
+            }
+      },
+      {
+          "config": {
+              "mode": "function",
+              "parameters": {
+                  "vars": [
+                      { "name": "a", "path": "train/test", "default": 0 },
+                      { "name": "b", "path": "train/train", "default": 0 },
+                      { "name": "c", "path": "test", "default": 1 }
+                  ],
+                  "function" : "a + b + c",
+                  "output_path" : "summa"
+              }
+          },
+          "input": [ 
+              { "train": { "test": 10, "train": -10 }, "test": 0 },
+              { "train": { "test": 10, "train": -10 }, "test": 10 },
+              { "train": { "test": 10, "train": -10 } }
+          ],
+          "answer": [
+              { "train": { "test": 10, "train": -10 }, "test": 0, "summa": 0 },
+              { "train": { "test": 10, "train": -10 }, "test": 10, "summa": 10 },
+              { "train": { "test": 10, "train": -10 }, "summa": 1  }
+          ]
+      },
+      {
+          "config": {
+              "mode": "function",
+              "parameters": {
+                  "vars": [
+                      { "name": "a", "path": "train/test", "default": 0 },
+                      { "name": "b", "path": "train/train", "default": 0 },
+                      { "name": "c", "path": "test", "default": 1 }
+                  ],
+                  "function" : "a + b + c"
+              }
+          },
+          "input": [ 
+              { "train": { "test": 10, "train": -10 }, "test": 0 },
+              { "train": { "test": 10, "train": -10 }, "test": 10 },
+              { "train": { "test": 10, "train": -10 } }
+          ],
+          "answer": [
+              "0",
+              "10",
+              "1"
+          ]
+      },
+      {
+          "config": {
+              "mode": "filter",
+              "parameters": {
+                  "vars": [
+                      { "name": "arrSize", "path": "train/test",  "default": [], "modifier" : "ArraySize"}
+                  ],
+                  "condition": "arrSize > 0"
+              }
+          },
+          "input": [ 
+              { "train": { "test": ["1", "2", "3"], "train": -10 }, "test": 0 },
+              { "train": { "test": ["1", "2", "3", "4"], "train": -10 }, "test": 10 },
+              { "train": { "train": -10 } },
+              { "train": { "test": [], "train": -10 } }
+          ],
+          "answer": [
+              { "train": { "test": ["1", "2", "3"], "train": -10 }, "test": 0 },
+              { "train": { "test": ["1", "2", "3", "4"], "train": -10 }, "test": 10 }
+          ]
+      },
+      {
+          "config": {
+              "mode": "filter",
+              "parameters": {
+                  "vars": [
+                      { "name": "dictSize", "path": "train/test",  "default": {}, "modifier" : "DictSize"}
+                  ],
+                  "condition": "dictSize * dictSize - 1 > 0"
+              }
+          },
+          "input": [ 
+              { "train": { "test": {"1" : [], "2" : {}, "3" : "some"}, "train": -10 }, "test": 0 },
+              { "train": { "test": {"1" : [] }, "train": -10 }, "test": 10 },
+              { "train": { "train": -10 } },
+              { "train": { "test": {}, "train": -10 } }
+          ],
+          "answer": [
+              { "train": { "test": {"1" : [], "2" : {}, "3" : "some"}, "train": -10 }, "test": 0 }
+          ]
+      },
+      {
+          "config": {
+              "mode": "filter",
+              "parameters" : {
+                  "vars": [
+                      { "name": "type", "path": "train/test", "default": ""},
+                      { "name": "searchType", "default": "model"}
+                  ],
+                  "condition": "type == searchType"
+              }
+          },
+          "input": [ 
+              { "train": { "test": "model", "train": -10 }, "test": 0 },
+              { "train": { "test": "model", "train": -10 }, "test": 10 },
+              { "train": { "train": -10 } },
+              { "train": { "test": "notmodel", "train": -10 } }
+          ],
+          "answer": [
+              { "train": { "test": "model", "train": -10 }, "test": 0 },
+              { "train": { "test": "model", "train": -10 }, "test": 10 }
+          ]
+      }
+   ],
+   "TReduceArray" : [
+        {
+            "config" : {
+                "operation" : "min"
+            },
+            "input" : [
+                1, 2, 0, 3, 4
+            ],
+            "answer" : 0
+        },
+        {
+            "config" : {
+                "operation" : "argmin"
+            },
+            "input" : [
+                1, 2, 0, 3, 4
+            ],
+            "answer" : 2
+        },
+        {
+            "config" : {
+                "operation" : "max"
+            },
+            "input" : [
+                2, 1, 4, 5, 3
+            ],
+            "answer" : 5
+        },
+        {
+            "config" : {
+                "operation" : "argmax"
+            },
+            "input" : [
+                2, 1, 4, 5, 3
+            ],
+            "answer" : 3
+        },
+        {
+            "config" : {
+                "operation" : "median"
+            },
+            "input" : [
+                1, 1, 5, 4, 3, 7, 8
+            ],
+            "answer" : 4
+        },
+        {
+            "config" : {
+                "operation" : "sum"
+            },
+            "input" : [
+                1, 2, 3, 4, 5, 6, 7
+            ],
+            "answer" : 28
+        },
+        {
+            "config" : {
+                "operation" : "avg",
+                "CheckNullPolicy" : true
+            },
+            "input" : [
+                1, 2, 3, 4, 5, 6, 7
+            ],
+            "answer" : 4
+        },
+        {
+            "config" : {
+                "operation" : "avg"
+            },
+            "input" : [
+                1, 2, null, 3, 4, null, 5, 6, 7, null
+            ],
+            "answer" : 4
+        }
+
+    ],
+    "TArrayToDict" : [
+        {
+            "config" : {
+            },
+            "input" : [
+                { "key1" : 1, "key2" : 2, "key3" : 3},
+                { "key1" : 2, "key2" : 3, "key3" : 4},
+                { "key1" : 3, "key2" : 4, "key3" : 5}
+            ],
+            "answer" : {
+                "key1" : [1, 2, 3],
+                "key2" : [2, 3, 4],
+                "key3" : [3, 4, 5]
+            }
+        },
+        {
+            "config" : {
+                "default_value" : null
+            },
+            "input" : [
+                { "key2" : 2, "key3" : 3},
+                { "key1" : 2, "key3" : 4},
+                { "key1" : 3, "key2" : 4}
+            ],
+            "answer" : {
+                "key1" : [null, 2, 3],
+                "key2" : [2, null, 4],
+                "key3" : [3, 4, null]
+            }
+        },
+        {
+            "config" : {
+                "default_value" : "0"
+            },
+            "input" : [
+                { "key2" : 2, "key3" : 3},
+                { "key1" : 2, "key3" : 4},
+                { "key1" : 3, "key2" : 4}
+            ],
+            "answer" : {
+                "key1" : ["0", 2, 3],
+                "key2" : [2, "0", 4],
+                "key3" : [3, 4, "0"]
+            }
+        },
+        {
+            "config" : {
+            },
+            "input" : [
+                { "key1" : 1, "key2" : 2, "key3" : 3},
+                { "key1" : 2, "key3" : 4},
+                { "key1" : 3, "key2" : 4, "key3" : 5}
+            ],
+            "answer" : {
+                "key1" : [1, 2, 3],
+                "key2" : [2, 4],
+                "key3" : [3, 4, 5]
+            }
+        }
+     ],
+    "TMultiplexConverter" : [
+        {
+            "config" : {
+                "converters" : [
+                    {
+                        "name" : "TReduceArray",
+                        "operation" : "min"
+                    },
+                    {
+                        "name" : "TReduceArray",
+                        "operation" : "sum"
+                    },
+                    {
+                        "name" : "TArrayElement",
+                        "index" : 0
+                    }
+                ]
+            },
+            "input" : [
+                0, 1, 2, 4, -1, 5
+            ],
+            "answer" : [
+                -1, 11, 0
+            ]
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+context:
+  default:
+    service_name: litmus_sslb
+    servername_regexp: 'litmus-sslb\\.tst\\.vs\\.market\\.yandex\\.net'
+    vs: litmus_sslb
+    plain_http: true
+    health_check: '"GET /ping HTTP/1.1\r\nHost: litmus-sslb.tst.vs.market.yandex.net\r\n\r\n"'
+    attempts: 3
+    antirobot: True
+    antirobot_service_name: market_other
+    balancing_method: "active"
+    cert: litmus-sslb.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+    rps_limiter: true
+
+servers:
+  default:
+    main:
+      - name: "litmus-sslb.tst.vs.market.yandex.net"
+        timeout: "400ms"
+        port: 8080
+        plain_http_backend: True

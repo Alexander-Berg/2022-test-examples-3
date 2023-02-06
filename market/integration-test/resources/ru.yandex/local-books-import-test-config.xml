@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans default-autowire="byName">
+
+    <import resource="corba-test-config.xml"/>
+    <import resource="db-test-config.xml"/>
+
+    <bean id="booksDiffDumpImporter" class="ru.yandex.market.mbo.dump.falschspieler.stub.BooksImport" autowire="no"
+          lazy-init="true">
+        <property name="fileManager">
+            <bean class="ru.yandex.market.mbo.dump.falschspieler.FileManagerDefaultImpl">
+                <property name="folder" value="/home/pulser/tmp" />
+                <property name="pattern" value="diff_dump_\d\d\d\d\d\d\d\d_\d\d\d\d\.xml" />
+            </bean>
+        </property>
+        <property name="consumer">
+            <bean class="ru.yandex.market.mbo.dump.falschspieler.JdbcConsumer" autowire="no">
+                <property name="dataSource" ref="booksDataSource"/>
+                <!--<property name="jdbcTemplate" ref="booksJdbcTemplate" />-->
+                <property name="hyperIdGenerator">
+                    <bean class="ru.yandex.market.mbo.core.kdepot.impl.IdGenerator" autowire="no">
+                        <property name="jdbcTemplate" ref="scatJdbcTemplate"/>
+                    </bean>
+                </property>
+            </bean>
+
+            <!--<bean class="ru.yandex.market.mbo.dump.falschspieler.FakeConsumer"/>-->
+        </property>
+    </bean>
+
+</beans>

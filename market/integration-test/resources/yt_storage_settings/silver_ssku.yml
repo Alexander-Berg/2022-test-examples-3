@@ -1,0 +1,61 @@
+---
+development:
+  table_name: 'ssku_silver'
+  mdm_entity_type_id: 884303947
+  auto_compaction_period: 21600000
+  tablet_cell_bundle_meta: 'market-mdm-development'
+  tablet_cell_bundle_replicas: 'market-mdm-development'
+  tablet_count: 1
+  compression_codec: 'LZ4' # r.y.m.yt.util.table.constants.CompressionCodec#name()
+  primary_medium: 'SSD_BLOBS' # r.y.m.yt.util.table.constants.Medium#name()
+  audit: true
+  indices:
+  - index:
+    primary: true
+    name_postfix: '_business_idx'
+    columns:
+    - search_column:
+      name: 'business_id'
+      mdm_attribute_path: [1]
+      type: 'UINT64' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+      mdm_type: 'INT64' # MdmAttributeDataType#name()
+    - search_column:
+      name: 'shop_sku'
+      mdm_attribute_path: [2]
+      type: 'STRING' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+      mdm_type: 'STRING' # MdmAttributeDataType#name()
+    - search_column:
+      name: 'source_type'
+      mdm_attribute_path: [3]
+      type: 'STRING' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+      mdm_type: 'STRING' # MdmAttributeDataType#name()
+    - search_column:
+      name: 'source_id'
+      mdm_attribute_path: [4]
+      type: 'STRING' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+      mdm_type: 'STRING' # MdmAttributeDataType#name()
+  - index:
+    primary: false
+    index_type: 'ONE_2_MANY_CARTESIAN' # SecondaryIndexType#name()
+    name_postfix: '_service_idx'
+    columns:
+    - search_column:
+      name: 'service_id'
+      mdm_attribute_path: [10, 11, 12]
+      type: 'UINT64' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+      mdm_type: 'INT64' # MdmAttributeDataType#name()
+    - search_column:
+      name: 'shop_sku'
+      mdm_attribute_path: [2]
+      type: 'STRING' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+      mdm_type: 'STRING' # MdmAttributeDataType#name()
+    - search_column:
+      name: 'source_type'
+      mdm_attribute_path: [3]
+      type: 'STRING' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+      mdm_type: 'STRING' # MdmAttributeDataType#name()
+    - search_column:
+      name: 'source_id'
+      mdm_attribute_path: [4]
+      type: 'STRING' # r.y.m.yt.util.table.model.YtColumnSchema.Type#name()
+      mdm_type: 'STRING' # MdmAttributeDataType#name()

@@ -1,0 +1,37 @@
+location ~* ^/api/(mobile/)(v\d+/)(|[a-zA-Z]+/)([^/\s]+)?$ {
+    expires epoch;
+    add_header Cache-Control "private,no-cache,no-store,must-revalidate,max-age=0";
+    add_header X-Request-Id $request_id always;
+    include sites-enabled/security-headers.include;
+
+    set $version "$2";
+    set $caller "$3";
+    set $api_method "$4";
+
+    include sites-enabled/cors.include;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $x_real_ip;
+    proxy_set_header X-Real-Port $x_real_port;
+    proxy_set_header X-Original-Uri $request_uri;
+    proxy_set_header X-Original-Host $host;
+    proxy_set_header X-Request-Id $request_id;
+    proxy_set_header X-Forwarded-For $x_real_ip;
+    proxy_set_header X-Https-Request yes;
+    proxy_set_header SSL-Cipher $ssl_cipher;
+
+    proxy_set_header X-Api-Method $api_method;
+    proxy_set_header X-Api-Version $version;
+    proxy_set_header X-Api-Caller $caller;
+
+    proxy_intercept_errors off;
+    default_type application/json;
+
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_next_upstream error timeout http_502 http_503 non_idempotent;
+    proxy_next_upstream_tries 3;
+
+    proxy_ssl_session_reuse on;
+    proxy_pass https://mobile-api-backend/mobileapi/$version$api_method$is_args$args;
+}

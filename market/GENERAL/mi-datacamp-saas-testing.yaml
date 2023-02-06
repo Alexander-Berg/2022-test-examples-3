@@ -1,0 +1,35 @@
+juggler:
+  checks:
+    - service: saas-docs-count
+    - service: promo-saas-docs-count
+    - service: saas-docs-age
+      children:
+        - host: 342a3692-40fc-42c9-99f0-7b25674fedac
+          service: all
+          type: MONITORING_MULTIALERT
+          instance: all
+    - service: promo-saas-docs-age
+      children:
+        - host: e56f3985-1db1-4449-9a28-e550a2c4ae6a
+          service: all
+          type: MONITORING_MULTIALERT
+          instance: all
+  default:
+    aggregator: more_than_limit_is_problem
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      mode: percent
+      crit_limit: 20
+      warn_limit: 10
+    check_options: { }
+    namespace: market.datacamp
+    notifications: [ ]
+    refresh_time: 60
+    ttl: 600
+    host: mi-datacamp-saas-testing
+    tags:
+      - market_indexer_datacamp
+      - market_testing
+      - testing
+      - market
+      - _market_

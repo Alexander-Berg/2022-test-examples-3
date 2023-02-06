@@ -1,0 +1,138 @@
+{% macro metrika_event_oldmarket(puid, cryptaid, uuid, deviceid, platform, version, event) %}
+    [
+        "1506963677",
+        {% if puid %}"{{ puid }}"{% else %}null{% endif %},
+        "{{ cryptaid }}",
+        "{{ uuid }}",
+        "{{ deviceid }}",
+        "{{ platform }}",
+        "{{ version }}",
+        "Card:Model:ModelMainScreen:SHOW_SCREEN",
+        "{{ event }}",
+        "4",
+        "ru.yandex.market",
+        "2607118"
+    ]
+{% endmacro %}
+
+{% macro metrika_event_oldmarket_ios(puid, cryptaid, uuid, deviceid, event) %}
+    {{ metrika_event_oldmarket(puid, cryptaid, uuid, deviceid, "iOS", "600.2", event) }}
+{% endmacro %}
+
+{% macro metrika_event_oldmarket_android(puid, cryptaid, uuid, deviceid, event) %}
+    {{ metrika_event_oldmarket(puid, cryptaid, uuid, deviceid, "android", "6.15.3", event) }}
+{% endmacro %}
+
+{% macro metrika_event(puid, cryptaid, uuid, deviceid, platform, version, event) %}
+    [
+        "1506963677",
+        {% if puid %}"{{ puid }}"{% else %}null{% endif %},
+        "{{ cryptaid }}",
+        "{{ uuid }}",
+        "{{ deviceid }}",
+        "{{ platform }}",
+        "{{ version }}",
+        "PRODUCT_OFFER-NOT_AVAILABLE_FOR_SALE_VISIBLE",
+        "{{ event }}",
+        "4",
+        "ru.yandex.blue.market",
+        "1389598"
+    ]
+{% endmacro %}
+
+{% macro metrika_event_ios(puid, cryptaid, uuid, deviceid, event) %}
+    {{ metrika_event(puid, cryptaid, uuid, deviceid, "iOS", "437", event) }}
+{% endmacro %}
+
+{% macro metrika_event_android(puid, cryptaid, uuid, deviceid, event) %}
+    {{ metrika_event(puid, cryptaid, uuid, deviceid, "android", "3.98.2787", event) }}
+{% endmacro %}
+
+
+{% if table == "events_model_views" %}
+    {% table "events" %}
+        [1506963677000, {"yandexuid": "2612626131506438713", "puid": null, "uuid": null}, "view", "model", "9361066", {"category_id": "C1"}, "{{ day }}"],
+        [1506963677000, {"yandexuid": "1228317011502781934", "puid": "32533377", "uuid": null}, "view", "model", "1728841734", {"category_id": "C2"}, "{{ day }}"],
+        [1506963677000, {"puid": "72104161", "yandexuid": "1873357221502255710", "uuid": null}, "view", "model", "8459436", {"category_id": "C3"}, "{{ day }}"],
+        [1506963677000, {"yandexuid": null, "puid": null, "uuid": "ed6b8ca6e96e4200a02e0c4f9ccb3ab1", "cryptaid": "2235326035209912082", "deviceid": "5811397079d45f3280047c0b9683e96f"}, "view", "model", "1728841734", {"category_id": "C2", "platform": "iOS", "version": "600.2"}, "{{ day }}"],
+        [1506963677000, {"yandexuid": null, "puid": "999851002", "uuid": "34797c4515c8401d847e35c71f987697", "cryptaid": "14663119560064712253", "deviceid": "B9F5A8A9-5038-4A8C-9DE0-54FA6517D2BA"}, "view", "model", "9361066", {"category_id": "C1", "platform": "android", "version": "6.15.3"}, "{{ day }}"],
+        [1506963677000, {"yandexuid": null, "puid": null, "uuid": "ed6b8ca6e96e4200a02e0c4f9ccb3ab1", "cryptaid": "2235326035209912082", "deviceid": "5811397079d45f3280047c0b9683e96f"}, "view", "model", "1445688773", {"category_id": "C1", "platform": "iOS", "version": "437"}, "{{ day }}"],
+        [1506963677000, {"yandexuid": null, "puid": "999851002", "uuid": "34797c4515c8401d847e35c71f987697", "cryptaid": "14663119560064712253", "deviceid": "B9F5A8A9-5038-4A8C-9DE0-54FA6517D2BA"}, "view", "model", "649586127", {"category_id": "C3", "platform": "android", "version": "3.98.2787"}, "{{ day }}"]
+    {% endtable %}
+{% elif table == "items_model_category_id" %}
+    {% table "items_model_category_id" %}
+        ["1728841734", "C2", "model", "{{ day }}"],
+        ["9361066", "C1", "model", "{{ day }}"],
+        ["8459436", "C3", "model", "{{ day }}"],
+        ["1445688773", "C1", "model", "{{ day }}"],
+        ["649586127", "C3", "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_page_views" %}
+    {% table "events" %}
+        [1506963677000, {"yandexuid": "2612626131506438713"}, "view", "page", "model_card", {"model_id": "9361066", "req_id": "3a78353ec4193654888b6d58d207ac9a"}, "{{ day }}"],
+        [1506963677000, {"yandexuid": "1228317011502781934", "puid": "32533377"}, "view", "page", "model_card", {"host": "m.market.yandex.ru", "model_id": "1728841734"}, "{{ day }}"],
+        [1506963677000, {"yandexuid": "7280141181506882278"}, "view", "page", "serp", {}, "{{ day }}"],
+        [1506963677000, {"puid": "72104161", "yandexuid": "1873357221502255710"}, "view", "page", "model_card", {"model_id": "8459436"}, "{{ day }}"],
+        [1506963677000, {"yandexuid": "4109121071492931047"}, "view", "page", "main_page", {}, "{{ day }}"],
+        [1506963677000, {"yandexuid": "4109121071492931047"}, "view", "page", "offer_card", {"offer_id": "W9Rgrv8TBd8GZBXfalqFlQ"}, "{{ day }}"]
+    {% endtable %}
+{% elif table == "logfeller_metrika_mobile_log_1d" %}
+    {
+        "schema": [
+            {
+                "name": "EventTimestamp",
+                "type": "String?"
+            },
+            {
+                "name": "AccountID",
+                "type": "String?"
+            },
+            {
+                "name": "CryptaID",
+                "type": "String?"
+            },
+            {
+                "name": "UUID",
+                "type": "String?"
+            },
+            {
+                "name": "DeviceID",
+                "type": "String?"
+            },
+            {
+                "name": "AppPlatform",
+                "type": "String?"
+            },
+            {
+                "name": "AppVersionName",
+                "type": "String?"
+            },
+            {
+                "name": "EventName",
+                "type": "String?"
+            },
+            {
+                "name": "EventValue",
+                "type": "String?"
+            },
+            {
+                "name": "EventType",
+                "type": "String?"
+            },
+            {
+                "name": "AppID",
+                "type": "String?"
+            },
+            {
+                "name": "APIKey",
+                "type": "String?"
+            }
+        ],
+        "records": [
+            {{ metrika_event_oldmarket_ios(null, "2235326035209912082", "ed6b8ca6e96e4200a02e0c4f9ccb3ab1", "5811397079d45f3280047c0b9683e96f", "{\\\"CategoryHID\\\":\\\"C2\\\",\\\"ModelID\\\":\\\"1728841734\\\"}") }},
+            {{ metrika_event_oldmarket_android("999851002", "14663119560064712253", "34797c4515c8401d847e35c71f987697", "B9F5A8A9-5038-4A8C-9DE0-54FA6517D2BA", "{\\\"CategoryHID\\\":\\\"C1\\\",\\\"ModelID\\\":\\\"9361066\\\"}") }},
+            {{ metrika_event_ios(null, "2235326035209912082", "ed6b8ca6e96e4200a02e0c4f9ccb3ab1", "5811397079d45f3280047c0b9683e96f", "{\\\"productId\\\":1445688773,\\\"hid\\\":15724921}") }},
+            {{ metrika_event_android("999851002", "14663119560064712253", "34797c4515c8401d847e35c71f987697", "B9F5A8A9-5038-4A8C-9DE0-54FA6517D2BA", "{\\\"productId\\\":649586127,\\\"hid\\\":\\\"14696956\\\"}") }}
+        ]
+    }
+{% endif %}

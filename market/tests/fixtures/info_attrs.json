@@ -1,0 +1,194 @@
+{
+  "content": {
+    "category": "/market/",
+    "ui_settings": {
+      "set_snapshot_as_current_on_activate": "True"
+    },
+    "balancers_integration": {
+      "auto_update_services_balancers": false
+    },
+    "recipes": {
+      "content": [
+        {
+          "context": [],
+          "labels": [],
+          "id": "default",
+          "name": "_activate_only_service_configuration.yaml",
+          "desc": "Activate"
+        }
+      ],
+      "prepare_recipes": [
+        {
+          "context": [],
+          "labels": [],
+          "id": "default",
+          "name": "_prepare_service_configuration.yaml",
+          "desc": "Prepare"
+        }
+      ]
+    },
+    "labels": [
+      {
+        "key": "geo"
+      },
+      {
+        "key": "ctype"
+      },
+      {
+        "key": "itype"
+      },
+      {
+        "key": "prj"
+      }
+    ],
+    "yp_settings": {
+      "mirror_to_yp": "SKIP"
+    },
+    "tickets_integration": {
+      "gencfg_release_rule": {
+        "filter_params": {
+          "expression": "True"
+        },
+        "queue_id": "MARKET",
+        "responsibles": []
+      },
+      "service_release_rules": [
+        {
+          "sandbox_resource_type": "MARKET_MBO_SKUBD_APP",
+          "ticket_priority": "NORMAL",
+          "desc": "Application",
+          "queue_id": "MARKET",
+          "filter_params": {
+            "expression": "sandbox_release.release_type in (\"testing\",)"
+          },
+          "sandbox_task_type": "HTTP_UPLOAD",
+          "auto_commit_settings": {
+            "scheduling_priority": "NORMAL",
+            "enabled": true
+          },
+          "responsibles": []
+        },
+        {
+          "sandbox_resource_type": "MARKET_COMMON_CONFIG",
+          "ticket_priority": "NORMAL",
+          "desc": "Config",
+          "queue_id": "MARKET",
+          "filter_params": {
+            "expression": "sandbox_release.release_type in (\"testing\",)"
+          },
+          "sandbox_task_type": "MARKET_YA_PACKAGE",
+          "auto_commit_settings": {
+            "enabled": true
+          },
+          "responsibles": []
+        },
+        {
+          "sandbox_resource_type": "MARKET_DATASOURCES_TESTING",
+          "ticket_priority": "NORMAL",
+          "desc": "Datasources",
+          "queue_id": "MARKET",
+          "filter_params": {
+            "expression": "sandbox_release.release_type in (\"testing\",)"
+          },
+          "sandbox_task_type": "BUILD_MARKET_DATASOURCES",
+          "auto_commit_settings": {
+            "scheduling_priority": "NONE",
+            "enabled": false
+          },
+          "responsibles": []
+        },
+        {
+          "sandbox_resource_type": "MARKET_JUGGLER_RTC_CHECKS_BUNDLE",
+          "ticket_priority": "NORMAL",
+          "desc": "juggler checks",
+          "queue_id": "MARKET",
+          "filter_params": {
+            "expression": "sandbox_release.release_type in (\"testing\",)"
+          },
+          "sandbox_task_type": "BUILD_JUGGLER_CHECKS_BUNDLE",
+          "auto_commit_settings": {
+            "scheduling_priority": "NONE",
+            "enabled": true
+          },
+          "responsibles": []
+        }
+      ],
+      "service_release_tickets_enabled": true,
+      "instancectl_release_rule": {
+        "queue_id": "INSTANCECTL",
+        "auto_commit_settings": {},
+        "match_release_type": "-",
+        "responsibles": []
+      }
+    },
+    "monitoring_settings": {
+      "panels": {
+        "juggler": [],
+        "quentao": [],
+        "yasm": []
+      },
+      "deploy_monitoring": {
+        "is_enabled": false
+      },
+      "juggler_settings": {
+        "is_enabled": true,
+        "content": {
+          "namespace": "market.common",
+          "juggler_tags": [],
+          "juggler_hosts": [
+            {
+               "name": "market_runtime"
+            }
+          ],
+         "instance_resolve_type": "NANNY",
+         "active_checks": [
+            {
+              "per_auto_tags": [],
+              "passive_checks": [
+                {
+                  "options": {
+                    "env_vars": [],
+                    "args": []
+                  },
+                  "notifications": [],
+                  "juggler_service_name": "push-client-auth-check",
+                  "juggler_host_name": "market_runtime"
+                }
+              ],
+            "module": {
+              "type": "logic_or",
+              "logic_or": {
+                "unreach_mode": "force_ok",
+                "mode": "CRIT"
+              }
+            },
+            "flap_detector": {
+            },
+            "checks": []
+           }
+         ]
+        }
+      }
+    },
+    "queue_id": "MARKET",
+    "cms_settings": {
+      "cms_stub_policy": "SKIP_ON_FAILURE"
+    },
+    "scheduling_policy": {
+      "type": "BASED_ON_SNAPSHOT_PRIORITY",
+      "based_on_snapshot_priority": {
+        "prepare_recipe": "default",
+        "activate_recipe": "default"
+      }
+    },
+    "desc": "Template service for Java Application",
+    "abc_group": 969
+  },
+  "parent_id": "bbdf62220b19512bfedab4c1fc4560b4690d87c2",
+  "_id": "888e059e08203d68e1a645d7d93daaa5b7578e8a",
+  "change_info": {
+    "comment": "",
+    "ctime": 1510311955313,
+    "author": "d3rp"
+  }
+}

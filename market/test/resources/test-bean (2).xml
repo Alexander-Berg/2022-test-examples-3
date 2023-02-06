@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+       default-autowire="byName" default-lazy-init="true">
+
+    <context:annotation-config/>
+    <bean class="ru.yandex.EmbeddedPgConfig"/>
+
+    <import resource="classpath:abo-shop-data.xml"/>
+    <import resource="classpath:market-report.xml"/>
+
+    <import resource="classpath:abo-core-services.xml"/>
+    <import resource="classpath:mock-external-services.xml"/>
+
+    <import resource="classpath:mail-services.xml"/>
+    <import resource="classpath:clch-services.xml"/>
+    <import resource="test-property-configurer.xml"/>
+
+    <!--
+    Некоторые бины из core используются только в tms, main, public и поэтому прописаны в соответствующих конфигах этих модулей.
+    Чтобы тест в core, использующий такие бины заработал, нужно явно прописать их ниже
+    -->
+
+    <bean id="calendarService" class="ru.yandex.market.abo.core.calendar.db.CalendarService"/>
+
+    <bean id="httpClientFactory" class="ru.yandex.common.util.http.HttpClientFactoryImpl"/>
+</beans>

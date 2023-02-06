@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <platform_client
+            id="1"
+            name="Beru"
+    />
+
+    <partner
+            id="3000"
+            name="Dropship 1"
+            readable_name="Dropship"
+            status="active"
+            type="DROPSHIP"
+            billing_client_id="123"
+            rating="1"
+    />
+
+    <partner
+            id="4000"
+            name="SC 1"
+            readable_name="SC 1"
+            status="active"
+            type="SORTING_CENTER"
+            billing_client_id="124"
+            rating="1"
+    />
+
+    <partner
+            id="5000"
+            name="SC 2"
+            readable_name="SC 2"
+            status="active"
+            type="SORTING_CENTER"
+            billing_client_id="124"
+            rating="1"
+    />
+
+    <partner_capacity
+            id="11111"
+            partner_id="3000"
+            location_from="255"
+            location_to="255"
+            platform_client_id="1"
+            value="100"
+            type="regular"
+            counting_type="order"
+            service_type="shipment"
+    />
+
+    <service_capacity
+            id="12344"
+            parent_id="[null]"
+            path="12344"
+            name="3000 root"
+    />
+
+    <service_capacity
+            id="12345"
+            parent_id="12344"
+            path="12344.12345"
+            name="3000 movement"
+    />
+
+    <service_capacity_value
+            id="54321"
+            capacity_id="12345"
+            unit_type="order"
+            value="100"
+            partner_capacity_id="11111"
+    />
+
+    <partner_relation
+            id="1"
+            from_partner="3000"
+            to_partner="4000"
+            handling_time="2"
+            return_partner="4000"
+            shipment_type="IMPORT"
+            enabled="false"
+    />
+
+    <partner_relation
+            id="2"
+            from_partner="3000"
+            to_partner="5000"
+            handling_time="2"
+            return_partner="5000"
+            shipment_type="IMPORT"
+            enabled="true"
+    />
+
+    <logistic_segments
+            id="101"
+            partner_id="3000"
+            location_id="123"
+            type="warehouse"
+            name="Сегмент для склада Dropship 1"
+    />
+
+    <logistic_segments
+            id="102"
+            partner_id="3000"
+            partner_relation_id="1"
+            type="movement"
+            name="Сегмент перемещения из Dropship 1 в SC 1"
+    />
+
+    <logistic_segments
+            id="103"
+            partner_id="3000"
+            partner_relation_id="2"
+            type="movement"
+            name="Сегмент перемещения из Dropship 1 в SC 2"
+    />
+
+    <logistic_segments
+            id="104"
+            partner_id="4000"
+            type="warehouse"
+            name="Сегмент для склада SC 1"
+    />
+
+    <logistic_segments
+            id="105"
+            partner_id="5000"
+            type="warehouse"
+            name="Сегмент для склада SC 2"
+    />
+
+    <logistic_segments_services
+            id="10002"
+            segment_id="102"
+            status="active"
+            code="551"
+            duration="0"
+            duration_delta="0"
+            price="0"
+            capacity_id="[null]"
+    />
+
+    <logistic_segments_services
+            id="10003"
+            segment_id="103"
+            status="inactive"
+            code="551"
+            duration="0"
+            duration_delta="0"
+            price="0"
+            capacity_id="12345"
+    />
+
+    <logistic_edges from_segment_id="102" to_segment_id="104" />
+    <logistic_edges from_segment_id="103" to_segment_id="105" />
+</dataset>

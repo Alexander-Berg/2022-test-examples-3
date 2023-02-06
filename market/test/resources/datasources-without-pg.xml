@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="false"
+       default-autowire="no">
+
+    <bean id="abstractCheckoutRefereeDataSource" class="ru.yandex.common.util.db.NamedDataSource" abstract="true">
+        <property name="maxWait" value="${jdbc.maxWait}"/>
+        <property name="minEvictableIdleTimeMillis" value="3600000"/>
+        <property name="validationQuery" value="select 1 from dual"/>
+        <property name="moduleName" value="${app.name}"/>
+        <property name="maxActive" value="${jdbc.maxActive}" />
+        <property name="maxIdle" value="${jdbc.maxIdle}" />
+        <property name="removeAbandoned" value="${jdbc.removeAbandoned}" />
+        <property name="removeAbandonedTimeout" value="${jdbc.removeAbandonedTimeout}" />
+        <property name="logAbandoned" value="true" />
+        <property name="queryTimeoutSeconds" value="${jdbc.queryTimeout.seconds}"/>
+    </bean>
+
+</beans>

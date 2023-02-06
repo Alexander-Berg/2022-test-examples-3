@@ -1,0 +1,16 @@
+# Простейший тест. TODO надо потом добавить больше кейсов
+# Разбираются две ситуации: к отзыву есть покупка и нет покупки.
+
+MOCK TABLE //_PREPAREDPATH_
+SCHEMA id:int64, author_uid:int64, resource_id:int64, type:int16, created:string
+# ок
+{"author_uid":1, "id":1, "resource_id":1, "type":1, "created":"2020-06-01T..."}
+# не ок
+{"author_uid":1, "id":10, "resource_id":10, "type":1, "created":"2020-06-01T..."}
+
+MOCK DIR_TABLE //home/market/production/mstat/analyst/regular/cubes_vertica/fact_new_order_item_dict_flattened
+NAME 2019-06
+SCHEMA order_puid:int64, order_order_status:string, model_id:int64, msku_model_id:int64, order_creation_datetime:string, order_id:int64
+# ок
+{"order_puid":1, "order_order_status":"DELIVERED", "model_id":1, "order_creation_datetime":"2020-06-01T...", "order_id":123}
+{"order_puid":1, "order_order_status":"DELIVERED", "model_id":1, "order_creation_datetime":"2020-06-01T...", "order_id":124}

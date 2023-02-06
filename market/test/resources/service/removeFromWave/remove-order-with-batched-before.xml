@@ -1,0 +1,373 @@
+<?xml version="1.0"?>
+<dataset>
+
+    <!--  Одна волна - один батч - два заказа  -->
+    <ORDERS ORDERKEY="00000001" BATCHORDERNUMBER="B0000001" />
+    <ORDERS ORDERKEY="00000002" BATCHORDERNUMBER="B0000001" />
+    <ORDERS ORDERKEY="B0000001" TOTALQTY="4"/>
+
+    <!--  Деталь батча с третьим товаром, без шортов  -->
+    <ORDERDETAIL
+        ORDERKEY="B0000001"
+        ORDERLINENUMBER="03"
+        BATCHORDERNUMBER="[null]"
+        BATCHORDERLINE="[null]"
+        STORERKEY="0003"
+        SKU="ROV03"
+        OPENQTY="4"
+        QTYALLOCATED="0"
+        QTYPICKED="4"
+        STATUS="52"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Деталь первого заказа с товаром ROV01 -->
+    <ORDERDETAIL
+        ORDERKEY="00000001"
+        ORDERLINENUMBER="01"
+        BATCHORDERNUMBER="[null]"
+        BATCHORDERLINE="[null]"
+        STORERKEY="0001"
+        SKU="ROV01"
+        OPENQTY="3"
+        QTYALLOCATED="0"
+        QTYPICKED="2"
+        STATUS="59"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Деталь первого заказа с товаром ROV02  -->
+    <ORDERDETAIL
+        ORDERKEY="00000001"
+        ORDERLINENUMBER="02"
+        BATCHORDERNUMBER="[null]"
+        BATCHORDERLINE="[null]"
+        STORERKEY="0002"
+        SKU="ROV02"
+        OPENQTY="3"
+        QTYALLOCATED="0"
+        QTYPICKED="3"
+        STATUS="59"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Деталь первого заказа с товаром ROV03, пока не консолидированна  -->
+    <ORDERDETAIL
+        ORDERKEY="00000001"
+        ORDERLINENUMBER="03"
+        BATCHORDERNUMBER="B0000001"
+        BATCHORDERLINE="03"
+        STORERKEY="0003"
+        SKU="ROV03"
+        OPENQTY="1"
+        QTYALLOCATED="0"
+        QTYPICKED="0"
+        STATUS="52"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Деталь второго заказа с товаром ROV03 пока не консолидированна -->
+    <ORDERDETAIL
+        ORDERKEY="00000002"
+        ORDERLINENUMBER="01"
+        BATCHORDERNUMBER="B0000001"
+        BATCHORDERLINE="03"
+        STORERKEY="0003"
+        SKU="ROV03"
+        OPENQTY="3"
+        QTYALLOCATED="0"
+        QTYPICKED="0"
+        STATUS="52"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Отконсолидированный первый товар первого заказа, уже переместилась в заказ - будет удален  -->
+    <PICKDETAIL
+        PICKDETAILKEY="PDK2"
+        PICKHEADERKEY=" "
+        ORDERKEY="00000001"
+        ORDERLINENUMBER="01"
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123001"
+        LOC="S01"
+        ID="S01-01"
+        STATUS="5"
+        QTY="1"
+        WAVEKEY="WAVE0001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+    <PICKDETAIL
+        PICKDETAILKEY="PDK3"
+        PICKHEADERKEY=" "
+        ORDERKEY="00000001"
+        ORDERLINENUMBER="01"
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123001"
+        LOC="S01"
+        ID="S01-01"
+        STATUS="5"
+        QTY="1"
+        WAVEKEY="WAVE0001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Отконсолидированный второй товар первого заказа, уже переместилась в заказ - будет удален  -->
+    <PICKDETAIL
+        PICKDETAILKEY="PDK4"
+        PICKHEADERKEY=" "
+        ORDERKEY="00000001"
+        ORDERLINENUMBER="02"
+        STORERKEY="0002"
+        SKU="ROV02"
+        LOT="123002"
+        LOC="S01"
+        ID="S01-01"
+        STATUS="5"
+        QTY="1"
+        WAVEKEY="WAVE0001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+    <PICKDETAIL
+        PICKDETAILKEY="PDK5"
+        PICKHEADERKEY=" "
+        ORDERKEY="00000001"
+        ORDERLINENUMBER="02"
+        STORERKEY="0002"
+        SKU="ROV02"
+        LOT="123002"
+        LOC="S01"
+        ID="S01-01"
+        STATUS="5"
+        QTY="1"
+        WAVEKEY="WAVE0001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+    <PICKDETAIL
+        PICKDETAILKEY="PDK6"
+        PICKHEADERKEY=" "
+        ORDERKEY="00000001"
+        ORDERLINENUMBER="02"
+        STORERKEY="0002"
+        SKU="ROV02"
+        LOT="123002"
+        LOC="S01"
+        ID="S01-01"
+        STATUS="5"
+        QTY="1"
+        WAVEKEY="WAVE0001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Отобранный товар, еще в батче  -->
+    <PICKDETAIL
+        PICKDETAILKEY="PDK7"
+        PICKHEADERKEY=" "
+        ORDERKEY="B0000001"
+        ORDERLINENUMBER="03"
+        STORERKEY="0003"
+        SKU="ROV03"
+        LOT="123003"
+        LOC="PICKTO"
+        ID="CART0001"
+        STATUS="5"
+        QTY="1"
+        WAVEKEY="WAVE0001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+    <PICKDETAIL
+        PICKDETAILKEY="PDK8"
+        PICKHEADERKEY=" "
+        ORDERKEY="B0000001"
+        ORDERLINENUMBER="03"
+        STORERKEY="0003"
+        SKU="ROV03"
+        LOT="123003"
+        LOC="PICKTO"
+        ID="CART0001"
+        STATUS="5"
+        QTY="1"
+        WAVEKEY="WAVE0001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+    <PICKDETAIL
+        PICKDETAILKEY="PDK9"
+        PICKHEADERKEY=" "
+        ORDERKEY="B0000001"
+        ORDERLINENUMBER="03"
+        STORERKEY="0003"
+        SKU="ROV03"
+        LOT="123003"
+        LOC="PICKTO"
+        ID="CART0001"
+        STATUS="5"
+        QTY="1"
+        WAVEKEY="WAVE0001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+    <PICKDETAIL
+        PICKDETAILKEY="PDK10"
+        PICKHEADERKEY=" "
+        ORDERKEY="B0000001"
+        ORDERLINENUMBER="03"
+        STORERKEY="0003"
+        SKU="ROV03"
+        LOT="123003"
+        LOC="PICKTO"
+        ID="CART0001"
+        STATUS="5"
+        QTY="1"
+        WAVEKEY="WAVE0001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <!--  Волна с текущим заказом и батчом  -->
+    <WAVE
+        WAVEKEY="W0000001"
+        BATCHORDERNUMBER="B0000001"
+        STATUS="5"
+        INPROCESS="1"
+        WAVE_TYPE="ALL"
+        START_TYPE="DEFAULT"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <WAVEDETAIL
+        WAVEKEY="W0000001"
+        WAVEDETAILKEY="WD000011"
+        ORDERKEY="B0000001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <WAVEDETAIL
+        WAVEKEY="W0000001"
+        WAVEDETAILKEY="WD000012"
+        ORDERKEY="00000001"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <WAVEDETAIL
+        WAVEKEY="W0000001"
+        WAVEDETAILKEY="WD000013"
+        ORDERKEY="00000002"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <LOT
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123001"
+        QTY="100"
+        QTYALLOCATED="11"
+        QTYPICKED="11"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <LOT
+        STORERKEY="0002"
+        SKU="ROV02"
+        LOT="123002"
+        QTY="100"
+        QTYALLOCATED="21"
+        QTYPICKED="22"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <LOT
+        STORERKEY="0003"
+        SKU="ROV03"
+        LOT="123003"
+        QTY="100"
+        QTYALLOCATED="31"
+        QTYPICKED="32"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <LOTXLOCXID
+        STORERKEY="0003"
+        SKU="ROV03"
+        LOT="123003"
+        LOC="PICKTO"
+        ID="CART0001"
+        QTYALLOCATED="0"
+        QTYPICKED="4"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <LOTXLOCXID
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOT="123001"
+        LOC="S01"
+        ID="S01-01"
+        QTYALLOCATED="0"
+        QTYPICKED="2"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <LOTXLOCXID
+        STORERKEY="0002"
+        SKU="ROV02"
+        LOT="123002"
+        LOC="S01"
+        ID="S01-01"
+        QTYALLOCATED="0"
+        QTYPICKED="3"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+    <SKUXLOC
+        STORERKEY="0001"
+        SKU="ROV01"
+        LOC="S01"
+        QTYALLOCATED="0"
+        QTYPICKED="2"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+    <SKUXLOC
+        STORERKEY="0002"
+        SKU="ROV02"
+        LOC="S01"
+        QTYALLOCATED="0"
+        QTYPICKED="3"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+    <SKUXLOC
+        STORERKEY="0003"
+        SKU="ROV03"
+        LOC="PICKTO"
+        QTYALLOCATED="0"
+        QTYPICKED="4"
+        EDITWHO="SETUP"
+        EDITDATE="2020-01-01 00:00:00.000"
+    />
+
+
+</dataset>

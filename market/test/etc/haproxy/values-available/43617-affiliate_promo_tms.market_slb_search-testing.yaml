@@ -1,0 +1,32 @@
+# Параметры обработки
+params:
+  default:
+    resolve: yes
+    templates:
+      - user_mslb_tcp.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    defaults:
+      check:          "check"
+      inter:          5s
+      rise:           3
+    globals:
+      addr_fdee:
+      service_name:   affiliate-promo-tms.tst.vs.market.yandex.net
+      service_port:   13774
+      timeout_server: 1h
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    main:
+    - name: YP@testing-market-affiliate-promo-vla
+      port: 13774
+      dns_resolvers: yandex-ns
+      resolve: false
+    - name: YP@testing-market-affiliate-promo-sas
+      port: 13774
+      dns_resolvers: yandex-ns
+      resolve: false

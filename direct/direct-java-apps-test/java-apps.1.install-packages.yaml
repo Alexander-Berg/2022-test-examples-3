@@ -1,0 +1,76 @@
+---
+- hosts: all
+  sudo: yes
+  tasks:
+    - name: sources.list common-stable
+      copy: src=apt-sources.list.d/common-stable.list dest=/etc/apt/sources.list.d/common-stable.list owner=root group=root mode=0644
+    - name: sources.list direct-common-prestable
+      copy: src=apt-sources.list.d/direct-common-prestable.list dest=/etc/apt/sources.list.d/direct-common-prestable.list owner=root group=root mode=0644
+    - name: sources.list direct-common-stable
+      copy: src=apt-sources.list.d/direct-common-stable.list dest=/etc/apt/sources.list.d/direct-common-stable.list owner=root group=root mode=0644
+    - name: sources.list direct-common-testing
+      copy: src=apt-sources.list.d/direct-common-testing.list dest=/etc/apt/sources.list.d/direct-common-testing.list owner=root group=root mode=0644
+    - name: sources.list direct-trusty-prestable
+      copy: src=apt-sources.list.d/direct-trusty-prestable.list dest=/etc/apt/sources.list.d/direct-trusty-prestable.list owner=root group=root mode=0644
+    - name: sources.list direct-untrusty-stable
+      copy: src=apt-sources.list.d/direct-trusty-unstable.list dest=/etc/apt/sources.list.d/direct-trusty-unstable.list owner=root group=root mode=0644
+    - name: sources.list direct-trusty-stable
+      copy: src=apt-sources.list.d/direct-trusty-stable.list dest=/etc/apt/sources.list.d/direct-trusty-stable.list owner=root group=root mode=0644
+    - name: sources.list direct-trusty-testing
+      copy: src=apt-sources.list.d/direct-trusty-testing.list dest=/etc/apt/sources.list.d/direct-trusty-testing.list owner=root group=root mode=0644
+    - name: sources.list yandex-stable
+      copy: src=apt-sources.list.d/yandex-stable.list dest=/etc/apt/sources.list.d/yandex-stable.list owner=root group=root mode=0644
+    - name: sources.list yandex-trusty-stable
+      copy: src=apt-sources.list.d/yandex-trusty-stable.list dest=/etc/apt/sources.list.d/yandex-trusty-stable.list owner=root group=root mode=0644
+
+- hosts: all
+  sudo: yes
+  tasks:
+    - name: apt no quiet
+      file: path=/etc/apt/apt.conf.d/98quiet state=absent
+
+- hosts: all
+  sudo: yes
+  tasks: 
+    - name: apt-get update
+      shell: apt-get update
+
+- name: upgrade APT
+  hosts: all
+  sudo: yes
+  tasks:
+    - name: install new apt
+      apt: name=apt=1.0.9.7ubuntu4 state=installed update_cache=false force=yes
+
+- hosts: all
+  sudo: yes
+  tasks: 
+    - name: apt-get update
+      shell: apt-get update
+
+#- name: ppc user
+#  hosts: all
+#  sudo: yes
+#  tasks:
+#    - name: direct special users
+#      apt: pkg=yandex-direct-user state=installed update_cache=false force=yes
+#
+#- name: packages
+#  hosts: all
+#  sudo: yes
+#  tasks:
+#    - name: packages
+#      apt: name={{ item }} state=latest update_cache=false force=yes dpkg_options='force-confnew'
+#      with_items:
+#          - yandex-jdk8
+
+- name: app
+  hosts: all
+  sudo: yes
+  tasks:
+    - name: packages
+      apt: name={{ item }} state=latest update_cache=false force=yes dpkg_options='force-confnew'
+      with_items:
+          - yandex-direct-logviewer-java
+
+

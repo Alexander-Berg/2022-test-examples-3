@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-autowire="byName"
+       default-lazy-init="true"
+        >
+	
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+        	<list>
+            	<ref bean="dataSourcePropertiesLocation"/>
+            	<ref bean="propertiesLocation"/>
+            	<ref bean="sqlPropertiesLocation"/>
+            	<ref bean="localPropertiesLocation"/>
+            </list>
+        </property>
+	    <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+	    <property name="ignoreResourceNotFound" value="true" />
+	</bean>	
+	
+    <bean name="propertiesLocation" class="ru.yandex.utils.spring.PropertiesLocationFactoryBean">
+    	<property name="defaultLocation" value="super-controller-test.properties" />
+		<property name="propertyName" value="super-controller.properties.location" />
+    </bean>
+
+	<bean name="sqlPropertiesLocation" class="ru.yandex.utils.spring.PropertiesLocationFactoryBean">
+    	<property name="defaultLocation" value="sql.properties" />
+		<property name="propertyName" value="sql.properties.location" />
+    </bean>
+    
+    <bean name="localPropertiesLocation" class="ru.yandex.utils.spring.PropertiesLocationFactoryBean">
+    	<property name="defaultLocation" value="super-controller-local-application.properties" />
+		<property name="propertyName" value="super-controller-local.properties.location" />
+    </bean>    
+    
+    <bean name="dataSourcePropertiesLocation" class="ru.yandex.utils.spring.PropertiesLocationFactoryBean">
+    	<property name="defaultLocation" value="datasources.properties" />
+		<property name="propertyName" value="super-controller.ds-properties.location" />
+    </bean>
+	
+    <import resource="client.xml"/>
+    <import resource="dao.xml"/>
+    <import resource="monitoring.xml"/>
+        
+</beans>

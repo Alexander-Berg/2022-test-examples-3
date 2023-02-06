@@ -1,0 +1,814 @@
+juggler:
+  checks:
+
+    # Check disk_free_space
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=disk_free_space&last=1DAY&mode=edit
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 0%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+      check_options: {}
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications:
+        - template_kwargs:
+            login: market_mdm
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+      service: disk_free_space
+
+    # Check fresh-hprof-files
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=fresh-hprof-files&last=1DAY&mode=edit
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 0%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+      check_options: {}
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications:
+        - template_kwargs:
+            login: market_mdm
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+      service: fresh-hprof-files
+
+    # Check logrotate
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=logrotate&last=1DAY&mode=edit
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+      check_options: {}
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: logrotate
+
+    # Check monitoring
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=monitoring&last=1DAY&mode=edit
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: monitoring
+
+    # Check ping
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=ping&last=1DAY&mode=edit
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: force_crit
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: ping
+
+    # Check push-client-status
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=push-client-status&last=1DAY&mode=edit
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+      check_options: {}
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: push-client-status
+
+    # Check testing_market_mbo_mdm
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=testing_market_mbo_mdm&last=1DAY&mode=edit
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+      check_options: {}
+      children:
+        - logkeeper-minion
+      notifications: []
+      service: testing_market_mbo_mdm
+
+    # Check tmsMonitoring
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=tmsMonitoring&last=1DAY&mode=edit
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: tmsMonitoring
+
+    # Check mdmErp
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=mdmErp&query=&last=1DAY&mode=edit
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      children:
+          - NANNY%testing_market_mbo_mdm_vla
+          - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: mdmErp
+
+    # Check mdmGold
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=mdmGold&query=&last=1DAY&mode=edit
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: mdmGold
+
+    # Check mdmIntegrations
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=mdmIntegrations&query=&last=1DAY&mode=edit
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: mdmIntegrations
+
+    # Check mdmRealtimeIntegrations
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=mdmRealtimeIntegrations&query=&last=1DAY&mode=edit
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 10
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 9
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      refresh_time: 30
+      ttl: 450
+      flaps:
+        boost_time: 0
+        critical_time: 750
+        stable_time: 150
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: mdmRealtimeIntegrations
+
+    # Check erpQueueSize
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm&service=erpQueueSize&last=1DAY&mode=edit
+    - aggregator: logic_or
+      aggregator_kwargs:
+          nodata_mode: skip
+      check_options: {}
+      children: []
+      service: erpQueueSize
+      notifications: []
+
+    # Check ytQueueSize
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm&service=ytQueueSize&last=1DAY&mode=edit
+    - aggregator: logic_or
+      aggregator_kwargs:
+          nodata_mode: skip
+      check_options: {}
+      children: []
+      service: ytQueueSize
+      notifications: []
+
+    # Check mskuQueueSize
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm&service=mskuQueueSize&last=1DAY&mode=edit
+    - aggregator: logic_or
+      aggregator_kwargs:
+          nodata_mode: skip
+      check_options: {}
+      children: []
+      service: mskuQueueSize
+      notifications: []
+
+    # Check sskuQueueSize
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm&service=sskuQueueSize&last=1DAY
+    - aggregator: logic_or
+      aggregator_kwargs:
+          nodata_mode: skip
+      check_options: {}
+      children: []
+      service: sskuQueueSize
+      notifications: []
+
+    # Check datacampQueueSize
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm&service=datacampQueueSize&last=1DAY&mode=edit
+    - aggregator: logic_or
+      aggregator_kwargs:
+          nodata_mode: skip
+      check_options: {}
+      children: []
+      service: datacampQueueSize
+      notifications: []
+
+    # Check numberOfUnprocessedReferenceItems
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm&service=numberOfUnprocessedReferenceItems&last=1DAY&mode=edit
+    - aggregator: logic_or
+      aggregator_kwargs:
+          nodata_mode: skip
+      check_options: {}
+      children: []
+      service: numberOfUnprocessedReferenceItems
+      notifications: []
+
+    # Check db_is_alive
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 101%
+        nodata_mode: force_warn
+      refresh_time: 60
+      ttl: 180
+      flaps:
+        boost_time: 0
+        critical_time: 300
+        stable_time: 180
+      check_options: {}
+      children: []
+      service: db_is_alive
+      notifications:
+        - template_kwargs:
+            login: market_mdm
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: {}
+
+
+    # Check db_free_space
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        nodata_mode: force_warn
+      refresh_time: 300
+      ttl: 900
+      flaps:
+        boost_time: 0
+        critical_time: 1500
+        stable_time: 900
+      check_options: {}
+      children: []
+      service: db_free_space
+      notifications:
+        - template_kwargs:
+            login: market_mdm
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: {}
+
+    # Check mdmDatacampOffers
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=mdmDatacampOffers&query=&last=1DAY&mode=edit
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 10
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 9
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      refresh_time: 30
+      ttl: 450
+      flaps:
+        boost_time: 0
+        critical_time: 750
+        stable_time: 150
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: mdmDatacampOffers
+
+    # Check lockedOldBusinesses
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=lockedOldBusinesses&query=&last=1DAY&mode=edit
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 10
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 9
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      refresh_time: 30
+      ttl: 450
+      flaps:
+        boost_time: 0
+        critical_time: 750
+        stable_time: 150
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: lockedOldBusinesses
+
+    # Check oldMigrationRequests
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=oldMigrationRequests&query=&last=1DAY&mode=edit
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 10
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 9
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      refresh_time: 30
+      ttl: 450
+      flaps:
+        boost_time: 0
+        critical_time: 750
+        stable_time: 150
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: oldMigrationRequests
+
+    # Check saveByLockedBusiness
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=saveByLockedBusiness&query=&last=1DAY&mode=edit
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 10
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 9
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      refresh_time: 30
+      ttl: 450
+      flaps:
+        boost_time: 0
+        critical_time: 750
+        stable_time: 150
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: saveByLockedBusiness
+
+    # Check mdmMbiSuppliers
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=mdmMbiSuppliers&query=&last=1DAY&mode=edit
+    - aggregator: timed_more_than_limit_is_problem
+      aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 10
+            warn: 49%
+          - crit: 101%
+            day_end: 7
+            day_start: 1
+            time_end: 9
+            time_start: 21
+            warn: 101%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      refresh_time: 30
+      ttl: 450
+      flaps:
+        boost_time: 0
+        critical_time: 750
+        stable_time: 150
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: mdmMbiSuppliers
+
+    # Check mdmDqFreshChecksLoadedToYt
+    - aggregator: logic_or
+      aggregator_kwargs:
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      refresh_time: 300
+      ttl: 900
+      flaps:
+        boost_time: 0
+        critical_time: 1500
+        stable_time: 900
+      check_options: {}
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: mdmDqFreshChecksLoadedToYt
+
+    # Check mdmDqFreshChecksHaveEnoughRowsInYt
+    - aggregator: logic_or
+      aggregator_kwargs:
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      refresh_time: 300
+      ttl: 900
+      flaps:
+        boost_time: 0
+        critical_time: 1500
+        stable_time: 900
+      check_options: {}
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: mdmDqFreshChecksHaveEnoughRowsInYt
+
+    # Check mdmDqChecksKnownDqResults
+    - aggregator: logic_or
+      aggregator_kwargs:
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      refresh_time: 300
+      ttl: 900
+      flaps:
+        boost_time: 0
+        critical_time: 1500
+        stable_time: 900
+      check_options: {}
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: mdmDqChecksKnownDqResults
+
+    # Check bmdmCheckMetadata
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=bmdmCheckMetadata&last=1DAY&mode=edit
+    - aggregator: logic_or
+      aggregator_kwargs:
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      refresh_time: 300
+      ttl: 900
+      flaps:
+        boost_time: 0
+        critical_time: 1500
+        stable_time: 900
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: []
+      service: bmdmCheckMetadata
+
+    # Check checkVghForceInheritanceConsistency
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=checkVghForceInheritanceConsistency&last=1DAY&mode=edit
+    - aggregator: logic_or
+      aggregator_kwargs:
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      refresh_time: 300
+      ttl: 900
+      flaps:
+        boost_time: 0
+        critical_time: 1500
+        stable_time: 900
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: [ ]
+      service: checkVghForceInheritanceConsistency
+
+    # Check checkStorageKeyValueConsistency
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=checkStorageKeyValueConsistency&last=1DAY&mode=edit
+    - aggregator: logic_or
+      aggregator_kwargs:
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      refresh_time: 300
+      ttl: 900
+      flaps:
+        boost_time: 0
+        critical_time: 1500
+        stable_time: 900
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: [ ]
+      service: checkStorageKeyValueConsistency
+
+    # Check checkZeroWeightNetAndTareInSilverAndFromIrisItem
+    # https://juggler.yandex-team.ru/check_details/?host=mbo_mdm-testing&service=checkZeroWeightNetAndTareInSilverAndFromIrisItem&last=1DAY&mode=edit
+    - aggregator: logic_or
+      aggregator_kwargs:
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      refresh_time: 300
+      ttl: 900
+      flaps:
+        boost_time: 0
+        critical_time: 1500
+        stable_time: 900
+      children:
+        - NANNY%testing_market_mbo_mdm_vla
+        - NANNY%testing_market_mbo_mdm_sas
+      notifications: [ ]
+      service: checkZeroWeightNetAndTareInSilverAndFromIrisItem
+
+  default:
+    check_options:
+      args:
+        - --kwargs
+        - '[{"service": "tmsMonitoring", "path": "/tmsMonitoring"},
+        {"service": "mdmErp", "path": "/mdmErp"},
+        {"service": "mdmGold", "path": "/mdmGold"},
+        {"service": "mdmIntegrations", "path": "/mdmIntegrations"},
+        {"service": "mdmRealtimeIntegrations", "path": "/mdmRealtimeIntegrations"},
+        {"service": "mdmDatacampOffers", "path": "/mdmDatacampOffers"},
+        {"service": "lockedOldBusinesses", "path": "/lockedOldBusinesses"},
+        {"service": "oldMigrationRequests", "path": "/oldMigrationRequests"},
+        {"service": "saveByLockedBusiness", "path": "/saveByLockedBusiness"},
+        {"service": "mdmMbiSuppliers", "path": "/mdmMbiSuppliers"},
+        {"service": "mdmDqFreshChecksLoadedToYt", "path": "/mdmDqFreshChecksLoadedToYt"},
+        {"service": "mdmDqFreshChecksHaveEnoughRowsInYt", "path": "/mdmDqFreshChecksHaveEnoughRowsInYt"},
+        {"service": "mdmDqChecksKnownDqResults", "path": "/mdmDqChecksKnownDqResults"},
+        {"service": "checkVghForceInheritanceConsistency", "path": "/check-vgh-force-inheritance-consistency"},
+        {"service": "checkStorageKeyValueConsistency", "path": "/check-storage-key-value-consistency"},
+        {"service": "checkZeroWeightNetAndTareInSilverAndFromIrisItem",
+        "path": "/check-zero-weight-net-and-tare-in-silver-and-from-iris-item"},
+        {"service": "bmdmCheckMetadata", "path": "/bmdmCheckMetadata"}
+        ]'
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: mbo_mdm-testing
+    namespace: market.common
+    refresh_time: 60
+    tags:
+      - market_testing
+      - market_rtc
+      - marketmbomdm
+      - testing
+      - market
+      - _market_
+    ttl: 900

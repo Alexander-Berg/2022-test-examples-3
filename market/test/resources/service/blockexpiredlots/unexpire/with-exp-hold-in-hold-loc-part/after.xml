@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<dataset>
+    <!--
+    * холд с типом EXPIRED отключается
+    * холд с партии снимается
+    * для записи в LOTXLOCXID, для которой нет холда, статус меняется на OK
+    * создана запись об отключении холда с типом EXPIRED
+    * QTYONHOLD=0
+    -->
+    <LOT STORERKEY="0" SKU="0"
+        LOT="LOT10"
+        QTY="10"
+        QTYONHOLD="0"
+        STATUS="OK" />
+    <LOTXLOCXID STORERKEY="0" SKU="0"
+        LOC="LOC10_1"
+        LOT="LOT10"
+        STATUS="OK"
+        QTY="4"
+        QTYPICKED="0"
+        QTYALLOCATED="0" />
+    <LOTXLOCXID STORERKEY="0" SKU="0"
+        LOC="LOC10_2"
+        LOT="LOT10"
+        STATUS="HOLD"
+        QTY="6"
+        QTYPICKED="1"
+        QTYALLOCATED="3" />
+    <INVENTORYHOLD
+        INVENTORYHOLDKEY="PRED10_1"
+        LOT="LOT10"
+        LOC=""
+        HOLD="0"
+        STATUS="EXPIRED"
+        COMMENTS=""
+        WHOON="test" DATEON="2020-03-01 12:34:56.789"
+        WHOOFF="HOLD_JOB" DATEOFF="2020-04-01 12:34:56.789"
+        ADDWHO="test" ADDDATE="2020-03-01 12:34:56.789"
+        EDITWHO="HOLD_JOB" EDITDATE="2020-04-01 12:34:56.789" />
+    <INVENTORYHOLD
+        INVENTORYHOLDKEY="PRED10_2"
+        LOT=""
+        LOC="LOC10_2"
+        HOLD="1"
+        STATUS="DAMAGE"
+        COMMENTS=""
+        WHOON="test" DATEON="2020-03-01 12:34:56.789"
+        WHOOFF="test" DATEOFF="2020-03-01 12:34:56.789"
+        ADDWHO="test" ADDDATE="2020-03-01 12:34:56.789"
+        EDITWHO="test" EDITDATE="2020-03-01 12:34:56.789" />
+    <HOLDTRN STORERKEY="0" SKU="0" ORIGIN="LotHold" RANK="50" COMMENTS="" LOC="" ID=" "
+        HOLDTRNKEY="0000001001"
+        HOLDTRNGROUP="0000001001"
+        LOT="LOT10"
+        HOLDCODE="EXPIRED"
+        QTY="10"
+        BEFOREAFTERINDICATOR="B"
+        ADDWHO="HOLD_JOB"
+        EDITWHO="HOLD_JOB" />
+</dataset>

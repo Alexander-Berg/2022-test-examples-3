@@ -1,0 +1,73 @@
+import: !expr "{$config_dir}/common.yaml"
+
+channels:
+  - name: operator-log
+    channel:
+      pipe:
+        - storage_ref:
+            name: operator-log
+      output:
+        id: operator-log-lb-output
+        plugin: logbroker
+        config:
+          endpoint: logbroker.yandex.net
+          topic: /crm/logs/prestable/operator
+          tvm_ref:
+            name: tvm_client_default
+            destination_id: logbroker
+  - name: lift-log
+    channel:
+      pipe:
+        - storage_ref:
+            name: lift-log
+      output:
+        id: lift-log-lb-output
+        plugin: logbroker
+        config:
+          endpoint: logbroker.yandex.net
+          topic: /crm/logs/prestable/lift
+          tvm_ref:
+            name: tvm_client_default
+            destination_id: logbroker
+  - name: issue-events
+    channel:
+      pipe:
+        - storage_ref:
+            name: issue-events
+      output:
+        id: issue-events-lb-output
+        plugin: logbroker
+        config:
+          endpoint: lbkx.logbroker.yandex.net
+          topic: /crm/testing/issue/events
+          tvm_ref:
+            name: tvm_client_default
+            destination_id: logbroker
+  - name: application-logs
+    channel:
+      pipe:
+        - storage_ref:
+            name: application-logs
+      output:
+        id: application-logs-lb-output
+        plugin: logbroker
+        config:
+          endpoint: logbroker.yandex.net
+          topic: /crm/logs/application-test
+          tvm_ref:
+            name: tvm_client_default
+            destination_id: logbroker
+  - name: message-gate-events
+    channel:
+      pipe:
+        - storage_ref:
+            name: message-gate-events
+      output:
+        id: message-gate-events-lb-output
+        plugin: logbroker
+        config:
+          endpoint: lbkx.logbroker.yandex.net
+          topic: /crm/testing/message-gate/events
+          tvm_ref:
+            name: tvm_client_default
+            destination_id: logbroker

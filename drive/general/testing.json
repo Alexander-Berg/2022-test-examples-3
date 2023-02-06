@@ -1,0 +1,89 @@
+{
+    "HttpConfig":{
+        "Port": ${PORT},
+        "Threads": ${NCPU}
+    },
+    "LoggingConfig": {
+        "LoggerType": "logs/current-global-pumpkin-log",
+        "EventLog": "logs/current-unified-client",
+        "UnifiedAgentConfig": {
+            "EventLog": "unix://${WorkDir}/unified_agent.sock",
+            "GrpcMaxMessageSize": 104857600,
+            "GrpcReconnectDelay": "50ms",
+            "GrpcSendDelay": "10ms",
+            "MaxInflightBytes": 104857600
+        },
+        "StdErr": "logs/current-pumpkin-stderr",
+        "StdOut": "logs/current-pumpkin-stdout"
+    },
+    "AuthManagerConfig": {
+        "Type": "blackbox",
+        "BlackboxAuthManagerConfig": {
+            "BlackboxAuthConfig": {
+                "Url": "http://blackbox.yandex-team.ru/blackbox",
+                "CookieHost": "yandex-team.ru",
+                "SelfClientId": 2027033,
+                "DestinationClientId": 223,
+                "IgnoreDeviceId": true,
+                "AuthMethod": "any"
+            },
+            "TvmConfig": {
+                "SecretFile": "secrets/tvm_secret",
+                "DestinationClientIds": [223],
+                "SelfClientId": 2027033
+            }
+        }
+    },
+    "TelematicsClientConfig": {
+        "TelematicsClientOptions": {
+            "Shards": ["sas1-2188-954-sas-rtline-drive-559-12959.gencfg-c.yandex.net:12960",
+                        "slovo108-sas-rtline-drive-tele-559-12959.gencfg-c.yandex.net:12960",
+                        "man1-2532-man-rtline-drive-tel-cad-16333.gencfg-c.yandex.net:16334",
+                        "man2-6642-b6b-man-rtline-drive-cad-16333.gencfg-c.yandex.net:16334",
+                        "vla1-6007-vla-rtline-drive-tel-4ea-18462.gencfg-c.yandex.net:18463",
+                        "vla2-0777-vla-rtline-drive-tel-4ea-18462.gencfg-c.yandex.net:18463"],
+            "DestinationClientId": 2017773
+        },
+        "TvmConfig": {
+            "SecretFile": "secrets/tvm_secret",
+            "DestinationClientIds": [2017773],
+            "SelfClientId": 2027033
+        }
+    },
+    "RTLineAPIConfigs": [
+        {
+            "Name": "sensors",
+            "Host": "saas-searchproxy-maps-prestable.yandex.net",
+            "Port": 17000,
+            "ServiceName": "drive_cache",
+            "BalancerTimeoutTableMs": [10, 30, 50, 70, 90, 110, 130, 150, 250, 500, 1000],
+            "SearchRequestConfig": {
+                "GlobalTimeout": 30000,
+                "ConnectTimeout": 100,
+                "TasksCheckIntervalMs": 5000,
+                "MaxAttempts": 3
+            },
+            "IndexingHost": "saas-indexerproxy-maps-prestable.yandex.net",
+            "IndexingPort": 80,
+            "IndexingToken": "ac6ac7f7a6544f336202c0b058104374",
+            "IndexingRequestConfig": {
+                "GlobalTimeout": 10000,
+                "ConnectTimeout": 100,
+                "TasksCheckIntervalMs": 3000,
+                "MaxAttempts": 3
+            }
+        }
+    ],
+    "SensorAPIConfig": {
+        "RTLineAPIName": "sensors"
+    },
+    "SimpleCarsDataStorageConfig": {
+        "CarsDataFile": "cars_data.json"
+    },
+    "SensorsStorageConfig": {
+        "UpdateIntervalSeconds": 60
+    },
+    "UsersPermissionsStorageConfig": {
+        "UsersPermissionsFile": "users_permissions.json"
+    }
+}

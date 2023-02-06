@@ -1,0 +1,61 @@
+# QUINN-5239 QUINN-5166 DARIA-31271
+location /touch-node/ {
+    rewrite ^/touch-node/(.*) /touch/$1 redirect;
+}
+
+location /touch/ {
+    add_header x-dns-prefetch-control "off";
+    add_header X-Request-Id $request_id always;
+    include sites-enabled/security-headers.include;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $x_real_ip;
+    proxy_set_header X-Real-Port $x_real_port;
+    proxy_set_header X-Original-Uri $request_uri;
+    proxy_set_header X-Original-Host $host;
+    proxy_set_header X-Request-Id $request_id;
+    proxy_set_header X-Https-Request yes;
+    proxy_set_header SSL-Cipher $ssl_cipher;
+    proxy_set_header X-Forwarded-For $x_real_ip;
+
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_next_upstream error timeout http_502 http_503 non_idempotent;
+    proxy_next_upstream_tries 2;
+
+    proxy_ssl_session_reuse on;
+    proxy_pass https://quinn-backend$uri$is_args$args;
+
+    location ~* /touch/jsx/models.jsx {
+        rewrite ^/touch/jsx/models.jsx(.*) /touch/api/models$1 redirect;
+    }
+
+    # DARIA-62334
+    location ~ /touch/.*message_part/ {
+        rewrite ^/touch/.*(message_part/.*) /$1;
+    }
+
+    location ~* /touch/jsx/xiva_sub.jsx {
+        return 200;
+    }
+
+    location = /touch/manifest.json {
+        root /var/wwwroot/mail;
+    }
+
+    location = /touch/yandex-manifest.json {
+        rewrite ^ /touch/api/manifest;
+    }
+
+    location = /touch/service-worker.js {
+        rewrite ^ /touch/api/service-worker;
+    }
+
+    location = /touch/clear-cache/ {
+        return 200 "0";
+    }
+}
+
+location ~* /for/[^/]+/touch/ {
+    rewrite ^/for/[^/]+/touch/(.*) /touch/$1 redirect;
+}

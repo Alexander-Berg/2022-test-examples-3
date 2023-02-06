@@ -1,0 +1,94 @@
+warehouse-timezone: Europe/Moscow
+api:
+  key: LgwApiToken
+
+AppServer: localhost
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms.receiving: debug
+    org.springframework.jdbc.core: debug
+    root: info
+
+spring:
+  application.name: wms-data-creator
+  datasource:
+    url: jdbc:h2:mem:SCPRD;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS WMWHSE1\;SET SCHEMA WMWHSE1
+    separator: ^^^ END OF SCRIPT ^^^
+  main:
+    allow-bean-definition-overriding: true
+  transaction.default-timeout: 30s
+  liquibase:
+    enabled: true
+  config:
+    import:
+      - application-fragment-common-test.yml
+  jackson:
+    deserialization:
+      wrap-exceptions: false
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+cte:
+  url: http://host.ru:123
+
+print:
+  server:
+    host: localhost
+    port: 631
+    mock: true
+
+oltp:
+  url: http://localhost:8383
+
+wms:
+  api:
+    host: 'http://wms.local'
+    username: 'wmsuser'
+    password: 'wmspass'
+  inventorization:
+    tvm:
+      serviceId: 0
+      secret: xxx
+      api-methods: /*
+      log-only-mode: true
+      check-user-ticket: false
+      cache:
+        dir: /tmp/
+
+servicebus:
+  api:
+    host: http://localhost:8382
+
+identity:
+  cis:
+    gs: "#GS#"
+
+s3.use: false
+
+datacreator:
+  tvm:
+    serviceId: 0
+    secret: xxx
+    api-methods: /*
+    log-only-mode: true
+    check-user-ticket: false
+    cache:
+      dir: /tmp/
+
+auth-app:
+  tvm:
+    serviceId: 0
+
+core-app:
+  tvm:
+    serviceId: 0
+
+core:
+  api:
+    host: http://localhost:8333
+
+user-lock:
+  seconds: 600

@@ -1,0 +1,458 @@
+agent_log:
+  file: /home/container/logs/unified_agent/unified_agent.log
+  priority: NOTICE
+channels:
+- channel:
+    output:
+      config:
+        delimiter: "\n"
+        file_name: /home/container/logs/goods-parallel_report/feature.log
+      plugin: debug
+    pipe:
+    - filter:
+        config:
+          sessions_count: 50
+        plugin: split_session
+  name: feature_log_channel
+- channel:
+    output:
+      config:
+        codec: zstd
+        endpoint: logbroker.yandex.net
+        export_session_meta_keys:
+        - file
+        - server
+        port: 2135
+        topic: /market-search/market-feature-log
+        tvm_ref:
+          destination_id: 2001059
+          name: tvm_default
+      plugin: logbroker
+    pipe:
+    - storage_ref:
+        flow_control:
+          inflight:
+            limit: 100mb
+        name: feature_log_storage
+    - filter:
+        config:
+          sessions_count: 50
+        plugin: split_session
+    - filter:
+        config:
+          delimiter: "\n"
+          flush_period: 500ms
+          limit:
+            bytes: 5mb
+        plugin: batch
+  name: feature_log_logbroker_channel
+- channel:
+    output:
+      config:
+        codec: zstd
+        endpoint: logbroker.yandex.net
+        export_session_meta_keys:
+        - file
+        - server
+        port: 2135
+        topic: /market-search/market-candidate-feature-log
+        tvm_ref:
+          destination_id: 2001059
+          name: tvm_default
+      plugin: logbroker
+    pipe:
+    - storage_ref:
+        flow_control:
+          inflight:
+            limit: 100mb
+        name: candidate_feature_log_storage
+    - filter:
+        config:
+          sessions_count: 50
+        plugin: split_session
+    - filter:
+        config:
+          delimiter: "\n"
+          flush_period: 500ms
+          limit:
+            bytes: 5mb
+        plugin: batch
+  name: candidate_feature_log_logbroker_channel
+- channel:
+    output:
+      config:
+        codec: zstd
+        endpoint: logbroker.yandex.net
+        export_session_meta_keys:
+        - file
+        - server
+        port: 2135
+        topic: /market-money-efficiency/market-new-candidate-feature-log
+        tvm_ref:
+          destination_id: 2001059
+          name: tvm_default
+      plugin: logbroker
+    pipe:
+    - storage_ref:
+        flow_control:
+          inflight:
+            limit: 100mb
+        name: new_candidate_feature_log_storage
+    - filter:
+        config:
+          sessions_count: 50
+        plugin: split_session
+    - filter:
+        config:
+          delimiter: "\n"
+          flush_period: 500ms
+          limit:
+            bytes: 5mb
+        plugin: batch
+  name: new_candidate_feature_log_logbroker_channel
+- channel:
+    output:
+      config:
+        codec: zstd
+        endpoint: logbroker.yandex.net
+        export_session_meta_keys:
+        - file
+        - server
+        port: 2135
+        topic: /market-search/market-consolidate-log
+        tvm_ref:
+          destination_id: 2001059
+          name: tvm_default
+      plugin: logbroker
+    pipe:
+    - storage_ref:
+        flow_control:
+          inflight:
+            limit: 100mb
+        name: consolidate_log_storage
+    - filter:
+        config:
+          sessions_count: 50
+        plugin: split_session
+    - filter:
+        config:
+          delimiter: "\n"
+          flush_period: 500ms
+          limit:
+            bytes: 5mb
+        plugin: batch
+  name: consolidate_log_logbroker_channel
+- channel:
+    fanout:
+    - channel:
+        channel_ref:
+          name: metrics_channel_final
+        pipe:
+        - filter:
+            config:
+              match: '{sensor=report_files.*}'
+            plugin: drop_metrics
+        - filter:
+            config:
+              match: '{place=*}'
+            plugin: drop_metrics
+        - filter:
+            config:
+              match: '{sensor=errors_summ}'
+            plugin: drop_metrics
+        - filter:
+            config:
+              session:
+              - _metrics_service: host_metric_logger
+            plugin: assign
+    - channel:
+        channel_ref:
+          name: metrics_channel_final
+        pipe:
+        - filter:
+            config:
+              match: '{sensor=report_files.*}'
+            plugin: filter_metrics
+        - filter:
+            config:
+              session:
+              - _metrics_service: report_files
+            plugin: assign
+    - channel:
+        channel_ref:
+          name: metrics_channel_final
+        pipe:
+        - filter:
+            config:
+              match: '{sensor=errors_summ}'
+            plugin: filter_metrics
+        - filter:
+            config:
+              session:
+              - _metrics_service: report_errors
+            plugin: assign
+    - channel:
+        channel_ref:
+          name: metrics_channel_final
+        pipe:
+        - filter:
+            config:
+              match: '{place=*}'
+            plugin: filter_metrics
+        - filter:
+            config:
+              session:
+              - _metrics_service: report_places
+            plugin: assign
+  name: metrics_channel_hml_raw
+- channel:
+    fanout:
+    - channel:
+        channel_ref:
+          name: metrics_channel_final
+        pipe:
+        - filter:
+            config:
+              match: '{shiny_component=*}'
+            plugin: drop_metrics
+        - filter:
+            config:
+              match: '{sensor_owner=*}'
+            plugin: drop_metrics
+        - filter:
+            config:
+              session:
+              - _metrics_service: report
+            plugin: assign
+    - channel:
+        channel_ref:
+          name: metrics_channel_final
+        pipe:
+        - filter:
+            config:
+              match: '{shiny_component=-, sensor_owner=*}'
+            plugin: filter_metrics
+        - filter:
+            config:
+              session:
+              - _metrics_service: report_custom
+            plugin: assign
+    - channel:
+        channel_ref:
+          name: metrics_channel_final
+        pipe:
+        - filter:
+            config:
+              match: '{shiny_component=*}'
+            plugin: filter_metrics
+        - filter:
+            config:
+              session:
+              - _metrics_service: report_shiny
+            plugin: assign
+    pipe:
+    - filter:
+        config:
+          match: '{sensor=dj_*}'
+        plugin: drop_metrics
+    - filter:
+        config:
+          match: '{sensor=es_*}'
+        plugin: drop_metrics
+    - filter:
+        config:
+          match: '{sensor=index-*}'
+        plugin: drop_metrics
+    - filter:
+        config:
+          match: '{sensor=pricedrop_*}'
+        plugin: drop_metrics
+  name: metrics_channel_report_raw
+- channel:
+    output:
+      config:
+        max_memory_usage: 5gb
+        max_shard_memory_usage: 500mb
+        port: 17077
+      plugin: metrics_pull
+    pipe:
+    - filter:
+        config:
+          labels:
+            cluster_index: '0'
+            role: market-report
+            subrole: goods-parallel
+        plugin: add_metric_labels
+    - storage_ref:
+        flow_control:
+          inflight:
+            limit: 100mb
+        name: metrics_storage
+  name: metrics_channel_final
+routes:
+- channel:
+    case:
+    - channel:
+        channel_ref:
+          name: feature_log_channel
+      when:
+        session:
+          client_key: feature_log
+    - channel:
+        channel_ref:
+          name: feature_log_logbroker_channel
+      when:
+        session:
+          client_key: feature_log_logbroker
+    - channel:
+        channel_ref:
+          name: candidate_feature_log_logbroker_channel
+      when:
+        session:
+          client_key: candidate_feature_log_logbroker
+    - channel:
+        channel_ref:
+          name: new_candidate_feature_log_logbroker_channel
+      when:
+        session:
+          client_key: new_candidate_feature_log_logbroker
+    - channel:
+        channel_ref:
+          name: consolidate_log_logbroker_channel
+      when:
+        session:
+          client_key: consolidate_log_logbroker
+    pipe:
+    - filter:
+        config:
+          session:
+          - _partition: '{client_key}'
+          - server: '{server}'
+          - file: '{file}'
+        plugin: assign
+  input:
+    config:
+      uri: localhost:17075
+    plugin: grpc
+- channel:
+    channel_ref:
+      name: metrics_channel_hml_raw
+  input:
+    config:
+      format:
+        unistat: {}
+      metric_name_label: sensor
+      project: market-report
+      service: null
+      url: http://localhost:17065/ua-stat
+    id: input-hml_other
+    plugin: metrics_pull
+- channel:
+    channel_ref:
+      name: metrics_channel_hml_raw
+  input:
+    config:
+      format:
+        unistat: {}
+      metric_name_label: sensor
+      project: market-report
+      service: null
+      url: http://localhost:17065/stat
+    id: input-hml
+    plugin: metrics_pull
+- channel:
+    channel_ref:
+      name: metrics_channel_final
+  input:
+    config:
+      format:
+        unistat: {}
+      metric_name_label: sensor
+      project: market-report
+      service: nginx
+      url: http://localhost:17050/unistat
+    id: input-nginx
+    plugin: metrics_pull
+- channel:
+    channel_ref:
+      name: metrics_channel_report_raw
+  input:
+    config:
+      format:
+        unistat: {}
+      metric_name_label: sensor
+      project: market-report
+      service: null
+      url: http://localhost:17051/tass
+    id: input-report
+    plugin: metrics_pull
+- channel:
+    channel_ref:
+      name: metrics_channel_final
+    pipe:
+    - filter:
+        config:
+          match: '{sensor=*}'
+        plugin: drop_metrics
+    - filter:
+        config:
+          match: '{name=*}'
+        plugin: drop_metrics
+  input:
+    config:
+      capture_request_headers: []
+      metric_name_label: sensor
+      path: /write
+      port: 17076
+      project: market-report
+      service: DEPRECATED
+    plugin: metrics
+- channel:
+    channel_ref:
+      name: metrics_channel_final
+  input:
+    config:
+      poll_period: 5s
+      project: market-report
+      service: unified-agent
+    plugin: agent_metrics
+services:
+- config:
+    client_id: 1234567
+    disk_cache_directory: /home/container/data/monitoring_tvm_cache
+    fetch:
+      destinations:
+      - 2001059
+      secret:
+        env: UA_TOKEN
+  name: tvm_default
+  type: tvm_client
+status:
+  host: '::'
+  port: 17073
+storages:
+- config:
+    directory: /home/container/logs/goods-parallel_report/unified_agent/storages/feature_log/
+    max_partition_size: 10gb
+  name: feature_log_storage
+  plugin: fs
+- config:
+    directory: /home/container/logs/goods-parallel_report/unified_agent/storages/candidate_feature_log/
+    max_partition_size: 10gb
+  name: candidate_feature_log_storage
+  plugin: fs
+- config:
+    directory: /home/container/logs/goods-parallel_report/unified_agent/storages/new_candidate_feature_log/
+    max_partition_size: 10gb
+  name: new_candidate_feature_log_storage
+  plugin: fs
+- config:
+    directory: /home/container/logs/goods-parallel_report/unified_agent/storages/consolidate_log/
+    max_partition_size: 10gb
+  name: consolidate_log_storage
+  plugin: fs
+- config:
+    directory: /home/container/logs/goods-parallel_report/unified_agent/storages/metrics/
+    max_partition_size: 10gb
+  name: metrics_storage
+  plugin: fs

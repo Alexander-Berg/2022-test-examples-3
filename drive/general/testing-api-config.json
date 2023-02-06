@@ -1,0 +1,87 @@
+{
+  "dbs": {
+    "postgres": {
+      "driver": "postgres",
+      "options": {
+        "hosts": [
+          "sas-fohe4i9kk3ujej5t.db.yandex.net:6432",
+          "vla-rkeaqyd53mur7stl.db.yandex.net:6432"
+        ],
+        "user": "drive_analytics",
+        "password": {{ env "POSTGRES_DB_PASSWORD" | json }},
+        "name": "drive_analytics_testing",
+        "target_session_attrs": "read-write",
+        "ssl_mode": "verify-full"
+      }
+    },
+    "backend": {
+      "driver": "postgres",
+      "options": {
+        "hosts": [
+          "extmaps-carsharing-testing01h.db.yandex.net:6432",
+          "vla-6b75l3xg6q0a7teh.db.yandex.net:6432"
+        ],
+        "user": "carsharing",
+        "password": {{ env "BACKEND_DB_PASSWORD" | json }},
+        "name": "extmaps-carsharing-testing",
+        "ssl_mode": "verify-full"
+      }
+    }
+  },
+  "tvms": {
+    "analytics": {
+      "source": 2011194,
+      "secret": {{ env "ANALYTICS_TVM_SECRET" | json }},
+      "targets": {
+        "blackbox": 223,
+        "solomon": 2010242
+      }
+    }
+  },
+  "yts": {
+    "hahn": {
+      "proxy": "hahn",
+      "token": {{ env "HAHN_YT_TOKEN" | json }}
+    }
+  },
+  "solomon": {
+    "project": "carsharing_analytics",
+    "cluster": "testing",
+    "service": "analytics",
+    "source": "analytics",
+    "target": "solomon"
+  },
+  "core_db": "postgres",
+  "backend_db": "backend",
+  "log_level": "info",
+  "server": {
+    "addr": ":80"
+  },
+  "bb": {
+    "source": "analytics",
+    "env": "intranet"
+  },
+  "yt": {
+    "proxy": "hahn",
+    "token": {{ env "HAHN_YT_TOKEN" | json }}
+  },
+  "drive": {
+    "endpoint": "Testing",
+    "token": {{ env "DRIVE_TOKEN" | json }}
+  },
+  "garage": {
+    "db": "postgres",
+    "binary_path": "/res/parsedocs/parsedocs",
+    "binary_env": {
+      "YT_TOKEN": {{ env "HAHN_YT_TOKEN" | json }},
+      "GARAGE_PATH": "//home/carsharing/testing/data/garage"
+    }
+  },
+  "license_checks": {
+    "callbacks": {
+      "drive": {
+        "tvm_id": 2011194
+      }
+    }
+  }
+}

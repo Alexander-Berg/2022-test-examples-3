@@ -1,0 +1,30 @@
+{
+  "id": "auto_graph_solomon_quota_dyno_testing",
+  "name": "Solomon quota for SPOK auto graph sensors (testing)",
+  "annotations": {
+    "wiki_what_to_do_if_warn_or_crit": "https://nda.ya.ru/t/sJfkExTc3fiZop",
+    "juggler_service": "market-Dyno_solomon_shard_ag_testing__market-Dyno_testing_dyno_auto-graph",
+    "percent_of_usage": "{{expression.percent_of_usage}} %",
+    "crit_if_more_than": "{{expression.crit_if_more}} %",
+    "shardId": "market-Dyno_testing_dyno_auto-graph",
+    "warn_if_more_than": "{{expression.warn_if_more}} %"
+  },
+  "channels": [
+    {
+      "id": "juggler_spok",
+      "config": {}
+    }
+  ],
+  "createdBy": "vladimirlevin",
+  "noPointsPolicy": "NO_POINTS_DEFAULT",
+  "periodMillis": 3600000,
+  "projectId": "market-Dyno",
+  "resolvedEmptyPolicy": "RESOLVED_EMPTY_DEFAULT",
+  "state": "ACTIVE",
+  "type": {
+    "expression": {
+      "checkExpression": "",
+      "program": "let limit \u003d {\n    project\u003d\"solomon\",\n    cluster\u003d\"production\",\n    service\u003d\"coremon\",\n    sensor\u003d\"engine.fileSensorsLimit\",\n    projectId\u003d\"market-Dyno\",\n    host\u003d\"cluster\",\n    shardId\u003d\"market-Dyno_testing_dyno_auto-graph\"\n};\n\nlet usage \u003d {\n    project\u003d\"solomon\",\n    cluster\u003d\"production\",\n    service\u003d\"coremon\",\n    sensor\u003d\"engine.fileSensors\",\n    projectId\u003d\"market-Dyno\",\n    host\u003d\"cluster\",\n    shardId\u003d\"market-Dyno_testing_dyno_auto-graph\"\n};\n\nlet avg_usage \u003d avg(usage);\nlet avg_limit \u003d avg(limit);\n\nlet percent_of_usage \u003d round(10 * 100 * avg_usage / avg_limit) / 10;\n\nalarm_if(percent_of_usage \u003e 95);\nwarn_if(percent_of_usage \u003e 85);"
+    }
+  }
+}

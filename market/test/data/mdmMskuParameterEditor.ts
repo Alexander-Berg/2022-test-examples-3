@@ -1,0 +1,513 @@
+import { MasterDataSourceType, MdmParam, MdmParamMetaType, MdmParamValueType } from 'src/java/definitions';
+
+export const testMskuId = 1;
+
+export const testMdmParamMetadata: MdmParam[] = [
+  {
+    id: 18,
+    xslName: 'NDS',
+    title: 'Ставка НДС',
+    metaType: MdmParamMetaType.MBO_PARAM,
+    valueType: MdmParamValueType.MBO_NUMERIC_ENUM,
+    externals: {
+      mboParamId: 15936630,
+      mboParamXslName: 'NDS',
+      cargotypeId: 0,
+      optionBindings: {
+        '1': 15936631,
+        '2': 15936632,
+        '3': 15936633,
+      },
+      boolBindings: {},
+      optionRenders: {
+        '1': '0',
+        '2': '10',
+        '3': '18',
+      },
+    },
+    options: [
+      {
+        id: 1,
+        renderedValue: '0',
+      },
+      {
+        id: 2,
+        renderedValue: '10',
+      },
+      {
+        id: 3,
+        renderedValue: '18',
+      },
+    ],
+    multivalue: false,
+    readableName: 'Ставка НДС',
+  },
+  {
+    id: 402,
+    xslName: 'mdm_height',
+    title: 'Высота в сантиметрах с учетом упаковки (МДМ)',
+    metaType: MdmParamMetaType.MBO_PARAM,
+    valueType: MdmParamValueType.NUMERIC,
+    externals: {
+      mboParamId: 17655846,
+      mboParamXslName: 'mdm_height',
+      cargotypeId: 0,
+      optionBindings: {},
+      boolBindings: {},
+      optionRenders: {},
+    },
+    options: [],
+    multivalue: false,
+    readableName: 'Высота в сантиметрах с учетом упаковки (МДМ)',
+  },
+  {
+    id: 17,
+    xslName: 'expir_date',
+    title: 'Работа со сроком годности',
+    metaType: MdmParamMetaType.MBO_PARAM,
+    valueType: MdmParamValueType.MBO_BOOL,
+    externals: {
+      mboParamId: 15838982,
+      mboParamXslName: 'expir_date',
+      cargotypeId: 0,
+      optionBindings: {},
+      boolBindings: {
+        true: 15838983,
+        false: 15838988,
+      },
+      optionRenders: {},
+    },
+    options: [],
+    multivalue: false,
+    readableName: 'Работа со сроком годности',
+  },
+  {
+    id: 10,
+    xslName: 'ShelfLife_Comment',
+    title: 'Дополнительные условия хранения',
+    metaType: MdmParamMetaType.MBO_PARAM,
+    valueType: MdmParamValueType.STRING,
+    externals: {
+      mboParamId: 16334003,
+      mboParamXslName: 'ShelfLife_Comment',
+      cargotypeId: 0,
+      optionBindings: {},
+      boolBindings: {},
+      optionRenders: {},
+    },
+    options: [],
+    multivalue: false,
+    readableName: 'Дополнительные условия хранения',
+  },
+];
+
+export const testMdmMsku: any = {
+  mskuId: testMskuId,
+  values: [
+    {
+      mdmParamId: 18,
+      xslName: 'NDS',
+      strings: [],
+      numerics: [],
+      bools: [],
+      options: [
+        {
+          id: 3,
+          renderedValue: '18',
+        },
+      ],
+      modificationInfo: {
+        updatedTs: '2020-06-02T12:53:50.313174Z',
+        updatedByLogin: 'amaslak',
+        updatedByUid: 0,
+        sourceUpdatedTs: '2020-06-02T12:53:50.313174Z',
+        masterDataSourceId: '',
+        masterDataSourceType: MasterDataSourceType.MDM_ADMIN,
+      },
+      shopSkuKey: {
+        supplierId: 2,
+        shopSku: '333',
+      },
+      key: {
+        shopSkuKey: {
+          supplierId: 2,
+          shopSku: '333',
+        },
+        mdmParamId: 18,
+      },
+      string: {
+        empty: true,
+        present: false,
+      },
+      option: {
+        empty: false,
+        present: true,
+      },
+      numeric: {
+        empty: true,
+        present: false,
+      },
+      bool: {
+        empty: true,
+        present: false,
+      },
+      updatedByLogin: 'amaslak',
+      updatedTs: '2020-06-02T12:53:50.313174Z',
+      processed: false,
+      masterDataSourceType: MasterDataSourceType.MDM_ADMIN,
+      masterDataSourceId: '',
+      sourceUpdatedTs: '2020-06-02T12:53:50.313174Z',
+      updatedByUid: 0,
+    },
+    {
+      mdmParamId: 402,
+      xslName: 'mdm_height',
+      strings: [],
+      numerics: [10],
+      bools: [],
+      options: [],
+      modificationInfo: {
+        updatedTs: '2020-06-02T12:53:50.321644Z',
+        updatedByLogin: 'amaslak',
+        updatedByUid: 0,
+        modificationSource: 'MDM_AUTO',
+        sourceUpdatedTs: '2020-06-02T12:53:50.321644Z',
+        masterDataSourceId: '',
+        masterDataSourceType: 'MDM_ADMIN',
+      },
+      shopSkuKey: {
+        supplierId: 2,
+        shopSku: '333',
+      },
+      key: {
+        shopSkuKey: {
+          supplierId: 2,
+          shopSku: '333',
+        },
+        mdmParamId: 402,
+      },
+      string: {
+        empty: true,
+        present: false,
+      },
+      modificationSource: 'MDM_AUTO',
+      option: {
+        empty: true,
+        present: false,
+      },
+      numeric: {
+        empty: false,
+        present: true,
+      },
+      bool: {
+        empty: true,
+        present: false,
+      },
+      updatedByLogin: 'amaslak',
+      updatedTs: '2020-06-02T12:53:50.321644Z',
+      processed: false,
+      masterDataSourceType: 'MDM_ADMIN',
+      masterDataSourceId: '',
+      sourceUpdatedTs: '2020-06-02T12:53:50.321644Z',
+      updatedByUid: 0,
+    },
+    {
+      mdmParamId: 17,
+      xslName: 'expir_date',
+      strings: [],
+      numerics: [],
+      bools: [true],
+      options: [],
+      modificationInfo: {
+        updatedTs: '2020-06-02T12:53:50.330658Z',
+        updatedByLogin: 'amaslak',
+        updatedByUid: 0,
+        modificationSource: 'MDM_AUTO',
+        sourceUpdatedTs: '2020-06-02T12:53:50.330658Z',
+        masterDataSourceId: '',
+        masterDataSourceType: 'MDM_ADMIN',
+      },
+      shopSkuKey: {
+        supplierId: 2,
+        shopSku: '333',
+      },
+      key: {
+        shopSkuKey: {
+          supplierId: 2,
+          shopSku: '333',
+        },
+        mdmParamId: 17,
+      },
+      string: {
+        empty: true,
+        present: false,
+      },
+      modificationSource: 'MDM_AUTO',
+      option: {
+        empty: true,
+        present: false,
+      },
+      numeric: {
+        empty: true,
+        present: false,
+      },
+      bool: {
+        empty: false,
+        present: true,
+      },
+      updatedByLogin: 'amaslak',
+      updatedTs: '2020-06-02T12:53:50.330658Z',
+      processed: false,
+      masterDataSourceType: 'MDM_ADMIN',
+      masterDataSourceId: '',
+      sourceUpdatedTs: '2020-06-02T12:53:50.330658Z',
+      updatedByUid: 0,
+    },
+    {
+      mdmParamId: 10,
+      xslName: 'ShelfLife_Comment',
+      strings: ['при температуре от 2 до 6 градусов'],
+      numerics: [],
+      bools: [],
+      options: [],
+      modificationInfo: {
+        updatedTs: '2020-06-02T12:53:50.339848Z',
+        updatedByLogin: 'amaslak',
+        updatedByUid: 0,
+        modificationSource: 'MDM_AUTO',
+        sourceUpdatedTs: '2020-06-02T12:53:50.339848Z',
+        masterDataSourceId: '',
+        masterDataSourceType: 'MDM_ADMIN',
+      },
+      shopSkuKey: {
+        supplierId: 2,
+        shopSku: '333',
+      },
+      key: {
+        shopSkuKey: {
+          supplierId: 2,
+          shopSku: '333',
+        },
+        mdmParamId: 10,
+      },
+      string: {
+        empty: false,
+        present: true,
+      },
+      modificationSource: 'MDM_AUTO',
+      option: {
+        empty: true,
+        present: false,
+      },
+      numeric: {
+        empty: true,
+        present: false,
+      },
+      bool: {
+        empty: true,
+        present: false,
+      },
+      updatedByLogin: 'amaslak',
+      updatedTs: '2020-06-02T12:53:50.339848Z',
+      processed: false,
+      masterDataSourceType: 'MDM_ADMIN',
+      masterDataSourceId: '',
+      sourceUpdatedTs: '2020-06-02T12:53:50.339848Z',
+      updatedByUid: 0,
+    },
+  ],
+};
+
+export const testCategoryData = {
+  id: 1,
+  category: {
+    id: 1,
+    name: 'MdmCategoryData',
+    parameterIds: [18, 402, 17, 10],
+    parameterValueLinks: [],
+    guruTitleTemplate: '',
+    skuTitleTemplate: '',
+  },
+  options: {
+    '18-1': {
+      id: '18-1',
+      name: '0',
+    },
+    '18-2': {
+      id: '18-2',
+      name: '10',
+    },
+    '18-3': {
+      id: '18-3',
+      name: '18',
+    },
+  },
+  parameters: {
+    '10': {
+      id: 10,
+      name: 'Дополнительные условия хранения',
+      xslName: 'ShelfLife_Comment',
+      isMultivalue: false,
+      valueType: 'STRING',
+      optionIds: [],
+      isRequired: false,
+      guruType: 'GURU_TYPE_TEXT',
+      isRequiredForSignature: false,
+      skuMode: 'SKU_NONE',
+      optionAccess: 'ACCESS_SIMPLE',
+      level: 'MODEL_LEVEL',
+      subType: 'NOT_DEFINED',
+      quotedInTitle: false,
+      precision: 2,
+      isService: false,
+    },
+    '17': {
+      id: 17,
+      name: 'Работа со сроком годности',
+      xslName: 'expir_date',
+      isMultivalue: false,
+      valueType: 'BOOLEAN',
+      optionIds: [],
+      isRequired: false,
+      guruType: 'GURU_TYPE_TEXT',
+      isRequiredForSignature: false,
+      skuMode: 'SKU_NONE',
+      optionAccess: 'ACCESS_SIMPLE',
+      level: 'MODEL_LEVEL',
+      subType: 'NOT_DEFINED',
+      quotedInTitle: false,
+      precision: 2,
+      isService: false,
+    },
+    '18': {
+      id: 18,
+      name: 'Ставка НДС',
+      xslName: 'NDS',
+      isMultivalue: false,
+      valueType: 'NUMERIC_ENUM',
+      optionIds: ['18-1', '18-2', '18-3'],
+      isRequired: false,
+      guruType: 'GURU_TYPE_TEXT',
+      isRequiredForSignature: false,
+      skuMode: 'SKU_NONE',
+      optionAccess: 'ACCESS_SIMPLE',
+      level: 'MODEL_LEVEL',
+      subType: 'NOT_DEFINED',
+      quotedInTitle: false,
+      precision: 2,
+      isService: false,
+    },
+    '402': {
+      id: 402,
+      name: 'Высота в сантиметрах с учетом упаковки (МДМ)',
+      xslName: 'mdm_height',
+      isMultivalue: false,
+      valueType: 'NUMERIC',
+      optionIds: [],
+      isRequired: false,
+      guruType: 'GURU_TYPE_TEXT',
+      isRequiredForSignature: false,
+      skuMode: 'SKU_NONE',
+      optionAccess: 'ACCESS_SIMPLE',
+      level: 'MODEL_LEVEL',
+      subType: 'NOT_DEFINED',
+      quotedInTitle: false,
+      precision: 2,
+      isService: false,
+    },
+  },
+  parameterIdByXslName: {
+    NDS: 18,
+    mdm_height: 402,
+    expir_date: 17,
+    ShelfLife_Comment: 10,
+  },
+  sizeMeasureInfos: [],
+};
+
+export const testModelData = {
+  '1': {
+    id: 1,
+    categoryId: 1,
+    vendorId: 0,
+    title: '',
+    parameterValueHypothesis: {},
+    sourceType: 'ANY',
+    currentType: 'ANY',
+    parameterValueLinks: {},
+    valueAliases: [],
+    relations: [],
+    pictures: [],
+    isDeleted: false,
+    parameterValues: {
+      '10': [
+        {
+          parameterId: 10,
+          type: 'STRING',
+          stringValue: {
+            value: 'при температуре от 2 до 6 градусов',
+          },
+        },
+      ],
+      '17': [
+        {
+          parameterId: 17,
+          type: 'BOOLEAN',
+          booleanValue: true,
+        },
+      ],
+      '18': [
+        {
+          parameterId: 18,
+          type: 'ENUM',
+          optionId: '18-3',
+        },
+      ],
+      '402': [
+        {
+          parameterId: 402,
+          type: 'NUMERIC',
+          numericValue: 10,
+        },
+      ],
+    },
+  },
+};
+
+export const backConvertedMskuFromEditor = {
+  mskuId: testMskuId,
+  values: [
+    {
+      mdmParamId: 10,
+      strings: ['при температуре от 2 до 6 градусов'],
+      numerics: [],
+      bools: [],
+      options: [],
+    },
+    {
+      mdmParamId: 17,
+      strings: [],
+      numerics: [],
+      bools: [true],
+      options: [],
+    },
+    {
+      mdmParamId: 18,
+      strings: [],
+      numerics: [],
+      bools: [],
+      options: [
+        {
+          id: 3,
+        },
+      ],
+    },
+    {
+      mdmParamId: 402,
+      strings: [],
+      numerics: [10],
+      bools: [],
+      options: [],
+    },
+  ],
+};

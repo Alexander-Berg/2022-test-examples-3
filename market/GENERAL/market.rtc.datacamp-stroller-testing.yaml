@@ -1,0 +1,153 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Ddatacamp-stroller-testing
+
+juggler:
+  checks:
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-stroller-testing&service=ping&last=1DAY&mode=edit
+  - service: ping
+    check_tags:
+      - market_datacamp_check_controllers_release_testing
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_crit
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-stroller-testing&service=disk_free_space&last=1DAY&mode=edit
+  - service: disk_free_space
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_warn
+      unreach_mode: "skip"
+      unreach_service:
+      - check: 'datacamp-stroller-testing:ping'
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-stroller-testing&service=logrotate&last=1DAY&mode=edit
+  - service: logrotate
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_warn
+      unreach_mode: "skip"
+      unreach_service:
+      - check: 'datacamp-stroller-testing:ping'
+
+  # Check logrotate-app
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-stroller-prestable&service=logrotate-app&last=1DAY&mode=edit
+  - service: logrotate-app
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_warn
+      unreach_mode: "skip"
+      unreach_service:
+      - check: 'datacamp-stroller-testing:ping'
+
+  # Check memory_anon_usage
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-stroller-prestable&service=memory_anon_usage&last=1DAY&mode=edit
+  - service: memory_anon_usage
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_warn
+      unreach_mode: "skip"
+      unreach_service:
+      - check: 'datacamp-stroller-testing:ping'
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-stroller-testing&service=push-client-status&last=1DAY&mode=edit
+  - service: push-client-status
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_warn
+      unreach_mode: "skip"
+      unreach_service:
+      - check: 'datacamp-stroller-testing:ping'
+
+  - service: data_getter_freshness
+    check_options:
+      args: ['--meta-file', '/app/data-getter/recent/datacamp-controllers/meta.json', '--warning-threshold', '7200', '--critical-threshold', '10800']
+    meta:
+      urls:
+        - title: Траблшутинг
+          url: https://docs.yandex-team.ru/market-datacamp/support/monitorings#data_getter_freshness
+        - title: Запуски таски RUN_MARKET_DATA_GETTER
+          url: https://sandbox.yandex-team.ru/tasks?children=true&hidden=false&type=RUN_MARKET_DATA_GETTER&created=14_days&input_parameters=%7B%22resource_type_name%22%3A%22MARKET_DATA_DATACAMP_CONTROLLERS%22%2C%22environment_type%22%3A%22testing%22%7D
+    aggregator_kwargs:
+      mode: percent
+      # in order to catch broken monitorings
+      warn_limit: 1
+      nodata_mode: force_warn
+      unreach_mode: "skip"
+      unreach_service:
+      - check: 'datacamp-stroller-testing:ping'
+
+  # Check crashes
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-stroller-testing&service=crashes&last=1DAY&mode=edit
+  - service: crashes
+    check_tags:
+      - market_datacamp_check_controllers_release_testing
+    aggregator: logic_or
+    children:
+    - datacamp-stroller-testing-sas
+    - datacamp-stroller-testing-vla
+
+  # Check ooms
+  # https://juggler.yandex-team.ru/check_details/?host=datacamp-stroller-testing&service=ooms&last=1DAY&mode=edit
+  - service: ooms
+    check_tags:
+      - market_datacamp_check_controllers_release_testing
+    aggregator: logic_or
+    children:
+    - datacamp-stroller-testing-sas
+    - datacamp-stroller-testing-vla
+
+  - service: 5xx_server_errors
+    check_tags:
+      - market_datacamp_check_controllers_release_testing
+    meta:
+      urls:
+        - title: Дашборд
+          url: https://yasm.yandex-team.ru/template/panel/Market_Datacamp_StrollerWhite_testing/
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+    flaps:
+      boost_time: 0
+      critical_time: 0
+      stable_time: 0
+    children:
+      - EVENTS%(host=yasm_alert&service=market_datacamp_stroller_white_testing.*_error_5xx&tag=a_itype_marketdatacampstroller&tag=a_ctype_testing):all:all
+
+  default:
+    host: datacamp-stroller-testing
+    namespace: market.datacamp
+    aggregator: more_than_limit_is_problem
+    children:
+    - 'DEPLOY%market-datacamp@stage=testing_market_datacamp-stroller;deploy_unit=stroller'
+    tags:
+    - market_indexer_datacamp
+    - market_testing
+    - testing
+    - market_datacamp_stroller
+    - market_rtc
+    - market
+    - _market_
+    check_options: {}
+    refresh_time: 60
+    ttl: 900
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications: []

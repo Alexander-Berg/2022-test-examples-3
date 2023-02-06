@@ -1,0 +1,336 @@
+{
+  "meta": {
+    "fields": [
+      {
+        "name": "name",
+        "title": "Имя",
+        "type": "STRING",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "partner",
+        "title": "Партнер",
+        "type": "REFERENCE",
+        "editable": false,
+        "options": [],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "type",
+        "title": "Тип сегмента",
+        "type": "LIST",
+        "editable": false,
+        "options": [
+          {
+            "id": null,
+            "displayName": "—",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "WAREHOUSE",
+            "displayName": "Склад",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "MOVEMENT",
+            "displayName": "Перемещение",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "LINEHAUL",
+            "displayName": "Магистраль",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "PICKUP",
+            "displayName": "ПВЗ",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "HANDING",
+            "displayName": "Вручение",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "RETURN_MOVEMENT",
+            "displayName": "Возвратное перемещение (для нужд TM)",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "GO_PLATFORM",
+            "displayName": "Доставка go-платформой",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "BACKWARD_MOVEMENT",
+            "displayName": "Перемещение в возвратном графе",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "BACKWARD_WAREHOUSE",
+            "displayName": "Склад в возвратном графе",
+            "slug": null,
+            "openNewTab": false
+          }
+        ],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      },
+      {
+        "name": "locationId",
+        "title": "Регион",
+        "type": "NUMBER",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": {
+          "optionsSlug": "lms/geobase/regions",
+          "multiple": false,
+          "authorities": [],
+          "titleFieldName": "name",
+          "idFieldName": "id",
+          "hint": "Регион",
+          "pageSize": 20,
+          "queryParamName": "searchQuery"
+        },
+        "secret": null
+      },
+      {
+        "name": "validationStatus",
+        "title": "Статус валидации",
+        "type": "LIST",
+        "autocomplete": null,
+        "editable": false,
+        "hidden": false,
+        "options": [
+          {
+            "displayName": "—",
+            "id": null,
+            "openNewTab": false,
+            "slug": null
+          },
+          {
+            "displayName": "UNKNOWN",
+            "id": "UNKNOWN",
+            "openNewTab": false,
+            "slug": null
+          },
+          {
+            "displayName": "VALIDATION_IN_PROGRESS",
+            "id": "VALIDATION_IN_PROGRESS",
+            "openNewTab": false,
+            "slug": null
+          },
+          {
+            "displayName": "INVALID",
+            "id": "INVALID",
+            "openNewTab": false,
+            "slug": null
+          },
+          {
+            "displayName": "VALID",
+            "id": "VALID",
+            "openNewTab": false,
+            "slug": null
+          },
+          {
+            "displayName": "WARNING",
+            "id": "WARNING",
+            "openNewTab": false,
+            "slug": null
+          }
+        ],
+        "secret": null
+      },
+      {
+        "name": "returnSortingCenterId",
+        "title": "ID возвратного склада для Дропофов",
+        "type": "NUMBER",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": {
+          "optionsSlug": "lms/partner",
+          "multiple": false,
+          "authorities": [],
+          "titleFieldName": "name",
+          "idFieldName": "id",
+          "hint": "ID возвратного склада для Дропофов",
+          "pageSize": 20,
+          "queryParams": [
+            {
+              "key": "partnerType",
+              "values": [
+                "SORTING_CENTER"
+              ]
+            }
+          ],
+          "queryParamName": "searchQuery"
+        },
+        "secret": null
+      },
+      {
+        "name": "logisticPointId",
+        "title": "Логистическая точка",
+        "type": "NUMBER",
+        "editable": true,
+        "options": [],
+        "hidden": false,
+        "autocomplete": {
+          "optionsSlug": "lms/logistics-point",
+          "multiple": false,
+          "authorities": [
+            "ROLE_LOGISTICS_POINT"
+          ],
+          "titleFieldName": "name",
+          "idFieldName": "id",
+          "hint": "Логистическая точка",
+          "pageSize": 20,
+          "queryParamName": "searchQuery"
+        },
+        "secret": null
+      },
+      {
+        "name": "edgesFrozen",
+        "title": "Способ обновления логистических связей",
+        "type": "LIST",
+        "editable": true,
+        "options": [
+          {
+            "id": null,
+            "displayName": "—",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "AUTO",
+            "displayName": "Автоматически обновлять связи и слева (откуда, from_segment_id), и справа (куда, to_segment_id).",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "AUTO_FROM",
+            "displayName": "Автоматически обновлять только связи слева (откуда, сегмент=from_segment_id).",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "AUTO_TO",
+            "displayName": "Автоматически обновлять только связи справа (куда, сегмент=to_segment_id).",
+            "slug": null,
+            "openNewTab": false
+          },
+          {
+            "id": "MANUALLY",
+            "displayName": "Не обновлять автоматически связи и слева (откуда, from_segment_id), и справа (куда, to_segment_id).",
+            "slug": null,
+            "openNewTab": false
+          }
+        ],
+        "hidden": false,
+        "autocomplete": null,
+        "secret": null
+      }
+    ],
+    "actions": [
+      {
+        "authorities": [
+          "ROLE_LOGISTIC_SEGMENT_EDIT"
+        ],
+        "description": "Отправить сегмент на валидацию, текущий статус валидации будет сброшен",
+        "icon": "add_task",
+        "identifiedBy": null,
+        "method": "POST_BODY",
+        "slug": "/10007/validate",
+        "title": "Валидировать",
+        "type": null
+      }
+    ],
+    "mode": "EDIT",
+    "deletable": false,
+    "children": [
+      {
+        "title": "Сервисы",
+        "slug": "logistic-services",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "segment",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "Последующие сегменты",
+        "slug": "logistic-segments",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "fromSegmentId",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "Предыдущие сегменты",
+        "slug": "logistic-segments",
+        "parentSlug": "",
+        "type": "GRID",
+        "parentColumn": "toSegmentId",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "Расписание сервисов",
+        "slug": "schedule",
+        "parentSlug": "logistic-segments",
+        "type": "CALENDAR_WEEK",
+        "parentColumn": "id",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      },
+      {
+        "title": "Ошибки валидации",
+        "slug": "validate",
+        "parentSlug": "logistic-segments",
+        "type": "GRID",
+        "parentColumn": "entityId",
+        "idFieldName": "id",
+        "pageSize": 5,
+        "isCrossPluginSlug": false
+      }
+    ],
+    "tabs": []
+  },
+  "item": {
+    "id": 10007,
+    "values": {
+      "edgesFrozen": "AUTO",
+      "partner": {
+        "id": "3",
+        "displayName": "Partner 3",
+        "slug": "lms/partner",
+        "openNewTab": false
+      },
+      "locationId": 1003,
+      "type": "HANDING"
+    },
+    "title": "Вручение Partner 3"
+  }
+}

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <service
+        id="1"
+        name="service"
+        initial_state_id="1000"
+    />
+
+    <car
+        id="0"
+        licence_plate="E105TM53"
+        required_gate_type="big test car"
+    />
+
+    <capacity
+        id="100"
+        name="capacity"
+        value="1"
+    />
+
+    <capacity_unit
+        id="1"
+        capacity_id="100"
+        readable_name="test_capacity_unit"
+        is_active="true"
+    />
+
+    <capacity_unit
+        id="2"
+        capacity_id="100"
+        readable_name="test_capacity_unit_2"
+        is_active="true"
+    />
+
+    <state
+        id="1000"
+        name="state"
+        service_id="1"
+        capacity_id="100"
+    />
+
+    <state
+        id="1001"
+        name="state"
+        service_id="1"
+        capacity_id="100"
+    />
+
+    <edge
+        id="1"
+        from_state_id="1000"
+        to_state_id="1001"/>
+
+
+    <edge_restriction
+        id="3"
+        type="EVENT_REQUIRED"
+        edge_id="1"/>
+
+    <restriction_param
+        id="5"
+        edge_restriction_id="3"
+        name="EVENT_TYPE"
+        value="PROCESSED"/>
+
+
+    <yard_client
+        id="1"
+        name="client"
+        external_id="extClient"
+        phone="123123123"
+        service_id="1"
+        created_at="2021-05-01 10:00:00"
+        state_id="1001"
+        car_id="0"
+        meta='{"comment": "All good test", "ticketCode": "Р043", "diffMinutes": "699615", "requestType": "SHIPMENT", "takeAwayPallets": false, "takeAwayReturns": false, "closestRequestId": "5", "selectedRequestsIds": [4, 5]}'
+    />
+
+    <ticket
+        id="0"
+        ticket_code="Р042"
+        service_id="1"
+        yard_client_id="1"
+        type="SHIPMENT"
+        created_at="2021-05-01 9:00:00"
+        updated_at="2021-05-01 9:00:00"
+        site_id="100"
+        operator_window_id="1"
+        initial_operator_window_id="2"
+    />
+
+    <yard_client_event
+        id="1"
+        type="PROCESSED"
+        yard_client_id="1"
+        processed="false"
+    />
+
+    <yard_client_info
+        id="1"
+        yard_client_id="1"
+        request_id="4"
+        external_request_id="11"
+        service_request_id="12"
+        total_items_count="10"
+        total_pallets_count="1"
+        supplier_id="1"
+        supplier_name="TEST_SUP_1"
+        supplier_type="TEST_SUP_TYPE_1"
+        readable_type="TEST SUP TYPE 1"
+        requested_date="2020-01-01 13:40:00.0"
+    />
+
+    <yard_client_info
+        id="2"
+        yard_client_id="1"
+        request_id="5"
+        external_request_id="22"
+        service_request_id="22"
+        total_items_count="20"
+        total_pallets_count="2"
+        supplier_id="2"
+        supplier_name="TEST_SUP_2"
+        supplier_type="TEST_SUP_TYPE_2"
+        readable_type="TEST SUP TYPE 2"
+        requested_date="2020-01-01 13:45:00.0"
+    />
+
+
+    <client_queue/>
+</dataset>

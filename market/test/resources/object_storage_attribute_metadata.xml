@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<m:config xmlns:c="urn:jmf:common:1.0"
+          xmlns:m="urn:jmf:metaclass:config:1.0"
+          xmlns:a="urn:jmf:attribute:type:default:config:1.0"
+          xmlns:eae="urn:jmf:entity:api:extension:config:1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+    <m:metaclass>
+        <m:fqn>e1</m:fqn>
+        <m:title>
+            <c:value>Test entity with object attribute</c:value>
+        </m:title>
+        <m:logics>
+            <m:logic>db</m:logic>
+        </m:logics>
+        <m:attributes>
+            <m:attribute>
+                <m:code>attr</m:code>
+                <m:title>
+                    <c:value>Object attribute</c:value>
+                </m:title>
+                <m:type xsi:type="a:object" fqn="e2"/>
+                <m:store xsi:type="m:storageAttributeStore"/>
+                <m:presentation view="vpc1" edit="epc1"/>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+    <m:metaclass>
+        <m:fqn>e2</m:fqn>
+        <m:title>
+            <c:value>Test entity</c:value>
+        </m:title>
+        <m:logics>
+            <m:logic>db</m:logic>
+        </m:logics>
+        <m:attributes>
+            <m:attribute editable="false">
+                <m:code>gid</m:code>
+                <m:title>
+                    <c:value>Идентификатор объекта</c:value>
+                </m:title>
+                <m:type xsi:type="a:string"/>
+                <m:extensions>
+                    <m:extension xsi:type="eae:snapshot" linked="INCLUDE"/>
+                </m:extensions>
+            </m:attribute>
+        </m:attributes>
+    </m:metaclass>
+
+</m:config>

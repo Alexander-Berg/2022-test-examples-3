@@ -1,0 +1,30 @@
+SELECT 
+  IF(is_null((transform(OS.OrderID, (14), (13)) AS masterCampaignId)), OS.OrderID, masterCampaignId) AS EffectiveOrderID, 
+  OS.EventDate AS Date, 
+  sum(OS.Shows) AS shows, 
+  sum(OS.Clicks) AS clicks, 
+  IF(shows <> 0, ((clicks * 100000000) / shows), 0) AS ctr, 
+  sum(OS.CostCurTaxFree) AS cost, 
+  sum(OS.CostCur) AS costWithTax, 
+  sum(OS.SumPurchaseRevenue) AS revenue, 
+  IF((
+    cost <> 0
+    AND revenue <> 0
+  ), ((double(cost) * 100000000.0) / double(revenue)), null) AS crr, 
+  sum(OS.Buckets) AS carts, 
+  sum(OS.Purchases) AS purchases, 
+  IF(clicks <> 0, (cost / clicks), 0) AS avgClickCost, 
+  IF(purchases <> 0, (sum(OS.SumAvgProductPrice) / purchases), null) AS avgProductPrice, 
+  IF(purchases <> 0, (sum(OS.SumPurchaseRevenue) / purchases), null) AS avgPurchaseRevenue, 
+  sum(OS.ABConversions) AS autobudgetGoals, 
+  sum(OS.KeyConversions) AS meaningfulGoals
+FROM yt.OfferStat_bs AS OS
+WHERE (
+  OS.OrderID IN (
+    13, 14
+  )
+  AND OS.EventDate = 1635714000
+)
+GROUP BY 
+  EffectiveOrderID, 
+  Date

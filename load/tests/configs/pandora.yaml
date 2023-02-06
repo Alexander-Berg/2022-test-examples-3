@@ -1,0 +1,37 @@
+pandora:
+  enabled: true
+  package: yandextank.plugins.Pandora
+  config_content:
+    pools:
+      - id: HTTP
+        gun:
+          type: http
+          target: 172.17.0.5:80
+        ammo:
+          file: http-json.ammo
+          type: http/json
+        result:
+          type: phout
+          destination: ./phout.log
+        startup:
+          type: once
+          times: 1000
+        rps:
+          - duration: 60s
+            type: line
+            from: 1
+            to: 10
+    log:
+      level: error
+    monitoring:
+      expvar:
+        enabled: true
+        port: 1234
+core: {}
+cloudloader:
+  enabled: true
+  package: yandextank.plugins.CloudUploader
+  job_name: ligreen-test18
+  job_dsc: fdgdf
+  ver: v
+  api_address: loadtesting.api.cloud.yandex.net:443

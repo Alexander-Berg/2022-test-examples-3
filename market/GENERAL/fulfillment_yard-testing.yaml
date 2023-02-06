@@ -1,0 +1,128 @@
+vars:
+  - &kwargs_with_service_api_points
+    args:
+      - --kwargs
+      - '[{"service": "logbroker_reading", "path": "/health/logbroker-reading"},
+        {"service": "hanging_jobs", "path": "/health/hangingJobs"},
+        {"service": "failed_jobs", "path": "/health/failedJobs"},
+        {"service": "client_in_state_too_long", "path": "/health/client-in-state-too-long"},
+        {"service": "process_client_queue_hang_check", "path": "/health/hangingJobs/processClientQueue"},
+        {"service": "process_client_queue_fail_check", "path": "/health/failedJobs/processClientQueue"},
+        {"service": "process_client_state_hang_check", "path": "/health/hangingJobs/processClientState"},
+        {"service": "process_client_state_fail_check", "path": "/health/failedJobs/processClientState"},
+        {"service": "clean_old_rows_in_queue_log_hang_check", "path": "/health/hangingJobs/cleanOldRowsInQueueLogExecutor"},
+        {"service": "clean_old_rows_in_queue_log_fail_check", "path": "/health/failedJobs/cleanOldRowsInQueueLogExecutor"}]'
+
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_yard-testing&service=disk_free_space&last=1DAY&mode=edit
+  - service: disk_free_space
+    nodata_mode: force_ok
+
+  # Check fresh-hprof-files
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_yard-testing&service=fresh-hprof-files&last=1DAY&mode=edit
+  - service: fresh-hprof-files
+    nodata_mode: force_ok
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_yard-testing&service=logrotate&last=1DAY&mode=edit
+  - service: logrotate
+    nodata_mode: force_ok
+
+  # Check monitoring
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_yard-testing&service=monitoring&last=1DAY&mode=edit
+  - service: monitoring
+    check_options:
+      *kwargs_with_service_api_points
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_yard-testing&service=ping&last=1DAY&mode=edit
+  - service: ping
+    check_options:
+      *kwargs_with_service_api_points
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_yard-testing&service=push-client-status&last=1DAY&mode=edit
+  - service: push-client-status
+    nodata_mode: force_ok
+
+  # Check client-in-state-too-long
+  - service: client_in_state_too_long
+    check_options:
+      *kwargs_with_service_api_points
+
+  - service: logbroker_reading
+    check_options:
+      *kwargs_with_service_api_points
+
+  - service: hanging_jobs
+    check_options:
+      *kwargs_with_service_api_points
+
+  - service: failed_jobs
+    check_options:
+      *kwargs_with_service_api_points
+
+  - service: process_client_queue_hang_check
+    check_options:
+      *kwargs_with_service_api_points
+
+  - service: process_client_queue_fail_check
+    check_options:
+      *kwargs_with_service_api_points
+
+  - service: process_client_state_hang_check
+    check_options:
+      *kwargs_with_service_api_points
+
+  - service: process_client_state_fail_check
+    check_options:
+      *kwargs_with_service_api_points
+
+  - service: clean_old_rows_in_queue_log_hang_check
+    check_options:
+      *kwargs_with_service_api_points
+
+  - service: clean_old_rows_in_queue_log_fail_check
+    check_options:
+      *kwargs_with_service_api_points
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options: {}
+    children:
+    - NANNY%testing_market_fulfillment_yard_vla
+    - NANNY%testing_market_fulfillment_yard_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: fulfillment_yard-testing
+    namespace: market.yard
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - marketfulfillmentyard
+    - testing
+    - ffyard
+    - market
+    - _market_
+    ttl: 900

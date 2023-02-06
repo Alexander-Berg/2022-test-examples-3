@@ -1,0 +1,87 @@
+port: 80
+update_interval_sec: 60
+solomon_data_request_timeout_sec: 10
+
+solomon:
+  project: crypta_cm
+  service: quoter
+  cluster: "testing"
+  timeout_sec: 10
+
+stats:
+  hist:
+    min: 0
+    max: 10
+    bin_count: 10
+
+  percentile:
+    max: 100000000
+    precision: 3
+    percentiles:
+      - 100
+      - 99.9
+      - 99
+      - 98
+      - 95
+      - 90
+
+dyntables_policy:
+  aggregation_window_sec: 1800
+  aggregation_function: "avg"
+  sensor_current: "tablet_static_memory_in_gb"
+  sensor_limit: "tablet_static_memory_limit_in_gb"
+
+  environment_types:
+    production:
+      min_gb_left: 50
+      clusters:
+        - labels:
+            project: "yt"
+            cluster: "seneca-sas"
+            service: "accounts"
+            account: "crypta-cm"
+        - labels:
+            project: "yt"
+            cluster: "seneca-vla"
+            service: "accounts"
+            account: "crypta-cm"
+    testing:
+      min_gb_left: 200
+      clusters:
+        - labels:
+            project: "yt"
+            cluster: "seneca-sas"
+            service: "accounts"
+            account: "crypta-cm"
+
+logs:
+  main:
+    level: debug
+    targets:
+      - type: stdout
+      - type: rotating
+        file: "/logs/main.log"
+        max_file_size: 41943040
+        max_files: 1
+
+  quoter_server:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/logs/quoter_server.log"
+      max_file_size: 41943040
+      max_files: 1
+  state_updater:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/logs/state_updater.log"
+      max_file_size: 41943040
+      max_files: 1
+  solomon:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/logs/solomon.log"
+      max_file_size: 41943040
+      max_files: 1

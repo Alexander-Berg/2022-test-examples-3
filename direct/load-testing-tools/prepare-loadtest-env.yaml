@@ -1,0 +1,67 @@
+# как применять:
+# ansible-playbook prepare-loadtest-env.yaml -K
+- hosts: ppctest-ts3-front.ppc.yandex.ru
+  become: True
+  vars:
+    service_name: fake-services-for-loadtest
+    py_module: fake_services_app
+    py_module_path: /opt/direct-py/fake-services-for-loadtest-app
+    uwsgi_socket: 127.0.0.1:5000
+    workers: 100
+  tasks:
+  - apt: name={{ item }}
+    with_items:
+    - python-flask
+    - uwsgi-core
+    - uwsgi-plugin-python
+    - runit
+  - apt: name=yandex-direct-api5-java state=latest force=yes
+  - service: name=direct-api5 state=started
+
+  - file: "state=directory path={{ py_module_path }}"
+  - copy: "src=./fake_services_app.py dest={{ py_module_path }}/{{ py_module }}.py"
+    notify: restart uwsgi
+
+  - file: "state=directory path=/etc/sv/{{ service_name }}"
+  - file: "state=directory path=/etc/sv/{{ service_name }}/log"
+  - template: "src=./run_fake_services.sh.j2 dest=/etc/sv/{{ service_name }}/run mode=0755"
+    notify: restart uwsgi
+  - copy: "src=./run_fake_services_log.sh dest=/etc/sv/{{ service_name }}/log/run mode=0755"
+    notify: restart uwsgi
+  - file: "state=link src=/etc/sv/{{ service_name }} path=/etc/service/{{ service_name }}"
+  - wait_for: "path=/etc/service/{{ service_name }}/supervise/ok timeout=10"
+
+  - replace:
+        destfile: /var/www/ppc.yandex.ru/perl/settings/SettingsTest.pm
+        regexp: '^(\$BSRANK_BASE_URL)\s*=.*'
+        replace: '\1 = "http://{{ uwsgi_socket }}";'
+        backup: yes
+    notify: restart soap apache
+  - replace:
+        destfile: /var/www/ppc.yandex.ru/perl/settings/SettingsTest.pm
+        regexp: '^(\s*\$Yandex::Blackbox::BLACKBOX_URL)\s*=.*'
+        replace: '\1 = "http://{{ uwsgi_socket }}/blackbox";'
+        backup: no
+    notify: restart soap apache
+  - replace:
+        destfile: /etc/nginx/sites-available/soap-direct-vhost.conf
+        regexp: '^(\s*set\s+\$back\s+)[a-z].*;$'
+        replace: '\1 127.0.0.1:10181;'
+        backup: no
+    notify: restart soap nginx
+  - lineinfile:
+        destfile: /etc/sv/direct-api5/run
+        insertbefore: '^JAVA_ARGS='
+        regexp: '^JAVA_OPTS=.*blackbox.endpoint.*'
+        line: 'JAVA_OPTS="$JAVA_OPTS -Dblackbox.endpoint=http://{{ uwsgi_socket }}/blackbox -Dbsauction.url=http://127.0.0.1:7088/rank/24 -Dyandex.environment.type=testing2"'
+    notify: restart java api
+
+  handlers:
+  - name: restart uwsgi
+    command: 'sv -w 10 restart {{ service_name }}'
+  - name: restart soap apache
+    service: name=soap.direct.yandex.ru state=restarted
+  - name: restart java api
+    command: sv -w 10 restart direct-api5
+  - name: restart soap nginx
+    command: /etc/init.d/soap-direct-accel restart

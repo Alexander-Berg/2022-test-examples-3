@@ -1,0 +1,26 @@
+server {
+    request_id on;
+    include listen;
+    include listen_https;
+
+    set $projectname "rasp-morda-front";
+    set $username "teamcity";
+    set $projectPath /home/$username/www/$projectname;
+    server_name ~^((([a-z0-9\-]+)\.haze\..*)||(rasp\.yandex\.ru))$;
+    # Перенаправление ссылок без / на конце, на ссылку со слешем в конце
+    if ($request_method = "GET") {
+        rewrite ^([^\.]*[^\/])$ $1/ permanent;
+    }
+
+    # include locations/add-final-slash;
+    include locations/404-portal-forproxypass;
+    add_header Access-Control-Allow-Origin "$http_origin";
+
+    location / {
+        include proxy_params;
+        proxy_intercept_errors on;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Request-Id $request_id;
+        proxy_pass http://unix:/tmp/$projectname.$username.sock;
+    }
+}

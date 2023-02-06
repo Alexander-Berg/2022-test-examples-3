@@ -1,0 +1,16 @@
+apply plugin: 'mbuild-java'
+
+dependencies {
+    compile project(':mbo-core')
+    compile project(':mbo-tms-common')
+    compile project(':mbo-tms')
+    compile project(path: ':mbo-db', configuration: 'liquibaseChangesets')
+
+    testCompile project(path: ':mbo-core', configuration: 'testCompile')
+}
+
+integrationTest {
+    // Thus gradle cant inherit system properties to test run,
+    // we do it by ourselves
+    systemProperty "MBO_REUSE_TEST_SCHEMAS", System.getenv('MBO_REUSE_TEST_SCHEMAS') ?: 'true'
+}

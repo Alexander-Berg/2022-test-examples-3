@@ -1,0 +1,23 @@
+log:
+  level: error
+pools:
+- ammo:
+    source:
+      path: ./ammo.json
+      type: file
+    type: custom_provider
+  gun:
+    target: ligreen-nix:8080
+    type: grpc_gun
+  id: Custom
+  result:
+    destination: ./phout.log
+    type: phout
+  rps:
+  - duration: 10s
+    from: 1
+    to: 10
+    type: line
+  startup:
+  - times: 1
+    type: once

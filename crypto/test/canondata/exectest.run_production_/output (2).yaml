@@ -1,0 +1,68 @@
+
+
+resources:
+  uatraits_data:
+    resource_type: "CRYPTA_UATRAITS_DATA"
+    ttls:
+      stable: inf
+  graph_task_config:
+    resource_type: "CRYPTA_GRAPH_RTMR_TASK_CONFIG"
+    bundle_file: "config.yaml"
+    ttls:
+      stable: inf
+  extfp_ipfilter:
+    resource_type: "CRYPTA_RTMR_EXTFP_IPFILTER"
+    ttls:
+      stable: inf
+
+file_client:
+  root: /resources
+
+http:
+  port: 80
+  timeout_sec: 10
+
+master_kv_client:
+  proxy: markov.yt.yandex.net
+  path: //home/crypta/production/resource_service/master
+
+replica_kv_clients:
+  dcs: {'VLA': 'seneca-vla.yt.yandex.net', 'SAS': 'seneca-sas.yt.yandex.net'}
+  path: //home/crypta/production/resource_service/replica
+  retry_timeout_ms: 100
+
+
+report_ttl_sec: 3600
+instance_ttl_sec: 300
+
+solomon_port: 4242
+
+cluster_envs:
+  testing_cluster: rtmr-dev-man-2
+  clusters:
+  - rtmr-vla
+  - rtmr-sas
+  tracked_operation: rtcrypta_graph:pqout_fingerprint_matching
+
+releaser:
+  version_thresholds:
+    prestable: 200
+    testing: 7
+  ok_rate_thresholds:
+    prestable: 0.9
+    testing: 0.9
+  sequence:
+  - testing
+  - prestable
+  - stable
+  juggler_dry_run: False
+
+retry_opts:
+  tries: 5
+  delay: 1
+
+rt_retry_opts:
+  tries: 3
+  delay: 0.1
+
+report_timeout_ms: 500

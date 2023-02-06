@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lom_order_events
+        logbroker_id="456"
+        order_id="789"
+        diff='[
+                {"op": "replace", "path": "/id", "value": 123456, "fromValue": null},
+                {"op": "replace", "path": "/waybill/1/segmentStatus", "value": "OUT", "fromValue": "TRANSIT_PICKUP"},
+                {"op": "add", "path": "/waybill/1/segmentStatusHistory/6", "value": {"id": 356584917, "status": "OUT", "trackerStatus": "DELIVERY_DELIVERED", "statusDate": "2021-05-19T03:40:51.055461Z"}}
+            ]'
+        snapshot='{
+                "id": 1,
+                "fake": false,
+                "status": "PROCESSING",
+                "barcode": "orderId",
+                "created": null,
+                "updated": null,
+                "waybill": [
+                    {
+                        "id": 12,
+                        "partnerId": 123,
+                        "externalId": "part1",
+                        "partnerType": "DELIVERY",
+                        "partnerAddress": "Какой-то адрес",
+                        "partnerEmail": "test@test.ru",
+                        "segmentType": "MOVEMENT",
+                        "segmentStatus": "CANCELLED",
+                        "waybillSegmentTags": ["DIRECT", "UNKNOWN_TAG"],
+                        "waybillSegmentStatusHistory": [
+                            {"id": 123456, "date": "2021-05-28T12:13:21.580534Z", "status": "STARTED", "trackerStatus": "DELIVERY_DELIVERED", "created": "2021-05-28T12:13:21.580535Z"}
+                        ]
+                    }
+                ],
+                "recipient": {"uid": null},
+                "deliveryType": "COURIER",
+                "deliveryInterval": {"toTime": null, "fromTime": null, "deliveryDateMax": "2021-05-18", "deliveryDateMin": "2021-05-18"},
+                "platformClientId": 6,
+                "cancellationOrderRequests": [
+                    {
+                        "id": 2345678,
+                        "status": "REQUIRED_SEGMENT_SUCCESS",
+                        "created": "2021-06-03T03:41:44.161122Z",
+                        "updated": "2021-06-03T03:41:44.552487Z",
+                        "cancellationOrderReason": "DELIVERY_SERVICE_UNDELIVERED",
+                        "cancellationErrorMessage": null,
+                        "cancellationSegmentRequests": [
+                            {"status": "PROCESSING", "required": false, "partnerId": 9, "sufficient": false},
+                            {"status": "PROCESSING", "required": false, "partnerId": 216, "sufficient": false},
+                            {"status": "NON_CANCELLABLE_SEGMENT", "required": false, "partnerId": 73, "sufficient": false},
+                            {"status": "SUCCESS_BY_CHECKPOINT", "required": false, "partnerId": 56083, "sufficient": false}
+                        ],
+                        "cancellationOrderRequestReasonDetails": null
+                    }
+                ],
+                "unknown_field": "test_value"
+            }'
+    />
+
+</dataset>

@@ -1,0 +1,24 @@
+import * as React from 'react';
+import { shallow } from 'enzyme';
+
+import { MarketReviewCard } from '@yandex-turbo/components/MarketReviewCard/MarketReviewCard';
+
+const stubProps = {
+    review: {
+        created: '1 октября',
+        uid: 933460785,
+        grade: 3,
+        comment: 'Купил я тут масляный коктейль для бороды. Покупка не дорогая так что смысла брать с платной доставкой не было, на следующий день по договоренности поехал за покупкой сам.\nНикого и ничего в самовывозе не ждал, ждали меня. \nРекомендую магазин.',
+    },
+    user: {
+        name: 'ama7395',
+        avatar: '25358\/DqV4o26ank7KUtgYRAYnrfGEw-1',
+    },
+};
+
+describe('MarketReviewCard', () => {
+    it('должен рендерится без ошибок', () => {
+        const wrapper = shallow(<MarketReviewCard {...stubProps} />);
+        expect(wrapper.length).toEqual(1);
+    });
+});

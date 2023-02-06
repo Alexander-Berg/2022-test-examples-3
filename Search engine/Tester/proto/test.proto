@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+import "search/resonance/tester/proto/script.proto";
+import "search/resonance/tester/proto/weight_check.proto";
+import "search/resonance/tester/proto/release.proto";
+
+package NResonanceTester.NProto;
+
+message TWeightTestCheck {
+    repeated TWeightCheck Case = 1;
+}
+
+message TResonanceTest {
+    string Name = 1;
+    oneof Test {
+        TScript Script = 2;
+        TWeightTestCheck WeightCheck = 3;
+        TReleaseTest Release = 4;
+    }
+}

@@ -1,0 +1,29 @@
+base: etc/retriever/retriever.yml
+config:
+    system:
+        daemon: 1
+        dir: {dir}
+        pid: {pid}
+    modules:
+        module:
+        -   _name: web_server
+            configuration:
+                socket:
+                    ipv6_only: false
+                endpoints:
+                    listen:
+                        _addr: '::'
+                        _port: {webserver_port}
+        -   _name: stat_server
+            configuration:
+                endpoints:
+                    listen:
+                        _port: {statserver_port}
+        -   _name: retriever
+            configuration:
+                uatraits_config: usr/share/uatraits/browser.xml
+                uatraits_profiles_config: usr/share/uatraits/profiles.xml
+                recognizer:
+                    language_dict: usr/share/recognizer/queryrec.dict
+                    language_weights: usr/share/recognizer/queryrec.weights
+                    encoding_dict: usr/share/recognizer/dict.dict

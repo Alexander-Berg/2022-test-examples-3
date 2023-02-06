@@ -1,0 +1,112 @@
+{
+  "items": [
+    {
+      "id": "intro",
+      "action_type": "tree",
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "welcome_text",
+          "text": "Добро пожаловать в службу поддержки!"
+        },
+        {
+          "type": "plaintext",
+          "text": "\\U0001F699 **Вопрос про автомобиль?**\nУкажите его гос. номер, чтобы мы разобрались быстрее."
+        },
+        {
+          "type": "plaintext",
+          "text": "\\U0001F6A8 **В экстренной ситуации**\nЗвоните в колл-центр:\n[url=tel://+74997040941]+7 499 704-09-41[/url] (Москва),\n[url=tel://+74997040941]+7 499 704-09-41[/url] (Санкт-Петербург),\n[url=tel://+74997040941]+7 499 704-09-41[/url] (Казань)"
+        },
+        {
+          "type": "plaintext",
+          "text": "\\U0001F4A1 **Страница помощи по сервису здесь:**\n [url=https://yandex.ru/support/drive]yandex.ru/support/drive[/url]"
+        }
+      ],
+      "schema": {
+        "type": "options",
+        "options": [
+          {
+            "text": "Регистрация и авторизация",
+            "type": "options",
+            "options": [
+              {
+                "text": "Требования к водителям",
+                "type": "message",
+                "message_text": "driver_requirements",
+                "node": "driver_requirements"
+              }
+            ]
+          },
+          {
+            "text": "Хочу поговорить с человеком",
+            "type": "message",
+            "message_text": "talk_with_human",
+            "node": "talk_with_human"
+          }
+        ]
+      },
+      "fallback_node": "talk_with_human",
+      "next_step": null
+    },
+    {
+      "id": "driver_requirements",
+      "action_type": "context_buttons",
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Для того, чтобы пользоваться Драйвом надо быть старше 21 года и иметь больше двух лет стажа в категории B"
+        },
+        {
+          "type": "plaintext",
+          "text": "Вы получили ответ на свой вопрос?"
+        }
+      ],
+      "schema": {
+        "type": "options",
+        "options": [
+          {
+            "text": "Да, получил",
+            "type": "message",
+            "message_text": "yes",
+            "node": "chat_finished"
+          },
+          {
+            "text": "Нет. Свяжите с оператором",
+            "type": "message",
+            "message_text": "no",
+            "node": "talk_with_human_2"
+          }
+        ]
+      },
+      "next_step": null
+    },
+    {
+      "id": "talk_with_human",
+      "action_type": "user_message",
+      "action_button_text": null,
+      "pre_action_messages": [
+      ],
+      "next_step": "talk_with_human"
+    },
+    {
+      "id": "talk_with_human_2",
+      "support_line_tag": "support_chat_1_line",
+      "action_type": "user_message",
+      "action_button_text": null,
+      "pre_action_messages": [
+      ],
+      "next_step": "talk_with_human_2"
+    },
+    {
+      "id": "chat_finished",
+      "action_type": "chat_closed",
+      "action_button_text": "В этом чате давно ничего не происходило и написать сюда не получится",
+      "pre_action_messages": [
+      ],
+      "next_step": null
+    }
+  ],
+  "faq_url": null,
+  "support_url": null
+}

@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+import "mapreduce/yt/interface/protos/extension.proto";
+
+message TSegment {
+    uint64 Keyword = 1;
+    uint64 ID = 2;
+}
+
+message TUserData {
+    message TAttributes {
+        uint64 Age = 1;
+        uint64 Device = 2;
+        uint64 Gender = 3;
+        int64 Region = 4;
+        uint64 Income = 5;
+    }
+    message TSegments {
+        repeated TSegment Segment = 1 [(NYT.flags) = SERIALIZATION_YT];
+    }
+
+    string Yandexuid = 1 [(NYT.column_name) = "yuid"];
+    uint64 Timestamp = 2 [(NYT.column_name) = "timestamp"];
+    TAttributes Attributes = 3 [(NYT.column_name) = "attributes", (NYT.flags) = SERIALIZATION_YT];
+    TSegments Segments = 4 [(NYT.column_name) = "segments", (NYT.flags) = SERIALIZATION_YT];
+}

@@ -1,0 +1,24 @@
+$schema: ../../../_schemas/nock.yaml
+
+scope: 'http://payments'
+method: POST
+path: /ext/payment_hash:abcdefghijklmnopqrstuvwxyz
+
+reqheaders:
+  $include: ../../../_samples/reqheaders.yaml
+
+body:
+  template: desktop
+  email: customer@domain.loc
+  description: description
+  yandexuid: '12345678901234567890'
+  customer_uid: null
+  return_url: https://localhost/transaction/order_hash:abcdefghijklmnopqrstuvwxyz?ref=billing
+
+status: 200
+
+response:
+  code: 200
+  status: success
+  data:
+    payment_url: https://trust/web/payment?purchase_token=purchase_token:abcdefghijklmnopqrstuvwxyz

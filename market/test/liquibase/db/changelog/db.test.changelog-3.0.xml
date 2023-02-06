@@ -1,0 +1,32 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="isonami" id="1586197595807-1">
+        <createProcedure procedureName="marketid_links_notify">CREATE OR REPLACE FUNCTION marketid_links_notify()
+            RETURNS trigger AS
+            $BODY$
+                BEGIN
+                    IF TG_OP = 'DELETE' THEN
+                        PERFORM pg_notify('linksModelCache', OLD.puid);
+                        RETURN NULL;
+                    ELSE
+                        PERFORM pg_notify('linksModelCache', NEW.puid);
+                        RETURN NEW;
+                    END IF;
+                END
+            $BODY$ LANGUAGE plpgsql;</createProcedure>
+        <rollback>
+            DROP FUNCTION IF EXISTS marketid_links_notify ();
+        </rollback>
+    </changeSet>
+    <changeSet author="isonami" id="1586197595807-2">
+        <sql>
+            DROP TRIGGER IF EXISTS marketid_links_notify_trigger ON marketid_links;
+            CREATE TRIGGER marketid_links_notify_trigger AFTER UPDATE OR INSERT OR DELETE ON marketid_links
+                FOR EACH ROW
+                EXECUTE PROCEDURE marketid_links_notify();
+        </sql>
+        <rollback>
+            DROP TRIGGER IF EXISTS marketid_links_notify_trigger ON marketid_links;
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

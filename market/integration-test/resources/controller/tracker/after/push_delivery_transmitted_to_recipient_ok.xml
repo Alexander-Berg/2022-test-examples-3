@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <orders
+            id="1"
+            status="PROCESSING"
+    />
+
+    <orders
+            id="2"
+            status="PROCESSING"
+    />
+    <orders
+            id="3"
+            status="PROCESSING"
+    />
+    <orders
+            id="5"
+            status="PROCESSING_ERROR"
+    />
+    <orders
+            id="6"
+            status="PROCESSING"
+    />
+
+    <orders
+            id="7"
+            status="PROCESSING"
+    />
+
+    <orders
+            id="8"
+            status="PROCESSING"
+    />
+
+    <orders
+            id="9"
+            status="PROCESSING"
+    />
+
+    <orders
+            id="10"
+            status="PROCESSING"
+    />
+
+    <cancellation_order_request
+            id="100"
+            order_id="1"
+            status="REJECTED"
+    />
+
+    <order_history_event
+            order_id="1"
+            diff='[
+              {
+                "op": "replace",
+                "path": "/cancellationOrderRequests/0/status",
+                "value": "REJECTED",
+                "fromValue": "PROCESSING"
+              }
+            ]'
+    />
+
+    <order_history_event
+            order_id="1"
+            diff='[
+              {
+                "op": "replace",
+                "path": "/waybill/1/segmentStatus",
+                "value": "TRANSIT_TRANSMITTED_TO_RECIPIENT",
+                "fromValue": "PENDING"
+              },
+              {
+                "op": "add",
+                "path": "/waybill/1/segmentStatusHistory/0",
+                "value": {
+                  "id": 1,
+                  "status": "TRANSIT_TRANSMITTED_TO_RECIPIENT",
+                  "statusDate": "2019-06-12T00:00:00Z",
+                  "partnerStatusDate": "2019-08-06T13:40:00Z"
+                }
+              }
+            ]'
+    />
+
+    <waybill_segment_status_history
+            waybill_segment_id="2"
+            status="TRANSIT_TRANSMITTED_TO_RECIPIENT"
+            date="2019-08-06 16:40:00 +0300"
+            tracker_status="DELIVERY_TRANSMITTED_TO_RECIPIENT"
+            tracker_checkpoint_id="1"
+            created="2019-06-12 03:00:00 +0300"
+    />
+</dataset>

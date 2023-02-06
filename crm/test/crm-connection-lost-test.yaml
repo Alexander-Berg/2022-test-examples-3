@@ -1,0 +1,107 @@
+labels:
+  tags:
+  - logexport
+  - test
+meta:
+  id: crm-connection-lost-test
+  project_id: crm-test
+spec:
+  deploy_units:
+    connection-lost:
+      endpoint_sets:
+      - port: 80
+      images_for_boxes:
+        connection-lost-box:
+          digest: sha256:5ae30dc622a22559c819d72f342bf5f306eb08f712739292a51532f4318ff987
+          name: crm/crm-connection-lost
+          registry_host: registry.yandex.net
+          tag: 8-b
+      multi_cluster_replica_set:
+        replica_set:
+          clusters:
+          - cluster: sas
+            spec:
+              replica_count: 1
+          - cluster: vla
+            spec:
+              replica_count: 1
+          deployment_strategy:
+            max_unavailable: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+              - id: main-disk
+                labels:
+                  used_by_infra: true
+                quota_policy:
+                  bandwidth_guarantee: 1048576
+                  bandwidth_limit: 2097152
+                  capacity: 3221225472
+                storage_class: hdd
+              host_infra:
+                monitoring:
+                  labels:
+                    itype: crm-test
+              pod_agent_payload:
+                spec:
+                  boxes:
+                  - cgroup_fs_mount_mode: ro
+                    env:
+                    - name: ASPNETCORE_ENVIRONMENT
+                      value:
+                        literal_env:
+                          value: Testing
+                    id: connection-lost-box
+                    volumes:
+                    - mode: read_write
+                      mount_point: /logs
+                      volume_ref: logs
+                  mutable_workloads:
+                  - workload_ref: connection-lost-workload
+                  volumes:
+                  - id: logs
+                  workloads:
+                  - box_ref: connection-lost-box
+                    env:
+                    - name: ConnectionStrings__ConnectionLostDatabase
+                      value:
+                        secret_env:
+                          alias: crm-connection-checker-test
+                          id: connection-string
+                    id: connection-lost-workload
+                    liveness_check:
+                      http_get:
+                        path: /liveness
+                        port: 80
+                    readiness_check:
+                      http_get:
+                        path: /readiness
+                        port: 80
+              resource_requests:
+                memory_guarantee: 2147483648
+                memory_limit: 2147483648
+                network_bandwidth_guarantee: 1048576
+                vcpu_guarantee: 2000
+                vcpu_limit: 2000
+              secret_refs:
+                crm-connection-checker-test:
+                  secret_id: sec-01g29wb4ghmwd7w1hgs6yr7vfx
+                  secret_version: ver-01g29wb4gzt8b7gd9b3ep85q0c
+      network_defaults:
+        network_id: _CRMTEST_DEPLOY_NETS_
+      patchers_revision: 11
+      pod_agent_layer_sandbox_info: {}
+      pod_agent_sandbox_info:
+        revision: 2621390537
+      tvm_config:
+        blackbox_environment: ProdYaTeam
+        clients:
+        - source:
+            alias: crm-frontend
+            app_id: 2031546
+        mode: enabled
+      tvm_sandbox_info:
+        revision: 2728323868
+  revision_info:
+    description: 'Connection lost service release #3, CRM-17140'
+

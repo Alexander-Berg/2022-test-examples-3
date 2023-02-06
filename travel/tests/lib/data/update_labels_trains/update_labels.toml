@@ -1,0 +1,139 @@
+bin_path = "travel/cpa/data_processing/update_labels_trains/update_labels_trains"
+
+args = [
+    "--yt-proxy", "%(yt_proxy)s",
+    "--src-dir", "//home/tests/update_labels_trains/redir_logs",
+    "--dst-dir", "//home/tests/update_labels_trains/labels",
+]
+
+checkers = [
+    "yt",
+]
+
+[yt.input.redir_logs]
+    path = "//home/tests/update_labels_trains/redir_logs/proto_table"
+    converter = "train_label_to_proto"
+
+[[yt.input.redir_logs.data]]
+    Label = "proto_label_0"
+    SerpReqId = "1234567890"
+    UtmSource = "proto_label_utm_source"
+    UtmMedium = "proto_label_utm_medium"
+    UtmCampaign = "proto_label_utm_campaign"
+    UtmTerm = "proto_label_utm_term"
+    UtmContent = "proto_label_utm_content"
+    From = "proto_label_from"
+    Gclid = "proto_label_gclid"
+    ICookie = "proto_label_icookie"
+    SerpUuid = "proto_label_serp_uuid"
+    TestBuckets = "proto_label_test_buckets"
+    Partner = "proto_label_partner"
+    SubPartner = "proto_label_subpartner"
+    PartnerUid = "proto_label_partner_uid"
+    Device = "proto_label_device"
+    Terminal = "proto_label_terminal"
+    IsTransfer = true
+    Ip = "proto_label_ip"
+    RegionId = 66
+    Uid = "proto_label_uid"
+    YandexUid = "proto_label_yandexuid"
+    WizardReqId = "proto_wizard_req_id"
+    SerpTestId = "proto_serp_test_id"
+    YtpReferer = "proto_test_referer"
+
+[yt.input.labels]
+    path = "//home/tests/update_labels_trains/labels/labels"
+
+# labels table already contains data
+[[yt.input.labels.data]]
+    label = "label_collected"
+    source_req_id = "label_req_id"
+    source_utm_source = "label_utm_source"
+    source_utm_medium = "label_utm_medium"
+    source_utm_campaign = "label_utm_campaign"
+    source_utm_term = "label_utm_term"
+    source_utm_content = "label_utm_content"
+    source_from = "label_from"
+    source_gclid = "label_gclid"
+    source_icookie = "label_icookie"
+    source_serp_uuid = "label_serp_uuid"
+    source_test_buckets = "label_test_buckets"
+    source_partner = "label_partner"
+    source_subpartner = "label_subpartner"
+    source_partner_uid = "label_partner_uid"
+    source_device = "label_device"
+    source_terminal = "label_terminal"
+    source_is_transfer = false
+    label_ip = "label_ip"
+    label_region_id = 11
+    label_uid = "label_uid"
+    label_yandex_uid = "label_yandex_uid"
+    label_wizard_req_id = ""
+    label_serp_test_id = ""
+    label_ytp_referer = "proto_test_referer"
+
+[yt.output.labels]
+    path = "//home/tests/update_labels_trains/labels/labels"
+
+# data from labels table
+[[yt.output.labels.data]]
+    label = "label_collected"
+    source_req_id = "label_req_id"
+    source_utm_source = "label_utm_source"
+    source_utm_medium = "label_utm_medium"
+    source_utm_campaign = "label_utm_campaign"
+    source_utm_term = "label_utm_term"
+    source_utm_content = "label_utm_content"
+    source_from = "label_from"
+    source_gclid = "label_gclid"
+    source_icookie = "label_icookie"
+    source_serp_uuid = "label_serp_uuid"
+    source_test_buckets = "label_test_buckets"
+    source_partner = "label_partner"
+    source_subpartner = "label_subpartner"
+    source_partner_uid = "label_partner_uid"
+    source_device = "label_device"
+    source_terminal = "label_terminal"
+    source_is_transfer = false
+    label_ip = "label_ip"
+    label_region_id = 11
+    label_uid = "label_uid"
+    label_yandex_uid = "label_yandex_uid"
+    label_wizard_req_id = ""
+    label_serp_test_id = ""
+    label_ytp_referer = "proto_test_referer"
+
+#data from redir logs
+[[yt.output.labels.data]]
+    label = "proto_label_0"
+    source_req_id = "1234567890"
+    source_utm_source = "proto_label_utm_source"
+    source_utm_medium = "proto_label_utm_medium"
+    source_utm_campaign = "proto_label_utm_campaign"
+    source_utm_term = "proto_label_utm_term"
+    source_utm_content = "proto_label_utm_content"
+    source_from = "proto_label_from"
+    source_gclid = "proto_label_gclid"
+    source_icookie = "proto_label_icookie"
+    source_serp_uuid = "proto_label_serp_uuid"
+    source_test_buckets = "proto_label_test_buckets"
+    source_partner = "proto_label_partner"
+    source_subpartner = "proto_label_subpartner"
+    source_partner_uid = "proto_label_partner_uid"
+    source_device = "proto_label_device"
+    source_terminal = "proto_label_terminal"
+    source_is_transfer = true
+    label_ip = "proto_label_ip"
+    label_region_id = 66
+    label_uid = "proto_label_uid"
+    label_yandex_uid = "proto_label_yandexuid"
+    label_wizard_req_id = "proto_wizard_req_id"
+    label_serp_test_id = "proto_serp_test_id"
+    label_ytp_referer = "proto_test_referer"
+
+[yt.output.processed_labels]
+    path = "//home/tests/update_labels_trains/labels/processed_labels"
+    fields_to_skip = ["content_revision"]
+
+[[yt.output.processed_labels.data]]
+    table = "//home/tests/update_labels_trains/redir_logs/proto_table"

@@ -1,0 +1,54 @@
+juggler:
+  default:
+    namespace: market-deepmind
+    host: market_deepmind_tms-testing
+    children:
+      - NANNY%testing_market_mbo_category_tms_sas
+      - NANNY%testing_market_mbo_category_tms_vla
+    tags:
+      - market_testing
+      - market_rtc
+      - marketdeepmind
+      - marketmboctmsdeepmind
+      - marketmboctms
+      - testing
+      - market
+      - _market_
+    refresh_time: 30 # кол-во секунд, как часто проверки будут выполняться (но ручка дергатся будет чаще, так как запросы идут от нескольких ДЦ)
+    ttl: 900 # кол-во секунд, когда проверка считается актуальной (по истечении времени мониторинг загорится в NO_DATA)
+    flaps:
+      stable_time: 60 # кол-во секунд с начала флапа, когда мы ждем, что он закончится
+      critical_time: 0 # отключено
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    notifications:
+      - template_kwargs:
+          login: deepmind_testing_chat # https://t.me/joinchat/GQwSt1s_hh-CSYin
+          method: telegram
+          status:
+            - CRIT
+            - WARN
+            - OK
+        template_name: on_desc_change
+  checks:
+    - service: deepmindTmsMonitoring
+      active: https
+      children: [ ]
+      active_kwargs:
+        host: mbo-category-tms.tst.vs.market.yandex.net
+        path: /deepmindTmsMonitoring
+        ok_codes:
+          - 200
+        warn_codes:
+          - 201
+    - service: deepmindTrackerApproverMonitoring
+      active: https
+      children: [ ]
+      active_kwargs:
+        host: mbo-category-tms.tst.vs.market.yandex.net
+        path: /deepmindTrackerApproverMonitoring
+        ok_codes:
+          - 200
+        warn_codes:
+          - 201

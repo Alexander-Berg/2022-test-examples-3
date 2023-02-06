@@ -1,0 +1,40 @@
+{
+    "name": "partner-hermione-tests-config",
+    "version": "1.1.0",
+    "description": "place to store skip hermione tests",
+    "main": "skipped.js",
+    "scripts": {
+        "count": "node ./scripts/count.js",
+        "count:desktop": "npm run count -- partner_desktop",
+        "count:touch": "npm run count -- partner_touch",
+        "lint": "eslint *.js ./**/*.js",
+        "lint:fix": "eslint --fix *.js ./**/*.js",
+        "lint:skipped": "eslint skipped.js",
+        "lint:skipped:fix": "eslint --fix skipped.js",
+        "lint:skipped:report": "mkdir -p txt_reports; npm run lint:skipped > txt_reports/report.txt",
+        "test": "jest",
+        "test:report": "mkdir -p txt_reports; npm test -- --ci --preset ./configs/jestConfigCI.js > txt_reports/report.txt 2>&1; R=$?; cat txt_reports/report.txt; exit $R",
+        "tickets:closed:report": "mkdir -p txt_reports; node ./scripts/tickets-check.js > txt_reports/report.txt"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@github.yandex-team.ru:market/partner-hermione-tests-config.git"
+    },
+    "keywords": [
+        "configs"
+    ],
+    "author": "alexmoiseenko@yandex-team.ru",
+    "license": "ISC",
+    "devDependencies": {
+        "@yandex-int/stapi": "^0.4.1",
+        "asker-as-promised": "^2.0.0",
+        "eslint": "7.32.0",
+        "eslint-plugin-prettier": "^3.3.0",
+        "jest": "^25.1.0",
+        "lint-staged": "^10.5.3",
+        "prettier": "^2.2.1"
+    },
+    "lint-staged": {
+        "*.{js,json}": "prettier --write"
+    }
+}

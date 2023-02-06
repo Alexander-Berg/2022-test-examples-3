@@ -1,0 +1,19 @@
+- gather_facts: false
+  hosts: localhost
+  roles:
+  - checks:
+    - rasp_rzd_task.fetch_events_from_sqs
+    limits: '{{ crit_0_warn_0 }}'
+    flap: '{{ stable600critical2400 }}'
+    role: chat_only
+    nodata_mode: force_ok
+    rtime: 60
+  vars:
+    children:
+      - rasp_sandbox_testing
+    host: rasp_sandbox_testing
+    telegram_chats:
+      - 'rasp-achtung'
+  vars_files:
+  - ../vars/common.yml
+  - vars/rasp.yml

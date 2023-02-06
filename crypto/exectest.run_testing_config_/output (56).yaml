@@ -1,0 +1,92 @@
+logbroker:
+  pqlib:
+    threads_count: 2
+
+  consumer:
+    server: "logbroker.yandex.net"
+    port: 2135
+    topics:
+      - "crypta@test@siberia--describe-log"
+    client_id: "crypta/test/siberia/consumer"
+    max_memory_usage: 16777216
+    max_infly_requests: 3
+    max_count: 1
+    max_size: 1048576
+    use_lock_session: false
+    read_mirrored_partitions: true
+    max_uncommitted_count: 144
+
+  credentials:
+    use_secure_tvm: True
+    tvm:
+      client_tvm_id: 2017431
+
+  pqlib_log_name: pqlib
+
+worker:
+  threads: 24
+
+reader:
+  read_timeout_ms: 1000
+
+ydb:
+  endpoint: "ydb-ru-prestable.yandex.net:2135"
+  database: "/ru-prestable/cdp/prestable/cdp"
+  max_active_sessions: 1000
+
+graphite:
+  host: localhost
+  port: 42000
+  root: siberia_describer
+
+solomon:
+  project: crypta_siberia
+  service: describer
+  cluster: testing
+  labels:
+    dc: man
+
+describing_batch_size: 50
+stats_update_threshold: 10000
+max_user_processed_count: 100000
+
+client_options:
+  token: ""
+
+logs:
+  main:
+    level: "info"
+    targets:
+    - type: "stdout"
+    - type: "rotating"
+      file: "/logs/main.log"
+      max_file_size: 4194304
+      max_files: 1
+
+  worker:
+    level: "debug"
+    targets:
+    - type: "rotating"
+      file: "/logs/worker.log"
+      max_file_size: 4194304
+      max_files: 1
+  pqlib:
+    level: "debug"
+    targets:
+    - type: "rotating"
+      file: "/logs/pqlib.log"
+      max_file_size: 4194304
+      max_files: 1
+
+  graphite:
+    targets:
+    - type: rotating
+      file: "/logs/graphite.log"
+      max_file_size: 4194304
+      max_files: 1
+  solomon:
+    targets:
+    - type: rotating
+      file: "/logs/solomon.log"
+      max_file_size: 4194304
+      max_files: 1

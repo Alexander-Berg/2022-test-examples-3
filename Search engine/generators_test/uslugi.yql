@@ -1,0 +1,40 @@
+use hahn;
+
+PRAGMA yt.InferSchema = '1';
+
+$FormPriceList = Python3::FormPriceList(Callable<(Json?)->Json?>,
+@@
+def FormPriceList(data):
+    import json
+    data = json.loads(data)
+    result = []
+    for profession in data:
+        if "childrens" in profession:
+            for specialization in profession["childrens"]:
+                if "childrens" in specialization:
+                    for service in specialization["childrens"]:
+                        result.append({
+                            "name" : service.get("name"),
+                            "description" : service.get("attr_values").get("description"),
+                            "price" : service.get("attr_values").get("price"),
+                            "specialization" : specialization.get("name")
+                        })
+    return json.dumps(result)
+@@);
+
+insert into `{{ pre_processing_out }}`
+with truncate
+select
+    Yson::SerializeJson(Yson::From(AsStruct(
+        Yson::ConvertToString(Yson::YPath(Yson::ParseJson(JsonMessage), "/docs/0/ydo_worker_id/0/value")) as worker_id,
+        Yson::ConvertToString(Yson::YPath(Yson::ParseJson(JsonMessage), "/docs/0/rating/0/value")) as rating,
+        "https://yandex.ru/uslugi/profile/" || Yson::ConvertToString(Yson::YPath(Yson::ParseJson(Yson::ConvertToString(Yson::YPath(Yson::ParseJson(JsonMessage), "/docs/0/personal_info/0/value"))), "/_seoname/name")) as profile_url,
+        $FormPriceList(Yson::SerializeJson(Yson::ParseJson(Yson::ConvertToString(Yson::YPath(Yson::ParseJson(JsonMessage), "/docs/0/services_list/0/value"))))) as price_list,
+        Yson::ConvertToString(Yson::YPath(Yson::ParseJson(JsonMessage), "/docs/0/permalink/0/value")) as permalink,
+        "https://yandex.ru/uslugi/create-order?create_order=oneorg&text=&workerId=" || Yson::ConvertToString(Yson::YPath(Yson::ParseJson(JsonMessage), "/docs/0/ydo_worker_id/0/value")) as suggest_order_url
+    ))) as value,
+    Yson::ConvertToString(Yson::YPath(Yson::ParseJson(JsonMessage), "/docs/0/permalink/0/value")) as key
+from `//home/ydo/index/stable/current_kv`
+where 
+    Yson::SerializeJson(Yson::YPath(Yson::ParseJson(JsonMessage), "/docs/0/permalink")) is not null and
+    Yson::SerializeJson(Yson::YPath(Yson::ParseJson(JsonMessage), "/docs/0/ydo_worker_id/0/value")) is not null

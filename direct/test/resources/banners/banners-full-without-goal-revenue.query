@@ -1,0 +1,223 @@
+SELECT
+  B.bid AS bid,
+  B.pid AS pid,
+  B.cid AS cid,
+  first(B.statusBsSynced) AS statusBsSynced,
+  first(B.statusPostModerate) AS statusPostModerate,
+  first(B.type) AS type,
+  first(B.statusSitelinksModerate) AS statusSitelinksModerate,
+  first(B.BannerID) AS BannerID,
+  first(B.statusModerate) AS statusModerate,
+  first(B.phoneflag) AS phoneflag,
+  first(B.opts_geoflag) AS opts_geoflag,
+  first(B.opts_no_display_href) AS opts_no_display_href,
+  first(B.banner_type) AS banner_type,
+  first(B.LastChange) AS LastChange,
+  first(B.statusActive) AS statusActive,
+  first(B.title) AS title,
+  first(B.title_extension) AS title_extension,
+  first(B.body) AS body,
+  first(B.href) AS href,
+  first(B.domain_id) AS domain_id,
+  first(B.domain) AS domain,
+  first(B.reverse_domain) AS reverse_domain,
+  first(B.statusShow) AS statusShow,
+  first(B.statusArch) AS statusArch,
+  first(B.vcard_id) AS vcard_id,
+  first(B.flags) AS flags,
+  first(B.sitelinks_set_id) AS sitelinks_set_id,
+  first(B.bannersInternalTemplateId) AS bannersInternalTemplateId,
+  first(B.bannersInternalDescription) AS bannersInternalDescription,
+  IF(is_null(sum(S.Shows)), 0, sum(S.Shows)) AS shows,
+  IF(is_null(sum(S.Clicks)), 0, sum(S.Clicks)) AS clicks,
+  IF(is_null(sum(IF(S.CurrencyID = 0, ((S.Cost * 100) / 118), S.CostTaxFree))), 0, sum(IF(S.CurrencyID = 0, ((S.Cost * 100) / 118), S.CostTaxFree))) AS cost,
+  IF(is_null(sum(S.CostCur)), 0, sum(S.CostCur)) AS costWithTax,
+  IF(is_null(sum(S.PriceCur)), 0, sum(S.PriceCur)) AS revenue,
+  IF(is_null(sum(S.GoalsNum)), 0, sum(S.GoalsNum)) AS goals,
+  IF(is_null(sum(GS1.WithShowsGoalsNum)), 0, sum(GS1.WithShowsGoalsNum)) AS goalsWithShows1,
+  IF(shows > 0, ((cost / shows) * 1000), 0) AS cpmPrice,
+  IF(is_null(sum(S.FirstPageClicks)), 0, sum(S.FirstPageClicks)) AS firstPageClicks,
+  IF(is_null(sum(S.FirstPageShows)), 0, sum(S.FirstPageShows)) AS firstPageShows,
+  IF(is_null(sum(S.FirstPageSumPosClicks)), 0, sum(S.FirstPageSumPosClicks)) AS firstPageSumPosClicks,
+  IF(is_null(sum(S.FirstPageSumPosShows)), 0, sum(S.FirstPageSumPosShows)) AS firstPageSumPosShows,
+  IF(is_null(sum(IF(S.IsRMP, S.Clicks, S.SessionNum))), 0, sum(IF(S.IsRMP, S.Clicks, S.SessionNum))) AS sessions,
+  IF(is_null(sum(S.SessionNumLimited)), 0, sum(S.SessionNumLimited)) AS sessionsLimited,
+  IF(is_null(sum(S.Bounces)), 0, sum(S.Bounces)) AS bounces,
+  IF(is_null(sum(S.SessionDepth)), 0, sum(S.SessionDepth)) AS sessionDepth,
+  IF(shows > 0, ((clicks * 100000000) / shows), 0) AS ctr,
+  IF(clicks > 0, (cost / clicks), 0) AS avgClickCost,
+  IF(firstPageShows > 0, ((firstPageSumPosShows * 1000000) / firstPageShows), 0) AS avgShowPosition,
+  IF(firstPageClicks > 0, ((firstPageSumPosClicks * 1000000) / firstPageClicks), 0) AS avgClickPosition,
+  IF(sessionsLimited > 0, ((bounces * 100000000) / sessionsLimited), 0) AS bounceRate,
+  IF(sessionsLimited > 0, ((sessionDepth * 1000000) / sessionsLimited), 0) AS avgDepth,
+  IF(clicks > 0, ((goals * 100000000) / clicks), 0) AS conversionRate,
+  IF(goals > 0, (cost / goals), null) AS avgGoalCost,
+  IF((
+    cost > 0
+    AND revenue > 0
+  ), ((double((revenue - cost)) * 1000000.0) / double(cost)), null) AS profitability,
+  IF((
+    cost > 0
+    AND revenue > 0
+  ), ((double(cost) * 100000000.0) / double(revenue)), null) AS crr,
+  IF(is_null(sum(GS1.GoalsNum)), 0, sum(GS1.GoalsNum)) AS goals1,
+  IF(clicks > 0, ((goals1 * 100000000) / clicks), 0) AS conversionRate1,
+  IF(goals1 > 0, (cost / goals1), 0) AS costPerAction1,
+  0 AS revenue1
+FROM yt.bannerstable_direct AS B
+  LEFT OUTER JOIN yt.DirectPhraseStatV2_bs AS S
+    ON (
+      (B.cid, B.pid, B.bid) = (S.ExportID, S.GroupExportID, S.DirectBannerID)
+      AND S.IsFlat = true
+      AND S.UpdateTime = 1546290000
+    )
+  LEFT OUTER JOIN yt.DirectPhraseGoalsStat_bs AS GS1
+    ON (S.ExportID, S.GroupExportID, S.UpdateTime, S.PhraseExportID, S.PhraseID, S.DirectBannerID, S.GoalContextID, S.IsFlat, S.IsMobile, S.CurrencyID, S.IsRMP, IF(is_null(S.AutobudgetStrategyID), -1, S.AutobudgetStrategyID), 1) = (GS1.ExportID, GS1.GroupExportID, GS1.UpdateTime, GS1.PhraseExportID, GS1.PhraseID, GS1.DirectBannerID, GS1.GoalContextID, GS1.IsFlat, GS1.IsMobile, GS1.CurrencyID, GS1.IsRMP, IF(is_null(GS1.AutobudgetStrategyID), -1, GS1.AutobudgetStrategyID), GS1.GoalID)
+WHERE (
+  B.cid IN (44)
+  AND B.pid IN (33)
+  AND B.bid IN (11)
+  AND NOT(B.bid IN (22))
+  AND (B.cid, B.pid, B.bid) IN ((10, 20, 30))
+  AND B.banner_type IN ('image_ad')
+  AND is_substr('a',lower(B.title))
+  AND NOT(is_substr('f',lower(B.title)))
+  AND NOT(lower(B.title) IN ('c'))
+  AND is_substr('d',lower(B.title_extension))
+  AND lower(B.title_extension) IN ('e')
+  AND NOT(lower(B.title_extension) IN ('g'))
+  AND is_substr('h',lower(B.body))
+  AND lower(B.body) IN ('i')
+  AND NOT(is_substr('j',lower(B.body)))
+  AND NOT(lower(B.body) IN ('k'))
+  AND is_substr('l',lower(B.href))
+  AND lower(B.href) IN ('m')
+  AND NOT(is_substr('n',lower(B.href)))
+  AND NOT(lower(B.href) IN ('o'))
+  AND is_substr('p',lower(B.bannersInternalDescription))
+  AND lower(B.bannersInternalDescription) IN ('q')
+  AND NOT(is_substr('r',lower(B.bannersInternalDescription)))
+  AND NOT(lower(B.bannersInternalDescription) IN ('s'))
+  AND (
+     (is_substr('t',regex_replace_all(' ',lower(B.title),' ')))
+     OR (is_substr('t',regex_replace_all(' ',lower(B.title_extension),' ')))
+     OR (is_substr('t',regex_replace_all(' ',lower(B.body),' ')))
+  )
+  AND B.bannersInternalTemplateId IN (55)
+  AND B.BannerID IN (66)
+  AND NOT(B.BannerID IN (77))
+  AND is_substr('88',numeric_to_string(B.BannerID))
+  AND NOT((
+    is_null(B.images_image_hash)
+    AND is_null(B.banner_images_image_hash)
+    AND is_null(B.creative_id)
+  ))
+  AND NOT(is_null(B.sitelinks_set_id))
+  AND NOT(is_null(B.vcard_id))
+  AND (
+    (
+      B.statusModerate IN (
+        'Sending', 'Sent', 'Ready'
+      )
+      AND B.statusPostModerate IN (
+        'No', 'Rejected'
+      )
+    )
+    OR (
+      B.banner_type IN (
+        'image_ad', 'mcbanner'
+      )
+      AND B.bannerImagesStatusModerate IN (
+        'Ready', 'Sending', 'Sent'
+      )
+    )
+    OR (
+      B.banner_type IN (
+        'image_ad', 'cpc_video', 'cpm_banner', 'performance'
+      )
+      AND B.bannersPerformanceStatusModerate IN (
+        'Ready', 'Sending', 'Sent'
+      )
+    )
+  )
+  AND B.statusArch = 'Yes'
+)
+GROUP BY
+  bid,
+  pid,
+  cid,
+  B.cid_hash,
+  B.__shard__
+HAVING (
+  cost >= 1000000
+  AND cost <= 2000000
+  AND costWithTax >= 1000000
+  AND costWithTax <= 2000000
+  AND shows >= 3
+  AND shows <= 4
+  AND clicks >= 5
+  AND clicks <= 6
+  AND ctr >= 7000000
+  AND ctr <= 8000000
+  AND avgClickCost >= 9000000
+  AND avgClickCost <= 10000000
+  AND avgShowPosition >= 11000000
+  AND avgShowPosition <= 12000000
+  AND avgClickPosition >= 13000000
+  AND avgClickPosition <= 14000000
+  AND bounceRate >= 15000000
+  AND bounceRate <= 16000000
+  AND conversionRate >= 17000000
+  AND conversionRate <= 18000000
+  AND avgGoalCost >= 19000000
+  AND avgGoalCost <= 20000000
+  AND goals >= 21
+  AND goals <= 22
+  AND avgDepth >= 23000000
+  AND avgDepth <= 24000000
+  AND profitability >= 25000000
+  AND profitability <= 26000000
+  AND revenue >= 27000000
+  AND revenue <= 28000000
+  AND goals1 >= 2
+  AND goals1 <= 3
+  AND conversionRate1 >= 4000000
+  AND conversionRate1 <= 5000000
+  AND costPerAction1 >= 6000000
+  AND costPerAction1 <= 7000000
+)
+ORDER BY
+  bid DESC,
+  pid DESC,
+  cid DESC,
+  banner_type DESC,
+  statusModerate DESC,
+  title DESC,
+  title_extension DESC,
+  domain DESC,
+  href DESC,
+  LastChange DESC,
+  cost DESC,
+  costWithTax DESC,
+  shows DESC,
+  clicks DESC,
+  ctr DESC,
+  revenue DESC,
+  goals DESC,
+  cpmPrice DESC,
+  profitability DESC,
+  crr DESC,
+  avgDepth DESC,
+  avgGoalCost DESC,
+  avgClickCost DESC,
+  avgShowPosition DESC,
+  avgClickPosition DESC,
+  bounceRate DESC,
+  conversionRate DESC,
+  costPerAction DESC,
+  goals1 DESC,
+  conversionRate1 DESC,
+  costPerAction1 DESC,
+  bannersInternalTemplateId DESC,
+  bannersInternalDescription DESC
+LIMIT 1000

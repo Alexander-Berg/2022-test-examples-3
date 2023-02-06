@@ -1,0 +1,374 @@
+#%RAML 0.8
+title: hound
+baseUri: https://{host}
+baseUriParameters:
+  host:
+    default: localhost
+traits:
+- macs-handler:
+    queryParameters:
+      uid:
+        description: идентификатор пользователя
+        required: true
+      dbtype:
+        description: стратегия похода в базу
+        enum: ["master", "replica"]
+        required: false
+      caller:
+        description: пользователь, под которым идти в базу
+        required: false
+      connection_id:
+        required: false
+- pagination:
+    queryParameters:
+      # один из параметров first и page необходимо указать
+      first:
+        description: начиная с какой выдавать записи; нумерация с нуля
+        required: false
+      page:
+        description: начиная с какой выдавать страницы; нумерация с единицы
+        required: false
+      count:
+        description: кол-во записей в ответе
+        required: true
+- sorted:
+    queryParameters:
+      sort_type:
+        description: порядок сортировки записей в ответе
+        required: false
+
+
+/mimes:
+  get:
+    description: возвращает MIME-part'ы писем корневой части и windat-аттачей
+    is: [macs-handler]
+    queryParameters:
+      mid:
+        description: mid письма
+        repeat: true
+      with_mulca:
+        description: парсить ли XML старых писем
+        required: false
+      with_inline:
+        description: парсить ли вложенные парты message/rfc822
+        required: false
+
+/attach_sid:
+  post:
+    body:
+      application/x-www-form-urlencoded:
+        formParameters:
+          uid:
+            description: uid пользователя
+          sids:
+            description: список сидов
+
+/folders:
+  post:
+  get:
+    description: возвращает список папок пользователя
+    is: [macs-handler]
+
+/yamail_status:
+  post:
+  get:
+    description: возвращает статус базы пользователя (read_only, read_write)
+    is: [macs-handler]
+
+/reset_fresh_counter:
+  post:
+  get:
+    description: сбрасывает счетчик fresh у пользователя
+    is: [macs-handler]
+
+/reset_unvisited:
+  post:
+  get:
+    description: сбрасывает у папки флаг unvisited
+    is: [macs-handler]
+    queryParameters:
+      fid:
+        description: идентификатор папки
+        required: true
+
+/folders_counters:
+  post:
+  get:
+    description: возвращает счётчики новых и общего кол-ва писем по папкам
+    is: [macs-handler]
+
+/labels:
+  post:
+  get:
+    description: возвращает список меток пользователя
+    is: [macs-handler]
+
+/mailbox_revision:
+  post:
+  get:
+    description: возвращает ревизию почтового ящика
+    is: [macs-handler]
+
+/counters:
+  post:
+  get:
+    description: возвращает счётчики свежих и непрочитанных писем
+    is: [macs-handler]
+
+
+#############
+#   Треды   #
+#############
+
+/threads:
+  post:
+  get:
+    description: возвращает список тредов с их участниками
+    is: [macs-handler]
+    queryParameters:
+      tids:
+        description: множество идентификаторов тредов
+        required: true
+        repeat: true
+
+/threads_by_folder:
+  post:
+  get:
+    description: возвращает список писем с тредами
+    is: [macs-handler, pagination]
+    queryParameters:
+      fid:
+        description: идентификатор папки
+        required: true
+      since:
+        description: unix timestamp - левая граница полуинтервала [since, till) для фильтра по received_date
+        required: false
+      till:
+        description: unix timestamp - правая граница полуинтервала [since, till) для фильтра по received_date
+        required: false
+
+/threads_in_folder_with_pins:
+  post:
+  get:
+    description: возвращает список писем с тредами, сначала идут запиненные
+    is: [macs-handler, pagination]
+    queryParameters:
+      fid:
+        description: идентификатор папки
+        required: true
+
+/threads_info:
+  post:
+  get:
+    description: возвращает список тредов в виде списка писем с доп. данными
+    is: [macs-handler]
+    queryParameters:
+      tid:
+        description: множество идентификаторов тредов
+        required: true
+        repeat: true
+
+
+#############
+#   Поиск   #
+#############
+
+/filter_search:
+  post:
+  get:
+    description: служит для фильтрации списка писем используя заданные фильтры
+    is: [macs-handler]
+    queryParameters:
+      mids:
+        description: множество идентификаторов фильтруемых писем
+        repeat: true
+        required: true
+      fids:
+        description: множество идентификаторов папок; если задан, то выдавать только письма в заданных папках
+        repeat: true
+        required: false
+      lids:
+        description: множество идентификаторов меток; если задан, то выдавать только письма с заданными метками
+        repeat: true
+        required: false
+      unread:
+        description: если не пуст, то выдавать только непрочитанные письма
+        required: false
+      only_attachments:
+        description: если не пуст, то выдавать письма только с вложениями
+        required: false
+      only_useful:
+        description: если не пуст, то выдавать письма только из пользовательских папок и папки inbox
+        required: false
+      incl_folders:
+        description: символы папок, которые надо включить в запрос
+        required: false
+      excl_folders:
+        description: символы папок, которые надо исключить из запроса
+        required: false
+      order:
+        description: порядок сортировки в ответе
+        enum: ["default", "date", "date1", "subject", "subject1", "from", "from1", "size", "size1"]
+        required: false
+      folder_set:
+        description: дополнительные ограничения для тимовской почты на местоположение писем
+        enum: ["default", "private_subscribed", "private_opened_allowed", "opened_allowed"]
+        required: false
+      full_folders_and_labels:
+        description: выдавать ли полную информацию о папках и метках
+        required: false
+      need_mailbox_revision:
+        description: выдавать ли дополнительно ревизию всего ящика
+        required: false
+
+
+##############
+#   Письма   #
+##############
+
+/first_envelope_date:
+  post:
+  get:
+    description: возвращает время первого письма папки
+    is: [macs-handler]
+    queryParameters:
+      fid:
+        description: идентификатор папки
+        required: true
+
+/messages_by_thread:
+  post:
+  get:
+    description: возвращает письма в заданном треде
+    is: [macs-handler, pagination, sorted]
+    queryParameters:
+      tid:
+        description: идентификатор треда
+        required: true
+
+/messages_by_thread_with_pins:
+  post:
+  get:
+    description: возвращает письма в заданном треде, сначала идут запиненные
+    is: [macs-handler, pagination]
+    queryParameters:
+      tid:
+        description: идентификатор треда
+        required: true
+
+/messages_by_label:
+  post:
+  get:
+    description: возвращает письма с заданной меткой
+    is: [macs-handler, pagination, sorted]
+    queryParameters:
+      lid:
+        description: идентификатор метки
+        required: true
+
+/messages_by_folder:
+  post:
+  get:
+    description: возвращает письма в заданной папке
+    is: [macs-handler, pagination, sorted]
+    queryParameters:
+      fid:
+        description: идентификатор папки
+        required: true
+      since:
+        description: unix timestamp - левая граница полуинтервала [since, till) для фильтра по received_date
+        required: false
+      till:
+        description: unix timestamp - правая граница полуинтервала [since, till) для фильтра по received_date
+        required: false
+
+/messages_unread_by_folder:
+  post:
+  get:
+    description: возвращает непрочитанные письма в заданной папке
+    is: [macs-handler, pagination, sorted]
+    queryParameters:
+      fid:
+        description: идентификатор папки
+        required: true
+
+/messages_unread:
+  post:
+  get:
+    description: возвращает непрочитанные письма пользователя
+    is: [macs-handler, pagination, sorted]
+
+/messages_unread_useful:
+  post:
+  get:
+    description: возвращает непрочитанные письма пользователя из инбокса и пользовательских папок
+    is: [macs-handler]
+    queryParameters:
+      count:
+        description: кол-во записей в ответе
+        required: false
+
+/messages_with_attaches:
+  post:
+  get:
+    description: возвращает письма пользователя с вложениями
+    is: [macs-handler, pagination, sorted]
+
+/nearest_messages:
+  post:
+  get:
+    description: возвращает письма пользователя, которые находятся рядом с заданным
+    is: [macs-handler, sorted]
+    queryParameters:
+      mid:
+        description: mid опорного письма
+        required: true
+      deviation:
+        description: кол-во сообщений до и после опорного
+        required: true
+
+/in_reply_to:
+  post:
+  get:
+    description: возвращает письма-ответы для заданного
+    is: [macs-handler]
+    queryParameters:
+      message_id:
+        description: message_id заданного письма
+        required: true
+
+/messages_in_folder_with_pins:
+  post:
+  get:
+    description: возвращает письма в заданной папке, сначала идут запиненные
+    is: [macs-handler, pagination, sorted]
+    queryParameters:
+      fid:
+        description: идентификатор папки
+        required: true
+
+/messages_by_folder_without_label:
+  post:
+  get:
+    description: возвращает письма в заданной папке без указанной метки
+    is: [macs-handler, pagination, sorted]
+    queryParameters:
+      fid:
+        description: идентификатор папки
+        required: true
+      lid:
+        description: идентификатор метки, письма с которой нужно исключить
+        required: true
+
+/messages_by_message_id:
+  post:
+  get:
+    description: возвращает mid'ы писем по message_id [и fid'у]
+    is: [macs-handler]
+    queryParameters:
+      msgid:
+        description: message_id письма
+        required: true
+      fid:
+        description: идентификатор папки
+        required: false

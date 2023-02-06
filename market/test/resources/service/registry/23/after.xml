@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <fulfillment_service
+        ID="100"
+        NAME="test"
+        STATUS="1"
+        TYPE="1"
+    />
+
+    <SUPPLIER
+        ID="444444"
+        NAME="supplier1"
+    />
+
+    <SHOP_REQUEST ID="1"
+                  SERVICE_ID="100"
+                  SUPPLIER_ID="444444"
+                  STATUS="7"
+                  TYPE="0"
+                  ITEMS_TOTAL_COUNT="6"
+                  ITEMS_TOTAL_DEFECT_COUNT="1"
+                  ITEMS_TOTAL_FACT_COUNT="3"
+                  ITEMS_TOTAL_SURPLUS_COUNT="0"
+                  ITEMS_TOTAL_SHORTAGE_COUNT="3"
+                  ITEMS_TOTAL_SURPLUS_COUNT_WITH_DEFECT="1"
+                  ITEMS_TOTAL_SHORTAGE_COUNT_WITH_DEFECT="3"
+                  HAS_ANOMALY="true"
+    />
+
+    <!-- requesting-update  -->
+    <shop_request
+        ID="2"
+        PARENT_REQUEST_ID="1"
+        SUPPLIER_ID="444444"
+        SERVICE_ID="100"
+        STATUS="10"
+        TYPE="19"
+        ITEMS_TOTAL_COUNT="6"
+    />
+
+    <REQUEST_ITEM
+        ID="1"
+        REQUEST_ID="1"
+        SUPPLIER_ID="444444"
+        ARTICLE="ssku123"
+        COUNT="3"
+        FACT_COUNT="3"
+        DEFECT_COUNT="1"
+        SURPLUS_COUNT="0"
+        SHORTAGE_COUNT="0"
+        SURPLUS_COUNT_WITH_DEFECT="1"
+        SHORTAGE_COUNT_WITH_DEFECT="0"
+    />
+
+    <REQUEST_ITEM
+        ID="2"
+        REQUEST_ID="1"
+        SUPPLIER_ID="444444"
+        ARTICLE="ssku456"
+        COUNT="3"
+        FACT_COUNT="0"
+        DEFECT_COUNT="0"
+        SURPLUS_COUNT="0"
+        SHORTAGE_COUNT="3"
+        SURPLUS_COUNT_WITH_DEFECT="0"
+        SHORTAGE_COUNT_WITH_DEFECT="3"
+    />
+
+    <REQUEST_ITEM
+        ID="3"
+        REQUEST_ID="2"
+        SUPPLIER_ID="444444"
+        ARTICLE="ssku123"
+        COUNT="3"
+        FACT_COUNT="0"
+        DEFECT_COUNT="0"
+    />
+
+    <REQUEST_ITEM
+        ID="4"
+        REQUEST_ID="2"
+        SUPPLIER_ID="444444"
+        ARTICLE="ssku456"
+        COUNT="3"
+        FACT_COUNT="0"
+        DEFECT_COUNT="0"
+    />
+
+    <registry id="1"
+              request_id="1"
+              type="1"
+              unit_counts='[
+              {"counts": [{"type": "FIT", "count": 1}], "unitType": 0},
+              {"counts": [{"type": "ANOMALY", "count": 1}], "unitType": 10},
+              {"counts": [{"type": "FIT", "count": 3}, {"type": "DEFECT", "count": 1}], "unitType": 20}]'
+    />
+
+    <registry_unit id="1" registry_id="1" type="0"
+                   identifiers='{"parts": [{"type": "PALLET_ID", "value": "PL1001"}]}'
+                   parents='[]'
+                   meta='{"description": "Some pallet"}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 1, "relatedUnitIds": [{}]}]}'/>
+    <registry_unit id="2" registry_id="1" type="10"
+                   identifiers='{"parts": [{"type": "ORDER_ID", "value": "12345"}, {"type": "BOX_ID", "value": "P001"}]}'
+                   parents='[{"parts": [{"type": "PALLET_ID", "value": "PL1001"}]}]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "ANOMALY", "count": 1, "relatedUnitIds": [{}]}]}'/>
+    <registry_unit id="3" registry_id="1" type="20"
+                   identifiers='{"parts": [{"type": "SHOP_SKU", "value": "ssku123"}, {"type": "VENDOR_ID", "value": "444444"}]}'
+                   parents='[]'
+                   meta='{"name": "name", "korobyte": {"width": 20, "height": 10, "length": 30}, "lifeTime": 10, "hasLifeTime": true,
+                   "supplyPrice": 100.0, "vendorCodes": ["vendorCode1", "vendorCode2"], "packageNumInSpike": 5}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 3, "relatedUnitIds": [{"unitIds": [{"parts": [{"type": "CIS", "value": "FIT CIS_ID"}]}, {"parts": [{"type": "CIS", "value": "FIT CIS_ID 2"}]}, {"parts": [{"type": "CIS", "value": "FIT CIS_ID 3"}]}]}]}]}'/>
+    <registry_unit id="4" registry_id="1" type="20"
+                   identifiers='{"parts": [{"type": "SHOP_SKU", "value": "ssku123"}, {"type": "VENDOR_ID", "value": "444444"}]}'
+                   parents='[{"parts": [{"type": "ORDER_ID", "value": "12345"}, {"type": "BOX_ID", "value": "P001"}]}]'
+                   meta='{"name": "name", "korobyte": {"width": 20, "height": 10, "length": 30}, "lifeTime": 10, "hasLifeTime": true,
+                   "supplyPrice": 100.0, "vendorCodes": ["vendorCode1", "vendorCode2"], "packageNumInSpike": 5}'
+                   unit_counts='{"unitCounts": [{"type": "DEFECT", "count": 1, "relatedUnitIds": [{"unitIds": [{"parts": [{"type": "CIS", "value": "UNFIT CIS_ID"}]}]}]}]}'/>
+
+    <unit_identifier ID="1" item_id="3" type="DECLARED"
+                     identifiers='{"parts": [{"type": "CIS", "value": "FIT CIS_ID"}, {"type": "CIS", "value": "FIT CIS_ID 2"}, {"type": "CIS", "value": "FIT CIS_ID 3"}]}'/>
+    <unit_identifier ID="2" item_id="4" type="DECLARED"
+                     identifiers='{"parts": [{"type": "CIS", "value": "FIT CIS_ID 4"}, {"type": "CIS", "value": "FIT CIS_ID 5"}, {"type": "CIS", "value": "FIT CIS_ID 6"}]}'/>
+
+    <unit_identifier ID="3" item_id="1" type="DECLARED"
+                     identifiers='{"parts": [{"type": "CIS", "value": "FIT CIS_ID"}, {"type": "CIS", "value": "FIT CIS_ID 2"}, {"type": "CIS", "value": "FIT CIS_ID 3"}]}'/>
+    <unit_identifier ID="4" item_id="2" type="DECLARED"
+                     identifiers='{"parts": [{"type": "CIS", "value": "FIT CIS_ID 4"}, {"type": "CIS", "value": "FIT CIS_ID 5"}, {"type": "CIS", "value": "FIT CIS_ID 6"}]}'/>
+
+    <unit_identifier ID="5" item_id="1" type="RECEIVED"
+                     identifiers='{"parts": [{"type": "CIS", "value": "FIT CIS_ID"}, {"type": "CIS", "value": "FIT CIS_ID 2"}, {"type": "CIS", "value": "FIT CIS_ID 3"}]}'/>
+
+    <unit_identifier ID="6" item_id="1" type="RECEIVED_UNFIT"
+                     identifiers='{"parts": [{"type": "CIS", "value": "UNFIT CIS_ID"}]}'/>
+
+</dataset>

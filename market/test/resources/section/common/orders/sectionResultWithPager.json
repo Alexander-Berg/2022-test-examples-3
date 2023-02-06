@@ -1,0 +1,73 @@
+{
+    "widget": {
+        "type": "UserOrdersListSection",
+        "id": "my-orders-test-section",
+        "actions": {
+            "onShow": {
+                "type": "SendAnalyticsAction",
+                "events": [
+                    {
+                        "name": "CMS-PAGE_UNKNOWN_VISIBLE",
+                        "type": "AppMetrica",
+                        "once": true,
+                        "key": "w-my-orders-test-section",
+                        "params": [
+                            "w-my-orders-test-section",
+                            "w-my-orders-test-section-1"
+                        ]
+                    }
+                ]
+            }
+        },
+        "loadingSnippet": {
+            "id": "divkit_order_loading_snippet",
+            "divData": {
+                "log_id": "my_order_loading_skeleton",
+                "states": [
+                    {
+                        "div": {
+                            "type": "loading_order_with_separator",
+                            "visibility_action": {
+                                "log_id": "LoadMoreOrders_orders.page_1_orders.archived_true_1647341610000",
+                                "visibility_duration": 0,
+                                "visibility_percentage": 1
+                            }
+                        },
+                        "state_id": 0
+                    }
+                ]
+            },
+            "actions": {
+                "LoadMoreOrders_orders.page_1_orders.archived_true_1647341610000": {
+                    "type": "MergeSectionAction",
+                    "sectionId": "my-orders-test-section",
+                    "params": {
+                        "nextPageTokenTest": 2
+                    }
+                }
+            },
+            "@c": "DivkitSnippet"
+        }
+    },
+    "analytics": {
+        "w-my-orders-test-section": {
+            "cmsPageId": 123,
+            "widgetId": "my-orders-test-section",
+            "name": "UserOrdersListSection",
+            "is_login": false,
+            "is_plus_user": false,
+            "widget_position": 0
+        },
+        "w-my-orders-test-section-1": {
+            "resolvers": [
+                {
+                    "resolver": "someResolver",
+                    "version": "v1",
+                    "key": "value",
+                    "param": "target"
+                }
+            ]
+        }
+    },
+    "toDivkit": true
+}

@@ -1,0 +1,1 @@
+TRUNCATE possible_order_change

@@ -1,0 +1,20 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+			http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+    <changeSet id="uc_generator" author="imelnikov" context="tables">
+        <createTable tableName="UC_GENERATOR">
+            <column name="ID" type="NUMBER">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR2(4000 BYTE)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="uc_generator_data" author="imelnikov" runOnChange="true" context="tables-data">
+        <loadUpdateData tableName="UC_GENERATOR" primaryKey="ID" file="UC_GENERATOR.csv" relativeToChangelogFile="true" quotchar="&quot;">
+            <column name="ID" type="NUMERIC"/>
+            <column name="DESCRIPTION" type="STRING"/>
+        </loadUpdateData>
+    </changeSet>
+</databaseChangeLog>

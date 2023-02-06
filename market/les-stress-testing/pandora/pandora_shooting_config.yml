@@ -1,0 +1,54 @@
+metaconf:
+  package: yandextank.plugins.MetaConf
+  firestarter: {secret: sec-01g0p9caj7w78sppgz15bw40my, owner: robot-market-les, tank: 'nanny:production_yandex_tank'}
+  enabled: true
+pandora:
+  config_content:
+    pools:
+      - id: les-stress-testing
+        gun:
+          type: les-stress-testing
+          target: sqs.yandex.net:8771
+          global: 600
+        ammo:
+          type: example_provider
+          source:
+            type: file
+            path: ./ammo.json
+        result:
+          type: phout
+          destination: ./phout.log
+        rps:
+          - {duration: 60s, type: const, ops: 400}
+        startup:
+          - {type: once, times: 30}
+    log:
+      level: error
+    monitoring:
+      expvar:
+        enabled: true
+        port: 1234
+  enabled: true
+  pandora_cmd: https://proxy.sandbox.yandex-team.ru/3009341590
+  resources:
+    - dst: ./ammo.json
+      src: https://proxy.sandbox.yandex-team.ru/3178408139
+phantom:
+  enabled: false
+uploader:
+  api_address: https://lunapark.yandex-team.ru/
+  enabled: true
+  job_dsc: pandora_fire
+  job_name: pandora_fire
+  operator: robot-market-les
+  package: yandextank.plugins.DataUploader
+  task: DELIVERY-41982
+  ver: ""
+solomon:
+  enabled: true
+  package: yandextank.plugins.Solomon
+  panels:
+    sqs:
+      project: kikimr
+      sensors:
+        - '{project="kikimr", cluster="sqs", service="kikimr_sqs", host="cluster", user="logistics-event-service-ymq-testing", queue="stress-1_in|stress-2_in|stress-3_in"}'

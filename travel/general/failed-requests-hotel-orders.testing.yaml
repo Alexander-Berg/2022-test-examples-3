@@ -1,0 +1,13 @@
+_service_add: -{{labels.uri}}
+description: User request failed with 5xx
+groupByLabels:
+- uri
+type:
+  expression:
+    checkExpression: ''
+    program: |
+      let errors_vector = {project='travel', service='api', host='cluster', sensor='http.server.requestsMs.count.rate', cluster='api_{{ENV}}', status='5xx', method='GET|POST', exception='_ALL_', is_robot_request='-', new_search='-', uri='{{hotel_orders_urls}}'};
+      let errors = group_lines('sum', errors_vector);
+      let total_errors = integrate(errors);
+
+      alarm_if(total_errors > 1000000000);

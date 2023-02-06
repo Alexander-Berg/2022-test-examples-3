@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <environment_param name="send-secondary-unredeemed-divergence-act" value="true" />
+    <environment_param
+        name="request-types-with-enabled-status-change-publishing-to-logbroker"
+        value="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11"
+    />
+
+    <fulfillment_service
+        ID="121"
+        NAME="test"
+        STATUS="1"
+        TYPE="1"
+    />
+
+    <SUPPLIER
+        ID="1"
+        NAME="supplier1"
+    />
+
+<!--  Обычная поставка, должна финализироваться  -->
+    <SHOP_REQUEST
+        ID="1"
+        SUPPLIER_ID="1"
+        SERVICE_ID="121"
+        SERVICE_REQUEST_ID="11"
+        STATUS="7"
+        TYPE="0"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        COMMENT="test"
+        ITEMS_TOTAL_COUNT="4"
+        ITEMS_TOTAL_DEFECT_COUNT="0"
+        ITEMS_TOTAL_FACT_COUNT="4"
+        DETAILS_LOADED="true"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="1"
+        ARTICLE="art1"
+        BARCODES="11;22"
+        COUNT="4"
+        FACT_COUNT="4"
+        DEFECT_COUNT="0"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="10.40"
+        VAT_RATE="2"
+    />
+
+
+<!--  Трансфер на годный сток, должен финализироваться  -->
+    <SHOP_REQUEST
+        ID="2"
+        SUPPLIER_ID="1"
+        SERVICE_ID="121"
+        SERVICE_REQUEST_ID="11"
+        STATUS="7"
+        TYPE="3"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        COMMENT="test"
+        ITEMS_TOTAL_COUNT="4"
+        ITEMS_TOTAL_DEFECT_COUNT="0"
+        ITEMS_TOTAL_FACT_COUNT="4"
+        DETAILS_LOADED="true"
+        TO_STOCK_TYPE="0"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="2"
+        ARTICLE="art1"
+        BARCODES="11;22"
+        COUNT="4"
+        FACT_COUNT="4"
+        DEFECT_COUNT="0"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="10.40"
+        VAT_RATE="2"
+    />
+
+<!--  Трансфер на утилизацию без связанных изъятий, не должен финализироваться  -->
+    <SHOP_REQUEST
+        ID="3"
+        SERVICE_ID="121"
+        SERVICE_REQUEST_ID="11"
+        SUPPLIER_ID="1"
+        STATUS="7"
+        TYPE="3"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        COMMENT="test"
+        ITEMS_TOTAL_COUNT="4"
+        ITEMS_TOTAL_DEFECT_COUNT="0"
+        ITEMS_TOTAL_FACT_COUNT="4"
+        DETAILS_LOADED="true"
+        TO_STOCK_TYPE="4"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="3"
+        ARTICLE="art1"
+        BARCODES="11;22"
+        COUNT="4"
+        FACT_COUNT="4"
+        DEFECT_COUNT="0"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="10.40"
+        VAT_RATE="2"
+    />
+
+<!--  REJECTED_BY_SERVICE изъятие утилизации  -->
+    <SHOP_REQUEST
+        ID="4"
+        SERVICE_ID="121"
+        SERVICE_REQUEST_ID="11"
+        SUPPLIER_ID="1"
+        STATUS="4"
+        TYPE="12"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        COMMENT="test"
+        ITEMS_TOTAL_COUNT="4"
+    />
+
+<!--  INVALID изъятие утилизации  -->
+    <SHOP_REQUEST
+        ID="5"
+        SERVICE_ID="121"
+        SERVICE_REQUEST_ID="11"
+        SUPPLIER_ID="1"
+        STATUS="5"
+        TYPE="12"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        COMMENT="test"
+        ITEMS_TOTAL_COUNT="4"
+    />
+
+<!--  CANCELLED изъятие утилизации  -->
+    <SHOP_REQUEST
+        ID="6"
+        SERVICE_ID="121"
+        SERVICE_REQUEST_ID="11"
+        SUPPLIER_ID="1"
+        STATUS="8"
+        TYPE="12"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        COMMENT="test"
+        ITEMS_TOTAL_COUNT="4"
+    />
+
+<!--  READY_FOR_WITHDRAW изъятие утилизации  -->
+    <SHOP_REQUEST
+        ID="7"
+        SERVICE_ID="121"
+        SERVICE_REQUEST_ID="11"
+        SUPPLIER_ID="1"
+        STATUS="11"
+        TYPE="12"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        COMMENT="test"
+        ITEMS_TOTAL_COUNT="4"
+    />
+
+<!--  PROCESSED изъятие утилизации без загруженных деталей  -->
+    <SHOP_REQUEST
+        ID="8"
+        SERVICE_ID="121"
+        SERVICE_REQUEST_ID="11"
+        SUPPLIER_ID="1"
+        STATUS="7"
+        TYPE="12"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        COMMENT="test"
+        ITEMS_TOTAL_COUNT="4"
+        ITEMS_TOTAL_FACT_COUNT="3"
+        ITEMS_TOTAL_SHORTAGE_COUNT_WITH_DEFECT="2"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="8"
+        ARTICLE="art1"
+        BARCODES="11;22"
+        COUNT="4"
+        FACT_COUNT="3"
+        SHORTAGE_COUNT_WITH_DEFECT="2"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="10.40"
+        VAT_RATE="2"
+    />
+
+<!--  PROCESSED изъятие утилизации с загруженными деталями, должно финализироваться  -->
+    <SHOP_REQUEST
+        ID="9"
+        SERVICE_ID="121"
+        SERVICE_REQUEST_ID="11"
+        SUPPLIER_ID="1"
+        STATUS="7"
+        TYPE="12"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        COMMENT="test"
+        ITEMS_TOTAL_COUNT="4"
+        ITEMS_TOTAL_FACT_COUNT="3"
+        ITEMS_TOTAL_DEFECT_COUNT="1"
+        DETAILS_LOADED="true"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="9"
+        ARTICLE="art1"
+        BARCODES="11;22"
+        COUNT="4"
+        FACT_COUNT="3"
+        DEFECT_COUNT="1"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="10.40"
+        VAT_RATE="2"
+    />
+
+<!--  FINISHED изъятие утилизации  -->
+    <SHOP_REQUEST
+        ID="10"
+        SERVICE_ID="121"
+        SERVICE_REQUEST_ID="11"
+        SUPPLIER_ID="1"
+        STATUS="10"
+        TYPE="12"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        COMMENT="test"
+        ITEMS_TOTAL_COUNT="4"
+        ITEMS_TOTAL_FACT_COUNT="4"
+        ITEMS_TOTAL_DEFECT_COUNT="0"
+        DETAILS_LOADED="true"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="10"
+        ARTICLE="art1"
+        BARCODES="11;22"
+        COUNT="4"
+        FACT_COUNT="4"
+        DEFECT_COUNT="0"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="10.40"
+        VAT_RATE="2"
+    />
+
+<!--  Трансфер на утилизацию со связанными неактивными изъятиями, не должен финализироваться -->
+    <SHOP_REQUEST
+        ID="11"
+        SUPPLIER_ID="1"
+        SERVICE_ID="121"
+        SERVICE_REQUEST_ID="11"
+        STATUS="7"
+        TYPE="3"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        COMMENT="test"
+        ITEMS_TOTAL_COUNT="4"
+        ITEMS_TOTAL_DEFECT_COUNT="0"
+        ITEMS_TOTAL_FACT_COUNT="4"
+        DETAILS_LOADED="true"
+        TO_STOCK_TYPE="4"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="11"
+        ARTICLE="art1"
+        BARCODES="11;22"
+        COUNT="4"
+        FACT_COUNT="3"
+        DEFECT_COUNT="1"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="10.40"
+        VAT_RATE="2"
+    />
+
+    <utilization_transfer_outbound_mapping
+        transfer_id="11"
+        outbound_id="4"
+    />
+
+    <utilization_transfer_outbound_mapping
+        transfer_id="11"
+        outbound_id="5"
+    />
+
+    <utilization_transfer_outbound_mapping
+        transfer_id="11"
+        outbound_id="6"
+    />
+
+<!--  Трансфер на утилизацию со связанными неактивными изъятиями и PROCESSED изъятиями и READY_FOR_WITHDRAW изъятием, не должен финализироваться  -->
+    <SHOP_REQUEST
+        ID="12"
+        SERVICE_ID="121"
+        SERVICE_REQUEST_ID="11"
+        SUPPLIER_ID="1"
+        STATUS="7"
+        TYPE="3"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        COMMENT="test"
+        ITEMS_TOTAL_COUNT="4"
+        ITEMS_TOTAL_DEFECT_COUNT="0"
+        ITEMS_TOTAL_FACT_COUNT="4"
+        DETAILS_LOADED="true"
+        TO_STOCK_TYPE="4"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="12"
+        ARTICLE="art1"
+        BARCODES="11;22"
+        COUNT="4"
+        FACT_COUNT="3"
+        DEFECT_COUNT="1"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="10.40"
+        VAT_RATE="2"
+    />
+
+    <utilization_transfer_outbound_mapping
+        transfer_id="12"
+        outbound_id="4"
+    />
+
+    <utilization_transfer_outbound_mapping
+        transfer_id="12"
+        outbound_id="5"
+    />
+
+    <utilization_transfer_outbound_mapping
+        transfer_id="12"
+        outbound_id="6"
+    />
+
+    <utilization_transfer_outbound_mapping
+        transfer_id="12"
+        outbound_id="7"
+    />
+
+    <utilization_transfer_outbound_mapping
+        transfer_id="12"
+        outbound_id="8"
+    />
+
+    <utilization_transfer_outbound_mapping
+        transfer_id="12"
+        outbound_id="9"
+    />
+
+    <!--  Трансфер на утилизацию со связанными неактивными изъятиями и PROCESSED изъятиями, одно из которых без деталей, не должен финализироваться  -->
+    <SHOP_REQUEST
+        ID="13"
+        SERVICE_ID="121"
+        SERVICE_REQUEST_ID="11"
+        SUPPLIER_ID="1"
+        STATUS="7"
+        TYPE="3"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        COMMENT="test"
+        ITEMS_TOTAL_COUNT="4"
+        ITEMS_TOTAL_DEFECT_COUNT="0"
+        ITEMS_TOTAL_FACT_COUNT="4"
+        ITEMS_TOTAL_SHORTAGE_COUNT="0"
+        DETAILS_LOADED="true"
+        TO_STOCK_TYPE="4"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="13"
+        ARTICLE="art1"
+        BARCODES="11;22"
+        COUNT="4"
+        FACT_COUNT="4"
+        SHORTAGE_COUNT="0"
+        DEFECT_COUNT="0"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="10.40"
+        VAT_RATE="2"
+    />
+
+    <utilization_transfer_outbound_mapping
+        transfer_id="13"
+        outbound_id="4"
+    />
+
+    <utilization_transfer_outbound_mapping
+        transfer_id="13"
+        outbound_id="5"
+    />
+
+    <utilization_transfer_outbound_mapping
+        transfer_id="13"
+        outbound_id="6"
+    />
+
+    <utilization_transfer_outbound_mapping
+        transfer_id="13"
+        outbound_id="8"
+    />
+
+    <utilization_transfer_outbound_mapping
+        transfer_id="13"
+        outbound_id="9"
+    />
+
+    <!--  Трансфер на утилизацию со связанным FINISHED изъятием, должен финализироваться  -->
+    <SHOP_REQUEST
+        ID="14"
+        SERVICE_ID="121"
+        SERVICE_REQUEST_ID="11"
+        SUPPLIER_ID="1"
+        STATUS="7"
+        TYPE="3"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        COMMENT="test"
+        ITEMS_TOTAL_COUNT="4"
+        ITEMS_TOTAL_DEFECT_COUNT="0"
+        ITEMS_TOTAL_FACT_COUNT="4"
+        DETAILS_LOADED="true"
+        TO_STOCK_TYPE="4"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="14"
+        ARTICLE="art1"
+        BARCODES="11;22"
+        COUNT="4"
+        FACT_COUNT="4"
+        DEFECT_COUNT="0"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="10.40"
+        VAT_RATE="2"
+    />
+
+    <utilization_transfer_outbound_mapping
+        transfer_id="14"
+        outbound_id="10"
+    />
+
+    <!--  Трансфер на утилизацию без связанных изъятий, не должен финализироваться  -->
+    <SHOP_REQUEST
+        ID="15"
+        SERVICE_ID="121"
+        SERVICE_REQUEST_ID="11"
+        SUPPLIER_ID="1"
+        STATUS="7"
+        TYPE="3"
+        CREATED_AT="1999-9-9 9:9:9"
+        UPDATED_AT="2018-1-1 10:10:10"
+        REQUESTED_DATE="2017-01-01 0:0:0"
+        COMMENT="test"
+        ITEMS_TOTAL_COUNT="4"
+        ITEMS_TOTAL_DEFECT_COUNT="0"
+        ITEMS_TOTAL_FACT_COUNT="4"
+        DETAILS_LOADED="true"
+        TO_STOCK_TYPE="4"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="15"
+        ARTICLE="art1"
+        BARCODES="11;22"
+        COUNT="4"
+        FACT_COUNT="4"
+        DEFECT_COUNT="0"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="10.40"
+        VAT_RATE="2"
+    />
+
+</dataset>

@@ -1,0 +1,33 @@
+{% if table == "features_item_pair_offer_offer_average_external_order_pmi" %}
+    {# Result data. #}
+    {% table "features_item_pair_offer_offer_average_external_order_pmi" %}
+        [
+            "O1", "O2",
+            {{ (2.0 + 1.0) / 2.0 }},
+            {{ (10.0 + 20.0) / 2.0 }},
+            {{ (2.0 / (4.0 * 8.0) + 1.0 / (2.0 * 2.0)) / 2.0 }},
+            {{ (10.0 / (40.0 * 20.0) + 20.0 / (10.0 * 10.0)) / 2.0 }},
+            "offer", "offer",
+            "{{ day }}"
+        ]
+    {% endtable %}
+{% elif table == "features_item_pair_offer_offer_external_order_statistics" %}
+    {% table "features_item_pair_offer_offer_external_order_statistics" %}
+        {% if shift == 0 %}
+            ["O1", "O2", 2.0, 10.0, "offer", "offer", "{{ day }}"]
+        {% elif shift == 1 %}
+            ["O1", "O2", 1.0, 20.0, "offer", "offer", "{{ day }}"]
+        {% endif %}
+    {% endtable %}
+{% elif table == "features_item_offer_order_statistics" %}
+    {% table "features_item_offer_order_statistics" %}
+        {# Note that here external order count goes before external orderer count. #}
+        {% if shift == 0 %}
+            ["O1", 40.0, 4.0, "offer", "{{ day }}"],
+            ["O2", 20.0, 8.0, "offer", "{{ day }}"]
+        {% elif shift == 1 %}
+            ["O1", 10.0, 2.0, "offer", "{{ day }}"],
+            ["O2", 10.0, 2.0, "offer", "{{ day }}"]
+        {% endif %}
+    {% endtable %}
+{% endif %}

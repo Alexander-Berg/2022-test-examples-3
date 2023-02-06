@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="TIMESTAMP_WITH_TIME_ZONE" value="datetimeoffset" dbms="mssql"/>
+    <property name="TIMESTAMP_WITH_TIME_ZONE" value="TIMESTAMP WITH TIME ZONE" dbms="h2"/>
+
+    <property name="NOW" value="getutcdate()" dbms="mssql"/>
+    <property name="NOW" value="CURRENT_TIMESTAMP()" dbms="h2"/>
+
+    <property name="USER_NAME" value="user_name()" dbms="mssql"/>
+    <property name="USER_NAME" value="USER()" dbms="h2"/>
+
+    <changeSet id="MARKETWMS-15147" author="j-sverhnova">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists
+                    schemaName="wmwhse1"
+                    tableName="RECEIPTS_TO_PRIORITIES"
+                />
+            </not>
+        </preConditions>
+
+        <createTable tableName="RECEIPTS_TO_PRIORITIES" schemaName="wmwhse1">
+            <column name="RECEIPTKEY" type="nvarchar(50)" remarks="Номер поставки">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRIORITYCOEFF" type="numeric(13, 4)" remarks="Коэффициент приоритета">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDDATE" type="${TIMESTAMP_WITH_TIME_ZONE}" defaultValueComputed="${NOW}"
+                    remarks="Дата добавления">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDWHO" type="nvarchar(256)" defaultValueComputed="${USER_NAME}"
+                    remarks="Пользователь, создавший строку">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITDATE" type="${TIMESTAMP_WITH_TIME_ZONE}" defaultValueComputed="${NOW}"
+                    remarks="Дата последнего редактирования строки">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITWHO" type="nvarchar(256)" defaultValueComputed="${USER_NAME}"
+                    remarks="Кем изменено">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey
+            columnNames="RECEIPTKEY"
+            constraintName="PK_RECEIPTS_TO_PRIORITIES"
+            schemaName="wmwhse1"
+            tableName="RECEIPTS_TO_PRIORITIES"
+        />
+
+        <rollback>
+            <dropTable schemaName="wmwhse1" tableName="RECEIPTS_TO_PRIORITIES"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

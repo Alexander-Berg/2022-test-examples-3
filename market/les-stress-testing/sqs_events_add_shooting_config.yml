@@ -1,0 +1,26 @@
+metaconf:
+    package: yandextank.plugins.MetaConf
+    firestarter: {tank: 'nanny:production_yandex_tank'}
+    enabled: true
+phantom:
+    autocases: 2
+    address: nanny:testing_market_les_sas
+    ammo_type: phantom
+    ammofile: 'https://proxy.sandbox.yandex-team.ru/2600146343'
+    load_profile: {load_type: rps, schedule: 'line(1,300,60s)  const(300,10m)'}
+uploader:
+    enabled: true
+    job_dsc: DELIVERY-32738
+    job_name: DELIVERY-32738
+    operator: lunapark
+    package: yandextank.plugins.DataUploader
+    task: DELIVERY-32738
+    ver: ""
+solomon:
+    enabled: true
+    package: yandextank.plugins.Solomon
+    panels:
+        sqs: 
+            project: kikimr
+            sensors:
+                - '{project="kikimr", cluster="sqs", service="kikimr_sqs", host="cluster", sensor="OldestMessageAgeSeconds", user="logistics-event-service-ymq-testing", queue="*_out"}'

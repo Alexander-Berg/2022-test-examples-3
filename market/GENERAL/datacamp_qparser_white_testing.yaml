@@ -1,0 +1,20 @@
+juggler:
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    check_options: {}
+    namespace: market.datacamp
+    notifications: []
+    refresh_time: 60
+    ttl: 900
+    host: datacamp_qparser_white_testing
+    tags:
+    - market_indexer_datacamp
+    - market_testing
+    - testing
+    - market
+    - _market_
+  checks:
+    - service: qparser_parsed_offers
+    - service: qoffers_lb_time_lag

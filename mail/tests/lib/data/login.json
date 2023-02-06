@@ -1,0 +1,91 @@
+{
+  "status": {
+    "value": "VALID",
+    "id": 0
+  },
+  "error": "OK",
+  {% if user.is_hosted %}
+  "uid": {
+    "hosted": true,
+    "lite" : false,
+    "value": "{{ user.uid }}",
+    "domid": "{{ user.domid }}",
+    "domain": "{{ user.domain }}",
+    "mx": "1",
+    "domain_ena": "1",
+    "catch_all": false
+  },
+  {% else %}
+  "uid": {
+    "hosted": false,
+    "lite" : false,
+    "value": "{{ user.uid }}"
+  },
+  {% endif %}
+  "login": "{{ user.login }}",
+  "have_password": true,
+  "have_hint": true,
+  "karma": {
+    {% if user.is_bad_karma %}
+    "value": 100
+    {% else %}
+    {% if user.is_threshold_karma %}
+    "value": 85
+    {% else %}
+    "value": 0
+    {% endif %}
+    {% endif %}
+  },
+  "karma_status": {
+    "value": 0
+  },
+  "dbfields": {
+    "account_info.country.uid": "{{ user.country }}",
+    {% if user.is_mdbreg %}
+    "hosts.db_id.-": "mdbreg",
+    {% else %}
+    "hosts.db_id.-": "pg",
+    {% endif %}
+    "subscription.login.-": "{{ user.login }}",
+    {% if user.is_email_blocked %}
+    "subscription.login_rule.2": "0",
+    {% else %}
+    "subscription.login_rule.2": "1",
+    {% endif %}
+    "subscription.login_rule.8": "1",
+    "subscription.suid.-": "{{ user.suid }}",
+    {% if user.is_no_eula %}
+    "subscription.suid.102": "",
+    {% else %}
+    "subscription.suid.102": "{{ user.is_eula_accepted and 1 or 0}}",
+    {% endif %}
+    {% if user.is_phone_confirmed %}
+    "userphones.confirmed.uid": "2016-01-21 14:21:04"
+    {% else %}
+    "userphones.confirmed.uid": ""
+    {% endif %}
+  },
+  "attributes": {
+    {% if is_assessor %}
+    "189": "1",
+    {% endif %}
+    {% if is_user_with_app_password_enabled %}
+    "107": "1",
+    {% endif %}
+    "": ""
+  },
+  "address-list": [{
+    {% if is_assessor %}
+    "address": "{{ user.login }}@ext.yandex.ru",
+    {% else %}
+    "address": "{{ user.login }}@yandex.ru",
+    {% endif %}
+    "validated": true,
+    "default": true,
+    "rpop": false,
+    "silent": false,
+    "unsafe": false,
+    "native": true,
+    "born-date": "2016-01-21 14:21:04"
+  }]
+}

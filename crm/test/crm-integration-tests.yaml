@@ -1,0 +1,104 @@
+annotations:
+  stagectl_epoch: 800
+  stagectl_vcs:
+    svn_branch: stage_controller/stable-142-1
+    svn_revision: 8976034
+    svn_tag: stage_controller/stable-142-1
+labels:
+  deploy_engine: env_controller
+  du_patchers_target_revision:
+    integration-tests: 11
+  du_sidecar_target_revision:
+    integration-tests:
+      podBin: 2621390537
+  notifications_last_timestamp: 1640874958313158000
+  tags: []
+meta:
+  account_id: abc:service:200
+  acl:
+  - action: allow
+    permissions:
+    - read
+    - read_secrets
+    - write
+    - create
+    - ssh_access
+    - root_ssh_access
+    subjects:
+    - robot-drug-deploy
+  id: crm-integration-tests
+  inherit_acl: true
+  project_id: crm-test
+spec:
+  deploy_units:
+    integration-tests:
+      endpoint_sets:
+      - port: 9090
+      images_for_boxes:
+        integration-tests:
+          name: crm/crm-integration-test
+          registry_host: registry.yandex.net
+          tag: trunk-8847268
+      network_defaults:
+        network_id: _CRMWEB__TEST_NETS_
+      patchers_revision: 9
+      replica_set:
+        per_cluster_settings:
+          sas:
+            deployment_strategy:
+              max_unavailable: 1
+            pod_count: 1
+        replica_set_template:
+          constraints:
+            antiaffinity_constraints:
+            - key: rack
+              max_pods: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+              - id: disk-0
+                labels:
+                  used_by_infra: true
+                quota_policy:
+                  bandwidth_guarantee: 1048576
+                  bandwidth_limit: 2097152
+                  capacity: 3221225472
+                storage_class: hdd
+              pod_agent_payload:
+                spec:
+                  boxes:
+                  - env:
+                    - name: CRM_ORA_HOST
+                      value:
+                        literal_env:
+                          value: TCRM.YANDEX.RU
+                    id: integration-tests
+                    resolv_conf: nat64_local
+                    volumes:
+                    - mode: read_write
+                      mount_point: /data
+                      volume_ref: cfg-volume
+                  mutable_workloads:
+                  - workload_ref: integration-tests
+                  volumes:
+                  - generic: {}
+                    id: cfg-volume
+                  workloads:
+                  - box_ref: integration-tests
+                    id: integration-tests
+              resource_requests:
+                memory_guarantee: 1073741824
+                memory_limit: 1073741824
+                network_bandwidth_guarantee: 1048576
+                network_bandwidth_limit: 1048576
+                vcpu_guarantee: 100
+                vcpu_limit: 100
+              secret_refs:
+                robot-crmdev:
+                  secret_id: sec-01cxw3nmmnrxk2b76anqyysyhz
+                  secret_version: ver-01fm7m5dmsnz4j3vx8wmpa2w7k
+      revision: 13
+  revision: 13
+  revision_info:
+    description: nat64 local
+

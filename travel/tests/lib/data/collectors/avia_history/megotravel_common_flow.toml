@@ -1,0 +1,57 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "megotravel_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 1031
+    confirm_dt = ""
+    created_at = "2020-01-31 00:37:25"
+    currency = "RUB"
+    from = "KHV"
+    marker = "cad307f3-a5e969-c3bd-481f-abc3-83f61b9624571"
+    order_id = "1437230"
+    partner = "megotravel"
+    partner_id = 121
+    price = 20791.0
+    source = "megotravel"
+    status = "paid"
+    ticket_number = ""
+    to = "SVX"
+    trip_type = "oneway"
+    unixtime = 1580443310
+
+[lb]
+    topic = "topic-megotravel_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "updated_at"]
+
+[[lb.expected]]
+    status = "confirmed"
+    category = "avia"
+    partner_id = 121
+    created_at = 1580431045
+    origin = "KHV"
+    partner_order_id = "1437230"
+    label = "cad307f3-a5e969-c3bd-481f-abc3-83f61b9624571"
+    source = "history"
+    destination = "SVX"
+    partner_name = "megotravel"
+    trip_type = "oneway"
+    billing_order_id = 1031
+    order_amount = 20791.0
+    travel_order_id = "megotravel:1437230"
+    currency_code = "RUB"

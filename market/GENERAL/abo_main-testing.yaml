@@ -1,0 +1,38 @@
+juggler:
+  default:
+    namespace: market.abo
+    host: abo_main-testing
+    children:
+    - NANNY%testing_market_abo_main_man
+    - NANNY%testing_market_abo_main_sas
+    tags:
+    - market_testing
+    - market_rtc
+    - market_abo
+    - marketabomain
+    - testing
+    - market
+    - _market_
+    ttl: 900
+    refresh_time: 60
+    aggregator: logic_or
+    flaps:
+      critical_time: 3600
+      stable_time: 600
+    aggregator_kwargs:
+      nodata_mode: skip
+      unreach_mode: skip
+      unreach_service:
+      - check: abo_main-testing:ping
+
+  checks:
+  - service: ping
+    flaps:
+      critical_time: 3600
+      stable_time: 500
+    aggregator_kwargs:
+      nodata_mode: force_crit
+
+  - service: disk_free_space
+  - service: logrotate
+  - service: push-client-status

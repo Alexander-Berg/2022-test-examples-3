@@ -1,0 +1,210 @@
+admin:
+  address:
+    socket_address:
+      address: '::1'
+      port_value: 9901
+
+static_resources:
+  listeners:
+  - name: listener1
+    address:
+      socket_address:
+        address: '::'
+        port_value: 443
+    filter_chains:
+    - transport_socket:
+        name: envoy.transport_sockets.tls
+        typed_config:
+          "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext"
+          common_tls_context:
+            tls_params:
+              tls_minimum_protocol_version: TLSv1_2
+            tls_certificate_sds_secret_configs:
+            - name: certs
+            alpn_protocols: [h2]
+      filters:
+      - name: envoy.filters.network.http_connection_manager
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+          stat_prefix: grpc_json
+          codec_type: AUTO
+          always_set_request_id_in_response: true
+          server_name: api360
+          use_remote_address: true
+          route_config:
+            name: local_route
+            request_headers_to_remove:
+            - x-forwarded-for
+            - x-real-ip
+            request_headers_to_add:
+            - header:
+                key: x-original-host
+                value: "%REQ(:authority)%"
+              append: false
+            - header:
+                key: x-real-ip
+                value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
+              append: false
+            response_headers_to_remove:
+            - grpc-accept-encoding
+            - grpc-encoding
+            virtual_hosts:
+            - name: local_service
+              domains: ["*"]
+              routes:
+              # NOTE: by default, matching happens based on the gRPC route, and not on the incoming request path.
+              # Reference: https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/grpc_json_transcoder_filter#route-configs-for-transcoded-requests
+              - match:
+                  prefix: "/"
+                  grpc: {}
+                route:
+                  cluster: grpc
+                  timeout: 60s
+
+              rate_limits:
+                actions:
+                - extension:
+                    name: path
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.rate_limit_descriptors.expr.v3.Descriptor
+                      descriptor_key: request.path
+                      text: request.path
+
+          http_filters:
+          - name: envoy.filters.http.health_check
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.http.health_check.v3.HealthCheck
+              pass_through_mode: true
+              headers:
+              - name: ":path"
+                prefix_match: "/ping"
+              - name: "User-Agent"
+                exact_match: "KeepAliveClient"
+
+          - name: envoy.filters.http.grpc_json_transcoder
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.http.grpc_json_transcoder.v3.GrpcJsonTranscoder
+              proto_descriptor: "/app/front/envoy/proto.pb"
+              services:
+                - yandex.api360.__private__.v1.HealthService
+                - yandex.api360.directory.v1.DepartmentService
+                - yandex.api360.directory.v1.GroupService
+                - yandex.api360.directory.v1.UserService
+                - yandex.api360.admin.v1.DiskService
+                - yandex.api360.admin.v1.RoutingService
+              convert_grpc_status: true
+              ignore_unknown_query_parameters: true
+              print_options:
+                add_whitespace: false
+                always_print_primitive_fields: true
+                always_print_enums_as_ints: false
+                preserve_proto_field_names: false
+
+          - name: envoy.filters.http.ratelimit
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.http.ratelimit.v3.RateLimit
+              domain: api360
+              request_type: both
+              stage: 0
+              failure_mode_deny: true # reject if ratelimiter not responding
+              rate_limit_service:
+                grpc_service:
+                  envoy_grpc:
+                    cluster_name: ratelimit
+                transport_api_version: V3
+
+          - name: envoy.filters.http.header_to_metadata
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.http.header_to_metadata.v3.Config
+              response_rules:
+              - header: x-envoy-upstream-service-time
+                on_header_present:
+                  metadata_namespace: access_log
+                  key: upstream_response_time
+                  type: NUMBER
+                remove: true
+
+          - name: envoy.filters.http.router
+
+          access_log:
+            - name: envoy.file_access_log
+              filter:
+                not_health_check_filter: {}
+              typed_config:
+                "@type": type.googleapis.com/envoy.extensions.access_loggers.file.v3.FileAccessLog
+                path: "/app/log/envoy.tskv"
+                log_format:
+                  text_format_source:
+                    inline_string: "tskv\t\
+                      tskv_format=mail-envoy-access-log\t\
+                      timestamp=%START_TIME%\t\
+                      status=%RESPONSE_CODE%\t\
+                      protocol=%PROTOCOL%\t\
+                      method=%REQ(X-ENVOY-ORIGINAL-METHOD?:METHOD)%\t\
+                      request=%REQ(X-ENVOY-ORIGINAL-PATH?:PATH)%\t\
+                      user_agent=%REQ(USER-AGENT)%\t\
+                      vhost=%REQ(:AUTHORITY)%\t\
+                      ip=%DOWNSTREAM_DIRECT_REMOTE_ADDRESS_WITHOUT_PORT%\t\
+                      ip_port=%DOWNSTREAM_DIRECT_REMOTE_ADDRESS%\t\
+                      x_forwarded_for=%REQ(X-FORWARDED-FOR)%\t\
+                      x_real_ip=%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%\t\
+                      x_real_ip_port=%DOWNSTREAM_REMOTE_ADDRESS%\t\
+                      upstream_addr=%UPSTREAM_HOST%\t\
+                      upstream_response_time=%DYNAMIC_METADATA(access_log:upstream_response_time)%\t\
+                      upstream_status=%RESP(GRPC-STATUS)%\t\
+                      upstream_grpc_status=%GRPC_STATUS%\t\
+                      request_id=%REQ(X-REQUEST-ID)%\t\
+                      request_length=%BYTES_RECEIVED%\t\
+                      bytes_sent=%BYTES_SENT%\t\
+                      request_time=%DURATION%\t\
+                      response_flags=%RESPONSE_FLAGS%\n"
+
+  clusters:
+  - name: grpc
+    type: LOGICAL_DNS
+    lb_policy: ROUND_ROBIN
+    dns_lookup_family: V6_ONLY
+    connect_timeout: 0.25s
+    typed_extension_protocol_options:
+      envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+        "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+        explicit_http_config:
+          http2_protocol_options: {}
+    load_assignment:
+      cluster_name: grpc
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: localhost
+                port_value: 3000
+
+  - name: ratelimit
+    type: LOGICAL_DNS
+    lb_policy: ROUND_ROBIN
+    dns_lookup_family: V6_ONLY
+    connect_timeout: 1s
+    protocol_selection: USE_CONFIGURED_PROTOCOL
+    typed_extension_protocol_options:
+      envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+        "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+        explicit_http_config:
+          http2_protocol_options: {}
+    load_assignment:
+      cluster_name: ratelimit
+      endpoints:
+        - lb_endpoints:
+          - endpoint:
+              address:
+                socket_address:
+                  address: localhost
+                  port_value: 8089
+
+  secrets:
+  - name: certs
+    tls_certificate:
+      certificate_chain:
+        filename: /app/secrets/ssl_cert.pem
+      private_key:
+        filename: /app/secrets/ssl_key.pem

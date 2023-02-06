@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <return
+            source="CLIENT"
+            order_external_id="order-external-id"
+            logistic_point_from_id="1234"
+    />
+
+    <return_event
+            id="1"
+            logbroker_id="[null]"
+            request_id="test-request-id/2"
+            return_id="1"
+            type="RETURN_SEGMENT_CREATED"
+            payload='{
+                "id": 1,
+                "type": "RETURN_SEGMENT_CREATED",
+                "boxExternalId": "VOZ_FBS_298347",
+                "logisticPointInfo": {
+                    "type": "PICKUP",
+                    "partnerId": 2001,
+                    "logisticPointId": 1234,
+                    "logisticPointExternalId": "3001"
+                },
+                "shipmentFieldsInfo": {
+                    "recipient": null,
+                    "shipmentTime": null,
+                    "destinationInfo": null
+                }
+            }'
+    />
+
+    <return_segment
+            return_id="1"
+            return_box_id="1"
+            logistic_point_id="1234"
+            logistic_point_partner_id="2001"
+            logistic_point_external_id="3001"
+            logistic_point_type="PICKUP"
+            unique_id="e11c5e64-3694-40c9-b9b4-126efedaa098"
+    />
+
+    <queue_tasks
+            queue_name="CREATE_RETURN_IN_PVZ"
+            payload='{"requestId":"test-request-id/3","returnSegmentId":1}'
+    />
+</dataset>

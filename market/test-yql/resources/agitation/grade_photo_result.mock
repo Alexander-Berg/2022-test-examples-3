@@ -1,0 +1,98 @@
+# Тесты
+# Модель 1 - платная, подходит по лимиту (не указан, несколько плательщиков, выбираем самую дешёвую)
+# Модель 2 - платная, подходит по лимиту (указан)
+# Модель 3 - платная, не подходит по лимиту
+# Модель 4 - бесплатная, порядок указан (у остальных нет)
+# Модель 5 - платная, но нет заказа (поэтому бесплатная)
+# Модель 5 - ещё один отзыв - уже есть фотка, не попадёт в задания
+# Модель 11 - fmcg
+# Модель 12 - не в индексе
+# Модель 13 - интим
+# Модель 14 - дешёвая
+# Модель 15 - адулт
+# Пользователь 1 - есть задания на все модели
+# Пользователь 2 - есть задание, но он не активный попапер
+
+
+# отзыв - mod_time = 2021-01-01T00:00:00 = 1609459200000
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/tables/pub_model_grades/current
+SCHEMA id:int64, author_id:int64, resource_id:int64, cpa:int16, mod_time:string, photos:yson
+# нормальные модельные
+{"id": 1, "author_id":1, "resource_id":1, "cpa": 1, "mod_time":"2021-01-01T00:00:00"}
+{"id": 2, "author_id":1, "resource_id":2, "cpa": 1, "mod_time":"2021-01-01T00:00:00"}
+{"id": 3, "author_id":1, "resource_id":3, "cpa": 1, "mod_time":"2021-01-01T00:00:00"}
+{"id": 4, "author_id":1, "resource_id":4, "cpa": 1, "mod_time":"2021-01-01T00:00:00"}
+{"id": 5, "author_id":1, "resource_id":5, "cpa": 0, "mod_time":"2021-01-01T00:00:00"}
+# второй пользователь - без попапа
+{"id": 51, "author_id":2, "resource_id":1, "cpa": 1, "mod_time":"2021-01-01T00:00:00"}
+# невалидные (c фотками)
+{"id": 101, "author_id":10, "resource_id":5, "cpa": 1, "mod_time":"2021-01-01T00:00:00"}
+# без всплывашки
+{"id": 81, "author_id":1, "resource_id":11, "cpa": 1, "mod_time":"2021-01-01T00:00:00"}
+{"id": 81, "author_id":1, "resource_id":12, "cpa": 1, "mod_time":"2021-01-01T00:00:00"}
+{"id": 81, "author_id":1, "resource_id":13, "cpa": 1, "mod_time":"2021-01-01T00:00:00"}
+{"id": 81, "author_id":1, "resource_id":14, "cpa": 1, "mod_time":"2021-01-01T00:00:00"}
+{"id": 81, "author_id":1, "resource_id":15, "cpa": 1, "mod_time":"2021-01-01T00:00:00"}
+# отзывы с фотками для счётчиков лимита
+{"id":200, "author_id":100, "resource_id":1, "photos": [1]}
+{"id":201, "author_id":100, "resource_id":2, "photos": [1]}
+{"id":202, "author_id":100, "resource_id":2, "photos": [1]}
+{"id":203, "author_id":100, "resource_id":3, "photos": [1, 2]}
+
+# фотки - для исключения отзывов с фотками
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_grade_photo
+SCHEMA grade_id:int64
+{"grade_id": 101}
+{"grade_id": 200}
+{"grade_id": 201}
+{"grade_id": 202}
+{"grade_id": 203}
+
+# инфа про модель - вытягиваем sku
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_grade_model
+SCHEMA grade_id:int64, sku:int64
+{"grade_id":1, "sku": 42}
+
+# порядок заданий
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/author/agitation_grade_order/current
+SCHEMA agitation_type:int16, resource_id:int64, order:int64, grade_count:int64
+{"agitation_type": 1, "resource_id": 4, "order": 66, "grade_count": 12}
+
+# платные модели
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/author/current_paid_models/current
+SCHEMA entity_type:int16, model_id:int64, price:int64, target_count:int64, balance:double
+{"entity_type": 2, "model_id":1, "price":1, "balance":10.1}
+{"entity_type": 2, "model_id":1, "price":2, "balance":10.1}
+{"entity_type": 2, "model_id":2, "price":3, "target_count":3, "balance":10.1}
+{"entity_type": 2, "model_id":3, "price":4, "target_count":1, "balance":10.1}
+{"entity_type": 2, "model_id":5, "price":5, "balance":10.1}
+# другие типы платности, не про отзыв
+{"entity_type": 1, "model_id":4, "price":1, "balance":10.1}
+{"entity_type": 3, "model_id":4, "price":1, "balance":10.1}
+{"entity_type": 0, "model_id":4, "price":1, "balance":10.1}
+
+
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/author/agitation_indexer_models/current
+# основные поля (обязательно заполнять)
+SCHEMA model_id_str:string, fmcg_hid:int32, in_idx:int32
+SCHEMA is_cheap:int32, is_adult:int32, definitely_not_adult:bool
+# доп поля (для отладки)
+SCHEMA price:double, type:int32, name:string, category_id:int64
+# правильные модели (все доп поля только в первой модели)
+{"model_id_str":"1","fmcg_hid":0,"in_idx":1,"is_adult":0,"is_cheap":0,"definitely_not_adult":true,"name":"AAA","price":33600.0,"type":1,"category_id":1}
+{"model_id_str":"2","fmcg_hid":0,"in_idx":1,"is_adult":0,"is_cheap":0,"definitely_not_adult":true}
+{"model_id_str":"3","fmcg_hid":0,"in_idx":1,"is_adult":0,"is_cheap":0,"definitely_not_adult":true}
+{"model_id_str":"4","fmcg_hid":0,"in_idx":1,"is_adult":0,"is_cheap":0,"definitely_not_adult":true}
+{"model_id_str":"5","fmcg_hid":0,"in_idx":1,"is_adult":0,"is_cheap":0,"definitely_not_adult":true}
+# модели с отклонениями, не будет попапа (дешёвые, не в индексе, fmcg)
+{"model_id_str":"11","fmcg_hid":1,"in_idx":1,"is_adult":0,"is_cheap":0,"definitely_not_adult":true}
+{"model_id_str":"12","fmcg_hid":0,"in_idx":0,"is_adult":0,"is_cheap":0,"definitely_not_adult":true}
+{"model_id_str":"13","fmcg_hid":0,"in_idx":1,"is_adult":1,"is_cheap":0,"definitely_not_adult":true}
+{"model_id_str":"14","fmcg_hid":0,"in_idx":1,"is_adult":0,"is_cheap":1,"definitely_not_adult":true}
+# модели, запрещённые к показу (интим)
+{"model_id_str":"15","fmcg_hid":0,"in_idx":1,"is_adult":0,"is_cheap":0,"definitely_not_adult":false}
+
+# пользователи, оставляющие контент из всплывашек - только они получат всплывашку для фоток
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/author/active_popup_users/current
+SCHEMA user_id:string
+{"user_id": "1"}

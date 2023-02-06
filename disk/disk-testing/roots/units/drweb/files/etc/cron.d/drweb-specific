@@ -1,0 +1,6 @@
+SHELL=/bin/sh
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/opt/drweb
+#MAILTO=disk-root@yandex-team.ru
+
+*/5 * * * * root    /usr/bin/drweb.watchdog.sh
+05 * * * *  root    if [ -d /var/drweb/spool ]; then flock -n /tmp/rm-drweb-spool.lock find /var/drweb/spool/* -mmin +9000 -delete &>/dev/null ; fi

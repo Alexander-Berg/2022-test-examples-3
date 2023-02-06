@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <lrm_return
+        lrm_return_id="1"
+        status="[null]"
+        source="CLIENT"
+        order_external_id="NOT_VALID"
+        logistic_point_from_id="1"
+    />
+
+    <lrm_return_segment
+        id="1"
+        lrm_return_id="1"
+        lrm_segment_id="15"
+        status="CREATED"
+        shipment_destination='{"name": "aboba", "type": "SORTING_CENTER", "partnerId": 173, "logisticPointId": 200, "returnSegmentId": 2}'
+        shipment_recipient='{"name": "Доставка до ПВЗ", "type": "DELIVERY_SERVICE_WITH_COURIER", "courier": {"id": 123, "uid": 234, "name": "courier", "carNumber": "car", "phoneNumber": "+7-000-000-00-00", "carDescription": "reno logan 20go veka chernogo zveta"}, "partnerId": 1005372}'
+        logistic_point_partner_id="172"
+        logistic_point_external_id="13"
+        logistic_point_id="200"
+        external_box_id="ORDER1"
+        logistic_point_type="SORTING_CENTER"
+    />
+
+    <lrm_return
+        lrm_return_id="2"
+        status="[null]"
+        source="CLIENT"
+        order_external_id="NOT_VALID"
+        logistic_point_from_id="1"
+    />
+
+    <lrm_return_segment
+        id="2"
+        lrm_return_id="2"
+        lrm_segment_id="16"
+        status="CREATED"
+        shipment_destination='{"name": "aboba", "type": "SORTING_CENTER", "partnerId": 173, "logisticPointId": 200, "returnSegmentId": 2}'
+        shipment_recipient='{"name": "Доставка до ПВЗ", "type": "DELIVERY_SERVICE_WITH_COURIER", "courier": {"id": 123, "uid": 234, "name": "courier", "carNumber": "car", "phoneNumber": "+7-000-000-00-00", "carDescription": "reno logan 20go veka chernogo zveta"}, "partnerId": 1005372}'
+        logistic_point_partner_id="172"
+        logistic_point_external_id="13"
+        logistic_point_id="200"
+        external_box_id="ORDER2"
+        logistic_point_type="SORTING_CENTER"
+    />
+
+    <lrm_return
+        lrm_return_id="3"
+        status="[null]"
+        source="CLIENT"
+        order_external_id="NOT_VALID"
+        logistic_point_from_id="1"
+    />
+
+    <lrm_return_segment
+        id="3"
+        lrm_return_id="3"
+        lrm_segment_id="16"
+        status="CREATED"
+        shipment_destination='{"name": "aboba", "type": "SORTING_CENTER", "partnerId": 173, "logisticPointId": 200, "returnSegmentId": 2}'
+        shipment_recipient='{"name": "Доставка до ПВЗ", "type": "DELIVERY_SERVICE_WITH_COURIER", "courier": {"id": 123, "uid": 234, "name": "courier", "carNumber": "car", "phoneNumber": "+7-000-000-00-00", "carDescription": "reno logan 20go veka chernogo zveta"}, "partnerId": 1005372}'
+        logistic_point_partner_id="172"
+        logistic_point_external_id="13"
+        logistic_point_id="200"
+        external_box_id="ORDER3"
+        logistic_point_type="SORTING_CENTER"
+    />
+
+    <plan_fact
+        id="1"
+        entity_type="LRM_RETURN_SEGMENT"
+        entity_id="1"
+        expected_status="TRANSIT_PREPARED"
+        processing_status="ENQUEUED"
+        plan_fact_status="ACTIVE"
+        producer_name="ScInToTransitPreparedReturnSegmentPlanFactProcessor"
+        expected_status_datetime="2020-11-01 12:00:00 +0000"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        created="2020-11-01 12:00:00 +0000"
+    />
+
+    <plan_fact
+        id="2"
+        entity_type="LRM_RETURN_SEGMENT"
+        entity_id="2"
+        producer_name="ScInToTransitPreparedReturnSegmentPlanFactProcessor"
+        expected_status="TRANSIT_PREPARED"
+        processing_status="ENQUEUED"
+        plan_fact_status="ACTIVE"
+        expected_status_datetime="2020-11-01 12:00:00 +0000"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        created="2020-11-01 12:00:00 +0000"
+    />
+
+    <plan_fact
+        id="3"
+        entity_type="LRM_RETURN_SEGMENT"
+        producer_name="ScInToTransitPreparedReturnSegmentPlanFactProcessor"
+        entity_id="3"
+        expected_status="TRANSIT_PREPARED"
+        processing_status="ENQUEUED"
+        plan_fact_status="ACTIVE"
+        expected_status_datetime="2020-11-01 12:00:00 +0000"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        created="2020-11-01 12:00:00 +0000"
+    />
+
+    <quality_rule
+        id="1"
+        enabled="true"
+        expected_status="TRANSIT_PREPARED"
+        aggregation_type="PARTNER_LRM_RETURN_SEGMENT_SC"
+        rule_processor="STARTREK"
+        rule='{
+                "queue": "MQMTESTRETURN",
+                "_type": ".PartnerLrmReturnSegmentScPayload",
+                "allowedToCloseAssigned": false
+            }'
+    />
+
+    <plan_fact_group
+        id="1"
+        aggregation_key="date:2020-11-01;lrmPartnerFrom:172;lrmPartnerTo:173;"
+        aggregation_type="PARTNER_LRM_RETURN_SEGMENT_SC"
+        processing_status="ENQUEUED"
+        expected_status="TRANSIT_PREPARED"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 1],
+                        "lrmPartnerFrom": {
+                            "id": 172,
+                            "name": "172"
+                        },
+                        "lrmPartnerTo" : {
+                            "id": 173,
+                            "name": "aboba"
+                        }
+                    }
+                },
+                "PartnerLrmReturnSegmentScAdditionalData": {
+                    "_type": ".PartnerLrmReturnSegmentScAdditionalData",
+                    "issueKey": "MQMTESTRETURN-1",
+                    "issueClosed": false,
+                    "orderIds": ["ORDER1", "ORDER2"],
+                    "affectedOrderIds": ["ORDER1", "ORDER2"],
+                    "issueCreatedAt": [2020, 11, 2, 12, 30]
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+        plan_fact_group_id="1"
+        plan_fact_id="1"
+    />
+
+    <plan_fact_group_relations
+        plan_fact_group_id="1"
+        plan_fact_id="3"
+    />
+
+</dataset>

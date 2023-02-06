@@ -1,0 +1,45 @@
+# Cases
+# - model1: all filled
+# - model2: offer name and pic missing
+# - model3: mbo name and pic missing
+# - model4: no rating
+# - model5: no offer
+# - model6: offer is gone
+# - model7: not published
+
+
+MOCK TABLE //home/market/production/indexer/stratocaster/offers/recent
+SCHEMA model_id:int64, cluster_id:int64, virtual_model_id:int64
+SCHEMA title:string, has_gone:bool, price:string, pictures:string
+{"model_id": 1, "title":"offer_name_1", "price":"RUR 1", "pictures":"[{\"group_id\":1,\"id\":\"opic1\"}]"}
+{"cluster_id": 2, "price":"RUR 1", "pictures":"[]"}
+{"virtual_model_id": 3, "title":"offer_name_3", "price":"RUR 1", "pictures":"[{\"group_id\":4,\"id\":\"opic3\"}]"}
+{"model_id": 4, "title":"offer_name_4", "price":"RUR 1", "pictures":"[{\"group_id\":4,\"id\":\"opic4\"}]"}
+{"model_id": 6, "title":"offer_name_1", "has_gone":true, "price":"RUR 1", "pictures":"[{\"group_id\":6,\"id\":\"opic6\"}]"}
+{"model_id": 7, "title":"offer_name_7", "price":"RUR 1", "pictures":"[{\"group_id\":1,\"id\":\"opic7\"}]"}
+
+MOCK VAR $get_mbo_picture
+SET ($row) -> { return $row.mock_url};
+
+MOCK VAR $get_mbo_published
+SET ($row) -> { return $row.published};
+
+MOCK TABLE //home/market/production/mbo/export/recent/models/all_models
+SCHEMA model_id:int64, title:string, published:bool
+SCHEMA mock_url:string
+{"model_id":1, "published":true, "title":"mod1", "mock_url": "murl1"}
+{"model_id":2, "published":true, "title":"mod2", "mock_url": "murl2"}
+{"model_id":3, "published":true}
+{"model_id":4, "published":true, "title":"mod4", "mock_url": "murl4"}
+{"model_id":5, "published":true, "title":"mod5", "mock_url": "murl5"}
+{"model_id":6, "published":true, "title":"mod6", "mock_url": "murl6"}
+{"model_id":7, "published":false, "title":"mod7", "mock_url": "murl7"}
+
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/tables/model_rating/current
+SCHEMA model_id:int64, rating:double
+{"model_id":1, "rating": 4.6}
+{"model_id":2, "rating": 4.1}
+{"model_id":3, "rating": 4.6}
+{"model_id":5, "rating": 4.3}
+{"model_id":6, "rating": 4.6}
+{"model_id":7, "rating": 4.6}

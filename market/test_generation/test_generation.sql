@@ -1,0 +1,9 @@
+--liquibase formatted sql
+
+--changeset sergey-fed:MBI-27632
+CREATE OR REPLACE VIEW SHOPS_WEB.TEST_GENERATION
+AS
+  SELECT *
+  FROM SHOPS_WEB.TEST_GENERATION_AND_DELTA
+  WHERE type = 0
+;

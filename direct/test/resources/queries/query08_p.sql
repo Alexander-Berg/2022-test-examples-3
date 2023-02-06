@@ -1,0 +1,1 @@
+update table1 as dest, (select name, id, family from table2 where id = ?) as src set dest.name = src.name, dest.id = src.id, dest.family = src.family where dest.id = ?

@@ -1,0 +1,25 @@
+context:
+  default:
+    service_name: content_api_haproxy
+    servername_regexp: content-api\\.tst\\.vs\\.market\\.yandex\\.net
+    vs: content_api
+    cert: market-api
+    plain_http: false
+    antirobot: false
+    balancing_method: active
+    health_check: '"GET /ping HTTP/1.1\r\nHost: api.content.market.yandex.ru\r\n\r\n"'
+    # Нельзя добавлять yandex-uid на балансере, если его не было - это ломает авторизацию мобильщикам
+    no_yandex_uid: true
+    # Нельзя затирать X-Forwarded-For на балансере, т.к. в этом заголовке приходит ip клиента от советника
+    trust_upstream_headers: true
+    # XXX: Приоритет должен быть ВЫШЕ, чем у встроенного хэндлера /ping, чтобы запросы на пинг обрабатывались haproxy
+    priority: 1000
+
+servers:
+  default:
+    main:
+      # local haproxy address - content-api.tst.vs.market.yandex.net address with grey 'fdee' prefix
+    - name: "GREY%content-api.tst.vs.market.yandex.net"
+      keepalive_count: 2
+      plain_http_backend: true
+      timeout: 50s

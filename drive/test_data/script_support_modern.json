@@ -1,0 +1,1915 @@
+{
+    "items": [
+      {
+        "id": "intro",
+        "action_type": "tree",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "welcome_text",
+            "text": "Добро пожаловать в службу поддержки!"
+          },
+          {
+            "type": "plaintext",
+            "text": "\\U0001F699 [b]Вопрос про автомобиль?[/b]\nУкажите его гос. номер, чтобы мы разобрались быстрее."
+          },
+          {
+            "type": "plaintext",
+            "text": "\\U0001F6A8 [b]В экстренной ситуации[/b]\nЗвоните в колл-центр:\n[url=tel://+74997040941]+7 499 704-09-41[/url] (Москва),\n[url=tel://+74997040941]+7 499 704-09-41[/url] (Санкт-Петербург),\n[url=tel://+74997040941]+7 499 704-09-41[/url] (Казань)"
+          },
+          {
+            "type": "plaintext",
+            "text": "\\U0001F4A1 [b]Страница помощи по сервису здесь:[/b]\n [url=https://yandex.ru/support/drive]yandex.ru/support/drive[/url]"
+          }
+        ],
+        "fallback_node": "entered_intro",
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "text": "Проблема в поездке",
+              "type": "options",
+              "options": [
+                {
+                  "text": "Автомобиль не заводится",
+                  "type": "message",
+                  "message_text": "!car_wont_start",
+                  "node": "car_wont_start_question"
+                },
+                {
+                  "text": "Автомобиль сломался в поездке",
+                  "type": "message",
+                  "message_text": "!car_broken_in_riding",
+                  "node": "car_broken_in_riding"
+                },
+                {
+                  "text": "Спустило колесо",
+                  "type": "message",
+                  "message_text": "!flat_tire",
+                  "node": "generic_ride_problem"
+                },
+                {
+                  "text": "Случилось ДТП",
+                  "type": "message",
+                  "message_text": "!dtp_happened",
+                  "node": "dtp_happened|044b8e35-0a02-4705-bb2a-5805ed381561"
+                },
+                {
+                  "text": "В машине чего-то не хватает",
+                  "type": "options",
+                  "options": [
+                    {
+                      "text": "Нет ковриков",
+                      "type": "message",
+                      "message_text": "!no_carpets_noriding",
+                      "node": "no_carpets_noriding"
+                    },
+                    {
+                      "text": "Нет СТС",
+                      "type": "message",
+                      "message_text": "!no_sts_noriding",
+                      "node": "no_sts_noriding"
+                    },
+                    {
+                      "text": "Нет омывающей жидкости",
+                      "type": "message",
+                      "message_text": "!no_washer_fluid_noriding",
+                      "node": "no_washer_fluid_noriding"
+                    },
+                    {
+                      "text": "Нет детского кресла",
+                      "type": "message",
+                      "message_text": "!car_without_child_seat_noriding",
+                      "node": "car_without_child_seat_noriding"
+                    },    
+                    {
+                      "text": "Кончился бензин",
+                      "type": "message",
+                      "message_text": "!no_fuel_noriding",
+                      "node": "no_fuel_noriding"
+                    }
+                  ]
+                },
+                {
+                  "text": "Не получается завершить аренду",
+                  "type": "message",
+                  "message_text": "!cant_finish_order",
+                  "node": "generic_ride_problem"
+                },
+                {
+                  "text": "Другое",
+                  "history_text": "У меня другая проблема в поездке",
+                  "type": "message",
+                  "message_text": "!other_problem_in_riding",
+                  "node": "generic_ride_problem"
+                }
+              ]
+            },
+            {
+              "text": "Проблемы с автомобилем",
+              "type": "options",
+              "options": [
+                {
+                  "text": "Не могу найти машину",
+                  "type": "message",
+                  "message_text": "!generic_car_problems",
+                  "node": "generic_car_problems"
+                },
+                {
+                  "text": "Автомобиль на закрытой территории или платной парковке",
+                  "type": "message",
+                  "message_text": "!car_on_closed_territory",
+                  "node": "generic_car_problems"
+                },
+                {
+                  "text": "Автомобиль в плохом состоянии",
+                  "type": "message",
+                  "message_text": "!car_in_bad_condition",
+                  "node": "generic_car_problems"
+                },
+                {
+                  "text": "Другое",
+                  "history_text": "У меня другая проблема с машиной",
+                  "type": "message",
+                  "message_text": "!other_problem_with_car",
+                  "node": "generic_car_problems"
+                }
+              ]
+            },
+            {
+              "text": "Вопрос по работе приложения",
+              "type": "options",
+              "options": [
+                {
+                  "text": "Как получить доступ к машине высокого класса",
+                  "type": "message",
+                  "message_text": "!how_to_get_higher_class_car",
+                  "node": "how_to_get_higher_class_car"
+                },
+                {
+                  "text": "Не вижу машин на карте",
+                  "type": "message",
+                  "message_text": "!dont_see_cars_on_map",
+                  "node": "dont_see_cars_on_map"
+                },
+                {
+                  "text": "Не могу привязать карту",
+                  "type": "message",
+                  "message_text": "!cant_bind_bank_card",
+                  "node": "cant_bind_bank_card"
+                },
+                {
+                  "text": "Другое",
+                  "history_text": "У меня другой вопрос по работе приложения",
+                  "type": "message",
+                  "message_text": "!other_question_on_app",
+                  "node": "other_question_on_app"
+                }
+              ]
+            },
+            {
+              "text": "Про деньги",
+              "type": "options",
+              "options": [
+                {
+                  "text": "Машина заправлена «за свои»",
+                  "type": "message",
+                  "message_text": "!car_fueled_for_own_money",
+                  "node": "car_fueled_for_own_money"
+                },
+                {
+                  "text": "Образовался долг",
+                  "type": "message",
+                  "message_text": "!ive_got_debt",
+                  "node": "ive_got_debt"
+                },
+                {
+                  "text": "Не могу привязать карту",
+                  "type": "message",
+                  "message_text": "!cant_bind_bank_card",
+                  "node": "cant_bind_bank_card"
+                },
+                {
+                  "text": "Не завершена аренда",
+                  "type": "message",
+                  "message_text": "!rent_not_finished",
+                  "node": "question_money_generic"
+                },
+                {
+                  "text": "Списали 271,82 рубль",
+                  "type": "message",
+                  "message_text": "!withdraw_271_82",
+                  "node": "withdraw_271_82"
+                },
+                {
+                  "text": "Деньги списали два раза",
+                  "type": "message",
+                  "message_text": "!withdraw_twice",
+                  "node": "withdraw_twice"
+                },
+                {
+                  "text": "За поездку списали больше",
+                  "type": "message",
+                  "message_text": "!withdraw_more_than_needed",
+                  "node": "withdraw_more_than_needed"
+                },
+                {
+                  "text": "Вопрос о штрафе или эвакуации",
+                  "type": "message",
+                  "message_text": "!question_fine_or_evacuation",
+                  "node": "question_fine_or_evacuation"
+                },
+                {
+                  "text": "Другое",
+                  "history_text": "У меня другой вопрос про деньги",
+                  "type": "message",
+                  "message_text": "!other_question_fine",
+                  "node": "question_money_generic"
+                }
+              ]
+            },
+            {
+              "text": "Яндекс.Авто",
+              "type": "options",
+              "options": [
+                {
+                  "text": "Не работает",
+                  "type": "options",
+                  "options": [
+                    {
+                      "type": "message",
+                      "text": "Система не включается",
+                      "history_text": "Яндекс.Авто не включается",
+                      "message_text": "!yauto_no_turn_on",
+                      "node": "yauto_no_turn_on"
+                    },
+                    {
+                      "type": "message",
+                      "text": "Не работает интернет",
+                      "history_text": "В Яндекс.Авто не работает интернет",
+                      "message_text": "!yauto_no_internet",
+                      "node": "yauto_no_internet"
+                    },
+                    {
+                      "type": "message",
+                      "text": "Проблема в другом",
+                      "history_text": "Проблема с Яндекс.Авто",
+                      "message_text": "!yauto_broken_other_problem",
+                      "node": "yauto_broken_other_problem"
+                    }
+                  ]
+                },
+                {
+                  "text": "Повреждено",
+                  "type": "options",
+                  "options": [
+                    {
+                      "type": "message",
+                      "text": "Разбит экран",
+                      "history_text": "Разбит экран в Яндекс.Авто",
+                      "message_text": "!yauto_damaged_screen",
+                      "node": "yauto_damaged_screen"
+                    },
+                    {
+                      "type": "message",
+                      "text": "Другие проблемы",
+                      "history_text": "Другие проблемы с Яндекс.Авто",
+                      "message_text": "!yauto_damaged_other",
+                      "node": "yauto_damaged_other"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Документы",
+              "type": "options",
+              "options": [
+                {
+                  "type": "message",
+                  "text": "У меня новое ВУ",
+                  "node": "new_driver_license",
+                  "message_text": "!new_driver_license"
+                },
+                {
+                  "message_text": "!got_new_passport",
+                  "node": "new_passport",
+                  "type": "message",
+                  "text": "У меня новый паспорт"
+                }
+              ]
+            },
+            {
+              "text": "Другие вопросы",
+              "history_text": "Есть один вопросик",
+              "type": "message",
+              "message_text": "!other_questions",
+              "node": "other_questions"
+            },
+            {
+              "text": "Впустите в сервис",
+              "history_text": "Впустите в сервис",
+              "type": "message",
+              "message_text": "!approve_me",
+              "node": "approve_user"
+            },
+            {
+              "text": "Покажите информацию о машине",
+              "type": "message",
+              "node": "show_car_info",
+              "message_text": "!show_car_info"
+            }
+          ]
+        },
+        "next_step": null
+      },
+
+      {
+        "id": "approve_user",
+        "action_type": "chat_closed",
+        "action_button_text": "Этот чат закрыт и зайти сюда не получится",
+        "on_entry_actions": [
+          {
+            "type": "endpoint_call",
+            "route": "api/staff/user/register-force",
+            "cgi": "user_id=[[[!current_user]]]",
+            "actor_user_id": "8b33b36b-ca2a-4f16-9af4-dc1598f02ec4",
+            "env": "test_local"
+          }
+        ],
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Ну, хорошо."
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "new_driver_license",
+        "action_type": "license",
+        "action_button_text": "Включить камеру",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Сейчас сфотографируем водительское удостоверение."
+          },
+          {
+            "type": "plaintext",
+            "text": "Постарайтесь держать его ровно."
+          }
+        ],
+        "next_step": "new_documents_done"
+      },
+      {
+        "id": "new_documents_done",
+        "action_type": null,
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Спасибо. Я отправил фотографии на проверку"
+          }
+        ],
+        "next_step": null
+      },
+
+      {
+        "id": "car_wont_start_question",
+        "action_type": "context_buttons",
+        "action_button_text": null,
+        "support_line_tag": "support_chat_riding",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Убедитесь, что автомобиль переведён в приложении в режим поездки, иначе машина не заведётся."
+          }
+        ],
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "text": "Точно, спасибо",
+              "type": "message",
+              "message_text": "!yes",
+              "node": "car_started"
+            },
+            {
+              "text": "Дело не в этом",
+              "type": "message",
+              "message_text": "!no",
+              "node": "generic_ride_problem"
+            }
+          ]
+        },
+        "next_step": null
+      },
+      {
+        "id": "car_started",
+        "action_type": "chat_closed",
+        "action_button_text": "Этот чат завершен и написать сюда не получится",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Отлично! Хорошей поездки."
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "car_broken_in_riding",
+        "action_type": "context_buttons",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Расскажите, в какой поездке произошла эта неприятность?"
+          }
+        ],
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "type": "message",
+              "text": "Текущая",
+              "message_text": "!current",
+              "node": "car_broken_in_riding_current"
+            },
+            {
+              "type": "message",
+              "text": "Прошедшая",
+              "message_text": "!past",
+              "node": "car_broken_in_riding_past"
+            }
+          ]
+        },
+        "next_step": null
+      },
+
+      {
+        "id": "car_broken_in_riding_current",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_riding",
+        "put_tag_on_entry": true,
+        "pre_action_messages": [
+        ],
+        "next_step": "car_broken_in_riding_current"
+      },
+      {
+        "id": "car_broken_in_riding_past",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_riding",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Нажмите на скрепку и прикрепите эту поездку."
+          }
+        ],
+        "next_step": "car_broken_in_riding_past"
+      },
+
+      {
+        "id": "generic_ride_problem",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_riding",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Расскажите нам, что случилоcь"
+          }
+        ],
+        "next_step": "generic_ride_problem"
+      },
+
+      {
+        "id": "dtp_happened",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_dtp",
+        "put_tag_on_entry": true,
+        "action_button_text": null,
+        "on_entry_actions": [
+            {
+                "type": "classify_request",
+                "categorizer_node_ids": "%1"
+            }
+        ],
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Напишите, если хотите. Я позову оператора."
+          }
+        ],
+        "next_step": "dtp_happened_support_is_here"
+      },
+      {
+        "id": "dtp_happened_support_is_here",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+        ],
+        "next_step": "dtp_happened_support_is_here"
+      },
+
+      {
+        "id": "no_carpets_noriding",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_riding",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Расскажите нам пожалуйста о поездке, в которой обнаружилась пропажа."
+          }
+        ],
+        "next_step": "no_carpets_noriding"
+      },
+
+      {
+        "id": "no_sts_noriding",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Ох, без СТС нельзя передвигаться на автомобиле. Расскажите нам пожалуйста о поездке, в которой обнаружилась пропажа."
+          }
+        ],
+        "next_step": "no_sts_noriding"
+      },
+
+      {
+        "id": "need_help_finding_car_nearby",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "support_line_tag": "support_chat_riding",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Напишите что-нибудь, если хотите. Я позову оператора."
+          }
+        ],
+        "next_step": "need_help_finding_car_nearby"
+      },
+
+      {
+        "id": "ok_we_will_look_for_sts",
+        "action_type": "chat_closed",
+        "action_button_text": "Этот чат завершен и написать сюда не получится",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Хорошо. Мы займемся поиском пропавшего документа — возможно, кто-то из предыдущих пользователей случайно забрал его с собой."
+          }
+        ],
+        "next_step": null
+      },
+
+      {
+        "id": "no_washer_fluid_noriding",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "support_line_tag": "support_chat_riding",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Извините за эти неудобства. Мы очень стараемся следить за всеми машинками, но иногда погода нас обыгрывает."
+          },
+          {
+            "type": "plaintext",
+            "text": "Сообщите нам о машине, в которой обнаружилось отсутствие омывайки."
+          }
+        ],
+        "next_step": "no_washer_fluid_noriding"
+      },
+
+      {
+        "id": "car_without_child_seat_noriding",
+        "action_type": "context_buttons",
+        "action_button_text": null,
+        "support_line_tag": "support_chat_riding",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "А вы не забыли, случайно, проверить багажник? Нашлось?"
+          }
+        ],
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "text": "Да",
+              "type": "message",
+              "message_text": "!yes",
+              "node": "missing_child_seat_found"
+            },
+            {
+              "text": "Нет",
+              "type": "message",
+              "message_text": "!no",
+              "node": "missing_child_seat_not_found"
+            }
+          ]
+        },
+        "next_step": null
+      },
+
+      {
+        "id": "missing_child_seat_found",
+        "action_type": "chat_closed",
+        "action_button_text": "Этот чат завершен и написать сюда не получится",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Ура! Приятной поездки :)"
+          }
+        ],
+        "next_step": null
+      },
+
+      {
+        "id": "missing_child_seat_not_found",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_riding",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Расскажите нам пожалуйста о поездке, в которой обнаружилась пропажа."
+          }
+        ],
+        "next_step": "missing_child_seat_not_found"
+      },
+
+      {
+        "id": "no_fuel_noriding",
+        "action_type": "context_buttons",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Если в автомобиле заканчивается бензин, его можно заправить через кнопку в приложении. Кнопка заправки появилась в приложении?"
+          }
+        ],
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "type": "message",
+              "text": "Да",
+              "message_text": "!yes",
+              "node": "no_fuel_noriding_with_button"
+            },
+            {
+              "type": "message",
+              "text": "Нет",
+              "message_text": "!no",
+              "node": "no_fuel_noriding_no_button"
+            }
+          ]
+        },
+        "next_step": null
+      },
+
+      {
+        "id": "no_fuel_noriding_with_button",
+        "action_type": "context_buttons",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Следуйте инструкциям в приложении. Нужна помощь?"
+          }
+        ],
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "type": "message",
+              "text": "Да",
+              "message_text": "!yes",
+              "node": "no_fuel_noriding_with_button_help"
+            },
+            {
+              "type": "message",
+              "text": "Нет",
+              "message_text": "!no",
+              "node": "no_fuel_noriding_with_button_finish"
+            }
+          ]
+        },
+        "next_step": null
+      },
+
+      {
+        "id": "no_fuel_noriding_with_button_help",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_riding",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Чем мы можем помочь?"
+          }
+        ],
+        "next_step": "no_fuel_noriding_with_button_help"
+      },
+
+      {
+        "id": "no_fuel_noriding_with_button_finish",
+        "action_type": "chat_closed",
+        "action_button_text": "Этот чат завершен и написать сюда не получится",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Приятной поездки :)"
+          }
+        ],
+        "next_step": null
+      },
+
+      {
+        "id": "no_fuel_noriding_no_button",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_finance",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Кнопка появляется, если бензина остаётся мало. Но вы всегда можете заправить автомобиль за свои. После заправки сделайте фото чека на фоне гос. номера автомобиля и пришлите в этот чат, мы компенсируем заправку бонусами на ваш счёт в Драйве."
+          }
+        ],
+        "next_step": null
+      },
+
+      {
+        "id": "generic_car_problems",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_car",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Чем мы можем помочь?"
+          }
+        ],
+        "next_step": "generic_car_problems"
+      },
+
+      {
+        "id": "how_to_get_higher_class_car",
+        "action_type": "button",
+        "action_button_text": "Хорошо",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Минимальные требования для доступа к таким моделям автомобилей — возраст от 26 лет и 6 лет стажа категории «B»."
+          },
+          {
+            "type": "plaintext",
+            "text": "Но это не всё: за выдачу доступа отвечает алгоритм на основе машинного обучения. Его задача — тщательный анализ с учетом множества факторов, на основании которых он предлагает пользователям автомобили повышенного сегмента."
+          },
+          {
+            "type": "plaintext",
+            "text": "Если новые модели авто пока недоступны вам — не расстраивайтесь, возможно, в ближайшем будущем это изменится. Иногда алгоритму просто нужно время"
+          }
+        ],
+        "next_step": "chat_finished"
+      },
+
+      {
+        "id": "dont_see_cars_on_map",
+        "action_type": "context_buttons",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Попробуйте, пожалуйста, переустановить приложение и проверьте соединение с интернетом. Помогло?"
+          }
+        ],
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "type": "message",
+              "text": "Да",
+              "message_text": "!yes",
+              "node": "dont_see_cars_on_map_finish_ok"
+            },
+            {
+              "type": "message",
+              "text": "Нет",
+              "message_text": "!no",
+              "node": "dont_see_cars_on_map_help"
+            }
+          ]
+        },
+        "next_step": null
+      },
+
+      {
+        "id": "dont_see_cars_on_map_finish_ok",
+        "action_type": "chat_closed",
+        "action_button_text": "Этот чат завершен и написать сюда не получится",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Ура! Хорошей поездки."
+          }
+        ],
+        "next_step": null
+      },
+
+      {
+        "id": "dont_see_cars_on_map_help",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_app",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Пришлите, пожалуйста, скриншот с картой."
+          }
+        ],
+        "next_step": "dont_see_cars_on_map_help"
+      },
+
+      {
+        "id": "cant_bind_bank_card",
+        "action_type": "context_buttons",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Для того чтобы получилось привязать карту, она должна соответствовать некоторым требованиям: быть именной, не виртуальной и поддерживать безакцептное списание. Карта подходит под эти требования?»"
+          }
+        ],
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "type": "message",
+              "text": "Да",
+              "message_text": "!yes",
+              "node": "cant_bind_bank_card_yes"
+            },
+            {
+              "type": "message",
+              "text": "Нет",
+              "message_text": "!no",
+              "node": "cant_bind_bank_card_no"
+            }
+          ]
+        },
+        "next_step": null
+      },
+
+      {
+        "id": "cant_bind_bank_card_yes",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "support_line_tag": "support_chat_finance",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Пришлите, пожалуйста, первые 6 и последние 4 цифры номера карты, а также скриншот возникающей ошибки. Будем разбираться, в чём дело."
+          }
+        ],
+        "next_step": "cant_bind_bank_card_yes"
+      },
+
+      {
+        "id": "cant_bind_bank_card_no",
+        "action_type": "context_buttons",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Попробуйте привязать другую карту. Получится?"
+          }
+        ],
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "type": "message",
+              "text": "Да",
+              "message_text": "!yes",
+              "node": "cant_bind_bank_card_no_yes"
+            },
+            {
+              "type": "message",
+              "text": "Нет",
+              "message_text": "!no",
+              "node": "cant_bind_bank_card_no_no"
+            }
+          ]
+        },
+        "next_step": null
+      },
+
+      {
+        "id": "cant_bind_bank_card_no_yes",
+        "action_type": "chat_closed",
+        "action_button_text": "Этот чат завершен и написать сюда не получится",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Супер! Хороших поездок."
+          }
+        ],
+        "next_step": null
+      },
+
+      {
+        "id": "cant_bind_bank_card_no_no",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_finance",
+        "put_tag_on_entry": true,
+        "pre_action_messages": [
+        ],
+        "next_step": "cant_bind_bank_card_no_no"
+      },
+
+      {
+        "id": "other_question_on_app",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_app",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Расскажите, что случилось"
+          }
+        ],
+        "next_step": "other_question_on_app"
+      },
+
+      {
+        "id": "car_fueled_for_own_money",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_finance",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Пожалуйста, сделайте фото чека на фоне гос. номера автомобиля и пришлите в этот чат, мы компенсируем заправку бонусами на ваш счёт в Драйве."
+          }
+        ],
+        "next_step": "car_fueled_for_own_money"
+      },
+
+      {
+        "id": "ive_got_debt",
+        "action_type": "context_buttons",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Вы можете самостоятельно погасить задолженность. Для этого перейдите, пожалуйста, в «Меню» — «Настройки». Под вашими данными будет красная кнопка с предложением оплатить долг. Нажмите её для оплаты, подождите немного для списания денежных средств. Получилось?"
+          }
+        ],
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "type": "message",
+              "text": "Да",
+              "message_text": "!yes",
+              "node": "ive_got_debt_yes"
+            },
+            {
+              "type": "message",
+              "text": "Нет",
+              "message_text": "!no",
+              "node": "ive_got_debt_no"
+            }
+          ]
+        },
+        "next_step": null
+      },
+
+      {
+        "id": "ive_got_debt_yes",
+        "action_type": "chat_closed",
+        "action_button_text": "Этот чат завершен и написать сюда не получится",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Отлично. Приятных поездок."
+          }
+        ],
+        "next_step": null
+      },
+
+      {
+        "id": "ive_got_debt_no",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_finance",
+        "put_tag_on_entry": true,
+        "pre_action_messages": [
+
+        ],
+        "next_step": null
+      },
+
+      {
+        "id": "question_money_generic",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_finance",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Расскажите, что случилось"
+          }
+        ],
+        "next_step": "question_money_generic"
+      },
+
+      {
+        "id": "withdraw_271_82",
+        "action_type": "context_buttons",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Если вы давно не ездили на Драйве или последние поездки были в долг, мы блокируем у вас на карте 271,82 рубль перед следующей арендой."
+          },
+          {
+            "type": "plaintext",
+            "text": "Если итоговая сумма поездки будет меньше, чем депозит, 271,82 рубль разблокируется после завершения аренды. Деньги за поездку спишутся отдельной транзакцией. Если итоговая сумма будет больше депозита, то 271 рубль и 82 копейки не разблокируются, а будут учтены за аренду. В качестве предсписания могут использоваться бонусные баллы, полностью или частично."
+          },
+          {
+            "type": "plaintext",
+            "text": "Если кажется, что 271,82 рубль не вернулись, вы всегда можете уточнить статус этой транзакции в поддержке своего банка. Или запросить в банке выписку по счёту, там видны все проведённые транзакции. Иногда сотрудники банка могут просить RRN-код операции."
+          },
+          {
+            "type": "plaintext",
+            "text": "Прислать вам RRN-код для обращения в банк?"
+          }
+        ],
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "type": "message",
+              "text": "Да",
+              "message_text": "!yes",
+              "node": "withdraw_271_82_yes"
+            },
+            {
+              "type": "message",
+              "text": "Не надо, всё понятно",
+              "message_text": "!no",
+              "node": "withdraw_271_82_no"
+            }
+          ]
+        },
+        "next_step": null
+      },
+
+      {
+        "id": "withdraw_271_82_yes",
+        "action_type": "user_message",
+        "put_tag_on_entry": true,
+        "support_line_tag": "support_chat_finance",
+        "pre_action_messages": [
+
+        ],
+        "next_step": "withdraw_271_82_yes"
+      },
+
+      {
+        "id": "withdraw_271_82_no",
+        "action_type": "chat_closed",
+        "action_button_text": "Этот чат завершен и написать сюда не получится",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Отлично, рады слышать :-)"
+          }
+        ],
+        "next_step": null        
+      },
+
+      {
+        "id": "withdraw_twice",
+        "action_type": "context_buttons",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "При оплате поездок средства сначала удерживаются на вашем счёте, а в течение 72 часов списываются. Однако некоторые банки не распознают операции списания и удержания средств и присылают смс с одинаковым текстом независимо от типа операции :-( Аналогичная ситуация возможна и в банковском приложении."
+          },
+          {
+            "type": "plaintext",
+            "text": "Вы можете запросить у банка выписку, там у вас отобразятся все списания. В выписке списание прошло один раз?"
+          }
+        ],
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "type": "message",
+              "text": "Да, ясно",
+              "message_text": "!yes",
+              "node": "withdraw_twice_yes"
+            },
+            {
+              "type": "message",
+              "text": "Нет",
+              "message_text": "!no",
+              "node": "withdraw_twice_no"
+            }
+          ]
+        },
+        "next_step": null
+      },
+
+      {
+        "id": "withdraw_twice_yes",
+        "action_type": "chat_closed",
+        "action_button_text": "Этот чат завершен и написать сюда не получится",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Хорошо. Удачных поездок!"
+          }
+        ],
+        "next_step": null
+      },
+
+      {
+        "id": "withdraw_twice_no",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_finance",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Пожалуйста, прикрепите выписку. Подскажите, какая сумма была списана дважды?"
+          }
+        ],
+        "next_step": "withdraw_twice_no"
+      },
+
+      {
+        "id": "withdraw_more_than_needed",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_finance",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Нажмите на скрепку и прикрепите поездку, за которую списалось больше, чем нужно"
+          }
+        ],
+        "next_step": "withdraw_more_than_needed"
+      },
+
+      {
+        "id": "question_fine_or_evacuation",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_finance",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Нажмите на скрепку и прикрепите поездку, по которой возник вопрос"
+          }
+        ],
+        "next_step": "question_fine_or_evacuation"
+      },
+
+      {
+        "id": "yauto_no_turn_on",
+        "action_type": "context_buttons",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Расскажите, в какой поездке произошла эта неприятность?"
+          }
+        ],
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "type": "message",
+              "text": "Текущая",
+              "message_text": "!current",
+              "node": "yauto_no_turn_on_current"
+            },
+            {
+              "type": "message",
+              "text": "Прошедшая",
+              "message_text": "!past",
+              "node": "yauto_no_turn_on_past"
+            }
+          ]
+        },
+        "next_step": null
+      },
+
+      {
+        "id": "yauto_no_turn_on_current",
+        "action_type": "context_buttons",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Спасибо, в ближайшее время починим. Приношу извинения за эту недоработку. Вам помочь найти другую машину?"
+          }
+        ],
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "type": "message",
+              "text": "Да",
+              "message_text": "!yes",
+              "node": "yauto_no_turn_on_current_yes"
+            },
+            {
+              "type": "message",
+              "text": "нет",
+              "message_text": "!no",
+              "node": "yauto_no_turn_on_current_no"
+            }
+          ]
+        },
+        "next_step": null
+      },
+
+      {
+        "id": "yauto_no_turn_on_current_yes",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_riding",
+        "put_tag_on_entry": true,
+        "action_button_text": null,
+        "pre_action_messages": [
+        ],
+        "next_step": "yauto_no_turn_on_current_yes"
+      },
+
+      {
+        "id": "yauto_no_turn_on_current_no",
+        "action_type": "chat_closed",
+        "action_button_text": "Этот чат завершен и написать сюда не получится",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Извините. Надеюсь, не очень расстроили."
+          }
+        ],
+        "next_step": null
+      },
+
+      {
+        "id": "yauto_no_turn_on_past",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_auto",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Нажмите на скрепку и прикрепите эту поездку."
+          }
+        ],
+        "next_step": "yauto_no_turn_on_past"
+      },
+
+      {
+        "id": "yauto_no_internet",
+        "action_type": "context_buttons",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Расскажите, в какой поездке вы остались без интернета?"
+          }
+        ],
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "type": "message",
+              "text": "Текущая",
+              "message_text": "!current",
+              "node": "yauto_no_internet_current"
+            },
+            {
+              "type": "message",
+              "text": "Прошедшая",
+              "message_text": "!past",
+              "node": "yauto_no_internet_past"
+            }
+          ]
+        },
+        "next_step": null
+      },
+
+      {
+        "id": "yauto_no_internet_current",
+        "action_type": "chat_closed",
+        "action_button_text": "Этот чат завершен и написать сюда не получится",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Спасибо, в ближайшее время проверим работу Я.Авто в этой машинке."
+          }
+        ],
+        "next_step": null
+      },
+
+      {
+        "id": "yauto_no_internet_past",
+        "support_line_tag": "support_chat_auto",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Нажмите на скрепку и прикрепите эту поездку."
+          }
+        ],
+        "next_step": "yauto_no_internet_past"
+      },
+
+      {
+        "id": "yauto_broken_other_problem",
+        "support_line_tag": "support_chat_auto",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Расскажите, что пошло не так?"
+          }
+        ],
+        "next_step": "yauto_broken_other_problem"
+      },
+
+      {
+        "id": "yauto_damaged_screen",
+        "action_type": "context_buttons",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Расскажите, в какой поездке произошла эта неприятность?"
+          }
+        ],
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "type": "message",
+              "text": "Текущая",
+              "message_text": "!current",
+              "node": "yauto_damaged_screen_current"
+            },
+            {
+              "type": "message",
+              "text": "Прошедшая",
+              "message_text": "!past",
+              "node": "yauto_damaged_screen_past"
+            }
+          ]
+        },
+        "next_step": null
+      },
+
+      {
+        "id": "yauto_damaged_screen_current",
+        "action_type": "context_buttons",
+        "action_button_text": null,
+        "on_entry_actions": [
+          {
+            "type": "propose_tag",
+            "object": "!current_car",
+            "tag": "yauto_damaged_screen"
+          }
+        ],
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Ох, как жалко. Похоже, у предыдущего пользователя не задался день. Мы обязательно приведём машину в порядок. Вам помочь найти другую машину?"
+          }
+        ],
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "type": "message",
+              "text": "Да",
+              "message_text": "!yes",
+              "node": "yauto_damaged_screen_current_yes"
+            },
+            {
+              "type": "message",
+              "text": "Нет",
+              "message_text": "!no",
+              "node": "yauto_damaged_screen_current_no"
+            }
+          ]
+        },
+        "next_step": null
+      },
+
+      {
+        "id": "show_car_info",
+        "action_type": "user_message",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "!current_model - !current_model_hr - !current_number"
+          }
+        ],
+        "next_step": null
+      },
+
+      {
+        "id": "yauto_damaged_screen_current_yes",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_riding",
+        "put_tag_on_entry": true,
+        "pre_action_messages": [
+
+        ],
+        "next_step": "yauto_damaged_screen_current_yes"
+      },
+
+      {
+        "id": "yauto_damaged_screen_current_no",
+        "action_type": "chat_closed",
+        "action_button_text": "Этот чат завершен и написать сюда не получится",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Извините. Надеюсь, не очень расстроили."
+          }
+        ],
+        "next_step": null
+      },
+
+      {
+        "id": "yauto_damaged_screen_past",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Нажмите на скрепку и прикрепите эту поездку."
+          }
+        ],
+        "next_step": null
+      },
+
+      {
+        "id": "yauto_damaged_other",
+        "action_type": "user_message",
+        "support_line_tag": "support_chat_auto",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Какие видите повреждения?"
+          }
+        ],
+        "next_step": "yauto_damaged_other"
+      },
+
+      {
+        "id": "other_questions",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "support_line_tag": "support_chat_general",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Отлично! Давайте с ним разберемся. Чем мы можем помочь?"
+          }
+        ],
+        "next_step": "other_questions"
+      },
+
+      {
+        "id": "chat_finished",
+        "action_type": "chat_closed",
+        "action_button_text": "Этот чат завершен и написать сюда не получится",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Отлично и хорошего настроения!"
+          }
+        ],
+        "next_step": null
+      },
+
+      {
+        "id": "start_resubmit_license_back",
+        "action_type": "license_back",
+        "action_button_text": "Включить камеру",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Сначала оборотная сторона водительского удостоверения."
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "start_resubmit_license_front",
+        "action_type": "license_front",
+        "action_button_text": "Включить камеру",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Сначала лицевая сторона водительского удостоверения."
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "start_resubmit_passport_biographical",
+        "action_type": "passport_biographical",
+        "action_button_text": "Включить камеру",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Сначала разворот паспорта с вашим фото."
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "start_resubmit_passport_registration",
+        "action_type": "passport_registration",
+        "action_button_text": "Включить камеру",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Сначала разворот паспорта с регистрацией."
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "start_resubmit_passport_selfie",
+        "action_type": "passport_selfie",
+        "action_button_text": "Включить камеру",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Сначала селфи с паспортом."
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "cont_resubmit_license_back",
+        "action_type": "license_back",
+        "action_button_text": "Включить камеру",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Теперь оборотная сторона водительского удостоверения."
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "cont_resubmit_license_front",
+        "action_type": "license_front",
+        "action_button_text": "Включить камеру",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Теперь лицевая сторона водительского удостоверения."
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "cont_resubmit_passport_biographical",
+        "action_type": "passport_biographical",
+        "action_button_text": "Включить камеру",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Теперь разворот паспорта с вашим фото."
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "cont_resubmit_passport_registration",
+        "action_type": "passport_registration",
+        "action_button_text": "Включить камеру",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Теперь разворот паспорта с регистрацией."
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "cont_resubmit_passport_selfie",
+        "action_type": "passport_selfie",
+        "action_button_text": "Включить камеру",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Теперь селфи с паспортом."
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "only_resubmit_license_back",
+        "action_type": "license_back",
+        "action_button_text": "Включить камеру",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Нужно еще раз сфотографировать сторону прав с таблицей"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "only_resubmit_license_front",
+        "action_type": "license_front",
+        "action_button_text": "Включить камеру",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Нужно еще раз сфотографировать сторону прав с фотографией"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "only_resubmit_passport_biographical",
+        "action_type": "passport_biographical",
+        "action_button_text": "Включить камеру",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Нужно еще раз сфотографировать основной разворот паспорта"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "only_resubmit_passport_registration",
+        "action_type": "passport_registration",
+        "action_button_text": "Включить камеру",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Нужно еще раз сфотографировать разворот паспорта с пропиской"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "only_resubmit_passport_selfie",
+        "action_type": "passport_selfie",
+        "action_button_text": "Включить камеру",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Нужно еще раз сделать селфи с паспортом"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "resubmit_one_complete",
+        "action_type": null,
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Спасибо. Я отправил фотографию на проверку"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "resubmit_many_complete",
+        "action_type": null,
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Спасибо. Я отправил фотографии на проверку"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "finish_ok",
+        "action_type": null,
+        "action_type_interface": "enter_map",
+        "action_button_text": "Поехали",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Поздравляю, регистрация пройдена!"
+          },
+          {
+            "type": "plaintext",
+            "text": "Команда Яндекс.Драйва, и я особенно, очень рады, что всё получилось."
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "finish_ok_again",
+        "action_type": null,
+        "action_type_interface": "enter_map",
+        "action_button_text": "Поехали",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Мы обновили данные о ваших документах. Спасибо за терпение."
+          }
+        ],
+        "next_step": null
+      },
+
+      {
+        "action_button_text": "Включить камеру",
+        "action_type": "passport",
+        "next_step": "new_passport_selfie",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Давайте его обновим. Сфотографируйте два разворота паспорта. Главный (с фотографией) и с регистрацией."
+          }
+        ],
+        "id": "new_passport"
+      },
+      {
+        "action_button_text": "Включить камеру",
+        "action_type": "passport_selfie",
+        "on_entry_actions": [
+          {
+            "type": "set_document_statuses",
+            "statuses": "....i"
+          }
+        ],
+        "next_step": "new_documents_done",
+        "pre_action_messages": [
+          {
+            "type": "plaintext",
+            "text": "Также сделайте селфи с паспортом, как при регистрации."
+          }
+        ],
+        "id": "new_passport_selfie"
+      },
+
+      {
+        "id": "leave_feedback_intro",
+        "action_type": "context_buttons",
+        "action_button_text": null,
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "text": "Отлично 😍",
+              "type": "message",
+              "message_text": "!excellent",
+              "node": "leave_feedback_excellent"
+            },
+            {
+              "text": "Нормально 🙂",
+              "type": "message",
+              "message_text": "!normal",
+              "node": "leave_feedback_details|normal"
+            },
+            {
+              "text": "Плохо 😔",
+              "type": "message",
+              "message_text": "!poor",
+              "node": "leave_feedback_details|poor"
+            }
+          ]
+        },
+        "pre_action_messages": [
+          {
+            "type": "feedback_dialogue",
+            "text": "[color=#FFFFFFE6]Оцените обращение в саппорт и расскажите, как с вами поговорили?[/color]"
+          },
+          {
+            "type": "feedback_dialogue",
+            "text": "[color=#FFFFFFE6]Не волнуйтесь, оператор не увидит ваш фидбек.[/color]"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "leave_feedback_excellent",
+        "on_entry_actions": [
+          {
+            "type": "feedback_overall",
+            "value": "excellent"
+          }
+        ],
+        "action_type": "chat_closed",
+        "action_button_text": "Этот чат закрыт и написать сюда не удастся",
+        "pre_action_messages": [
+          {
+            "type": "feedback_dialogue",
+            "text": "[color=#FFFFFFE6]Спасибо за фидбек ❤️[/color]"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "leave_feedback_details",
+        "on_entry_actions": [
+          {
+            "type": "feedback_overall",
+            "value": "%1"
+          }
+        ],
+        "action_type": "context_buttons",
+        "action_button_text": null,
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "text": "Отвечали долго",
+              "type": "message",
+              "message_text": "!long_wait",
+              "node": "leave_feedback_finish|long_wait"
+            },
+            {
+              "text": "Проблема не решена",
+              "type": "message",
+              "message_text": "!problem_not_solved",
+              "node": "leave_feedback_finish|problem_not_solved"
+            },
+            {
+              "text": "Ответ непонятен",
+              "type": "message",
+              "message_text": "!answer_unclear",
+              "node": "leave_feedback_finish|answer_unclear"
+            },
+            {
+              "text": "Другое",
+              "type": "message",
+              "message_text": "!other",
+              "node": "leave_feedback_text"
+            }
+          ]
+        },
+        "pre_action_messages": [
+          {
+            "type": "feedback_dialogue",
+            "text": "[color=#FFFFFFE6]А почему не «Отлично»?[/color]"
+          }
+        ],
+        "next_step": null
+      },
+      {
+        "id": "leave_feedback_text",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "feedback_dialogue",
+            "text": "[color=#FFFFFFE6]Расскажите подробнее, пожалуйста[/color]"
+          }
+        ],
+        "next_step": "leave_feedback_finish|other"
+      },
+      {
+        "id": "leave_feedback_finish",
+        "on_entry_actions": [
+          {
+            "type": "feedback_details",
+            "value": "%1"
+          }
+        ],
+        "action_type": "chat_closed",
+        "action_button_text": "Этот чат закрыт и написать сюда не удастся",
+        "pre_action_messages": [
+          {
+            "type": "feedback_dialogue",
+            "text": "[color=#FFFFFFE6]Спасибо за фидбек ❤️[/color]"
+          }
+        ],
+        "next_step": null
+      },
+
+      {
+        "id": "entered_intro",
+        "action_type": "user_message",
+        "action_button_text": null,
+        "pre_action_messages": [
+        ],
+        "next_step": "entered_intro"
+      }
+    ],
+    "faq_url": null,
+    "support_url": null
+  }
+  

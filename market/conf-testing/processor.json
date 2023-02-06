@@ -1,0 +1,137 @@
+{
+    "VerboseLevel": 6,
+    "YtVerboseLevel": "Error",
+
+    "YtCluster": "markov",
+    "YtLog": "logs/datacamp-picrobot/processor-yt.log",
+    "Port": 7571,
+
+    "GlobalLog": "logs/datacamp-picrobot/processor.log",
+
+    "Suppliers": [
+        {
+            "Alias": "resharded_yt_log",
+            "YtSupplier": {
+                "QueueConsumer": "processor",
+                "QueuePath": "//home/market/testing/indexer/picrobot/queues/input_queue",
+                "Cluster": "markov"
+            }
+        }
+    ],
+    "ConsumingSystem": {
+        "MainPath": "//home/market/testing/indexer/picrobot/cs/processor_events",
+        "MaxShards": 16,
+        "MaxShardsToCheck": 16,
+        "WorkerMinorName": "0"
+    },
+    "StatefulShardProcessorConfig": {
+        "MaxEpochsInFlight": 3,
+        "MaxGroupingTasks": 3
+    },
+    "CollectConfig": {
+        "StateTable": "//home/market/testing/indexer/picrobot/state/state",
+        "OutputQueue": "//home/market/testing/indexer/picrobot/queues/output_queue",
+        "ShardCount": 16,
+        "CopierQueue": "//home/market/testing/indexer/picrobot/queues/copier_queue",
+        "CopierQueuesByNamespace": {
+            "goods_pic": "//home/market/testing/indexer/picrobot/queues/copier_queue_goods_pic",
+            "yabs_performance": "//home/market/testing/indexer/picrobot/queues/copier_queue_yabs_performance"
+        }
+    },
+    "StateManagerConfig": {
+        "EpochStatesSizeQuota": 30000,
+        "StateSizeDummy": 9000
+    },
+    "FactorsConfig": [
+        {
+            "Name": "colorness",
+            "Path": "meta.Colorness",
+            "Colorness": true
+        },
+        {
+            "Name": "colorness_avg",
+            "Path": "meta.ColornessAvg",
+            "ColornessAvg": true
+        },
+        {
+            "Name": "image2text_v6",
+            "Path": "meta.v6.NNetFeatures.prod_v6_enc_i2t_v8_200_img",
+            "NNetFeatures": {
+                "Version": 6,
+                "Layer": "FEAT_I2T_200"
+            }
+        },
+        {
+            "Name": "image2clothes_v6",
+            "Path": "meta.v6.NNetFeatures.prod_v6_enc_clothes_96",
+            "NNetFeatures": {
+                "Version": 6,
+                "Layer": "FEAT_CLOTHES_96"
+            }
+        },
+        {
+            "Name": "image2toloka_v6",
+            "Path": "meta.v6.NNetFeatures.prod_v6_enc_toloka_96",
+            "NNetFeatures": {
+                "Version": 6,
+                "Layer": "FEAT_TOLOKA_96"
+            }
+        },
+        {
+            "Name": "prod_v10_enc_toloka_192",
+            "Path": "meta.NNetFeatures.prod_v10_enc_toloka_192",
+            "NNetFeatures": {
+                "Version": 10,
+                "Layer": "FEAT_TOLOKA_192"
+            }
+        },
+        {
+            "Name": "prod_v10_enc_market_96",
+            "Path": "meta.NNetFeatures.prod_v10_enc_market_96",
+            "NNetFeatures": {
+                "Version": 10,
+                "Layer": "FEAT_MARKET_96"
+            }
+        },
+        {
+            "Name": "prod_v10_enc_i2t_v12_200_img",
+            "Path": "meta.NNetFeatures.prod_v10_enc_i2t_v12_200_img",
+            "NNetFeatures": {
+                "Version": 10,
+                "Layer": "FEAT_I2T_200"
+            }
+        },
+        {
+            "Name": "main_color",
+            "Path": "meta.MainColor",
+            "MainColor": true
+        }
+    ],
+    "SamovarConfig": {
+        "SamovarFeed": "data-camp-images",
+        "Installation": "testing",
+        "YaDiskApiUrl": "https://cloud-api.yandex.net/v1/disk/public/resources/download",
+        "FeedNames": {
+            "goods_pic": "data-camp-images-goods",
+            "yabs_performance": "data-camp-images-yabs"
+        }
+    },
+    "Features": {
+        "SendErrors": true
+    },
+    "MdsSettings": {
+        "MdsHost": "avatars.mds.yandex.net",
+        "MdsTestingHost": "avatars.mdst.yandex.net",
+        "MdsHostNames": [
+            {
+                "Namespace": "mrkt_idx_direct_test",
+                "HostName": "avatars.mds.yandex.net"
+            }
+        ]
+    },
+    "LifeTimeConfig": {
+        "AttemptDelayBase": 3,
+        "DeletedProfileLifeTimeHours": 720,
+        "RequestLifeTimeHours": 720
+    }
+}

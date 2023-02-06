@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Appenders>
+    <Routing name="MESSAGES">
+        <Routes pattern="$${date:yyyyMMdd}">
+            <Route>
+                <File name="MessagesFile-${date:yyyyMMdd}" fileName="${sys:LOG_ROOT}/messages.log.${date:yyyyMMdd}"
+                      bufferSize="16777216">
+                    <PatternLayout
+                        pattern="%d{yyyy-MM-dd:HH:mm:ss} %CUSTOMHOSTNAME,%CUSTOMMDC{traceService,default('unknown')}/%CUSTOMMDC{traceMethod,default('unknown')},%CUSTOMMDC{traceId,default('0')}:%CUSTOMMDC{traceParentId,default('0')}:%CUSTOMMDC{traceSpanId,default('0')} [%thread] %-5level %logger{36} - %msg %xThrowable{full,separator(|)}%n"/>
+                </File>
+            </Route>
+        </Routes>
+        <IdlePurgePolicy timeToLive="5" timeUnit="minutes"/>
+    </Routing>
+
+    <Routing name="TRACE">
+        <Routes pattern="$${date:yyyyMMdd}">
+            <Route>§
+                <File name="TraceFile-${date:yyyyMMdd}" fileName="${sys:LOG_ROOT}/trace.log.${date:yyyyMMdd}"
+                      bufferSize="16777216">
+                    <PatternLayout pattern="%msg%n"/>
+                </File>
+            </Route>
+        </Routes>
+        <IdlePurgePolicy timeToLive="5" timeUnit="minutes"/>
+    </Routing>
+
+    <Routing name="LOGAPI">
+        <Routes pattern="$${date:yyyyMMdd}">
+            <Route>
+                <File name="LogApiFile-${date:yyyyMMdd}" fileName="${sys:LOG_ROOT}/ppclog_api.log.${date:yyyyMMdd}"
+                      bufferSize="16777216">
+                    <PatternLayout pattern="%msg%n"/>
+                </File>
+            </Route>
+        </Routes>
+        <IdlePurgePolicy timeToLive="5" timeUnit="minutes"/>
+    </Routing>
+
+    <Routing name="ACCESS_LOG">
+        <Routes pattern="$${date:yyyyMMdd}">
+            <Route>
+                <File name="AccessLogFile-${date:yyyyMMdd}" fileName="${sys:LOG_ROOT}/access.log.${date:yyyyMMdd}"
+                      bufferSize="16777216">
+                    <PatternLayout pattern="%msg%n"/>
+                </File>
+            </Route>
+        </Routes>
+        <IdlePurgePolicy timeToLive="5" timeUnit="minutes"/>
+    </Routing>
+
+    <Routing name="LOGINTAPI">
+        <Routes pattern="$${date:yyyyMMdd}">
+            <Route>
+                <File name="LogIntApiFile-${date:yyyyMMdd}" fileName="${sys:LOG_ROOT}/intapi.log.${date:yyyyMMdd}"
+                      bufferSize="16777216">
+                    <PatternLayout pattern="%msg%n"/>
+                </File>
+            </Route>
+        </Routes>
+        <IdlePurgePolicy timeToLive="5" timeUnit="minutes"/>
+    </Routing>
+
+    <Routing name="LOGWEBAPI">
+        <Routes pattern="$${date:yyyyMMdd}">
+            <Route>
+                <File name="LogWebApiFile-${date:yyyyMMdd}" fileName="${sys:LOG_ROOT}/webapi.log.${date:yyyyMMdd}"
+                      bufferSize="16777216">
+                    <PatternLayout pattern="%msg%n"/>
+                </File>
+            </Route>
+        </Routes>
+        <IdlePurgePolicy timeToLive="5" timeUnit="minutes"/>
+    </Routing>
+
+    <Console name="STDOUT" target="SYSTEM_OUT">
+        <PatternLayout pattern="%d{yyyy-MM-dd:HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+    </Console>
+</Appenders>

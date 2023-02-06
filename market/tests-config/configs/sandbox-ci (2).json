@@ -1,0 +1,45 @@
+{
+    "sandbox_tasks_defaults": {
+        "type": "MARKET_FRONT_CI",
+        "owner": "MARKET",
+        "priority": {
+            "class": "SERVICE",
+            "subclass": "NORMAL"
+        },
+        "custom_fields": [
+            {
+                "name": "node_version",
+                "value": "16"
+            }
+        ]
+    },
+    "github_event_handlers": {
+        "pull_request": [
+            {
+                "filter": {
+                    "action": ["opened", "reopened", "synchronize"]
+                },
+                "sandbox_tasks": [
+                    {
+                        "custom_fields": [
+                            {"name": "github_context", "value": "Run unit tests"},
+                            {"name": "check_command", "value": "npm install && npm run report:test"}
+                        ]
+                    },
+                    {
+                        "custom_fields": [
+                            {"name": "github_context", "value": "Format skipped to JSON"},
+                            {"name": "check_command", "value": "npm install && npm run report:lint:skipped"}
+                        ]
+                    },
+                    {
+                        "custom_fields": [
+                            {"name": "github_context", "value": "No closed ST issues"},
+                            {"name": "check_command", "value": "npm install && npm run report:tickets:closed"}
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

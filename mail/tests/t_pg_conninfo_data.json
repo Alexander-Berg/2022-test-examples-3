@@ -1,0 +1,127 @@
+{
+    "SelectFirstNode": {
+        "sharpei_response": {
+            "1": {
+                "name" : "xdb1010",
+                "databases" : [
+                    { "status" : "alive", "role" : "replica",
+                    "address" : { "host" : "host11.ya.ru",
+                        "dbname" : "maildb", "port" : "6432" },
+                    "state" : { "lag" : 1 }
+                    },
+                    { "status" : "alive", "role" : "replica",
+                    "address" : { "host" : "host12.ya.ru",
+                        "dbname" : "maildb", "port" : "6432" },
+                    "state" : { "lag" : 1 }
+                    }
+                ],
+                "id" : "1"
+            }
+        },
+        "expected": {
+            "xdb1": { "connfinfo": "host=host11.ya.ru port=6432 dbname=maildb user=user sslmode=verify-full", "name": "xdb1010" }
+        }
+    },
+    "SelectSecondNode": {
+        "sharpei_response": {
+            "1": {
+                "name" : "xdb1010",
+                "databases" : [
+                    { "status" : "alive", "role" : "master",
+                    "address" : { "host" : "host11.ya.ru",
+                        "dbname" : "maildb", "port" : "6432" },
+                    "state" : { "lag" : 1 }
+                    },
+                    { "status" : "alive", "role" : "replica",
+                    "address" : { "host" : "host12.ya.ru",
+                        "dbname" : "maildb", "port" : "6432" },
+                    "state" : { "lag" : 1 }
+                    }
+                ],
+                "id" : "1"
+            }
+        },
+        "expected": {
+            "xdb1": { "connfinfo": "host=host12.ya.ru port=6432 dbname=maildb user=user sslmode=verify-full", "name": "xdb1010" }
+        }
+    },
+    "OnlyFirstAlive": {
+        "sharpei_response": {
+            "1": {
+                "name" : "xdb1010",
+                "databases" : [
+                    { "status" : "alive", "role" : "replica",
+                    "address" : { "host" : "host11.ya.ru",
+                        "dbname" : "maildb", "port" : "6432" },
+                    "state" : { "lag" : 1 }
+                    },
+                    { "status" : "dead", "role" : "replica",
+                    "address" : { "host" : "host12.ya.ru",
+                        "dbname" : "maildb", "port" : "6432" },
+                    "state" : { "lag" : 1 }
+                    }
+                ],
+                "id" : "1"
+            }
+        },
+        "expected": {
+            "xdb1": { "connfinfo": "host=host11.ya.ru port=6432 dbname=maildb user=user sslmode=verify-full", "name": "xdb1010" }
+        }
+    },
+    "OnlySecondAlive": {
+        "sharpei_response": {
+            "1": {
+                "name" : "xdb1010",
+                "databases" : [
+                    { "status" : "dead", "role" : "replica",
+                    "address" : { "host" : "host11.ya.ru",
+                        "dbname" : "maildb", "port" : "6432" },
+                    "state" : { "lag" : 1 }
+                    },
+                    { "status" : "alive", "role" : "replica",
+                    "address" : { "host" : "host12.ya.ru",
+                        "dbname" : "maildb", "port" : "6432" },
+                    "state" : { "lag" : 1 }
+                    }
+                ],
+                "id" : "1"
+            }
+        },
+        "expected": {
+            "xdb1": { "connfinfo": "host=host12.ya.ru port=6432 dbname=maildb user=user sslmode=verify-full", "name": "xdb1010" }
+        }
+    },
+    "OnlyMasterAlive": {
+        "sharpei_response": {
+            "1": {
+                "name" : "xdb1010",
+                "databases" : [
+                    { "status" : "dead", "role" : "replica",
+                    "address" : { "host" : "host11.ya.ru",
+                        "dbname" : "maildb", "port" : "6432" },
+                    "state" : { "lag" : 1 }
+                    },
+                    { "status" : "aliva", "role" : "master",
+                    "address" : { "host" : "host12.ya.ru",
+                        "dbname" : "maildb", "port" : "6432" },
+                    "state" : { "lag" : 1 }
+                    }
+                ],
+                "id" : "1"
+            }
+        },
+        "expected": null
+    },
+    "UnknownResponseStructure": {
+        "sharpei_response": {
+            "1": [
+                    { "status" : "alive", "role" : "replica",
+                    "address" : { "host" : "host11.ya.ru",
+                        "dbname" : "maildb", "port" : "6432" },
+                    "state" : { "lag" : 1 }
+                    }
+                ]
+        },
+        "expected": null
+    }
+}

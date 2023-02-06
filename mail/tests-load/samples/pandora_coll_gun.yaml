@@ -1,0 +1,71 @@
+pools:
+- gun:
+    type: "collector_http_gun"
+    target: "collectors.loadtest.collectors.mail.stable.qloud-d.yandex.net:3048"
+
+  ammo:
+    type: "collector_http_provider"
+    source: # You may just write file path here. Or stdin.
+      type: inline
+      data: |
+        {"tag": "ping", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+        {"tag": "create-collector", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+        {"tag": "ping", "sourceUid": 10000001000002, "targetUid": 10000002000002}
+        {"tag": "create-collector", "sourceUid": 10000001000002, "targetUid": 10000002000002}
+        {"tag": "ping", "sourceUid": 10000001000003, "targetUid": 10000002000003}
+        {"tag": "create-collector", "sourceUid": 10000001000003, "targetUid": 10000002000003}
+        {"tag": "ping", "sourceUid": 10000001000004, "targetUid": 10000002000004}
+        {"tag": "create-collector", "sourceUid": 10000001000004, "targetUid": 10000002000004}
+        {"tag": "ping", "sourceUid": 10000001000005, "targetUid": 10000002000005}
+        {"tag": "create-collector", "sourceUid": 10000001000005, "targetUid": 10000002000005}
+        {"tag": "ping", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+        {"tag": "ping", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+        {"tag": "ping", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+        {"tag": "ping", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+        {"tag": "ping", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+        {"tag": "ping", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+        {"tag": "ping", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+        {"tag": "ping", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+        {"tag": "ping", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+        {"tag": "ping", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+        {"tag": "ping", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+        {"tag": "ping", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+        {"tag": "ping", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+        {"tag": "ping", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+
+  result:
+    type: phout
+    destination: ./phout.log
+
+  rps:
+    - {duration: 10s, type: const,  ops: 2}
+  startup:
+    type: once
+    times: 5
+
+- gun:
+    type: "collector_pg_gun"
+    host: "pgload03e.mail.yandex.net"
+    port: 6432
+    database: "maildb"
+    user: "mxfront"
+
+  ammo:
+    type: "collector_pg_provider"
+    source: # You may just write file path here. Or stdin.
+      type: inline
+      data: |
+        {"tag": "ping", "uid": 10010000000001, "folderName": "Inbox", "folderType": "inbox"}
+
+  result:
+    type: phout
+    destination: ./phout_pg.log
+
+  rps:
+    - {duration: 30s, type: line, from: 5, to: 5}
+  startup:
+    type: once
+    times: 5
+
+log:
+  level: debug

@@ -1,0 +1,143 @@
+{
+    "description": "https://testpalm.yandex-team.ru/testcase/serp-2239",
+    "properties": {
+        "IP": {
+            "type": "string"
+        },
+        "IS_IP_V6": {
+            "type": "integer"
+        },
+        "XFF": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "XRIP": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "applicable": {
+            "enum": [
+                1
+            ],
+            "type": "integer"
+        },
+        "counter_prefix": {
+            "pattern": "^/",
+            "type": "string"
+        },
+        "data": {
+            "properties": {
+                "link": {
+                    "properties": {
+                        "text": {
+                            "type": "string"
+                        },
+                        "url": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "text",
+                        "url"
+                    ],
+                    "type": "object"
+                },
+                "passages": {
+                    "items": [
+                        {
+                            "properties": {
+                                "fact": {
+                                    "type": "string"
+                                },
+                                "params": {
+                                    "properties": {
+                                        "version": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "version"
+                                    ],
+                                    "type": "object"
+                                },
+                                "text": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "fact",
+                                "params",
+                                "text"
+                            ],
+                            "type": "object"
+                        }
+                    ],
+                    "type": "array"
+                },
+                "title": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "link",
+                "passages",
+                "title"
+            ],
+            "type": "object"
+        },
+        "template": {
+            "enum": [
+                "fact"
+            ],
+            "type": "string"
+        },
+        "type": {
+            "enum": [
+                "internet"
+            ],
+            "type": "string"
+        },
+        "types": {
+            "properties": {
+                "all": {
+                    "items": [
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "type": "array"
+                },
+                "extra": {
+                    "items": [
+                        {
+                            "type": "object"
+                        }
+                    ],
+                    "type": "array"
+                },
+                "kind": {
+                    "type": "string"
+                },
+                "main": {
+                    "enum": [
+                        "my_ip"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "all",
+                "extra",
+                "kind",
+                "main"
+            ],
+            "type": "object"
+        }
+    },
+    "title": "Фактовые - Фактовые - IP",
+    "type": "object"
+}

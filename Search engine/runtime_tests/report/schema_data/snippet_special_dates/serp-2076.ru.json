@@ -1,0 +1,105 @@
+{
+    "description": "https://testpalm.yandex-team.ru/testcase/serp-2076",
+    "properties": {
+        "accuracy": {
+            "type": ["null", "string"]
+        },
+        "applicable": {
+            "enum": [
+                1
+            ],
+            "type": "integer"
+        },
+        "counter_prefix": {
+            "pattern": "^/",
+            "type": "string"
+        },
+        "date": {
+            "$ref": "../core.json#time"
+        },
+        "do_annotate": {
+            "type": "integer"
+        },
+        "green": {
+            "properties": {
+                "date": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "$ref": "../core.json#time"
+                        }
+                    ]
+                },
+                "do_annotate": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ]
+                }
+            },
+            "required": [
+                "date",
+                "do_annotate"
+            ],
+            "type": "object"
+        },
+        "is_fresh_source": {
+            "type": "integer"
+        },
+        "source": {
+            "type": "string"
+        },
+        "template": {
+            "enum": [
+                "special_dates"
+            ],
+            "type": "string"
+        },
+        "type": {
+            "enum": [
+                "special_dates"
+            ],
+            "type": "string"
+        },
+        "types": {
+            "properties": {
+                "all": {
+                    "items": [
+                        {
+                            "type": "string"
+                        }
+                    ],
+                    "type": "array"
+                },
+                "extra": {
+                    "items": [
+                        {
+                            "type": "object"
+                        }
+                    ],
+                    "type": "array"
+                },
+                "kind": {
+                    "type": "string"
+                },
+                "main": {
+                    "enum": [
+                        "special_dates"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "all",
+                "extra",
+                "kind",
+                "main"
+            ],
+            "type": "object"
+        }
+    },
+    "title": "Сниппеты - Серая дата",
+    "type": "object"
+}

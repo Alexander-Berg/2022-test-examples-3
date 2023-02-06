@@ -1,0 +1,579 @@
+bin_path = "travel/cpa/data_processing/update_orders/update_orders"
+
+args = [
+    "--category", "avia",
+    "--yt-proxy", "%(yt_proxy)s",
+    "--skip-set-media-attribute",
+    "--stocks-url", "%(stocks_server_url)s",
+    "--src-dir", "//home/tests/update_orders",
+    "--dst-dir", "//home/tests/update_orders",
+]
+
+checkers = [
+    "stocks",
+    "yt",
+]
+
+[stocks]
+    check_type = "http"
+    mime_type = "apllication/json"
+
+[[stocks.responses]]
+    path = "/graph_23.json"
+    data_file = "stocks_EUR.json"
+
+[[stocks.responses]]
+    path = "/graph_1.json"
+    data_file = "stocks_USD.json"
+
+[[stocks.responses]]
+    path = "/graph_10009.json"
+    data_file = "stocks_KZT.json"
+
+[[stocks.responses]]
+    path = "/graph_10011.json"
+    data_file = "stocks_TRY.json"
+
+[[stocks.responses]]
+    path = "/graph_10018.json"
+    data_file = "stocks_CNY.json"
+
+[[stocks.responses]]
+    path = "/graph_10022.json"
+    data_file = "stocks_AZN.json"
+
+[[stocks.responses]]
+    path = "/graph_10006.json"
+    data_file = "stocks_UAH.json"
+
+[[stocks.responses]]
+    path = "/graph_10007.json"
+    data_file = "stocks_CHF.json"
+
+
+[[stocks.responses]]
+    path = "/23.xml"
+    data_file = "meta_EUR.xml"
+
+[[stocks.responses]]
+    path = "/1.xml"
+    data_file = "meta_USD.xml"
+
+[[stocks.responses]]
+    path = "/10009.xml"
+    data_file = "meta_KZT.xml"
+
+[[stocks.responses]]
+    path = "/10011.xml"
+    data_file = "meta_TRY.xml"
+
+[[stocks.responses]]
+    path = "/10018.xml"
+    data_file = "meta_CNY.xml"
+
+[[stocks.responses]]
+    path = "/10022.xml"
+    data_file = "meta_AZN.xml"
+
+[[stocks.responses]]
+    path = "/10006.xml"
+    data_file = "meta_UAH.xml"
+
+[[stocks.responses]]
+    path = "/10007.xml"
+    data_file = "meta_CHF.xml"
+
+
+[yt.input.snapshots]
+    path = "//home/tests/update_orders/order_snapshots"
+    sort_by = ["partner_name", "partner_order_id"]
+
+
+[[yt.input.snapshots.data]]
+    category = "avia"
+    partner_name = "ozon"
+    partner_order_id = "0"
+    travel_order_id = "ozon:0"
+    status = "pending"
+    label = "ozon_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    profit_amount = 1.0
+    created_at = 1500000000
+    updated_at = 1500010000
+    source = "source_0_0"
+    partner_id = 0
+    billing_order_id = 0
+
+# same order id and status
+[[yt.input.snapshots.data]]
+    category = "avia"
+    partner_name = "ozon"
+    partner_order_id = "0"
+    travel_order_id = "ozon:0"
+    status = "pending"
+    label = "ozon_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    profit_amount = 1.0
+    created_at = 1500000000
+    updated_at = 1500020000
+    source = "source_0_0"
+    partner_id = 0
+    billing_order_id = 0
+
+# status change
+[[yt.input.snapshots.data]]
+    category = "avia"
+    partner_name = "ozon"
+    partner_order_id = "0"
+    travel_order_id = "ozon:0"
+    status = "confirmed"
+    label = "ozon_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    profit_amount = 1.0
+    created_at = 1500000000
+    updated_at = 1500030000
+    source = "source_0_0"
+    partner_id = 0
+    billing_order_id = 0
+
+# another order
+[[yt.input.snapshots.data]]
+    category = "avia"
+    partner_name = "ozon"
+    partner_order_id = "1"
+    travel_order_id = "ozon:1"
+    status = "cancelled"
+    label = "ozon_1"
+    currency_code = "RUB"
+    order_amount = 5.0
+    profit_amount = 0.0
+    created_at = 1500050000
+    updated_at = 1500070000
+    source = "source_0_1"
+    partner_id = 1
+    billing_order_id = 1
+
+# order without label
+[[yt.input.snapshots.data]]
+    category = "avia"
+    partner_name = "ozon"
+    partner_order_id = "2"
+    travel_order_id = "ozon:2"
+    status = "cancelled"
+    label = "ozon_2"
+    currency_code = "RUB"
+    order_amount = 5.0
+    profit_amount = 0.0
+    created_at = 1500050000
+    updated_at = 1500070000
+    source = "source_0_2"
+    partner_id = 2
+    billing_order_id = 2
+
+# Ural Airlines order
+[[yt.input.snapshots.data]]
+    category = "avia"
+    partner_name = "uralairlines"
+    partner_order_id = "3"
+    travel_order_id = "uralairlines:3"
+    status = "confirmed"
+    label = "uralairlines_3"
+    currency_code = "RUB"
+    order_amount = 1000.0
+    created_at = 1500050000
+    updated_at = 1500070000
+    source = "u6_0_3"
+    partner_id = 69
+    billing_order_id = 435
+
+# Pobeda snapshot
+[[yt.input.snapshots.data]]
+    category = "avia"
+    partner_name = "pobeda"
+    partner_order_id = "order_4"
+    travel_order_id = "pobeda:order_4"
+    status = "confirmed"
+    label = "marker_pobeda_4"
+    currency_code = "RUB"
+    order_amount = 1200.0
+    created_at = 1560729480
+    updated_at = 1560729480
+    source = "pobeda"
+    partner_id = 58
+    billing_order_id = 409
+
+# Snapshot in KZT
+[[yt.input.snapshots.data]]
+    category = "avia"
+    partner_name = "pobeda"
+    partner_order_id = "order_5"
+    travel_order_id = "pobeda:order_5"
+    status = "confirmed"
+    label = "marker_pobeda_5"
+    currency_code = "KZT"
+    order_amount = 2000.0
+    created_at = 1560729480
+    updated_at = 1560729480
+    source = "pobeda"
+    partner_id = 58
+    billing_order_id = 409
+
+# Utair check tax calculation
+[[yt.input.snapshots.data]]
+    category = "avia"
+    partner_name = "utair"
+    partner_order_id = "order_6"
+    travel_order_id = "utair:order_6"
+    status = "confirmed"
+    label = "marker_utair_6"
+    currency_code = "RUB"
+    order_amount = 7000.0
+    created_at = 1560729480
+    updated_at = 1560729480
+    source = "utair"
+    partner_id = 68
+    billing_order_id = 429
+
+# Tutu order
+[[yt.input.snapshots.data]]
+    category = "avia"
+    partner_name = "tutu"
+    partner_order_id = "1gdxr28b1j"
+    travel_order_id = "tutu:1gdxr28b1j"
+    status = "cancelled"
+    label = "unknown"
+    currency_code = "RUB"
+    order_amount = 7184.95
+    created_at = 1500050000
+    updated_at = 1546300800
+    source = "tutu"
+    partner_id = 163
+    billing_order_id = 1053
+    origin = "SVX"
+    destination = "DME"
+    trip_type = "oneway"
+
+# Aeroflot profit amount special case
+[[yt.input.snapshots.data]]
+    category = "avia"
+    partner_name = "aeroflot"
+    partner_order_id = "order_0"
+    travel_order_id = "aeroflot:order_0"
+    status = "confirmed"
+    label = "marker_aeroflot_0"
+    currency_code = "EUR"
+    order_amount = 222.46
+    profit_amount = 215.0
+    created_at = 1560739480
+    updated_at = 1560739480
+    source = "aeroflot"
+    partner_id = 999
+    billing_order_id = 1999
+
+# S7 snapshot: check profit_amount_ex_tax, profit_amount_rub, order_amount_rub
+[[yt.input.snapshots.data]]
+    status = "confirmed"
+    category = "avia"
+    partner_name = "s_seven"
+    partner_id = 43
+    origin = "KUF"
+    partner_order_id = "MCCFW3E"
+    label = "e5afb600-a5e969-6761-4993-9afe-e755b5c4dc531"
+    source = "s_seven"
+    destination = "OVB"
+    trip_type = "roundtrip"
+    billing_order_id = 307
+    order_amount = 22760.0
+    profit_amount = 398.3
+    travel_order_id = "s_seven:MCCFW3E"
+    currency_code = "RUB"
+    created_at = 1560739480
+    updated_at = 1560739480
+
+[yt.input.labels]
+    path = "//home/tests/update_orders/avia/labels"
+    sort_by = ["label"]
+
+[[yt.input.labels.data]]
+    label = "ozon_0"
+    label_national_version = "label_national_version_0_0"
+
+[[yt.input.labels.data]]
+    label = "ozon_1"
+    label_national_version = "label_national_version_0_1"
+
+
+[yt.output.orders]
+    path = "//home/tests/update_orders/avia/orders"
+    ignore_unknown_fields = true
+    fields_to_skip = [
+        "status_explanation",
+        "label_pp",
+        "label_price",
+        "label_when",
+        "label_return_date",
+        "label_adult_seats",
+        "label_children_seats",
+        "label_infant_seats",
+        "label_offer_price",
+        "label_wizardredirkey",
+        "label_utm_term",
+        "label_utm_source",
+        "label_utm_campaign",
+        "label_utm_content",
+        "label_offer_currency",
+        "label_ytp_referer",
+        "label_utm_medium",
+    ]
+
+[[yt.output.orders.data]]
+    category = "avia"
+    partner_name = "ozon"
+    partner_order_id = "0"
+    travel_order_id = "ozon:0"
+    status = "confirmed"
+    label = "ozon_0"
+    currency_code = "RUB"
+    order_amount = 10.0
+    order_amount_rub = 10.0
+    profit_amount = 1.0
+    profit_amount_ex_tax = 0.0
+    profit_amount_rub = 1.0
+    created_at = 1500000000
+    updated_at = 1500030000
+    first_seen_at = 1500010000
+    suspicious_explanation = []
+    is_suspicious = false
+    has_label = true
+    label_national_version = "label_national_version_0_0"
+    source = "source_0_0"
+    partner_id = 0
+    billing_order_id = 0
+
+[[yt.output.orders.data]]
+    category = "avia"
+    partner_name = "ozon"
+    partner_order_id = "1"
+    travel_order_id = "ozon:1"
+    status = "cancelled"
+    label = "ozon_1"
+    currency_code = "RUB"
+    order_amount = 5.0
+    order_amount_rub = 5.0
+    profit_amount = 0.0
+    profit_amount_ex_tax = 0.0
+    profit_amount_rub = 0.0
+    created_at = 1500050000
+    updated_at = 1500070000
+    first_seen_at = 1500070000
+    suspicious_explanation = []
+    is_suspicious = false
+    has_label = true
+    label_national_version = "label_national_version_0_1"
+    source = "source_0_1"
+    partner_id = 1
+    billing_order_id = 1
+
+[[yt.output.orders.data]]
+    category = "avia"
+    partner_name = "ozon"
+    partner_order_id = "2"
+    travel_order_id = "ozon:2"
+    status = "cancelled"
+    label = "ozon_2"
+    currency_code = "RUB"
+    order_amount = 5.0
+    order_amount_rub = 5.0
+    profit_amount = 0.0
+    profit_amount_ex_tax = 0.0
+    profit_amount_rub = 0.0
+    created_at = 1500050000
+    updated_at = 1500070000
+    first_seen_at = 1500070000
+    suspicious_explanation = []
+    is_suspicious = false
+    has_label = false
+    label_national_version = ""
+    source = "source_0_2"
+    partner_id = 2
+    billing_order_id = 2
+
+[[yt.output.orders.data]]
+    category = "avia"
+    partner_name = "uralairlines"
+    partner_order_id = "3"
+    travel_order_id = "uralairlines:3"
+    status = "confirmed"
+    label = "uralairlines_3"
+    currency_code = "RUB"
+    order_amount = 1000
+    order_amount_rub = 1000.0
+    profit_amount = 15.0
+    profit_amount_ex_tax = 15.0
+    profit_amount_rub = 15.0
+    created_at = 1500050000
+    updated_at = 1500070000
+    first_seen_at = 1500070000
+    suspicious_explanation = []
+    is_suspicious = false
+    has_label = false
+    label_national_version = ""
+    source = "u6_0_3"
+    partner_id = 69
+    billing_order_id = 435
+
+# Pobeda order: check profit_amount, profit_amount_rub, profit_amount_ex_tax
+[[yt.output.orders.data]]
+    category = "avia"
+    partner_name = "pobeda"
+    partner_order_id = "order_4"
+    travel_order_id = "pobeda:order_4"
+    status = "confirmed"
+    label = "marker_pobeda_4"
+    currency_code = "RUB"
+    order_amount = 1200.0
+    order_amount_rub = 1200.0
+    created_at = 1560729480
+    updated_at = 1560729480
+    first_seen_at = 1560729480
+    source = "pobeda"
+    partner_id = 58
+    billing_order_id = 409
+    is_suspicious = false
+    has_label = false
+    label_national_version = ""
+    suspicious_explanation = []
+    profit_amount = 12.0
+    profit_amount_ex_tax = 10.0
+    profit_amount_rub = 12.0
+
+# Check correct scale of currency coversion
+[[yt.output.orders.data]]
+    category = "avia"
+    partner_name = "pobeda"
+    partner_order_id = "order_5"
+    travel_order_id = "pobeda:order_5"
+    status = "confirmed"
+    label = "marker_pobeda_5"
+    currency_code = "KZT"
+    order_amount = 2000.0
+    order_amount_rub = 340.0
+    created_at = 1560729480
+    updated_at = 1560729480
+    first_seen_at = 1560729480
+    source = "pobeda"
+    partner_id = 58
+    billing_order_id = 409
+    is_suspicious = false
+    has_label = false
+    label_national_version = ""
+    suspicious_explanation = []
+    profit_amount = 20.0
+    profit_amount_rub = 3.4
+    profit_amount_ex_tax = 2.8333333333333335
+
+# Utair order: check profit_amount, profit_amount_rub, profit_amount_ex_tax
+[[yt.output.orders.data]]
+    category = "avia"
+    partner_name = "utair"
+    partner_order_id = "order_6"
+    travel_order_id = "utair:order_6"
+    status = "confirmed"
+    label = "marker_utair_6"
+    currency_code = "RUB"
+    order_amount = 7000.0
+    order_amount_rub = 7000.0
+    created_at = 1560729480
+    updated_at = 1560729480
+    first_seen_at = 1560729480
+    source = "utair"
+    partner_id = 68
+    billing_order_id = 429
+    is_suspicious = false
+    has_label = false
+    label_national_version = ""
+    suspicious_explanation = []
+    profit_amount = 120.0
+    profit_amount_rub = 120.0
+    profit_amount_ex_tax = 100.0
+
+# S7 order: check profit_amount_ex_tax, profit_amount_rub, order_amount_rub
+[[yt.output.orders.data]]
+    status = "confirmed"
+    category = "avia"
+    partner_name="s_seven"
+    partner_id = 43
+    origin = "KUF"
+    partner_order_id = "MCCFW3E"
+    label = "e5afb600-a5e969-6761-4993-9afe-e755b5c4dc531"
+    source = "s_seven"
+    destination = "OVB"
+    trip_type = "roundtrip"
+    billing_order_id = 307
+    order_amount = 22760.0
+    profit_amount = 398.3
+    travel_order_id = "s_seven:MCCFW3E"
+    currency_code = "RUB"
+    order_amount_rub = 22760.0
+    profit_amount_rub = 398.3
+    profit_amount_ex_tax = 398.3
+    created_at = 1560739480
+    updated_at = 1560739480
+    first_seen_at = 1560739480
+    is_suspicious = false
+    has_label = false
+    label_national_version = ""
+    suspicious_explanation = []
+
+# Aeroflot order
+[[yt.output.orders.data]]
+    category = "avia"
+    partner_name = "aeroflot"
+    partner_order_id = "order_0"
+    travel_order_id = "aeroflot:order_0"
+    status = "confirmed"
+    label = "marker_aeroflot_0"
+    currency_code = "EUR"
+    order_amount = 222.46
+    order_amount_rub = 444.92
+    created_at = 1560739480
+    updated_at = 1560739480
+    first_seen_at = 1560739480
+    source = "aeroflot"
+    partner_id = 999
+    billing_order_id = 1999
+    is_suspicious = false
+    has_label = false
+    label_national_version = ""
+    suspicious_explanation = []
+    profit_amount = 215.0
+    profit_amount_rub = 215.0
+    profit_amount_ex_tax = 179.17
+
+# Tutu order
+[[yt.output.orders.data]]
+    category = "avia"
+    partner_name = "tutu"
+    partner_order_id = "1gdxr28b1j"
+    travel_order_id = "tutu:1gdxr28b1j"
+    status = "cancelled"
+    label = "unknown"
+    currency_code = "RUB"
+    order_amount = 7184.95
+    order_amount_rub = 7184.95
+    created_at = 1500050000
+    updated_at = 1500070000
+    first_seen_at = 1500070000
+    suspicious_explanation = []
+    is_suspicious = false
+    has_label = false
+    label_national_version = ""
+    source = "tutu"
+    partner_id = 163
+    billing_order_id = 1053
+    origin = "SVX"
+    destination = "DME"
+    trip_type = "oneway"

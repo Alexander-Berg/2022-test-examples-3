@@ -1,0 +1,82 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "suburban",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--date-from", "2019-12-16",
+    "--date-to", "2020-01-01",
+    "--limit", "1"
+]
+
+checkers = [
+    "lb",
+    "partner",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "apllication/json"
+
+[[partner.responses]]
+    args = {"updated_at_from_utc"="2019-12-16T00:00:00"}
+    data_file = "partner_response_0.json"
+
+[[partner.responses]]
+    args = {"updated_at_from_utc"="2019-12-18T10:44:35"}
+    data_file = "partner_response_1.json"
+
+[lb]
+    topic = "topic-suburban-boy"
+    fields_to_skip = ["_timestamp", "updated_at", "last_seen"]
+
+# index 0
+[[lb.expected]]
+    partner_name = "suburban"
+    travel_order_id = "suburban:YA-1111-1111-1111"
+    partner_order_id = "YA-1111-1111-1111"
+    boy_order_id = "YA-1111-1111-1111"
+    created_at = 1576665799
+    status = "confirmed"
+    currency_code = "RUB"
+    category = "suburban"
+    snapshot_source = "collectors"
+    order_amount = 100
+    profit_amount = 0
+    label = "label_1"
+
+    provider = "movista"
+    provider_order_id = "movista_order_1"
+    carrier_partner = "cppk"
+    station_from_id = 111
+    station_to_id = 112
+    station_from_title = "Station 11"
+    station_to_title = "Station 12"
+    departure_date = "2019-12-25"
+
+# index 1
+[[lb.expected]]
+    partner_name = "suburban"
+    travel_order_id = "suburban:YA-2222-2222-2222"
+    partner_order_id = "YA-2222-2222-2222"
+    boy_order_id = "YA-2222-2222-2222"
+    created_at = 1580479665
+    status = "pending"
+    currency_code = "RUB"
+    category = "suburban"
+    snapshot_source = "collectors"
+    order_amount = 200
+    profit_amount = 0
+    label = "label_2"
+
+    provider = "movista"
+    provider_order_id = "movista_order_2"
+    carrier_partner = "cppk"
+    station_from_id = 121
+    station_to_id = 122
+    station_from_title = "Station 21"
+    station_to_title = "Station 22"
+    departure_date = "2020-02-07"

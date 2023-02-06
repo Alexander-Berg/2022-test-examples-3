@@ -1,0 +1,18 @@
+{% if "_average_" in table %}
+    {# Result data. #}
+    {% table table %}
+        [
+            "I1",
+            "I2",
+            {{ (history - 1.0) }},
+            {{ 2.0 * (history - 1.0) }},
+            "{{ item_type }}",
+            "{{ item_type }}",
+            "{{ day }}"
+        ]
+    {% endtable %}
+{% else %}
+    {% table table %}
+        ["I1", "I2", {{ 2.0 * shift }}, {{ 4.0 * shift }}, "{{ item_type }}", "{{ item_type }}", "{{ day }}"]
+    {% endtable %}
+{% endif %}

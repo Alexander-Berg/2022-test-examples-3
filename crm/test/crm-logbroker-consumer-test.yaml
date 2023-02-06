@@ -1,0 +1,182 @@
+annotations:
+  stagectl_epoch: 800
+  stagectl_vcs:
+    svn_branch: stage_controller/stable-142-1
+    svn_revision: 8976034
+    svn_tag: stage_controller/stable-142-1
+labels:
+  deploy_engine: env_controller
+  du_patchers_target_revision:
+    yacalls-cdr: 11
+  du_sidecar_target_revision:
+    yacalls-cdr:
+      podBin: 2621390537
+  migration_from: crm.logbroker-consumer.test
+  migration_type: qloud
+  notifications_last_timestamp: 1640875000922535000
+  stagectl_epoch: 589
+  stagectl_vcs:
+    svn_branch: stage_controller/stable-108-2
+    svn_revision: 7951591
+    svn_tag: stage_controller/stable-108-2
+  tags: []
+meta:
+  account_id: abc:service:200
+  acl:
+  - action: allow
+    permissions:
+    - read
+    - write
+    - create
+    - ssh_access
+    - root_ssh_access
+    - read_secrets
+    subjects:
+    - robot-drug-deploy
+  id: crm-logbroker-consumer-test
+  inherit_acl: true
+  project_id: crm-test
+spec:
+  deploy_units:
+    yacalls-cdr:
+      endpoint_sets:
+      - port: 80
+      images_for_boxes:
+        yacalls-cdr:
+          name: crm/crm-logbroker-consumer
+          registry_host: registry.yandex.net
+          tag: '1.3'
+      logbroker_tools_sandbox_info:
+        revision: 2739742779
+      multi_cluster_replica_set:
+        replica_set:
+          clusters:
+          - cluster: vla
+            spec:
+              constraints:
+                antiaffinity_constraints:
+                - key: rack
+                  max_pods: 1
+              replica_count: 1
+          - cluster: sas
+            spec:
+              constraints:
+                antiaffinity_constraints:
+                - key: rack
+                  max_pods: 1
+              replica_count: 1
+          deployment_strategy:
+            max_unavailable: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+              - id: infra
+                labels:
+                  used_by_infra: true
+                quota_policy:
+                  bandwidth_guarantee: 1048576
+                  bandwidth_limit: 1048576
+                  capacity: 6442450944
+                storage_class: hdd
+              host_infra:
+                monitoring:
+                  unistats:
+                  - output_format: yasm_json
+                    path: /stat
+                    port: 80
+                    workload_id: yacalls-cdr
+              pod_agent_payload:
+                spec:
+                  boxes:
+                  - compute_resources:
+                      anonymous_memory_limit: 1961932800
+                      memory_limit: 2147483648
+                      vcpu_limit: 500
+                    id: yacalls-cdr
+                    rootfs: {}
+                  mutable_workloads:
+                  - workload_ref: yacalls-cdr
+                  resources: {}
+                  workloads:
+                  - box_ref: yacalls-cdr
+                    env:
+                    - name: LB_OAUTH_TOKEN
+                      value:
+                        secret_env:
+                          alias: sec-01ey2z79dy22tbk4bxgh6zk58h:ver-01ey2z79ed0tmdwm39n10hvba3
+                          id: crm-logbroker-oauth-test
+                    - name: CRM_LB_TABLE
+                      value:
+                        literal_env:
+                          value: yacalls_cdr
+                    - name: LB_TIMEOUT
+                      value:
+                        literal_env:
+                          value: '15'
+                    - name: LB_TOPIC
+                      value:
+                        literal_env:
+                          value: /crm/yacalls/prestable/cdr
+                    - name: LB_BALANCE_PARTITION
+                      value:
+                        literal_env:
+                          value: '0'
+                    - name: LB_UNISTAT_SIGNAL_PREFIX
+                      value:
+                        literal_env:
+                          value: crm.one_min.crm_yandex_ru.test.logbroker_consumer.yacalls_cdr.
+                    - name: CRM_ORA_HOST
+                      value:
+                        literal_env:
+                          value: TCRM.YANDEX.RU
+                    - name: LB_PORT
+                      value:
+                        literal_env:
+                          value: '2135'
+                    - name: LB_MESSAGE_BATCH_SIZE
+                      value:
+                        literal_env:
+                          value: '10'
+                    - name: CRM_ORA_USER
+                      value:
+                        secret_env:
+                          alias: "crm-ora-crmimport"
+                          id: "crm-ora-crm-testing"
+                    - name: LB_HOSTS
+                      value:
+                        literal_env:
+                          value: vla.logbroker.yandex.net;sas.logbroker.yandex.net;iva.logbroker.yandex.net
+                    - name: LB_CONSUMER
+                      value:
+                        literal_env:
+                          value: /crm/yacalls/prestable/cdr-crm-consumer
+                    - name: LB_READ_INFLY_COUNT
+                      value:
+                        literal_env:
+                          value: '1'
+                    id: yacalls-cdr
+                    start:
+                      command_line: $LB_CONSUMER_HOME/start.sh
+                    transmit_logs: true
+              resource_requests:
+                memory_guarantee: 2147483648
+                memory_limit: 2147483648
+                vcpu_guarantee: 500
+                vcpu_limit: 500
+              secret_refs:
+                crm-ora-crmimport:
+                  secret_id: "sec-01ey2zfbtk1q64as6wz0rhgypv"
+                  secret_version: "ver-01fzaqvcez390xjncqjkrkvrgk"
+                sec-01ey2z79dy22tbk4bxgh6zk58h:ver-01ey2z79ed0tmdwm39n10hvba3:
+                  secret_id: sec-01ey2z79dy22tbk4bxgh6zk58h
+                  secret_version: ver-01ey2z79ed0tmdwm39n10hvba3
+      network_defaults:
+        network_id: _CRMTEST_DEPLOY_NETS_
+      patchers_revision: 11
+      pod_agent_sandbox_info:
+        revision: 2882369236
+      revision: 19
+  revision: 21
+  revision_info:
+    description: remove man
+

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lom_order
+            id="100111"
+            barcode="777"
+            platform_client_id="1"
+            sender_id="12345678"
+            status="DRAFT"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="100111"
+            partner_id="987654321"
+            partner_type="DROPSHIP"
+            segment_type="FULFILLMENT"
+            waybill_segment_index="0"
+            shipment_date="2020-11-02"
+            shipment_type="IMPORT"
+            partner_name="Почта"
+    />
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="1"
+            waybill_segment_type="FULFILLMENT"
+            expected_status="TRACK_RECEIVED"
+            processing_status="ENQUEUED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2020-11-07 11:11:50 +0300"
+            schedule_time="2020-11-07 11:11:50 +0300"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="TRACK_RECEIVED"
+            waybill_segment_type="FULFILLMENT"
+            aggregation_type="NONE"
+            rule_processor="STARTREK"
+            rule='{ "queue": "MONITORINGSNDBX", "_type": ".OrderCreatePayload", "partnerTypeComponents": { "DROPSHIP": 42 } }'
+    />
+
+    <quality_rule
+            id="2"
+            enabled="true"
+            expected_status="TRACK_RECEIVED"
+            waybill_segment_type="FULFILLMENT"
+            aggregation_type="DATE_PARTNER"
+            rule_processor="STARTREK"
+            rule='{"_type": ".TskvLoggerPayload"}'
+    />
+
+</dataset>

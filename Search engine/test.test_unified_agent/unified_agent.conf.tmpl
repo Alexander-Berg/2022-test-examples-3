@@ -1,0 +1,222 @@
+monitoring:
+    port: MONITORING_PORT
+status:
+    port: STATUS_PORT
+storages:
+-   name: reqans_log_storage
+    plugin: fs
+    config:
+        directory: STATE_DIR/reqans_log_storage
+        max_partition_size: 3gb
+        max_segment_size: 50mb
+-   name: rt_reqans_log_storage
+    plugin: fs
+    config:
+        directory: STATE_DIR/rt_reqans_log_storage
+        max_partition_size: 512mb
+        max_segment_size: 50mb
+-   name: fat_reqans_log_storage
+    plugin: fs
+    config:
+        directory: STATE_DIR/fat_reqans_log_storage
+        max_partition_size: 512mb
+        max_segment_size: 50mb
+-   name: xml_reqans_log_storage
+    plugin: fs
+    config:
+        directory: STATE_DIR/xml_reqans_log_storage
+        max_partition_size: 128mb
+        max_segment_size: 50mb
+-   name: alice_reqans_log_storage
+    plugin: fs
+    config:
+        directory: STATE_DIR/alice_reqans_log_storage
+        max_partition_size: 512mb
+        max_segment_size: 50mb
+-   name: error_booster_log_storage
+    plugin: fs
+    config:
+        directory: STATE_DIR/error_booster_log_storage
+        max_partition_size: 256mb
+        max_segment_size: 50mb
+routes:
+-   input:
+        plugin: grpc
+        config:
+            uri: unix://STATE_DIR/proto_reqans
+    channel:
+        pipe:
+        -   storage_ref:
+                storage: reqans_log_storage
+        -   filter:
+                plugin: assign
+                config:
+                    session:
+                    -   server: '{$host_name}'
+        -   filter:
+                plugin: split_session
+                config:
+                    sessions_count: 10
+        output:
+            plugin: logbroker
+            config:
+                endpoint: logbroker.yandex.net
+                topic: LB_ACCOUNT/proto-reqans-log
+                export_session_meta_keys:
+                - server
+                use_ydb_discovery: true
+                use_logbroker_cds: true
+                tvm:
+                    client_id: 2001534
+                    secret_file: BSCONFIG_IDIR/tvm-secret/tvm_key
+                    disk_cache_directory: STATE_DIR/proto_reqans_log_tvm_cache
+-   input:
+        plugin: grpc
+        config:
+            uri: unix://STATE_DIR/proto_rt_reqans
+    channel:
+        pipe:
+        -   storage_ref:
+                storage: rt_reqans_log_storage
+        -   filter:
+                plugin: assign
+                config:
+                    session:
+                    -   server: '{$host_name}'
+        -   filter:
+                plugin: split_session
+                config:
+                    sessions_count: 10
+        output:
+            plugin: logbroker
+            config:
+                endpoint: logbroker.yandex.net
+                topic: LB_ACCOUNT/splitted-proto-reqans/rt-reqans-log
+                export_session_meta_keys:
+                - server
+                use_ydb_discovery: true
+                use_logbroker_cds: true
+                tvm:
+                    client_id: 2001534
+                    secret_file: BSCONFIG_IDIR/tvm-secret/tvm_key
+                    disk_cache_directory: STATE_DIR/proto_rt_reqans_log_tvm_cache
+-   input:
+        plugin: grpc
+        config:
+            uri: unix://STATE_DIR/proto_fat_reqans
+    channel:
+        pipe:
+        -   storage_ref:
+                storage: fat_reqans_log_storage
+        -   filter:
+                plugin: assign
+                config:
+                    session:
+                    -   server: '{$host_name}'
+        -   filter:
+                plugin: split_session
+                config:
+                    sessions_count: 10
+        output:
+            plugin: logbroker
+            config:
+                endpoint: logbroker.yandex.net
+                topic: LB_ACCOUNT/splitted-proto-reqans/fat-reqans-log
+                export_session_meta_keys:
+                - server
+                use_ydb_discovery: true
+                use_logbroker_cds: true
+                tvm:
+                    client_id: 2001534
+                    secret_file: BSCONFIG_IDIR/tvm-secret/tvm_key
+                    disk_cache_directory: STATE_DIR/proto_fat_reqans_log_tvm_cache
+-   input:
+        plugin: grpc
+        config:
+            uri: unix://STATE_DIR/proto_xml_reqans
+    channel:
+        pipe:
+        -   storage_ref:
+                storage: xml_reqans_log_storage
+        -   filter:
+                plugin: assign
+                config:
+                    session:
+                    -   server: '{$host_name}'
+        -   filter:
+                plugin: split_session
+                config:
+                    sessions_count: 10
+        output:
+            plugin: logbroker
+            config:
+                endpoint: logbroker.yandex.net
+                topic: LB_ACCOUNT/proto-xml-reqans-log
+                export_session_meta_keys:
+                - server
+                use_ydb_discovery: true
+                use_logbroker_cds: true
+                tvm:
+                    client_id: 2001534
+                    secret_file: BSCONFIG_IDIR/tvm-secret/tvm_key
+                    disk_cache_directory: STATE_DIR/proto_xml_reqans_log_tvm_cache
+-   input:
+        plugin: grpc
+        config:
+            uri: unix://STATE_DIR/alice_proto_reqans
+    channel:
+        pipe:
+        -   storage_ref:
+                storage: alice_reqans_log_storage
+        -   filter:
+                plugin: assign
+                config:
+                    session:
+                    -   server: '{$host_name}'
+        -   filter:
+                plugin: split_session
+                config:
+                    sessions_count: 10
+        output:
+            plugin: logbroker
+            config:
+                endpoint: logbroker.yandex.net
+                topic: LB_ACCOUNT/report-alice-log
+                export_session_meta_keys:
+                - server
+                use_ydb_discovery: true
+                use_logbroker_cds: true
+                tvm:
+                    client_id: 2001534
+                    secret_file: BSCONFIG_IDIR/tvm-secret/tvm_key
+                    disk_cache_directory: STATE_DIR/alice_proto_reqans_log_tvm_cache
+-   input:
+        plugin: grpc
+        config:
+            uri: unix://STATE_DIR/error_booster
+    channel:
+        pipe:
+        -   storage_ref:
+                storage: error_booster_log_storage
+        -   filter:
+                plugin: assign
+                config:
+                    session:
+                    -   server: '{$host_name}'
+        -   filter:
+                plugin: split_session
+                config:
+                    sessions_count: 10
+        output:
+            plugin: logbroker
+            config:
+                endpoint: logbroker.yandex.net
+                topic: LB_ACCOUNT/noapache-errorbooster
+                export_session_meta_keys:
+                - server
+                use_ydb_discovery: true
+                use_logbroker_cds: true
+                tvm:
+                    client_id: 2001534
+                    secret_file: BSCONFIG_IDIR/tvm-secret/tvm_key
+                    disk_cache_directory: STATE_DIR/error_booster_tvm_cache

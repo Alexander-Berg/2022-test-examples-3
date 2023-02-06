@@ -1,0 +1,27 @@
+import "crypta/lib/proto/extensions/extensions.proto";
+
+message TPlanet {
+    required string Name = 1;
+    optional float Radius = 2;
+    optional uint64 TotalPopulation = 3;
+}
+
+message TStarSystem {
+    required string Name = 1;
+    required string StarName = 2;
+    repeated TPlanet Planets = 3;
+    map<string, string> LocalNames = 4;
+    optional string EnvVariable = 5 [ (NCryptaOpts.FromEnv) = "ENV_VAR" ];
+}
+
+message TExoplanet {
+    required string Name = 1 [ (NCryptaOpts.FromEnv) = "EXOPLANET_NAME" ];
+    required float Mass = 2;
+    required float PeriodDays = 3;
+    required float Temperature = 4;
+}
+
+message TExoplanetSystem {
+    required string StarName = 1;
+    optional TExoplanet Planet = 2;
+}

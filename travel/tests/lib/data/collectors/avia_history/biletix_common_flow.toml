@@ -1,0 +1,57 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "biletix_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 20
+    confirm_dt = ""
+    created_at = "2020-01-31 00:51:28"
+    currency = "RUR"
+    from = "AAA"
+    marker = "75766dc6-a5e969-a345-4875-9ea3-ca27016e3c851"
+    order_id = "29408724"
+    partner = "biletix"
+    partner_id = 11
+    price = 3006.0
+    source = "biletix"
+    status = "paid"
+    ticket_number = ""
+    to = "BBB"
+    trip_type = "oneway"
+    unixtime = 1580421696
+
+[lb]
+    topic = "topic-biletix_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "updated_at"]
+
+[[lb.expected]]
+    status = "confirmed"
+    category = "avia"
+    partner_id = 11
+    created_at = 1580431888
+    origin = "AAA"
+    partner_order_id = "29408724"
+    label = "75766dc6-a5e969-a345-4875-9ea3-ca27016e3c851"
+    source = "history"
+    destination = "BBB"
+    partner_name = "biletix"
+    trip_type = "oneway"
+    billing_order_id = 20
+    order_amount = 3006.0
+    travel_order_id = "biletix:29408724"
+    currency_code = "RUB"

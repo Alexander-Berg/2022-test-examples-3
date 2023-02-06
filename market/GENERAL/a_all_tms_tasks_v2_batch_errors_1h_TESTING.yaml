@@ -1,0 +1,26 @@
+name: Errors in processing tms tasks v2 by 1h (testing)
+description: ''
+windowSecs: 3600
+delaySecs: 0
+type:
+  expression:
+    program: |-
+      let data = drop_empty_lines(drop_below({sensor="taskV2ErrorInBatchCount", cluster="testing", service="market-checkouter", project="market-checkout", period="five_min"}, 1));
+      let failed = map(moving_sum(data, 1h), v-> get_label(v, "taskName"));
+      let failed_count = size(failed);
+      alarm_if(failed_count > 0);
+      let description = 'Всё хорошо';
+    checkExpression: 'false'
+annotations:
+  description: |
+    У тмс задач {{expression.failed}} есть ошибки при обработке.
+    <a href="https://monitoring.yandex-team.ru/projects/market-checkout/explorer/queries?q.0.s=drop_below%28%7Bproject%3D%22market-checkout%22%2C%20cluster%3D%22testing%22%2C%20service%3D%22market-checkouter%22%2C%20sensor%3D%22taskV2ErrorInBatchCount%22%2C%20period%3D%22five_min%22%7D%2C%201%29&from=now-1h&to=now&utm_source=solomon_graph_view&refresh=60000&normz=off&colors=auto&type=area&interpolation=linear&dsp_method=auto&dsp_aggr=default&dsp_fill=default&vis_labels=off&vis_aggr=avg">Набор тмс задач с ошибками (monitoring.yandex-team.ru)</a>
+    <a href="https://yql.yandex-team.ru/Operations/YVbroJfFtzcrh9Jh3UdTRx-z0XGRxDEUDQuyFW1X9rE=">Посмотреть ошибки в задачах (yql.yandex-team.ru)</a>
+  environment: testing
+  trafficLight.color: '{{expression.trafficColor}}'
+channels:
+- id: solomon-bot-testing-notifications
+  config:
+    notifyAboutStatuses:
+    - ALARM
+    repeatDelaySecs: 0

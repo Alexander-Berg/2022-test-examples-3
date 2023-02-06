@@ -1,0 +1,41 @@
+# now = 2021-01-01:00:00:00 = 1609459200000
+# now-90d = 2020-10-03T00:00:00Z = 1601683200000
+# now-90d-minor = 2020-10-02T20:00:00Z = 1601668800000
+# 1630415828000 = 2021-08-31T13:17:08Z (Instant) = 2021-08-31T13:17:08+00:00 (yt cdc)
+
+MOCK VAR $gradeThresholdDate
+SET DateTime::FromMilliseconds(1609459200000) - Interval("P90D");
+
+MOCK DIR_TABLE //home/market/production/ugc/order_delivery
+NAME 12345
+SCHEMA model_id:int64, yandexuid:string, passportuid:string, timestamp:uint64
+# uid purchase: ok, too fresh, ok&verified=true/false
+{"model_id":1, "yandexuid":"some", "passportuid":"123", "timestamp":1630415828000}
+{"model_id":2, "yandexuid":"some", "passportuid":"124", "timestamp":1630415829000}
+{"model_id":3, "yandexuid":"some", "passportuid":"125", "timestamp":1630415828000}
+{"model_id":4, "yandexuid":"some", "passportuid":"126", "timestamp":1630415828000}
+# very old purchase for old grade
+{"model_id":5, "yandexuid":"some", "passportuid":"127", "timestamp":1601668700000}
+# yandexuid purchase: ok and too fresh
+{"model_id":101, "yandexuid":"mock1", "timestamp":1630415828000}
+{"model_id":102, "yandexuid":"mock2", "timestamp":1630415829000}
+
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_grade
+SCHEMA id:int64, state:int16, type:int16
+SCHEMA resource_id:int64, author_id:int64, yandexuid:utf8
+SCHEMA verified:int16, cr_time:utf8
+# grades to match purchases (UID)
+{"id":1, "state":0, "type":1, "resource_id":1, "author_id":123, "yandexuid":"none", "cr_time":"2021-08-31T13:17:08+00:00"}
+{"id":2, "state":0, "type":1, "resource_id":2, "author_id":124, "yandexuid":"none", "cr_time":"2021-08-31T13:17:08+00:00"}
+# grades to match purchases (YANDEXUID)
+{"id":3, "state":0, "type":1, "resource_id":101, "yandexuid":"mock1", "cr_time":"2021-08-31T13:17:08+00:00"}
+{"id":4, "state":0, "type":1, "resource_id":102, "yandexuid":"mock2", "cr_time":"2021-08-31T13:17:08+00:00"}
+# grades without purchases
+{"id":5, "state":0, "type":1, "resource_id":300, "author_id":123, "yandexuid":"none", "cr_time":"2021-08-31T13:17:08+00:00"}
+{"id":6, "state":0, "type":1, "resource_id":301, "yandexuid":"mock1", "cr_time":"2021-08-31T13:17:08+00:00"}
+# already verified (true and false)
+{"id":7, "state":0, "type":1, "resource_id":3, "author_id":125, "yandexuid":"none", "cr_time":"2021-08-31T13:17:08+00:00", "verified":1}
+{"id":8, "state":0, "type":1, "resource_id":4, "author_id":126, "yandexuid":"none", "cr_time":"2021-08-31T13:17:08+00:00", "verified":0}
+# too old grade (has purchase, but too old to process: 90d exceeded)
+{"id":9, "state":0, "type":1, "resource_id":5, "author_id":127, "yandexuid":"none", "cr_time":"2020-10-02T20:00:00+00:00", "verified":0}

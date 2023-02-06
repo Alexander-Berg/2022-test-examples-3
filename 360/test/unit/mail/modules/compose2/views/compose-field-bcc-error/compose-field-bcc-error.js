@@ -1,0 +1,13 @@
+describe('Daria.vComposeFieldBccError', function() {
+    describe('#onHtmlInit', function() {
+
+    });
+
+    describe('#onShow', function() {
+
+    });
+
+    describe('#onHide', function() {
+
+    });
+});

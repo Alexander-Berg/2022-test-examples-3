@@ -1,0 +1,51 @@
+{
+  "tableName": "clusterizer_evaluation_testing",
+  "splits": {
+    "experiment_name": "experiment_name",
+    "category_id": "category_id",
+    "sample_id": "sample_id",
+    "host": "host"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "ir.models-clusterizer.evaluation.${host}.${experiment_name}.category.${category_id}.f_measure",
+        "ir.models-clusterizer.evaluation.${host}.${experiment_name}.f_measure",
+        "ir.models-clusterizer.evaluation.${host}.${experiment_name}.sample.${sample_id}.f_measure"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "2*sum(tp)/sum(2*tp+fp+fn)*100",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "ir.models-clusterizer.evaluation.${host}.${experiment_name}.category.${category_id}.precision",
+        "ir.models-clusterizer.evaluation.${host}.${experiment_name}.precision",
+        "ir.models-clusterizer.evaluation.${host}.${experiment_name}.sample.${sample_id}.precision"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "sum(tp)/(sum(tp+fp))*100",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "ir.models-clusterizer.evaluation.${host}.${experiment_name}.category.${category_id}.used_pair_number",
+        "ir.models-clusterizer.evaluation.${host}.${experiment_name}.sample.${sample_id}.used_pair_number",
+        "ir.models-clusterizer.evaluation.${host}.${experiment_name}.used_pair_number"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "sum(tp+tn+fp+fn)",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "ir.models-clusterizer.evaluation.${host}.${experiment_name}.category.${category_id}.recall",
+        "ir.models-clusterizer.evaluation.${host}.${experiment_name}.recall",
+        "ir.models-clusterizer.evaluation.${host}.${experiment_name}.sample.${sample_id}.recall"
+      ],
+      "period": "FIVE_MIN",
+      "metricField": "sum(tp)/(sum(tp+fn))*100",
+      "type": "SIMPLE"
+    }
+  ]
+}

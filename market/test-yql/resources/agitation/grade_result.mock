@@ -1,0 +1,54 @@
+# Тесты
+# Модель 1 - платная, подходит по лимиту (не указан, несколько плательщиков, выбираем самую дешёвую)
+# Модель 2 - платная, подходит по лимиту (указан)
+# Модель 3 - платная, не подходит по лимиту
+# Модель 4 - бесплатная, порядок указан (у остальных нет)
+# Модель 5 - платная, но нет заказа (поэтому бесплатная)
+# Магазин 1 - для проверки магазина (исключён после закапывания CPA)
+# Пользователь 1 - есть задания на все модели
+
+
+# товары из заказов для генерации заданий на отзывы
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/author/agitation_order_delivery/current
+SCHEMA author_type:int16, type:int16, user_id:string, entity_id:int64,
+SCHEMA agitation_source_type:string, agitation_time:int64
+SCHEMA skip:int16, order_id:int64, sku:string
+# все модели
+{"author_type": 0, "type": 0, "user_id": "1", "entity_id": 1, "order_id":123, "agitation_source_type": "test", "agitation_time": 1}
+{"author_type": 0, "type": 0, "user_id": "1", "entity_id": 2, "order_id":123, "agitation_source_type": "test", "agitation_time": 2}
+{"author_type": 0, "type": 0, "user_id": "1", "entity_id": 3, "order_id":123, "agitation_source_type": "test", "agitation_time": 3}
+{"author_type": 0, "type": 0, "user_id": "1", "entity_id": 4, "agitation_source_type": "test", "agitation_time": 4}
+{"author_type": 0, "type": 0, "user_id": "1", "entity_id": 5, "agitation_source_type": "test", "agitation_time": 5}
+# магазин
+{"author_type": 0, "type": 3, "user_id": "1", "entity_id": 1, "agitation_source_type": "test", "agitation_time": 4, "skip":0}
+# скип
+{"author_type": 0, "type": 3, "user_id": "1", "entity_id": 666, "agitation_source_type": "test", "agitation_time": 4, "skip":1}
+
+
+# порядок заданий
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/author/agitation_grade_order/current
+SCHEMA agitation_type:int16, resource_id:int64, order:int64, grade_count:int64
+{"agitation_type": 1, "resource_id": 4, "order": 66, "grade_count": 12}
+
+# текущие отзывы моделей
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/tables/pub_model_grades/current
+SCHEMA resource_id:int64, id:int64, photos:yson
+{"id":1, "resource_id":1, "photos": []}
+{"id":20, "resource_id":2, "photos": []}
+{"id":21, "resource_id":2, "photos": []}
+{"id":30, "resource_id":3, "photos": []}
+{"id":31, "resource_id":3, "photos": []}
+
+# платные модели
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/author/current_paid_models/current
+SCHEMA entity_type:int16, model_id:int64, price:int64, target_count:int64, balance:double
+{"entity_type": 1, "model_id":1, "price":1, "balance":10.1}
+{"entity_type": 1, "model_id":1, "price":2, "balance":10.1}
+{"entity_type": 1, "model_id":2, "price":3, "target_count":3, "balance":10.1}
+{"entity_type": 1, "model_id":3, "price":4, "target_count":1, "balance":10.1}
+{"entity_type": 1, "model_id":5, "price":5, "balance":10.1}
+# другие типы платности, не про отзыв
+{"entity_type": 2, "model_id":4, "price":1, "balance":10.1}
+{"entity_type": 3, "model_id":4, "price":1, "balance":10.1}
+{"entity_type": 0, "model_id":4, "price":1, "balance":10.1}
+

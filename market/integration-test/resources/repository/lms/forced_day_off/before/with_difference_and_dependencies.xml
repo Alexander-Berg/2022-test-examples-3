@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <service_forced_day_off
+            service_id="1"
+            day="2021-01-01"
+    />
+    <!--Не удалится, потому что совпадает с forced-дейоффом-->
+    <service_day_off
+            service_id="1"
+            day="2021-01-01"
+    />
+    <!--Удалится, потому что для сервиса сервиса нет капасити-->
+    <service_day_off
+            service_id="2"
+            day="2021-01-01"
+    />
+    <!--Удалится, потому что нет счетчика капасити на эту дату-->
+    <service_day_off
+            service_id="3"
+            day="2021-01-01"
+    />
+    <!--Удалится, потому что есть счетчик капасити на эту дату и dayoff = false-->
+    <service_day_off
+            service_id="3"
+            day="2021-01-02"
+    />
+    <!--Не удалится, потому что есть счетчик капасити на эту дату и dayoff = true-->
+    <service_day_off
+            service_id="3"
+            day="2021-01-03"
+    />
+    <!--Удалится, потому что есть счетчик капасити на все даты (day = null) и dayoff = false -->
+    <service_day_off
+            service_id="4"
+            day="2021-01-01"
+    />
+    <!--Удалится, потому что есть счетчик капасити на все даты (day = null) и dayoff = false -->
+    <service_day_off
+            service_id="4"
+            day="2021-01-02"
+    />
+    <!--Не удалится, потому что есть счетчик капасити на все даты (day = null) и dayoff = true -->
+    <service_day_off
+            service_id="5"
+            day="2021-01-01"
+    />
+    <!--Не удалится, потому что есть счетчик капасити на все даты (day = null) и dayoff = true -->
+    <service_day_off
+            service_id="5"
+            day="2021-01-02"
+    />
+    <!--Удалится, потому что оба счетчика капасити имеют dayoff = false -->
+    <service_day_off
+            service_id="6"
+            day="2021-01-01"
+    />
+    <!--Не удалится, потому что один из двух счетчиков капасити имеет dayoff = true -->
+    <service_day_off
+            service_id="7"
+            day="2021-01-01"
+    />
+
+    <capacity
+            id="1"
+            path="1"
+            name="1 test"
+    />
+
+    <service_capacity_mapping
+            service_id="3"
+            capacity_id="1"
+    />
+
+    <capacity_value_counter
+            capacity_id="1"
+            unit_type="ORDER"
+            count="0"
+            threshold="1"
+            day="2021-01-02"
+            day_off="false"
+            day_off_type="UNSET"
+    />
+
+    <capacity_value_counter
+            capacity_id="1"
+            unit_type="ORDER"
+            count="0"
+            threshold="1"
+            day="2021-01-03"
+            day_off="true"
+            day_off_type="UNSET"
+    />
+
+    <capacity
+            id="2"
+            path="2"
+            name="2 test"
+    />
+
+    <service_capacity_mapping
+            service_id="4"
+            capacity_id="2"
+    />
+
+    <capacity_value_counter
+            capacity_id="2"
+            unit_type="ORDER"
+            count="0"
+            threshold="1"
+            day_off="false"
+            day_off_type="UNSET"
+    />
+
+    <capacity
+            id="3"
+            path="3"
+            name="3 test"
+    />
+
+    <service_capacity_mapping
+            service_id="5"
+            capacity_id="3"
+    />
+
+    <capacity_value_counter
+            capacity_id="3"
+            unit_type="ORDER"
+            count="0"
+            threshold="1"
+            day_off="true"
+            day_off_type="UNSET"
+    />
+
+    <capacity
+            id="4"
+            path="4"
+            name="4 test"
+    />
+
+    <service_capacity_mapping
+            service_id="6"
+            capacity_id="4"
+    />
+
+    <capacity_value_counter
+            capacity_id="4"
+            unit_type="ORDER"
+            count="0"
+            threshold="1"
+            day_off="false"
+            day_off_type="UNSET"
+    />
+
+    <capacity_value_counter
+            capacity_id="4"
+            unit_type="ITEM"
+            count="0"
+            threshold="1"
+            day_off="false"
+            day_off_type="UNSET"
+            day="2021-01-01"
+    />
+
+    <capacity
+            id="5"
+            path="5"
+            name="5 test"
+    />
+
+    <service_capacity_mapping
+            service_id="7"
+            capacity_id="5"
+    />
+
+    <capacity_value_counter
+            capacity_id="5"
+            unit_type="ORDER"
+            count="0"
+            threshold="1"
+            day_off="true"
+            day_off_type="UNSET"
+    />
+
+    <capacity_value_counter
+            capacity_id="5"
+            unit_type="ITEM"
+            count="0"
+            threshold="1"
+            day_off="false"
+            day_off_type="UNSET"
+            day="2021-01-01"
+    />
+</dataset>

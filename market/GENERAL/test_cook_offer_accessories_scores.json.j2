@@ -1,0 +1,46 @@
+{% from "include/offer_accessories_features.j2" import
+        pair_offer_features,
+        single_offer_features,
+        pair_model_features,
+        single_model_features,
+        pair_category_features,
+        single_category_features,
+        crypta_features
+    with context %}
+{% from "include/utility.j2" import skip_features %}
+
+{% macro skip_auto_features() %}
+    {{ skip_features(pair_offer_features) }},
+    {{ skip_features(single_offer_features) }},
+    {{ skip_features(single_offer_features) }},
+    {{ skip_features(pair_model_features) }},
+    {{ skip_features(single_model_features) }},
+    {{ skip_features(single_model_features) }},
+    {{ skip_features(pair_category_features) }},
+    {{ skip_features(single_category_features) }},
+    {{ skip_features(single_category_features) }}
+{% endmacro %}
+
+{% macro skip_crypta_features() %}
+    {% for feature in crypta_features %}
+        0.0, 0.0, 0.0
+        {% if not loop.last %},{% endif %}
+    {% endfor %}
+{% endmacro %}
+
+
+{% if table == "sets_offer_accessories_scores" %}
+    {% table table %}
+        ["O1", "O2", 0.28964805603027344, "{{ day }}"],
+        ["O1", "O3", 0.22080159187316895, "{{ day }}"],
+        ["O1", "O4", 0.22080159187316895, "{{ day }}"],
+        ["O1", "O5", 0.22470998764038086, "{{ day }}"]
+    {% endtable %}
+{% elif table == "sets_offer_accessories_features" %}
+    {% table table %}
+        ["O1", "O2", {{ skip_auto_features() }}, 1.0, 0.0, 0.0, {{ skip_crypta_features() }}, "{{ day }}"],
+        ["O1", "O3", {{ skip_auto_features() }}, 0.0, 0.0, 0.0, {{ skip_crypta_features() }}, "{{ day }}"],
+        ["O1", "O4", {{ skip_auto_features() }}, 0.0, 1.0, 0.0, {{ skip_crypta_features() }}, "{{ day }}"],
+        ["O1", "O5", {{ skip_auto_features() }}, 0.0, 0.0, 1.0, {{ skip_crypta_features() }}, "{{ day }}"]
+    {% endtable %}
+{% endif %}

@@ -1,0 +1,85 @@
+
+logbroker:
+  pq_lib:
+    worker_threads: 2
+
+  consumer:
+    server: localhost
+    port: 20500
+    topics:
+      - lb-topic
+    client_id: lb-consumer
+    max_memory_usage: 16777216
+    max_infly_requests: 3
+    max_size: 1048576
+    use_lock_session: false
+    read_mirrored_partitions: true
+
+  credentials:
+    use_secure_tvm: False
+
+  pqlib_log_name: pqlib
+
+reader:
+  read_timeout_ms: 1000
+
+worker:
+  threads: 4
+
+processor:
+  max_batch_size_per_transaction: 100000
+
+ydb:
+  endpoint: ydb-endpoint
+  database: ydb-database
+  max_active_sessions: 1000
+
+
+logs:
+  main:
+    level: info
+    targets:
+    - type: stdout
+    - type: rotating
+      file: /tmp/main.log
+      max_file_size: 4194304
+      max_files: 1
+
+  scheduler:
+    level: info
+    targets:
+    - type: rotating
+      file: /tmp/scheduler.log
+      max_file_size: 4194304
+      max_files: 1
+
+  worker:
+    level: info
+    targets:
+    - type: rotating
+      file: /tmp/worker.log
+      max_file_size: 4194304
+      max_files: 1
+
+  pqlib:
+    level: info
+    targets:
+    - type: rotating
+      file: /tmp/pqlib.log
+      max_file_size: 4194304
+      max_files: 1
+
+  graphite:
+    targets:
+    - type: rotating
+      file: /tmp/graphite.log
+      max_file_size: 4194304
+      max_files: 1
+
+  solomon:
+    targets:
+    - type: rotating
+      file: /tmp/solomon.log
+      max_file_size: 4194304
+      max_files: 1
+

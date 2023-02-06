@@ -1,0 +1,309 @@
+
+--convert all ids to crypta_id
+$visits_crypta_ids = (
+    SELECT
+        matching.target_id AS crypta_id,
+        segment.`date` AS `date`,
+        segment.ozon AS ozon,
+        segment.wildberries AS wildberries,
+    FROM `//idfa/crypta_id` AS matching
+    INNER JOIN `//visits` AS segment
+    ON matching.id == segment.devid
+    
+UNION ALL
+
+    SELECT
+        matching.target_id AS crypta_id,
+        segment.`date` AS `date`,
+        segment.ozon AS ozon,
+        segment.wildberries AS wildberries,
+    FROM `//gaid/crypta_id` AS matching
+    INNER JOIN `//visits` AS segment
+    ON matching.id == segment.devid
+    
+);
+
+$bar_crypta_ids = (
+    SELECT
+        matching.target_id AS crypta_id,
+        segment.ozon AS ozon,
+        segment.wildberries AS wildberries,
+        segment.`date` AS `date`,
+    FROM `//yandexuid/crypta_id` AS matching
+    INNER JOIN `//bar` AS segment
+    ON matching.id == CAST(segment.yandexuid AS String)
+);
+
+$metrics_crypta_ids = (
+    SELECT
+        matching.target_id AS crypta_id,
+        segment.ozon AS ozon,
+        segment.wildberries AS wildberries,
+        segment.`date` AS `date`,
+    FROM `//yandexuid/crypta_id` AS matching
+    INNER JOIN `//metrics` AS segment
+    ON matching.id == CAST(segment.yandexuid AS String)
+);
+
+
+--count actions
+$bar_count = (
+    SELECT
+        crypta_id,
+        CAST(SUM(ozon) AS Double) AS ozon_visits_count,
+        CAST(SUM(wildberries) AS Double) AS wildberries_visits_count,
+    FROM (
+        SELECT
+            crypta_id,
+            MAX(ozon) AS ozon,
+            MAX(wildberries) AS wildberries,
+        FROM $bar_crypta_ids
+        GROUP BY crypta_id, `date`
+    )
+    GROUP BY crypta_id
+);
+
+$metrics_count = (
+    SELECT
+        crypta_id,
+        CAST(SUM(ozon) AS Double) AS ozon_visits_count,
+        CAST(SUM(wildberries) AS Double) AS wildberries_visits_count,
+    FROM (
+        SELECT
+            crypta_id,
+            MAX(ozon) AS ozon,
+            MAX(wildberries) AS wildberries,
+        FROM $metrics_crypta_ids
+        GROUP BY crypta_id, `date`
+    )
+    GROUP BY crypta_id
+);
+
+$visits_count = (
+    SELECT
+        crypta_id,
+        CAST(SUM(ozon) AS Double) AS ozon_visits_count,
+        CAST(SUM(wildberries) AS Double) AS wildberries_visits_count,
+    FROM (
+        SELECT
+            crypta_id,
+            MAX(ozon) AS ozon,
+            MAX(wildberries) AS wildberries,
+        FROM $visits_crypta_ids
+        GROUP BY crypta_id, `date`
+    )
+    GROUP BY crypta_id
+);
+
+
+$market_count = (
+    SELECT
+        CAST(CryptaId AS String) AS crypta_id,
+        SUM(ItemUnitPriceRub * ItemQuantity) AS cost
+    FROM `//market`
+    WHERE CryptaId IS NOT NULL
+        AND `Timestamp` >= 1000000
+    GROUP BY CryptaId
+);
+
+--count percentiles
+$ozon_bar_95_percentile = (
+            SELECT
+                PERCENTILE(ozon_visits_count, 0.95),
+            FROM $bar_count
+);
+
+$ozon_bar_50_percentile = (
+            SELECT
+                PERCENTILE(ozon_visits_count, 0.50),
+            FROM $bar_count
+);
+
+$wildberries_bar_95_percentile = (
+            SELECT
+                PERCENTILE(wildberries_visits_count, 0.95),
+            FROM $bar_count
+);
+
+$wildberries_bar_50_percentile = (
+            SELECT
+                PERCENTILE(wildberries_visits_count, 0.50),
+            FROM $bar_count
+);
+
+$ozon_metrics_95_percentile = (
+            SELECT
+                PERCENTILE(ozon_visits_count, 0.95),
+            FROM $metrics_count
+);
+
+$ozon_metrics_50_percentile = (
+            SELECT
+                PERCENTILE(ozon_visits_count, 0.50),
+            FROM $metrics_count
+);
+
+$wildberries_metrics_95_percentile = (
+            SELECT
+                PERCENTILE(wildberries_visits_count, 0.95),
+            FROM $metrics_count
+);
+
+$wildberries_metrics_50_percentile = (
+            SELECT
+                PERCENTILE(wildberries_visits_count, 0.50),
+            FROM $metrics_count
+);
+
+$ozon_visits_95_percentile = (
+            SELECT
+                PERCENTILE(ozon_visits_count, 0.95),
+            FROM $visits_count
+);
+
+$ozon_visits_50_percentile = (
+            SELECT
+                PERCENTILE(ozon_visits_count, 0.50),
+            FROM $visits_count
+);
+
+$wildberries_visits_95_percentile = (
+            SELECT
+                PERCENTILE(wildberries_visits_count, 0.95),
+            FROM $visits_count
+);
+
+$wildberries_visits_50_percentile = (
+            SELECT
+                PERCENTILE(wildberries_visits_count, 0.50),
+            FROM $visits_count
+);
+
+
+$market_95_percentile = (
+            SELECT
+                PERCENTILE(cost, 0.95)
+            FROM $market_count
+);
+
+$market_50_percentile = (
+            SELECT
+                PERCENTILE(cost, 0.50)
+            FROM $market_count
+);
+
+
+--filter according to percentiles
+INSERT INTO `//output` WITH TRUNCATE
+SELECT
+    id,
+    'crypta_id' AS id_type,
+    segment_name,
+FROM (
+        SELECT
+            crypta_id AS id,
+            'ozon_95' AS segment_name,
+        FROM $bar_count
+        WHERE ozon_visits_count >= $ozon_bar_95_percentile
+            
+UNION ALL
+        SELECT
+            crypta_id AS id,
+            'ozon_50' AS segment_name,
+        FROM $bar_count
+        WHERE ozon_visits_count >= $ozon_bar_50_percentile
+            AND ozon_visits_count < $ozon_bar_95_percentile
+            
+UNION ALL
+        SELECT
+            crypta_id AS id,
+            'wildberries_95' AS segment_name,
+        FROM $bar_count
+        WHERE wildberries_visits_count >= $wildberries_bar_95_percentile
+            
+UNION ALL
+        SELECT
+            crypta_id AS id,
+            'wildberries_50' AS segment_name,
+        FROM $bar_count
+        WHERE wildberries_visits_count >= $wildberries_bar_50_percentile
+            AND wildberries_visits_count < $wildberries_bar_95_percentile
+            
+UNION ALL
+        SELECT
+            crypta_id AS id,
+            'ozon_95' AS segment_name,
+        FROM $metrics_count
+        WHERE ozon_visits_count >= $ozon_metrics_95_percentile
+            
+UNION ALL
+        SELECT
+            crypta_id AS id,
+            'ozon_50' AS segment_name,
+        FROM $metrics_count
+        WHERE ozon_visits_count >= $ozon_metrics_50_percentile
+            AND ozon_visits_count < $ozon_metrics_95_percentile
+            
+UNION ALL
+        SELECT
+            crypta_id AS id,
+            'wildberries_95' AS segment_name,
+        FROM $metrics_count
+        WHERE wildberries_visits_count >= $wildberries_metrics_95_percentile
+            
+UNION ALL
+        SELECT
+            crypta_id AS id,
+            'wildberries_50' AS segment_name,
+        FROM $metrics_count
+        WHERE wildberries_visits_count >= $wildberries_metrics_50_percentile
+            AND wildberries_visits_count < $wildberries_metrics_95_percentile
+            
+UNION ALL
+        SELECT
+            crypta_id AS id,
+            'ozon_95' AS segment_name,
+        FROM $visits_count
+        WHERE ozon_visits_count >= $ozon_visits_95_percentile
+            
+UNION ALL
+        SELECT
+            crypta_id AS id,
+            'ozon_50' AS segment_name,
+        FROM $visits_count
+        WHERE ozon_visits_count >= $ozon_visits_50_percentile
+            AND ozon_visits_count < $ozon_visits_95_percentile
+            
+UNION ALL
+        SELECT
+            crypta_id AS id,
+            'wildberries_95' AS segment_name,
+        FROM $visits_count
+        WHERE wildberries_visits_count >= $wildberries_visits_95_percentile
+            
+UNION ALL
+        SELECT
+            crypta_id AS id,
+            'wildberries_50' AS segment_name,
+        FROM $visits_count
+        WHERE wildberries_visits_count >= $wildberries_visits_50_percentile
+            AND wildberries_visits_count < $wildberries_visits_95_percentile
+            
+UNION ALL
+        SELECT
+            crypta_id AS id,
+            'market_95' AS segment_name,
+        FROM $market_count
+        WHERE cost >= $market_95_percentile
+
+UNION ALL
+
+        SELECT
+            crypta_id AS id,
+            'market_50' AS segment_name,
+        FROM $market_count
+        WHERE cost >= $market_50_percentile
+            AND cost < $market_95_percentile
+
+)
+GROUP BY id, segment_name;

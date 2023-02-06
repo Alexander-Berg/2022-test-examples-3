@@ -1,0 +1,201 @@
+#!/bin/bash -ex
+
+# Что делает этот скрипт (ppcdict-create-jails):
+# создаёт chroot-окружение или окружения для запуска Percona XtraDB Cluster с базой ppcdict
+# Если окружение одно, оно создаётся в каталоге /opt/root.ppcdict.1
+# Если окружений 3, они создаются в каталогах /opt/root.ppcdict.{1,2,3}
+# Случай, когда окружений не одно и не три, не предусмотрен.
+#
+# Скрипт предлагается запускать сразу после установки пакета yandex-du-ppcdict-mysql-test.
+#
+# Чтобы поднять коллекцию баз для ppcdict в Percona XtraDB Cluster, общий порядок действий
+# такой: запустить скрипт (этот), привезти данные в /opt/root.ppcdict.1/opt/mysql.ppcdict,
+# запустить один узел (bootstrap-pxc), выдать права на innobackupex, запустить два других
+# узла (start, start)
+
+VERSION=$1
+NODECOUNT=$2
+GROUPNAME=$3
+
+if [ "$VERSION" == "" ]; then
+    echo "Usage: $0 <package VERSION for yandex-direct-mysql-ppcdict-pxc> [<node count>]"
+    exit 1
+fi
+
+if [ "$NODECOUNT" == "" ]; then
+    echo "Defaulting to 1 node"
+    NODECOUNT=1
+fi
+
+if [ "$GROUPNAME" == "" ]; then
+    echo "Used defaulting group name"
+    GROUPNAME="default"
+fi
+
+if [ "$NODECOUNT" != "1" ] && [ "$NODECOUNT" != "3" ]; then
+    echo "Invalid node count ($NODECOUNT): must be 1 or 3"
+    exit 1
+fi
+
+if [ "$(id -u)" != "0" ]; then
+    echo "Only root can do this."
+    exit 1
+fi
+
+echo "Creating one jail at /opt/root.ppcdict.1/"
+
+debootstrap --arch amd64 trusty /opt/root.ppcdict.1/ http://mirror.yandex.ru/ubuntu/
+
+curl http://dist.yandex.ru/REPO.asc | chroot /opt/root.ppcdict.1/ apt-key add -
+
+cat > /opt/root.ppcdict.1/etc/apt/sources.list <<ENDSOURCES
+deb http://mirror.yandex.ru/ubuntu trusty main restricted universe multiverse
+deb http://mirror.yandex.ru/ubuntu trusty-updates main restricted universe multiverse
+deb http://mirror.yandex.ru/ubuntu trusty-security main restricted universe multiverse
+
+deb http://unstable.direct-trusty.dist.yandex.ru/direct-trusty unstable/all/
+deb http://unstable.direct-trusty.dist.yandex.ru/direct-trusty unstable/amd64/
+deb http://testing.direct-trusty.dist.yandex.ru/direct-trusty testing/all/
+deb http://testing.direct-trusty.dist.yandex.ru/direct-trusty testing/amd64/
+deb http://stable.direct-trusty.dist.yandex.ru/direct-trusty stable/all/
+deb http://stable.direct-trusty.dist.yandex.ru/direct-trusty stable/amd64/
+deb http://direct-common.dist.yandex.ru/direct-common/ stable/all/
+deb http://direct-common.dist.yandex.ru/direct-common/ stable/amd64/
+deb http://common.dist.yandex.ru/common/ stable/all/
+deb http://common.dist.yandex.ru/common/ stable/amd64/
+ENDSOURCES
+
+chroot /opt/root.ppcdict.1/ apt-get update
+
+# сейчас mysql ставится из репозиториев Директа, так что следующие две закомментированные команды должны быть не нужны; при следующей переналивке (январь 2019) убедиться, что это так, и удалить
+#chroot /opt/root.ppcdict.1/ apt-get -y install percona-repo-config
+#chroot /opt/root.ppcdict.1/ apt-get update
+
+chroot /opt/root.ppcdict.1/ apt-get -y install tzdata
+
+mount -o bind /proc/ /opt/root.ppcdict.1/proc/
+
+# временно записать /usr/sbin/policy-rc.d, чтобы запретить запуск mysql;
+# если этого не сделать, "стандартный" mysqld попробует запуститься из postinst и может
+# конфликтовать с каким-нибудь процессом (например, с таким же стандартным mysqld или с ppcdata1)
+# на "хосте" за порт 3306
+cat > /opt/root.ppcdict.1/usr/sbin/policy-rc.d <<ENDPOLICY
+#!/bin/sh
+echo "All runlevel operations denied by policy" >&2
+exit 101
+ENDPOLICY
+chmod a+x /opt/root.ppcdict.1/usr/sbin/policy-rc.d
+
+#yandex-du-mysql-monitor=4.3-1 строгая версия, т.к. сейчас мониторинг пытается записаться в продакшеновый zookeeper
+chroot /opt/root.ppcdict.1 env DEBIAN_FRONTEND=noninteractive apt-get install yandex-du-mysql-monitor=4.3-1 percona-xtradb-cluster-server-5.7 percona-xtradb-cluster-common-5.7 percona-xtradb-cluster-client-5.7 -y
+
+# hostname -f почему-то не работает в chroot с trusty, подменяем
+hostname_path_in_chroot="$(chroot /opt/root.ppcdict.1/ which hostname)"
+fqdn=$(hostname --fqdn)
+mv "/opt/root.ppcdict.1/${hostname_path_in_chroot}" "/opt/root.ppcdict.1/${hostname_path_in_chroot}.old"
+cat > /opt/root.ppcdict.1/"${hostname_path_in_chroot}" <<EOF
+#!/usr/bin/perl
+if (@ARGV == 1 && \$ARGV[0] =~ /^(-f|--fqdn)\$/) { print "$fqdn\\n" } else { exec '${hostname_path_in_chroot}.old', @ARGV }
+EOF
+chmod a+x /opt/root.ppcdict.1/${hostname_path_in_chroot}
+chroot /opt/root.ppcdict.1/ env DEBIAN_FRONTEND=noninteractive apt-get -y install yandex-direct-mysql-ppcdict-pxc=$VERSION
+mv /opt/root.ppcdict.1/${hostname_path_in_chroot}.old /opt/root.ppcdict.1/${hostname_path_in_chroot}
+rm /opt/root.ppcdict.1/usr/sbin/policy-rc.d
+# с audit.cnf не запустится, пока не установлен плагин audit-лога
+# на ТС audit-лог пока не нужен, 
+rm -f /opt/root.ppcdict.1/etc/mysql/ppcdict.conf.d/audit.cnf
+# без mysql.err почему-то не запускается
+chroot /opt/root.ppcdict.1 touch /var/log/mysql.ppcdict/mysql.err
+chroot /opt/root.ppcdict.1 chown mysql:mysql /var/log/mysql.ppcdict/mysql.err
+
+chroot /opt/root.ppcdict.1/ /etc/init.d/mysql stop
+umount /opt/root.ppcdict.1/proc/
+
+# кусок про AUTO_INCREMENT скопирован с поправками на путь в chroot из mysql-test-server-local-conf/actions/postinst
+AUTO_INCREMENT_OFFSET=0
+
+# хосты у уже давно так не называются, надо придумать другой способ определения offset'а, а пока выставлять правильный вручную
+if [ "$GROUPNAME" == "devtest" ] || hostname | grep -q ppctest-devtest-mysql; then
+    AUTO_INCREMENT_OFFSET=1
+elif [ "$GROUPNAME" == "dev7" ] || hostname | grep -q ppctest-dev7-mysql; then
+    AUTO_INCREMENT_OFFSET=2
+elif [ "$GROUPNAME" == "testing" ] || hostname | grep -q ppctest-ts1-mysql; then
+    AUTO_INCREMENT_OFFSET=3
+elif [ "$GROUPNAME" == "ts2" ] || hostname | grep -q ppctest-ts2-mysql; then
+    AUTO_INCREMENT_OFFSET=4
+elif [ "$GROUPNAME" == "load" ] || hostname | grep -q ppctest-load-mysql; then
+    AUTO_INCREMENT_OFFSET=5
+fi
+
+if [ $AUTO_INCREMENT_OFFSET != 0 ]; then
+    echo "Writing auto_increment settings for ppcdict, auto_increment_offset = $AUTO_INCREMENT_OFFSET"
+    echo -e "[mysqld]\nauto-increment-increment = 5\nauto-increment-offset = $AUTO_INCREMENT_OFFSET" > \
+        /opt/root.ppcdict.1/etc/mysql/ppcdict.conf.d/auto-increment.cnf
+fi
+
+printf '[mysqld]\ninnodb_buffer_pool_size = 10G\n' > /opt/root.ppcdict.1/etc/mysql/ppcdict.conf.d/buffer-pool.cnf
+printf '[mysqld]\nwsrep_sst_auth = "backupuser:a671pqaqlmubckq5"\n' > /opt/root.ppcdict.1/etc/mysql/ppcdict.conf.d/wsrep-auth.cnf
+
+if [ $NODECOUNT == 3 ]; then
+    echo "Copying /opt/root.ppcdict.1/ to /opt/root.ppcdict.2/"
+    cp -a /opt/root.ppcdict.1/ /opt/root.ppcdict.2/
+
+    echo "Copying /opt/root.ppcdict.1/ to /opt/root.ppcdict.3/"
+    cp -a /opt/root.ppcdict.1/ /opt/root.ppcdict.3/
+fi
+
+echo "Writing configuration files"
+
+tpage \
+    --define instance=ppcdict \
+    --define port=3311 \
+    /opt/root.ppcdict.1/etc/mysql/ppcdict.cnf.tmpl > /opt/root.ppcdict.1/etc/mysql/ppcdict.cnf
+
+tpage \
+    --define test_server_conf=1 \
+    --define ipaddr=127.0.0.1 \
+    --define shaddr=ppcdict.1 \
+    --define cluster_listen_port=17411 \
+    --define ist_recv_port=17511 \
+    --define sst_recv_port=17611 \
+    --define cluster_address=127.0.0.1:17411,127.0.0.1:17452,127.0.0.1:17453 \
+    --define preferred_weight=1 \
+    /opt/root.ppcdict.1/etc/mysql/ppcdict-wsrep.cnf.tmpl > /opt/root.ppcdict.1/etc/mysql/ppcdict.conf.d/wsrep.cnf
+
+if [ $NODECOUNT == 3 ]; then
+    tpage \
+        --define instance=ppcdict \
+        --define port=3352 \
+        /opt/root.ppcdict.2/etc/mysql/ppcdict.cnf.tmpl > /opt/root.ppcdict.2/etc/mysql/ppcdict.cnf
+
+    tpage \
+        --define test_server_conf=1 \
+        --define ipaddr=127.0.0.1 \
+        --define shaddr=ppcdict.2 \
+        --define cluster_listen_port=17452 \
+        --define ist_recv_port=17552 \
+        --define sst_recv_port=17652 \
+        --define cluster_address=127.0.0.1:17411,127.0.0.1:17452,127.0.0.1:17453 \
+	--define preferred_weight=1 \
+        /opt/root.ppcdict.2/etc/mysql/ppcdict-wsrep.cnf.tmpl > /opt/root.ppcdict.2/etc/mysql/ppcdict.conf.d/wsrep.cnf
+
+    tpage \
+        --define instance=ppcdict \
+        --define port=3353 \
+        /opt/root.ppcdict.3/etc/mysql/ppcdict.cnf.tmpl > /opt/root.ppcdict.3/etc/mysql/ppcdict.cnf
+
+    tpage \
+        --define test_server_conf=1 \
+        --define ipaddr=127.0.0.1 \
+        --define shaddr=ppcdict.3 \
+        --define cluster_listen_port=17453 \
+        --define ist_recv_port=17553 \
+        --define sst_recv_port=17653 \
+        --define cluster_address=127.0.0.1:17411,127.0.0.1:17452,127.0.0.1:17453 \
+	--define preferred_weight=1 \
+        /opt/root.ppcdict.3/etc/mysql/ppcdict-wsrep.cnf.tmpl > /opt/root.ppcdict.3/etc/mysql/ppcdict.conf.d/wsrep.cnf
+
+fi
+
+echo "All done."
+exit 0

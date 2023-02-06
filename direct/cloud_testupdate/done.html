@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{%load attr%}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Версионика/Обновление тестового облачного рантайма - результат</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/releaser.css" media="all"/>
+    <link href="{{ MEDIA_URL }}/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 10px; /* to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+        {% include "index/header.html" %}
+        <br>
+        <h1> Обновление тестового облачного рантайма
+        </h1>
+        <br>
+        <br>
+        <div class="row12" style="font-size:120%;">
+            Рантайм: <b>{{runtime_port}}</b>
+            <br>
+            Приложение: <b>{{app}}</b>
+            <br>
+            Версия: <b>{{version}}</b>
+            <br>
+            <br>
+            {% if status == 0 %}
+            <span class="label label-info">Успешно</span>
+            {% else %}
+            <span class="label label-important" style="font-size:100%;">Произошла ошибка!</span>
+            <br>
+            <br>
+            <pre>{{update_log}}</pre>
+            {% endif %}
+            <br>
+            <br>
+            <a href="/cloud_testupdate/index">К странице обновления тестового облака</a>
+        </div>
+
+    </div> <!-- /container -->
+  </body>
+</html>

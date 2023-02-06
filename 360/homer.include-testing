@@ -1,0 +1,113 @@
+location ~* ^/homer/ {
+    add_header x-dns-prefetch-control "off";
+    add_header Cache-Control "private,no-cache,no-store,must-revalidate,max-age=0";
+    add_header X-Request-Id $request_id always;
+    include sites-enabled/security-headers.include;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $x_real_ip;
+    proxy_set_header X-Real-Port $x_real_port;
+    proxy_set_header X-Original-Uri $request_uri;
+    proxy_set_header X-Original-Host $host;
+    proxy_set_header X-Request-Id $request_id;
+    proxy_set_header X-Forwarded-For $x_real_ip;
+    proxy_set_header X-Https-Request yes;
+    proxy_set_header SSL-Cipher $ssl_cipher;
+
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_next_upstream error timeout http_502 http_503;
+    proxy_next_upstream_tries 2;
+
+    proxy_ssl_session_reuse on;
+    proxy_pass https://homer-backend$uri$is_args$args;
+}
+
+location /redirect-with-closing-connection/ {
+    internal;
+    keepalive_requests 0;
+    return 302 $upstream_http_location;
+}
+
+location ~* ^/20(\.html)?$ {
+    rewrite ^/20 /homer/twentieth_anniversary last;
+}
+
+# DARIA-56212
+location ~* ^/(un)?subscribe(\.html)?$ {
+    rewrite ^/(un)?subscribe /homer/subscription_status/$1subscribe last;
+}
+
+location ~* ^/sm.jsx$ {
+    rewrite ^/(.*) /homer/sms_link last;
+}
+
+location ~* ^/for/[^/]+/sm.jsx {
+    rewrite ^/for/[^/]+/(.*) /homer/sms_link last;
+}
+
+location ~* ^/(compose|message|search|setup|abook|messages|msg)/?$ {
+    rewrite ^/msg /homer/shortcut/message last;
+    rewrite ^/(\w+) /homer/shortcut/$1 last;
+}
+
+location ~* ^/for/[^/]+/(compose|message|search|setup|abook|messages|msg)/?$ {
+    rewrite ^/for/[^/]+/msg /homer/shortcut/message last;
+    rewrite ^/for/[^/]+/(\w+) /homer/shortcut/$1 last;
+}
+
+location ~* "^/app\d+" {
+    rewrite ^/app(\d+) /homer/app_store/$1 last;
+}
+
+location ~* "^/app" {
+    rewrite ^/app /homer/app_store/$1 last;
+}
+
+location ~* ^/r$ {
+    rewrite ^/r(.*) /homer/link_warning/$1 last;
+}
+
+location ~* ^/infected$ {
+    rewrite ^/infected(.*) /homer/link_warning/$1 last;
+}
+
+location ~* ^/for/[^/]+/r$ {
+    rewrite ^/r/(.*) /homer/phishing-warning/$1 last;
+}
+
+# DARIA-39238
+location ~* ^/forward-confirm$ {
+    rewrite ^/forward-confirm(.*) /homer/forwarding_confirmation/$1 last;
+}
+
+location ~* ^/for/[^/]+/forward-confirm$ {
+    rewrite ^/for/[^/]+/forward-confirm(.*) /homer/forwarding_confirmation/$1 last;
+}
+
+location ~* ^/forward-confirm/ {
+    rewrite ^/forward-confirm/(.*) /homer/forwarding_confirmation/$1 last;
+}
+
+location ~* ^/for/[^/]+/forward-confirm/ {
+    rewrite ^/for/[^/]+/forward-confirm/(.*) /homer/forwarding_confirmation/$1 last;
+}
+
+location ~* ^/host-root2/s.jsx$ {
+    rewrite ^/host-root2/s.jsx(.*) /homer/confirm_to_follow/$1 last;
+}
+
+location / {
+    rewrite ^/$ /homer/ last;
+    rewrite ^/for/([^/]+)/?$ /?pdd_domain=$1 redirect;
+
+    if ($http_host ~ "\.$" ){
+        rewrite ^(.*) $scheme://$host$1 redirect;
+    }
+}
+
+location /landing {
+    internal;
+    proxy_set_header Host mail360.yandex.$_TLD;
+    proxy_pass https://mail360.yandex.ru/mail-landing/;
+}

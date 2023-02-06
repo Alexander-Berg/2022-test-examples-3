@@ -1,0 +1,37 @@
+{% if table == "features_item_pair_model_model_clickout_statistics" %}
+    {# Result data. #}
+    {% table table %}
+        ["M1", "M2", 1.0, 2.0, "model", "model", "{{ day }}"],
+        ["M2", "M1", 1.0, 1.0, "model", "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_clickouts" %}
+    {% macro clickout(timestamp, yandexuid, model_id) -%}
+        [
+            {{ timestamp }},
+            {
+                "yandexuid": "{{ yandexuid }}"
+            },
+            "view",
+            "offer",
+            "whatever",
+            {
+                {% if model_id %}
+                    "model_id": "{{ model_id }}"
+                {% elif model_id != "" %}
+                    "model_id": null
+                {% endif %}
+            },
+            "{{ day }}"
+        ]
+    {%- endmacro %}
+    {% table "events" %}
+        {% if shift == 0 %}
+            {{ clickout(1503225532000, "19275", "M2") }},
+            {{ clickout(1503225532001, "19275", "M1") }},
+            {{ clickout(1503225532002, "19275", "M2") }},
+            {{ clickout(1503225532004, "19275", "M2") }},
+            {{ clickout(1503225532005, "19276", None) }},
+            {{ clickout(1503225532006, "19277", "") }}
+        {% endif %}
+    {% endtable %}
+{% endif %}

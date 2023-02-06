@@ -1,0 +1,67 @@
+{
+  "title": "Avia search check v2.0, response schema",
+  "type": "object",
+  "required": ["components"],
+  "properties": {
+    "components": {
+      "type": "object",
+      "required": ["aviabarData"],
+      "properties": {
+        "aviabarData": {
+          "type": "object",
+          "required": ["status", "flight", "price"],
+          "properties": {
+            "flight": {
+              "type": "object",
+              "required": ["isDirect"],
+              "properties": {
+                "isDirect": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "urls": {
+              "type": "object",
+              "required": ["minPriceUrlSurface"],
+              "properties": {
+                "minPriceUrl": {
+                  "type": "string",
+                  "forms": "uri"
+                },
+                "minPriceUrlSurface": {
+                  "type": "string",
+                  "forms": "uri"
+                }
+              }
+            },
+            "price": {
+              "type": "object",
+              "required": [
+                "delimiters",
+                "valueText",
+                "value",
+                "currencySign",
+                "isCurrencySignFirst",
+                "currencyCode"
+              ],
+              "propertirs": {
+                "delimiters": {
+                  "type": "object",
+                  "required": ["decimal", "group"],
+                  "properties": {
+                    "decimal": {
+                      "type": "string"
+                    },
+                    "group": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

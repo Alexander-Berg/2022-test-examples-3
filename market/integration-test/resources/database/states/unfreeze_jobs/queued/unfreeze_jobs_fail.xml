@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <sku id="10001" warehouse_id="100500" sku="sku1" vendor_id="9999"/>
+    <sku id="10002" warehouse_id="100500" sku="sku2" vendor_id="9999"/>
+    <sku id="10003" warehouse_id="100500" sku="sku3" vendor_id="9999"/>
+    <sku id="10004" warehouse_id="100500" sku="sku4" vendor_id="9999"/>
+
+    <stock id="1001" sku_id="10001" type="FIT"/>
+    <stock id="1002" sku_id="10002" type="FIT"/>
+    <stock id="1003" sku_id="10003" type="FIT"/>
+    <stock id="1004" sku_id="10004" type="FIT"/>
+
+    <stock_freeze id="101" stock_id="1001" freeze_version="0" amount="1" deleted="false" reason_id="7508227"
+                  reason_type="ORDER"/>
+    <stock_freeze id="102" stock_id="1002" freeze_version="0" amount="1" deleted="false" reason_id="7508227"
+                  reason_type="ORDER"/>
+    <stock_freeze id="103" stock_id="1003" freeze_version="0" amount="1" deleted="false" reason_id="7508227"
+                  reason_type="ORDER"/>
+    <stock_freeze id="104" stock_id="1004" freeze_version="0" amount="1" deleted="false" reason_id="7508227"
+                  reason_type="ORDER"/>
+
+    <unfreeze_job id="1" attempt_number="0" stock_freeze_id="101"/>
+    <unfreeze_job id="2" attempt_number="18" stock_freeze_id="102"/>
+    <unfreeze_job id="3" attempt_number="0" stock_freeze_id="103"/>
+    <unfreeze_job id="4" attempt_number="16" stock_freeze_id="104"/>
+
+    <execution_queue
+            id="100"
+            type="FULL_SYNC_STOCK"
+            created="2018-01-01 00:00:00"
+            execute_after="2018-01-01 00:00:01"
+            payload='{"warehouseId":100500,"from":0,"to":500, "pageSize":500, "last":false}'
+            uuid='0-500-1'
+            attempt_number="1"
+    />
+
+    <execution_queue
+            id="101"
+            type="KOROBYTE_SYNC"
+            created="2018-01-01 00:00:00"
+            execute_after="2018-01-01 00:00:01"
+            payload='{"warehouseId":100500,"from":0,"to":500, "pageSize":500, "last":false}'
+            uuid='0-500-1'
+            attempt_number="1"
+    />
+
+    <execution_queue
+            id="13800"
+            type="FULL_SYNC_STOCK"
+            created="2018-01-01 00:00:00"
+            execute_after="2018-01-01 00:00:01"
+            payload='{"warehouseId":777,"from":0,"to":500, "pageSize":500, "last":false}'
+            uuid='0-500-3'
+            attempt_number="1"
+    />
+</dataset>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:c="urn:jmf:dataimport:converter:1.0"
+        xmlns:d="urn:jmf:dataimport:datasource:1.0"
+        xmlns:m="urn:jmf:metaclass:config:1.0"
+        xmlns:r="urn:jmf:dataimport:resolver:1.0"
+        xmlns:v="urn:jmf:common:1.0"
+        xmlns:a="urn:jmf:attribute:type:default:config:1.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="urn:jmf:dataimport:config:1.0"
+>
+    <attribute>
+        <m:code>titleText</m:code>
+        <m:title>
+            <v:value>Название тикета</v:value>
+        </m:title>
+        <m:type xsi:type="a:string"/>
+    </attribute>
+    <attribute>
+        <m:code>commentText</m:code>
+        <m:title>
+            <v:value>Текст комментария</v:value>
+        </m:title>
+        <m:type xsi:type="a:string"/>
+        <m:presentation view="text" edit="text"/>
+    </attribute>
+
+    <process name="ticket">
+        <mode>CREATE</mode>
+        <mode>UPDATE</mode>
+
+        <parameter name="fqn">ticket$default</parameter>
+
+        <dataSource xsi:type="d:CSV" url="classpath:/runImportTriggerActionTest/%s" delimeter=";">
+            <d:column name="title" key="Название"/>
+            <d:column name="marketOrderId" key="ID заказа в Маркете"/>
+            <d:column name="attributeMustBeOk" key="Все ли хорошо"/>
+        </dataSource>
+
+        <idColumn>marketOrderId</idColumn>
+
+        <metaclass xsi:type="r:constant" fqn="ticket$default"/>
+
+        <searcher xsi:type="c:entity" fqn="${fqn}" attr="marketOrderId"/>
+
+        <attr name="title" column="title"/>
+        <attr name="marketOrderId" column="marketOrderId"/>
+
+        <customizer xsi:type="scriptCustomizer">
+            <beforeItem>
+                <![CDATA[
+                        if (row.attributeMustBeOk != 'ok') {
+                           throw new RuntimeException("required attribute is wrong")
+                        }
+                ]]>
+            </beforeItem>
+        </customizer>
+    </process>
+
+</config>

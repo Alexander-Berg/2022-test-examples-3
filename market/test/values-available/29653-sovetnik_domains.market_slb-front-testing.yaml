@@ -1,0 +1,21 @@
+context:
+  default:
+    service_name: sovetnik_domains
+    servername_regexp: '(sovetnik-domains\\.tst\\.vs\\.market\\.yandex\\.net|domains-test\\.sovetnik\\.market\\.yandex\\.net)'
+    vs: sovetnik_domains
+    health_check: '"GET /ping HTTP/1.1\r\nHost: sovetnik-domains.tst.vs.market.yandex.net\r\n\r\n"'
+    attempts: 3
+    antirobot: True
+    antirobot_service_name: market
+    balancing_method: "active"
+    cert: sovetnik-domains.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+
+servers:
+  default:
+    main:
+      - name: "GREY%sovetnik-domains.tst.vs.market.yandex.net"
+        timeout: "35s"
+        port: 443
+        plain_http_backend: True

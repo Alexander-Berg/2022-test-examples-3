@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <orders
+            id="1"
+            barcode="LOinttest-1"
+            platform_client_id="3"
+            return_sorting_center_id="1"
+            sender_id="1"
+            status="CANCELLED"
+    />
+
+    <waybill_segment
+            id="1"
+            order_id="1"
+            partner_id="2"
+            external_id="test-external-id-1"
+            waybill_segment_index="0"
+            segment_type="COURIER"
+    />
+
+    <waybill_segment
+            id="2"
+            order_id="1"
+            partner_id="1"
+            external_id="[null]"
+            waybill_segment_index="1"
+            segment_type="COURIER"
+    />
+
+    <cancellation_order_request
+            id="1"
+            order_id="1"
+            status="CREATED"
+    />
+
+    <order_history_event
+            id="1"
+            order_id="1"
+            diff='[
+              {
+                "op": "replace",
+                "path": "/waybill/0/externalId",
+                "value": "test-external-id-1",
+                "fromValue": null
+              },
+              {
+                "op": "replace",
+                "path": "/waybill/0/segmentStatus",
+                "value": "TRACK_RECEIVED",
+                "fromValue": "STARTED"
+              },
+              {
+                "op": "add",
+                "path": "/waybill/0/segmentStatusHistory/0",
+                "value": {
+                  "id": 1,
+                  "status": "TRACK_RECEIVED",
+                  "statusDate": "2019-06-12T00:00:00Z",
+                  "partnerStatusDate": "2019-06-12T00:00:00Z"
+                }
+              }
+            ]'
+    />
+
+    <order_history_event
+            id="2"
+            order_id="1"
+            diff='[
+              {
+                "op": "add",
+                "path": "/cancellationOrderRequests/0",
+                "value": {
+                  "id": 1,
+                  "reason": "CUSTOM",
+                  "status": "CREATED",
+                  "cancellationErrorMessage": null
+                }
+              }
+            ]'
+    />
+
+    <business_process_state
+            sequence_id="1009"
+            queue_type="CREATE_ORDER_EXTERNAL"
+            status="SUCCESS_RESPONSE_PROCESSING_SUCCEEDED"
+    />
+
+    <business_process_state
+            sequence_id="1"
+            queue_type="CREATE_SEGMENT_CANCELLATION_REQUESTS"
+            status="ENQUEUED"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd/1","orderCancellationRequestId":1,"sequenceId":1}'
+    />
+</dataset>

@@ -1,0 +1,32 @@
+phantom:
+  address: vla1-53cf270da97a.qloud-c.yandex.net
+  load_profile:
+    load_type: rps
+    schedule: 'line(1, 300, 15m)'
+  ammofile: >-
+    https://storage-int.mds.yandex.net/get-load-ammo/15228/0ae47535d5499f483e75ce5bf03b27c7
+uploader:
+  enabled: true
+  package: yandextank.plugins.DataUploader
+  job_name: maps.front-maps
+  operator: lunapark
+  component: maps_capacity
+  meta:
+    use_tank: vla1-3afb98127029.qloud-c.yandex.net
+  task: MAPSLOADTESTING-43
+autostop:
+  autostop:
+    - 'quantile(75,1000,5s)'
+    - 'http(4xx,10%,4)'
+    - 'http(5xx,2%,4)'
+    - 'net(1xx,10,3)'
+    - 'net(104,10,5)'
+    - 'net(43,10,5)'
+    - 'net(110,10,5)'
+yasm:
+  enabled: true
+  package: yandextank.plugins.YASM
+  panels:
+    resources:
+      host: QLOUD
+      tags: itype=qloud;prj=maps.front-maps.stress;tier=target-1

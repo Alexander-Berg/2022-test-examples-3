@@ -1,0 +1,30 @@
+network:
+  master-addr: "logbroker.yandex.net"
+  proto: "pq"
+  tvm-server-id: 2001059
+
+watcher:
+  state: /logs/push-client-state
+
+files:
+  - name: /logs/orders-app/orders-app.log.json
+    topic: /travel/orders-app/application-log
+
+  - name: /logs/orders-app/partners-http.log.json
+    topic: /travel/test/orders-partners-http-log
+
+  - name: /logs/orders-app/workflow-events.log.json
+    topic: /travel/test/orders-workflow-events-log
+
+  - name: /logs/orders-app/train-refund-events.log.json
+    topic: /travel/test/train-refunds-cpa-export-log
+
+  - name: /logs/orders-app/ydb.log.json
+    topic: /travel/test/orders-ydb-log-copy
+
+logger:
+  file: /logs/push-client.log
+  level: 6
+  telemetry_interval: -1
+  remote: 0 
+

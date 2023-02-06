@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <service_code
+            code="SORT"
+            type="internal"
+            is_optional="true"
+    />
+    <service_code
+            code="PROCESSING"
+            type="internal"
+            is_optional="true"
+    />
+    <service_code
+            code="SHIPMENT"
+            type="outbound"
+            is_optional="true"
+    />
+    <service_code
+            code="INBOUND"
+            type="inbound"
+            is_optional="true"
+    />
+    <service_code
+            code="DROPSHIP_EXPRESS"
+            type="internal"
+            is_optional="true"
+    />
+
+    <logistic_segments_services_meta_key
+            key="RETURN_SORTING_CENTER_ID"
+    />
+
+    <partner_external_param_type
+            id="1"
+            key="IS_DROPOFF"
+            description="Является ли партнёр дропоффом"
+    />
+
+    <platform_client
+            id="1"
+            name="Beru"
+    />
+
+    <platform_client
+            id="2"
+            name="Yandex Delivery"
+    />
+
+    <platform_client
+            id="6"
+            name="Yandex GO"
+    />
+
+    <calendar
+            id="111"
+    />
+
+    <partner
+            id="1"
+            status="active"
+            type="DELIVERY"
+            name="Delivery service partner"
+            readable_name="Читаемое имя СД"
+            calendar_id="111"
+    />
+    <partner
+            id="2"
+            status="inactive"
+            type="DELIVERY"
+            name="Inactive delivery service partner"
+            readable_name="Читаемое имя неактивной СД"
+    />
+    <partner
+            id="3"
+            status="active"
+            type="DELIVERY"
+            name="Delivery service partner with handling time"
+            readable_name="Читаемое имя СД с указанным временем сортировки"
+    />
+    <partner
+            id="1000"
+            name="Partner 1000"
+            status="active"
+            type="SORTING_CENTER"
+    />
+    <partner
+            id="3000"
+            name="Partner 3000"
+            status="active"
+            type="DELIVERY"
+    />
+    <partner
+            id="4"
+            status="active"
+            type="DELIVERY"
+            name="Delivery service partner with handling time not dropoff"
+            readable_name="Читаемое имя СД с указанным временем сортировки не dropoff"
+    />
+
+    <partner
+            id="5"
+            status="active"
+            type="YANDEX_GO_SHOP"
+            name="Go shop"
+            readable_name="Магазин GO"
+    />
+
+    <platform_client_partners
+            partner_id="1"
+            platform_client_id="1"
+            status="ACTIVE"
+    />
+    <platform_client_partners
+            partner_id="1"
+            platform_client_id="2"
+            status="ACTIVE"
+    />
+    <platform_client_partners
+            partner_id="2"
+            platform_client_id="1"
+            status="ACTIVE"
+    />
+    <platform_client_partners
+            partner_id="3"
+            platform_client_id="1"
+            status="ACTIVE"
+    />
+    <platform_client_partners
+            partner_id="4"
+            platform_client_id="1"
+            status="ACTIVE"
+    />
+
+    <platform_client_partners
+            partner_id="5"
+            platform_client_id="6"
+            status="ACTIVE"
+    />
+
+    <platform_client_partners
+            partner_id="1000"
+            platform_client_id="1"
+            status="ACTIVE"
+    />
+    <platform_client_partners
+            partner_id="3000"
+            platform_client_id="1"
+            status="ACTIVE"
+    />
+
+    <partner_external_param_value
+            type_id="1"
+            partner_id="1"
+            value="1"
+    />
+    <partner_external_param_value
+            type_id="1"
+            partner_id="3"
+            value="1"
+    />
+
+    <!-- Несколько значений, чтобы проверить, что берётся максимальное значение из локации 225 в локацию 225 -->
+    <partner_handling_time
+            partner_id="3"
+            location_from="1"
+            location_to="225"
+            handling_time="90000000000000"
+    />
+    <partner_handling_time
+            partner_id="3"
+            location_from="225"
+            location_to="1"
+            handling_time="90000000000000"
+    />
+    <partner_handling_time
+            partner_id="3"
+            location_from="225"
+            location_to="225"
+            handling_time="86400000000000"
+    />
+    <partner_handling_time
+        partner_id="4"
+        location_from="225"
+        location_to="225"
+        handling_time="86400000000000"
+    />
+
+
+    <address
+            id="11"
+            location_id="213"
+    />
+    <address
+            id="22"
+            location_id="213"
+    />
+    <address
+            id="33"
+            location_id="213"
+    />
+
+    <schedule
+            id="110"
+    />
+
+    <logistics_point
+            id="10"
+            name="Delivery service pickup point"
+            partner_id="1"
+            external_id="point_10"
+            type="PICKUP_POINT"
+            address_id="11"
+            schedule_id="110"
+            active="true"
+    />
+    <logistics_point
+            id="20"
+            name="Inactive delivery service pickup point"
+            partner_id="2"
+            external_id="point_20"
+            type="PICKUP_POINT"
+            address_id="22"
+            active="true"
+    />
+    <logistics_point
+            id="30"
+            name="Delivery service pickup point"
+            partner_id="3"
+            external_id="point_30"
+            type="PICKUP_POINT"
+            address_id="33"
+            schedule_id="110"
+            active="true"
+    />
+    <logistics_point
+        id="40"
+        name="Delivery service pickup point"
+        partner_id="4"
+        external_id="point_40"
+        type="WAREHOUSE"
+        address_id="33"
+        schedule_id="110"
+        active="true"
+    />
+
+    <logistics_point
+        id="50"
+        name="Go shop warehouse"
+        partner_id="5"
+        external_id="external-id"
+        type="WAREHOUSE"
+        address_id="33"
+        schedule_id="110"
+        active="true"
+    />
+
+    <cargo_type
+            id="1"
+            cargo_type="301"
+    />
+    <cargo_type
+            id="2"
+            cargo_type="302"
+    />
+    <cargo_type
+            id="3"
+            cargo_type="303"
+    />
+    <cargo_type
+            id="4"
+            cargo_type="304"
+    />
+    <cargo_type
+            id="5"
+            cargo_type="305"
+    />
+    <cargo_type
+            id="6"
+            cargo_type="306"
+    />
+
+    <partner_forbidden_cargo_type
+        partner_id="1"
+        cargo_type_id="1"
+    />
+    <partner_forbidden_cargo_type
+            partner_id="1"
+            cargo_type_id="3"
+    />
+    <partner_forbidden_cargo_type
+            partner_id="1"
+            cargo_type_id="5"
+    />
+</dataset>

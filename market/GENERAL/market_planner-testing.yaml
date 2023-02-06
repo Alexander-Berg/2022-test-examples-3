@@ -1,0 +1,66 @@
+juggler:
+
+  checks:
+  
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 100%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    service: ping
+
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    service: monitoring
+  
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    service: disk_free_space
+  
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    service: fresh-hprof-files
+
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: skip
+    service: push-client-status
+
+  default:
+    check_options: {}
+    children:
+    - NANNY%testing_market_mstat_planner_sas
+    - NANNY%testing_market_mstat_planner_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_planner-testing
+    namespace: market.devexp
+    notifications: []
+    refresh_time: 60
+    service: planner-ping
+    tags:
+    - market
+    - _market_
+    - market_testing
+    - market-devexp-testing
+    - market-devexp
+    - market_rtc
+    - market_planner
+    - testing
+    ttl: 900

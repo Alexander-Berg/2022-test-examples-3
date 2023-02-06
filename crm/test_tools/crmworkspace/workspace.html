@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Workspace v0.3</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+</head>
+<script>
+    var pwd = "emptypwd";
+    
+    function changeUser(login){
+        document.cookie=pwd+'=;domain=yandex-team.ru;Max-Age=-1;path=/;';
+        document.cookie=pwd+'=' +login +';domain=yandex-team.ru;path=/;';
+        document.getElementById('currentuser').innerHTML = 'Current user: '+'<b>'+login +'</b>';
+    }
+
+    function deleteCookie(){
+        document.cookie=pwd+'=;domain=yandex-team.ru;Max-Age=-1;path=/;';
+        document.getElementById('currentuser').innerHTML = 'user cookie deleted succesfully';
+    }
+
+    function blockPwdInput(){
+        pwd = document.getElementById('pwd').value;
+        pwdarea = document.getElementById('pwd');
+        pwdarea.disabled=true;
+    }
+
+    function openLogs(url){
+        objectId = document.getElementById('logId').value;
+        url = url + objectId;
+        window.open(url, '_blank');
+    }
+</script>
+<body>
+<div class="all">
+    <div class="column">
+        <div class="menu-d">links</div>
+        <div class="menu-u" style="background-color:lightgoldenrodyellow;">Instances</div>
+        <div class="content-h-t">
+            <div class="content">Dev: <a href="http://crmdev01.ld.yandex-team.ru/space1/index.html" target="_blank">Space1</a> <a href="http://crmdev01.ld.yandex-team.ru/space2/index.html" target="_blank">Space2</a> <a href="http://crmdev01.ld.yandex-team.ru/space3/index.html" target="_blank">Space3</a> <a href="http://crmdev01.ld.yandex-team.ru/space4/index.html" target="_blank">Space4</a></div>
+            <div class="content">Test: <a href="https://tcrm-myt.yandex-team.ru/index.html" target="_blank">Space</a> </div>
+            <div class="content">Mars: <a href="https://crm.yandex-team.ru/mars/index.html#/cases/" target="_blank">Space</a> </div>
+            <div class="content">Prod: <a href="https://crm.yandex-team.ru/index.html" target="_blank">Space</a> <a href="https://crm-win-front-iva6-1.ld.yandex-team.ru:4443/space/index.html" target="_blank">iva6-1</a> <a href="https://crm-win-front-iva6-2.ld.yandex-team.ru:4443/space/index.html" target="_blank">iva6-2</a> <a href="https://crm-win-front-myt-1.ld.yandex-team.ru:4443/space/index.html" target="_blank">myt-1</a> <a href="https://crm-win-front-myt-2.ld.yandex-team.ru:4443/space/index.html" target="_blank">myt-2</a></div>
+        </div>
+        <div class="menu-u" style="background-color:lightgoldenrodyellow;">Batyr</div>
+        <div class="content-h-t">
+            <div class="content"><a href="https://github.yandex-team.ru/CRM/crm/tree/develop/space/Crm.Batyr/Code" target="_blank">All rules</a></div>
+        </div>
+        <div class="menu-u" style="background-color:lightgoldenrodyellow;">Tracker</div>
+        <div class="content-h-t">
+            <div class="content"><a href="https://st.yandex-team.ru/createTicket?queue=CRM&ttBugSource=Команда&ttEnvironment=Тестинг&affectedVersions=229625&template=6405&sprint=100723" target="_blank">Submit new bug</a></div>
+        </div>
+        <div class="menu-u" style="background-color:lightgoldenrodyellow;">Logs</div>
+        <div class="menu-u" style="background-color:#D2E4D2;"><input type="text" placeholder="mail_id or issue_id" style="width: 120px;" id="logId"></div>
+        <div class="half-l">
+            <div class="content-h-t">test
+                <div class="content"><span class="ticket" onclick=openLogs("https://tcrm-myt.yandex-team.ru/space/view/mail/rulelog?mailId=")>Mail</span></div>
+                <div class="content"><span class="ticket" onclick=openLogs("https://tcrm-myt.yandex-team.ru/space/view/rule/log/issue2line/issue/")>Issue</span></div>
+                <div class="content"><span class="ticket" onclick=openLogs("https://tcrm-myt.yandex-team.ru/space/view/rule/log/startrek/issue/")>Tracker</span></div>
+                <div class="content"><span class="ticket" onclick=openLogs("https://tcrm-myt.yandex-team.ru/download/mail/headers/")>Mail headers</span></div>
+            </div>
+        </div>
+        <div class="half-l">
+            <div class="content-h-t">prod
+                <div class="content"><span class="ticket" onclick=openLogs("https://crm.yandex-team.ru/space/view/mail/rulelog?mailId=")>Mail</span></div>
+                <div class="content"><span class="ticket" onclick=openLogs("https://crm.yandex-team.ru/space/view/rule/log/issue2line/issue/")>Issue</span></div>
+                <div class="content"><span class="ticket" onclick=openLogs("https://crm.yandex-team.ru/space/view/rule/log/startrek/issue/")>Tracker</span></div>
+                <div class="content"><span class="ticket" onclick=openLogs("https://crm.yandex-team.ru/download/mail/headers/")>Mail headers</span></div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="column-c">
+        <div class="menu-d">login as user <div class="pwd"><input type="password" placeholder="password" id="pwd" style="width:100px" ><button onclick=blockPwdInput()>Ok</button></div></div>
+        <div class="menu-u" style="text-align: right;"><span id="currentuser"><br></span></div>
+        <div class="half">
+            <div class="content-h-d">crm dev1
+                <div class="content"><span class="ticket" onclick=changeUser("chanyshev") style="color: goldenrod">chanyshev</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("nasyrov") style="color: darkgray">nasyrov</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("zavtur")>zavtur</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("jk76")>jk76</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("agroroza") style="color: green">agroroza</span></span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("blinkovilya")>blinkovilya</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("dariakiseleva")>dariakiseleva</span></div>
+            </div>
+            <div class="content-h-d">crm dev2
+                <div class="content"><span class="ticket" onclick=changeUser("meroving") style="color: goldenrod">meroving</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("butorin") style="color: darkgray">butorin</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("alevitsky")>alevitsky</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("liapustin")>liapustin</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("tarasov-dmtr")>tarasov-dmtr</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("polkhovich")>polkhovich</span></div>
+            </div>
+            <div class="content-h-d">crm man
+                <div class="content"><span class="ticket" onclick=changeUser("dkriv") style="color: goldenrod">dkriv</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("nataliaisaeva")>nataliaisaeva</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("akoryakin")>akoryakin</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("max-l")>max-l</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("yuliased")>yuliased</span></div>
+            </div>
+        </div>
+        <div class="half">
+            <div class="content-h-d">crm test
+                <div class="content"><span class="ticket" onclick=changeUser("olavreniuk") style="color: goldenrod">olavreniuk</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("sbalzitova")>sbalzitova</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("mpavlovna")>mpavlovna</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("eyurkov")>eyurkov</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("agnia")>agnia</span></div>
+            </div>
+            <div class="content-h-d">Robots
+                <div class="content"><span class="ticket" onclick=changeUser("robot-crmcrown") style="color: goldenrod">robot-crmcrown</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("robot-crmlead")>robot-crmlead</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("robot-crmapprover")>robot-crmaprov</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("robot-crmbatyr")>robot-crmbatyr</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("robot-crmmanager1")>robot-crmman1</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("robot-crmmanager2")>robot-crmman2</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("robot-crmmanager3")>robot-crmman3</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("robot-back-space")>robot-back-space</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("robot-space-jam")>robot-space-jam</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("robot-space-oddity")>robot-space-oddity</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("robot-space-odyssey")>robot-space-odyssey</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("robot-space-x")>robot-space-x</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("zomb-crmtest")>zomb-crmtest</span></div>
+            </div>
+        </div>
+        <div class="half">
+            <div class="content-h-d">Зайти под пользователем
+                <div class="content"></div>
+                <div class="content"><input type="text" placeholder="login" id="userlogin" class="ticketnum"><button onclick=changeUser(document.getElementById('userlogin').value)>GO</button></div>
+                <div class="content"><span class="ticket" onclick=deleteCookie()>delete user cookie</span></div>
+            </div>
+        </div>
+        <div class="half-r">
+            <div class="content-h-d">МКС Звонки
+                <div class="content"><span class="ticket" onclick=changeUser("sapozhnikova") style="color: goldenrod">sapozhnikova</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("tonymineev")>tonymineev</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("popovskikh")>popovskikh</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("solodovams")>solodovams</span></div>
+            </div>
+            <div class="content-h-d">Approvers
+                <div class="content"><span class="ticket" onclick=changeUser("eokomarova")>eokomarova</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("nugzar")>nugzar</span></div>
+            </div>
+            <div class="content-h-d">Reviews
+                <div class="content"><span class="ticket" onclick=changeUser("romanenko")>romanenko</span></div>
+            </div>
+            <div class="content-h-d">Chats
+                <div class="content"><span class="ticket" onclick=changeUser("likaruleva")>likaruleva</span></div>
+            </div>
+            <div class="content-h-d">Telephony factors
+                <div class="content"><span class="ticket" onclick=changeUser("ovelikanova")>ovelikanova</span></div>
+                <div class="content"><span class="ticket" onclick=changeUser("usyakaya")>usyakaya</span></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

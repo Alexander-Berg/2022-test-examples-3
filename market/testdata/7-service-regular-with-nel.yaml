@@ -1,0 +1,20 @@
+context:
+  default:
+    service_name: regular_service_with_nel
+    servername_regexp: service-with-nel\\.vs\\.market\\.yandex\\.net
+    vs: market
+    cert: market
+    plain_http: true
+    nel: true
+    nel_max_age: 60
+    nel_success_fraction: 0.1
+    nel_failure_fraction: 1.0
+    balancing_method: active
+    health_check: '"GET /ping HTTP/1.1\r\nHost: service-with-nel.market.yandex.ru\r\n\r\n"'
+
+servers:
+  default:
+    main:
+    - name: N@regular_service
+      plain_http_backend: true
+      timeout: 50s

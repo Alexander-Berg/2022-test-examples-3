@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <fulfillment_service
+            ID="145"
+            NAME="test"
+            STATUS="1"
+            TYPE="1"
+    />
+    <fulfillment_service
+            ID="147"
+            NAME="test"
+            STATUS="1"
+            TYPE="1"
+    />
+    <!-- Стандартные заявки на поставку-->
+
+    <SHOP_REQUEST
+            ID="1"
+            SUPPLIER_ID="1"
+            SERVICE_ID="145"
+            STATUS="5"
+            TYPE="0"
+            CREATED_AT="1999-9-9 9:9:9"
+
+            REQUESTED_DATE="2017-10-10 9:9:9"
+            ITEMS_TOTAL_COUNT="2"
+    />
+
+    <SHOP_REQUEST_DOC
+            ID="1"
+            REQUEST_ID="1"
+            TYPE="0"
+            CREATED_AT="1999-9-9 9:9:9"
+            FILE_URL="FILE_URL"
+            EXTENSION="1"
+    />
+
+    <REQUEST_ITEM
+            ID="1"
+            REQUEST_ID="1"
+            ARTICLE="SHOPSKU1"
+            BARCODES="11;22"
+            COUNT="3"
+            SKU="1"
+            NAME="offer_1"
+            SUPPLY_PRICE="50.50"
+            UNTAXED_PRICE="50.50"
+            VAT_RATE="5"
+            BOX_COUNT="1"
+    />
+
+    <REQUEST_ITEM
+            ID="2"
+            REQUEST_ID="1"
+            ARTICLE="SHOPSKU2"
+            BARCODES="11;22"
+            COUNT="3"
+            NAME="offer_2"
+            SUPPLY_PRICE="50"
+            UNTAXED_PRICE="45.45"
+            VAT_RATE="2"
+    />
+
+    <REQUEST_ITEM_ERROR
+            REQUEST_ID="1"
+            ITEM_ID="1"
+            ERROR_TYPE="9"
+    />
+
+    <REQUEST_ITEM_ERROR
+            REQUEST_ID="1"
+            ITEM_ID="2"
+            ERROR_TYPE="0"
+    />
+
+    <EXTERNAL_REQUEST_ITEM_ERROR
+            REQUEST_ID="1"
+            REQUEST_ITEM_ID="1"
+            ERROR_SOURCE="MBO"
+            ERROR_CODE="InboundNotAllowed"
+            MESSAGE_TEMPLATE="This Is template"
+            ERROR_PARAMS="{test:test}"
+            HIDDEN="false"
+    />
+
+    <!-- Валидные старые поставки на другой склад, которые никак не повлияют на валидацию и она сфэйлится -->
+    <SHOP_REQUEST
+            ID="8"
+            SUPPLIER_ID="1"
+            SERVICE_ID="147"
+            STATUS="10"
+            TYPE="0"
+            CREATED_AT="1999-9-9 9:9:9"
+
+            REQUESTED_DATE="1999-9-9 9:9:9"
+            ITEMS_TOTAL_COUNT="3"
+    />
+    <REQUEST_ITEM
+            ID="11"
+            REQUEST_ID="8"
+            ARTICLE="SHOPSKU2"
+            BARCODES="11;22"
+            COUNT="3"
+            NAME="offer_2"
+            SUPPLY_PRICE="50.50"
+            VAT_RATE="5"
+            FACT_COUNT="3"
+            DEFECT_COUNT="0"
+            BOX_COUNT="1"
+    />
+
+    <!-- Сгенерированные документы с ошибками -->
+
+    <SHOP_REQUEST_DOC
+            ID="2"
+            REQUEST_ID="1"
+            TYPE="5"
+            CREATED_AT="2018-01-01 10:10:10"
+            FILE_URL="http://localhost/errors.csv"
+            EXTENSION="1"
+    />
+
+    <!-- История статусов -->
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="1"
+            STATUS="0"
+            UPDATED_AT="1999-9-9 9:9:9"
+    />
+
+    <REQUEST_STATUS_HISTORY
+            REQUEST_ID="1"
+            STATUS="5"
+            UPDATED_AT="2018-1-1 10:10:10"
+    />
+
+</dataset>

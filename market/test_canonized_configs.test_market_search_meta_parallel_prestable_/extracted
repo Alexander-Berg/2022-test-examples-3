@@ -1,0 +1,40 @@
+ident: market-search
+
+files:
+  - name: /var/logs/yandex/parallel_report/access-tskv.log
+    log_type: market-parallel-report-log
+    max_jobs: 2
+  - name: /var/logs/yandex/parallel_report/base-access-tskv.log
+    log_type: market-parallel-base-report-log
+  - name: /var/logs/yandex/parallel_report/feature.log
+    log_type: market-feature-log
+    compress: zstd
+  - name: /var/logs/yandex/parallel_report/test-data.log
+    log_type: market-test-data-log
+  - name: /var/logs/yandex/parallel_report/ammo.log
+    log_type: market-test-data-log
+  - name: /var/logs/yandex/parallel_report/show-tskv.log
+    log_type: market-shows-log
+  - name: /var/logs/yandex/parallel_report/error.log
+    log_type: market-report-error-log
+  - name: /var/logs/yandex/parallel_report/external-services-trace.log
+    log_type: market-report-trace
+
+    send-delay: 8
+    max_chunk_size: 10485760
+
+logger:
+  mode: [file]
+  file: /var/logs/yandex/push-client/market_search.log
+  remote: 1
+  level: 5
+
+watcher:
+  state: pstate/push-client/market-search
+
+network:
+  master_addr: "logbroker.yandex.net"
+  tvm-server-id: 2001059
+  tvm-client-id: 2027312
+  tvm-secret-file: push_client/tvm_secret
+  proto: pq

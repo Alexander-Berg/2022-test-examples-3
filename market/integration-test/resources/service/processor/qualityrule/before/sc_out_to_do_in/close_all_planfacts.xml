@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+
+    <lrm_return
+        lrm_return_id="1"
+        status="[null]"
+        source="CLIENT"
+        order_external_id="ORDER1"
+        logistic_point_from_id="1"
+    />
+
+    <lrm_return_segment
+        id="1"
+        lrm_return_id="1"
+        lrm_segment_id="1"
+        status="IN"
+        shipment_destination="[null]"
+        shipment_recipient="[null]"
+        logistic_point_partner_id="172"
+        logistic_point_external_id="13"
+        logistic_point_id="200"
+        external_box_id="ORDER1"
+        logistic_point_type="DROPOFF"
+    />
+
+
+    <plan_fact
+        id="1"
+        entity_type="LRM_RETURN_SEGMENT"
+        entity_id="1"
+        expected_status="IN"
+        processing_status="ENQUEUED"
+        plan_fact_status="ACTIVE"
+        expected_status_datetime="2020-11-01 12:00:00 +0000"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        created="2020-11-01 12:00:00 +0000"
+    />
+
+
+    <plan_fact_group
+        id="1"
+        aggregation_key="date:2020-11-01;lrmPartnerTo:172;lrmPartnerFrom:100;"
+        aggregation_type="SC_OUT_TO_DROPOFF_IN"
+        processing_status="ENQUEUED"
+        expected_status="IN"
+        schedule_time="2020-11-01 12:00:00 +0000"
+        data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                     "aggregationEntity": {
+                        "date": [2020, 11, 1],
+                         "lrmPartnerTo": {
+                            "id": 172,
+                            "name": "doName",
+                            "type" : "DROPOFF"
+                         },
+                         "lrmPartnerFrom": {
+                            "id":100,
+                            "name":"scName",
+                            "type" : "SORTING_CENTER"
+                         }
+                     }
+                },
+                "ScOutToDropoffInAdditionalData": {
+                     "_type": ".ScOutToDropoffInAdditionalData",
+                     "issueKey": "MONITORINGSNDBX-1",
+                     "open" : true,
+                     "issueClosed": false,
+                     "issueCreatedAt": [2020, 11, 2, 12, 30],
+                     "orderIds": ["ORDER1"],
+                     "affectedOrderIds": ["ORDER1"]
+                }
+                }'
+    />
+
+    <quality_rule
+        id="1"
+        enabled="true"
+        expected_status="IN"
+        aggregation_type="SC_OUT_TO_DROPOFF_IN"
+        rule_processor="STARTREK"
+        rule='{
+                "queue": "MONITORINGSNDBX",
+                "_type": ".ScOutToDropoffInPayload",
+                "allowedToCloseAssigned": false
+            }'
+    />
+
+</dataset>

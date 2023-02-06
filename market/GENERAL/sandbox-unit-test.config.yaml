@@ -1,0 +1,28 @@
+templates:
+  - market/market-tpl/sc-app/configs/common/secrets_template.yaml
+  - market/market-tpl/sc-app/configs/common/main_template.yaml
+  - market/market-tpl/sc-app/configs/common/sdk_template.yaml
+  - market/market-tpl/sc-app/configs/common/cache_template.yaml
+config:
+  name:
+    market_sc_app_build
+  runner_version:
+    2021.07.19-8430304
+  build_counter:
+    MARKET_TPL_ANDROID
+
+stages:
+  assemble:
+    work_dir:
+      market/market-tpl/sc-app/
+    cmd:
+      - ./gradlew testQa testTsdQa
+    junit:
+      - app/build/test-results
+      - core/**/build/test-results
+      - feature/**/build/test-results
+      - operation/**/build/test-results
+    <<: *sdk
+    <<: *cache
+    <<: *secrets
+    <<: *main

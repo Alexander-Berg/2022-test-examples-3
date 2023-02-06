@@ -1,0 +1,28 @@
+ifdef APPDIR
+include $(APPDIR)/Make.defs
+endif
+
+.PHONY: context
+context:: build_only  # For nuttx build
+
+build_only::
+ifeq ($(CONFIG_YMBOT_UNIT_TESTS),y)
+	make -f MakeTests.mk V=${V} all_no_tests
+endif
+
+all:: tests
+
+tests::
+	make -f MakeTests.mk V=${V} all
+
+coverage::
+	make -f MakeTests.mk V=${V} coverage
+
+clean::
+	make -f MakeTests.mk V=${V} clean
+	make -f MakeTests.mk V=${V} coverage_clean
+	@rm -rf lib objs
+
+ifdef APPDIR
+include $(APPDIR)/Application.mk
+endif

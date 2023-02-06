@@ -1,0 +1,219 @@
+{
+    "items": [
+      {
+        "id": "intro",
+        "action_type": "tree",
+        "action_button_text": null,
+        "pre_action_messages": [
+          {
+            "type": "welcome_text",
+            "text": "Добро пожаловать в службу поддержки!"
+          },
+          {
+            "type": "plaintext",
+            "text": "\\U0001F699 [b]Вопрос про автомобиль?[/b]\nУкажите его гос. номер, чтобы мы разобрались быстрее."
+          },
+          {
+            "type": "plaintext",
+            "text": "\\U0001F6A8 [b]В экстренной ситуации[/b]\nЗвоните в колл-центр:\n[url=tel://+74997040941]+7 499 704-09-41[/url] (Москва),\n[url=tel://+74997040941]+7 499 704-09-41[/url] (Санкт-Петербург),\n[url=tel://+74997040941]+7 499 704-09-41[/url] (Казань)"
+          },
+          {
+            "type": "plaintext",
+            "text": "\\U0001F4A1 [b]Страница помощи по сервису здесь:[/b]\n [url=https://yandex.ru/support/drive]yandex.ru/support/drive[/url]"
+          }
+        ],
+        "schema": {
+          "type": "options",
+          "options": [
+            {
+              "text": "Регистрация и авторизация",
+              "type": "options",
+              "options": [
+                {
+                  "text": "Требования к водителям",
+                  "type": "message",
+                  "message_text": "driver_requirements",
+                  "node": "intro"
+                },
+                {
+                  "text": "У меня новые права",
+                  "type": "message",
+                  "message_text": "new_license",
+                  "node": "intro"
+                }
+              ],
+              "show_if": {
+                "type": "or",
+                "subconditions": [
+                    {
+                      "type": "performs",
+                      "tag_name": "old_state_reservation"
+                    },
+                    {
+                      "type": "performs",
+                      "tag_name": "old_state_acceptance"
+                    },
+                    {
+                      "type": "performs",
+                      "tag_name": "old_state_parking"
+                    }
+                ]
+              }
+            },
+            {
+              "text": "Хочу поговорить с человеком",
+              "type": "message",
+              "message_text": "talk_with_human",
+              "node": "intro"
+            },
+            {
+              "text": "Хочу поговорить о проблеме",
+              "type": "message",
+              "message_text": "talk_about_problem",
+              "node": "intro",
+              "show_if": {
+                "type": "has_tag",
+                "tag_name": "user_problem_tag_minor"
+              }
+            },
+            {
+              "text": "Я в онбординге",
+              "type": "message",
+              "message_text": "im_in_onboarding",
+              "node": "intro",
+              "show_if": {
+                "type": "user_in_status",
+                "status": "onboarding"
+              }
+            },
+            {
+              "text": "Хочу поговорить о автомобиле",
+              "type": "message",
+              "message_text": "talk_about_session_no_fueling",
+              "node": "intro",
+              "show_if": {
+                "type": "car_tags",
+                "car_id": "[[[!current_car]]]",
+                "has_all": ["old_state_reservation"],
+                "has_none": ["simple_fueling_tag"]
+              }
+            },
+            {
+              "text": "Хочу поговорить о автомобиле с заправками",
+              "type": "message",
+              "message_text": "talk_about_session_with_fueling",
+              "node": "intro",
+              "show_if": {
+                "type": "car_tags",
+                "car_id": "[[[!current_car]]]",
+                "has_all": ["old_state_reservation", "simple_fueling_tag"]
+              }
+            },
+            {
+              "text": "Хочу поговорить о автомобиле с заправками",
+              "type": "message",
+              "message_text": "talk_about_session_any",
+              "node": "intro",
+              "show_if": {
+                "type": "car_tags",
+                "car_id": "[[[!current_car]]]",
+                "has_any": ["old_state_reservation", "simple_fueling_tag"],
+                "has_none": ["simple_fueling_tag_2"]
+              }
+            },
+            {
+              "text": "Хочу поговорить о автомобиле с заправками",
+              "type": "message",
+              "message_text": "talk_about_session_unreachable",
+              "node": "intro",
+              "show_if": {
+                "type": "car_tags",
+                "car_id": "[[[!current_car]]]",
+                "has_any": ["simple_fueling_tag"],
+                "has_none": ["simple_fueling_tag"]
+              }
+            },
+            {
+              "text": "Хочу поговорить о теге с полем и значением",
+              "type": "message",
+              "message_text": "talk_about_tag_has_field_value",
+              "node": "intro",
+              "show_if": {
+                "type": "tag_field_value",
+                "tag_name": "simple_user_tag",
+                "field_path": "comment",
+                "policy": "equals",
+                "values": ["comment_1"]
+              }
+            },
+            {
+              "text": "Хочу поговорить о теге, которого нет",
+              "type": "message",
+              "message_text": "talk_about_bad_tag",
+              "node": "intro",
+              "show_if": {
+                "type": "tag_field_value",
+                "tag_name": "schimple_user_tag",
+                "field_path": "comment",
+                "policy": "defined"
+              }
+            },
+            {
+              "text": "Хочу поговорить о теге без поля",
+              "type": "message",
+              "message_text": "talk_about_tag_no_field",
+              "node": "intro",
+              "show_if": {
+                "type": "tag_field_value",
+                "tag_name": "simple_user_tag",
+                "field_path": "support_line",
+                "policy": "defined"
+              }
+            },
+            {
+              "text": "Хочу поговорить о теге с полем",
+              "type": "message",
+              "message_text": "talk_about_tag_with_field",
+              "node": "intro",
+              "show_if": {
+                "type": "tag_field_value",
+                "tag_name": "simple_user_tag",
+                "field_path": "comment",
+                "policy": "defined"
+              }
+            },
+            {
+              "text": "Хочу поговорить о теге с несколькими полями",
+              "type": "message",
+              "message_text": "talk_about_tag_has_field_set",
+              "node": "intro",
+              "show_if": {
+                "type": "tag_field_value",
+                "tag_name": "simple_user_tag",
+                "field_path": "comment",
+                "policy": "equals",
+                "values": ["comment_0","comment_2"]
+              }
+            },
+            {
+              "text": "Хочу поговорить о теге с другими полями",
+              "type": "message",
+              "message_text": "talk_about_tag_has_field_bad_value",
+              "node": "intro",
+              "show_if": {
+                "type": "tag_field_value",
+                "tag_name": "simple_user_tag",
+                "field_path": "comment",
+                "policy": "equals",
+                "values": ["comment_0"]
+              }
+            }
+          ]
+        },
+        "next_step": null
+      }
+    ],
+    "faq_url": null,
+    "support_url": null
+  }
+  

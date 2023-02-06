@@ -1,0 +1,417 @@
+{
+"defaults": {
+  "message": {
+    "service": "disk-json",
+    "uid": "1005001000"
+  },
+  "subscription": {
+    "id": "1234",
+    "platform": "unknown",
+    "app_name": "ru.yandex.disk",
+    "push_token": "XYZxyz"
+  }
+},
+"DISK-JSON, APNS, share_invite_new": {
+  "message": {
+    "operation": "share_invite_new",
+    "raw_data": {
+      "root":{"tag":"share","parameters":{"type":"invite_new","for":"actor"}},
+      "values":[{"tag":"owner","parameters":{"uid":"376337666","name":"Test name"},"value":""},{"tag":"folder","parameters":{"hash":"6bebfb9ff8a7a50b660e8f6d7b2f53fd","name":"Test folder","rights":660},"value":""}]
+    },
+    "data": {
+      "localized_msg": "Hello, disk"
+    }
+  },
+  "subscription": {
+    "platform": "apns"
+  },
+  "expect": {
+    "messages": [ {
+      "payload": { "t": "share_invite_new"},
+      "urlparams": {
+        "x-aps": {
+          "alert": "Hello, disk"
+        }
+      }
+    }],
+    "bright": true
+  }
+},
+"DISK-JSON, GCM, share_invite_new_gcm_compatibility": {
+    "message": {
+      "operation": "share_invite_new",
+      "raw_data": {
+        "root":{"tag":"share","parameters":{"type":"invite_new","for":"actor"}},
+        "values":[{"tag":"owner","parameters":{"uid":"376337666","name":"Test name"},"value":""},{"tag":"folder","parameters":{"hash":"6bebfb9ff8a7a50b660e8f6d7b2f53fd","name":"Test folder","rights":660},"value":""}]
+      },
+      "data": {
+        "localized_msg": "Hello, disk"
+      }
+    },
+    "subscription": {
+      "platform": "gcm"
+    },
+    "expect": {
+      "messages": [ {
+        "payload": {
+          "m": "Hello, disk",
+          "t": "share_invite_new",
+          "uid": "1005001000"
+        },
+        "urlparams": {}
+      }]
+    }
+  },
+"DISK-JSON, FCM, share_invite_new": {
+  "message": {
+    "operation": "share_invite_new",
+    "raw_data": {
+      "root":{"tag":"share","parameters":{"type":"invite_new","for":"actor"}},
+      "values":[{"tag":"owner","parameters":{"uid":"376337666","name":"Test name"},"value":""},{"tag":"folder","parameters":{"hash":"6bebfb9ff8a7a50b660e8f6d7b2f53fd","name":"Test folder","rights":660},"value":""}]
+    },
+    "data": {
+      "localized_msg": "Hello, disk"
+    }
+  },
+  "subscription": {
+    "platform": "fcm"
+  },
+  "expect": {
+    "messages": [ {
+      "payload": {
+        "m": "Hello, disk",
+        "t": "share_invite_new",
+        "uid": "1005001000"
+      },
+      "urlparams": {}
+    }]
+  }
+},
+"DISK-JSON, ANY, share_invite_new: if no localized message - ignore": {
+  "message": {
+    "operation": "share_invite_new",
+    "raw_data": {
+      "smth_else": "ignored"
+    }
+  },
+  "subscription": {
+    "platform": "apns"
+  },
+  "expect": {
+    "messages": []
+  }
+},
+"DISK-JSON, APNS, other: default repacking (operations diff/operations/album etc)": {
+  "message": {
+    "operation": "diff",
+    "raw_data": {
+      "root":{"tag":"diff",
+              "parameters":{"new":1460021401290479,"old":"1456323512071938"}},
+      "values":[{"tag":"op","parameters":{"key":"/-","fid":"06e462fff04fc84b66c8f228c04a6e09653023699e14536f4139cb487fb23a18","folder":"/attach/","type":"published_download","resource_type":"file"},"value":""}]
+    }
+  },
+  "subscription": {
+    "platform": "apns"
+  },
+  "expect": {
+    "messages": [ {
+      "payload": {
+        "t": "diff"
+      }
+    } ]
+  }
+},
+"DISK-JSON, GCM, other (gcm_compatibility): default repacking (operations diff/operations/album etc)": {
+    "message": {
+      "operation": "diff",
+      "raw_data": {
+        "root":{"tag":"diff",
+                "parameters":{"new":1460021401290479,"old":"1456323512071938"}},
+        "values":[{"tag":"op","parameters":{"key":"/-","fid":"06e462fff04fc84b66c8f228c04a6e09653023699e14536f4139cb487fb23a18","folder":"/attach/","type":"published_download","resource_type":"file"},"value":""}]
+      }
+    },
+    "subscription": {
+      "platform": "gcm"
+    },
+    "expect": {
+      "messages": [ {
+        "payload": {
+          "t": "diff",
+          "uid": "1005001000"
+        }
+      } ]
+    }
+  },
+"DISK-JSON, FCM, other: default repacking (operations diff/operations/album etc)": {
+  "message": {
+    "operation": "diff",
+    "raw_data": {
+      "root":{"tag":"diff",
+              "parameters":{"new":1460021401290479,"old":"1456323512071938"}},
+      "values":[{"tag":"op","parameters":{"key":"/-","fid":"06e462fff04fc84b66c8f228c04a6e09653023699e14536f4139cb487fb23a18","folder":"/attach/","type":"published_download","resource_type":"file"},"value":""}]
+    }
+  },
+  "subscription": {
+    "platform": "fcm"
+  },
+  "expect": {
+    "messages": [ {
+      "payload": {
+        "t": "diff",
+        "uid": "1005001000"
+      }
+    } ]
+  }
+},
+"DISK-JSON, APNS, photoslice_updated": {
+  "message": {
+    "operation": "photoslice_updated",
+    "raw_data": {
+      "root": {
+        "tag": "photoslice_updated",
+        "parameters": {
+          "new": 2,
+          "old": "1",
+          "photoslice_id": 1,
+          "current_revision": 2
+        }
+      }
+    }
+  },
+  "subscription": {
+    "platform": "apns"
+  },
+  "expect": {
+    "messages": [ {
+      "payload": {
+        "t": "photoslice_updated",
+        "p_id": 1,
+        "p_r": 2
+      }
+    } ]
+  }
+},
+"DISK-JSON, GCM, photoslice_updated_gcm_compatibility": {
+    "message": {
+      "operation": "photoslice_updated",
+      "raw_data": {
+        "root": {
+          "tag": "photoslice_updated",
+          "parameters": {
+            "new": 2,
+            "old": "1",
+            "photoslice_id": 1,
+            "current_revision": 2
+          }
+        }
+      }
+    },
+    "subscription": {
+      "platform": "gcm"
+    },
+    "expect": {
+      "messages": [ {
+        "payload": {
+          "t": "photoslice_updated",
+          "p_id": 1,
+          "p_r": 2,
+          "uid": "1005001000"
+        }
+      } ]
+    }
+  },
+  "DISK-JSON, FCM, photoslice_updated": {
+  "message": {
+    "operation": "photoslice_updated",
+    "raw_data": {
+      "root": {
+        "tag": "photoslice_updated",
+        "parameters": {
+          "new": 2,
+          "old": "1",
+          "photoslice_id": 1,
+          "current_revision": 2
+        }
+      }
+    }
+  },
+  "subscription": {
+    "platform": "fcm"
+  },
+  "expect": {
+    "messages": [ {
+      "payload": {
+        "t": "photoslice_updated",
+        "p_id": 1,
+        "p_r": 2,
+        "uid": "1005001000"
+      }
+    } ]
+  }
+},
+"DISK-JSON, HMS, photoslice_updated": {
+  "message": {
+    "operation": "photoslice_updated",
+    "raw_data": {
+      "root": {
+        "tag": "photoslice_updated",
+        "parameters": {
+          "new": 2,
+          "old": "1",
+          "photoslice_id": 1,
+          "current_revision": 2
+        }
+      }
+    }
+  },
+  "subscription": {
+    "platform": "hms"
+  },
+  "expect": {
+    "messages": [ {
+      "payload": {
+        "t": "photoslice_updated",
+        "p_id": 1,
+        "p_r": 2,
+        "uid": "1005001000"
+      }
+    } ]
+  }
+},
+"DISK-JSON, ANY, other: no root, usupported format": {
+  "message": {
+    "operation": "other",
+    "raw_data": { "a":"b" }
+  },
+  "subscription": {
+    "platform": "apns"
+  },
+  "expect": {
+    "messages": []
+  }
+},
+"DISK-JSON, ANY, other: invalid root type": {
+  "message": {
+    "operation": "other",
+    "raw_data": {
+      "root": null
+    }
+  },
+  "subscription": {
+    "platform": "apns"
+  },
+  "expect": {
+    "messages": []
+  }
+},
+"DISK-JSON, ANY, other: no tag in root": {
+  "message": {
+    "operation": "other",
+    "raw_data": {
+      "root": {}
+    }
+  },
+  "subscription": {
+    "platform": "apns"
+  },
+  "expect": {
+    "messages": []
+  }
+},
+"DISK-JSON, ANY, photoslice_updated: no parameters": {
+  "message": {
+    "operation": "photoslice_updated",
+    "raw_data": {
+      "root": {
+        "tag": "photoslice_updated"
+      }
+    }
+  },
+  "subscription": {
+    "platform": "apns"
+  },
+  "expect": {
+    "messages": []
+  }
+},
+"DISK-JSON, ANY, photoslice_updated: no p_id": {
+  "message": {
+    "operation": "photoslice_updated",
+    "raw_data": {
+      "root": {
+        "tag": "photoslice_updated",
+        "current_revision": 1
+      }
+    }
+  },
+  "subscription": {
+    "platform": "apns"
+  },
+  "expect": {
+    "messages": []
+  }
+},
+"DISK-JSON, ANY, photoslice_updated: no p_r": {
+  "message": {
+    "operation": "photoslice_updated",
+    "raw_data": {
+      "root": {
+        "tag": "photoslice_updated",
+        "photoslice_id": 1
+      }
+    }
+  },
+  "subscription": {
+    "platform": "apns"
+  },
+  "expect": {
+    "messages": []
+  }
+},
+"DISK-USER-EVENTS, GCM, share_invite_new (gcm_compatibility): just check user events service not forgotten": {
+  "message": {
+    "operation": "share_invite_new",
+    "service": "disk-user-events",
+    "raw_data": {
+    },
+    "data": {
+      "localized_msg": "Hello, disk"
+    }
+  },
+  "subscription": {
+    "platform": "gcm"
+  },
+  "expect": {
+    "messages": [ {
+      "payload": {
+        "m": "Hello, disk",
+        "t": "share_invite_new",
+        "uid": "1005001000"
+      }
+    }]
+  }
+ },
+ "DISK-USER-EVENTS, FCM, share_invite_new: just check user events service not forgotten": {
+    "message": {
+      "operation": "share_invite_new",
+      "service": "disk-user-events",
+      "raw_data": {
+      },
+      "data": {
+        "localized_msg": "Hello, disk"
+      }
+    },
+    "subscription": {
+      "platform": "fcm"
+    },
+    "expect": {
+      "messages": [ {
+        "payload": {
+          "m": "Hello, disk",
+          "t": "share_invite_new",
+          "uid": "1005001000"
+        }
+      }]
+    }
+  }
+}

@@ -1,0 +1,120 @@
+const langdetect = require('/home/avanes/.nvm/versions/node/v14.15.1/lib/node_modules/@yandex-int/langdetect');
+const { LangDetector } = langdetect;
+const data = './test/lang_detect_data.txt';
+
+let detector;
+
+describe('LangDetector', () => {
+    beforeEach(() => {
+        detector = new LangDetector(data);
+    });
+
+    it('data types', () => {
+        expect(typeof langdetect).toEqual('object');
+        expect(typeof LangDetector).toEqual('function');
+        expect(typeof detector).toEqual('object');
+    });
+
+    it('#find', () => {
+        expect(detector.find({
+            domain: 'http://mail.yandex.ru/neo2',
+            filter: 'tt,ru,uk',
+            geo: '24896,20529,20524,187,166,10001,10000'
+        })).toEqual({
+            id: 'ru',
+            name: 'Ru'
+        });
+    });
+
+    it('#findWithoutDomain', () => {
+        expect(detector.findWithoutDomain({
+            language: 'En-en, Ru-ru',
+            cookie: '5',
+            default: 'ru'
+        })).toEqual({
+            id: 'be',
+            name: 'By'
+        });
+    });
+
+    it('#findDomain', () => {
+        expect(detector.findDomain('24896,20529,20524,187,166,10001,10000', 'ua,by,kz', 'http://mail.yandex.ru/neo2'))
+            .toEqual({
+                host: 'mail.yandex.ua',
+                changed: true,
+                'content-region': 24896
+            });
+    });
+
+    it('#list', () => {
+        expect(detector.list({
+            domain: 'http://mail.yandex.ru/neo2',
+            filter: 'tt,ru,uk',
+            geo: '24896,20529,20524,187,166,10001,10000'
+        })).toEqual([
+            { id: 'ru', name: 'Ru' },
+            { id: 'uk', name: 'Ua' }
+        ]);
+    });
+
+    it('#cookie2language', () => {
+        expect(detector.cookie2language(1)).toEqual('ru');
+        expect(detector.cookie2language(2)).toEqual('uk');
+        expect(detector.cookie2language(3)).toEqual('en');
+        expect(detector.cookie2language(4)).toEqual('kk');
+        expect(detector.cookie2language(5)).toEqual('be');
+    });
+
+    it('#language2cookie', () => {
+        expect(detector.language2cookie('ru')).toEqual(1);
+        expect(detector.language2cookie('uk')).toEqual(2);
+        expect(detector.language2cookie('en')).toEqual(3);
+        expect(detector.language2cookie('kk')).toEqual(4);
+        expect(detector.language2cookie('be')).toEqual(5);
+    });
+
+    describe('special cases', () => {
+        it('LIB-347', () => {
+            const expected = { host: 'maps.yandex.ua', changed: true, 'content-region': 24896 };
+            const result = detector.findDomain('24896,20529,20524,187,166,10001,10000', 'ua,by,kz', 'maps.yandex.ru', '');
+            const result2 = detector.findDomain('24896,20529,20524,187,166,10001,10000', 'ua,by,kz', 'http://maps.yandex.ru/');
+            expect(result).toEqual(expected);
+            expect(result).toEqual(result2);
+        });
+
+        it('MAPS-15597', () => {
+            const parents_ids = '11503,103674,983,111,10001,10000';
+            const domains = 'by,com,com.tr,kz,ua';
+            const host = 'harita.yandex.com.tr';
+            const expected = { 'host': host, 'changed': false, 'content-region': 11503 };
+
+            const result = detector.findDomain(parents_ids, domains, host)
+
+            expect(result).toEqual(expected);
+        });
+
+        it('ge from ru', () => {
+            const expected = { host: 'maps.yandex.com.ge', changed: true, 'content-region': 10277 };
+            const result = detector.findDomain('10277,169,183,10001,10000', 'ua,by,kz,com.ge', 'maps.yandex.ru', '');
+            expect(result).toEqual(expected);
+        });
+
+        it('ge from ua', () => {
+            const expected = { host: 'maps.yandex.com.ge', changed: true, 'content-region': 10277 };
+            const result = detector.findDomain('10277,169,183,10001,10000', 'ru,by,kz,com.ge', 'maps.yandex.ua', '');
+            expect(result).toEqual(expected);
+        });
+
+        it('ge from com', () => {
+            const expected = { host: 'maps.yandex.com.ge', changed: true, 'content-region': 10283 };
+            const result = detector.findDomain('10283,122060,169,183,10001,10000', 'com.tr,com.ge', 'maps.yandex.com');
+            expect(result).toEqual(expected);
+        });
+
+        it('ge from ge', () => {
+            const expected = { host: 'maps.yandex.com.ge', changed: false, 'content-region': 10283 };
+            const result = detector.findDomain('10283,122060,169,183,10001,10000', 'ua,ru,by,kz,com', 'maps.yandex.com.ge');
+            expect(result).toEqual(expected);
+        });
+    });
+});

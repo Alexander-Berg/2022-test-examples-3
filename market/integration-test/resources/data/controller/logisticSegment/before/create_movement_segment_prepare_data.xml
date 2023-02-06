@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <service_code
+            code="MOVEMENT"
+            type="internal"
+            is_optional="true"
+    />
+    <service_code
+            code="TRANSPORT_MANAGER_MOVEMENT"
+            type="internal"
+            is_optional="true"
+    />
+    <service_code
+            code="SHIPMENT"
+            type="outbound"
+            is_optional="true"
+    />
+    <service_code
+            code="PROCESSING"
+            type="internal"
+            is_optional="true"
+    />
+    <service_code
+            code="CALL_COURIER"
+            type="internal"
+            is_optional="true"
+    />
+
+    <partner
+            id="1"
+            name="Partner 1"
+            status="active"
+            type="DELIVERY"
+    />
+    <partner
+            id="2"
+            name="Partner 2"
+            status="active"
+            type="SORTING_CENTER"
+    />
+
+    <address id="1"/>
+    <address id="2"/>
+    <address id="3"/>
+    <address id="4"/>
+
+    <logistics_point
+            id="10"
+            partner_id="1"
+            external_id="10"
+            name="Дропофф"
+            type="PICKUP_POINT"
+            active="true"
+            address_id="1"
+    />
+    <!-- Точка без сегмента -->
+    <logistics_point
+            id="11"
+            partner_id="1"
+            external_id="11"
+            type="PICKUP_POINT"
+            active="true"
+            address_id="2"
+    />
+    <logistics_point
+            id="20"
+            partner_id="2"
+            external_id="20"
+            name="Склад СЦ"
+            type="WAREHOUSE"
+            active="true"
+            address_id="3"
+    />
+    <!-- Точка без сегмента -->
+    <logistics_point
+            id="22"
+            partner_id="2"
+            external_id="22"
+            type="WAREHOUSE"
+            active="true"
+            address_id="4"
+    />
+
+    <logistic_segments
+            partner_id="1"
+            logistic_point_id="10"
+            name="Сегмент для склада СД"
+            type="warehouse"
+            location_id="213"
+    />
+    <logistic_segments_services
+            id="1000"
+            segment_id="1"
+            status="active"
+            delivery_type="[null]"
+            code="1"
+            duration="120"
+            duration_delta="0"
+            price="0"
+            schedule="[null]"
+            calendar="[null]"
+            capacity_id="[null]"
+            capacity_calendar="[null]"
+            frozen="false"
+    />
+    <logistic_segments
+            partner_id="2"
+            logistic_point_id="20"
+            name="Сегмент для склада СЦ"
+            type="warehouse"
+            location_id="213"
+    />
+    <logistic_segments
+            partner_id="1"
+            name="Сегмент перемещения той же СД, не соединённый ни с кем рёбрами графа"
+            type="movement"
+    />
+
+    <logistic_segments_services_meta_key
+            id="3"
+            key="START_AT_RIGHT_BORDER"
+            description="Использовать правую границу расписания для старта сервиса"
+    />
+</dataset>

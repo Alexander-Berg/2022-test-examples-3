@@ -1,0 +1,16 @@
+version: '3.6'
+services:
+    xivaserver:
+        build:
+            context: $ARCADIA_SOURCE_ROOT/mail/xiva/server/tests-system/
+            dockerfile: ./docker/Dockerfile
+            network: host
+            args:
+                TVM_TICKETS_DIR: /xiva/server/var/xiva-server/tvm
+        network_mode: host
+        volumes:
+            - $ARCADIA_BUILD_ROOT/mail/xiva/server/xiva-server:/usr/bin/xiva-server
+            - $ARCADIA_SOURCE_ROOT/mail/xiva/core/pycommon:/xiva/core/pycommon
+            - $ARCADIA_SOURCE_ROOT/mail/xiva/server:/xiva/server
+            - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt
+        working_dir: /xiva/server

@@ -1,0 +1,19 @@
+export const testUser = {
+  id: 777,
+  login: 'tester-daddy',
+  roles: [
+    'DEVELOPER',
+    'MANAGE_ASSORTMENT',
+    'MANAGE_DOCUMENTS',
+    'VIEWER',
+    'MANAGE_REPLENISHMENT',
+    'MANAGE_SEASONS',
+    'MANAGE_MSKU_STATUSES',
+    'MANAGE_MSKU_AVAILABILITY_BY_STOCK',
+    'MANAGE_CUSTOMS_COMM_CODES',
+    'MDM_UI_OPERATOR',
+  ],
+  firstName: 'tester-daddy-first',
+  lastName: 'tester-daddy-last',
+  staffUpdateTs: '',
+};

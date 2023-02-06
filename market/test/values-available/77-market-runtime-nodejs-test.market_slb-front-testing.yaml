@@ -1,0 +1,20 @@
+context:
+  default:
+    antirobot: true
+    antirobot_service_name: market
+    balancing_method: active
+    cert: fslb-testing
+    exp_getter: true
+    health_check: '"GET /ping HTTP/1.1\r\nHost: heartbeat.market.yandex.ru\r\n\r\n"'
+    priority: 1000
+    servername_regexp: (www\\.)?desktop-test\\.market\\.([\\w\\d]+\\.)?yandex\\.(ru|ua|com|kz|by)
+    service_name: desktop_market_runtime_nodejs_test
+    vs: market
+
+servers:
+  default:
+    main:
+    - name: GREY%fslb.yandex.ru
+      plain_http_backend: true
+      port: 82
+      timeout: 35s

@@ -1,0 +1,81 @@
+/var/log/mpfs/admin.log
+/var/log/mpfs/fcgi.log
+/var/log/mpfs/fcgi-error.log
+/var/log/mpfs/fcgi-access.log
+/var/log/mpfs/fcgi-body.log
+/var/log/mpfs/requests.log
+/var/log/mpfs/queue.log
+/var/log/mpfs/queue-error.log
+/var/log/mpfs/queue-index.log
+/var/log/mpfs/queue-index-error.log
+/var/log/mpfs/queue-sync.log
+/var/log/mpfs/queue-sync-error.log
+/var/log/mpfs/service-mail.log
+/var/log/mpfs/service-passport.log
+/var/log/mpfs/service-fotki.log
+/var/log/mpfs/service-narod.log
+/var/log/mpfs/service-kladun.log
+/var/log/mpfs/service-mulca.log
+/var/log/mpfs/service-zaberun.log
+/var/log/mpfs/service-clck.log
+/var/log/mpfs/service-xiva.log
+/var/log/mpfs/service-abook.log
+/var/log/mpfs/service-search.log
+/var/log/mpfs/service-indexer.log
+/var/log/mpfs/service-music.log
+/var/log/mpfs/service-socialproxy.log
+/var/log/mpfs/service-helper.log
+/var/log/mpfs/service-calendar.log
+/var/log/mpfs/service-assistant.log
+/var/log/mpfs/service-notifications.log
+/var/log/mpfs/service-mpfsproxy.log
+/var/log/mpfs/service-aviary.log
+/var/log/mpfs/service-logreader.log
+/var/log/mpfs/service-billing.log
+/var/log/mpfs/service-profile.log
+/var/log/mpfs/service-data-api.log
+/var/log/mpfs/billing-process.log
+/var/log/mpfs/billing-notify.log
+/var/log/mpfs/billing-orders.log
+/var/log/mpfs/default.log
+/var/log/mpfs/engine.log
+/var/log/mpfs/warehouse.log
+/var/log/mpfs/mulcadel.log
+/var/log/mpfs/callback.log
+/var/log/mpfs/invite.log
+/var/log/mpfs/hiddenclean.log
+/var/log/mpfs/browserclean.log
+/var/log/mpfs/stat-store.log
+/var/log/mpfs/stat-billing.log
+/var/log/mpfs/stat-listing.log
+/var/log/mpfs/stat-video-listing.log
+/var/log/mpfs/stat-social.log
+/var/log/mpfs/mongo-migrate.log
+/var/log/mpfs/mongo-migrate-error.log
+/var/log/mpfs/narod-lost.log
+/var/log/mpfs/trash-cleaner.log
+{
+    daily
+    compress
+    compresscmd /usr/bin/pigz
+    start 0
+    missingok
+    rotate 5
+    sharedscripts
+    nodateext
+    postrotate
+        pkill -SIGHUP uwsgi >/dev/null
+        pgrep queueworker |sudo xargs kill -SIGHUP
+    endscript 
+}
+
+/var/log/mpfs/uwsgi.log
+{
+    daily
+    compress
+    copytruncate
+    start 0
+    missingok
+    nodateext
+    rotate 5
+}

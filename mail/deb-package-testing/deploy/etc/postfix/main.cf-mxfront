@@ -1,0 +1,73 @@
+mail_name		= Yandex
+
+mydomain		= yandex.ru
+
+smtpd_banner		= $myhostname (Want to use Yandex.Mail for your domain? Visit http://pdd.yandex.ru)
+
+mydestination		= ya.ru, narod.ru, yandex.ru, yandex.by, yandex.kz, yandex.ua, yandex.com, yandex.com.tr, yandex.az, yandex.co.il, yandex.com.am, yandex.com.ge, yandex.ee, yandex.fr, yandex.kg, yandex.lt, yandex.lv, yandex.md, yandex.tj, yandex.tm, yandex.uz, xn--d1acpjx3f.xn--p1ai, galatasaray.net, hash:/etc/postfix/domain_maps
+local_transport		= lmtp:127.0.0.1:1234
+smtp_fallback_relay	= mxbacks.mail.yandex.net:25
+
+append_at_myorigin	= no
+append_dot_mydomain	= no
+
+allow_min_user		= yes
+
+alias_maps		= hash:/etc/postfix/aliases
+transport_maps		= hash:/etc/postfix/transport_maps
+virtual_alias_maps	= hash:/etc/postfix/virtual_alias_maps
+local_recipient_maps	=
+
+bounce_template_file	= /etc/postfix/bounce.cf
+bounce_template_file_ru	= /etc/postfix/bounce.cf.ru
+
+message_size_limit	= 44040192
+
+mynetworks		= 127.0.0.0/8 [::1]/128
+mynetworks_style	= subnet
+
+delay_warning_time	= 0h
+bounce_queue_lifetime	= 3d
+maximal_queue_lifetime	= 3d
+
+hash_queue_depth	= 1
+hash_queue_names	= active, bounce, defer, deferred, flush, hold, incoming
+
+queue_run_delay		= 10s
+minimal_backoff_time	= 10s
+maximal_backoff_time	= 150s
+
+default_process_limit	= 100
+
+in_flow_delay		= 0s
+
+smtp_helo_timeout	= 75s
+smtp_mail_timeout	= 75s
+smtp_quit_timeout	= 75s
+smtp_rcpt_timeout	= 75s
+
+smtpd_hard_error_limit	= 1024
+smtpd_helo_required	= yes
+smtpd_delay_reject	= no
+smtpd_timeout		= 20
+
+smtpd_recipient_limit   = 51333
+
+transport_retry_time	= 1s
+
+#Resolve "user@ipaddress" as "user@[ipaddress]", instead of rejecting the address as invalid.
+#resolve_numeric_domain = yes
+
+always_add_missing_headers	= yes
+local_header_rewrite_clients	= static:all
+
+local_destination_concurrency_limit	= 100
+default_destination_concurrency_limit	= 100
+
+initial_destination_concurrency		= 100
+
+relayhost		= [forwards.mail.yandex.net]
+
+smtpd_client_restrictions	= reject_rbl_client spamsource.mail.yandex.net, permit_mynetworks
+
+smtpd_recipient_restrictions	= reject_non_fqdn_recipient, permit_mynetworks, reject_unauth_destination

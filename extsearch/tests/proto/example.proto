@@ -1,0 +1,56 @@
+import "extsearch/geo/kernel/broto/tests/proto/external.proto";
+import "extsearch/geo/kernel/broto/ext/extension.proto";
+
+package NOuterNS.NInnerNS;
+
+message TPerson {
+    required string Name = 1;
+    required int32 Id = 2;
+    optional string Email = 3;
+
+    enum EPhoneType {
+        MOBILE = 0;
+        HOME = 1;
+        WORK = 2;
+    }
+
+    message TPhoneNumber {
+        required string Number = 1;
+        optional EPhoneType Type = 2 [default = HOME];
+    }
+
+    repeated TPhoneNumber Phone = 4;
+    repeated fixed64 ReferenceId = 5;
+
+    optional NExternalNS.TRealProtoMessage External = 6 [(NBroto.native_proto) = true];
+    repeated NExternalNS.TRealProtoMessage Externals = 7 [(NBroto.native_proto) = true];
+}
+
+enum EPhoneOrFax {
+    Phone = 10 [(NBroto.text) = "phone"];
+    Fax = 20 [(NBroto.text) = "fax"];
+    PhoneFax = 30 [(NBroto.text) = "phone_or_fax"];
+}
+
+message TExtendedPhoneNumber {
+    required TPerson.TPhoneNumber Phone = 1;
+    optional TPerson.EPhoneType AuxType = 2 [default = WORK];
+    optional string Country = 3;
+    optional string Prefix = 4;
+    optional string Number = 5;
+    optional string Ext = 6;
+    repeated float Score = 7;
+    repeated EPhoneOrFax PhoneOrFax = 8;
+}
+
+message TLocaleToDataItem {
+    required uint64 Key = 7;
+    required string Value = 42;
+}
+
+message TPhoneOrFax {
+    required EPhoneOrFax Value = 1;
+}
+
+message TEmpty {
+}

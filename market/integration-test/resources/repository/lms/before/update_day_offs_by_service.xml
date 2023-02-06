@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <!--
+        Удаляется маппинг для 3-го капасити.
+        Изменяется сервис для 2-го капасити с 2 на 3.
+        Выглядит как 2 удаления и 1 добавление.
+
+        Изменяется сервис через изменение маппинга для 4-го капасити с 4 на 5
+    -->
+    <capacity
+            id="1"
+            parent_id="[null]"
+            path="1"
+            name="a root"
+    />
+
+    <capacity
+            id="2"
+            parent_id="1"
+            path="1.2"
+            name="obviously not a root"
+    />
+
+    <capacity
+            id="3"
+            parent_id="1"
+            path="1.3"
+            name="obviously not a root"
+    />
+
+    <capacity
+            id="4"
+            parent_id="1"
+            path="1.4"
+            name="obviously not a root"
+    />
+
+    <capacity_value
+            id="1"
+            capacity_id="2"
+            unit_type="ORDER"
+            day="[null]"
+            value="1"
+    />
+
+    <capacity_value
+            id="2"
+            capacity_id="3"
+            unit_type="ORDER"
+            day="[null]"
+            value="1"
+    />
+
+    <capacity_value
+            id="3"
+            capacity_id="4"
+            unit_type="ORDER"
+            day="[null]"
+            value="1"
+    />
+
+    <capacity_value_counter
+            capacity_id="2"
+            capacity_value_id="1"
+            unit_type="ORDER"
+            day="[now]"
+            count="1"
+            threshold="1"
+            day_off="true"
+    />
+
+    <capacity_value_counter
+            capacity_id="2"
+            capacity_value_id="2"
+            unit_type="ORDER"
+            day="[now+1d]"
+            count="0"
+            threshold="1"
+            day_off="false"
+    />
+
+    <capacity_value_counter
+            capacity_id="3"
+            capacity_value_id="2"
+            unit_type="ORDER"
+            day="[now]"
+            count="0"
+            threshold="1"
+            day_off="false"
+    />
+
+    <capacity_value_counter
+            capacity_id="3"
+            capacity_value_id="2"
+            unit_type="ORDER"
+            day="[now+1d]"
+            count="1"
+            threshold="1"
+            day_off="true"
+    />
+
+    <capacity_value_counter
+            capacity_id="4"
+            capacity_value_id="3"
+            unit_type="ORDER"
+            day="[now+2d]"
+            count="1"
+            threshold="1"
+            day_off="true"
+    />
+
+    <capacity_value_counter
+            capacity_id="1"
+            capacity_value_id="[null]"
+            unit_type="ORDER"
+            day="[now]"
+            count="1"
+            threshold="-1"
+            day_off="false"
+    />
+
+    <capacity_value_counter
+            capacity_id="1"
+            capacity_value_id="[null]"
+            unit_type="ORDER"
+            day="[now+1d]"
+            count="1"
+            threshold="-1"
+            day_off="false"
+    />
+
+    <capacity_value_counter
+            capacity_id="1"
+            capacity_value_id="[null]"
+            unit_type="ORDER"
+            day="[now+2d]"
+            count="1"
+            threshold="-1"
+            day_off="false"
+    />
+
+    <service_capacity_mapping
+            service_id="20"
+            capacity_id="2"
+    />
+
+    <service_capacity_mapping
+            service_id="30"
+            capacity_id="3"
+    />
+
+    <service_capacity_mapping
+            service_id="40"
+            capacity_id="4"
+    />
+
+    <service_day_off
+            service_id="20"
+            day="[now]"
+    />
+
+    <service_day_off
+            service_id="30"
+            day="[now+1d]"
+    />
+
+    <service_day_off
+            service_id="40"
+            day="[now+2d]"
+    />
+
+    <!-- FROM LMS -->
+
+    <service_capacity
+            id="1"
+            parent_id="[null]"
+            path="1"
+            name="a root"
+    />
+
+    <service_capacity
+            id="2"
+            parent_id="1"
+            path="1.2"
+            name="obviously not a root"
+    />
+
+    <service_capacity
+            id="3"
+            parent_id="1"
+            path="1.3"
+            name="obviously not a root"
+    />
+
+    <service_capacity
+            id="4"
+            parent_id="1"
+            path="1.4"
+            name="obviously not a root"
+    />
+
+    <service_capacity_value
+            id="1"
+            capacity_id="2"
+            unit_type="order"
+            day="[null]"
+            value="1"
+            partner_capacity_id="42069"
+    />
+
+    <service_capacity_value
+            id="2"
+            capacity_id="3"
+            unit_type="order"
+            day="[null]"
+            value="1"
+            partner_capacity_id="69420"
+    />
+
+    <service_capacity_value
+            id="3"
+            capacity_id="4"
+            unit_type="order"
+            day="[null]"
+            value="1"
+            partner_capacity_id="69420"
+    />
+
+    <logistic_segments_services_capacity_mapping
+            id="4"
+            service_id="30"
+            capacity_id="2"
+    />
+
+    <logistic_segments_services_capacity_mapping
+            id="5"
+            service_id="50"
+            capacity_id="4"
+    />
+    <!-- c4: s4 -> s5, c2: s2 -> s3 -->
+
+    <event
+            id="1"
+            key="ORDER1"
+            type="NEW"
+            route="{}"
+            timestamp="[now]"
+            max_service_time="[now]"
+            processed="true"
+    />
+
+    <service_counter
+            id="1"
+            service_id="20"
+            day="[now]"
+            event_id="1"
+            service_version="0"
+            order_count="1"
+            item_count="1"
+    />
+
+    <service_counter
+            id="2"
+            service_id="30"
+            day="[now+1d]"
+            event_id="1"
+            service_version="0"
+            order_count="1"
+            item_count="1"
+    />
+
+    <service_counter
+            id="3"
+            service_id="40"
+            day="[now+2d]"
+            event_id="1"
+            service_version="0"
+            order_count="1"
+            item_count="1"
+    />
+
+    <service_counter
+            id="4"
+            service_id="50"
+            day="[now+2d]"
+            event_id="1"
+            service_version="0"
+            order_count="1"
+            item_count="1"
+    />
+
+</dataset>

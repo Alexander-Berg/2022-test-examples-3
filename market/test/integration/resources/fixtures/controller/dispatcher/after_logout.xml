@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <service
+        id="1"
+        name="service"
+        initial_state_id="1000"
+    />
+
+    <car
+        id="0"
+        licence_plate="E105TM53"
+        required_gate_type="big test car"
+    />
+
+    <capacity
+        id="100"
+        name="capacity"
+        value="1"
+    />
+
+    <state
+        id="1000"
+        name="ASSIGNED"
+        service_id="1"
+        capacity_id="100"
+    />
+
+    <state
+        id="1001"
+        name="PROCESSING_START"
+        service_id="1"
+        capacity_id="100"
+    />
+
+    <edge
+        id="1"
+        from_state_id="1000"
+        to_state_id="1001"
+        priority="1"
+    />
+
+    <edge_restriction
+        id="1"
+        type="EVENT_REQUIRED"
+        edge_id="1"
+    />
+
+    <restriction_param
+        id="1"
+        edge_restriction_id="1"
+        name="EVENT_TYPE"
+        value="MOVE_CLIENT_BACK_TO_QUEUE"/>
+
+    <yard_client
+        id="0"
+        name="client"
+        external_id="extClient"
+        phone="123123123"
+        service_id="1"
+        state_id="1001"
+        car_id="0"
+        meta='{"ticketCode": "Р043", "requestType": "SHIPMENT", "takeAwayPallets": false, "takeAwayReturns": false}'
+    />
+
+    <capacity_unit
+        id="1"
+        capacity_id="100"
+        readable_name="test_capacity_unit"
+        is_active="false"
+        occupied_by_client_id="0"
+    />
+
+    <capacity_unit_login
+        id="1"
+        capacity_unit_id="1"
+        login="[null]"
+    />
+
+    <ticket
+        id="0"
+        ticket_code="Р042"
+        service_id="1"
+        yard_client_id="3"
+        type="SHIPMENT"
+        created_at="2021-05-01 9:00:00"
+        updated_at="2021-05-01 9:00:00"
+        site_id="100"
+        operator_window_id="1"
+    />
+
+    <client_queue/>
+</dataset>

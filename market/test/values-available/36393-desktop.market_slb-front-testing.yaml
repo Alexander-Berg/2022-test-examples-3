@@ -1,0 +1,24 @@
+# -> haproxy: 29943-market_front_desktop_testing.market_slb-front-testing.yaml
+# old: 89-market-runtime-nodejs.market_slb-front-testing.yaml
+
+context:
+  default:
+    service_name: desktop
+    servername_regexp: 'desktop\\.tst\\.market\\.yandex\\.(ru|by|kz|ua|com)'
+    vs: desktop
+    health_check: '"GET /ping HTTP/1.1\r\nHost: desktop.tst.market.yandex.ru\r\n\r\n"'
+    exp_getter: True
+    antirobot: True
+    antirobot_service_name: market
+    starttime_cookie: True
+    cert: desktop.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+
+servers:
+  default:
+    main:
+    - name: "GREY%desktop.tst.vs.market.yandex.net"
+      plain_http_backend: True
+      port: 9080
+      timeout: "35s"

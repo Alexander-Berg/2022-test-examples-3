@@ -1,0 +1,23 @@
+# -> haproxy: 10017-fslb-yandex-ru.market_slb-front-testing.yaml
+# old: 85-market-runtime-nodejs-stress.market_slb-front-testing.yaml
+
+context:
+  default:
+    service_name: desktop_stress
+    servername_regexp: 'desktop-stress\\.tst\\.market\\.yandex\\.(ru|by|kz|ua|com)'
+    vs: desktop_stress
+    health_check: '"GET /ping HTTP/1.1\r\nHost: desktop-stress.tst.market.yandex.ru\r\n\r\n"'
+    antirobot: False
+    exp_getter: True
+    cert: desktop-stress.tst.vs.market.yandex.net
+    # CSADMIN-27292 Send /ping requests to haproxy instead of default handler
+    priority: 1000
+
+servers:
+  default:
+    main:
+    - name: "GREY%fslb.yandex.ru"
+      timeout: "35s"
+      weight: 100
+      port: 10017
+      plain_http_backend: True

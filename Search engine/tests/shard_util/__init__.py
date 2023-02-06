@@ -1,0 +1,5 @@
+from search.base_search.daemons.inverted_index_storage.tests.shard_util.shard_util import create_shard
+from search.base_search.daemons.inverted_index_storage.tests.shard_util.shard_util import deserialize_hits
+
+create_shard
+deserialize_hits

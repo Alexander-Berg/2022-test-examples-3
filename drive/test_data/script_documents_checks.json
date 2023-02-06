@@ -1,0 +1,504 @@
+{
+  "items": [
+    {
+      "id": "intro",
+      "comment": "this is a test comment",
+      "action_type": "tree",
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "welcome_text",
+          "text": "Добро пожаловать в службу поддержки!"
+        }
+      ],
+      "schema": {
+        "type": "options",
+        "options": [
+          {
+            "text": "Хочу поговорить о статусах документов",
+            "type": "message",
+            "message_text": "talk_about_documents_checks",
+            "node": "test_documents_checks"
+          },
+          {
+            "text": "Хочу повтороно отправить документы",
+            "type": "message",
+            "message_text": "test_resubmits",
+            "node": "test_resubmits"
+          },
+          {
+            "text": "Хочу поменять статус проверки",
+            "type": "message",
+            "message_text": "test_check_status",
+            "node": "test_check_status"
+          },
+          {
+            "text": "Хочу проверить документы",
+            "type": "message",
+            "message_text": "test_documents_match",
+            "node": "test_documents_match"
+          },
+          {
+            "text": "Я Рон Суонсон",
+            "type": "message",
+            "message_text": "check_ron_swanson",
+            "node": "check_ron_swanson"
+          },
+          {
+            "text": "datasync condition name matches",
+            "type": "message",
+            "message_text": "test_datasync",
+            "node": "intro",
+            "show_if": {
+              "type": "private_data_equals",
+              "compare_parameters": [
+                [
+                  {"document": "license", "field": "first_name"}, {"document": "passport", "field": "first_name"}
+                ],
+                [
+                  {"document": "license", "field": "last_name"}, {"document": "passport", "field": "last_name"}
+                ]
+              ]
+            }
+          },
+          {
+            "text": "datasync condition number matches",
+            "type": "message",
+            "message_text": "test_datasync",
+            "node": "intro",
+            "show_if": {
+              "type": "private_data_equals",
+              "compare_parameters": [
+                [
+                  {"document": "license", "field": "number_front"}, {"document": "license", "field": "number_back"}
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "next_step": null
+    },
+    {
+      "action_button_text": null,
+      "action_type": "skip_action",
+      "pre_action_messages": [],
+      "id": "test_documents_checks",
+      "next_step": {
+          "default": "check_status|no checks matching",
+          "conditions": [
+          {
+              "node": "check_status|option_1",
+              "condition": {
+                  "type": "documents_check_status",
+                  "main_types": ["passport", "license"],
+                  "main_statuses": ["new"],
+                  "main_aggregation": "any_of"
+              }
+          },
+          {
+              "node": "check_status|option_2",
+              "condition": {
+                  "type": "documents_check_status",
+                  "main_types": ["passport", "license", "selfie"],
+                  "main_statuses": ["bad"],
+                  "main_aggregation": "none_of"
+              }
+          },
+          {
+              "node": "check_status|option_3",
+              "condition": {
+                  "type": "documents_check_status",
+                  "main_types": ["passport", "license"],
+                  "main_statuses": ["ok", "bad"],
+                  "main_aggregation": "all_of",
+                  "additional_types": ["selfie", "license"],
+                  "additional_statuses": ["new"],
+                  "additional_aggregation": "any_of"
+              }
+          },
+          {
+              "node": "check_status|option_4",
+              "condition": {
+                  "type": "documents_check_status",
+                  "main_types": ["license", "selfie"],
+                  "main_statuses": ["ok"],
+                  "main_aggregation": "all_of",
+                  "additional_types": ["passport", "license", "selfie"],
+                  "additional_statuses": ["bad"],
+                  "additional_aggregation": "any_of"
+              }
+          },
+          {
+              "node": "check_status|option_5",
+              "condition": {
+                  "type": "documents_check_status",
+                  "main_types": ["passport", "license"],
+                  "main_statuses": ["bad"],
+                  "main_aggregation": "none_of",
+                  "additional_types": ["selfie"],
+                  "additional_statuses": ["ok", "bad"],
+                  "additional_aggregation": "all_of"
+              }
+          }
+          ]
+        }
+    },
+    {
+      "schema": {
+        "options": [
+          {
+            "message_text": "to_intro",
+            "node": "intro",
+            "type": "message",
+            "text": "To intro"
+          },
+          {
+            "message_text": "to_checks",
+            "node": "test_documents_checks",
+            "type": "message",
+            "text": "More checks"
+          }
+        ],
+        "type": "options"
+      },
+      "action_type": "context_buttons",
+      "next_step": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "%1"
+        }
+      ],
+      "id": "check_status"
+    },
+    {
+      "action_button_text": null,
+      "action_type": "skip_action",
+      "pre_action_messages": [],
+      "id": "test_resubmits",
+      "next_step": {
+          "default": "resubmit_documents|lf,lb,pr",
+          "conditions": [
+          {
+              "node": "resubmit_documents|lb,lf",
+              "condition": {
+                  "type": "documents_check_status",
+                  "main_types": ["license"],
+                  "main_statuses": ["bad"],
+                  "main_aggregation": "any_of"
+              }
+          },
+          {
+              "node": "resubmit_documents|pb",
+              "condition": {
+                  "type": "documents_check_status",
+                  "main_types": ["passport"],
+                  "main_statuses": ["bad"],
+                  "main_aggregation": "all_of"
+              }
+          }
+          ]
+        }
+    },
+    {
+      "action_type": "resubmit",
+      "resubmit_documents": "%1",
+      "next_step": null,
+      "pre_action_messages": [],
+      "id": "resubmit_documents"
+    },
+    {
+      "id": "start_resubmit_license_back",
+      "action_type": "license_back",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Сначала оборотная сторона водительского удостоверения."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "start_resubmit_license_front",
+      "action_type": "license_front",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Сначала лицевая сторона водительского удостоверения."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "start_resubmit_passport_biographical",
+      "action_type": "passport_biographical",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Сначала разворот паспорта с вашим фото."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "start_resubmit_passport_registration",
+      "action_type": "passport_registration",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Сначала разворот паспорта с регистрацией."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "cont_resubmit_license_back",
+      "action_type": "license_back",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Теперь оборотная сторона водительского удостоверения."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "cont_resubmit_license_front",
+      "action_type": "license_front",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Теперь лицевая сторона водительского удостоверения."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "cont_resubmit_passport_biographical",
+      "action_type": "passport_biographical",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Теперь разворот паспорта с вашим фото."
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "cont_resubmit_passport_registration",
+      "action_type": "passport_registration",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Теперь разворот паспорта с регистрацией."
+        }
+      ],
+      "next_step": null
+    },
+
+    {
+      "id": "only_resubmit_license_back",
+      "action_type": "license_back",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Нужно еще раз сфотографировать сторону прав с таблицей"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "only_resubmit_license_front",
+      "action_type": "license_front",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Нужно еще раз сфотографировать сторону прав с фотографией"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "only_resubmit_passport_biographical",
+      "action_type": "passport_biographical",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Нужно еще раз сфотографировать основной разворот паспорта"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "only_resubmit_passport_registration",
+      "action_type": "passport_registration",
+      "action_button_text": "Включить камеру",
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Нужно еще раз сфотографировать разворот паспорта с пропиской"
+        }
+      ],
+      "next_step": null
+    },
+    {
+      "id": "resubmit_one_complete",
+      "action_type": "skip_action",
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Спасибо. Я отправил фотографию на проверку"
+        }
+      ],
+      "next_step": "intro"
+    },
+    {
+      "id": "resubmit_many_complete",
+      "action_type": "skip_action",
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Спасибо. Я отправил фотографии на проверку"
+        }
+      ],
+      "next_step": "intro"
+    },
+    {
+      "on_entry_actions": [
+          {
+            "check_types": ["passport", "license"],
+            "status": "new",
+            "type": "set_documents_check_status"
+          }
+      ],
+      "id": "test_check_status",
+      "action_type": "skip_action",
+      "action_button_text": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "Обновляем статус"
+        }
+      ],
+      "next_step": "intro"
+    },
+    {
+      "action_button_text": null,
+      "action_type": "skip_action",
+      "pre_action_messages": [],
+      "id": "check_ron_swanson",
+      "next_step": {
+          "default": "match_document|impostor",
+          "conditions": [
+          {
+            "node": "match_document|duke_silver_welcome_back",
+            "condition": {
+              "type": "has_role",
+              "aggregation_type": "all_of",
+              "role_names": ["RonFuckingSwanson"]
+            }
+          }
+          ]
+        }
+    },
+    {
+      "action_button_text": null,
+      "action_type": "skip_action",
+      "pre_action_messages": [],
+      "id": "test_documents_match",
+      "next_step": {
+          "default": "intro",
+          "conditions": [
+          {
+            "node": "match_document|latin",
+            "condition": {
+              "type": "private_data_matches",
+              "match_type": "has_latin",
+              "check_parameters": [
+                  {"document": "license", "field": "first_name"}, {"document": "license", "field": "last_name"}
+              ]
+            }
+          },
+          {
+            "node": "match_document|mr_anderson_welcome_back",
+            "condition": {
+              "type": "private_data_matches",
+              "match_type": "regex",
+              "match_condition": "^нео",
+              "aggregation_type": "all_of",
+              "check_parameters": [
+                  {"document": "passport", "field": "first_name"}, {"document": "passport", "field": "middle_name"}
+              ]
+            }
+          },
+          {
+            "node": "match_document|only",
+            "condition": {
+              "type": "private_data_matches",
+              "match_type": "has_only_symbols",
+              "match_condition": "-+",
+              "check_parameters": [
+                  {"document": "passport", "field": "middle_name"}
+              ]
+            }
+          },
+          {
+            "node": "match_document|complex_batya",
+            "condition": {
+              "type": "private_data_matches",
+              "match_type": "has_any_of_symbols",
+              "match_condition": "-",
+              "check_parameters": [
+                  {"document": "passport", "field": "middle_name"}
+              ]
+            }
+          }
+          ]
+        }
+    },
+    {
+      "schema": {
+        "options": [
+          {
+            "message_text": "to_intro",
+            "node": "intro",
+            "type": "message",
+            "text": "To intro"
+          },
+          {
+            "message_text": "to_match",
+            "node": "test_documents_match",
+            "type": "message",
+            "text": "More checks"
+          }
+        ],
+        "type": "options"
+      },
+      "action_type": "context_buttons",
+      "next_step": null,
+      "pre_action_messages": [
+        {
+          "type": "plaintext",
+          "text": "%1"
+        }
+      ],
+      "id": "match_document"
+    }
+  ],
+  "faq_url": null,
+  "support_url": null
+}

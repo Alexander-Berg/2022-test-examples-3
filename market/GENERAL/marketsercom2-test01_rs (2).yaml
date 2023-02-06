@@ -1,0 +1,42 @@
+- name: marketsercom2-test01f.db.yandex.net
+  cluster_id: ea880c4a-8594-40f7-b4a0-b7aa7cf9681a
+  zone_id: myt
+  resources:
+    resource_preset_id: db1.small
+    disk_size: "53687091200"
+    disk_type_id: local-ssd
+  role: MASTER
+  health: ALIVE
+  services:
+  - type: POSTGRESQL
+    health: ALIVE
+  - type: POOLER
+    health: ALIVE
+- name: marketsercom2-test01h.db.yandex.net
+  cluster_id: ea880c4a-8594-40f7-b4a0-b7aa7cf9681a
+  zone_id: sas
+  resources:
+    resource_preset_id: db1.small
+    disk_size: "53687091200"
+    disk_type_id: local-ssd
+  health: DEAD
+  services:
+  - type: POOLER
+    health: ALIVE
+  - type: POSTGRESQL
+- name: marketsercom2-test01i.db.yandex.net
+  cluster_id: ea880c4a-8594-40f7-b4a0-b7aa7cf9681a
+  zone_id: man
+  resources:
+    resource_preset_id: db1.small
+    disk_size: "53687091200"
+    disk_type_id: local-ssd
+  role: REPLICA
+  health: ALIVE
+  services:
+  - type: POSTGRESQL
+    health: ALIVE
+  - type: POOLER
+    health: ALIVE
+  replica_type: ASYNC
+

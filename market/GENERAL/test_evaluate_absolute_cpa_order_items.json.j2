@@ -1,0 +1,47 @@
+{% set table = table|default("statistics_absolute_cpa_order_items") %}
+
+{% macro order(platform, order_id) %}
+    [
+        1508752281000,
+        {
+            "puid": "99934355",
+            "yandexuid": "0038347431518121200",
+            "uuid": null
+        },
+        "order",
+        "offer",
+        "Am5Xm_e3CgDFSxw52HWJ3g",
+        {
+            "status": "PLACING",
+            "shop_id": "324423",
+            "order_id": "{{ order_id }}",
+            "model_id": "14255414",
+            "category_id": "91491",
+            "fee": "2.2",
+            "count": "2",
+            "price": "50",
+            "sku_id": "100246276948",
+            "platform": "{{ platform }}",
+            "rgb": "BLUE"
+        },
+        "{{ day }}"
+    ]
+{% endmacro %}
+
+{% if table == "statistics_absolute_cpa_order_items" %}
+    {% table "statistics" %}
+        {% for place in places_with_parents %}
+        {% if place != "Market" %}
+        ["{{ place }}", "Total", "total", 1.0, "{{ day }}"],
+        {% endif %}
+        {% endfor %}
+        ["Market", "Total", "total", 4.0, "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_internal_orders" %}
+    {% table "events" %}
+        {{ order("DESKTOP", "1") }},
+        {{ order("MOBILE_BROWSER", "2") }},
+        {{ order("IOS", "3") }},
+        {{ order("ANDROID", "4") }}
+    {% endtable %}
+{% endif %}

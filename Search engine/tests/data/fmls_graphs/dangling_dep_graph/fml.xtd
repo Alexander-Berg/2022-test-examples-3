@@ -1,0 +1,40 @@
+{
+    "Bundles": [
+        {
+            "Alias": "local_addition",
+            "Fml": {
+                "Bin": "",
+                "Name": "INFO.info"
+            },
+            "Params": {
+                "Threshold": 0.0,
+                "Step": 0.05,
+                "StepsCount": 11,
+                "ClickRegTreeType": "max_positive_prediction",
+                "StartIntentWeight": 0.0
+            },
+            "XtdType": "clickregtree"
+        },
+        {
+            "Alias": "base",
+            "Params": {
+                "ResultTransform": {
+                    "Clamp": {
+                        "Max": 0.99,
+                        "Min": 0.0
+                    }
+                },
+                "Expression": "0"
+            },
+            "XtdType": "multibundle"
+        }
+    ],
+    "Params": {
+        "ResultTransform": {
+            "Distrib": "y-uniform"
+        },
+        "Expression": "fml.local_addition + fml.base / (1 - fml.base)"
+    },
+    "XtdType": "multibundle"
+}
+

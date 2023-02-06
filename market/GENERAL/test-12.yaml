@@ -1,0 +1,14 @@
+name: test-12
+parameters:
+  project: market-mbo
+  cluster: content_mapping_micrometer_testing
+  service: content_mapping_micrometer
+elements:
+- expression: '{cluster="content_mapping_micrometer_testing", service="content_mapping_micrometer",
+    sensor="AutogenerationService_sendModel_seconds"}'
+numberFormat: 3|auto
+percentiles: 50,90,99
+filterLimit: '3'
+movingWindow: 5m
+movingPercentile: '80'
+downsamplingAggr: DEFAULT

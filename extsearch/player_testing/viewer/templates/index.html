@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<table class="table mt-auto">
+  <thead>
+   <tr>
+    <th scope="col">Host</th>
+    <th scope="col">Platform</th>
+    <th scope="col">PlayerId</th>
+    <th scope="col">Last check</th>
+    <th scope="col">Status</th>
+    <th scope="col">Popup</th>
+    <th scope="col">Info</th>
+   </tr>
+  </thead>
+  <tbody>
+   {% for row in hosts %}
+    <tr>
+        <th scope="row">{{row.host}}</th>
+        <td>{{row.platform}}</td>
+        <td>{{row.player_id}}</td>
+        <td>{{row.timestamp}}</td>
+        <td>{{row.status}}</td>
+        <td>{{row.popup}}</td>
+        <td>
+            <button type="button" class="btn btn-secondary" data-toggle="popover" title="Info" data-content="{{row.info}}">I</button>
+            <button type="button" class="btn btn-secondary" data-toggle="popover" title="Sample" data-content="{{row.sample}}">S</button>
+        </td>
+    </tr>
+   {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

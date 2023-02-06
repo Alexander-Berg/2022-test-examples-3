@@ -1,0 +1,552 @@
+{
+  "id": {
+    "configId": "applicationName_auto_graph",
+    "vesionNumber": "0"
+  },
+  "owner": "abcGroup",
+  "defaultValues": {
+    "table": {
+      "table": "applicationName_nginx"
+    },
+    "graphiteSolomon": {
+      "splits": [
+        {
+          "name": "host",
+          "expression": "new_host"
+        },
+        {
+          "name": "environment",
+          "expression": "multiIf(new_environment = 'PRODUCTION', 'stable', new_environment = 'PRESTABLE', 'prestable', new_environment = 'TESTING', 'testing', new_environment = 'DEVELOPMENT', 'development', toString(new_environment))"
+        },
+        {
+          "name": "dc",
+          "expression": "multiIf(dictGetString('dc', 'dc', sipHash64(new_host)) <> '', dictGetString('dc', 'dc', sipHash64(new_host)), substring(new_host, 1, 3) in ('iva', 'man', 'vla', 'sas'), substring(new_host, 1, 3), endsWith(new_host, 'yp-c.yandex.net'), substring(new_host, position(new_host, '.') + 1, 3), 'undefined_dc')"
+        },
+        {
+          "name": "error_codes",
+          "expression": "multiIf(new_http_code >= 300 and new_http_code <= 399, '3xx', new_http_code >= 400 and new_http_code <= 499 and new_http_code != 429, '4xx', new_http_code = 429, '429', new_http_code >= 500 and new_http_code <= 599, '5xx', 'undefined_error')"
+        },
+        {
+          "name": "http_code",
+          "expression": "new_http_code"
+        },
+        {
+          "name": "http_handle_by_method",
+          "expression": "concat(new_page_id, '__', new_http_method)"
+        },
+        {
+          "name": "url",
+          "expression": "new_url"
+        }
+      ],
+      "commonLabels": [
+        {
+          "name": "project",
+          "expression": "market-projectName"
+        },
+        {
+          "name": "service",
+          "expression": "applicationName_ag"
+        },
+        {
+          "name": "cluster",
+          "expression": "${environment}"
+        }
+      ]
+    }
+  },
+  "configs": [
+    {
+      "filter": "new_url != '/ping' AND new_url != '/monitoring'",
+      "periods": [
+        "ONE_MIN"
+      ],
+      "valueOnNan": 0,
+      "graphiteSolomon": {
+        "metricExpression": "count() / 60",
+        "type": "SIMPLE",
+        "solomonSensors": [
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "RPS"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              }
+            ]
+          },
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "RPS"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              },
+              {
+                "name": "dc",
+                "expression": "${dc}"
+              }
+            ]
+          },
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "RPS"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              },
+              {
+                "name": "host",
+                "expression": "${host}"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "filter": "new_page_id != '' AND new_url != '/ping' AND new_url != '/monitoring'",
+      "periods": [
+        "ONE_MIN"
+      ],
+      "valueOnNan": 0,
+      "graphiteSolomon": {
+        "metricExpression": "count() / 60",
+        "type": "SIMPLE",
+        "solomonSensors": [
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "RPS"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              },
+              {
+                "name": "http_handle_by_method",
+                "expression": "${http_handle_by_method}"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "filter": "new_http_code >= 200 AND new_http_code <= 299 AND new_url != '/ping' AND new_url != '/monitoring'",
+      "periods": [
+        "ONE_MIN"
+      ],
+      "valueOnNan": 0,
+      "graphiteSolomon": {
+        "metricExpression": "new_resptime_ms",
+        "type": "QUANTILE_TIMING",
+        "quantiles": [
+          "0.5",
+          "0.8",
+          "0.9",
+          "0.95",
+          "0.99"
+        ],
+        "solomonSensors": [
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "response_time"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              }
+            ]
+          },
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "response_time"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              },
+              {
+                "name": "host",
+                "expression": "${host}"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "filter": "new_page_id != '' AND new_url != '/ping' AND new_url != '/monitoring'",
+      "periods": [
+        "ONE_MIN"
+      ],
+      "valueOnNan": 0,
+      "graphiteSolomon": {
+        "metricExpression": "new_resptime_ms",
+        "type": "QUANTILE_TIMING",
+        "quantiles": [
+          "0.5",
+          "0.8",
+          "0.9",
+          "0.95",
+          "0.99"
+        ],
+        "solomonSensors": [
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "response_time"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              },
+              {
+                "name": "http_handle_by_method",
+                "expression": "${http_handle_by_method}"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "filter": "new_url != '/ping' AND new_url != '/monitoring' AND new_http_code >= 300",
+      "periods": [
+        "ONE_MIN"
+      ],
+      "valueOnNan": 0,
+      "graphiteSolomon": {
+        "metricExpression": "count()",
+        "type": "SIMPLE",
+        "solomonSensors": [
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "errors"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              },
+              {
+                "name": "error_codes",
+                "expression": "${error_codes}"
+              }
+            ]
+          },
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "errors"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              },
+              {
+                "name": "dc",
+                "expression": "${dc}"
+              }
+            ]
+          },
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "errors"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              },
+              {
+                "name": "host",
+                "expression": "${host}"
+              }
+            ]
+          },
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "errors"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              },
+              {
+                "name": "error_codes",
+                "expression": "${error_codes}"
+              },
+              {
+                "name": "host",
+                "expression": "${host}"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "filter": "new_page_id != '' AND new_url != '/ping' AND new_url != '/monitoring' AND new_http_code >= 300",
+      "periods": [
+        "ONE_MIN"
+      ],
+      "valueOnNan": 0,
+      "graphiteSolomon": {
+        "metricExpression": "count()",
+        "type": "SIMPLE",
+        "solomonSensors": [
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "errors"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              },
+              {
+                "name": "error_codes",
+                "expression": "${error_codes}"
+              },
+              {
+                "name": "http_handle_by_method",
+                "expression": "${http_handle_by_method}"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "filter": "new_page_id != '' AND new_url != '/ping' AND new_url != '/monitoring'",
+      "periods": [
+        "ONE_MIN"
+      ],
+      "valueOnNan": 0,
+      "graphiteSolomon": {
+        "metricExpression": "countIf(new_http_code >= 500 and new_http_code <= 599) / count() * 100",
+        "type": "SIMPLE",
+        "solomonSensors": [
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "errors-percent"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              },
+              {
+                "name": "error_codes",
+                "expression": "5xx"
+              },
+              {
+                "name": "http_handle_by_method",
+                "expression": "${http_handle_by_method}"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "filter": "new_url = '/ping' OR new_url = '/monitoring'",
+      "periods": [
+        "ONE_MIN"
+      ],
+      "valueOnNan": 0,
+      "graphiteSolomon": {
+        "metricExpression": "count() / 60",
+        "type": "SIMPLE",
+        "solomonSensors": [
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "RPS"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              },
+              {
+                "name": "liveness_handle",
+                "expression": "${url}"
+              },
+              {
+                "name": "dc",
+                "expression": "${dc}"
+              }
+            ]
+          },
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "RPS"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              },
+              {
+                "name": "liveness_handle",
+                "expression": "${url}"
+              },
+              {
+                "name": "host",
+                "expression": "${host}"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "filter": "new_url = '/ping' OR new_url = '/monitoring'",
+      "periods": [
+        "ONE_MIN"
+      ],
+      "valueOnNan": 0,
+      "graphiteSolomon": {
+        "metricExpression": "count()",
+        "type": "SIMPLE",
+        "solomonSensors": [
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "errors"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              },
+              {
+                "name": "liveness_handle",
+                "expression": "${url}"
+              },
+              {
+                "name": "http_code",
+                "expression": "${http_code}"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "filter": "(new_url = '/ping' OR new_url = '/monitoring') AND new_http_code >= 300",
+      "periods": [
+        "ONE_MIN"
+      ],
+      "valueOnNan": 0,
+      "graphiteSolomon": {
+        "metricExpression": "count()",
+        "type": "SIMPLE",
+        "solomonSensors": [
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "errors"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              },
+              {
+                "name": "liveness_handle",
+                "expression": "${url}"
+              },
+              {
+                "name": "dc",
+                "expression": "${dc}"
+              }
+            ]
+          },
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "errors"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              },
+              {
+                "name": "liveness_handle",
+                "expression": "${url}"
+              },
+              {
+                "name": "host",
+                "expression": "${host}"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "filter": "new_url = '/ping' OR new_url = '/monitoring'",
+      "periods": [
+        "ONE_MIN"
+      ],
+      "valueOnNan": 0,
+      "graphiteSolomon": {
+        "metricExpression": "new_resptime_ms",
+        "type": "QUANTILE_TIMING",
+        "quantiles": [
+          "0.5",
+          "0.8",
+          "0.9",
+          "0.95",
+          "0.99"
+        ],
+        "solomonSensors": [
+          {
+            "labels": [
+              {
+                "name": "sensor",
+                "expression": "response_time"
+              },
+              {
+                "name": "environment",
+                "expression": "${environment}"
+              },
+              {
+                "name": "liveness_handle",
+                "expression": "${url}"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

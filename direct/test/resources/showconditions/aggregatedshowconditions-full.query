@@ -1,0 +1,69 @@
+SELECT
+  K.phrase AS phrase,
+  K.cid AS cid,
+  K.bid_type AS bid_type,
+  IF(is_null(sum(S.Shows)), 0, sum(S.Shows)) AS shows,
+  IF(is_null(sum(S.Clicks)), 0, sum(S.Clicks)) AS clicks,
+  IF(is_null(sum(IF(S.CurrencyID = 0, ((S.Cost * 100) / 118), S.CostTaxFree))), 0, sum(IF(S.CurrencyID = 0, ((S.Cost * 100) / 118), S.CostTaxFree))) AS cost,
+  IF(is_null(sum(S.CostCur)), 0, sum(S.CostCur)) AS costWithTax,
+  IF(is_null(sum(S.PriceCur)), 0, sum(S.PriceCur)) AS revenue,
+  IF(is_null(sum(S.GoalsNum)), 0, sum(S.GoalsNum)) AS goals,
+  IF(shows > 0, ((cost / shows) * 1000), 0) AS cpmPrice,
+  IF(is_null(sum(S.FirstPageClicks)), 0, sum(S.FirstPageClicks)) AS firstPageClicks,
+  IF(is_null(sum(S.FirstPageShows)), 0, sum(S.FirstPageShows)) AS firstPageShows,
+  IF(is_null(sum(S.FirstPageSumPosClicks)), 0, sum(S.FirstPageSumPosClicks)) AS firstPageSumPosClicks,
+  IF(is_null(sum(S.FirstPageSumPosShows)), 0, sum(S.FirstPageSumPosShows)) AS firstPageSumPosShows,
+  IF(is_null(sum(IF(S.IsRMP, S.Clicks, S.SessionNum))), 0, sum(IF(S.IsRMP, S.Clicks, S.SessionNum))) AS sessions,
+  IF(is_null(sum(S.SessionNumLimited)), 0, sum(S.SessionNumLimited)) AS sessionsLimited,
+  IF(is_null(sum(S.Bounces)), 0, sum(S.Bounces)) AS bounces,
+  IF(is_null(sum(S.SessionDepth)), 0, sum(S.SessionDepth)) AS sessionDepth,
+  IF(shows > 0, ((clicks * 100000000) / shows), 0) AS ctr,
+  IF(clicks > 0, (cost / clicks), 0) AS avgClickCost,
+  IF(firstPageShows > 0, ((firstPageSumPosShows * 1000000) / firstPageShows), 0) AS avgShowPosition,
+  IF(firstPageClicks > 0, ((firstPageSumPosClicks * 1000000) / firstPageClicks), 0) AS avgClickPosition,
+  IF(sessionsLimited > 0, ((bounces * 100000000) / sessionsLimited), 0) AS bounceRate,
+  IF(sessionsLimited > 0, ((sessionDepth * 1000000) / sessionsLimited), 0) AS avgDepth,
+  IF(clicks > 0, ((goals * 100000000) / clicks), 0) AS conversionRate,
+  IF(goals > 0, (cost / goals), null) AS avgGoalCost,
+  IF((
+    cost > 0
+    AND revenue > 0
+  ), ((double((revenue - cost)) * 1000000.0) / double(cost)), null) AS profitability,
+  IF((
+    cost > 0
+    AND revenue > 0
+  ), ((double(cost) * 100000000.0) / double(revenue)), null) AS crr,
+  IF(is_null(sum(GS4.GoalsNum)), 0, sum(GS4.GoalsNum)) AS goals4,
+  IF(is_null(sum(GS4.WithShowsGoalsNum)), 0, sum(GS4.WithShowsGoalsNum)) AS goalsWithShows4,
+  IF(clicks > 0, ((goals4 * 100000000) / clicks), 0) AS conversionRate4,
+  IF(goals4 > 0, (cost / goals4), 0) AS costPerAction4,
+  IF(is_null(sum(GS4.PriceCur)), 0, sum(GS4.PriceCur)) AS revenue4
+FROM yt.bidstable_direct AS K
+  LEFT OUTER JOIN yt.DirectPhraseStatV2_bs AS S
+    ON (
+      (K.cid, K.pid, uint64(K.id)) = (S.ExportID, S.GroupExportID, S.PhraseExportID)
+      AND S.UpdateTime = 1546290000
+    )
+  LEFT OUTER JOIN yt.DirectPhraseGoalsStat_bs AS GS4
+    ON (S.ExportID, S.GroupExportID, S.UpdateTime, S.PhraseExportID, S.PhraseID, S.DirectBannerID, S.GoalContextID, S.IsFlat, S.IsMobile, S.CurrencyID, S.IsRMP, IF(is_null(S.AutobudgetStrategyID), -1, S.AutobudgetStrategyID), 4) = (GS4.ExportID, GS4.GroupExportID, GS4.UpdateTime, GS4.PhraseExportID, GS4.PhraseID, GS4.DirectBannerID, GS4.GoalContextID, GS4.IsFlat, GS4.IsMobile, GS4.CurrencyID, GS4.IsRMP, IF(is_null(GS4.AutobudgetStrategyID), -1, GS4.AutobudgetStrategyID), GS4.GoalID)
+WHERE (
+  K.cid IN (11)
+  AND (
+    K.is_deleted = 0
+    OR is_null(K.is_deleted)
+  )
+)
+GROUP BY
+  phrase,
+  cid,
+  bid_type,
+  K.__hash__,
+  K.__shard__
+ORDER BY
+  cost DESC,
+  shows DESC,
+  avgGoalCost DESC,
+  goals DESC,
+  clicks DESC,
+  avgClickCost DESC
+LIMIT 1000

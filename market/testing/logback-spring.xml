@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty name="LOG_PATH" source="logging.path" />
+    <springProperty name="LOG_FILE" source="logging.file" />
+
+    <include resource="appenders/file.xml"/>
+    <include resource="appenders/request-trace.xml"/>
+    <logger name="ru.yandex" level="DEBUG" additivity="false">
+        <appender-ref ref="FILE"/>
+    </logger>
+    <logger name="requestTrace" level="TRACE" additivity="false">
+        <appender-ref ref="REQUEST_TRACE"/>
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

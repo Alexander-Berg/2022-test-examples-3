@@ -1,0 +1,104 @@
+warehouse-timezone: Europe/Moscow
+spring:
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:sorter;MODE=PostgreSQL;INIT=RUNSCRIPT FROM 'classpath:schema.sql'
+    username: ShippingSorter
+  main:
+    allow-bean-definition-overriding: true
+  config:
+    import:
+      - application-fragment-mq-test.yml
+      - application-fragment-common-test.yml
+  liquibase:
+    enabled: false
+
+app.scheduling.enable: false
+
+conveyor.username: conveyor
+
+server:
+  servlet.context-path: /shippingsorter
+  port: 8251
+
+healthcheck:
+  ds.enabled: true
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /monitoring
+      exposure.include: [health, metrics, loggers, prometheus]
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    metrics.enabled: true
+    loggers.enabled: true
+    prometheus.enabled: true
+
+logging.do-not-log-uri: /hc/**,/monitoring/**,/pagematch/**,/swagger-ui/**,/swagger-resources/**,/v3/**
+logging.log-requests: true
+
+
+oltp:
+  url: http://${Balancer}/scprd/wmwebservice_rest/
+  moduleName: oltp
+
+wrap:
+  api:
+    host: 'http://localhost:19000'
+    token: 'TEST_WRAP_TOKEN'
+
+lgw:
+  api:
+    host: 'https://lgw.tst.vs.market.yandex.net'
+    token: 'TEST_TOKEN'
+
+
+wms:
+  api:
+    host: 'http://localhost:${wiremock.server.port}/api'
+    username: 'wmsuser'
+    password: 'wmspass'
+  autostart:
+    host: 'http://localhost:${wiremock.server.port}/autostart'
+  receiving:
+    host: 'http://localhost:${wiremock.server.port}/receiving'
+  transportation:
+    host: 'http://localhost:${wiremock.server.port}/transportation'
+  shippingsorter:
+    tvm:
+      serviceId: 0
+      secret: testpwd
+      api-methods: /sorting/transport-unit-tracking,/sorting/dimensions-control
+      log-only-mode: false
+      check-user-ticket: false
+      cache:
+        dir: /var/cache/tvm
+
+iris:
+  url: 'http://iris.local'
+  tvmServiceId: 0
+
+servicebus:
+  api:
+    host: http://shippingsorter.local
+  tvm:
+    serviceId: 0
+
+core:
+  api:
+    host: http://core.local
+
+wiremock.server.port: 9999
+
+check:
+  authentication: 'no'
+
+application:
+  security:
+    use-tvm-auth: false
+
+s3.use: false

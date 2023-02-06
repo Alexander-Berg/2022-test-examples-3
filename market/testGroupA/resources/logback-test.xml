@@ -1,0 +1,30 @@
+<configuration debug="true">
+
+    <conversionRule conversionWord="exC"
+                    converterClass="ru.yandex.market.checkout.common.logging.CompressedThrowableProxyConverter"/>
+
+    <appender name="DEFAULT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ru.yandex.market.checkout.common.logging.SmartPatternLayout">
+                <pattern>[%d] %-5p [%X{requestId}][%t][%c{0}] %m~%ex%n</pattern>
+            </layout>
+        </encoder>
+    </appender>
+    <appender name="ASYNC" class="ru.yandex.market.checkout.common.logging.NonDiscardingAsyncAppender">
+        <prerenderMessage>${asyncLogging.prerenderMessage:-true}</prerenderMessage>
+        <appender-ref ref="DEFAULT"/>
+    </appender>
+    <appender name="TRACE" class="ch.qos.logback.core.helpers.NOPAppender"/>
+
+    <logger name="ru.yandex" level="DEBUG" additivity="false">
+        <appender-ref ref="ASYNC"/>
+    </logger>
+    <logger name="ru.yandex.market.checkout.checkouter.storage.jooq.CommonLoggerListener" additivity="false"
+            level="OFF">
+    </logger>
+
+    <logger name="requestTrace" level="TRACE">
+        <appender-ref ref="TRACE"/>
+    </logger>
+    <root level="OFF"/>
+</configuration>

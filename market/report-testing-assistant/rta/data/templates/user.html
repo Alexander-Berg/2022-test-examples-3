@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>RTA - User{{ " - " + user + "@" if user }}</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/rta.css"/>
+        <link rel="shortcut icon" href="/static/png/favicon.png" type="image/png"/>
+    </head>
+    <body>
+        {% if user -%}
+        <div class="container">
+            <div class="avatar">
+                <img class="avatar" src="https://center.yandex-team.ru/api/v1/user/{{ user }}/avatar/300.jpg"/>
+            </div>
+            <div class="panel">
+                <form action="/user/log-out" method="POST">
+                    <input type="submit" value="Log out"/>
+                </form>
+            </div>
+        </div>
+        <div class="rule"></div>
+        <div class="nick"><span class="spot">{{ user[0] }}</span>{{ user[1:] }}@</div>
+        {%- else -%}
+        <div>
+            <form action="/user/log-in" method="POST">
+                <input name="name" placeholder="username"/>
+                <input type="submit" value="Log in"/>
+            </form>
+        </div>
+        {%- endif %}
+    </body>
+</html>

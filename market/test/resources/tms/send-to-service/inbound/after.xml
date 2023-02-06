@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <fulfillment_service
+        ID="100"
+        NAME="test"
+        STATUS="1"
+        TYPE="1"
+    />
+
+    <SUPPLIER
+        ID="1"
+        NAME="supplier1"
+    />
+
+    <shop_request ID="1"
+                  SUPPLIER_ID="1"
+                  SERVICE_ID="100"
+                  STATUS="20"
+                  TYPE="7"
+                  SUBTYPE="DEFAULT"
+                  REQUESTED_DATE="1999-9-9 9:9:9"
+                  ITEMS_TOTAL_COUNT="1"
+    />
+
+    <REQUEST_ITEM
+        REQUEST_ID="1"
+        ARTICLE="art1"
+        BARCODES="11;22"
+        COUNT="3"
+        SKU="1"
+        NAME="name"
+        SUPPLY_PRICE="11.40"
+        VAT_RATE="2"
+    />
+
+    <registry id="1"
+              request_id="1"
+              type="8"
+              unit_counts='[{"counts": [{"type": "FIT", "count": 1}], "unitType": 10}]'
+    />
+
+    <registry_unit id="1" registry_id="1" type="20"
+                   identifiers='{"parts": [{"type": "ORDER_RETURN_ID", "value": "10121"}, {"type": "SHOP_SKU", "value": "00065.00026.100126176174"}, {"type": "VENDOR_ID", "value": "10264169"}]}'
+                   parents='[{"parts": [{"type": "BOX_ID", "value": "VOZVRAT_SF_PVZ_55970"}]}]'
+                   meta='{"name": "Подушка для беременных 170см", "boxCount": 1, "marketSku": 100126176174, "cargoTypes": [950], "categoryId": 10752772, "marketName": "Подушка Theraline для беременных 170 см малиновый", "supplyPrice": 100.5, "hasExpirationDate": false, "needManualVerification": false, "inboundRemainingLifetimeDays": 35, "outboundRemainingLifetimeDays": 35}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 1, "relatedUnitIds": [{"unitIds": [{"parts": [{"type": "UIT", "value": "991870055836"}, {"type": "UIT", "value": "991870072559"}, {"type": "UIT", "value": "991870072560"}, {"type": "ORDER_RETURN_REASON_ID", "value": "DO_NOT_FIT"}]}]}]}]}'
+    />
+
+    <registry_unit id="2" registry_id="1" type="10"
+                   identifiers='{"parts": [{"type": "BOX_ID", "value": "VOZVRAT_SF_PVZ_55970"}]}'
+                   parents='[]'
+                   meta='{}'
+                   unit_counts='{"unitCounts": [{"type": "FIT", "count": 1, "relatedUnitIds": [{}]}]}'
+    />
+
+    <queue_tasks
+        queue_name="PUT_FF_INBOUND_REGISTRY"
+        task='{"registryId":1,"inboundRegistry":{"boxes":[{"unitInfo":{"counts":[{"countType":"FIT","quantity":1,"unitIds":[]}],"relations":[],"compositeId":{"partialIds":[{"idType":"BOX_ID","value":"VOZVRAT_SF_PVZ_55970"}]}}}],"items":[{"cargoTypes":[950],"unitInfo":{"counts":[{"countType":"FIT","quantity":1,"unitIds":[{"partialIds":[{"idType":"UIT","value":"991870055836"},{"idType":"UIT","value":"991870072559"},{"idType":"UIT","value":"991870072560"},{"idType":"ORDER_RETURN_REASON_ID","value":"DO_NOT_FIT"}]}]}],"relations":[{"parentId":{"partialIds":[{"idType":"BOX_ID","value":"VOZVRAT_SF_PVZ_55970"}]}}],"compositeId":{"partialIds":[{"idType":"ARTICLE","value":"00065.00026.100126176174"},{"idType":"VENDOR_ID","value":"10264169"},{"idType":"ORDER_RETURN_ID","value":"10121"}]}},"name":"Подушка для беременных 170см","price":100.5,"boxCount":1,"remainingLifetimes":{"inbound":{"days":{"value":35}},"outbound":{"days":{"value":35}}},"categoryId":10752772}],"registryId":{"yandexId":"1"},"inboundId":{"yandexId":"1"},"registryType":8}}'
+    />
+
+    <queue_tasks
+        queue_name="PUBLISH_REQUEST_STATUS_CHANGE"
+        task='{"requestId":1,"requestType":7,"detailsLoaded":false,"preparedDetailsLoaded":false,"changedAt":"2018-01-01T10:10:10","oldStatus":3,"newStatus":20,"receivedChangeAt":"2018-01-01T10:10:10","topic":"REQUEST_STATUS_EVENTS"}'
+    />
+</dataset>

@@ -1,0 +1,28 @@
+juggler:
+  default:
+    host: testing_market_nodejs-template
+    namespace: market.sre
+    refresh_time: 60
+    ttl: 900
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    flaps:
+      stable_time: 600
+      critical_time: 3000
+      boost_time: 0
+    children:
+    - DEPLOY%market-sre@stage=testing_market_nodejs-template;deploy_unit=nodejs-template-placeholder
+
+  checks:
+  - service: logrotate
+    nodata_mode: force_ok
+  - service: logrotate-app
+    nodata_mode: force_ok
+  - service: disk_free_space
+    nodata_mode: force_ok
+  - service: nginx-status
+    nodata_mode: force_ok
+  - service: memory_anon_usage
+  - service: ping
+  - service: monitoring

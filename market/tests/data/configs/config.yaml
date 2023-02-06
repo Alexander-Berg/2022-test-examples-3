@@ -1,0 +1,17 @@
+#!include global.yaml
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_sandbox
+
+juggler:
+  default:
+    host: market_sandbox
+    namespace: market.sre
+    aggregator: logic_and
+    children:
+    - type: EVENTS
+      host: service=fslb_false_positive_pings
+      service: all
+      instance: all
+  checks:
+  - service: fslb_false_positive_pings
+    notifications:
+      - *notification_csadmin

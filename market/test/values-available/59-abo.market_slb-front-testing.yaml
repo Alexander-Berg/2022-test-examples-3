@@ -1,0 +1,47 @@
+context:
+  default:
+    service_name: abo_market
+    servername_regexp: abo\\.market\\.([\\w\\d]+\\.)?yandex\\.ru
+    vs: market
+    cert: abo.market
+    antirobot: false
+    health_check: '"GET /ping HTTP/1.1\r\nHost: abo.market.yandex.ru\r\n\r\n"'
+    disable_icookie: true
+
+  testing:
+    cert: fslb-testing
+
+servers:
+  default:
+    main:
+    - name: N%production_market_abo_main_iva@local
+      plain_http_backend: true
+      timeout: 600s
+      weight: 100
+    - name: N%production_market_abo_main_iva
+      plain_http_backend: true
+      timeout: 600s
+    - name: N%production_market_abo_main_vla@local
+      plain_http_backend: true
+      timeout: 600s
+      weight: 100
+    - name: N%production_market_abo_main_vla
+      plain_http_backend: true
+      timeout: 600s
+
+  testing:
+    main:
+    - name: N%testing_market_abo_main_man@local
+      plain_http_backend: true
+      timeout: 1800s
+      weight: 100
+    - name: N%testing_market_abo_main_man
+      plain_http_backend: true
+      timeout: 1800s
+    - name: N%testing_market_abo_main_sas@local
+      plain_http_backend: true
+      timeout: 1800s
+      weight: 100
+    - name: N%testing_market_abo_main_sas
+      plain_http_backend: true
+      timeout: 1800s

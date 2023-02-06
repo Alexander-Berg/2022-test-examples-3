@@ -1,0 +1,1610 @@
+{
+  "type": "object",
+  "required": [
+    "user",
+    "server_time"
+  ],
+  "properties": {
+    "sf": {
+      "type": "array",
+      "title": "The Sf Schema",
+      "items": {
+        "$id": "#/properties/sf/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "properties": {
+          "index": {
+            "$id": "#/properties/sf/items/properties/index",
+            "type": "integer",
+            "title": "The Index Schema",
+            "default": 0,
+            "examples": [
+              158
+            ]
+          },
+          "action_name": {
+            "$id": "#/properties/sf/items/properties/action_name",
+            "type": "string",
+            "title": "The Action_name Schema",
+            "default": "",
+            "examples": [
+              "Прогреть"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "action_progress_name": {
+            "$id": "#/properties/sf/items/properties/action_progress_name",
+            "type": "string",
+            "title": "The Action_progress_name Schema",
+            "default": "",
+            "examples": [
+              "Греется"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "display_name": {
+            "$id": "#/properties/sf/items/properties/display_name",
+            "type": "string",
+            "title": "The Display_name Schema",
+            "default": "",
+            "examples": [
+              "Удаленный прогрев"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "public_icon": {
+            "$id": "#/properties/sf/items/properties/public_icon",
+            "type": "string",
+            "title": "The Public_icon Schema",
+            "default": "",
+            "examples": [
+              "https://carsharing.s3.yandex.net/drive/static/tag-icons/heating.png"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "name": {
+            "$id": "#/properties/sf/items/properties/name",
+            "type": "string",
+            "title": "The Name Schema",
+            "default": "",
+            "examples": [
+              "remote_condition"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "comment": {
+            "$id": "#/properties/sf/items/properties/comment",
+            "type": "string",
+            "title": "The Comment Schema",
+            "default": "",
+            "examples": [
+              "Доступна опция удаленного прогрева."
+            ],
+            "pattern": "^(.*)$"
+          },
+          "is_important": {
+            "$id": "#/properties/sf/items/properties/is_important",
+            "type": "boolean",
+            "title": "The Is_important Schema",
+            "default": false,
+            "examples": [
+              false
+            ]
+          },
+          "visibility": {
+            "$id": "#/properties/sf/items/properties/visibility",
+            "type": "boolean",
+            "title": "The Visibility Schema",
+            "default": false,
+            "examples": [
+              true
+            ]
+          },
+          "action_style": {
+            "$id": "#/properties/sf/items/properties/action_style",
+            "type": "string",
+            "title": "The Action_style Schema",
+            "default": "",
+            "examples": [
+              "heating"
+            ],
+            "pattern": "^(.*)$"
+          }
+        }
+      }
+    },
+    "user": {
+      "type": "object",
+      "required": [
+        "credit_card",
+        "details",
+        "billing",
+        "plus",
+        "is_first_riding"
+      ],
+      "properties": {
+        "credit_card": {
+          "type": "object",
+          "required": [
+            "pan",
+            "paymethod_id"
+          ],
+          "properties": {
+            "pan": {
+              "type": "object",
+              "required": [
+                "suffix",
+                "prefix"
+              ],
+              "properties": {
+                "suffix": {
+                  "type": "string",
+                  "pattern": "^([0-9]*)$"
+                },
+                "prefix": {
+                  "type": "string",
+                  "pattern": "^([0-9]*)$"
+                }
+              }
+            },
+            "paymethod_id": {
+              "type": "string"
+            }
+          }
+        },
+        "details": {
+          "type": "object",
+          "required": [
+            "last_name",
+            "setup",
+            "first_name",
+            "preliminary_payments",
+            "status",
+            "pn",
+            "username"
+          ],
+          "properties": {
+            "last_name": {
+              "type": "string"
+            },
+            "setup": {
+              "type": "object",
+              "required": [
+                "phone",
+                "email"
+              ],
+              "properties": {
+                "phone": {
+                  "type": "object",
+                  "required": [
+                    "verified",
+                    "number"
+                  ],
+                  "properties": {
+                    "verified": {
+                      "type": "boolean"
+                    },
+                    "number": {
+                      "type": "string",
+                      "pattern": "^(\\+)([0-9]+)$"
+                    }
+                  }
+                },
+                "email": {
+                  "type": "object",
+                  "required": [
+                    "verified",
+                    "address"
+                  ],
+                  "properties": {
+                    "verified": {
+                      "type": "boolean"
+                    },
+                    "address": {
+                      "type": "string",
+                      "pattern": "(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$)"
+                    }
+                  }
+                }
+              }
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "first_name": {
+                "type": "string"
+              },
+              "preliminary_payments": {
+                "type": "object",
+                "required": [
+                  "enabled",
+                  "amount"
+                ],
+                "properties": {
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "amount": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "status": {
+                "type": "string"
+              },
+              "pn": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              }
+            }
+          },
+          "billing": {
+            "type": "object",
+            "required": [
+              "bonuses"
+            ],
+            "properties": {
+              "bonuses": {
+                "type": "object",
+                "required": [
+                  "amount"
+                ],
+                "properties": {
+                  "amount": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          },
+          "plus": {
+            "type": "object",
+            "required": [
+              "is_activated"
+            ],
+            "properties": {
+              "is_activated": {
+                "type": "boolean"
+              }
+            }
+          },
+          "is_first_riding": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "server_time": {
+      "type": "integer"
+    },
+    "car": {
+      "type": "object",
+      "required": [
+        "number",
+        "model_id"
+      ],
+      "properties": {
+        "number": {
+          "type": "string"
+        },
+        "model_id": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "models": {
+      "type": "object",
+      "title": "The Models Schema",
+      "patternProperties": {
+        "^[A-Za-z0-9_]*$": {
+          "type": "object",
+          "required": [
+            "image_pin_url_3x",
+            "fuel_type",
+            "image_pin_url_2x",
+            "fuel_cap_side",
+            "short_name",
+            "image_large_url",
+            "name",
+            "manufacturer",
+            "code",
+            "image_map_url_3x",
+            "image_map_url_2x",
+            "image_small_url",
+            "cars_count",
+            "specifications"
+          ],
+          "properties": {
+            "image_pin_url_3x": {
+              "$id": "#/properties/models/properties/renault_kaptur/properties/image_pin_url_3x",
+              "type": "string",
+              "title": "The Image_pin_url_3x Schema",
+              "default": "",
+              "examples": [
+                "https://carsharing.s3.yandex.net/drive/static/pins/white-3x.png"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "fuel_type": {
+              "$id": "#/properties/models/properties/renault_kaptur/properties/fuel_type",
+              "type": "string",
+              "title": "The Fuel_type Schema",
+              "default": "",
+              "examples": [
+                "95"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "image_pin_url_2x": {
+              "$id": "#/properties/models/properties/renault_kaptur/properties/image_pin_url_2x",
+              "type": "string",
+              "title": "The Image_pin_url_2x Schema",
+              "default": "",
+              "examples": [
+                "https://carsharing.s3.yandex.net/drive/static/pins/white-2x.png"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "fuel_cap_side": {
+              "$id": "#/properties/models/properties/renault_kaptur/properties/fuel_cap_side",
+              "type": "string",
+              "title": "The Fuel_cap_side Schema",
+              "default": "",
+              "examples": [
+                "right"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "short_name": {
+              "$id": "#/properties/models/properties/renault_kaptur/properties/short_name",
+              "type": "string",
+              "title": "The Short_name Schema",
+              "default": "",
+              "examples": [
+                "Kaptur"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "image_large_url": {
+              "$id": "#/properties/models/properties/renault_kaptur/properties/image_large_url",
+              "type": "string",
+              "title": "The Image_large_url Schema",
+              "default": "",
+              "examples": [
+                "https://carsharing.s3.yandex.net/drive/car-models/kaptur/kaptur-large__25-10.png"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "name": {
+              "$id": "#/properties/models/properties/renault_kaptur/properties/name",
+              "type": "string",
+              "title": "The Name Schema",
+              "default": "",
+              "examples": [
+                "Renault Kaptur"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "manufacturer": {
+              "$id": "#/properties/models/properties/renault_kaptur/properties/manufacturer",
+              "type": "string",
+              "title": "The Manufacturer Schema",
+              "default": "",
+              "examples": [
+                "Renault"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "code": {
+              "$id": "#/properties/models/properties/renault_kaptur/properties/code",
+              "type": "string",
+              "title": "The Code Schema",
+              "default": "",
+              "examples": [
+                "renault_kaptur"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "default_tags": {
+              "$id": "#/properties/models/properties/renault_kaptur/properties/default_tags",
+              "type": "array",
+              "title": "The Default_tags Schema"
+            },
+            "image_map_url_3x": {
+              "$id": "#/properties/models/properties/renault_kaptur/properties/image_map_url_3x",
+              "type": "string",
+              "title": "The Image_map_url_3x Schema",
+              "default": "",
+              "examples": [
+                "https://carsharing.s3.yandex.net/drive/car-models/renault_kaptur/map-3x.png?r=3"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "image_map_url_2x": {
+              "$id": "#/properties/models/properties/renault_kaptur/properties/image_map_url_2x",
+              "type": "string",
+              "title": "The Image_map_url_2x Schema",
+              "default": "",
+              "examples": [
+                "https://carsharing.s3.yandex.net/drive/car-models/renault_kaptur/map-2x.png?r=3"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "image_small_url": {
+              "$id": "#/properties/models/properties/renault_kaptur/properties/image_small_url",
+              "type": "string",
+              "title": "The Image_small_url Schema",
+              "default": "",
+              "examples": [
+                "https://carsharing.s3.yandex.net/drive/car-models/kaptur/kaptur-small__25-10.png"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "cars_count": {
+              "$id": "#/properties/models/properties/renault_kaptur/properties/cars_count",
+              "type": "integer",
+              "title": "The Cars_count Schema",
+              "default": 0,
+              "examples": [
+                1
+              ]
+            },
+            "specifications": {
+              "$id": "#/properties/models/properties/renault_kaptur/properties/specifications",
+              "type": "array",
+              "title": "The Specifications Schema",
+              "items": {
+                "$id": "#/properties/models/properties/renault_kaptur/properties/specifications/items",
+                "type": "object",
+                "title": "The Items Schema",
+                "required": [
+                  "name",
+                  "position",
+                  "value",
+                  "id"
+                ],
+                "properties": {
+                  "name": {
+                    "$id": "#/properties/models/properties/renault_kaptur/properties/specifications/items/properties/name",
+                    "type": "string",
+                    "title": "The Name Schema",
+                    "default": "",
+                    "examples": [
+                      "Коробка"
+                    ],
+                    "pattern": "^(.*)$"
+                  },
+                  "position": {
+                    "$id": "#/properties/models/properties/renault_kaptur/properties/specifications/items/properties/position",
+                    "type": "integer",
+                    "title": "The Position Schema",
+                    "default": 0,
+                    "examples": [
+                      0
+                    ]
+                  },
+                  "value": {
+                    "$id": "#/properties/models/properties/renault_kaptur/properties/specifications/items/properties/value",
+                    "type": "string",
+                    "title": "The Value Schema",
+                    "default": "",
+                    "examples": [
+                      "вариатор"
+                    ],
+                    "pattern": "^(.*)$"
+                  },
+                  "id": {
+                    "$id": "#/properties/models/properties/renault_kaptur/properties/specifications/items/properties/id",
+                    "type": "string",
+                    "title": "The Id Schema",
+                    "default": "",
+                    "examples": [
+                      "d2795edc-32fa-4bed-8216-1f7feb1fe77a"
+                    ],
+                    "pattern": "^(.*)$"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "segment": {
+      "type": "object",
+      "required": [
+        "session",
+        "meta"
+      ],
+      "properties": {
+        "session": {
+          "type": "object",
+          "required": [
+            "specials"
+          ],
+          "properties": {
+            "specials": {
+              "type": "object",
+              "required": [
+                "current_offer",
+                "is_cancelled",
+                "bill",
+                "total_price",
+                "free_time",
+                "durations_by_tags"
+              ],
+              "current_offer": {
+                "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer",
+                "type": "object",
+                "title": "The Current_offer Schema",
+                "required": [
+                  "from_scanner",
+                  "type",
+                  "deadline",
+                  "debt",
+                  "prices",
+                  "name",
+                  "list_priority",
+                  "offer_id",
+                  "summary_discount",
+                  "discounts"
+                ],
+                "properties": {
+                  "from_scanner": {
+                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/from_scanner",
+                    "type": "boolean",
+                    "title": "The From_scanner Schema",
+                    "default": false,
+                    "examples": [
+                      false
+                    ]
+                  },
+                  "type": {
+                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/type",
+                    "type": "string",
+                    "title": "The Type Schema",
+                    "default": "",
+                    "examples": [
+                      "standart_offer"
+                    ],
+                    "pattern": "^(.*)$"
+                  },
+                  "deadline": {
+                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/deadline",
+                    "type": "integer",
+                    "title": "The Deadline Schema",
+                    "default": 0,
+                    "examples": [
+                      1541673694
+                    ]
+                  },
+                  "debt": {
+                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/debt",
+                    "type": "object",
+                    "title": "The Debt Schema",
+                    "required": [
+                      "threshold"
+                    ],
+                    "properties": {
+                      "threshold": {
+                        "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/debt/properties/threshold",
+                        "type": "integer",
+                        "title": "The Threshold Schema",
+                        "default": 0,
+                        "examples": [
+                          102400
+                        ]
+                      }
+                    }
+                  },
+                  "prices": {
+                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices",
+                    "type": "object",
+                    "title": "The Prices Schema",
+                    "required": [
+                      "discount",
+                      "deposit",
+                      "riding",
+                      "parking"
+                    ],
+                    "properties": {
+                      "discount": {
+                        "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount",
+                        "type": "object",
+                        "title": "The Discount Schema",
+                        "required": [
+                          "discount",
+                          "visible",
+                          "details",
+                          "title",
+                          "id"
+                        ],
+                        "properties": {
+                          "discount": {
+                            "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/discount",
+                            "type": "number",
+                            "title": "The Discount Schema",
+                            "default": 0.0,
+                            "examples": [
+                              0.1
+                            ]
+                          },
+                          "visible": {
+                            "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/visible",
+                            "type": "boolean",
+                            "title": "The Visible Schema",
+                            "default": false,
+                            "examples": [
+                              false
+                            ]
+                          },
+                          "details": {
+                            "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details",
+                            "type": "object",
+                            "title": "The Details Schema",
+                            "required": [
+                              "old_state_acceptance",
+                              "old_state_parking",
+                              "old_state_reservation"
+                            ],
+                            "properties": {
+                              "old_state_acceptance": {
+                                "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_acceptance",
+                                "type": "object",
+                                "title": "The Old_state_acceptance Schema",
+                                "required": [
+                                  "tag_name",
+                                  "additional_duration"
+                                ],
+                                "properties": {
+                                  "tag_name": {
+                                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_acceptance/properties/tag_name",
+                                    "type": "string",
+                                    "title": "The Tag_name Schema",
+                                    "default": "",
+                                    "examples": [
+                                      "old_state_acceptance"
+                                    ],
+                                    "pattern": "^(.*)$"
+                                  },
+                                  "additional_duration": {
+                                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_acceptance/properties/additional_duration",
+                                    "type": "integer",
+                                    "title": "The Additional_duration Schema",
+                                    "default": 0,
+                                    "examples": [
+                                      300
+                                    ]
+                                  }
+                                }
+                              },
+                              "old_state_parking": {
+                                "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_parking",
+                                "type": "object",
+                                "title": "The Old_state_parking Schema",
+                                "required": [
+                                  "tag_name",
+                                  "additional_duration"
+                                ],
+                                "properties": {
+                                  "tag_name": {
+                                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_parking/properties/tag_name",
+                                    "type": "string",
+                                    "title": "The Tag_name Schema",
+                                    "default": "",
+                                    "examples": [
+                                      "old_state_parking"
+                                    ],
+                                    "pattern": "^(.*)$"
+                                  },
+                                  "additional_duration": {
+                                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_parking/properties/additional_duration",
+                                    "type": "integer",
+                                    "title": "The Additional_duration Schema",
+                                    "default": 0,
+                                    "examples": [
+                                      0
+                                    ]
+                                  }
+                                }
+                              },
+                              "old_state_reservation": {
+                                "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_reservation",
+                                "type": "object",
+                                "title": "The Old_state_reservation Schema",
+                                "required": [
+                                  "widest_free_period",
+                                  "tag_name",
+                                  "is_actual",
+                                  "additional_duration",
+                                  "free_timetable"
+                                ],
+                                "properties": {
+                                  "widest_free_period": {
+                                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_reservation/properties/widest_free_period",
+                                    "type": "object",
+                                    "title": "The Widest_free_period Schema",
+                                    "required": [
+                                      "tz_shift",
+                                      "time_to",
+                                      "time_from"
+                                    ],
+                                    "properties": {
+                                      "tz_shift": {
+                                        "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_reservation/properties/widest_free_period/properties/tz_shift",
+                                        "type": "integer",
+                                        "title": "The Tz_shift Schema",
+                                        "default": 0,
+                                        "examples": [
+                                          3
+                                        ]
+                                      },
+                                      "time_to": {
+                                        "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_reservation/properties/widest_free_period/properties/time_to",
+                                        "type": "integer",
+                                        "title": "The Time_to Schema",
+                                        "default": 0,
+                                        "examples": [
+                                          530
+                                        ]
+                                      },
+                                      "time_from": {
+                                        "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_reservation/properties/widest_free_period/properties/time_from",
+                                        "type": "integer",
+                                        "title": "The Time_from Schema",
+                                        "default": 0,
+                                        "examples": [
+                                          2330
+                                        ]
+                                      }
+                                    }
+                                  },
+                                  "tag_name": {
+                                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_reservation/properties/tag_name",
+                                    "type": "string",
+                                    "title": "The Tag_name Schema",
+                                    "default": "",
+                                    "examples": [
+                                      "old_state_reservation"
+                                    ],
+                                    "pattern": "^(.*)$"
+                                  },
+                                  "is_actual": {
+                                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_reservation/properties/is_actual",
+                                    "type": "boolean",
+                                    "title": "The Is_actual Schema",
+                                    "default": false,
+                                    "examples": [
+                                      false
+                                    ]
+                                  },
+                                  "additional_duration": {
+                                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_reservation/properties/additional_duration",
+                                    "type": "integer",
+                                    "title": "The Additional_duration Schema",
+                                    "default": 0,
+                                    "examples": [
+                                      0
+                                    ]
+                                  },
+                                  "free_timetable": {
+                                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_reservation/properties/free_timetable",
+                                    "type": "object",
+                                    "title": "The Free_timetable Schema",
+                                    "required": [
+                                      "time_zone",
+                                      "restrictions"
+                                    ],
+                                    "properties": {
+                                      "time_zone": {
+                                        "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_reservation/properties/free_timetable/properties/time_zone",
+                                        "type": "integer",
+                                        "title": "The Time_zone Schema",
+                                        "default": 0,
+                                        "examples": [
+                                          3
+                                        ]
+                                      },
+                                      "restrictions": {
+                                        "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_reservation/properties/free_timetable/properties/restrictions",
+                                        "type": "array",
+                                        "title": "The Restrictions Schema",
+                                        "items": {
+                                          "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_reservation/properties/free_timetable/properties/restrictions/items",
+                                          "type": "object",
+                                          "title": "The Items Schema",
+                                          "required": [
+                                            "time_to",
+                                            "time_from"
+                                          ],
+                                          "properties": {
+                                            "time_to": {
+                                              "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_reservation/properties/free_timetable/properties/restrictions/items/properties/time_to",
+                                              "type": "integer",
+                                              "title": "The Time_to Schema",
+                                              "default": 0,
+                                              "examples": [
+                                                530
+                                              ]
+                                            },
+                                            "time_from": {
+                                              "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/details/properties/old_state_reservation/properties/free_timetable/properties/restrictions/items/properties/time_from",
+                                              "type": "integer",
+                                              "title": "The Time_from Schema",
+                                              "default": 0,
+                                              "examples": [
+                                                2330
+                                              ]
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "title": {
+                            "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/title",
+                            "type": "string",
+                            "title": "The Title Schema",
+                            "default": "",
+                            "examples": [
+                              ""
+                            ],
+                            "pattern": "^(.*)$"
+                          },
+                          "id": {
+                            "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/discount/properties/id",
+                            "type": "string",
+                            "title": "The Id Schema",
+                            "default": "",
+                            "examples": [
+                              ""
+                            ],
+                            "pattern": "^(.*)$"
+                          }
+                        }
+                      },
+                      "deposit": {
+                        "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/deposit",
+                        "type": "integer",
+                        "title": "The Deposit Schema",
+                        "default": 0,
+                        "examples": [
+                          0
+                        ]
+                      },
+                      "riding": {
+                        "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/riding",
+                        "type": "integer",
+                        "title": "The Riding Schema",
+                        "default": 0,
+                        "examples": [
+                          777
+                        ]
+                      },
+                      "parking": {
+                        "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/prices/properties/parking",
+                        "type": "integer",
+                        "title": "The Parking Schema",
+                        "default": 0,
+                        "examples": [
+                          260
+                        ]
+                      }
+                    }
+                  },
+                  "name": {
+                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/name",
+                    "type": "string",
+                    "title": "The Name Schema",
+                    "default": "",
+                    "examples": [
+                      "Базовый"
+                    ],
+                    "pattern": "^(.*)$"
+                  },
+                  "list_priority": {
+                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/list_priority",
+                    "type": "integer",
+                    "title": "The List_priority Schema",
+                    "default": 0,
+                    "examples": [
+                      0
+                    ]
+                  },
+                  "offer_id": {
+                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/offer_id",
+                    "type": "string",
+                    "title": "The Offer_id Schema",
+                    "default": "",
+                    "examples": [
+                      "70d50dee-93024159-940e40da-b0b8523"
+                    ],
+                    "pattern": "^(.*)$"
+                  },
+                  "summary_discount": {
+                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount",
+                    "type": "object",
+                    "title": "The Summary_discount Schema",
+                    "required": [
+                      "discount",
+                      "visible",
+                      "details",
+                      "title",
+                      "id"
+                    ],
+                    "properties": {
+                      "discount": {
+                        "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/discount",
+                        "type": "number",
+                        "title": "The Discount Schema",
+                        "default": 0.0,
+                        "examples": [
+                          0.1
+                        ]
+                      },
+                      "visible": {
+                        "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/visible",
+                        "type": "boolean",
+                        "title": "The Visible Schema",
+                        "default": false,
+                        "examples": [
+                          false
+                        ]
+                      },
+                      "details": {
+                        "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details",
+                        "type": "object",
+                        "title": "The Details Schema",
+                        "required": [
+                          "old_state_acceptance",
+                          "old_state_parking",
+                          "old_state_reservation"
+                        ],
+                        "properties": {
+                          "old_state_acceptance": {
+                            "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_acceptance",
+                            "type": "object",
+                            "title": "The Old_state_acceptance Schema",
+                            "required": [
+                              "tag_name",
+                              "additional_duration"
+                            ],
+                            "properties": {
+                              "tag_name": {
+                                "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_acceptance/properties/tag_name",
+                                "type": "string",
+                                "title": "The Tag_name Schema",
+                                "default": "",
+                                "examples": [
+                                  "old_state_acceptance"
+                                ],
+                                "pattern": "^(.*)$"
+                              },
+                              "additional_duration": {
+                                "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_acceptance/properties/additional_duration",
+                                "type": "integer",
+                                "title": "The Additional_duration Schema",
+                                "default": 0,
+                                "examples": [
+                                  300
+                                ]
+                              }
+                            }
+                          },
+                          "old_state_parking": {
+                            "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_parking",
+                            "type": "object",
+                            "title": "The Old_state_parking Schema",
+                            "required": [
+                              "tag_name",
+                              "additional_duration"
+                            ],
+                            "properties": {
+                              "tag_name": {
+                                "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_parking/properties/tag_name",
+                                "type": "string",
+                                "title": "The Tag_name Schema",
+                                "default": "",
+                                "examples": [
+                                  "old_state_parking"
+                                ],
+                                "pattern": "^(.*)$"
+                              },
+                              "additional_duration": {
+                                "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_parking/properties/additional_duration",
+                                "type": "integer",
+                                "title": "The Additional_duration Schema",
+                                "default": 0,
+                                "examples": [
+                                  0
+                                ]
+                              }
+                            }
+                          },
+                          "old_state_reservation": {
+                            "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_reservation",
+                            "type": "object",
+                            "title": "The Old_state_reservation Schema",
+                            "required": [
+                              "widest_free_period",
+                              "tag_name",
+                              "is_actual",
+                              "additional_duration",
+                              "free_timetable"
+                            ],
+                            "properties": {
+                              "widest_free_period": {
+                                "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_reservation/properties/widest_free_period",
+                                "type": "object",
+                                "title": "The Widest_free_period Schema",
+                                "required": [
+                                  "tz_shift",
+                                  "time_to",
+                                  "time_from"
+                                ],
+                                "properties": {
+                                  "tz_shift": {
+                                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_reservation/properties/widest_free_period/properties/tz_shift",
+                                    "type": "integer",
+                                    "title": "The Tz_shift Schema",
+                                    "default": 0,
+                                    "examples": [
+                                      3
+                                    ]
+                                  },
+                                  "time_to": {
+                                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_reservation/properties/widest_free_period/properties/time_to",
+                                    "type": "integer",
+                                    "title": "The Time_to Schema",
+                                    "default": 0,
+                                    "examples": [
+                                      530
+                                    ]
+                                  },
+                                  "time_from": {
+                                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_reservation/properties/widest_free_period/properties/time_from",
+                                    "type": "integer",
+                                    "title": "The Time_from Schema",
+                                    "default": 0,
+                                    "examples": [
+                                      2330
+                                    ]
+                                  }
+                                }
+                              },
+                              "tag_name": {
+                                "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_reservation/properties/tag_name",
+                                "type": "string",
+                                "title": "The Tag_name Schema",
+                                "default": "",
+                                "examples": [
+                                  "old_state_reservation"
+                                ],
+                                "pattern": "^(.*)$"
+                              },
+                              "is_actual": {
+                                "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_reservation/properties/is_actual",
+                                "type": "boolean",
+                                "title": "The Is_actual Schema",
+                                "default": false,
+                                "examples": [
+                                  false
+                                ]
+                              },
+                              "additional_duration": {
+                                "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_reservation/properties/additional_duration",
+                                "type": "integer",
+                                "title": "The Additional_duration Schema",
+                                "default": 0,
+                                "examples": [
+                                  0
+                                ]
+                              },
+                              "free_timetable": {
+                                "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_reservation/properties/free_timetable",
+                                "type": "object",
+                                "title": "The Free_timetable Schema",
+                                "required": [
+                                  "time_zone",
+                                  "restrictions"
+                                ],
+                                "properties": {
+                                  "time_zone": {
+                                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_reservation/properties/free_timetable/properties/time_zone",
+                                    "type": "integer",
+                                    "title": "The Time_zone Schema",
+                                    "default": 0,
+                                    "examples": [
+                                      3
+                                    ]
+                                  },
+                                  "restrictions": {
+                                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_reservation/properties/free_timetable/properties/restrictions",
+                                    "type": "array",
+                                    "title": "The Restrictions Schema",
+                                    "items": {
+                                      "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_reservation/properties/free_timetable/properties/restrictions/items",
+                                      "type": "object",
+                                      "title": "The Items Schema",
+                                      "required": [
+                                        "time_to",
+                                        "time_from"
+                                      ],
+                                      "properties": {
+                                        "time_to": {
+                                          "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_reservation/properties/free_timetable/properties/restrictions/items/properties/time_to",
+                                          "type": "integer",
+                                          "title": "The Time_to Schema",
+                                          "default": 0,
+                                          "examples": [
+                                            530
+                                          ]
+                                        },
+                                        "time_from": {
+                                          "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/details/properties/old_state_reservation/properties/free_timetable/properties/restrictions/items/properties/time_from",
+                                          "type": "integer",
+                                          "title": "The Time_from Schema",
+                                          "default": 0,
+                                          "examples": [
+                                            2330
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "title": {
+                        "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/title",
+                        "type": "string",
+                        "title": "The Title Schema",
+                        "default": "",
+                        "examples": [
+                          ""
+                        ],
+                        "pattern": "^(.*)$"
+                      },
+                      "id": {
+                        "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/summary_discount/properties/id",
+                        "type": "string",
+                        "title": "The Id Schema",
+                        "default": "",
+                        "examples": [
+                          ""
+                        ],
+                        "pattern": "^(.*)$"
+                      }
+                    }
+                  },
+                  "discounts": {
+                    "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/discounts",
+                    "type": "array",
+                    "title": "The Discounts Schema",
+                    "items": {
+                      "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/discounts/items",
+                      "type": "object",
+                      "title": "The Items Schema",
+                      "required": [
+                        "discount",
+                        "visible",
+                        "details",
+                        "title",
+                        "id"
+                      ],
+                      "properties": {
+                        "discount": {
+                          "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/discounts/items/properties/discount",
+                          "type": "integer",
+                          "title": "The Discount Schema",
+                          "default": 0,
+                          "examples": [
+                            0
+                          ]
+                        },
+                        "visible": {
+                          "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/discounts/items/properties/visible",
+                          "type": "boolean",
+                          "title": "The Visible Schema",
+                          "default": false,
+                          "examples": [
+                            false
+                          ]
+                        },
+                        "details": {
+                          "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/discounts/items/properties/details",
+                          "type": "object",
+                          "title": "The Details Schema",
+                          "required": [
+                            "old_state_reservation"
+                          ],
+                          "properties": {
+                            "old_state_reservation": {
+                              "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/discounts/items/properties/details/properties/old_state_reservation",
+                              "type": "object",
+                              "title": "The Old_state_reservation Schema",
+                              "required": [
+                                "tag_name",
+                                "additional_duration"
+                              ],
+                              "properties": {
+                                "tag_name": {
+                                  "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/discounts/items/properties/details/properties/old_state_reservation/properties/tag_name",
+                                  "type": "string",
+                                  "title": "The Tag_name Schema",
+                                  "default": "",
+                                  "examples": [
+                                    "old_state_reservation"
+                                  ],
+                                  "pattern": "^(.*)$"
+                                },
+                                "additional_duration": {
+                                  "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/discounts/items/properties/details/properties/old_state_reservation/properties/additional_duration",
+                                  "type": "integer",
+                                  "title": "The Additional_duration Schema",
+                                  "default": 0,
+                                  "examples": [
+                                    1200
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "title": {
+                          "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/discounts/items/properties/title",
+                          "type": "string",
+                          "title": "The Title Schema",
+                          "default": "",
+                          "examples": [
+                            ""
+                          ],
+                          "pattern": "^(.*)$"
+                        },
+                        "id": {
+                          "$id": "#/properties/segment/properties/session/properties/specials/properties/current_offer/properties/discounts/items/properties/id",
+                          "type": "string",
+                          "title": "The Id Schema",
+                          "default": "",
+                          "examples": [
+                            ""
+                          ],
+                          "pattern": "^(.*)$"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "free_time": {
+                "$id": "#/properties/segment/properties/session/properties/specials/properties/free_time",
+                "type": "integer",
+                "title": "The Free_time Schema",
+                "default": 0,
+                "examples": [
+                  0
+                ]
+              },
+              "bill": {
+                "$id": "#/properties/segment/properties/session/properties/specials/properties/bill",
+                "type": "array",
+                "title": "The Bill Schema",
+                "items": {
+                  "$id": "#/properties/segment/properties/session/properties/specials/properties/bill/items",
+                  "type": "object",
+                  "title": "The Items Schema",
+                  "required": [
+                    "duration",
+                    "details",
+                    "type",
+                    "title",
+                    "cost"
+                  ],
+                  "properties": {
+                    "duration": {
+                      "$id": "#/properties/segment/properties/session/properties/specials/properties/bill/items/properties/duration",
+                      "type": "integer",
+                      "title": "The Duration Schema",
+                      "default": 0,
+                      "examples": [
+                        303
+                      ]
+                    },
+                    "details": {
+                      "$id": "#/properties/segment/properties/session/properties/specials/properties/bill/items/properties/details",
+                      "type": "string",
+                      "title": "The Details Schema",
+                      "default": "",
+                      "examples": [
+                        "5 мин 3 с"
+                      ],
+                      "pattern": "^(.*)$"
+                    },
+                    "type": {
+                      "$id": "#/properties/segment/properties/session/properties/specials/properties/bill/items/properties/type",
+                      "type": "string",
+                      "title": "The Type Schema",
+                      "default": "",
+                      "examples": [
+                        "old_state_acceptance"
+                      ],
+                      "pattern": "^(.*)$"
+                    },
+                    "title": {
+                      "$id": "#/properties/segment/properties/session/properties/specials/properties/bill/items/properties/title",
+                      "type": "string",
+                      "title": "The Title Schema",
+                      "default": "",
+                      "examples": [
+                        "Осмотр"
+                      ],
+                      "pattern": "^(.*)$"
+                    },
+                    "cost": {
+                      "$id": "#/properties/segment/properties/session/properties/specials/properties/bill/items/properties/cost",
+                      "type": "integer",
+                      "title": "The Cost Schema",
+                      "default": 0,
+                      "examples": [
+                        13
+                      ]
+                    }
+                  }
+                }
+              },
+              "total_price": {
+                "$id": "#/properties/segment/properties/session/properties/specials/properties/total_price",
+                "type": "integer",
+                "title": "The Total_price Schema",
+                "default": 0,
+                "examples": [
+                  26
+                ]
+              },
+              "is_cancelled": {
+                "$id": "#/properties/segment/properties/session/properties/specials/properties/is_cancelled",
+                "type": "boolean",
+                "title": "The Is_cancelled Schema",
+                "default": false,
+                "examples": [
+                  false
+                ]
+              },
+              "total_duration": {
+                "$id": "#/properties/segment/properties/session/properties/specials/properties/total_duration",
+                "type": "integer",
+                "title": "The Total_duration Schema",
+                "default": 0,
+                "examples": [
+                  307
+                ]
+              },
+              "durations_by_tags": {
+                "$id": "#/properties/segment/properties/session/properties/specials/properties/durations_by_tags",
+                "type": "object",
+                "title": "The Durations_by_tags Schema",
+                "required": [
+                  "old_state_acceptance",
+                  "old_state_reservation"
+                ],
+                "properties": {
+                  "old_state_acceptance": {
+                    "$id": "#/properties/segment/properties/session/properties/specials/properties/durations_by_tags/properties/old_state_acceptance",
+                    "type": "integer",
+                    "title": "The Old_state_acceptance Schema",
+                    "default": 0,
+                    "examples": [
+                      303
+                    ]
+                  },
+                  "old_state_reservation": {
+                    "$id": "#/properties/segment/properties/session/properties/specials/properties/durations_by_tags/properties/old_state_reservation",
+                    "type": "integer",
+                    "title": "The Old_state_reservation Schema",
+                    "default": 0,
+                    "examples": [
+                      4
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "meta": {
+        "$id": "#/properties/segment/properties/meta",
+        "type": "object",
+        "title": "The Meta Schema",
+        "required": [
+          "start",
+          "corrupted",
+          "session_id",
+          "user_id",
+          "object_id",
+          "finished",
+          "inconsistency",
+          "finish"
+        ],
+        "properties": {
+          "start": {
+            "$id": "#/properties/segment/properties/meta/properties/start",
+            "type": "integer",
+            "title": "The Start Schema",
+            "default": 0,
+            "examples": [
+              1541673394
+            ]
+          },
+          "corrupted": {
+            "$id": "#/properties/segment/properties/meta/properties/corrupted",
+            "type": "boolean",
+            "title": "The Corrupted Schema",
+            "default": false,
+            "examples": [
+              false
+            ]
+          },
+          "session_id": {
+            "$id": "#/properties/segment/properties/meta/properties/session_id",
+            "type": "string",
+            "title": "The Session_id Schema",
+            "default": "",
+            "examples": [
+              "70d50dee-93024159-940e40da-b0b8523"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "user_id": {
+            "$id": "#/properties/segment/properties/meta/properties/user_id",
+            "type": "string",
+            "title": "The User_id Schema",
+            "default": "",
+            "examples": [
+              "0007e410-c857-4835-9a73-1eee79d55208"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "object_id": {
+            "$id": "#/properties/segment/properties/meta/properties/object_id",
+            "type": "string",
+            "title": "The Object_id Schema",
+            "default": "",
+            "examples": [
+              "53a93d85-45e6-4b70-98ea-b4739a1950ad"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "finished": {
+            "$id": "#/properties/segment/properties/meta/properties/finished",
+            "type": "boolean",
+            "title": "The Finished Schema",
+            "default": false,
+            "examples": [
+              true
+            ]
+          },
+          "inconsistency": {
+            "$id": "#/properties/segment/properties/meta/properties/inconsistency",
+            "type": "boolean",
+            "title": "The Inconsistency Schema",
+            "default": false,
+            "examples": [
+              false
+            ]
+          },
+          "finish": {
+            "$id": "#/properties/segment/properties/meta/properties/finish",
+            "type": "integer",
+            "title": "The Finish Schema",
+            "default": 0,
+            "examples": [
+              1541673701
+            ]
+          }
+        }
+      }
+    },
+    "property_patches": {
+      "$id": "#/properties/property_patches",
+      "type": "array",
+      "title": "The Property_patches Schema",
+      "items": {
+        "$id": "#/properties/property_patches/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "properties": {
+          "name": {
+            "$id": "#/properties/property_patches/items/properties/name",
+            "type": "string",
+            "title": "The Name Schema",
+            "default": "",
+            "examples": [
+              "patch_polo_spb"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "index": {
+            "$id": "#/properties/property_patches/items/properties/index",
+            "type": "integer",
+            "title": "The Index Schema",
+            "default": 0,
+            "examples": [
+              298
+            ]
+          },
+          "comment": {
+            "$id": "#/properties/property_patches/items/properties/comment",
+            "type": "string",
+            "title": "The Comment Schema",
+            "default": "",
+            "examples": [
+              "Изображения для Volkswagen Polo в СПб"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "patches": {
+            "$id": "#/properties/property_patches/items/properties/patches",
+            "type": "array",
+            "title": "The Patches Schema",
+            "items": {
+              "$id": "#/properties/property_patches/items/properties/patches/items",
+              "type": "object",
+              "title": "The Items Schema",
+              "required": [
+                "key",
+                "value"
+              ],
+              "properties": {
+                "key": {
+                  "$id": "#/properties/property_patches/items/properties/patches/items/properties/key",
+                  "type": "string",
+                  "title": "The Key Schema",
+                  "default": "",
+                  "examples": [
+                    "image_large_url"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "value": {
+                  "$id": "#/properties/property_patches/items/properties/patches/items/properties/value",
+                  "type": "string",
+                  "title": "The Value Schema",
+                  "default": "",
+                  "examples": [
+                    "https://carsharing.s3.yandex.net/drive/car-models/vw_polo/polo-spb-image-large.png"
+                  ],
+                  "pattern": "^(.*)$"
+                }
+              }
+            }
+          },
+          "display_name": {
+            "$id": "#/properties/property_patches/items/properties/display_name",
+            "type": "string",
+            "title": "The Display_name Schema",
+            "default": "",
+            "examples": [
+              "patch_polo_spb"
+            ],
+            "pattern": "^(.*)$"
+          }
+        }
+      }
+    }
+  }
+}

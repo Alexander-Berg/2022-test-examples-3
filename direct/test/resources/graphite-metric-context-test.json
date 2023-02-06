@@ -1,0 +1,32 @@
+{
+  "tableName": "some_table",
+  "splits": {
+    "unusedSplit": "unusedSplit",
+    "splitWithEmptyValue": "splitWithEmptyValue",
+    "splitWithValueThatNeedsEscaping": "splitWithValueThatNeedsEscaping",
+    "foo": "foo",
+    "bar": "bar",
+    "baz": "baz"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "foo.TOTAL",
+        "foo.${bar}.${baz}.foo",
+        "foo.${bar}.${splitWithEmptyValue}",
+        "foo.${bar}.${splitWithValueThatNeedsEscaping}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "count()",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "quantile.${bar}.${baz}"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "some_field_ms",
+      "type": "QUANTILE_TIMING"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+test-port: ${random.port}
+micronaut:
+  security:
+    enabled: false
+  server:
+    port: ${test-port}
+  http:
+    services:
+      tasks:
+        urls:
+          - http://localhost:${test-port}
+        acquireTimeout: 20s
+        readTimeout: 20s
+        connectTimeout: 20s
+  executors:
+    io:
+      n-threads: 1
+      type: scheduled
+      core-pool-size: 1
+    scheduled:
+      n-threads: 1
+      type: scheduled
+      core-pool-size: 1
+    cerberus-worker-executor:
+      type: scheduled
+      core-pool-size: ${cerberus.worker.threads-count}
+datasources:
+  master:
+    url: jdbc:postgresql://localhost:${pglocal.database.port}/${test.database.name}
+    username: testuser
+    password: ""
+    initializationFailTimeout: -1
+    autoCommit: false
+    forwarding-executor: cerberus-worker-executor
+    read-only: false
+cerberus:
+  worker:
+    worker-rate: 1s
+    recycler-rate: 1s
+    monitor-rate: 10s
+    threads-count: 3
+    simultaneous-tasks-count: 3
+    tasks:
+      one-off:
+        timeout: 5m
+      cron:
+        timeout: 5m
+        repetition-rate: 5s
+      expired-cron:
+        timeout: 5s
+        repetition-rate: 5s
+      interrupting:
+        timeout: 100ms
+      context-cron:
+        timeout: 5m
+        repetition-rate: 5s

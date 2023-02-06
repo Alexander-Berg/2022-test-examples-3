@@ -1,0 +1,38 @@
+#!/usr/bin/make -f
+
+package=yandex-market-checkout-test-util
+build:
+	dh_testdir
+	mkdir -p $(CURDIR)/debian/tmp
+
+clean:
+	dh_testroot
+	dh_testdir
+	rm -rf debian/tmp
+	dh_clean
+
+binary-indep: build
+
+binary-arch: build
+
+binary: binary-indep binary-arch
+	dh_testroot
+	dh_testdir
+	dh_installdirs
+	dh_installinit -r --no-start --name=market-checkout-test-util -u defaults
+
+	mkdir -p $(CURDIR)/debian/tmp/usr/lib/yandex/market-checkout-test-util
+	cp $(CURDIR)/test-util.py $(CURDIR)/debian/tmp/usr/lib/yandex/market-checkout-test-util/
+	cp $(CURDIR)/requirements.txt $(CURDIR)/debian/tmp/usr/lib/yandex/market-checkout-test-util/
+	cp $(CURDIR)/start.sh $(CURDIR)/debian/tmp/usr/bin/market-checkout-test-util.sh
+	cp $(CURDIR)/logrotate $(CURDIR)/debian/tmp/etc/logrotate.d/market-checkout-test-util
+	cp -r $(CURDIR)/cert $(CURDIR)/debian/tmp/usr/lib/yandex/market-checkout-test-util/
+	chmod +x $(CURDIR)/debian/tmp/usr/bin/market-checkout-test-util.sh
+
+	dh_installdeb
+	dh_gencontrol
+	dh_fixperms
+	dh_md5sums
+	dh_builddeb
+
+.PHONY: binary binary-arch binary-indep clean checkroot

@@ -1,0 +1,48 @@
+SELECT
+  R.ret_id AS ret_id,
+  R.ret_cond_id AS ret_cond_id,
+  R.pid AS pid,
+  R.cid AS cid,
+  R.bid AS bid,
+  first(R.price_context) AS price_context,
+  first(R.statusBsSynced) AS statusBsSynced,
+  first(R.is_suspended) AS is_suspended,
+  first(R.autobudgetPriority) AS autobudgetPriority,
+  first(R.reach) AS reach,
+  C.negative AS negative,
+  C.is_deleted AS is_deleted,
+  C.interest AS interest,
+  C.retargeting_conditions_type AS retargeting_conditions_type,
+  C.condition_json AS condition_json,
+  C.ClientID AS ClientID,
+  C.condition_desc AS condition_desc,
+  C.condition_name AS condition_name
+FROM yt.bids_retargetingtable_direct AS R
+  JOIN yt.retargeting_conditionstable_direct AS C
+  ON (R.ret_cond_id, R.__shard__, 123) = (C.ret_cond_id, C.__shard__, C.ClientID)
+WHERE (
+  R.cid IN (11)
+  AND C.is_deleted = 0
+)
+GROUP BY
+  ret_id,
+  ret_cond_id,
+  pid,
+  cid,
+  bid,
+  R.__hash__,
+  R.__shard__,
+  negative,
+  is_deleted,
+  interest,
+  retargeting_conditions_type,
+  condition_json,
+  ClientID,
+  condition_desc,
+  condition_name
+ORDER BY
+  ret_id,
+  pid,
+  cid,
+  bid
+LIMIT 1000

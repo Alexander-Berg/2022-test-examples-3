@@ -1,0 +1,54 @@
+yenv_type: "testing"
+tvm:
+  enabled: true
+  self_app_id: 2032348
+  whitelist:
+    - 2032348 # collector's own id
+dicts:
+  resources_path: "/dynamic_resources/symlinks/dicts"
+  use_dynamic_resources: true
+logging:
+  level: "Info"
+  sentrydsn: "http://d43fd0d86c3e4700b1ac93349ffbedba@sentry.testing.avia.yandex.net/341"
+  sentrylevel: "Error"
+
+http:
+  addr: "[::]:80"
+
+processor:
+  y_planner_id: travel-trips-testing.processor
+  tvm_id: 2032352
+
+orders_collector_enabled: true
+orders_collector:
+  consumer:
+    topic:
+      path: "/travel/test/orders-updates-queue"
+      consumer: "/avia/testing/trips/orders-consumer"
+
+unprocessed_orders_collector_enabled: true
+unprocessed_orders_collector:
+  consumer:
+    topic:
+      path: "/avia/testing/trips/unprocessed-orders"
+      consumer: "/avia/testing/trips/orders-consumer"
+      max_read_messages_count: 10
+
+old_orders_collector_enabled: false
+old_orders_collector:
+  consumer:
+    topic:
+      path: "/avia/testing/trips/old-orders"
+      consumer: "/avia/testing/trips/orders-consumer"
+      max_read_messages_count: 10
+
+unprocessed_orders:
+  topic: "/avia/testing/trips/unprocessed-orders"
+  mock: false
+
+database:
+  hosts:
+    - sas-0k1lfn2nrbt80sru.db.yandex.net
+    - vla-d4tczsf41r9mtn2o.db.yandex.net
+    - vlx-six4y8k0omwrg7pg.db.yandex.net
+  password: "" # https://yav.yandex-team.ru/secret/sec-01fq1cra3mf0p3hw6hg540bmvj/explore/versions

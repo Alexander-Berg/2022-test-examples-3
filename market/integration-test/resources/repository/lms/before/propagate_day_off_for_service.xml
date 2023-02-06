@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <capacity id="1" path="1" name="root 1" parent_id="[null]" />
+    <capacity id="2" path="1.2" name="node 2" parent_id="1" />
+
+    <capacity_value id="1" capacity_id="2" unit_type="ORDER" day="[null]" value="10"/>
+    <capacity_value id="2" capacity_id="2" unit_type="ORDER" day="[now]" value="0"/>
+    <capacity_value id="3" capacity_id="1" unit_type="ORDER" day="[now+1d]" value="0"/>
+
+    <service_capacity id="1" path="1" name="root 1" parent_id="[null]" />
+    <service_capacity id="2" path="1.2" name="node 2" parent_id="1" />
+
+    <service_capacity_value id="1" capacity_id="2" unit_type="order" day="[null]" value="10" partner_capacity_id="1" />
+    <service_capacity_value id="2" capacity_id="2" unit_type="order" day="[now]" value="0" partner_capacity_id="1" />
+    <service_capacity_value id="3" capacity_id="2" unit_type="order" day="[now+1d]" value="0" partner_capacity_id="1" />
+
+    <logistic_segments_services_capacity_mapping id="1" capacity_id="1" service_id="1" />
+    <logistic_segments_services_capacity_mapping id="2" capacity_id="2" service_id="13" />
+    <logistic_segments_services_capacity_mapping id="3" capacity_id="1" service_id="7" />
+
+    <capacity_value_counter
+            id="1"
+            capacity_id="1"
+            capacity_value_id="1"
+            unit_type="ORDER"
+            day="[now]"
+            threshold="10"
+            count="10"
+            day_off="true"
+            day_off_type="TECHNICAL"
+    />
+
+    <capacity_value_counter
+            id="2"
+            capacity_id="1"
+            unit_type="ORDER"
+            day="[now+1d]"
+            threshold="-1"
+            count="0"
+            day_off="false"
+            day_off_type="UNSET"
+    />
+
+    <capacity_value_counter
+            id="3"
+            capacity_id="2"
+            capacity_value_id="3"
+            unit_type="ORDER"
+            day="[now+80d]"
+            threshold="0"
+            count="10"
+            day_off="true"
+            day_off_type="TECHNICAL"
+    />
+
+</dataset>

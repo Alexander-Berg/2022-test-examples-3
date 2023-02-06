@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mockito="http://www.mockito.org/spring/mockito"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.mockito.org/spring/mockito http://www.mockito.org/spring/mockito.xsd"
+       default-autowire="byName">
+
+    <import resource="classpath:app-ctx/app-context.xml"/>
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:common/common-servant.properties</value>
+                <value>classpath*:servant-jdbc.properties</value>
+                <value>classpath*:auction.properties</value>
+                <value>file:src/main/properties.d/servant.properties</value>
+                <value>classpath*:common-servant.properties</value>
+                <value>classpath:ru/yandex/market/mbi/api/config/functional-test.properties</value>
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="order" value="-1" />
+    </bean>
+
+    <bean name="dbTestConfig" class="ru.yandex.market.core.database.EmbeddedPostgresConfig"/>
+    <bean name="functionalTestConfig" class="ru.yandex.market.core.config.FunctionalTestConfig"/>
+    <bean name="functionalTestEnvironmentConfig" class="ru.yandex.market.mbi.api.config.FunctionalTestEnvironmentConfig"/>
+
+    <bean id="dataSource"
+          name="dataSourceRO,
+          dataSourceBilling,
+          mstatYqlDataSource"
+          factory-bean="dbTestConfig"
+          factory-method="dataSource"/>
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"/>
+
+    <!-- QueryProfiler -->
+    <mockito:mock id="jdbcTemplateProfilerBeanPostProcessor" class="ru.yandex.market.mbi.profiler.ProfilerBeanPostProcessor"/>
+    <mockito:mock id="memCacheProfilerBeanPostProcessor" class="ru.yandex.market.mbi.profiler.ProfilerBeanPostProcessor"/>
+    <mockito:mock id="hitRatioProfilerBeanPostProcessor" class="ru.yandex.market.mbi.profiler.ProfilerBeanPostProcessor"/>
+    <mockito:mock id="aboPublicRestClient" class="ru.yandex.market.abo.api.client.AboPublicRestClient"/>
+
+    <mockito:mock id="checkouterClient" class="ru.yandex.market.checkout.checkouter.client.CheckouterClient"/>
+
+    <bean class="ru.yandex.market.mbi.api.client.config.MbiApiClientConfig"/>
+    <bean id="mbiApiObjectMapper" class="ru.yandex.market.mbi.api.client.config.MbiApiConfigDataFactory" factory-method="mbiApiObjectMapper"/>
+
+    <bean id="historyService" class="ru.yandex.market.core.history.DbHistoryService">
+        <constructor-arg name="shopJdbcTemplate" ref="shopJdbcTemplate" />
+        <constructor-arg name="rowSerializer" ref="rowSerializer" />
+        <constructor-arg name="entityHistoryTableName" value="shops_web.entity_history" />
+        <constructor-arg name="entityHistorySequenceName" value="shops_web.s_entity_history" />
+    </bean>
+
+    <mockito:mock id="balanceService" class="ru.yandex.market.core.balance.ExternalBalanceService"/>
+    <mockito:mock id="passportService" class="ru.yandex.market.core.passport.MemCachedBlackboxPassportService"/>
+    <mockito:mock id="impatientBalanceService" class="ru.yandex.market.core.balance.ExternalBalanceService"/>
+    <mockito:mock id="patientBalanceService" class="ru.yandex.market.core.balance.ExternalBalanceService"/>
+    <mockito:mock id="balanceContactService" class="ru.yandex.market.core.balance.ExternalBalanceService"/>
+    <mockito:mock id="balanceXmlRPCServiceFactory" class="ru.yandex.market.common.balance.xmlrpc.Balance2XmlRPCServiceFactory"/>
+    <mockito:mock id="taskScheduler" class="org.springframework.scheduling.TaskScheduler"/>
+    <mockito:spy beanName="cutoffMessageLinkDao"/>
+    <mockito:spy beanName="marketIdGrpcService"/>
+    <mockito:spy beanName="aboCutoffNotificationService"/>
+    <mockito:mock id="pushApiClient" class="ru.yandex.market.checkout.pushapi.client.RestPushApiClient"/>
+    <mockito:spy beanName="supplierService"/>
+    <mockito:spy beanName="asyncCheckouterService"/>
+    <mockito:spy beanName="notificationService"/>
+    <mockito:spy beanName="messageService"/>
+    <mockito:spy beanName="aboScreenshotDao"/>
+    <mockito:mock id="mbiTvm" class="ru.yandex.inside.passport.tvm2.Tvm2"/>
+    <mockito:mock id="nesuClient" class="ru.yandex.market.logistics.nesu.client.NesuClient"/>
+    <mockito:mock id="indexerApiClient" class="ru.yandex.market.mbi.core.IndexerApiClient"/>
+    <mockito:mock id="dataCampShopClient" class="ru.yandex.market.core.datacamp.DataCampClientStub" />
+    <mockito:mock id="communicationProxyClient" class="ru.yandex.market.communication.proxy.client.CommunicationProxyClient"/>
+    <mockito:mock id="tvmApiSettings" class="ru.yandex.passport.tvmauth.TvmApiSettings"/>
+    <mockito:mock id="ticketParserTvmClient" class="ru.yandex.passport.tvmauth.TvmClient"/>
+    <mockito:mock id="bpmnClientService" class="ru.yandex.market.api.BpmnClientService"/>
+    <bean id="clock" class="ru.yandex.common.util.date.TestableClock"/>
+    <mockito:mock id="partnerNotificationClient" class="ru.market.partner.notification.client.PartnerNotificationClient"/>
+</beans>

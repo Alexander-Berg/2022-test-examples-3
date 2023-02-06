@@ -1,0 +1,245 @@
+meta:
+  id: crm-queue-manager-test
+  account_id: abc:service:200
+  project_id: crm-test
+labels:
+  tags:
+    - logexport
+    - unified-agent-reader
+spec:
+  account_id: "abc:service:200"
+  deploy_unit_settings:
+    queue-manager:
+      environment: "testing"
+  deploy_units:
+    queue-manager:
+      coredump_config:
+        unified-agent:
+          coredump_processor:
+            aggregator: {}
+            cleanup_ttl_seconds: 86400
+            count_limit: 3
+            output: ""
+            probability: 100
+            total_size_limit_megabytes: 1000    
+      endpoint_sets:
+        - port: 80
+      images_for_boxes:
+        logexport-box:
+          name: crm/log-export-worker
+          registry_host: registry.yandex.net
+          tag: '34'
+        queue-manager-box:
+          name: crm/queue-manager
+          registry_host: registry.yandex.net
+          tag: 57-b
+      multi_cluster_replica_set:
+        replica_set:
+          clusters:
+            - cluster: sas
+              spec:
+                replica_count: 1
+            - cluster: vla
+              spec:
+                replica_count: 1
+          deployment_strategy:
+            max_unavailable: 1
+          pod_template_spec:
+            spec:
+              disk_volume_requests:
+                - id: main-disk
+                  labels:
+                    used_by_infra: true
+                  quota_policy:
+                    bandwidth_guarantee: 1048576
+                    bandwidth_limit: 2097152
+                    capacity: 16106127360
+                  storage_class: hdd
+              pod_agent_payload:
+                spec:
+                  boxes:
+                    - id: queue-manager-box
+                      env:
+                        - name: ASPNETCORE_ENVIRONMENT
+                          value:
+                            literal_env:
+                              value: Testing
+                      volumes:
+                        - mode: read_write
+                          mount_point: /logs
+                          volume_ref: logs
+                    - id: logexport-box
+                      env:
+                        - name: ASPNETCORE_ENVIRONMENT
+                          value:
+                            literal_env:
+                              value: Testing
+                      volumes:
+                        - mode: read_write
+                          mount_point: /logs
+                          volume_ref: logs
+                    - id: unified-agent-box
+                      cgroup_fs_mount_mode: ro
+                      rootfs:
+                        create_mode: read_only
+                        layer_refs:
+                          - base
+                          - unified-agent-directory-layout
+                          - unified-agent-config
+                      static_resources:
+                        - mount_point: /unified_agent/bin
+                          resource_ref: unified-agent-bin
+                      volumes:
+                        - mode: read_write
+                          mount_point: /unified_agent/data
+                          volume_ref: ua-data
+                  mutable_workloads:
+                    - workload_ref: queue-manager-workload
+                    - workload_ref: logexport-workload
+                    - workload_ref: unified-agent
+                  resources:
+                    layers:
+                      - id: base
+                        checksum: MD5:f96807d42bc01a5c8bd12a42f7d68a30
+                        url: sbr:2083514813
+                      - id: unified-agent-directory-layout
+                        checksum: MD5:c5a50776d38b5a791dd171faca8939be
+                        url: sbr:2670656501
+                      - id: unified-agent-config
+                        checksum: MD5:d3e20684a0bd9937f546ff51e0af1ced
+                        url: sbr:3259040267
+                    static_resources:
+                      - id: unified-agent-bin
+                        url: sbr:3208761595
+                        verification:
+                          check_period_ms: 180000
+                          checksum: MD5:6d5dff49efcacc6faf412e6185387a60
+                  volumes:
+                    - id: logs
+                    - id: ua-data
+                  workloads:
+                    - id: queue-manager-workload
+                      box_ref: queue-manager-box
+                      env:
+                        - name: ConnectionStrings__QueueManagerDatabase
+                          value:
+                            secret_env:
+                              id: connection-string
+                              alias: crm-queue-manager-db
+                        - name: HangfireConfig__DbConnectionString
+                          value:
+                            secret_env:
+                              id: connection-string
+                              alias: crm-queue-manager-db
+                      liveness_check:
+                        http_get:
+                          any: true
+                          path: /liveness
+                          port: 80
+                      readiness_check:
+                        http_get:
+                          any: true
+                          path: /readiness
+                          port: 80
+                    - id: logexport-workload
+                      box_ref: logexport-box
+                      env:
+                        - name: ElasticConfig__Username
+                          value:
+                            literal_env:
+                              value: crm-queue-manager
+                        - name: ElasticConfig__Password
+                          value:
+                            secret_env:
+                              id: crm-queue-manager
+                              alias: crm-logs-admin
+                        - name: LogSourcesConfig__Sources__1__ApplicationName
+                          value:
+                            literal_env:
+                              value: logs-queue-manager
+                        - name: LogSourcesConfig__Sources__1__DirectoryPath
+                          value:
+                            literal_env:
+                              value: /logs/Yandex.Crm.QueueManager.Service
+                      transmit_logs: true
+                    - id: unified-agent
+                      box_ref: unified-agent-box
+                      destroy_policy:
+                        container:
+                          command_line: /bin/bash -c "/unified_agent/bin/unified_agent -c /unified_agent/config/config.yaml & pid=$!; while true; do unified_agent_idle=$(curl localhost:16301/check_backlog 2>/dev/null); if [ "$unified_agent_idle" = "IDLE1" ]; then echo "Unified Agent is idle"; break; else echo "Unified Agent is busy '$unified_agent_idle', waiting..."; sleep 1; fi; done; kill $pid"
+                        max_tries: 2
+                      env:
+                        - name: LOGBROKER_CONSUMER
+                          value:
+                            literal_env:
+                              value: /crm/testing/message-gate/queue-manager-consumer
+                        - name: LOGBROKER_TOPIC
+                          value:
+                            literal_env:
+                              value: /crm/testing/message-gate/events
+                        - name: TVM_CLIENT_ID
+                          value:
+                            literal_env:
+                              value: '2001283'
+                        - name: TVM_DST_ID
+                          value:
+                            literal_env:
+                              value: '2001283'
+                        - name: TVM_SECRET
+                          value:
+                            secret_env:
+                              id: client_secret
+                              alias: tvm.secret.2001283
+                      liveness_check:
+                        http_get:
+                          any: true
+                          path: /status
+                          port: 16301
+                      readiness_check:
+                        http_get:
+                          expected_answer: OK
+                          path: /ready
+                          port: 16301
+                      start:
+                        command_line: /unified_agent/bin/unified_agent -c /unified_agent/config/config.yaml --log-priority DEBUG
+                      stop_policy:
+                        max_tries: 3
+                        unix_signal:
+                          signal: SIGTERM
+                      transmit_logs: true
+              resource_requests:
+                memory_guarantee: 8589934592
+                memory_limit: 8589934592
+                network_bandwidth_guarantee: 10485760
+                vcpu_guarantee: 4000
+                vcpu_limit: 4000
+              secret_refs:
+                crm-logs-admin:
+                  secret_id: sec-01f92gcrxd4j2czhv1x3epk464
+                  secret_version: ver-01g04kq01fmnvt3mcx1ffhvrjk
+                crm-queue-manager-db:
+                  secret_id: sec-01g0ct0t982wft4y8bnern4r32
+                  secret_version: ver-01g0ct0t9fx5x9p66pdp9f79rq
+                tvm.secret.2001283:
+                  secret_id: sec-01dq7m10q03ytkzp4z39hzs07w
+                  secret_version: ver-01dq7m10yrrfwh13ng7azs89ge
+      network_defaults:
+        network_id: _CRMTEST_DEPLOY_NETS_
+      patchers_revision: 11
+      pod_agent_sandbox_info:
+        revision: 2882369236
+      tvm_config:
+        blackbox_environment: ProdYaTeam
+        clients:
+          - destinations:
+              - alias: crm
+                app_id: 2001283
+            secret_selector:
+              id: client_secret
+              alias: tvm.secret.2001283
+            source:
+              alias: crm
+              app_id: 2001283
+        mode: enabled
+      tvm_sandbox_info:
+        revision: 2927963150

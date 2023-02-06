@@ -1,0 +1,23 @@
+$schema: ../_schemas/nock.yaml
+
+scope: 'http://tvm'
+method: GET
+path: /tvm/tickets
+
+reqheaders:
+  authorization: TEST_TVM_TOKEN
+  accept: application/json
+  accept-encoding: 'gzip, deflate'
+
+query:
+  dsts: 'blackbox,payments'
+
+status: 200
+
+response:
+  blackbox:
+    ticket: blackbox:abcdefghijklmnopqrstuvwxyz
+    tvm_id: 123
+  payments:
+    ticket: payments:abcdefghijklmnopqrstuvwxyz
+    tvm_id: 456

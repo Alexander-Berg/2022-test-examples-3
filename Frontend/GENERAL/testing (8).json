@@ -1,0 +1,421 @@
+{
+  "name": "exps_test",
+  "revision": 0,
+  "vertical": "GARAGE",
+  "uploadedAt": 0,
+  "firstSeen": 0,
+  "deleted": false,
+  "tag": "",
+  "settings": {
+    "expressionsMap": [],
+    "edgeExpressionsMap": [],
+    "nodeDepsMap": [
+      [
+        "ROUTER_RR",
+        {
+          "inputDepsList": [
+            "INIT_MERGED",
+            "ROUTER_TEMPLATE",
+            "BLACKBOX_HTTP@http_response->blackbox_http_response"
+          ]
+        }
+      ],
+      [
+        "LEGAL_TECH",
+        {
+          "inputDepsList": [
+              "HTTP_REQUEST"
+          ]
+        }
+      ],
+      [
+        "SESSIONID_RR",
+        {
+          "inputDepsList": [
+            "INIT_MERGED",
+            "SESSIONID_TEMPLATE"
+          ]
+        }
+      ],
+      [
+        "RENDERER_RR",
+        {
+          "inputDepsList": [
+            "LEGAL_TECH",
+            "INIT_MERGED",
+            "ROUTER_RR"
+          ]
+        }
+      ],
+      [
+        "INIT_MERGED",
+        {
+          "inputDepsList": [
+            "HTTP_REQUEST",
+            "REQUEST->INIT@request"
+          ]
+        }
+      ],
+      [
+        "RESPONSE",
+        {
+          "inputDepsList": [
+            "RENDERER_RR"
+          ]
+        }
+      ],
+      [
+        "REQUEST",
+        {
+          "inputDepsList": [
+            "HTTP_REQUEST"
+          ]
+        }
+      ],
+      [
+        "BLACKBOX_HTTP",
+        {
+          "inputDepsList": [
+            "SESSIONID_RR@!blackbox_http_request->http_request"
+          ]
+        }
+      ]
+    ],
+    "inputDepsList": [
+      "HTTP_REQUEST"
+    ],
+    "outputDepsList": [
+      "RESPONSE"
+    ],
+    "criticalDepsList": [],
+    "nodesMap": [
+      [
+        "INIT_MERGED",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "SELF"
+          },
+          "params": {
+            "timeout": {
+              "value": "1000ms"
+            },
+            "codecsList": [],
+            "attempts": {
+              "maxAttempts": {
+                "value": 2
+              }
+            },
+            "notRetryable": false,
+            "handler": {
+              "value": "/_subhost/init"
+            }
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": [],
+          "pollsList": [],
+          "typingConf": ""
+        }
+      ],
+      [
+        "RENDERER_RR",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "RENDERER_GARAGE2"
+          },
+          "params": {
+            "timeout": {
+              "value": "1000ms"
+            },
+            "codecsList": [],
+            "attempts": {
+              "maxAttempts": {
+                "value": 2
+              }
+            },
+            "notRetryable": false
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": [],
+          "pollsList": [],
+          "typingConf": ""
+        }
+      ],
+      [
+        "ROUTER_TEMPLATE",
+        {
+          "nodeType": 0,
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [
+            {
+              "fieldsMap": [
+                [
+                  "template",
+                  {
+                    "nullValue": 0,
+                    "numberValue": 0,
+                    "stringValue": "router",
+                    "boolValue": false
+                  }
+                ],
+                [
+                  "type",
+                  {
+                    "nullValue": 0,
+                    "numberValue": 0,
+                    "stringValue": "template_params",
+                    "boolValue": false
+                  }
+                ]
+              ]
+            }
+          ],
+          "monitoringList": [],
+          "pollsList": [],
+          "typingConf": ""
+        }
+      ],
+      [
+        "ROUTER_RR",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "RENDERER_GARAGE2"
+          },
+          "params": {
+            "timeout": {
+              "value": "1000ms"
+            },
+            "codecsList": [],
+            "attempts": {
+              "maxAttempts": {
+                "value": 2
+              }
+            },
+            "notRetryable": false
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": [],
+          "pollsList": [],
+          "typingConf": ""
+        }
+      ],
+      [
+        "SESSIONID_TEMPLATE",
+        {
+          "nodeType": 0,
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [
+            {
+              "fieldsMap": [
+                [
+                  "template",
+                  {
+                    "nullValue": 0,
+                    "numberValue": 0,
+                    "stringValue": "sessionid",
+                    "boolValue": false
+                  }
+                ],
+                [
+                  "type",
+                  {
+                    "nullValue": 0,
+                    "numberValue": 0,
+                    "stringValue": "template_params",
+                    "boolValue": false
+                  }
+                ]
+              ]
+            }
+          ],
+          "monitoringList": [],
+          "pollsList": [],
+          "typingConf": ""
+        }
+      ],
+      [
+        "SESSIONID_RR",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "RENDERER_GARAGE2"
+          },
+          "params": {
+            "timeout": {
+              "value": "1000ms"
+            },
+            "codecsList": [],
+            "attempts": {
+              "maxAttempts": {
+                "value": 2
+              }
+            },
+            "notRetryable": false
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": [],
+          "pollsList": [],
+          "typingConf": ""
+        }
+      ],
+      [
+        "LEGAL_TECH",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "GARAGE__LEGAL_TECH"
+          },
+          "params": {
+            "handler": "/handle",
+            "timeout": {
+              "value": "1000ms"
+            },
+            "codecsList": [],
+            "notRetryable": false,
+            "responsibles": {
+              "abcService": [
+                  {
+                      "slug": "rtx",
+                      "roleScopes": [
+                          "development"
+                      ]
+                  }
+              ]
+            }
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": [],
+          "pollsList": [],
+          "typingConf": ""
+        }
+      ],
+      [
+        "BLACKBOX_HTTP",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "GARAGE__BLACKBOX"
+          },
+          "params": {
+            "timeout": {
+              "value": "1000ms"
+            },
+            "codecsList": [],
+            "attempts": {
+              "maxAttempts": {
+                "value": 2
+              }
+            },
+            "notRetryable": false
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": [],
+          "pollsList": [],
+          "typingConf": ""
+        }
+      ],
+      [
+        "REQUEST",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "GRPC_SRC_SETUP__SHARED"
+          },
+          "params": {
+            "timeout": {
+              "value": "1000ms"
+            },
+            "codecsList": [],
+            "attempts": {
+              "maxAttempts": {
+                "value": 2
+              }
+            },
+            "notRetryable": false,
+            "handler": {
+              "value": "/setup/request"
+            }
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": [],
+          "pollsList": [],
+          "typingConf": ""
+        }
+      ]
+    ],
+    "streamingNoBlockOutputs": false,
+    "nodeSubsetsMap": [],
+    "responsibles": {
+      "loginsList": [
+        "karserg",
+        "abyk",
+        "ndozmorov",
+        "rvdubinskiy",
+        "muftik",
+        "robot-frontend"
+      ],
+      "abcList": [],
+      "staffDepartmentsList": [],
+      "notificationGroupsList": [],
+      "messengerChatNamesList": [],
+      "abcServiceList": []
+    },
+    "allowedTvmIdsList": [],
+    "allowEmptyResponse": false
+  },
+  "createdAt": 0
+}

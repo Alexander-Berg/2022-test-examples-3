@@ -1,0 +1,30 @@
+service: geosearch2
+title: Geometasearch tests
+ci:
+  secret: sec-01ekj7956qc7cxesn8vjhvd9mj
+  runtime:
+    sandbox-owner: GEOMETA-SEARCH
+
+  actions:
+    build-geosearch-acceptance-executable:
+      flow: build-geosearch-acceptance-executable
+      triggers:
+      - on: commit
+
+  flows:
+    build-geosearch-acceptance-executable:
+      title: Build geosearch acceptance executable
+      jobs:
+        build-geosearch-acceptance-executable:
+          title: Build geosearch acceptance executable
+          task: common/arcadia/ya_make
+          input:
+            targets: extsearch/geo/meta/tests/behavioral/bin_standalone
+            arts: extsearch/geo/meta/tests/behavioral/bin_standalone/geosearch_acceptance_bin
+            result_rt: GEOSEARCH_ACCEPTANCE_EXECUTABLE
+            result_single_file: true
+            result_ttl: '90'
+            build_type: release
+          requirements:
+            sandbox:
+              platform: linux

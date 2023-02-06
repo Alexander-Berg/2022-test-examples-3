@@ -1,0 +1,24 @@
+DATABASES = {
+    'default': {
+        'NAME': 'ml',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'ml-user',
+        'PASSWORD': 'ml-password',
+        'HOST': 'mysql.unstable.maillists.mail.stable.qloud-d.yandex.net',
+        'OPTIONS': {
+            'init_command': 'SET storage_engine=INNODB',
+            'connect_timeout': 2,
+        },
+    },
+
+    'fake-slave': {
+        'NAME': 'ml',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'ml-user',
+        'PASSWORD': 'ml-password',
+        'HOST': 'mysql.unstable.maillists.mail.stable.qloud-d.yandex.net',
+    },
+}
+
+DATABASE_SLAVES = ['fake-slave']
+DATABASE_PREFERRED_SLAVES = ['fake-slave', ]

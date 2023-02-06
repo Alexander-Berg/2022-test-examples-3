@@ -1,0 +1,86 @@
+truncate configuration;
+truncate photo cascade;
+-- grade common
+truncate grade_photo;
+truncate grade_lock;
+truncate grade_model;
+truncate grade_shop;
+truncate grade_vote;
+truncate grade cascade;
+truncate security_data;
+-- grade factors
+-- truncate grade_factor;
+truncate grade_factor_radio_type;
+truncate grade_factor_radio_type_value;
+truncate grade_factor_value;
+-- karma
+truncate karma_grade_vote;
+-- paid
+truncate paid_grade;
+truncate paid_grade_events;
+-- queue
+truncate grade_updates;
+-- saas
+truncate saas_index_queue;
+truncate saas_indexing;
+truncate saas_index_archive;
+truncate saas_index_generation;
+
+truncate auto_mod_result;
+truncate user_data_removal_ticket;
+truncate notification_queue;
+truncate antifraud_tables;
+truncate comment_signal;
+truncate model_id_transfer;
+truncate experimental_grade;
+truncate mod_filters;
+truncate exclude_model;
+truncate exclude_vendor;
+truncate grade_import_queue;
+truncate model_rng_import;
+truncate action_data;
+truncate mod_rejection_reason;
+truncate inbox;
+truncate inbox_log;
+truncate moderator_id_mapping;
+truncate spammer;
+truncate white_grade;
+truncate mod_grade_complaint_ticket;
+truncate mod_grade;
+truncate mod_grade_last;
+truncate mod_grade_photo;
+truncate article_moderation_log;
+truncate article_moderation_last;
+truncate grade_complaint;
+truncate recommended_grade_log;
+truncate comment_complaint_moderation;
+truncate antifraud_ban_grade;
+truncate antifraud_ban_grade_last;
+truncate model_transition;
+truncate model_transition_history;
+truncate model_transition_weak;
+truncate recheck_grade_queue;
+truncate model_vendor;
+truncate model_category;
+truncate model_without_category;
+truncate article_moderation;
+truncate article_published;
+truncate article_ticket;
+truncate grade_comment;
+truncate grade_comment_marker;
+truncate shop_rating_history;
+truncate achievement_event;
+truncate ext_mbi_datasource;
+truncate ext_mbi_shops;
+truncate ext_mbi_campaign;
+truncate ext_shop_business_id;
+truncate ext_shop_without_rating;
+truncate ext_shop_own_region;
+truncate ext_disabled_shops;
+truncate ext_models_for_tickets;
+truncate takeout_del_history;
+truncate grade_transition_history;
+
+truncate ext_models_for_tickets;
+truncate grade_ticket;
+truncate created_ticket_log;

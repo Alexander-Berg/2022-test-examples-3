@@ -1,0 +1,17 @@
+<infinispan
+        xmlns="urn:infinispan:config:11.0">
+
+    <cache-container default-cache="default" statistics="true">
+        <local-cache name="default">
+            <locking isolation="READ_COMMITTED"/>
+            <transaction transaction-manager-lookup="ru.yandex.market.jmf.hibernate.JmfInfinispanTransactionManagerLookup"/>
+
+            <expiration interval="10000" lifespan="120000"/>
+
+            <memory>
+                <object size="100" strategy="REMOVE"/>
+            </memory>
+        </local-cache>
+    </cache-container>
+
+</infinispan>

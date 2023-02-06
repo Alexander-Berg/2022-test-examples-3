@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="true">
+    <appender name="ASYNC" class="org.apache.log4j.AsyncAppender">
+        <param name="BufferSize" value="1024"/>
+        <appender-ref ref="CONSOLE"/>
+    </appender>
+    <appender name="JSON_BETA" class="org.apache.log4j.FileAppender">
+        <param name="File" value="json-beta.log"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+    <appender name="JSON_BETA_DESERIALIZE" class="org.apache.log4j.FileAppender">
+        <param name="File" value="json-beta-deserialize.log"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d] %-5p [%X{requestId}][%t] %m%n"/>
+        </layout>
+    </appender>
+    <logger name="json-beta.log">
+        <level value="INFO"/>
+        <appender-ref ref="JSON_BETA"/>
+    </logger>
+    <logger name="json-beta-deserialize.log">
+        <level value="INFO"/>
+        <appender-ref ref="JSON_BETA_DESERIALIZE"/>
+    </logger>
+    <root>
+        <priority value="INFO"/>
+        <appender-ref ref="ASYNC"/>
+    </root>
+</log4j:configuration>

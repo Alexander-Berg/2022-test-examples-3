@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="urn:jmf:trigger:1.0"
+        xmlns:c="urn:jmf:common:1.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <trigger id="testCreate">
+        <title>
+            <c:value>Тригер для проверки срабатывания при создания объекта</c:value>
+        </title>
+        <event xsi:type="entity" fqn="triggerSimple$type1" event="create"/>
+        <action xsi:type="script">
+            <scriptCode>createTrigger</scriptCode>
+        </action>
+    </trigger>
+
+    <trigger id="testCreateWithCondition">
+        <title>
+            <c:value>Тригер для проверки срабатывания при создания объекта</c:value>
+        </title>
+        <event xsi:type="entity" fqn="triggerSimple$type3" event="create"/>
+        <condition scriptCode="triggerConditionOnAttr"/>
+        <action xsi:type="script">
+            <scriptCode>createTrigger</scriptCode>
+        </action>
+    </trigger>
+
+    <trigger id="testEdit">
+        <title>
+            <c:value>Тригер для проверки срабатывания при редактировании объекта</c:value>
+        </title>
+        <event xsi:type="entity" fqn="triggerSimple$type1" event="edit"/>
+        <action xsi:type="script">
+            <scriptCode>editTrigger</scriptCode>
+        </action>
+    </trigger>
+
+    <trigger id="testDelete">
+        <title>
+            <c:value>Тригер для проверки срабатывания при удалении объекта</c:value>
+        </title>
+        <event xsi:type="entity" fqn="triggerSimple$type1" event="delete"/>
+        <action xsi:type="script">
+            <scriptCode>deleteTrigger</scriptCode>
+        </action>
+    </trigger>
+
+    <trigger id="testEdit2">
+        <title>
+            <c:value>Триггер для проверки защиты от зацикливания</c:value>
+        </title>
+        <event xsi:type="entity" fqn="triggerSimple$type2" event="edit"/>
+        <action xsi:type="script">
+            <scriptCode>cyclingProtection</scriptCode>
+        </action>
+    </trigger>
+
+    <trigger id="asyncTrigger">
+        <title>
+            <c:value>Триггер для проверки ассинхронных триггеров</c:value>
+        </title>
+        <event xsi:type="entity" fqn="triggerForAsyncTrigger" event="create"/>
+        <action xsi:type="script">
+            <scriptCode>asyncTriggerScript</scriptCode>
+        </action>
+        <async/>
+    </trigger>
+
+    <trigger id="asyncTriggerEdit">
+        <title>
+            <c:value>Триггер для проверки ассинхронных триггеров</c:value>
+        </title>
+        <event xsi:type="entity" fqn="triggerForAsyncTrigger" event="edit"/>
+        <action xsi:type="script">
+            <scriptCode>asyncTriggerScript</scriptCode>
+        </action>
+        <async/>
+    </trigger>
+
+    <trigger id="asyncDeduplicatedTrigger">
+        <title>
+            <c:value>Триггер для проверки ассинхронных триггеров c дедубликацией</c:value>
+        </title>
+        <event xsi:type="entity" fqn="triggerForAsyncDeduplicatedTrigger" event="create"/>
+        <action xsi:type="script">
+            <scriptCode>asyncTriggerScript</scriptCode>
+        </action>
+        <async deduplicationAlgorithm="NONE"/>
+    </trigger>
+
+    <trigger id="asyncDeduplicatedTriggerEdit">
+        <title>
+            <c:value>Триггер для проверки ассинхронных триггеров c дедубликацией</c:value>
+        </title>
+        <event xsi:type="entity" fqn="triggerForAsyncDeduplicatedTrigger" event="edit"/>
+        <action xsi:type="script">
+            <scriptCode>asyncTriggerScript</scriptCode>
+        </action>
+        <async deduplicationAlgorithm="NONE"/>
+    </trigger>
+
+    <trigger id="asyncTriggerWithFail">
+        <title>
+            <c:value>Триггер для проверки ассинхронных триггеров (ошибка обработки триггера)</c:value>
+        </title>
+        <event xsi:type="entity" fqn="triggerForAsyncFailTrigger" event="create"/>
+        <action xsi:type="script">
+            <scriptCode>asyncTriggerErrorScript</scriptCode>
+        </action>
+        <async delay="1" maxAttempt="1">
+            <onErrorAction xsi:type="script">
+                <scriptCode>asyncTriggerErrorHandlerScript</scriptCode>
+            </onErrorAction>
+        </async>
+    </trigger>
+
+    <trigger id="asyncCreateWithCondition">
+        <title>
+            <c:value>Тригер для проверки срабатывания асинхронного триггера с условием</c:value>
+        </title>
+        <event xsi:type="entity" fqn="triggerSimple$type4" event="create"/>
+        <condition scriptCode="triggerConditionOnAttr"/>
+        <action xsi:type="script">
+            <scriptCode>createTrigger</scriptCode>
+        </action>
+        <async/>
+    </trigger>
+
+    <trigger id="withRequiredOnCreate">
+        <title>
+            <c:value>Триггер заполняющий обязательные атрибуты при создании объекта</c:value>
+        </title>
+        <event xsi:type="entity" fqn="triggerWithRequired" event="create"/>
+        <action xsi:type="script">
+            <scriptCode>withRequiredOnCreate</scriptCode>
+        </action>
+    </trigger>
+
+    <trigger id="entityForTestGroupingStrategyWithGroupingStrategySpecified">
+        <title>
+            <c:value>Триггер заполняющий обязательные атрибуты при создании объекта</c:value>
+        </title>
+        <!--        eventForGroupingStrategySpecified-->
+        <event xsi:type="entity" fqn="triggerForTestGroupingStrategy" event="eventForGroupingStrategySpecified"/>
+        <action xsi:type="script">
+            <scriptCode>attr1IncrementScript</scriptCode>
+        </action>
+        <async groupingStrategy="testRetryTaskGroupingStrategy"/>
+    </trigger>
+
+    <trigger id="entityForTestGroupingStrategyWithGroupingStrategySpecifiedButWrong">
+        <title>
+            <c:value>Триггер заполняющий обязательные атрибуты при создании объекта</c:value>
+        </title>
+        <event xsi:type="entity" fqn="triggerForTestGroupingStrategy" event="eventForGroupingStrategySpecifiedButWrong"/>
+        <action xsi:type="script">
+            <scriptCode>attr1IncrementScript</scriptCode>
+        </action>
+        <async groupingStrategy="nonexistentRetryTaskGroupingStrategy"/>
+    </trigger>
+
+</config>

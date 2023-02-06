@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns:x="http://www.yandex.ru/xscript">
+    <x:js>
+        function convert(value) {
+            return value.split('-')[1];
+        }
+        String.prototype.endsWith = function(suffix) {
+            return this.indexOf(suffix, this.length - suffix.length) !== -1;
+        };
+        var body = '{';
+        if (xscript.state['id']) {
+            body += '"xid":' + xscript.state['id'] + ',';
+        }
+        body += '"rid":"' + convert('rid-'+xscript.request.args['id']) +'",';
+        if (body.endsWith(',')) {
+            body = body.substring(0, body.length - 1);
+        }
+        body += '}';
+        xscript.state.test = body;
+    </x:js>
+</root>

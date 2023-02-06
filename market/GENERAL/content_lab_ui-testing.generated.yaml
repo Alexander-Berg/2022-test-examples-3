@@ -1,0 +1,180 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый content_lab_ui-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dcontent_lab_ui-testing
+
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=content_lab_ui-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 0%
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 101%
+      nodata_mode: skip
+    notifications:
+    - template_kwargs:
+        login: market_content_lab
+        method: telegram
+        status:
+        - CRIT
+        - WARN
+      template_name: on_status_change
+    service: disk_free_space
+
+  # Check fresh-hprof-files
+  # https://juggler.yandex-team.ru/check_details/?host=content_lab_ui-testing&service=fresh-hprof-files&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 0%
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 101%
+      nodata_mode: skip
+    notifications:
+    - template_kwargs:
+        login: market_content_lab
+        method: telegram
+        status:
+        - CRIT
+        - WARN
+      template_name: on_status_change
+    service: fresh-hprof-files
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=content_lab_ui-testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 51%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 0%
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 101%
+      nodata_mode: skip
+    notifications: []
+    service: logrotate
+
+  # Check monitoring
+  # https://juggler.yandex-team.ru/check_details/?host=content_lab_ui-testing&service=monitoring&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 51%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 51%
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 101%
+      nodata_mode: skip
+      unreach_mode: skip
+      unreach_service:
+      - check: :ping
+    notifications:
+    - template_kwargs:
+        login: market_content_lab
+        method: telegram
+        status:
+        - CRIT
+        - WARN
+      template_name: on_status_change
+    service: monitoring
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=content_lab_ui-testing&service=ping&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 51%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 0%
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 101%
+      nodata_mode: force_crit
+    notifications:
+    - template_kwargs:
+        login: market_content_lab
+        method: telegram
+        status:
+        - CRIT
+        - WARN
+      template_name: on_status_change
+    service: ping
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=content_lab_ui-testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator_kwargs:
+      limits:
+      - crit: 51%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: 0%
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: 101%
+      nodata_mode: skip
+    notifications: []
+    service: push-client-status
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    check_options: {}
+    children:
+    - NANNY%testing_market_content_lab_ui_vla
+    - NANNY%testing_market_content_lab_ui_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: content_lab_ui-testing
+    namespace: market.contentlab
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - marketcontentlabui
+    - marketcontentlab
+    - testing
+    - market
+    - _market_
+    ttl: 900

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <lom_order
+            id="100111"
+            barcode="777"
+            platform_client_id="3"
+            sender_id="1"
+            status="ENQUEUED"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="100111"
+            external_id="101"
+            partner_id="987654321"
+            partner_type="DELIVERY"
+            segment_type="MOVEMENT"
+            shipment_date="2020-11-06"
+            waybill_segment_index="0"
+            partner_name="Маркет курьерка"
+            tags='["ON_DEMAND"]'
+    />
+
+    <lom_waybill_segment
+            id="2"
+            order_id="100111"
+            external_id="102"
+            partner_id="987654322"
+            partner_type="DELIVERY"
+            segment_type="COURIER"
+            waybill_segment_index="1"
+            partner_name="Лавка"
+    />
+
+    <lom_order
+            id="100112"
+            barcode="778"
+            platform_client_id="3"
+            sender_id="1"
+            status="ENQUEUED"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <lom_waybill_segment
+            id="3"
+            order_id="100112"
+            external_id="103"
+            partner_id="987654321"
+            partner_type="DELIVERY"
+            segment_type="MOVEMENT"
+            waybill_segment_index="0"
+            shipment_date="2020-11-06"
+            partner_name="Маркет курьерка"
+            tags='["ON_DEMAND"]'
+    />
+
+    <lom_waybill_segment
+            id="4"
+            order_id="100112"
+            external_id="104"
+            partner_id="987654322"
+            partner_type="DELIVERY"
+            segment_type="COURIER"
+            waybill_segment_index="1"
+            partner_name="Лавка"
+    />
+
+    <plan_fact_group
+            id="1"
+            aggregation_key="date:2020-11-07;partner:987654321;partnerTo:987654322;"
+            aggregation_type="DATE_PARTNER_RELATION_TO_ON_DEMAND"
+            processing_status="ENQUEUED"
+            expected_status="TRANSIT_DELIVERY_TRANSPORTATION"
+            schedule_time="2020-11-07 11:11:50 +0300"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 7],
+                        "partner": {
+                            "id": 987654321,
+                            "name": "Маркет курьерка",
+                            "type": "DELIVERY"
+                        },
+                        "partnerTo": {
+                            "id": 987654322,
+                            "name": "Лавка",
+                            "type": "DELIVERY"
+                        }
+                    }
+                },
+                "OnDemandShipmentAdditionalData": {
+                    "_type": ".OnDemandShipmentAdditionalData",
+                    "issueKey": "MONITORINGSNDBX-1",
+                    "issueClosed": false,
+                    "issueCreatedAt": [2021, 3, 1, 22, 0],
+                    "orderIds": ["777", "778"],
+                    "affectedOrderIds": ["777", "778"]
+                }
+            }'
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="TRANSIT_DELIVERY_TRANSPORTATION"
+            aggregation_type="DATE_PARTNER_RELATION_TO_ON_DEMAND"
+            rule_processor="STARTREK"
+            rule='{
+                "queue": "MONITORINGSNDBX",
+                "_type": ".OnDemandShipmentPayload",
+                "components": [123]
+            }'
+    />
+</dataset>

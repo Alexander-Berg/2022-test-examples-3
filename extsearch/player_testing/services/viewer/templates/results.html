@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block main %}
+    <h1>
+    {% if finished != True %}
+        <table><tr>
+        <td><img src="https://i.gifer.com/Iih1.gif" width="75" height="75"></td><td>still working..</td>
+        </tr></table>
+    {% else %}
+        finished
+    {% endif %}
+    </h1>
+    <table>
+        {% for item in params %}
+        <tr>
+            <td>{{item.key}}</td>
+            <td><pre>{{item.value}}</pre></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <table>
+        {% for item in videos %}
+        <tr>
+            <td><video src="{{item.url}}" controls></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <table>
+        {% for item in img %}
+        <tr>
+            <td><img src="{{item.url}}"></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% if finished != True %}
+    <script>
+        setTimeout(function() {
+            window.location.reload();
+        }, 5000);
+    </script>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:c="urn:jmf:dataimport:converter:1.0"
+        xmlns:d="urn:jmf:dataimport:datasource:1.0"
+        xmlns:f="urn:jmf:dataimport:filter:1.0"
+        xmlns:r="urn:jmf:dataimport:resolver:1.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="urn:jmf:dataimport:config:1.0">
+
+    <process name="ou" threadsNumber="5">
+        <mode>CREATE</mode>
+
+        <parameter name="fqn">ou$default</parameter>
+
+        <dataSource xsi:type="d:DELEGATE" url="classpath:/delegateTestFiles/${name}" fileName="${name}">
+            <d:entry filePattern=".*\.CSV">
+                <d:source xsi:type="d:CSV" url="classpath:/delegateTestFiles/${name}" delimeter=";">
+                    <d:column name="id" key="id"/>
+                    <d:column name="title" key="name"/>
+                    <d:column name="parent" key="department.id"/>
+                </d:source>
+            </d:entry>
+            <d:entry filePattern=".*\.xLsx?">
+                <d:source xsi:type="d:EXCEL" url="classpath:/delegateTestFiles/${name}">
+                    <d:column name="id" key="id"/>
+                    <d:column name="title" key="name"/>
+                    <d:column name="parent" key="department.id"/>
+                </d:source>
+            </d:entry>
+            <d:entry filePattern=".*\.JsOn" default="true">
+                <d:source xsi:type="d:JSON" url="classpath:/delegateTestFiles/${name}" items="result">
+                    <d:column name="id" key="id"/>
+                    <d:column name="title" key="name"/>
+                    <d:column name="parent" key="department.id"/>
+                </d:source>
+            </d:entry>
+        </dataSource>
+
+        <idColumn>id</idColumn>
+
+        <parentColumn>parent</parentColumn>
+
+        <filter xsi:type="f:hierarchical"/>
+
+        <metaclass xsi:type="r:constant" fqn="${fqn}"/>
+
+        <searcher xsi:type="c:entity" fqn="${fqn}" attr="staffId"/>
+
+        <attr name="staffId" column="id"/>
+        <attr name="title" column="title"/>
+        <attr name="parent" column="parent">
+            <converter xsi:type="c:entity" fqn="ou" attr="staffId"/>
+        </attr>
+    </process>
+</config>

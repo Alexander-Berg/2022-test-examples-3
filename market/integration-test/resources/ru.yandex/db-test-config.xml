@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans default-autowire="byName">
+    <bean id="dataSourceTemplate" class="org.apache.commons.dbcp.BasicDataSource" abstract="true">
+        <property name="maxWait" value="300000"/>
+        <property name="minEvictableIdleTimeMillis" value="3600000"/>
+    </bean>
+
+    <bean id="scatDevDataSource" class="ru.yandex.common.util.db.NamedDataSource" destroy-method="close">
+        <property name="driverClassName">
+            <value>oracle.jdbc.driver.OracleDriver</value>
+        </property>
+        <property name="url">
+            <value>jdbc:oracle:thin:@marketdevdb.yandex.ru:1521:scatdev</value>
+        </property>
+        <property name="username">
+            <value>site_catalog</value>
+        </property>
+        <property name="password">
+            <value>99(=dev=mbo=)</value>
+        </property>
+        <property name="validationQuery">
+            <value>select 1 from dual</value>
+        </property>
+        <property name="moduleName">
+            <value>mbo-lite</value>
+        </property>
+        <property name="nativeJdbcExtractor">
+            <bean class="org.springframework.jdbc.support.nativejdbc.CommonsDbcpNativeJdbcExtractor"/>
+        </property>
+        <property name="maxActive">
+            <value>8</value>
+        </property>
+        <property name="maxIdle">
+            <value>8</value>
+        </property>
+        <property name="removeAbandoned">
+            <value>true</value>
+        </property>
+        <property name="removeAbandonedTimeout">
+            <value>10</value>
+        </property>
+        <property name="logAbandoned">
+            <value>true</value>
+        </property>
+    </bean>
+
+    <bean id="matcherDataSource" parent="dataSourceTemplate">
+        <property name="driverClassName">
+            <value>com.microsoft.sqlserver.jdbc.SQLServerDriver</value>
+        </property>
+        <property name="url">
+            <value>jdbc:sqlserver://marketdb;DatabaseName=matcher</value>
+        </property>
+        <property name="username">
+            <value>mbo_user</value>
+        </property>
+        <property name="password">
+            <value>eghfdkznjh</value>
+        </property>
+        <property name="validationQuery">
+            <value>select 1</value>
+        </property>
+    </bean>
+
+    <bean id="matcherJdbcTemplate"
+          class="org.springframework.jdbc.core.simple.SimpleJdbcTemplate"
+          lazy-init="false">
+        <constructor-arg index="0" ref="matcherDataSource"/>
+    </bean>
+
+    <bean id="mysqlDataSource" parent="dataSourceTemplate">
+        <property name="driverClassName">
+            <value>org.gjt.mm.mysql.Driver</value>
+        </property>
+        <property name="url">
+            <value>jdbc:mysql://localhost/mboclassifier?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=Cp1251&amp;useServerPrepStmts=false</value>
+        </property>
+        <property name="username">
+            <value>mboclassifier</value>
+        </property>
+        <property name="password">
+            <value>Cfhltkmrf10v</value>
+        </property>
+        <property name="validationQuery">
+            <value>select 1</value>
+        </property>
+    </bean>
+
+    <bean id="mysqlJdbcTemplate"
+          class="org.springframework.jdbc.core.simple.SimpleJdbcTemplate"
+          lazy-init="false">
+        <constructor-arg index="0" ref="mysqlDataSource"/>
+    </bean>
+
+    <bean id="classifierDataSource" parent="dataSourceTemplate">
+        <property name="driverClassName">
+            <value>oracle.jdbc.OracleDriver</value>
+        </property>
+        <property name="url">
+            <value>jdbc:oracle:thin:@//scatdb.yandex.ru:1521/scat</value>
+        </property>
+        <property name="username">
+            <value>classifier</value>
+        </property>
+        <property name="password">
+            <value>jkhsdf66t</value>
+        </property>
+        <property name="validationQuery">
+            <value>select 1 from dual</value>
+        </property>
+    </bean>
+
+    <bean id="classifierJdbcTemplate"
+          class="org.springframework.jdbc.core.simple.SimpleJdbcTemplate"
+          lazy-init="false">
+        <constructor-arg index="0" ref="classifierDataSource"/>
+    </bean>
+
+    <bean id="requesterDataSource" parent="dataSourceTemplate">
+        <property name="driverClassName">
+            <value>oracle.jdbc.driver.OracleDriver</value>
+        </property>
+        <property name="url">
+            <value>jdbc:oracle:thin:@pikestby.yandex.ru:1521:scat</value>
+        </property>
+        <property name="username">
+            <value>site_catalog</value>
+        </property>
+        <property name="password">
+            <value>99(=dev=mbo=)</value>
+        </property>
+        <property name="validationQuery">
+            <value>select 1 from dual</value>
+        </property>
+    </bean>
+
+    <bean id="sovetDataSource" parent="dataSourceTemplate">
+        <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+        <property name="username" value="mapper_user"/>
+        <property name="password" value="09gjkmpjdfntkm01"/>
+        <property name="url" value="jdbc:sqlserver://213.180.193.131;DatabaseName=Tovar"/>
+        <property name="validationQuery" value="SELECT 1"/>
+    </bean>
+
+    <bean id="requesterJdbcTemplate"
+          class="org.springframework.jdbc.core.simple.SimpleJdbcTemplate"
+          lazy-init="false">
+        <constructor-arg index="0" ref="requesterDataSource"/>
+    </bean>
+
+    <bean id="marketDataSource" parent="dataSourceTemplate">
+        <property name="driverClassName">
+            <value>com.microsoft.sqlserver.jdbc.SQLServerDriver</value>
+        </property>
+        <property name="url">
+            <value>jdbc:sqlserver://marketdb;DatabaseName=market</value>
+        </property>
+        <property name="username">
+            <value>mbo_user</value>
+        </property>
+        <property name="password">
+            <value>eghfdkznjh</value>
+        </property>
+        <property name="validationQuery">
+            <value>select 1</value>
+        </property>
+    </bean>
+
+    <bean id="marketJdbcTemplate"
+          class="org.springframework.jdbc.core.simple.SimpleJdbcTemplate"
+          lazy-init="false">
+        <constructor-arg index="0" ref="marketDataSource"/>
+    </bean>
+
+    <bean id="dataSource" class="ru.yandex.common.util.db.NamedDataSource" destroy-method="close">
+        <property name="driverClassName">
+            <value>oracle.jdbc.driver.OracleDriver</value>
+        </property>
+        <property name="url">
+            <value>jdbc:oracle:thin:@scatdb.yandex.ru:1521:scat</value>
+        </property>
+        <property name="username">
+            <value>site_catalog</value>
+        </property>
+        <property name="password">
+            <value>99(=dev=mbo=)</value>
+        </property>
+        <property name="validationQuery">
+            <value>select 1 from dual</value>
+        </property>
+        <property name="moduleName">
+            <value>mbo-lite</value>
+        </property>
+        <property name="nativeJdbcExtractor">
+            <bean class="org.springframework.jdbc.support.nativejdbc.CommonsDbcpNativeJdbcExtractor"/>
+        </property>
+        <property name="maxActive">
+            <value>4</value>
+        </property>
+        <property name="maxIdle">
+            <value>4</value>
+        </property>
+        <property name="removeAbandoned">
+            <value>false</value>
+        </property>
+        <property name="removeAbandonedTimeout">
+            <value>300</value>
+        </property>
+        <property name="logAbandoned">
+            <value>true</value>
+        </property>
+    </bean>
+
+    <alias name="dataSource" alias="scatDataSource"/>
+
+    <bean id="jdbcTemplate"
+          class="org.springframework.jdbc.core.simple.SimpleJdbcTemplate"
+          lazy-init="false">
+        <constructor-arg index="0" ref="dataSource"/>
+    </bean>
+
+    <bean id="booksDataSource" parent="dataSourceTemplate">
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@marketdevdb.yandex.ru:1521:scatdev"/>
+        <property name="username" value="books"/>
+        <property name="password" value="books"/>
+        <property name="validationQuery" value="SELECT 1 FROM DUAL"/>
+    </bean>
+
+    <bean id="booksJdbcTemplate"
+          class="org.springframework.jdbc.core.simple.SimpleJdbcTemplate"
+          lazy-init="false">
+        <constructor-arg index="0" ref="booksDataSource"/>
+    </bean>
+
+    <bean id="matcherTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="matcherDataSource"/>
+    </bean>
+
+    <bean id="matcherTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="matcherTransactionManager"/>
+        <property name="isolationLevelName" value="ISOLATION_READ_UNCOMMITTED"/>
+    </bean>
+</beans>

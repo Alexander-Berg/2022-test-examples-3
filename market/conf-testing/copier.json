@@ -1,0 +1,107 @@
+{
+    "TvmConfig": {
+        "CacheDir": "./tvm_cache/",
+        "DstServices": [
+            {
+                "Alias": "avatars_mds",
+                "Id": 2002150
+            }
+        ],
+        "SrcIdEnvName": "PICROBOT_TVM_ID",
+        "SrcSecretEnvName": "PICROBOT_TVM_SECRET"
+    },
+
+    "OauthTokenEnvName": "DIRECT_OAUTH_TOKEN",
+
+    "VerboseLevel": 6,
+    "YtVerboseLevel": "Error",
+    "YtLog": "logs/datacamp-picrobot/copier-yt.log",
+    "Port": 7572,
+    "GlobalLog": "logs/datacamp-picrobot/copier.log",
+    "ConsumingInstances": [
+        {
+            "Suppliers": [
+                {
+                    "Alias": "copier_yt_log",
+                    "YtSupplier": {
+                        "QueueConsumer": "copier",
+                        "QueuePath": "//home/market/testing/indexer/picrobot/queues/copier_queue",
+                        "Cluster": "markov"
+                    }
+                }
+            ],
+            "ConsumingSystem": {
+                "MainPath": "//home/market/testing/indexer/picrobot/cs/copier",
+                "MaxShards": 16,
+                "MaxShardsToCheck": 16,
+                "WorkerMinorName": "0",
+                "Cluster": "markov"
+            },
+            "StatelessShardProcessorConfig": {
+                "ThreadLabelPrefix": "copier_log"
+            },
+            "NumThreads": 4
+        },
+        {
+            "Suppliers": [
+                {
+                    "Alias": "copier_goods_pic_yt_log",
+                    "YtSupplier": {
+                        "QueueConsumer": "copier_goods_pic",
+                        "QueuePath": "//home/market/testing/indexer/picrobot/queues/copier_queue_goods_pic",
+                        "Cluster": "markov"
+                    }
+                }
+            ],
+            "ConsumingSystem": {
+                "MainPath": "//home/market/testing/indexer/picrobot/cs/copier_goods_pic",
+                "MaxShards": 16,
+                "MaxShardsToCheck": 16,
+                "WorkerMinorName": "0",
+                "Cluster": "markov"
+            },
+            "StatelessShardProcessorConfig": {
+                "ThreadLabelPrefix": "copier_goods_pic_log"
+            },
+            "NumThreads": 4
+        },
+        {
+            "Suppliers": [
+                {
+                    "Alias": "copier_yabs_performance_yt_log",
+                    "YtSupplier": {
+                        "QueueConsumer": "copier_yabs_performance",
+                        "QueuePath": "//home/market/testing/indexer/picrobot/queues/copier_queue_yabs_performance",
+                        "Cluster": "markov"
+                    }
+                }
+            ],
+            "ConsumingSystem": {
+                "MainPath": "//home/market/testing/indexer/picrobot/cs/copier_yabs_performance",
+                "MaxShards": 16,
+                "MaxShardsToCheck": 16,
+                "WorkerMinorName": "0",
+                "Cluster": "markov"
+            },
+            "StatelessShardProcessorConfig": {
+                "ThreadLabelPrefix": "copier_yabs_performance_log"
+            },
+            "NumThreads": 4
+        }
+    ],
+    "MaxInflightBytes": 2000,
+    "CollectConfig": {
+        "OutputQueue": "//home/market/testing/indexer/picrobot/queues/event_queue",
+        "ShardCount": 16
+    },
+    "MdsSettings": {
+        "MdsHost": "avatars-int.mds.yandex.net:13000",
+        "MdsHostNames": [
+            {
+                "Namespace": "mrkt_idx_direct_test",
+                "HostName": "avatars-int.mds.yandex.net:13000"
+            }
+        ],
+        "VideoMdsUrl": "https://ipv6.api.direct.yandex.ru/json/v5/"
+    }
+}

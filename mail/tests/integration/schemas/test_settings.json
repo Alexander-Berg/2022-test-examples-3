@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "properties": {
+    "shards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "master_hosts": {
+            "type": "integer"
+          },
+          "replica_hosts": {
+            "type": "integer"
+          }
+        }
+      },
+      "default": [
+        {
+          "master_hosts": 1,
+          "replica_hosts": 1
+        }
+      ]
+    },
+    "kind": {
+      "enum": ["datasync", "disk", "mail", "cloud"],
+      "default": "mail"
+    }
+  },
+  "required": [
+    "kind",
+    "shards"
+  ],
+  "additionalProperties": false
+}

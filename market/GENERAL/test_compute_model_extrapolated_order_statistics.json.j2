@@ -1,0 +1,125 @@
+{#
+    M1:
+        - 5 internal orders
+        - 200 clickouts, 100 of which are untracked
+        - 10% of tracked clickouts ended with an order
+        - its category C1 has average conversion of 1%
+    > expected 5 + 0.1*100 + 0.01*100 = 16
+    M2:
+        - 3 internal orders
+    > expected 3
+    M3:
+        - 200 clickouts, all of which are untracked
+        - its category C3 has average conversion of 2%
+    > expected 200*0.02 = 4
+#}
+{% if table == "features_item_model_extrapolated_order_statistics" %}
+    {# Result data. #}
+    {% table table %}
+        ["M1", 16.0, "model", "{{ day }}"],
+        ["M2", 3.0, "model", "{{ day }}"],
+        ["M3", 4.0, "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "features_item_model_order_statistics" %}
+    {% table table %}
+        ["M1", 5, 5, 1.0, {{ 5.0 / 200.0 }},  5, 3, 1.0, 0.01,  0.0, 0.0, 0.0, 0.0,  10, 1.0, "model", "{{ day }}"],
+        ["M2", 2, 2, 1.0, {{ 2.0 / 40.0 }},   3, 2, 1.0, 0.01,  0.0, 0.0, 0.0, 0.0,  5, 1.0, "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "features_item_category_tracked_external_order_statistics" %}
+    {% table table %}
+        ["C1", 300.0, 3.0, 0.01, "category", "{{ day }}"],
+        ["C3", 200.0, 4.0, 0.02, "category", "{{ day }}"]
+    {% endtable %}
+{% elif table == "events_clickouts" %}
+    {% macro clickout(show_uid, model_id, category_id) %}
+        [
+            1504558800000,
+            {
+                "yandexuid": "3711067351504558611"
+            },
+            "view",
+            "offer",
+            "does not matter",
+            {
+                "model_id": "{{ model_id }}",
+                "category_id": "{{ category_id }}",
+                "show_uid": "{{ show_uid }}"
+            },
+            "{{ day }}"
+        ]
+    {% endmacro %}
+    {% table "events" %}
+        {% set comma = joiner(",") %}
+        {% for i in range(200) %}
+            {{ comma() }}
+            {{ clickout("M1_%d" % i, "M1", "C1") }},
+            {{ clickout("M3_%d" % i, "M3", "C3") }}
+        {% endfor %}
+    {% endtable %}
+{% elif table == "market_clicks_log" %}
+    {
+        "schema": [
+            {
+                "name": "show_uid",
+                "type": "String"
+            },
+            {
+                "name": "ware_md5",
+                "type": "String?"
+            }
+        ],
+        "records": [
+            {% for i in range(100) %}
+                ["M1_{{ i }}", "1"],
+            {% endfor %}
+            ["Beliberda", "1"]
+        ]
+    }
+{% elif table == "all_clicks_orders_one_day_ago" %}
+    {
+        "schema": [
+            {
+                "name": "creation_time",
+                "type": "Int64?"
+            },
+            {
+                "name": "puid",
+                "type": "String?"
+            },
+            {
+                "name": "yandexuid",
+                "type": "String?"
+            },
+            {
+                "name": "model_id",
+                "type": "Int64?"
+            },
+            {
+                "name": "money",
+                "type": "Double?"
+            },
+            {
+                "name": "cpc_trans",
+                "type": "Int64?"
+            },
+            {
+                "name": "orders",
+                "type": "Int64?"
+            },
+            {
+                "name": "show_uid",
+                "type": "String?"
+            },
+            {
+                "name": "is_cpa",
+                "type": "Int64?"
+            }
+        ],
+        "records": [
+            {% for i in range(100) %}
+                [1508752280, "0", "1", 10, 33.0, 1, {{ (i % 10 == 0)|int }}, "M1_{{ i }}", 0],
+            {% endfor %}
+            [1508752280, "0", "1", 10, 33.0, 1, 0, "Beliberda", 0]
+        ]
+    }
+{% endif %}

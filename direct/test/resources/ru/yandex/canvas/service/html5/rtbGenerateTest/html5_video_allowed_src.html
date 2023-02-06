@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="ad.size" content="width=300,height=300">
+    <title>Video Ad</title>
+    <style>
+        html,body {
+            width: 300px;
+            height: 300px;
+            padding: 0;
+            margin: 0;
+        }
+        #slot,#video {
+            width: 100%;
+            height: 169px;
+        }
+        #pic {
+            width: 100%;
+            height: 131px;
+        }
+    </style>
+</head>
+<body>
+<div class="video-container" id="slot"><video id="video"></video></div>
+<a id="click1_area" href="#" target="_blank">
+    <img id="pic" src="./picture_300x131.gif">
+</a>
+<script>
+    var script = document.createElement('script');
+    script.src = 'https://an.yandex.ru/system/video-ads-sdk/adsdk.js';
+    script['async'] = false;
+    document.head.appendChild(script);
+
+    function getBannerUrl() {
+        return window.yandexHTML5BannerApi?window.yandexHTML5BannerApi.getClickURLNum(1):''
+    }
+
+    script.onload = function() {
+        var vast =
+            '<VAST version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
+            '      xsi:noNamespaceSchemaLocation="http://specs.adfox.ru/uploads/vast.xsd">' +
+            '    <Ad id="1531336">' +
+            '        <InLine>' +
+            '            <Creatives>' +
+            '                <Creative>' +
+            '                    <Linear>' +
+            '                       <VideoClicks>' +
+            '   					<ClickThrough>' +
+            '       					<![CDATA[ %%ClickURL%% ]]>' +
+            '   					</ClickThrough>' +
+            '					    </VideoClicks>' +
+            '                        <MediaFiles>' +
+            '                            <MediaFile delivery="streaming" width="0" height="0" type="video/mp4">' +
+            '                                <![CDATA[ %%VideoURL%% ]]>' +
+            '                            </MediaFile>' +
+            '                        </MediaFiles>' +
+            '                    </Linear>' +
+            '                </Creative>' +
+            '                <Extensions>' +
+            '                  <Extension type="controls">' +
+            '                   <control id="countdown" layout="0"/>' +
+            '                   <control id="soundbtn" layout="1"/>' +
+            '                  </Extension>' +
+            '                </Extensions>' +
+            '            </Creatives>' +
+            '        </InLine>' +
+            '    </Ad>' +
+            '</VAST>';
+
+        vast = vast.replace('%%ClickURL%%', getBannerUrl()).replace('%%VideoURL%%', getVideoUrl());
+
+        ya.videoAd.loadModule('VideoBannerAd').then(function(module) {
+            return module.createVideoBannerAd(
+                {
+                    vast: vast,
+                    replayMode: 'auto',
+                    backgroundBlur: true,
+                    muted: true,
+                }, true,
+            )})
+            .then(function(bannerAd) {
+                bannerAd.load().then(function () {
+                        var adPlaybackController = bannerAd.createPlaybackController(
+                            document.getElementById('video'),
+                            document.getElementById('slot'),
+                            {
+                                backgroundBlur: true,
+                            }
+                        );
+                        adPlaybackController.playAd();
+                    }
+                )})
+    };
+
+    document.getElementById("click1_area").href = getBannerUrl();
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+SELECT 
+  OA.BusinessId AS OA_BusinessId, 
+  OA.ShopId AS OA_ShopId, 
+  OA.OfferYabsId AS OA_OfferYabsId, 
+  first(OA.Url) AS OA_Url, 
+  first(OA.Name) AS OA_Name, 
+  first(OA.PictureUrl) AS OA_PictureUrl, 
+  first(OA.Price) AS OA_Price, 
+  first(OA.CurrencyName) AS OA_CurrencyName
+FROM yt.OfferAttributes_bs AS OA
+WHERE (OA.BusinessId, OA.ShopId, OA.OfferYabsId) IN ((15, 14, 23756482394))
+GROUP BY 
+  OA_BusinessId, 
+  OA_ShopId, 
+  OA_OfferYabsId

@@ -1,0 +1,20 @@
+micronaut:
+  executors:
+    io:
+      n-threads: 1
+      type: scheduled
+      core-pool-size: 1
+datasources:
+  master:
+    url: jdbc:postgresql://localhost:${pglocal.database.port}/${test.database.name}
+    username: testuser
+    password: ""
+    initializationFailTimeout: -1
+cerberus:
+  worker:
+    tasks:
+      sync-staff:
+        group-chunk-size: 2
+        room-chunk-size: 2
+        user-chunk-size: 2
+        office-chunk-size: 2

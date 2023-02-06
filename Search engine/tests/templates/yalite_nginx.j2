@@ -1,0 +1,80 @@
+{% set EP_CODES = "400 401 402 403 404 405 406 407 408 409 410 411 412 413 414 415 500 501 502 503 504 505" %}
+{% set EP_404 = "/404.html" %}
+{% set EP_404_MINIMAL = "/404-minimal.html" %}
+# THIS FILE HAD BEEN GENERATED FROM TEMPLATE BY ANSIBLE.
+
+server {
+	###########
+	# General #
+	###########
+	listen		80 backlog=32678;
+	listen		[::]:80 backlog=32678;
+{% for domain in domains %}
+	server_name	{{ domain }};
+{% endfor %}
+
+	access_log	/var/log/nginx/yalite.access.log;
+	log_not_found	off;
+
+	root		/place/yalite/www;
+
+	error_page	{{ EP_CODES }} =404	{{ EP_404 }};
+
+	open_file_cache		max=100000;
+	open_file_cache_errors	on;
+
+	location = / {
+		{{ root_action.action }}		{{ root_action.value }};
+	}
+
+	# NOC balancer HTTP checks.
+	location = /check {
+		open_file_cache	off;
+		access_log	/var/log/nginx/yalite.checks.log;
+		error_page	{{ EP_CODES }}	{{ EP_404_MINIMAL }};
+	}
+
+	#####################
+	# Service locations #
+	#####################
+{% for service_name, service_config in services.iteritems() %}
+	#
+	# {{ service_name }} #
+	#
+
+	# 'robot' locations
+{%   for location in service_config.nginx.robot_locations %}
+	location {{ location }} {
+		error_page	{{ EP_CODES }} =404	{{ EP_404_MINIMAL }};
+	}
+{%   endfor %}
+
+	# 'service' locations
+{%   for location in service_config.nginx.service_locations %}
+	location {{ location }} {
+		perl		{{ service_config.nginx.request_mapper }};
+		error_page	{{ EP_CODES }} =200	{{ service_config.nginx.not_found }};
+	}
+{%   endfor %}
+
+{% endfor %}
+
+	######################
+	# Internal locations #
+	######################
+{% for service_name, service_config in services.iteritems() %}
+	location {{ service_config.nginx.link }} {
+		internal;
+		error_page	{{ EP_CODES }} =200	{{ service_config.nginx.not_found }};
+	}
+{% endfor %}
+	location = /404.html {
+		internal;
+	}
+	location = /404-minimal.html {
+		internal;
+	}
+	location = /not_found.html {
+		internal;
+	}
+}

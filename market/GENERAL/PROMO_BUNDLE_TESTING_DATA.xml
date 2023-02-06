@@ -1,0 +1,447 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_200396943" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo (name, description, status, creation_time, promo_type, promo_subtype, promo_key, start_date)
+            VALUES ('DEMO_BUNDLE_200396943', 'Акционный комплект', 'ACTIVE', now(), 'GENERIC_BUNDLE', 'GIFT_WITH_PURCHASE',
+                    'OOkCFXwM4PBz+PH2+L7ycg==', '2019-08-20 00:00:00.000000');
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_bundle_200396943" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo_bundle (promo_id, shop_promo_id, promo_key, discount_strategy, status, creation_time,
+                                      start_time, end_time)
+            SELECT id,
+                   'DEMO_BUNDLE_200396943',
+                   promo_key,
+                   'GIFT_WITH_PURCHASE',
+                   status,
+                   now(),
+                   '2019-08-20 00:00:00.000000',
+                   '2020-01-01 00:00:00.000000'
+              FROM promo
+             WHERE promo_type = 'GENERIC_BUNDLE'
+               AND name = 'DEMO_BUNDLE_200396943';
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_bundle_item_200396943" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo_bundle_item (bundle_id, condition_id, condition, is_primary, creation_time,
+                                           quantity_in_bundle)
+            SELECT id,
+                   MD5('{\"feedId\":200396943, \"shopSkus\":[\"100131944741\", \"100177217802\", \"1752149854\", \"100135030607\"]}'),
+                   '{\"feedId\":200396943, \"shopSkus\":[\"100131944741\", \"100177217802\", \"1752149854\", \"100135030607\"]}',
+                   TRUE,
+                   now(),
+                   1
+              FROM promo_bundle
+             WHERE promo_key = 'OOkCFXwM4PBz+PH2+L7ycg==';
+
+            INSERT INTO promo_bundle_item (bundle_id, condition_id, condition, is_primary, creation_time,
+                                           quantity_in_bundle)
+            SELECT id,
+                   MD5('{\"feedId\":200396943, \"shopSkus\":[\"100152460049\"]}'),
+                   '{\"feedId\":200396943, \"shopSkus\":[\"100152460049\"]}',
+                   FALSE,
+                   now(),
+                   1
+              FROM promo_bundle
+             WHERE promo_key = 'OOkCFXwM4PBz+PH2+L7ycg==';
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_200396944" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo (name, description, status, creation_time, promo_type, promo_subtype, promo_key, start_date)
+            VALUES ('DEMO_BUNDLE_200396944', 'Акционный комплект', 'ACTIVE', now(), 'GENERIC_BUNDLE', 'GIFT_WITH_PURCHASE',
+                    'SEdevVFQY1T3dwCIMTgC5A==', '2019-08-20 00:00:00.000000');
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_bundle_200396944" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo_bundle (promo_id, shop_promo_id, promo_key, discount_strategy, status, creation_time,
+                                      start_time, end_time)
+            SELECT id,
+                   'DEMO_BUNDLE_200396944',
+                   promo_key,
+                   'GIFT_WITH_PURCHASE',
+                   status,
+                   now(),
+                   '2019-08-20 00:00:00.000000',
+                   '2020-01-01 00:00:00.000000'
+              FROM promo
+             WHERE promo_type = 'GENERIC_BUNDLE'
+               AND name = 'DEMO_BUNDLE_200396944';
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_bundle_item_200396944" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo_bundle_item (bundle_id, condition_id, condition, is_primary, creation_time,
+                                           quantity_in_bundle)
+            SELECT id,
+                   MD5('{\"feedId\":200396944, \"shopSkus\":[\"100131944741\", \"100177217802\", \"1752149854\", \"100135030607\"]}'),
+                   '{\"feedId\":200396944, \"shopSkus\":[\"100131944741\", \"100177217802\", \"1752149854\", \"100135030607\"]}',
+                   TRUE,
+                   now(),
+                   1
+              FROM promo_bundle
+             WHERE promo_key = 'SEdevVFQY1T3dwCIMTgC5A==';
+
+            INSERT INTO promo_bundle_item (bundle_id, condition_id, condition, is_primary, creation_time,
+                                           quantity_in_bundle)
+            SELECT id,
+                   MD5('{\"feedId\":200396944, \"shopSkus\":[\"100152460049\"]}'),
+                   '{\"feedId\":200396944, \"shopSkus\":[\"100152460049\"]}',
+                   FALSE,
+                   now(),
+                   1
+              FROM promo_bundle
+             WHERE promo_key = 'SEdevVFQY1T3dwCIMTgC5A==';
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_200344511" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo (name, description, status, creation_time, promo_type, promo_subtype, promo_key, start_date)
+            VALUES ('DEMO_BUNDLE_200344511', 'Акционный комплект', 'ACTIVE', now(), 'GENERIC_BUNDLE', 'GIFT_WITH_PURCHASE',
+                    'qVDK+QndUz37+GJEa5g2CA==', '2019-08-20 00:00:00.000000');
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_bundle_200344511" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo_bundle (promo_id, shop_promo_id, promo_key, discount_strategy, status, creation_time,
+                                      start_time, end_time)
+            SELECT id,
+                   'DEMO_BUNDLE_200344511',
+                   promo_key,
+                   'GIFT_WITH_PURCHASE',
+                   status,
+                   now(),
+                   '2019-08-20 00:00:00.000000',
+                   '2020-01-01 00:00:00.000000'
+              FROM promo
+             WHERE promo_type = 'GENERIC_BUNDLE'
+               AND name = 'DEMO_BUNDLE_200344511';
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_bundle_item_200344511" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo_bundle_item (bundle_id, condition_id, condition, is_primary, creation_time,
+                                           quantity_in_bundle)
+            SELECT id,
+                   MD5('{\"feedId\":200344511, \"shopSkus\":[\"100131944741\", \"100177217802\", \"1752149854\", \"100135030607\"]}'),
+                   '{\"feedId\":200344511, \"shopSkus\":[\"100131944741\", \"100177217802\", \"1752149854\", \"100135030607\"]}',
+                   TRUE,
+                   now(),
+                   1
+              FROM promo_bundle
+             WHERE promo_key = 'qVDK+QndUz37+GJEa5g2CA==';
+
+            INSERT INTO promo_bundle_item (bundle_id, condition_id, condition, is_primary, creation_time,
+                                           quantity_in_bundle)
+            SELECT id,
+                   MD5('{\"feedId\":200344511, \"shopSkus\":[\"100152460049\"]}'),
+                   '{\"feedId\":200344511, \"shopSkus\":[\"100152460049\"]}',
+                   FALSE,
+                   now(),
+                   1
+              FROM promo_bundle
+             WHERE promo_key = 'qVDK+QndUz37+GJEa5g2CA==';
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_200369699" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo (name, description, status, creation_time, promo_type, promo_subtype, promo_key, start_date)
+            VALUES ('DEMO_BUNDLE_200369699', 'Акционный комплект', 'ACTIVE', now(), 'GENERIC_BUNDLE', 'GIFT_WITH_PURCHASE',
+                    'A70L6KZoCCL0e6IPJZ31qA==', '2019-08-20 00:00:00.000000');
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_bundle_200369699" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo_bundle (promo_id, shop_promo_id, promo_key, discount_strategy, status, creation_time,
+                                      start_time, end_time)
+            SELECT id,
+                   'DEMO_BUNDLE_200369699',
+                   promo_key,
+                   'GIFT_WITH_PURCHASE',
+                   status,
+                   now(),
+                   '2019-08-20 00:00:00.000000',
+                   '2020-01-01 00:00:00.000000'
+              FROM promo
+             WHERE promo_type = 'GENERIC_BUNDLE'
+               AND name = 'DEMO_BUNDLE_200369699';
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_bundle_item_200369699" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo_bundle_item (bundle_id, condition_id, condition, is_primary, creation_time,
+                                           quantity_in_bundle)
+            SELECT id,
+                   MD5('{\"feedId\":200344511, \"shopSkus\":[\"100131944741\", \"100177217802\", \"1752149854\", \"100135030607\"]}'),
+                   '{\"feedId\":200344511, \"shopSkus\":[\"100131944741\", \"100177217802\", \"1752149854\", \"100135030607\"]}',
+                   TRUE,
+                   now(),
+                   1
+              FROM promo_bundle
+             WHERE promo_key = 'A70L6KZoCCL0e6IPJZ31qA==';
+
+            INSERT INTO promo_bundle_item (bundle_id, condition_id, condition, is_primary, creation_time,
+                                           quantity_in_bundle)
+            SELECT id,
+                   MD5('{\"feedId\":200344511, \"shopSkus\":[\"100152460049\"]}'),
+                   '{\"feedId\":200344511, \"shopSkus\":[\"100152460049\"]}',
+                   FALSE,
+                   now(),
+                   1
+              FROM promo_bundle
+             WHERE promo_key = 'A70L6KZoCCL0e6IPJZ31qA==';
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_200396943_2" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo (name, description, status, creation_time, promo_type, promo_subtype, promo_key, start_date)
+            VALUES ('DEMO_BUNDLE_200396943_2', 'Акционный комплект', 'ACTIVE', now(), 'GENERIC_BUNDLE', 'GIFT_WITH_PURCHASE',
+                    'Cyf/1ZopCNEV56pT7QctYg==', '2019-08-20 00:00:00.000000');
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_bundle_200396943_2" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo_bundle (promo_id, shop_promo_id, promo_key, discount_strategy, status, creation_time,
+                                      start_time, end_time)
+            SELECT id,
+                   'DEMO_BUNDLE_200396943_2',
+                   promo_key,
+                   'GIFT_WITH_PURCHASE',
+                   status,
+                   now(),
+                   '2019-08-20 00:00:00.000000',
+                   '2020-01-01 00:00:00.000000'
+              FROM promo
+             WHERE promo_type = 'GENERIC_BUNDLE'
+               AND name = 'DEMO_BUNDLE_200396943_2';
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_bundle_item_200396943_2" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo_bundle_item (bundle_id, condition_id, condition, is_primary, creation_time,
+                                           quantity_in_bundle)
+            SELECT id,
+                   MD5('{\"feedId\":200396943, \"shopSkus\":[\"100244446005\"]}'),
+                   '{\"feedId\":200396943, \"shopSkus\":[\"100244446005\"]}',
+                   TRUE,
+                   now(),
+                   1
+              FROM promo_bundle
+             WHERE promo_key = 'Cyf/1ZopCNEV56pT7QctYg==';
+
+            INSERT INTO promo_bundle_item (bundle_id, condition_id, condition, is_primary, creation_time,
+                                           quantity_in_bundle)
+            SELECT id,
+                   MD5('{\"feedId\":200396943, \"shopSkus\":[\"100131944806\"]}'),
+                   '{\"feedId\":200396943, \"shopSkus\":[\"100131944806\"]}',
+                   FALSE,
+                   now(),
+                   1
+              FROM promo_bundle
+             WHERE promo_key = 'Cyf/1ZopCNEV56pT7QctYg==';
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_200396944_2" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo (name, description, status, creation_time, promo_type, promo_subtype, promo_key, start_date)
+            VALUES ('DEMO_BUNDLE_200396944_2', 'Акционный комплект', 'ACTIVE', now(), 'GENERIC_BUNDLE', 'GIFT_WITH_PURCHASE',
+                    '+KNJojkt6oOph2rwMPpCAw==', '2019-08-20 00:00:00.000000');
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_bundle_200396944_2" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo_bundle (promo_id, shop_promo_id, promo_key, discount_strategy, status, creation_time,
+                                      start_time, end_time)
+            SELECT id,
+                   'DEMO_BUNDLE_200396944_2',
+                   promo_key,
+                   'GIFT_WITH_PURCHASE',
+                   status,
+                   now(),
+                   '2019-08-20 00:00:00.000000',
+                   '2020-01-01 00:00:00.000000'
+              FROM promo
+             WHERE promo_type = 'GENERIC_BUNDLE'
+               AND name = 'DEMO_BUNDLE_200396944_2';
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_bundle_item_200396944_2" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo_bundle_item (bundle_id, condition_id, condition, is_primary, creation_time,
+                                           quantity_in_bundle)
+            SELECT id,
+                   MD5('{\"feedId\":200396944, \"shopSkus\":[\"100244446005\"]}'),
+                   '{\"feedId\":200396944, \"shopSkus\":[\"100244446005\"]}',
+                   TRUE,
+                   now(),
+                   1
+              FROM promo_bundle
+             WHERE promo_key = '+KNJojkt6oOph2rwMPpCAw==';
+
+            INSERT INTO promo_bundle_item (bundle_id, condition_id, condition, is_primary, creation_time,
+                                           quantity_in_bundle)
+            SELECT id,
+                   MD5('{\"feedId\":200396944, \"shopSkus\":[\"100131944806\"]}'),
+                   '{\"feedId\":200396944, \"shopSkus\":[\"100131944806\"]}',
+                   FALSE,
+                   now(),
+                   1
+              FROM promo_bundle
+             WHERE promo_key = '+KNJojkt6oOph2rwMPpCAw==';
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_200344511_2" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo (name, description, status, creation_time, promo_type, promo_subtype, promo_key, start_date)
+            VALUES ('DEMO_BUNDLE_200344511_2', 'Акционный комплект', 'ACTIVE', now(), 'GENERIC_BUNDLE', 'GIFT_WITH_PURCHASE',
+                    'fnBK5hY8+HovaPQSJmy3EA==', '2019-08-20 00:00:00.000000');
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_bundle_200344511_2" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo_bundle (promo_id, shop_promo_id, promo_key, discount_strategy, status, creation_time,
+                                      start_time, end_time)
+            SELECT id,
+                   'DEMO_BUNDLE_200344511_2',
+                   promo_key,
+                   'GIFT_WITH_PURCHASE',
+                   status,
+                   now(),
+                   '2019-08-20 00:00:00.000000',
+                   '2020-01-01 00:00:00.000000'
+              FROM promo
+             WHERE promo_type = 'GENERIC_BUNDLE'
+               AND name = 'DEMO_BUNDLE_200344511_2';
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_bundle_item_200344511_2" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo_bundle_item (bundle_id, condition_id, condition, is_primary, creation_time,
+                                           quantity_in_bundle)
+            SELECT id,
+                   MD5('{\"feedId\":200344511, \"shopSkus\":[\"100244446005\"]}'),
+                   '{\"feedId\":200344511, \"shopSkus\":[\"100244446005\"]}',
+                   TRUE,
+                   now(),
+                   1
+              FROM promo_bundle
+             WHERE promo_key = 'fnBK5hY8+HovaPQSJmy3EA==';
+
+            INSERT INTO promo_bundle_item (bundle_id, condition_id, condition, is_primary, creation_time,
+                                           quantity_in_bundle)
+            SELECT id,
+                   MD5('{\"feedId\":200344511, \"shopSkus\":[\"100131944806\"]}'),
+                   '{\"feedId\":200344511, \"shopSkus\":[\"100131944806\"]}',
+                   FALSE,
+                   now(),
+                   1
+              FROM promo_bundle
+             WHERE promo_key = 'fnBK5hY8+HovaPQSJmy3EA==';
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_200369699_2" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo (name, description, status, creation_time, promo_type, promo_subtype, promo_key, start_date)
+            VALUES ('DEMO_BUNDLE_200369699_2', 'Акционный комплект', 'ACTIVE', now(), 'GENERIC_BUNDLE', 'GIFT_WITH_PURCHASE',
+                    '2QEzvPnJSuCm8YMF/FDG4A==', '2019-08-20 00:00:00.000000');
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_bundle_200369699_2" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo_bundle (promo_id, shop_promo_id, promo_key, discount_strategy, status, creation_time,
+                                      start_time, end_time)
+            SELECT id,
+                   'DEMO_BUNDLE_200369699_2',
+                   promo_key,
+                   'GIFT_WITH_PURCHASE',
+                   status,
+                   now(),
+                   '2019-08-20 00:00:00.000000',
+                   '2020-01-01 00:00:00.000000'
+              FROM promo
+             WHERE promo_type = 'GENERIC_BUNDLE'
+               AND name = 'DEMO_BUNDLE_200369699_2';
+        </sql>
+    </changeSet>
+
+    <changeSet id="MARKETDISCOUNT-1937/promo_bundle_item_200369699_2" author="golovin-stan" context="table-data">
+        <!--language="PostgreSQL"-->
+        <sql>
+            INSERT INTO promo_bundle_item (bundle_id, condition_id, condition, is_primary, creation_time,
+                                           quantity_in_bundle)
+            SELECT id,
+                   MD5('{\"feedId\":200369699, \"shopSkus\":[\"100244446005\"]}'),
+                   '{\"feedId\":200369699, \"shopSkus\":[\"100244446005\"]}',
+                   TRUE,
+                   now(),
+                   1
+              FROM promo_bundle
+             WHERE promo_key = '2QEzvPnJSuCm8YMF/FDG4A==';
+
+            INSERT INTO promo_bundle_item (bundle_id, condition_id, condition, is_primary, creation_time,
+                                           quantity_in_bundle)
+            SELECT id,
+                   MD5('{\"feedId\":200369699, \"shopSkus\":[\"100131944806\"]}'),
+                   '{\"feedId\":200369699, \"shopSkus\":[\"100131944806\"]}',
+                   FALSE,
+                   now(),
+                   1
+              FROM promo_bundle
+             WHERE promo_key = '2QEzvPnJSuCm8YMF/FDG4A==';
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

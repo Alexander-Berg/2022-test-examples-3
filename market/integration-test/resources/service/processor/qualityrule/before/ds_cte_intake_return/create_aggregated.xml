@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="RETURN_ARRIVED"
+            waybill_segment_type="FULFILLMENT"
+            aggregation_type="DATE_PARTNER_RELATION_FROM_RETURN"
+            rule_processor="STARTREK"
+            rule='{
+                "queue": "MONITORINGSNDBX",
+                "_type": ".DsCteIntakeReturnPayload",
+                "allowedToCloseAssigned": false
+            }'
+    />
+
+    <plan_fact_group
+            id="1"
+            aggregation_key="date:2020-11-01;partner:172;partnerTo:123;"
+            aggregation_type="DATE_PARTNER_RELATION_FROM_RETURN"
+            processing_status="ENQUEUED"
+            expected_status="RETURN_ARRIVED"
+            waybill_segment_type="FULFILLMENT"
+            schedule_time="2020-11-01 12:00:00 +0000"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 1],
+                        "partner": {
+                            "id": 172,
+                            "name": "Cофьино",
+                            "type": "FULFILLMENT"
+                        },
+                        "partnerFrom": {
+                            "id": 123,
+                            "name": "Cофьино-2",
+                            "type": "DELIVERY"
+                        }
+                    }
+                }
+            }'
+    />
+
+    <lom_order
+            id="100111"
+            barcode="777"
+            platform_client_id="1"
+            return_sorting_center_id="1"
+            sender_id="1"
+            status="DRAFT"
+            delivery_type="COURIER"
+            created="2020-11-01 12:00:00 +0000"
+            updated="2020-11-01 12:00:00 +0000"
+            delivery_date_max="2020-12-12"
+            delivery_end_time="12:00:00"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="100111"
+            external_id="101"
+            partner_id="172"
+            partner_type="FULFILLMENT"
+            segment_type="FULFILLMENT"
+            waybill_segment_index="0"
+            shipment_date="2020-11-02"
+            partner_name="Софьино"
+    />
+
+    <lom_waybill_segment
+            id="2"
+            order_id="100111"
+            external_id="102"
+            partner_id="123"
+            partner_type="DELIVERY"
+            segment_type="MOVEMENT"
+            waybill_segment_index="1"
+            shipment_date="2020-11-02"
+            partner_name="Cофьино-2"
+    />
+
+    <lom_waybill_segment_status_history
+            waybill_segment_id="2"
+            status="RETURNED"
+            date="2020-11-02 07:40:00 +0000"
+            tracker_status="RETURN_TRANSMITTED_FULFILMENT"
+    />
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="1"
+            waybill_segment_type="FULFILLMENT"
+            expected_status="RETURN_ARRIVED"
+            processing_status="PROCESSED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2020-11-01 12:00:00 +0000"
+            schedule_time="2020-11-01 12:00:00 +0000"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="1"
+    />
+
+    <lom_order
+            id="100222"
+            barcode="888"
+            platform_client_id="1"
+            return_sorting_center_id="1"
+            sender_id="1"
+            status="DRAFT"
+            delivery_type="COURIER"
+            created="2020-11-01 12:00:00 +0000"
+            updated="2020-11-01 12:00:00 +0000"
+            delivery_date_max="2020-12-12"
+            delivery_end_time="12:00:00"
+    />
+
+    <lom_waybill_segment
+            id="3"
+            order_id="100222"
+            external_id="103"
+            partner_id="172"
+            partner_type="FULFILLMENT"
+            segment_type="FULFILLMENT"
+            waybill_segment_index="0"
+            shipment_date="2020-11-02"
+            partner_name="Софьино"
+    />
+
+    <lom_waybill_segment
+            id="4"
+            order_id="100222"
+            external_id="104"
+            partner_id="123"
+            partner_type="DELIVERY"
+            segment_type="MOVEMENT"
+            waybill_segment_index="1"
+            shipment_date="2020-11-02"
+            partner_name="Cофьино-2"
+    />
+
+    <lom_waybill_segment_status_history
+            waybill_segment_id="4"
+            status="RETURNED"
+            date="2020-11-02 07:40:00 +0000"
+            tracker_status="RETURN_TRANSMITTED_FULFILMENT"
+    />
+
+    <plan_fact
+            id="2"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="3"
+            waybill_segment_type="FULFILLMENT"
+            expected_status="RETURN_ARRIVED"
+            processing_status="PROCESSED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2020-11-01 12:00:00 +0000"
+            schedule_time="2020-11-01 12:00:00 +0000"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="2"
+    />
+
+</dataset>

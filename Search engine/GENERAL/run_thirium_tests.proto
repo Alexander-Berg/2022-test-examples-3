@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+import "ci/tasklet/common/proto/service.proto";
+import "tasklet/api/tasklet.proto";
+import "tasklet/services/yav/proto/yav.proto";
+import "tasklet/services/ci/proto/ci.proto";
+
+package yappy.tasklets.thirium;
+
+
+message Context {
+    option (tasklet.context) = true;
+
+    yav_service.YavService yav = 1 [(tasklet.inject) = true];
+    ci.CiService ci = 2 [(tasklet.inject) = true];
+}
+
+message ThiriumConfig {
+    string secret = 1;
+    string url = 2;
+    string token_key = 3;
+    string project = 4;
+}
+
+message WaitConfig {
+    int32 sleep_before_check = 1;
+    int32 sleep_step = 2;
+    int32 max_retries = 3;
+    int32 retry_step_factor = 4;
+}
+
+message Config {
+    string secret = 1;
+    ThiriumConfig thirium = 2;
+    WaitConfig wait = 3;
+}
+
+message RunThiriumTestsInput {
+    ci.TaskletContext context = 1;
+    Config config = 2;
+}
+
+message OutputState {
+    bool success = 1;
+}
+
+enum ThiriumLaunchStatus {
+    UNKNOWN = 0;
+    NEW = 1;
+    RUNNING = 2;
+    FINISHED = 3;
+    FAILED = 4;
+}
+
+message ThiriumLaunch {
+    int32 id = 1;
+    string details_url = 2;
+    ThiriumLaunchStatus status = 3;
+}
+
+message RunThiriumTestsOutput {
+    OutputState state = 1;
+    ThiriumLaunch launch = 2;
+}
+
+message RunThiriumTests {
+    option (tasklet.tasklet_interface) = true;
+
+    RunThiriumTestsInput input = 1 [(tasklet.input) = true];
+    RunThiriumTestsOutput output = 2 [(tasklet.output) = true];
+
+    Context ctx = 3;
+}

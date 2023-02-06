@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <!--
+              1
+           /
+          2
+          |
+          4
+    -->
+    <capacity id="1" parent_id="[null]" path="1"        name="111 root"/>
+    <capacity id="2" parent_id="1"      path="1.2"      name="Capacity 2"/>
+    <capacity id="4" parent_id="2"      path="1.2.4"    name="Capacity 4"/>
+
+    <capacity_value id="101" capacity_id="1" unit_type="ORDER"  day="[now-1d]"   value="4000"/>
+    <capacity_value id="102" capacity_id="2" unit_type="ORDER"  day="[now-1d]"   value="2000"/>
+    <capacity_value id="104" capacity_id="4" unit_type="ORDER"  day="[null]"     value="2000"/>
+
+    <capacity_value id="113" capacity_id="1" unit_type="ITEM"   day="[now]"      value="4000"/>
+    <capacity_value id="114" capacity_id="2" unit_type="ITEM"   day="[now]"      value="2000"/>
+    <capacity_value id="117" capacity_id="4" unit_type="ITEM"   day="[null]"     value="2000"/>
+
+    <capacity_value_counter id="1001" capacity_value_id="101" capacity_id="1" unit_type="ORDER" day="[now-1d]"
+                            count="2250" threshold="4000" day_off="false" day_off_type="UNSET" propagated_from="[null]"/>
+
+    <capacity_value_counter id="1002" capacity_value_id="102" capacity_id="2" unit_type="ORDER" day="[now-1d]"
+                            count="2250" threshold="2000" day_off="true" day_off_type="THRESHOLD" propagated_from="[null]"/>
+
+    <capacity_value_counter id="1004" capacity_value_id="104" capacity_id="4" unit_type="ORDER" day="[now-1d]"
+                            count="2250" threshold="2000" day_off="true" day_off_type="THRESHOLD" propagated_from="[null]"/>
+
+    <capacity_value_counter id="1" capacity_value_id="[null]" capacity_id="1" unit_type="ITEM" day="[now-1d]"
+                            count="600" threshold="-1" day_off="false" day_off_type="UNSET" propagated_from="[null]"/>
+
+    <capacity_value_counter id="3" capacity_value_id="117" capacity_id="4" unit_type="ITEM" day="[now-1d]"
+                            count="600" threshold="2000" day_off="false" day_off_type="UNSET" propagated_from="[null]"/>
+
+    <capacity_value_counter id="2" capacity_value_id="[null]" capacity_id="2"  unit_type="ITEM" day="[now-1d]"
+                            count="600" threshold="-1" day_off="false" day_off_type="UNSET" propagated_from="[null]"/>
+
+    <capacity_value_counter id="1013" capacity_value_id="113" capacity_id="1" unit_type="ITEM" day="[now]"
+                            count="0" threshold="4000" day_off="false" day_off_type="UNSET" propagated_from="[null]"/>
+
+    <capacity_value_counter id="1014" capacity_value_id="114" capacity_id="2" unit_type="ITEM" day="[now]"
+                            count="0" threshold="2000" day_off="false" day_off_type="UNSET" propagated_from="[null]"/>
+
+    <capacity_counter_notification
+            capacity_value_counter_id="1001"
+            is_50_percent_notification_send="false"
+            is_90_percent_notification_send="false"
+            is_100_percent_notification_send="false"
+            last_sent_count="0"
+    />
+
+    <capacity_counter_notification
+            capacity_value_counter_id="1002"
+            is_50_percent_notification_send="false"
+            is_90_percent_notification_send="false"
+            is_100_percent_notification_send="false"
+            last_sent_count="0"
+    />
+    <capacity_counter_notification
+            capacity_value_counter_id="1004"
+            is_50_percent_notification_send="false"
+            is_90_percent_notification_send="false"
+            is_100_percent_notification_send="false"
+            last_sent_count="0"
+    />
+
+    <service_capacity_mapping
+            service_id="111"
+            capacity_id="4"
+    />
+
+    <event
+            id="0"
+            key="ORDER1"
+            type="NEW"
+            route="{}"
+            processed="true"
+    />
+
+</dataset>

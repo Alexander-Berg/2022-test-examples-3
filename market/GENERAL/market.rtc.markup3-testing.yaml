@@ -1,0 +1,413 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarkup3-testing
+
+vars:
+  - &monitoring_check_options
+    args:
+      - --kwargs
+      - '[{"service": "tmsMappingModerationMonitoring", "path": "/tmsMappingModerationMonitoring"},
+        {"service": "tmsTolokaMappingModerationMonitoring", "path": "/tmsTolokaMappingModerationMonitoring"},
+        {"service": "tmsMonitoring", "path": "/tmsMonitoring"},
+        {"service": "mappingModerationErrorsMonitoring", "path": "/mappingModerationErrorsMonitoring"}]'
+
+juggler:
+  checks:
+
+    # Check disk_free_space
+    - aggregator_kwargs:
+        limits:
+          - crit: 0%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 0%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options: {}
+      service: disk_free_space
+      notifications:
+        - template_kwargs:
+            login: instrumenty_gvd_dev
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+
+    # Check fresh-hprof-files
+    - aggregator_kwargs:
+        limits:
+          - crit: 0%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 0%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options: {}
+      service: fresh-hprof-files
+      notifications:
+        - template_kwargs:
+            login: instrumenty_gvd_dev
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+
+    # Check fresh-core-dumps
+    - aggregator_kwargs:
+        limits:
+          - crit: 0%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 0%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options: {}
+      service: fresh-core-dumps
+      notifications:
+        - template_kwargs:
+            login: instrumenty_gvd_dev
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+
+    # Check logrotate
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options: {}
+      service: logrotate
+      notifications:
+        - template_kwargs:
+            login: instrumenty_gvd_dev
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+
+    # Check monitoring
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      check_options: *monitoring_check_options
+      service: monitoring
+      notifications:
+        - template_kwargs:
+            login: instrumenty_gvd_dev
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+
+    # Check ping
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: force_crit
+      check_options: *monitoring_check_options
+      service: ping
+      notifications:
+        - template_kwargs:
+            login: instrumenty_gvd_dev
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+
+    # Check push-client-status
+    # https://juggler.yandex-team.ru/check_details/?host=markup3-testing&service=push-client-status&last=1DAY&mode=edit
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 0%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+      check_options: {}
+      service: push-client-status
+      notifications:
+        - template_kwargs:
+            login: instrumenty_gvd_dev
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+
+    # Check tmsMonitoring
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      check_options: *monitoring_check_options
+      service: tmsMonitoring
+      notifications:
+        - template_kwargs:
+            login: instrumenty_gvd_dev
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+
+    # Check tmsMappingModerationMonitoring
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      check_options: *monitoring_check_options
+      service: tmsMappingModerationMonitoring
+      notifications:
+        - template_kwargs:
+            login: instrumenty_gvd_dev
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+
+    # Check tmsTolokaMappingModerationMonitoring
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      check_options: *monitoring_check_options
+      service: tmsTolokaMappingModerationMonitoring
+      notifications:
+        - template_kwargs:
+            login: instrumenty_gvd_dev
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+
+    # Check mappingModerationErrorsMonitoring
+    - aggregator_kwargs:
+        limits:
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 20
+            time_start: 12
+            warn: 49%
+          - crit: 49%
+            day_end: 7
+            day_start: 1
+            time_end: 11
+            time_start: 21
+            warn: 49%
+        nodata_mode: skip
+        unreach_mode: skip
+        unreach_service:
+          - check: :ping
+      check_options: *monitoring_check_options
+      service: mappingModerationErrorsMonitoring
+      notifications:
+        - template_kwargs:
+            login: instrumenty_gvd_dev
+            method: telegram
+            status:
+              - CRIT
+              - WARN
+              - from: WARN
+                to: OK
+              - from: CRIT
+                to: OK
+          template_name: on_status_change
+        - template_name: solomon
+          template_kwargs: { }
+
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    children:
+      - 'DEPLOY%market-mbo@stage=testing_market_markup3;deploy_unit=markup3'
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: markup3-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    tags:
+      - market_testing
+      - market_rtc
+      - market_markup3_tms
+      - testing
+      - market
+      - _market_
+    ttl: 900

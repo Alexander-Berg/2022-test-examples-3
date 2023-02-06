@@ -1,0 +1,50 @@
+autostop:
+  autostop:
+  - limit(10m)
+  - quantile(50,7000,20)
+  - http(4xx,25%,10)
+  - http(5xx,25%,7)
+  package: yandextank.plugins.Autostop
+core:
+  aggregator_max_wait: 120
+pandora:
+    enabled: true
+    pandora_cmd: ./pandora
+    config_content:
+        pools:
+           - id: Custom
+             gun:
+                 type: example
+                 target: 4bs65mu2kdulxmir.myt.yp-c.yandex.net:80
+                 idle-conn-timeout: 60
+                 client-timeout: 10
+             ammo:
+                  type: example_provider
+                  source:
+                      type: file
+                      path: ./ammo.json
+             result:
+                 type: phout
+                 destination: ./phout.log
+             rps:
+               - {duration: 180s, type: line,  from: 1, to: 60000}
+             startup:
+               - {type: once, times: 10000}
+        log:
+            level: error
+        monitoring:
+            expvar:
+                enabled: true
+                port: 1234
+phantom:
+  enabled: false
+telegraf:
+  config: monitoring.xml
+  enabled: false
+  package: yandextank.plugins.Telegraf
+uploader:
+  operator: ligreen
+  package: yandextank.plugins.DataUploader
+  task: LUNAPARK-2988
+console:
+  enabled: true

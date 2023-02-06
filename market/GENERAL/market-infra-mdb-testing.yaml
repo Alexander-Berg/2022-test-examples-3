@@ -1,0 +1,26 @@
+juggler:
+  default:
+    host: market-infra-testing-mdb
+    namespace: market.infra
+    ttl: 900
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    flaps:
+      stable_time: 600
+      critical_time: 3000
+      boost_time: 0
+    children:
+      - EVENTS%(service=infra_mdb_mongo_disk_free_space_testing_*):all:all
+    notifications: []
+    tags:
+      - market_testing
+      - market_testing_db
+      - market-infra-testing
+      - market-infra
+      - market-infra-mdb-testing
+      - market-infra-mdb
+      - market
+      - _market_
+  checks:
+    - service: infra_mdb_mongo_disk_free_space_testing

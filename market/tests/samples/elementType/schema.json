@@ -1,0 +1,191 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "elementType::X::boolean": {
+            "properties": {"x": {"anyOf": [{"type": "boolean"}, {"type": "string"}]}},
+            "type": "object",
+            "required": ["x"]
+        },
+        "elementType::P": {"const": "x"},
+        "elementType::S": {
+            "properties": {"s": {"const": "S"}},
+            "type": "object",
+            "required": ["s"]
+        },
+        "elementType::R": {"$ref": "#/definitions/elementType::S"},
+        "elementType::Q": {"$ref": "#/definitions/elementType::R"},
+        "elementType::V": {
+            "allOf": [
+                {"$ref": "#/definitions/elementType::Q"},
+                {"$ref": "#/definitions/elementType::R"}
+            ]
+        },
+        "elementType::U": {
+            "anyOf": [
+                {"$ref": "#/definitions/elementType::Q"},
+                {"$ref": "#/definitions/elementType::R"}
+            ]
+        },
+        "elementType::A": {
+            "properties": {
+                "s": {
+                    "anyOf": [
+                        {"$ref": "#/definitions/elementType::Q"},
+                        {"$ref": "#/definitions/elementType::R"}
+                    ]
+                }
+            },
+            "type": "object",
+            "required": ["s"]
+        },
+        "elementType::B": {
+            "properties": {
+                "s": {
+                    "allOf": [
+                        {"$ref": "#/definitions/elementType::Q"},
+                        {"$ref": "#/definitions/elementType::R"}
+                    ]
+                }
+            },
+            "type": "object",
+            "required": ["s"]
+        },
+        "elementType::C": {
+            "properties": {
+                "s": {
+                    "anyOf": [
+                        {"$ref": "#/definitions/elementType::A"},
+                        {"$ref": "#/definitions/elementType::B"}
+                    ]
+                }
+            },
+            "type": "object",
+            "required": ["s"]
+        },
+        "elementType::D": {
+            "properties": {
+                "s": {
+                    "allOf": [
+                        {"$ref": "#/definitions/elementType::A"},
+                        {"$ref": "#/definitions/elementType::B"}
+                    ]
+                }
+            },
+            "type": "object",
+            "required": ["s"]
+        },
+        "elementType::F": {
+            "properties": {"f": {"const": "f"}},
+            "type": "object",
+            "required": ["f"]
+        },
+        "elementType::E": {
+            "anyOf": [
+                {"$ref": "#/definitions/elementType::F"},
+                {"properties": {"e": {"const": "e"}}, "type": "object", "required": ["e"]}
+            ]
+        },
+        "elementType::H": {
+            "allOf": [
+                {"$ref": "#/definitions/elementType::F"},
+                {"$ref": "#/definitions/elementType::F"}
+            ]
+        },
+        "elementType::G": {
+            "anyOf": [
+                {"$ref": "#/definitions/elementType::H"},
+                {"$ref": "#/definitions/elementType::H"}
+            ]
+        },
+        "elementType::Y::x": {
+            "properties": {
+                "y0": {"anyOf": [{"type": "boolean"}, {"type": "string"}]},
+                "y1": {"anyOf": [{"type": "boolean"}, {"type": "string"}]},
+                "y2": {"const": "S"},
+                "y3": {"const": "S"},
+                "y4": {"const": "S"},
+                "y5": {"const": "S"},
+                "y6": {"const": "S"},
+                "y7": {"const": "S"},
+                "y8": {
+                    "anyOf": [
+                        {"$ref": "#/definitions/elementType::Q"},
+                        {"$ref": "#/definitions/elementType::R"}
+                    ]
+                },
+                "y9": {
+                    "allOf": [
+                        {"$ref": "#/definitions/elementType::Q"},
+                        {"$ref": "#/definitions/elementType::R"}
+                    ]
+                },
+                "y10": {
+                    "anyOf": [
+                        {
+                            "anyOf": [
+                                {"$ref": "#/definitions/elementType::Q"},
+                                {"$ref": "#/definitions/elementType::R"}
+                            ]
+                        },
+                        {
+                            "allOf": [
+                                {"$ref": "#/definitions/elementType::Q"},
+                                {"$ref": "#/definitions/elementType::R"}
+                            ]
+                        }
+                    ]
+                },
+                "y11": {
+                    "allOf": [
+                        {
+                            "anyOf": [
+                                {"$ref": "#/definitions/elementType::Q"},
+                                {"$ref": "#/definitions/elementType::R"}
+                            ]
+                        },
+                        {
+                            "allOf": [
+                                {"$ref": "#/definitions/elementType::Q"},
+                                {"$ref": "#/definitions/elementType::R"}
+                            ]
+                        }
+                    ]
+                },
+                "y12": {
+                    "anyOf": [
+                        {"$ref": "#/definitions/elementType::A"},
+                        {"$ref": "#/definitions/elementType::B"}
+                    ]
+                },
+                "y13": {
+                    "allOf": [
+                        {"$ref": "#/definitions/elementType::A"},
+                        {"$ref": "#/definitions/elementType::B"}
+                    ]
+                },
+                "y14": {"const": "f"},
+                "y15": {"const": "f"}
+            },
+            "type": "object",
+            "required": [
+                "y0",
+                "y1",
+                "y2",
+                "y3",
+                "y4",
+                "y5",
+                "y6",
+                "y7",
+                "y8",
+                "y9",
+                "y10",
+                "y11",
+                "y12",
+                "y13",
+                "y14",
+                "y15"
+            ]
+        },
+        "elementType::Z": {"anyOf": [{"type": "boolean"}, {"type": "string"}]}
+    }
+}

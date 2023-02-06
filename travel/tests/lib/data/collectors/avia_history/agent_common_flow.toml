@@ -1,0 +1,57 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "agent_history",
+    "--booking-dir", "//home/avia/logs/avia-partner-booking-log",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "yt",
+]
+
+[yt.input.avia_partner_booking_log]
+    path = "//home/avia/logs/avia-partner-booking-log/2020-01-31"
+
+[[yt.input.avia_partner_booking_log.data]]
+    billing_order_id = 438
+    confirm_dt = ""
+    created_at = "2020-03-11 10:26:47"
+    currency = "RUB"
+    from = "LED"
+    marker = "f4f7acdb-a5e969-c8af-43a9-b7ef-09b6735a2bb21"
+    order_id = "LMESNE"
+    partner = "agent"
+    partner_id = 2
+    price = 2420.0
+    source = "nemo"
+    status = "booking"
+    ticket_number = ""
+    to = "UFA"
+    trip_type = "oneway"
+    unixtime = 1583911891
+
+[lb]
+    topic = "topic-agent_history"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "partner_profit", "updated_at"]
+
+[[lb.expected]]
+    status = "pending"
+    category = "avia"
+    partner_id = 2
+    created_at = 1583922407
+    origin = "LED"
+    partner_order_id = "LMESNE"
+    label = "f4f7acdb-a5e969-c8af-43a9-b7ef-09b6735a2bb21"
+    source = "history"
+    destination = "UFA"
+    partner_name = "agent"
+    trip_type = "oneway"
+    billing_order_id = 438
+    order_amount = 2420.0
+    travel_order_id = "agent:LMESNE"
+    currency_code = "RUB"

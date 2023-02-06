@@ -1,0 +1,92 @@
+logbroker:
+  pqlib:
+    worker_threads: 2
+
+  consumer:
+    server: "localhost"
+    port: 20500
+    topics:
+    - "lb-topic"
+    client_id: "lb-consumer"
+    max_memory_usage: 16777216
+    max_infly_requests: 3
+    max_size: 102400
+    use_lock_session: false
+    read_mirrored_partitions: true
+    max_uncommitted_count: 5000
+
+  credentials:
+    use_secure_tvm: False
+
+  pqlib_log_name: pqlib
+
+reader:
+  read_timeout_ms: 1000
+
+parser:
+  threads: 2
+  sample_percent: 5
+  experiment_sources:
+      - ertelecom
+
+uploader:
+  threads: 2
+  max_in_flight_requests: 10000
+  request_timeout_ms: 1000
+  retry_timeout_ms: 1000
+  max_rps: 5000
+  poller_threads: 2
+
+
+logs:
+  main:
+    level: trace
+    targets:
+    - type: "stdout"
+    - type: "rotating"
+      file: "/tmp/main.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  parser:
+    level: trace
+    targets:
+    - type: "rotating"
+      file: "/tmp/parser.log"
+      max_file_size: 419430400
+      max_files: 1
+  uploader:
+    level: trace
+    targets:
+    - type: "rotating"
+      file: "/tmp/uploader.log"
+      max_file_size: 419430400
+      max_files: 1
+  pqlib:
+    level: trace
+    targets:
+    - type: "rotating"
+      file: "/tmp/pqlib.log"
+      max_file_size: 419430400
+      max_files: 1
+  tvm:
+    level: trace
+    targets:
+    - type: "rotating"
+      file: "/tmp/tvm.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  graphite:
+    targets:
+    - type: rotating
+      file: "/tmp/graphite.log"
+      max_file_size: 419430400
+      max_files: 1
+
+  solomon:
+    targets:
+    - type: rotating
+      file: "/tmp/solomon.log"
+      max_file_size: 419430400
+      max_files: 1

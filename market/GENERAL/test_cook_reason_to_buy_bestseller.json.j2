@@ -1,0 +1,76 @@
+{#
+    We have models {M1, .., M99, G} with 99, .., 1, and 0 orders, respectively.
+    G is a group model related to {M1, M3}.
+    The Top-7 is going to be {G, M1, M2, M3, M4, M5, M6}.
+    There are also outliers from another category {OM1, OM2}.
+    They all will form the Top-7: {OM2, OM1}.
+#}
+{% if table == "sets_reasons_to_buy_bestseller" %}
+    {% table "sets_reasons_to_buy" %}
+        {% if version.startswith("blue") %}
+            {# M4 = (M4 + M8 + M9 + M10) / 4 #}
+            ["M4", "model", "bestseller", "consumerFactor", 92.25, {}, "{{ day }}"],
+        {% else %}
+            ["G", "model", "bestseller", "consumerFactor", 196.0, {}, "{{ day }}"],
+        {% endif %}
+        ["M1", "model", "bestseller", "consumerFactor", 99.0, {}, "{{ day }}"],
+        ["M2_NEW", "model", "bestseller", "consumerFactor", 98.0, {}, "{{ day }}"],
+        ["M3", "model", "bestseller", "consumerFactor", 97.0, {}, "{{ day }}"],
+        {# M5_NEW = M5 #}
+        ["M5_NEW", "model", "bestseller", "consumerFactor", 95, {}, "{{ day }}"],
+        {# M56_NEW = (M5 + M6) / 2 #}
+        ["M56_NEW", "model", "bestseller", "consumerFactor", 94.5, {}, "{{ day }}"],
+        ["M7", "model", "bestseller", "consumerFactor", 93.0, {}, "{{ day }}"],
+        ["OM2", "model", "bestseller", "consumerFactor", 2.0, {}, "{{ day }}"],
+        ["OM1", "model", "bestseller", "consumerFactor", 1.0, {}, "{{ day }}"]
+    {% endtable %}
+{% elif table == "features_item_model_order_statistics" %}
+    {% table table %}
+        {% for i in range(1, 100) %}
+            ["M{{ i }}",
+                {{ 100 - i }}.0, {{ 100 - i }}.0, {{ 100 - i }}.0, {{ 100 - i }}.0,
+                {{ 100 - i }}.0, {{ 100 - i }}.0, {{ 100 - i }}.0, {{ 100 - i }}.0,
+                {{ 100 - i }}.0, {{ 100 - i }}.0, {{ 100 - i }}.0, {{ 100 - i }}.0,
+                {{ 100 - i }}.0, {{ 100 - i }}.0, "model", "{{ day }}"],
+        {% endfor %}
+        ["OM1", 1.0, 1.0, 1.0, 1.0,  1.0, 1.0, 1.0, 1.0,  1.0, 1.0, 1.0, 1.0,  1.0, 1.0, "model", "{{ day }}"],
+        ["OM2", 2.0, 2.0, 2.0, 2.0,  2.0, 2.0, 2.0, 2.0,  2.0, 2.0, 2.0, 2.0,  2.0, 2.0, "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "features_item_model_extrapolated_order_statistics" %}
+    {% table table %}
+        {% for i in range(1, 100) %}
+            ["M{{ i }}", {{ 100 - i }}.0, "model", "{{ day }}"],
+        {% endfor %}
+        ["G", 0.0, "model", "{{ day }}"],
+        ["OM1", 1.0, "model", "{{ day }}"],
+        ["OM2", 2.0, "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "items_model_category_id" %}
+    {% table table %}
+        {% for i in range(1, 100) %}
+            ["M{{ i }}", "C", "model", "{{ day }}"],
+        {% endfor %}
+        {% if not version.startswith("blue") %}
+        ["G", "C", "model", "{{ day }}"],
+        {% endif %}
+        ["OM1", "OC", "model", "{{ day }}"],
+        ["OM2", "OC", "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "items_model_group" %}
+    {% table table %}
+        ["M1", "G", "model", "{{ day }}"],
+        ["M3", "G", "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "outlet_model_transitions" %}
+    {% table table %}
+        ["M2", "M2_NEW", "{{ day }}"],
+        ["M5", "M5_NEW", "{{ day }}"],
+        ["M5", "M56_NEW", "{{ day }}"],
+        ["M6", "M56_NEW", "{{ day }}"],
+        ["M8", "M4", "{{ day }}"],
+        ["M9", "M4", "{{ day }}"],
+        ["M10", "M4", "{{ day }}"],
+        ["M97", "M97_98", "{{ day }}"],
+        ["M98", "M97_98", "{{ day }}"]
+    {% endtable %}
+{% endif %}

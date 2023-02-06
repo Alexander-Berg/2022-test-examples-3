@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd"
+       default-lazy-init="false">
+
+    <context:annotation-config/>
+
+    <import resource="test-db.xml"/>
+    <import resource="classpath*:service.xml"/>
+
+    <bean id="checkerDao" class="ru.yandex.market.checker.dao.CheckerDao">
+        <property name="transactionTemplate" ref="transactionTemplate"/>
+        <property name="urlCheckerJdbcTemplate" ref="ucJdbcTemplate"/>
+    </bean>
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          lazy-init="false">
+        <property name="locations">
+            <list>
+                <value>classpath:urlchecker.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- stuff -->
+    <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+
+    <bean id="profiler" class="ru.yandex.common.util.profile.statdump.StatDumpProfiler"/>
+</beans>

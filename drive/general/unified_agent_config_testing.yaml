@@ -1,0 +1,48 @@
+status:
+  port: 16301
+storages:
+  - name: main
+    plugin: fs
+    config:
+      directory: /work/unified_agent_storage
+      max_partition_size: 2gb
+routes:
+  - input:
+      plugin: grpc
+      config:
+        uri: unix:///work/unified_agent.sock
+        grpc_memory_quota: 200mb
+        max_receive_message_size: 200mb
+      flow_control:
+        inflight:
+          limit: 200mb
+          limit_messages: 200000
+    channel:
+      pipe:
+        - storage_ref:
+            name: main
+            flow_control:
+              inflight:
+                limit: 200mb
+                limit_messages: 200000
+                action: backpressure
+        - filter:
+            plugin: batch
+            config:
+              delimiter: "\n"
+              flush_period: 500ms
+              limit:
+                bytes: 10mb
+      fanout:
+        - channel:
+            output:
+              id: output_debug
+              plugin: debug
+              config:
+                file_name: /var/log/yandex/scooter-backend/current-backend-events.log
+                delimiter: "\n"
+                _test:
+                  register_test_handlers: true
+monitoring:
+  enabled: true
+  port: 16300

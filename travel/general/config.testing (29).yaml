@@ -1,0 +1,35 @@
+yenv_type: "testing"
+tvm:
+  enabled: true
+  whitelist:
+    - 2025412 # travel-notifer own tvm-id for /readiness probe and debugging purposes
+  selfappid: 2025412
+logging:
+  sentrydsn: "http://1645b310b33248bb9789af8b2bd7f10c:9659f93fd5e347918874277cee6885a8@sentry.testing.avia.yandex.net/270"
+
+database:
+  user: "avia"
+  name: "notifier"
+
+order_changes_service:
+  y_planner_id: travel-notifier-testing.api
+  tvm_id: 2025412
+
+unprocessed_service:
+  topic: "/avia/testing/notifier/unprocessed-orders"
+  mock: false
+
+orders_collector_enabled: true
+orders_collector:
+  consumer:
+    topic:
+      path: "/travel/test/orders-updates-queue"
+      consumer: "/avia/testing/notifier/orders-consumer"
+
+unprocessed_orders_collector_enabled: true
+unprocessed_orders_collector:
+  consumer:
+    topic:
+      path: "/avia/testing/notifier/unprocessed-orders"
+      consumer: "/avia/testing/notifier/orders-consumer"
+      max_read_messages_count: 10

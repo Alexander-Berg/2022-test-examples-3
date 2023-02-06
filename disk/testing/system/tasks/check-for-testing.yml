@@ -1,0 +1,46 @@
+---
+##################################################
+# Checks if testing is needed for specifed version
+#
+## Provides:
+#
+# release_issue:
+#   Release issue for specified MPFS version
+#   (for notifications).
+#
+- name: Setting {{ component_name }} variables
+  set_fact:
+    component: "{{ mpfs if component_name == 'mpfs' else api }}"
+    different_component: "{{ api if component_name == 'mpfs' else mpfs }}"
+  when: component is not defined
+
+- name: Find release issue
+  startrek:
+    find: >
+      Queue: DISKBACK and
+      Resolution: empty() and
+      Summary: "Протестировать mpfs для {{ component.issue_summary_keyword }}"
+      Summary: "{{ mpfs_version.split("-")[0] }}-"
+  register: issues
+
+- name: Set release issue
+  set_fact:
+    release_issue: "{{ issues.data[0] }}"
+  when: issues.data | length == 1
+
+- name: Change TeamCity status text
+  debug:
+    msg: "Release issue wasn't found ##teamcity[buildStatus text='No need for testing']"
+  when: release_issue is not defined
+
+- name: Ensure there is a package in repository with specified version
+  check_on_dist:
+    package: "{{ component.package_name }}"
+    version: "{{ mpfs_version }}"
+  register: dist
+  until: dist.result
+  delay: 60
+  retries: 20
+  when: release_issue is defined
+  tags:
+    - check_package

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<query>
+
+    <description>Just a simple query for tests</description>
+
+    <aliases>
+        <alias name="EMPTY"/>
+        <alias name="TAB">chr(9)</alias>
+        <alias name="NEW_LINE_REGEXP_TO_REPLACE">'(' || chr(13) || chr(10) || ')|(' || chr(10) || chr(13) || ')|' || chr(10) || '|' || chr(13)</alias>
+        <alias name="NEW_LINE_REGEXP_TO_REMOVE">'[' || chr(10) || chr(13) || ']'</alias>
+        <alias name="TEST_DATASOURCE_ID">774</alias>
+        <alias name="BOOLEAN">NUMBER(1)</alias>
+        <alias name="QUOTE_MARK">chr(148)</alias>
+        <alias name="ID">id</alias>
+        <alias name="DATASOURCE_ID">main_datasource.${ID}</alias>
+        <alias name="DATAFEED_ID">main_datafeed.id${EMPTY}</alias>
+        <alias name="CONSTANT_VALUE">nvl(12345, 0)</alias>
+    </aliases>
+
+    <base>
+        select ${SYS_PARAM_NAMES_BLOCK}
+        from shops_web.datasource main_datasource
+        inner join shops_web.datafeed main_datafeed on main_datafeed.datasource_id = main_datasource.id
+        ${SYS_PARAM_QUERIES_BLOCK}
+    </base>
+
+    <orders>
+        <order parameter="feed_id" type="desc"/>
+    </orders>
+
+    <templates>
+
+        <template name="FEED_PARAMETER" type="NUMBER(10)">
+            <sql>select ${PARAM_VALUE}, id df_id from shops_web.datafeed ${PARAM_EXTRA}</sql>
+            <condition>${SYS_QUERY_NAME}.df_id = ${DATAFEED_ID}</condition>
+        </template>
+
+    </templates>
+
+    <parameters>
+
+        <parameter name="feed_id" value="id" template="FEED_PARAMETER" description="Идентификатор фида">
+            <argument name="extra"/>
+        </parameter>
+
+        <parameter name="shop_id" value="datasource_id" template="FEED_PARAMETER" description="Идентификатор магазина">
+            <argument name="extra"/>
+        </parameter>
+
+        <parameter name="url" value="url" type="varchar2(1024)" template="feed_parameter" description="URL фида">
+            <argument name="extra">
+                <![CDATA[
+
+                ]]>
+            </argument>
+        </parameter>
+
+        <parameter name="ConstAnt" value="${constant_value}" description="Константа global12345"/>
+
+        <!-- Описание параметра "shop_id" без использование шаблона -->
+        <!--<parameter name="shop_id" value="datasource_id">-->
+        <!--<sql>select datasource_id from datafeed</sql>-->
+        <!--<condition>${SYS_QUERY_NAME}.datasource_id = ${DATASOURCE_ID}</condition>-->
+        <!--<description>Идентификатор магазина</description>-->
+        <!--</parameter>-->
+
+        <parameter name="is_enabled" value="${SYS_QUERY_name}.value" type="${BOOLEAN}">
+            <description>Признак того что магазин включен</description>
+            <sql>
+                <![CDATA[
+                select 1 as value, 1 as datafeed_id from dual
+                ]]>
+            </sql>
+            <condition>${SYS_QUERY_NAME}.datafeed_id = ${DATAFEED_ID}</condition>
+        </parameter>
+
+    </parameters>
+
+</query>

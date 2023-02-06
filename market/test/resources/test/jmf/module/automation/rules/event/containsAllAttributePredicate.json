@@ -1,0 +1,47 @@
+{
+  "rules": [
+    {
+      "conditions": [
+        {
+          "predicate": {
+            "type": "attribute",
+            "parameter": "obj",
+            "filter": {
+              "type": "containsAll",
+              "attribute": "simple1@objectsAttr",
+              "values": [
+                {
+                  "gid": "%s"
+                },
+                {
+                  "gid": "%s"
+                }
+              ]
+            }
+          },
+          "positiveBranch": {
+            "rules": [
+              {
+                "actions": [
+                  {
+                    "type": "edit",
+                    "parameter": "obj",
+                    "properties": [
+                      {
+                        "code": "simple1@ruleResult",
+                        "value": {
+                          "type": "raw",
+                          "value": "success"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

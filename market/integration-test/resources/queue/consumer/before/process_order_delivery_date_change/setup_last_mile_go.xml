@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset reset_sequences="plan_fact_id_seq">
+
+    <order_events_processing_locks
+            id="1"
+    />
+
+    <lom_order
+            id="1"
+            platform_client_id="1"
+            status="PROCESSING"
+            barcode="LOinttest-1"
+            delivery_type="COURIER"
+            delivery_date_max="2021-08-12"
+            delivery_date_min="2021-08-12"
+            delivery_start_time="12:00:00"
+            delivery_end_time="12:00:00"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            external_id="ext101"
+            order_id="1"
+            partner_id="301"
+            partner_type="FULFILLMENT"
+            segment_type="FULFILLMENT"
+            waybill_segment_index="0"
+            shipment_date="2021-05-11"
+    />
+
+    <lom_waybill_segment
+            id="2"
+            external_id="ext102"
+            order_id="1"
+            partner_id="302"
+            partner_type="DELIVERY"
+            segment_type="GO_PLATFORM"
+            waybill_segment_index="1"
+            shipment_date="2021-05-11"
+            tags='["DEFERRED_COURIER"]'
+    />
+
+
+    <plan_fact
+            id="100"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="2"
+            waybill_segment_type="GO_PLATFORM"
+            expected_status="TRANSIT_PICKUP"
+            producer_name="DeferredCourierOrderPlanFactProcessor"
+            expected_status_datetime="2021-05-15 03:40:51 +0000"
+            fact_status_datetime="[null]"
+            end_of_processing_datetime="[null]"
+            plan_fact_status="ACTIVE"
+            processing_status="PROCESSED"
+            schedule_time="2021-05-19 03:40:51 +0000"
+            data="[null]"
+    />
+
+</dataset>

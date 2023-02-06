@@ -1,0 +1,22 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+			http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+	<changeSet id="test_email" author="a-danilov" context="tables">
+		<createTable tableName="TEST_EMAIL">
+			<column name="EMAIL" type="VARCHAR(254)">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+		</createTable>
+		<modifySql dbms="mysql">
+			<append value="ENGINE=INNODB CHARSET=UTF8 COLLATE utf8_general_ci"/>
+		</modifySql>
+	</changeSet>
+
+	<changeSet id="test_email_data" author="a-danilov" runOnChange="true">
+		<loadUpdateData tableName="TEST_EMAIL" primaryKey="EMAIL" file="TEST_EMAIL.csv" quotchar="&quot;" relativeToChangelogFile="true">
+			<column name="EMAIL" type="STRING"/>
+		</loadUpdateData>
+	</changeSet>
+</databaseChangeLog>

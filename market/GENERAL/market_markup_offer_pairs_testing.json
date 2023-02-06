@@ -1,0 +1,108 @@
+{
+  "owner": "marketir",
+  "statfaceReports": [
+    {
+      "title": "Точность и полнота кластеризации",
+      "report": "Market/IR/ClusterizationQualityTesting",
+      "tableName": "markup_worker_offer_pairs_testing",
+      "periodArray": [
+        "DAY", "WEEK", "MONTH"
+      ],
+      "splits": [
+        {
+          "name": "category",
+          "title": "Категория",
+          "splitField": "dictGetString('category', 'full_name', arrayJoin(dictGetHierarchy('category', toUInt64(category_id))))",
+          "tree": true
+        }
+      ],
+      "fields": [
+        {
+          "name": "tp_cnt",
+          "title": "True positive count",
+          "metricField": "sum(TP_cnt)"
+        }, {
+          "name": "fp_cnt",
+          "title": "False positive count",
+          "metricField": "sum(FP_cnt)"
+        }, {
+          "name": "tn_cnt",
+          "title": "True negative count",
+          "metricField": "sum(TN_cnt)"
+        }, {
+          "name": "fn_cnt",
+          "title": "False negative count",
+          "metricField": "sum(FN_cnt)"
+        }, {
+          "name": "tp_val",
+          "title": "True positive weight",
+          "metricField": "sum(TP_val)"
+        }, {
+          "name": "fp_val",
+          "title": "False positive weight",
+          "metricField": "sum(FP_val)"
+        }, {
+          "name": "tn_val",
+          "title": "True negative weight",
+          "metricField": "sum(TN_val)"
+        }, {
+          "name": "fn_val",
+          "title": "False negative weight",
+          "metricField": "sum(FN_val)"
+        }, {
+          "name": "precision",
+          "title": "Точность стандарт",
+          "metricField": "if(tp_cnt + fp_cnt > 0, toFloat64(tp_cnt) / (tp_cnt + fp_cnt), nan)"
+        }, {
+          "name": "recall",
+          "title": "Полнота стандарт",
+          "metricField": "if(tp_cnt + fn_cnt > 0, toFloat64(tp_cnt) / (tp_cnt + fn_cnt), nan)"
+        }, {
+          "name": "f1",
+          "title": "F1 стандарт",
+          "metricField": "2 * precision * recall/(precision + recall)"
+        }, {
+          "name": "precision_w",
+          "title": "Точность по весам",
+          "metricField": "if(tp_val + fp_val > 0, tp_val / (tp_val + fp_val), nan)"
+        }, {
+          "name": "recall_w",
+          "title": "Полнота по весам",
+          "metricField": "if(tp_val + fn_val > 0, tp_val / (tp_val + fn_val), nan)"
+        }, {
+          "name": "f1_w",
+          "title": "F1 по весам",
+          "metricField": "2 * precision_w * recall_w/(precision_w + recall_w)"
+        }
+      ],
+      "graphs": [
+        {
+          "title": "Точность, полнота, F1 стандарт",
+          "fields": [
+            "precision", "recall", "f1"
+          ]
+        }, {
+          "title": "Точность, полнота, F1 по весам",
+          "fields": [
+            "precision_w", "recall_w", "f1_w"
+          ]
+        }, {
+          "title": "Точность, полнота, F1 стандарт и по весам",
+          "fields": [
+            "precision", "recall", "f1", "precision_w", "recall_w", "f1_w"
+          ]
+        }, {
+          "title": "Точность, полнота, F1, аргументы стандарт",
+          "fields": [
+            "precision", "recall", "f1", "tp_cnt", "fp_cnt", "tn_cnt", "fn_cnt"
+          ]
+        }, {
+          "title": "Точность, полнота, F1, аргументы по весам",
+          "fields": [
+            "precision_w", "recall_w", "f1_w", "tp_val", "fp_val", "tn_val", "fn_val"
+          ]
+        }
+      ]
+    }
+  ]
+}

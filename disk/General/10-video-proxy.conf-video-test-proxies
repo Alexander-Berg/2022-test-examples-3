@@ -1,0 +1,146 @@
+perl_modules /etc/nginx/perl;
+perl_require video-swf-redirect.pm;
+
+map_hash_bucket_size 256;
+map_hash_max_size 2097152;
+
+map $shs_dir $mds_dir {
+    include common/shs2mds.map;
+    default $shs_dir;
+}
+
+map $service/$arg_redirect $transmit_mds_content {
+    kinopoisk-trailers/no yes;
+}
+
+#########################################################################
+# 2a02:6b8:0:3400::188 - proxy.vd.yandex-team.ru
+# 2a02:6b8:0:3400::302 - static.vd.yandex-team.ru
+# 2a02:6b8:0:3400::303 - streaming.vd.yandex-team.ru
+#########################################################################
+map $server_addr $source_proxy_header {
+        2a02:6b8:0:3400::188 "intranet";
+        2a02:6b8:0:3400::302 "intranet";
+        2a02:6b8:0:3400::303 "intranet";
+        default  "public";
+}
+
+################################################
+# 80, SSL 443 - static.vd.yandex.net
+# 8080, SSL 8443 - streaming.vd.yandex.net
+################################################
+server {
+        listen      80;
+        listen [::]:80;
+        listen      443 ssl;
+        listen [::]:443 ssl;
+
+        listen      8080;
+        listen [::]:8080;
+        listen      8443 ssl;
+        listen [::]:8443 ssl;
+
+        # static.vd.yandex.net
+        listen [2a02:6b8:0:3400::505]:80;
+        listen [2a02:6b8:0:3400::505]:443 ssl;
+
+        # streaming.vd.yandex.net
+        listen [2a02:6b8:0:3400::506]:80;
+        listen [2a02:6b8:0:3400::506]:443 ssl;
+
+        # static.vd.yandex-team.ru
+        listen [2a02:6b8:0:3400::302]:80;
+        listen [2a02:6b8:0:3400::302]:443 ssl;
+
+        # streaming.vd.yandex-team.ru
+        listen [2a02:6b8:0:3400::303]:80;
+        listen [2a02:6b8:0:3400::303]:443 ssl;
+
+        include ssl/https;
+
+        include common/video-villains.conf;
+
+        location /crossdomain.xml {
+                root /var/lib/crossdomain-xml;
+                default_type text/x-cross-domain-policy;
+        }
+
+        location /swf/ {
+                root /var/www;
+        }
+
+        location ^~ /get-token/ {
+                return 200 '<token>80ep9a3bch9x1lae1y1fdtf8s.0rb09rdg580bawazb2m6nk.1445943673.82087255</token>';
+        }
+
+        location ~ ^/(lite(-audio)?|full(-7|-fb)?|player(-7)?|euro-lite|recorder|videoletter|uploader|playlist|custom|olymp|banned)\b {
+                perl YandexVideo::swfRedirect;
+        }
+
+        # VIDEO-5457
+        if ($request_uri ~* "%0[9ad]") {
+                return 400;
+        }
+
+        include common/rewrite_to_mds.conf;
+        include common/proxy_get_mds.conf;
+
+        location ^~ /ping {
+                rewrite ^ /ping break;
+                proxy_pass http://localhost:32048;
+        }
+        location / {
+                return 404;
+        }
+}
+
+
+server {
+        listen      9080;
+        listen [::]:9080;
+        listen      9443 ssl;
+        listen [::]:9443 ssl;
+
+        # proxy.vd.yandex.net
+        listen [2a02:6b8:0:3400::504]:80;
+        listen [2a02:6b8:0:3400::504]:443 ssl;
+
+        # proxy.vd.yandex-team.ru
+        listen [2a02:6b8:0:3400::188]:80;
+        listen [2a02:6b8:0:3400::188]:443 ssl;
+
+        include ssl/https;
+
+        location /swf/ {
+                root /var/www;
+        }
+
+        location ~ ^/(lite(-audio)?|full(-7|-fb)?|player(-7)?|euro-lite|recorder|videoletter|uploader|playlist|custom|olymp|banned)\b {
+                perl YandexVideo::swfRedirect;
+        }
+
+        location /crossdomain.xml {
+                root /var/lib/crossdomain-xml;
+                default_type text/x-cross-domain-policy;
+        }
+
+        # VIDEO-5457
+        if ($request_uri ~* "%0[9ad]") {
+                return 400;
+        }
+
+        include common/proxy_get_mds.conf;
+
+        location / {
+                proxy_pass       http://localhost:32049/actions/;
+                proxy_set_header X-Forwarded-For $remote_addr;
+                proxy_set_header X-Proxy-Source $source_proxy_header;
+                add_header Access-Control-Allow-Origin $http_origin; # VIDEO-6386
+
+                # XXX cache?
+        }
+
+        location = /ping {
+                proxy_pass       http://localhost:32048/ping;
+        }
+}

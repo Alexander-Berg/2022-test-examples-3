@@ -1,0 +1,90 @@
+billing-api:
+  base-url: ___should_be_mocked___
+  enabled: true
+  http-read-timeout: 60s
+  http-request-timeout: 60s
+  tvm-destination-alias: billing_api
+  tvm-enabled: false
+billing-service:
+  manager-id: 232408280582
+  operator-id: 73484729472942
+  service-id: 876543
+bnovo:
+  base-url: not_used
+  private-api-base-url: not_used
+  username: not_used
+  password: not_used
+clusterization-task-processor:
+  schedule-rate: 10ms
+geo-search:
+  base-url: not_used
+grpc:
+  enabled: false
+hotels-partner-config:
+  token: token
+  index-path: ./partner-config-index
+hotel-connection:
+  create-agreements: true
+  commissions:
+    - priority: 0
+      confirmed-rate: 0.14
+      refunded-rate: 0.14
+    - priority: 10
+      confirmed-rate: 0.07
+      refunded-rate: 0.07
+      start-date: 2020-06-01T00:00:00
+      end-date: 2020-10-01T00:00:00
+# spring configuration
+spring:
+  datasource:
+    driverClassName: org.h2.Driver
+    password: ''
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+  jpa:
+    database-platform: ru.yandex.travel.hibernate.dialects.CustomH2Dialect
+    properties:
+      hibernate:
+        dialect: ru.yandex.travel.hibernate.dialects.CustomH2Dialect
+        format_sql: false
+    show-sql: false
+spark-api:
+  base-url: not_used
+  login: not_used
+  password: not_used
+st:
+  queue-name: not_used
+  oauth-token: token
+ticket-task-processor:
+  schedule-rate: 10ms
+travelline:
+  api-key: not_used
+  base-url: not_used
+workflow-processing:
+  pending-workflow-polling-interval: 10ms
+yt:
+  cache:
+    token: not_used
+    base-local-path: ./cache
+    hotels-clustering-yt-table: not_used
+    hotels-feeds-yt-table: not_used
+    altay-signals-yt-table: not_used
+    altay-publishing-yt-table: not_used
+yt-connection:
+  token: not_used
+  transaction-duration: 3s
+yt-publisher:
+  clusters: not_used
+  whitelist-table-path: not_used
+  agreement-table-path: not_used
+  legal-info-table-path: not_used
+  contract-info-table-path: not_used
+  hotel-connections-table-path: not_used
+  task-processor:
+    name: HotelPublishTask
+    initial-start-delay: 1s
+    schedule-rate: 1m
+    pool-size: 1
+    daemon-pool-threads: true
+    graceful-pool-shutdown: true
+    enabled: false

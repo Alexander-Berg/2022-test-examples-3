@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Ubic wrapper for fastcgi-blackbox-authorizer
+
+case "$1" in
+  start|stop|status|restart)
+    ubic $1 fastcgi-daemon2 fastcgi-daemon2.fastcgi-blackbox-authorizer
+    RCODE=$?
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|status|restart}"
+    exit 1
+esac
+
+exit ${RCODE}
+

@@ -1,0 +1,738 @@
+{#
+    Categories:
+        сRXXX - categories with rules
+        сCXXX - categories included in category ranking
+        cC10XX - categories without SKU included in category ranking
+        cCS - category for siblings
+        cFXXX - categories for fixed candidates
+        сCR0, cCR1, cCR2 - categories have rules and included in category ranking
+        cCB0, cCB1, cCB2 - banned categories of candidates included in category ranking (heuristics)
+        cCB01, cCB11, cCB21 - banned categories of candidates for parametric siblings
+        cMWS - category for models not in stock
+        fake_category_without_automatic_candidates - stub in config
+
+    Main categories from category_ranking have 3 models, other categories
+    have {{ max_candidates_per_model }} models.
+#}
+
+{% set rule_id_counter = [0] %}
+{# zpt() generates "," on each invocation except first one #}
+{% set zpt = joiner(",") %}
+
+{% macro model(model_id, category_id, offer_count, shop_ids) -%}
+    {{ zpt() }}
+    {% if table == "items_model_category_id" %}
+        ["{{ model_id }}", "{{ category_id }}", "model", "{{ day }}"]
+    {% elif table == "items_model_offer_count" %}
+        ["{{ model_id }}", {{ offer_count }}, "model", "{{ day }}"]
+    {% endif %}
+{%- endmacro %}
+
+{% macro average_model_statistics(model_id, count) -%}
+    {{ zpt() }}["{{ model_id }}", {{ count }}, 1.0, "model", "{{ day }}"]
+{%- endmacro %}
+
+{% macro model_pair_pmi(model_id, linked_model_id, pmi) -%}
+    {{ zpt() }}["{{ model_id }}", "{{ linked_model_id }}", {{ pmi }}, 1.0, "model", "model", "{{ day }}"]
+{%- endmacro %}
+
+{% macro recipe(recipe_id, category_id, item_type, item_ids) %}
+    {% if table == "items_recipe_category_id" %}
+        {{ zpt() }}["{{ recipe_id }}", "{{ category_id }}", "recipe", "{{ day }}"]
+    {% elif table.startswith("features_item_pair_recipe") %}
+        {% if (item_type == "model" and table == "features_item_pair_recipe_model_conformity") or
+              (item_type == "category" and table == "features_item_pair_recipe_category_conformity") %}
+            {% for item_id in item_ids %}
+                {{ zpt() }}
+                [
+                    "{{ recipe_id }}",
+                    "{{ item_id }}",
+                    1.0,
+                    "recipe",
+                    "{{ item_type }}",
+                    "{{ day }}"
+                ]
+            {% endfor %}
+        {% endif %}
+    {% elif table == "items_recipe_filter" %}
+        {# NB All model recipes must be with filters -- see compute_recipe_item_conformity #}
+        {% if item_type == "model" %}
+            {{ zpt() }}["{{ recipe_id }}", "filter", "recipe", "{{ day }}"]
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
+{% macro rule(category_id, item_type, item_ids, linked_category_id, linked_item_type, linked_item_ids) %}
+    {# NB All category recipes must be without filters while all model recipes must be with filters -- see compute_recipe_item_conformity #}
+    {% set rule_id = "r%d" % rule_id_counter|length %}
+    {% if rule_id_counter.append(0) %}{% endif %}
+    {% set recipe_id = rule_id + "M" %}
+    {% set linked_recipe_id = rule_id + "L" %}
+    {% if table == "items_rule_recipes" %}
+        {{ zpt() }}["{{ rule_id }}", "{{ recipe_id }}", "{{ linked_recipe_id }}", "rule", "{{ day }}"]
+    {% elif table.startswith("items_recipe") or table.startswith("features_item_pair_recipe") %}
+        {{ recipe(recipe_id, category_id, item_type, item_ids) }}
+        {{ recipe(linked_recipe_id, linked_category_id, linked_item_type, linked_item_ids) }}
+    {% endif %}
+{% endmacro %}
+
+{% macro accessories(model_id, linked_model_id, category_id, linked_category_id, accessory_pair_target=0, priority_candidate=0, shop_ids=[0]) %}
+    {{ zpt() }}["{{ model_id }}", "{{ linked_model_id }}", "{{ category_id }}", "{{ linked_category_id }}", {{ shop_ids }}, {{ accessory_pair_target }}, {{ priority_candidate }}, "{{ day }}"]
+{% endmacro %}
+
+{% macro sku_model_id(model_id, blue_mrs=True) %}
+    {% if table == "indexer_in_blue_mrs" %}
+        {% if blue_mrs %}
+            {{ zpt() }}
+            ["{{ model_id }}", 1]
+        {% endif %}
+    {% else %}
+        {{ zpt() }}["{{ model_id }}", "{{ model_id }}", "sku", "{{ day }}"]
+    {% endif %}
+{% endmacro %}
+
+{% macro shop_model(model_id, shop_id) %}
+    {{ zpt() }}["{{ model_id }}", {{ shop_id }}]
+{% endmacro %}
+
+{% macro sku_category_id(category_id) %}
+    {{ zpt() }}["sAny", "{{ category_id }}", "sku", "{{ day }}"]
+{% endmacro %}
+
+{% if table == "sets_model_accessories_candidates" %}
+    {# Result data. #}
+    {% table table %}
+        {% if use_heuristics %}
+            {# $accessories_from_allowed_category_pairs #}
+            {# Accessories for same category pairs for coviews mode #}
+            {% if use_same_categories -%}
+                {% if not cpc_only_outlet %}
+                    {% for mi in range(3) %}
+                        {% for li in range(3) %}
+                            {% if mi != li %}
+                                {% if mi + li != 1 %}
+                                    {{ accessories("mC0.%d" % mi, "mC0.%d" % li, "cC0", "cC0", 0, 0, [0]) }}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+                {% if not cpa_only_outlet %}
+                    {# Accessories without SKU #}
+                    {{ accessories("mC1000.0", "mC1000.1", "cC1000", "cC1000",0,0) }}
+                    {{ accessories("mC1000.1", "mC1000.0", "cC1000", "cC1000",0,0) }}
+
+                {% endif %}
+                {% if not cpc_only_outlet and not cpa_only_outlet%}
+                    {# Accessories with SKU but not on stock in Beru #}
+                    {{ accessories("mC1010.0", "mC1010.1", "cC1010", "cC1010",0,0) }}
+                    {{ accessories("mC1010.1", "mC1010.0", "cC1010", "cC1010",0,0) }}
+                {% endif %}
+                {% if cpa_only_inlet and include_popular_out_of_stock_items_inlet %}
+                    {{ accessories("mMWS1.1", "mMWS1.2", "cMWS", "cMWS", 0,0) }}
+                {% endif %}
+            {% endif %}{# use_same_categories #}
+            {% if use_accessory_categories %}
+                {# Accessories for category pairs cC0, cC1; cC0, cC3 and cC1000, cC1001 #}
+                {% if not cpc_only_outlet %}
+                    {% for mi in range(3) %}
+                        {% for li in range(max_candidates_per_model // 10) %}
+                            {{ accessories("mC0.%d" % mi, "mC1.%d" % li, "cC0", "cC1",0, boost_cpa_priority) }}
+                            {{ accessories("mC0.%d" % mi, "mC3.%d" % li, "cC0", "cC3",0, boost_cpa_priority) }}
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+                {# Accessories for categories without SKU #}
+                {% if not cpa_only_outlet %}
+                    {{ accessories("mC1000.0", "mC1001.0", "cC1000", "cC1001",0,boost_cpa_priority) }}
+                    {{ accessories("mC1000.1", "mC1001.0", "cC1000", "cC1001",0,boost_cpa_priority) }}
+                    {{ accessories("mC1010.0", "mC1011.0", "cC1010", "cC1011",0,boost_cpa_priority) }}
+                    {{ accessories("mC1010.1", "mC1011.0", "cC1010", "cC1011",0,boost_cpa_priority) }}
+                {% endif %}
+                {# Accessories for category pairs cC2, cC3..cCN #}
+                {% if not cpc_only_outlet %}
+                    {% for mi in range(3) %}
+                        {% for li in range(max_candidates_per_model // 10) %}
+                            {% if mi != 0 %}
+                                {{ accessories("mC2.%d" % mi, "mC7.%d" % li, "cC2", "cC7",0,boost_cpa_priority) }}
+                            {% endif %}
+                            {{ accessories("mC2.%d" % mi, "mC5.%d" % li, "cC2", "cC5",0,boost_cpa_priority) }}
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+            {% endif %}{# use_accessory_categories #}
+            {# Accessories for banned categories cCBX #}
+            {% if ban_types and soft_ban_types %}
+                {% if use_accessory_categories %}
+                    {% if not cpc_only_outlet %}
+                        {{ accessories("mCB2.0", "mCB1.0", "cCB2", "cCB1",0,0) }}
+                        {{ accessories("mCB2.0", "mCB1.1", "cCB2", "cCB1",0,0) }}
+                        {% for mi in range(3) %}
+                            {{ accessories("mCB2.0", "mC2.%d" % mi, "cCB2", "cC2",0,boost_cpa_priority) }}
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}{# use_accessory_categories #}
+            {% endif %}
+            {% if soft_ban_types %}
+                {% if use_accessory_categories %}
+                    {% if not cpc_only_outlet %}
+                        {% for mi in range(3) %}
+                            {{ accessories("mCB1.0", "mC2.%d" % mi, "cCB1", "cC2",0,boost_cpa_priority) }}
+                            {{ accessories("mCB1.1", "mC2.%d" % mi, "cCB1", "cC2",0,boost_cpa_priority) }}
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}{# use_accessory_categories #}
+                {% if use_same_categories %}
+                    {% if not cpc_only_outlet %}
+                        {{ accessories("mCB1.1", "mCB1.0", "cCB1", "cCB1",0,0) }}
+                        {{ accessories("mCB1.0", "mCB1.1", "cCB1", "cCB1",0,0) }}
+                    {% endif %}
+                {% endif %}{# use_same_categories #}
+                {% if use_parametric_siblings %}
+                    {% if not cpc_only_outlet %}
+                        {{ accessories("mCB11.1", "mCB11.0", "cCB11", "cCB11",0,boost_cpa_priority) }}
+                        {{ accessories("mCB11.0", "mCB11.1", "cCB11", "cCB11",0,boost_cpa_priority) }}
+                    {% endif %}
+                {% endif %}{# use_parametric_siblings #}
+            {% endif %}
+            {% if ban_types %}
+                {% if not cpc_only_outlet %}
+                    {% if use_accessory_categories %}
+                        {% for mi in range(3) %}
+                            {{ accessories("mCB0.0", "mC2.%d" % mi, "cCB0", "cC2",0,boost_cpa_priority) }}
+                        {% endfor %}
+                    {% endif %} {# use_accessory_categories #}
+                {% endif %}
+            {% endif %}
+            {% if not cpc_only_outlet %}
+                {% if use_shop_models %}
+                    {{ accessories("mC0.0", "mC0.1", "cC0", "cC0", 0, 0, [0, 1]) }}
+                    {{ accessories("mC0.1", "mC0.0", "cC0", "cC0", 0, 0, [0, 1]) }}
+                {% else %}
+                    {{ accessories("mC0.0", "mC0.1", "cC0", "cC0", 0, 0, [0]) }}
+                    {{ accessories("mC0.1", "mC0.0", "cC0", "cC0", 0, 0, [0]) }}
+                {% endif %}
+            {% endif %}
+        {% endif %}{# use_heuristics #}
+        {% if use_parametric_siblings %}
+            {% if not cpc_only_outlet %}
+                {% for i in range(max_candidates_per_model // 5) %}
+                    {% if i != 0 %}
+                        {{ accessories("mCS1", "mCS1%d" % i, "cCS", "cCS", 0, boost_cpa_priority, [0]) }}
+                        {{ accessories("mCS1%d" % i, "mCS1", "cCS", "cCS", 0, boost_cpa_priority, [0]) }}
+                    {% endif %}
+                {% endfor %}
+                {% if use_shop_models %}
+                    {{ accessories("mCS1", "mCS10", "cCS", "cCS", 0, boost_cpa_priority, [0, 1]) }}
+                    {{ accessories("mCS10", "mCS1", "cCS", "cCS", 0, boost_cpa_priority, [0, 1]) }}
+                {% else %}
+                    {{ accessories("mCS1", "mCS10", "cCS", "cCS", 0, boost_cpa_priority, [0]) }}
+                    {{ accessories("mCS10", "mCS1", "cCS", "cCS", 0, boost_cpa_priority, [0]) }}
+                {% endif %}
+            {% endif %}
+        {% endif %}{# use_parametric_siblings #}
+        {# Accessories from rules #}
+        {% if use_mbo_rules %}
+            {% if not cpc_only_outlet %}
+                {% for i in range(3) %}
+                    {% for mi in range(max_candidates_per_model) %}
+                        {{ accessories("mR0.%d" % mi, "mR1.%d" % i, "cR0", "cR1", 1) }}
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            {% if not cpc_only_outlet %}
+                {{ accessories("mR2.1", "mR3.0", "cR2", "cR3", 1) }}
+                {{ accessories("mR4.0", "mR5.0", "cR4", "cR5", 1) }}
+                {{ accessories("mR4.0", "mR5.1", "cR4", "cR5", 1) }}
+                {{ accessories("mR2.2", "mR5.0", "cR2", "cR5", 1) }}
+                {{ accessories("mF1.1", "mFR1.1", "cF1", "cFR1", 1, priority_candidate_feature_for_test) }}
+            {% endif %}
+        {% endif %}{# use_mbo_rules #}
+        {# Hardcoded accessories #}
+        {% if use_hardcoded_accessories %}
+            {% if not cpc_only_outlet %}
+                {{ accessories("mC2.0", "mC7.0", "cC2", "cC7") }}
+                {{ accessories("mR0.0", "mR5.0", "cR0", "cR5") }}
+            {% endif %}
+            {% if not cpa_only_outlet %}
+                {{ accessories("mR6.0", "mR7.1", "cR6", "cR7") }}
+            {% endif %}
+            {% if not cpc_only_outlet %}
+                {{ accessories("mF1.1", "mFH1.1", "cF1", "cFH1") }}
+            {% endif %}
+        {% endif %}{# use_hardcoded_accessories #}
+        {% if use_fixed_candidates %}
+                {% if use_accessory_categories %}
+                    {{ accessories("mF1.1", "mF2.1", "cF1", "cF2", priority_candidate=priority_candidate_feature_for_test) }}
+                    {{ accessories("mF1.1", "mF2.2", "cF1", "cF2", priority_candidate=priority_candidate_feature_for_test) }}
+                    {% if not cpa_only_outlet %}
+                        {{ accessories("mF1.1", "mF2.NOSKU", "cF1", "cF2", priority_candidate=priority_candidate_feature_for_test) }}
+                    {% endif %}
+                    {% if not use_hardcoded_accessories %}
+                        {{ accessories("mF1.1", "mFH1.2", "cF1", "cFH1", priority_candidate=priority_candidate_feature_for_test) }}
+                    {% endif %}
+                    {{ accessories("mF1.1", "mFR1.1", "cF1", "cFR1", priority_candidate=priority_candidate_feature_for_test) }}
+                    {{ accessories("mF1.1", "mFR1.2", "cF1", "cFR1", priority_candidate=priority_candidate_feature_for_test) }}
+                    {% if not soft_ban_types %}
+                        {{ accessories("mF1.1", "mFBS1.1", "cF1", "cFBS1", priority_candidate=priority_candidate_feature_for_test) }}
+                    {% endif %}
+                    {% if not ban_types %}
+                        {{ accessories("mF1.1", "mFBH1.1", "cF1", "cFBH1", priority_candidate=priority_candidate_feature_for_test) }}
+                    {% endif %}
+                    {% if not categories_without_automatic_candidates %}
+                        {{ accessories("mFBWA1.1", "mF2.4", "fake_category_without_automatic_candidates", "cF2", priority_candidate=priority_candidate_feature_for_test) }}
+                    {% endif %}
+                    {% for mi in range(max_candidates_per_model // 5) %}
+                        {{ accessories("mF1.2", "mF2.%d" % (mi + 1 + 4 * max_candidates_per_model // 5), "cF1", "cF2", priority_candidate=priority_candidate_feature_for_test) }}
+                    {% endfor %}
+                {% endif %}{# use_accessory_candidates #}
+                {% if use_same_categories %}
+                    {{ accessories("mF1.3", "mF1.1", "cF1", "cF1", priority_candidate=priority_candidate_feature_for_test) }}
+                    {{ accessories("mFBS1.1", "mFBS1.2", "cFBS1", "cFBS1", priority_candidate=priority_candidate_feature_for_test) }}
+                {% endif %}{# use_same_categories #}
+        {% endif %}{# use_fixed_candidates #}
+    {% endtable %}
+{% elif table == "sets_accessory_category_scores" %}
+    {% table table %}
+        ["cC0", "cC1", 1.0, "{{ day }}"],
+        ["cC0", "cC3", 0.5, "{{ day }}"],
+        {% if categories_without_automatic_candidates %}
+            ["fake_category_without_automatic_candidates", "cC1", 0.5, "{{ day }}"],
+        {% endif %}
+        {# For checking limitations in $allowed_category_pairs #}
+        {% for i in range(5, top_categories * 3, 2) %}
+            ["cC2", "{{ 'cC%d' % i }}", -{{ i|float }}, "{{ day }}"],
+        {% endfor %}
+        {% if ban_types or soft_ban_types %}
+            {% if ban_types and soft_ban_types %}
+                ["cC2", "cCB0", 1.0, "{{ day }}"],
+                ["cC2", "cCB1", 1.0, "{{ day }}"],
+                ["cC2", "cCB2", 1.0, "{{ day }}"],
+                ["cCB0", "cC2", 1.0, "{{ day }}"],
+                ["cCB1", "cC2", 1.0, "{{ day }}"],
+                ["cCB2", "cC2", 1.0, "{{ day }}"],
+                {% for mi in range(3) %}
+                    {% for li in range(3) %}
+                        {% if mi != li %}
+                          ["{{ 'cCB%d' % mi }}", "{{ 'cCB%d' % li }}", 1.0, "{{ day }}" ],
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            {% elif ban_types %}
+                ["cC2", "cCB0", 1.0, "{{ day }}"],
+                ["cCB0", "cC2", 1.0, "{{ day }}"],
+            {% else %}
+                ["cC2", "cCB1", 1.0, "{{ day }}"],
+                ["cCB1", "cC2", 1.0, "{{ day }}"],
+            {% endif %}
+        {% endif %}
+        {# Pair cCR0, cCR1 will be skipped due to appropriate rule #}
+        ["cCR0", "cCR1", 1.0, "{{ day }}"],
+        ["cCR0", "cCR2", 1.0, "{{ day }}"],
+        {# For checking of filtering categories-candidates by SKU availability #}
+        ["cC1000", "cC1001", 1.0, "{{ day }}"],
+        ["cC1010", "cC1011", 1.0, "{{ day }}"]
+    {% endtable %}
+{% elif table.startswith("items_r") or table.startswith("features_item_pair_recipe") %}
+    {% table "features_item_pair_recipe_item_conformity" if table.startswith("features_item_pair_recipe") else table %}
+        {# This rule is ignored in favor of cR0-cR1(with filters) rule #}
+        {{ rule("cR0", "category", ["cR0"], "cR1", "category", ["cR1"]) }}
+        {# Ok for this pair #}
+        {{ rule("cR0", "category", ["cR0"], "cR1", "model", ["mR1.0", "mR1.1", "mR1.2"]) }}
+        {# Ok, for cR0-cR1 with both filters #}
+        {{ rule("cR0", "model", ["mR0.0", "mR0.1"], "cR1", "model", ["mR1.0", "mR1.1", "mR1.2"]) }}
+        {# Rules for exclusion in automatic candiates #}
+        {{ rule("cCR0", "category", ["cCR0"], "cCR1", "category", ["cCR1"]) }}
+        {{ rule("cCR2", "category", ["cCR2"], "cCR0", "category", ["cCR0"]) }}
+        {# Ok, simple rules with filter #}
+        {{ rule("cR2", "model", ["mR2.1"], "cR3", "model", ["mR3.0"]) }}
+        {{ rule("cR4", "model", ["mR4.0"], "cR5", "model", ["mR5.0", "mR5.1"]) }}
+        {# Ok, cR2 and cR5 have rules with filters, but pair cR2, cR5 doesn't have #}
+        {{ rule("cR2", "model", ["mR2.2"], "cR5", "model", ["mR5.0"]) }}
+        {# Will be skipped due to corresponding hardcoded rule #}
+        {{ rule("cR6", "model", ["mR6.0"], "cR7", "model", ["mR7.0"]) }}
+        {# Priority check for fixed candidates #}
+        {{ rule("cF1", "model", ["mF1.1"], "cFR1", "model", ["mFR1.1"]) }}
+    {% endtable %}
+{% elif table == "sets_hardcoded_accessories_hardcoded_accessories" %}
+    {% table table %}
+        {# Include this accessories and disable all accessories from allowed categories with pair mc2.0, cC7 #}
+        ["mC2.0", "cC2", "mC7.0", "cC7", "model", "{{ day }}"],
+        {# Include this accessory #}
+        ["mR0.0", "cR0", "mR5.0", "cR5", "model", "{{ day }}"],
+        {# Skip rule mR6.0 -> mR7.0 because pair mR6.0, cR7 has hardcoded accessories #}
+        ["mR6.0", "cR6", "mR7.1", "cR7", "model", "{{ day }}"],
+        {# Priority check for fixed candidates #}
+        ["mF1.1", "cF1", "mFH1.1", "cFH1", "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "items_category_tree" %}
+    {% table table %}
+        ["cC0", "cRoot", [], "category", "{{ day }}"]
+    {% endtable %}
+{% elif table == "items_category_name" %}
+    {# Category names of small subset of categories for the purposes of coviews testing #}
+    {% table table %}
+        ["cC0", "Category cC0", "category", "{{ day }}"],
+        ["cC1000", "Category cC1000", "category", "{{ day }}"],
+        ["cC1010", "Category cC1010", "category", "{{ day }}"],
+        ["cCB0", "Category cCB0", "category", "{{ day }}"],
+        ["cCB1", "Category cCB1", "category", "{{ day }}"],
+        ["cCB2", "Category cCB2", "category", "{{ day }}"],
+        ["fake_category_without_automatic_candidates", "Fake category for bans", "category", "{{ day }}"]
+    {% endtable %}
+{% elif table == "items_sku_model_id" or table == "indexer_in_blue_mrs" %}
+    {% table table %}
+        {% for mi in range(3) %}
+            {{ sku_model_id("mF%d" % mi) }}
+            {{ sku_model_id("mC0.%d" % mi) }}
+            {{ sku_model_id("mC2.%d" % mi) }}
+            {{ sku_model_id("mR1.%d" % mi) }}
+            {{ sku_model_id("mCB.%d" % mi) }}
+        {% endfor %}
+        {% for li in range(max_candidates_per_model // 10) %}
+            {{ sku_model_id("mC1.%d" % li) }}
+            {{ sku_model_id("mC3.%d" % li) }}
+            {{ sku_model_id("mC5.%d" % li) }}
+            {{ sku_model_id("mC7.%d" % li) }}
+        {% endfor %}
+        {{ sku_model_id("mC1010.0", blue_mrs=False) }}
+        {{ sku_model_id("mC1010.1", blue_mrs=False) }}
+        {{ sku_model_id("mC1011.0", blue_mrs=False) }}
+        {% for mi in range(max_candidates_per_model) %}
+            {{ sku_model_id("mR0.%d" % mi) }}
+        {% endfor %}
+        {{ sku_model_id("mR2.1") }}
+        {{ sku_model_id("mR2.2") }}
+        {{ sku_model_id("mR3.0") }}
+        {{ sku_model_id("mR4.0") }}
+        {{ sku_model_id("mR5.0") }}
+        {{ sku_model_id("mR5.1") }}
+        {# Skip mR6.0, mR7.1 to check filtering of candidates by sku #}
+        {# Models from banned categoies #}
+        {% if ban_types or soft_ban_types %}
+            {# For heuristics #}
+            {{ sku_model_id("mCB0.0") }}
+            {{ sku_model_id("mCB1.0") }}
+            {{ sku_model_id("mCB1.1") }}
+            {{ sku_model_id("mCB2.0") }}
+            {# For parametric siblings #}
+            {{ sku_model_id("mCB01.0") }}
+            {{ sku_model_id("mCB01.1") }}
+            {{ sku_model_id("mCB11.0") }}
+            {{ sku_model_id("mCB11.1") }}
+            {{ sku_model_id("mCB21.0") }}
+            {{ sku_model_id("mCB21.1") }}
+        {% endif %}
+        {# For sku siblings #}
+        {{ sku_model_id("mCS1") }}
+        {% for i in range(max_candidates_per_model) %}
+            {{ sku_model_id("mCS1%d" % i) }}
+        {% endfor %}
+        {# Models for fixed candidates #}
+        {% for mi in range(3) %}
+            {{ sku_model_id("mF1.%d" % (mi + 1)) }}
+        {% endfor %}
+        {% for mi in range(2 * max_candidates_per_model) %}
+            {{ sku_model_id("mF2.%d" % (mi + 1)) }}
+        {% endfor %}
+        {{ sku_model_id("mF2.ANY") }}
+        {{ sku_model_id("mFH1.1") }}
+        {{ sku_model_id("mFH1.2") }}
+        {{ sku_model_id("mFR1.1") }}
+        {{ sku_model_id("mFR1.2") }}
+        {{ sku_model_id("mFBS1.1") }}
+        {{ sku_model_id("mFBS1.2") }}
+        {{ sku_model_id("mFBH1.1") }}
+        {{ sku_model_id("mFBWA1.1") }}
+        {{ sku_model_id("mMWS1.2") }}
+        {{ sku_model_id("mMWS2.2") }}
+    {% endtable %}
+{% elif table == "items_sku_category_id" %}
+    {% table table %}
+        {{ sku_category_id("cC0") }}
+        {{ sku_category_id("cC1") }}
+        {{ sku_category_id("cC2") }}
+        {{ sku_category_id("cC3") }}
+        {{ sku_category_id("cC5") }}
+        {{ sku_category_id("cC7") }}
+        {# Skip cC100X to check filtering of candidates by sku #}
+        {{ sku_category_id("cC1010") }}
+        {{ sku_category_id("cC1011") }}
+        {{ sku_category_id("cR0") }}
+        {{ sku_category_id("cR2") }}
+        {{ sku_category_id("cR3") }}
+        {{ sku_category_id("cR4") }}
+        {{ sku_category_id("cR5") }}
+        {{ sku_category_id("cR6") }}
+        {{ sku_category_id("cR7") }}
+        {{ sku_category_id("cCB") }}
+        {{ sku_category_id("cCB0") }}
+        {{ sku_category_id("cCB1") }}
+        {{ sku_category_id("cCB2") }}
+        {# For sku siblings #}
+        {{ sku_category_id("cCS") }}
+    {% endtable %}
+{% elif table == "indexer_offers" %}
+    {% table table %}
+        {# Models for main categories #}
+        {% for mi in range(2) %}
+            {{ shop_model("mC0.%d" % mi, 1) }}
+        {% endfor %}
+        {% if use_parametric_siblings %}
+            {{ shop_model("mCS10", 1) }}
+            {{ shop_model("mCS1", 1) }}
+        {% endif %}
+    {% endtable %}
+{% elif table.startswith("items_model") %}
+    {% table table %}
+        {# Models for main categories #}
+        {% for mi in range(3) %}
+            {{ model("mC0.%d" % mi, "cC0", 1) }}
+            {{ model("mC2.%d" % mi, "cC2", 1) }}
+            {{ model("mCR.0%d" % mi, "cCR0", 1) }}
+            {% if categories_without_automatic_candidates %}
+                {{ model("mCB.%d" % mi, "fake_category_without_automatic_candidates", 1) }}
+            {% endif %}
+        {% endfor %}
+        {# Models without SKU #}
+        {{ model("mC1000.0", "cC1000", 1) }}
+        {{ model("mC1000.1", "cC1000", 1) }}
+        {# Models with SKU but not in stock on Beru #}
+        {{ model("mC1010.0", "cC1010", 1) }}
+        {{ model("mC1010.1", "cC1010", 1) }}
+        {% if use_parametric_siblings %}
+            {% for i in range(max_candidates_per_model) %}
+                {{ model("mCS1%d" % i, "cCS", 1) }}
+            {% endfor %}
+            {{ model("mCS1", "cCS", 1)}}
+        {% endif %}
+        {# Models for linked categories #}
+        {% for ci in range(1, top_categories * 3, 2) %}
+            {% for mi in range(max_candidates_per_model) %}
+                {{ model("mC%d.%d" % (ci, mi), "cC%d" % ci, 1) }}
+            {% endfor %}
+        {% endfor %}
+        {# Model for linked category without SKU #}
+        {{ model("mC1001.0", "cC1001", 1) }}
+        {# Model for linked category with SKU but not in stock on Beru #}
+        {{ model("mC1011.0", "cC1011", 1) }}
+        {# Models from rules #}
+        {% for ci in range(top_categories) %}
+            {% for mi in range(max_candidates_per_model) %}
+                {{ model("mR%d.%d" % (ci, mi), "cR%d" % ci, max_candidates_per_model - mi) }}
+            {% endfor %}
+        {% endfor %}
+        {# Models from banned categoies #}
+        {% if ban_types or soft_ban_types %}
+            {# For heuristics #}
+            {{ model("mCB0.0", "cCB0", 1) }}
+            {{ model("mCB1.0", "cCB1", 1) }}
+            {{ model("mCB1.1", "cCB1", 1) }}
+            {{ model("mCB2.0", "cCB2", 1) }}
+            {# For parametric siblings #}
+            {{ model("mCB01.0", "cCB01", 1) }}
+            {{ model("mCB01.1", "cCB01", 1) }}
+            {{ model("mCB11.0", "cCB11", 1) }}
+            {{ model("mCB11.1", "cCB11", 1) }}
+            {{ model("mCB21.0", "cCB21", 1) }}
+            {{ model("mCB21.1", "cCB21", 1) }}
+        {% endif %}
+        {# Models for fixed candidates #}
+        {% for mi in range(3) %}
+            {{ model("mF1.%d" % (mi + 1), "cF1", 1) }}
+        {% endfor %}
+        {% for mi in range(2 * max_candidates_per_model) %}
+            {{ model("mF2.%d" % (mi + 1), "cF2", 1) }}
+        {% endfor %}
+        {{ model("mF2.NOSKU", "cF2", 1) }}
+        {{ model("mF2.ANY", "cF2", 1) }}
+        {{ model("mFH1.1", "cFH1", 1) }}
+        {{ model("mFH1.2", "cFH1", 1) }}
+        {{ model("mFR1.1", "cFR1", 1) }}
+        {{ model("mFR1.2", "cFR1", 1) }}
+        {{ model("mFBS1.1", "cFBS1", 1) }}
+        {{ model("mFBS1.2", "cFBS1", 1) }}
+        {{ model("mFBH1.1", "cFBH1", 1) }}
+        {% if cpa_only_inlet and include_popular_out_of_stock_items_inlet %}
+            {{ model("mMWS1.1", "cMWS", 1) }}
+            {{ model("mMWS1.2", "cMWS", 1) }}
+            {{ model("mMWS2.1", "cMWS", 1) }}
+            {{ model("mMWS2.2", "cMWS", 1) }}
+        {% endif %}
+        {{ model("mFBWA1.1", "fake_category_without_automatic_candidates", 1) }}
+    {% endtable %}
+{% elif table.endswith("statistics") %}
+    {% table table %}
+        {# Average model statistics for main categories #}
+        {% for mi in range(3) %}
+            {{ average_model_statistics("mC0.%d" % mi, max_candidates_per_model - mi|float) }}
+            {{ average_model_statistics("mC2.%d" % mi, max_candidates_per_model - mi|float) }}
+            {{ average_model_statistics("mCR0.%d" % mi, max_candidates_per_model - mi|float) }}
+        {% endfor %}
+        {# Average model statistics for main category without SKU: put on top #}
+        {{ average_model_statistics("mC1000.0", max_candidates_per_model + 1|float) }}
+        {# Average model statistics for main category with SKU but not on stock in Beru: put on top #}
+        {{ average_model_statistics("mC1010.0", max_candidates_per_model + 1|float) }}
+        {# Average model statistics for linked categories #}
+        {% for ci in range(1, top_categories * 3, 2) %}
+            {% for mi in range(max_candidates_per_model) %}
+                {% set count = (top_categories * 3 - ci) * 1000 + max_candidates_per_model - mi %}
+                {# Include first 50 accessories from category #}
+                {% if loop.index0 >= max_candidates_per_model // 10 %}{% set count = 1 %}{% endif %}
+                {{ average_model_statistics("mC%d.%d" % (ci, mi), count|float) }}
+            {% endfor %}
+        {% endfor %}
+        {# Average model statistics for linked category without SKU: put on top #}
+        {{ average_model_statistics("mC1001.0", max_candidates_per_model + 1|float) }}
+        {# Average model statistics for linked category with SKU but not on stock in Beru: put on top #}
+        {{ average_model_statistics("mC1011.0", max_candidates_per_model + 1|float) }}
+        {# Average model statistics for models from rules #}
+        {% for ci in range(top_categories) %}
+            {% for mi in range(max_candidates_per_model) %}
+                {% set count = (top_categories - ci) * 1000 + max_candidates_per_model - mi %}
+                {{ average_model_statistics("mR%d.%d" % (ci, mi), count|float) }}
+            {% endfor %}
+        {% endfor %}
+    {% endtable %}
+{% elif table.endswith("pmi") %}
+    {% table table %}
+        {# Models for linked categories #}
+        {% for mmi in range(3) %}
+            {# Some same category pairs for  coviews mode #}
+            {% if use_same_categories -%}
+                {% for lmi in range(3) %}
+                    {% if mmi != lmi %}
+                        {% set count = (top_categories * 3) * 10000 + max_candidates_per_model - lmi %}
+                        {{ model_pair_pmi("mC0.%d" % mmi, "mC0.%d" % lmi, count|float) }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% for ci in range(5, top_categories * 3, 2) %}
+                {% for lmi in range(max_candidates_per_model) %}
+                    {% set count = (top_categories * 3 - ci) * 1000 + max_candidates_per_model - lmi %}
+                    {# Include first 50 accessories from category #}
+                    {% if loop.index0 >= max_candidates_per_model // 10 %}{% set count = 1 %}{% endif %}
+                    {{ model_pair_pmi("mC2.%d" % mmi, "mC%d.%d" % (ci, lmi), count|float) }}
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+        {# The record will be skipped, because pair cC2, cC3 is not allowed #}
+        {{ model_pair_pmi("mC2.0", "mC3.0", top_categories * 10000.0) }}
+    {% endtable %}
+{% elif table == "features_item_pair_model_model_parametric_distance" %}
+    {% table table %}
+        {% for i in range(max_candidates_per_model) %}
+            {{ zpt() }}["mCS1", "mCS1{{ i }}", {{ 1.0 + i }}, "model", "model", "{{ day }}"]
+        {% endfor %}
+        {% for i in range(max_candidates_per_model // 5) %}
+            {{ zpt() }}["mCS1{{ i }}", "mCS1", {{ 1.0 + i }}, "model", "model", "{{ day }}"]
+        {% endfor %}
+        {# Models from banned categoies #}
+        {% if ban_types or soft_ban_types %}
+            {{ zpt() }}["mCB01.0", "mCB01.1", 1.0, "model", "model", "{{ day }}"]
+            {{ zpt() }}["mCB11.0", "mCB11.1", 1.0, "model", "model", "{{ day }}"]
+            {{ zpt() }}["mCB21.0", "mCB21.1", 1.0, "model", "model", "{{ day }}"]
+            {{ zpt() }}["mCB01.1", "mCB01.0", 1.0, "model", "model", "{{ day }}"]
+            {{ zpt() }}["mCB11.1", "mCB11.0", 1.0, "model", "model", "{{ day }}"]
+            {{ zpt() }}["mCB21.1", "mCB21.0", 1.0, "model", "model", "{{ day }}"]
+        {% endif %}
+        {# Model missing in $models #}
+        {{ zpt() }}["mCS1", "mCSX", 1.0, "model", "model", "{{ day }}"]
+    {% endtable %}
+{% elif table == "sets_banned_categories" %}
+    {% table table %}
+        {% if ban_types %}
+            {{ zpt() }}["cCB0", ["{{ ban_types | join('", "') }}"], "{{ day }}"]
+            {{ zpt() }}["cCB01", ["{{ ban_types | join('", "') }}"], "{{ day }}"]
+            {{ zpt() }}["cFBH1", ["{{ ban_types | join('", "') }}"], "{{ day }}"]
+            {% if soft_ban_types %}
+                {{ zpt() }}["cCB2", ["{{ (ban_types + soft_ban_types) | join('", "') }}"], "{{ day }}"]
+                {{ zpt() }}["cCB21", ["{{ (ban_types + soft_ban_types) | join('", "') }}"], "{{ day }}"]
+            {% endif %}
+        {% endif %}
+        {% if soft_ban_types %}
+            {{ zpt() }}["cCB1", ["{{ soft_ban_types | join('", "') }}"], "{{ day }}"]
+            {{ zpt() }}["cCB11", ["{{ soft_ban_types | join('", "') }}"], "{{ day }}"]
+            {{ zpt() }}["cFBS1", ["{{ soft_ban_types | join('", "') }}"], "{{ day }}"]
+        {% endif %}
+    {% endtable %}
+{% elif table == "inlet_fixed_model_accessories" %}
+    {% table table %}
+        {# Categories:
+            cF1 -- Regular 1 (main and linked category)
+            cF2 -- Regular 2 (linked category)
+            cFH -- Hardcoded (linked category)
+            cFR -- Rules (linked category)
+            cFBS -- Soft ban (main and linked category)
+            cFBH -- Hard ban (linked category)
+            fake_category_without_automatic_candidates (main category)
+        #}
+
+        {# Use accessory categories #}
+        {% if use_accessory_categories %}
+
+            {# Usual case -- will get to result #}
+            {{ zpt() }}["mF1.1", "mF2.1", 0.0]
+
+            {# Duplicate candidates (only one will be taken) #}
+            {{ zpt() }}["mF1.1", "mF2.2", 0.0]
+            {{ zpt() }}["mF1.1", "mF2.2", 1.0]
+
+            {# This candidate will be filtered out in case of sku filtering #}
+            {{ zpt() }}["mF1.1", "mF2.NOSKU", 0.0]
+
+            {# This candidate will be "skipped" in favor of hardcoded (in case one used) #}
+            {{ zpt() }}["mF1.1", "mFH1.2", 0.0]
+
+            {# This pair is similar to one with rules. Result will contain such a pair with rule flag set #}
+            {{ zpt() }}["mF1.1", "mFR1.1", 0.0]
+
+            {# This candidate is from category with rules. It will get to result without from_rule flag #}
+            {{ zpt() }}["mF1.1", "mFR1.2", 0.0]
+
+            {# Soft ban case 1 #}
+            {# This candidate will be filtered out -- main model is not from soft ban category #}
+            {{ zpt() }}["mF1.1", "mFBS1.1", 0.0]
+
+            {# Hard ban case -- this candidate will be filtered out #}
+            {{ zpt() }}["mF1.1", "mFBH1.1", 0.0]
+
+            {# categories_without_automatic_candidates case -- this pair will be dropped #}
+            {{ zpt() }}["mFBWA1.1", "mF2.4", 0.0]
+
+            {# Only last (with largest score) max_candidates_per_model candidates will get to result #}
+            {% for mi in range(max_candidates_per_model) %}
+                {{ zpt() }}["mF1.2", "mF2.{{ mi + 1 }}", {{ mi }}]
+            {% endfor %}
+        {% else %}
+            {# Candidate from different category will be filtered out #}
+            {{ zpt() }}["mF1.1", "mF2.ANY", 0.0]
+        {% endif %}
+
+        {# Use same categories #}
+        {% if use_same_categories %}
+            {# Usual case -- will get to result #}
+            {{ zpt() }}["mF1.3", "mF1.1", 0.0]
+
+            {# Soft ban case 2 #}
+            {# Main model from same ban type -- will get to result #}
+            {{ zpt() }}["mFBS1.1", "mFBS1.2", 0.0]
+
+            {# Candidate equal to main model will be filtered out #}
+            {{ zpt() }}["mF1.3", "mF1.3", 0.0]
+
+            {# Candidates for models not in stock #}
+            {{ zpt() }}["mMWS1.1", "mMWS1.2", 0.0]
+            {{ zpt() }}["mMWS2.1", "mMWS2.2", 0.0]
+        {% else %}
+            {# Candidate from same category will be filtered out #}
+            {{ zpt() }}["mF1.3", "mF1.1", 0.0]
+        {% endif %}
+
+    {% endtable %}
+{% elif table == "item2item_models_with_shows" %}
+    {% table table %}
+         {{ zpt() }}["mMWS1.1", 0.05, 10]
+         {{ zpt() }}["mMWS2.1", 0.01, 2]
+    {% endtable %}
+{% endif %}

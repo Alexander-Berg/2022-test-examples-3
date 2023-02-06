@@ -1,0 +1,96 @@
+service:
+  port: 1234
+  max_receive_message_size: 1073741824
+  thread_count: 60
+  describe_threshold: 100000
+
+db:
+  user_data_tables:
+    user_data: //dir/user_data
+    word_dict: //dir/word_dict
+    host_dict: //dir/host_dict
+    app_dict: //dir/app_dict
+
+  pack_size: 100000
+
+  yt:
+    - proxy: hahn.yt.yandex.net
+    - proxy: arnold.yt.yandex.net
+
+  max_rows_to_download: 15000000
+
+solomon:
+  project: crypta_siberia
+  service: custom_audience
+  cluster: "qa"
+  labels:
+    dc: "sas"
+    host: "localhost"
+  schema: "http"
+  host: "localhost"
+  port: 2345
+  timeout_sec: 10
+
+stats:
+  hist:
+    min: 0
+    max: 10
+    bin_count: 10
+
+  percentile:
+    max: 100000000
+    precision: 3
+    percentiles:
+      - 100
+      - 99.9
+      - 99
+      - 98
+      - 95
+      - 90
+
+logs:
+  main:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/main.log"
+      max_file_size: 41943040
+      max_files: 1
+    - type: stdout
+      deploy_format: true
+  download:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/download.log"
+      max_file_size: 41943040
+      max_files: 1
+    - type: stdout
+      deploy_format: true
+  custom_audience_server:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/custom_audience_server.log"
+      max_file_size: 41943040
+      max_files: 1
+    - type: stdout
+      deploy_format: true
+  custom_audience_service:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/custom_audience_service.log"
+      max_file_size: 41943040
+      max_files: 1
+    - type: stdout
+      deploy_format: true
+  solomon:
+    level: debug
+    targets:
+    - type: rotating
+      file: "/tmp/solomon.log"
+      max_file_size: 41943040
+      max_files: 1
+    - type: stdout
+      deploy_format: true

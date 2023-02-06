@@ -1,0 +1,46 @@
+{
+  "statfaceReports": [
+    {
+      "title": "Duplicate rate кластеров (Тестинг)",
+      "report": "Market/IR/models-clusterizer/ClustersStat/DuplicateRateTest",
+      "tableName": "clusterizer_duplicate_rate_testing",
+      "period": "ONE_MIN",
+      "splits": [
+        {
+          "name": "category",
+          "title": "Категория",
+          "splitField": "dictGetString('category', 'full_name', arrayJoin(dictGetHierarchy('category', toUInt64(category_id))))",
+          "tree": true
+        },
+        {
+          "name": "metric_name",
+          "title": "Способ агрегации",
+          "splitField": "metric_name",
+          "viewType": "Selector"
+        },
+        {
+          "name": "quantile",
+          "title": "Квантиль",
+          "splitField": "quantile",
+          "viewType": "Selector"
+        }
+      ],
+      "fields": [
+        {
+          "name": "duplicate_rate_metric",
+          "title": "Duplicate rate",
+          "metricField": "avg(value)",
+          "viewType": "Percent"
+        }
+      ],
+      "graphs": [
+        {
+          "title": "Duplicate rate (около 0 -- супер, 1 -- пограничные случаи, >> 1 -- дубли)",
+          "fields": [
+            "duplicate_rate_metric"
+          ]
+        }
+      ]
+    }
+  ]
+}

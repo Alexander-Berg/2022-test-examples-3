@@ -1,0 +1,73 @@
+{
+  "title": "iphone searchInfo schema v1",
+  "type": "object",
+  "required": ["originalQuery", "filteredQuery", "urls"],
+  "properties": {
+    "originalQuery": {
+      "type": "string",
+      "pattern": "Apple iPhone"
+    },
+    "filteredQuery": {
+      "type": "string",
+      "pattern": "Apple iPhone"
+    },
+    "urls": {
+      "type": "object",
+      "required": [
+        "market",
+        "eula",
+        "feedback",
+        "help",
+        "helpPhone",
+        "helpTablet"
+      ],
+      "properties": {
+        "market": {
+          "type": "string",
+          "format": "uri"
+        },
+        "eula": {
+          "type": "string",
+          "format": "uri"
+        },
+        "feedback": {
+          "type": "string",
+          "format": "uri"
+        },
+        "help": {
+          "type": "string",
+          "format": "uri"
+        },
+        "helpPhone": {
+          "type": "string",
+          "format": "uri"
+        },
+        "helpTablet": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "categories": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "url"],
+        "properties": {
+          "id": {
+            "type": "number",
+            "minimum": 0
+          },
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <service
+        id="1"
+        name="service"
+        initial_state_id="1000"
+    />
+
+    <car
+        id="0"
+        licence_plate="E105TM53"
+        required_gate_type="big test car"
+    />
+
+    <capacity
+        id="100"
+        name="capacity"
+        value="1"
+    />
+
+    <capacity_unit
+        id="1"
+        capacity_id="100"
+        readable_name="test_capacity_unit"
+        is_active="true"
+    />
+
+    <capacity_unit
+        id="2"
+        capacity_id="100"
+        readable_name="test_capacity_unit_2"
+        is_active="true"
+    />
+
+    <capacity_unit_login
+        id="1"
+        capacity_unit_id="1"
+        login="test"
+    />
+
+    <capacity_unit_login
+        id="2"
+        capacity_unit_id="2"
+        login="[null]"
+    />
+
+    <state
+        id="1000"
+        name="PROCESSING_START"
+        service_id="1"
+        capacity_id="100"
+    />
+
+    <state
+        id="1001"
+        name="POSTPONED"
+        service_id="1"
+        capacity_id="100"
+    />
+
+    <edge
+        id="2"
+        from_state_id="1000"
+        to_state_id="1001"/>
+
+
+    <edge_restriction
+        id="3"
+        type="EVENT_REQUIRED"
+        edge_id="2"/>
+
+    <restriction_param
+        id="5"
+        edge_restriction_id="3"
+        name="EVENT_TYPE"
+        value="POSTPONE"/>
+
+
+    <yard_client
+        id="1"
+        name="client"
+        external_id="extClient"
+        phone="123123123"
+        service_id="1"
+        created_at="2021-05-01 10:00:00"
+        state_id="1001"
+        car_id="0"
+        meta='{"ticketCode": "Р043", "requestType": "SHIPMENT", "capacityUnitId": "1", "takeAwayPallets": false, "takeAwayReturns": false, "lastCapacityUnitId": "1"}'
+    />
+
+    <yard_client_info
+        id="1"
+        yard_client_id="1"
+        root_id="711840"
+    />
+
+    <yard_client_info
+        id="2"
+        yard_client_id="1"
+        root_id="711841"
+    />
+
+    <yard_client_info
+        id="3"
+        yard_client_id="1"
+        root_id="711842"
+    />
+
+    <ticket
+        id="0"
+        ticket_code="Р042"
+        service_id="1"
+        yard_client_id="1"
+        type="SHIPMENT"
+        created_at="2021-05-01 9:00:00"
+        updated_at="2021-05-01 9:00:00"
+        site_id="100"
+        operator_window_id="1"
+    />
+
+</dataset>

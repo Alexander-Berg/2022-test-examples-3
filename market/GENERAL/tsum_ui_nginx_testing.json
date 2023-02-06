@@ -1,0 +1,126 @@
+{
+  "owner": "marketinfra",
+  "tableName": "tsum_nginx_testing",
+  "splits": {
+    "host": "host"
+  },
+  "metrics": [
+    {
+      "metricNameArray": [
+        "tsum.testing.ui.nginx.rps.host.${host}",
+        "tsum.testing.ui.nginx.rps.ALL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "countIf(vhost='tsum-testing.yandex-team.ru' AND url != '/ping') / 60",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "tsum.testing.ui.nginx.timings.host.${host}",
+        "tsum.testing.ui.nginx.timings.ALL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "resptime_ms",
+      "filter": "vhost='tsum-testing.yandex-team.ru' AND http_code >= 200 AND http_code <= 299 AND url != '/ping' AND url not like '/api/%/poll/%'",
+      "type": "QUANTILE_TIMING",
+      "valueOnNan": 0
+    },
+    {
+      "metricNameArray": [
+        "tsum.testing.ui.nginx.errors-percent.5xx.host.${host}",
+        "tsum.testing.ui.nginx.errors-percent.5xx.ALL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "countIf(vhost='tsum-testing.yandex-team.ru' AND http_code >= 500 AND http_code <= 599 AND url != '/ping' AND url NOT LIKE '%everybodybecoolthisis%') / count(url != '/ping') * 100",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "tsum.testing.ui.nginx.response.2xx.host.${host}",
+        "tsum.testing.ui.nginx.response.2xx.ALL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "countIf(vhost='tsum-testing.yandex-team.ru' AND http_code >= 200 AND http_code <= 299 AND url != '/ping')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "tsum.testing.ui.nginx.response.3xx.host.${host}",
+        "tsum.testing.ui.nginx.response.3xx.ALL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "countIf(vhost='tsum-testing.yandex-team.ru' AND http_code >= 300 AND http_code <= 399 AND url != '/ping')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "tsum.testing.ui.nginx.response.4xx.host.${host}",
+        "tsum.testing.ui.nginx.response.4xx.ALL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "countIf(vhost='tsum-testing.yandex-team.ru' AND http_code >= 400 AND http_code <= 499 AND url != '/ping')",
+      "type": "SIMPLE"
+    },
+    {
+      "metricNameArray": [
+        "tsum.testing.ui.nginx.response.5xx.host.${host}",
+        "tsum.testing.ui.nginx.response.5xx.ALL"
+      ],
+      "period": "ONE_MIN",
+      "metricField": "countIf(vhost='tsum-testing.yandex-team.ru' AND http_code >= 500 AND http_code <= 599 AND url != '/ping')",
+      "type": "SIMPLE"
+    }
+  ],
+
+  "commonSolomonLabels": {
+    "project": "market-infra",
+    "service": "tsum-ui",
+    "cluster": "testing"
+  },
+  "solomonSensors": [
+    {
+      "labelsArray": [
+        {
+          "sensor": "RPS"
+        },
+        {
+          "sensor": "RPS",
+          "host": "${host}"
+        }
+      ],
+      "period": "ONE_MIN",
+      "metricField": "countIf(vhost='tsum-testing.yandex-team.ru' AND url != '/ping') / 60",
+      "type": "SIMPLE"
+    },
+    {
+      "labelsArray": [
+        {
+          "sensor": "response_time"
+        },
+        {
+          "sensor": "response_time",
+          "host": "${host}"
+        }
+      ],
+      "period": "ONE_MIN",
+      "metricField": "resptime_ms",
+      "filter": "vhost='tsum-testing.yandex-team.ru' AND http_code >= 200 AND http_code <= 299 AND url != '/ping' AND url not like '/api/%/poll/%'",
+      "type": "QUANTILE_TIMING",
+      "valueOnNan": 0
+    },
+    {
+      "labelsArray": [
+        {
+          "sensor": "5xx_count"
+        },
+        {
+          "sensor": "5xx_count",
+          "host": "${host}"
+        }
+      ],
+      "period": "ONE_MIN",
+      "metricField": "countIf(vhost='tsum-testing.yandex-team.ru' AND http_code >= 500 AND http_code <= 599 AND url != '/ping' AND url NOT LIKE '%everybodybecoolthisis%')",
+      "type": "SIMPLE"
+    }
+  ]
+}

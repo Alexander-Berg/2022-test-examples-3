@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.yandex.autotests</groupId>
+        <artifactId>innerpochta-imap-new</artifactId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
+
+    <packaging>jar</packaging>
+    <artifactId>pop3-tests</artifactId>
+
+    <name>autotests-testpers-mail-pop3-new-tests</name>
+    <description>Tests module for new POP3 autotests</description>
+
+
+    <dependencies>
+
+        <!--<dependency>-->
+            <!--<groupId>com.sun.jersey</groupId>-->
+            <!--<artifactId>jersey-client</artifactId>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>imap-steps</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jersey-client</artifactId>
+                    <groupId>com.sun.jersey</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.yandex.autotests</groupId>
+            <artifactId>wmi-core</artifactId>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <!--<testSourceDirectory>src/main</testSourceDirectory>-->
+        <plugins>
+
+            <plugin>
+                <groupId>ru.yandex.qatools.tms</groupId>
+                <artifactId>testpalm-maven-plugin</artifactId>
+                <version>2.0-SNAPSHOT</version>
+                <configuration>
+                    <endpoint>https://testpalm.yandex-team.ru</endpoint>
+                    <packageName>ru.yandex.autotests.innerpochta.pop3</packageName>
+                    <token>11076fbe-e814-4d7e-b8f9-34dc9609ca28</token> <!-- robot-aqua-testpers token-->
+                    <testpalmProjectId>imap</testpalmProjectId>
+                    <isTestScope>false</isTestScope>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+</project>

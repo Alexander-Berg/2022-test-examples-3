@@ -1,0 +1,23 @@
+SELECT 
+  S.ExportID AS effectiveCampaignId, 
+  IF(is_null(S.AutobudgetStrategyID), -1, S.AutobudgetStrategyID) AS EffectiveStrategyId
+FROM yt.DirectGridStat_bs AS S
+WHERE (
+  (
+    S.ExportID = 3
+    AND IF(is_null(S.AutobudgetStrategyID), -1, S.AutobudgetStrategyID) IN (
+      1, 2
+    )
+    AND S.UpdateTime BETWEEN 1645650000 AND 1648069200
+  )
+  OR (
+    S.ExportID = 4
+    AND IF(is_null(S.AutobudgetStrategyID), -1, S.AutobudgetStrategyID) IN (
+      1, 2
+    )
+    AND S.UpdateTime BETWEEN 1645650000 AND 1648069200
+  )
+)
+GROUP BY 
+  effectiveCampaignId, 
+  EffectiveStrategyId

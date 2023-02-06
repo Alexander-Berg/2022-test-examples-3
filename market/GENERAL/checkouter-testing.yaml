@@ -1,0 +1,204 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый checkouter-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dcheckouter-testing
+
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=checkouter-testing&service=disk_free_space&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 1%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_checkouter_vla
+    - NANNY%testing_market_checkouter_sas
+    - NANNY%testing_market_checkouter_load_iva
+    - NANNY%testing_market_checkouter_load_vla
+    - NANNY%testing_market_checkouter_load_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: disk_free_space
+    nodata_mode: force_ok
+    ttl: 900
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=checkouter-testing&service=logrotate&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 1%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_checkouter_vla
+    - NANNY%testing_market_checkouter_sas
+    - NANNY%testing_market_checkouter_load_iva
+    - NANNY%testing_market_checkouter_load_vla
+    - NANNY%testing_market_checkouter_load_sas
+    flaps:
+      boost_time: 0
+      critical_time: 0
+      stable_time: 10800
+    service: logrotate
+    nodata_mode: force_ok
+    ttl: 21600
+
+  # Check mstat-contract-monitor
+  # https://juggler.yandex-team.ru/check_details/?host=checkouter-testing&service=mstat-contract-monitor&last=1DAY&mode=edit
+  - active: http
+    active_kwargs:
+      headers:
+        Host: checkouter.tst.vs.market.yandex.net
+      host: checkouter.tst.vs.market.yandex.net
+      ok_codes:
+      - 200
+      path: /monitor/mstat/contract
+      port: 39001
+      timeout: 200
+      warn_codes:
+      - 500
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    children: []
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: mstat-contract-monitor
+    ttl: 900
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=checkouter-testing&service=ping&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 1%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_checkouter_vla:ping
+    - NANNY%testing_market_checkouter_sas:ping
+    - NANNY%testing_market_checkouter_load_iva:ping
+    - NANNY%testing_market_checkouter_load_vla:ping
+    - NANNY%testing_market_checkouter_load_sas:ping
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: ping-alive
+    check_options:
+      args:
+      - '--path'
+      - '/ping-alive'
+    ttl: 900
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=checkouter-testing&service=push-client-status&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 1%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_checkouter_vla
+    - NANNY%testing_market_checkouter_sas
+    - NANNY%testing_market_checkouter_load_iva
+    - NANNY%testing_market_checkouter_load_vla
+    - NANNY%testing_market_checkouter_load_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: push-client-status
+    nodata_mode: force_ok
+    ttl: 900
+
+  # Check testing_checkouter
+  # https://juggler.yandex-team.ru/check_details/?host=checkouter-testing&service=testing_checkouter&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 1%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - logkeeper-minion
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    service: testing_checkouter
+    ttl: 900
+  default:
+    check_options: {}
+    host: checkouter-testing
+    namespace: market.checkouter
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - marketcheckouter
+    - testing
+    - market_checkout_testing
+    - market
+    - _market_

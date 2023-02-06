@@ -1,0 +1,28 @@
+module.exports = [
+    {
+        anonymous: 0,
+        id: '59553435',
+        created: 1473151855000,
+        comment: 'Люблю черный',
+        pro: 'Черный',
+        contra: 'Недостаточно черный',
+        type: 1,
+        photos: [],
+        entity: 'opinion',
+        rating: {value: 3, title: 'обычная модель'},
+        resolved: undefined,
+        usage: 'менее месяца',
+        votes: {agree: 1, reject: 0, total: 0, isActive: false, value: 1},
+        user: {
+            entity: 'user',
+            uid: '416708933',
+            displayName: 'yndx-ukchuvrus',
+            login: 'yndx-ukchuvrus',
+            firstName: 'Vasily',
+            lastName: 'Pupkin',
+            grades: 2,
+            social: undefined,
+        },
+        region: {entity: 'region', name: undefined},
+    },
+];

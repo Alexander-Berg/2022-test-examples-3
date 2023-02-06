@@ -1,0 +1,63 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый mbo_cms_api-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmbo_cms_api-testing
+
+juggler:
+  checks:
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=mbo_cms_api-testing&service=disk_free_space&last=1DAY&mode=edit
+  - service: disk_free_space
+    nodata_mode: force_ok
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=mbo_cms_api-testing&service=logrotate&last=1DAY&mode=edit
+  - service: logrotate
+    nodata_mode: force_ok
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=mbo_cms_api-testing&service=ping&last=1DAY&mode=edit
+  - service: ping
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=mbo_cms_api-testing&service=push-client-status&last=1DAY&mode=edit
+  - service: push-client-status
+    nodata_mode: force_ok
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 101%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    check_options: {}
+    children:
+    - NANNY%testing_market_mbo_cms_api_vla
+    - NANNY%testing_market_mbo_cms_api_sas
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: mbo_cms_api-testing
+    namespace: market.common
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - marketmbocmsapi
+    - testing
+    - market
+    - _market_
+    ttl: 900

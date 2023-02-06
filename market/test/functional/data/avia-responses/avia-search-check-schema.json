@@ -1,0 +1,246 @@
+{
+  "title": "Avia search check, full response schema",
+  "type": "object",
+  "required": ["avia"],
+  "properties": {
+    "avia": {
+      "type": "object",
+      "required": [
+        "type",
+        "requestCount",
+        "flights",
+        "flightsCount",
+        "minPrice"
+      ],
+      "properties": {
+        "type": {
+          "enum": ["check", "finish"]
+        },
+        "requestCount": {
+          "type": "number",
+          "minimum": 0
+        },
+        "flightsCount": {
+          "type": "number",
+          "minimum": 0
+        },
+        "flights": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["forward", "intent", "url", "orderUrl", "price"],
+            "properties": {
+              "forward": {
+                "type": "object",
+                "required": ["depart", "arrive", "duration", "airlines"],
+                "properties": {
+                  "depart": {
+                    "type": "object",
+                    "required": ["airport", "iata", "city", "date", "time"],
+                    "properties": {
+                      "airport": {
+                        "type": "string"
+                      },
+                      "iata": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "date": {
+                        "type": "string"
+                      },
+                      "time": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "arrive": {
+                    "type": "object",
+                    "required": ["airport", "iata", "city", "date", "time"],
+                    "properties": {
+                      "airport": {
+                        "type": "string"
+                      },
+                      "iata": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "date": {
+                        "type": "string"
+                      },
+                      "time": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "duration": {
+                    "type": "string"
+                  },
+                  "changesInfo": {
+                    "type": "object",
+                    "required": ["text", "longText", "type"],
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      },
+                      "text": {
+                        "type": "string"
+                      },
+                      "longText": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "airlines": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["name", "image"],
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "image": {
+                          "type": "string",
+                          "format": "uri"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "backward": {
+                "type": "object",
+                "required": ["depart", "arrive", "duration", "airlines"],
+                "properties": {
+                  "depart": {
+                    "type": "object",
+                    "required": ["airport", "iata", "city", "date", "time"],
+                    "properties": {
+                      "airport": {
+                        "type": "string"
+                      },
+                      "iata": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "date": {
+                        "type": "string"
+                      },
+                      "time": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "arrive": {
+                    "type": "object",
+                    "required": ["airport", "iata", "city", "date", "time"],
+                    "properties": {
+                      "airport": {
+                        "type": "string"
+                      },
+                      "iata": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "date": {
+                        "type": "string"
+                      },
+                      "time": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "duration": {
+                    "type": "string"
+                  },
+                  "changesInfo": {
+                    "type": "object",
+                    "required": ["text", "longText", "type"],
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      },
+                      "text": {
+                        "type": "string"
+                      },
+                      "longText": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "airlines": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["name", "image"],
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "image": {
+                          "type": "string",
+                          "format": "uri"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "intent": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "orderUrl": {
+                "type": "string",
+                "format": "uri"
+              },
+              "price": {
+                "type": "object",
+                "required": ["value", "currency"],
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "currency": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "minPrice": {
+          "type": "object",
+          "required": ["value", "currency"],
+          "properties": {
+            "value": {
+              "type": "number",
+              "minimum": 0
+            },
+            "currency": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

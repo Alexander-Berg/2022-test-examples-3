@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <business_process_state
+            id="1001"
+            queue_type="MULTIPLE_RETRY_BUSINESS_PROCESS_STATES_VIA_FILE"
+            status="SYNC_PROCESS_SUCCEEDED"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd","fileId":1,"sequenceId":1001}'
+            comment="Some processes were not retried. Errors by types: {ALREADY_IN_SUCCESS_STATUS=[1002], ORDER_HAS_DELIVERY_OPTION_CHANGE_REQUEST=[1004], NOT_FOUND=[1005]}"
+            sequence_id="1001"
+            parent_id="[null]"
+            save_to_yt_only="true"
+    />
+
+    <business_process_state
+            id="1002"
+            queue_type="CREATE_ORDER_EXTERNAL"
+            status="SUCCESS_RESPONSE_PROCESSING_SUCCEEDED"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd","orderId":1,"waybillSegmentId":2,"sequenceId":1002}'
+            comment="Недопустимый тип района обслуживания на этапе доставки по услуге и клиенту"
+            sequence_id="1002"
+            parent_id="[null]"
+    />
+
+    <business_process_state
+            id="1003"
+            queue_type="FULFILLMENT_CREATE_ORDER_EXTERNAL"
+            status="ERROR_RESPONSE_PROCESSING_SUCCEEDED"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd","orderId":1,"waybillSegmentId":1,"sequenceId":1003}'
+            comment="Marschroute error message [Не удаётся зарезервировать товар под заказ]"
+            sequence_id="1003"
+            parent_id="[null]"
+    />
+
+    <business_process_state
+            id="1004"
+            queue_type="CREATE_ORDER_EXTERNAL"
+            status="ERROR_RESPONSE_PROCESSING_SUCCEEDED"
+            payload='{"requestId":"1000000000000/abcdabcdabcdabcdabcdabcdabcdabcd","orderId":2,"waybillSegmentId":3,"sequenceId":1004}'
+            comment="code 9999: Unexpected technical error. Please check logs for details."
+            sequence_id="1004"
+            parent_id="[null]"
+    />
+</dataset>

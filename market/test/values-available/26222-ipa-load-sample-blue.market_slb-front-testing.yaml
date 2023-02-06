@@ -1,0 +1,21 @@
+context:
+  default:
+    balancing_method: rr
+    cert: ipa-test-load
+    health_check: '"GET /ping HTTP/1.1\r\nHost: ipa-test-load-sample.fslb.beru.ru\r\n\r\n"'
+    plain_http: false
+    # XXX: Приоритет должен быть ВЫШЕ, чем у встроенного хэндлера /ping, чтобы запросы на пинг обрабатывались haproxy
+    priority: 1000
+    servername_regexp: (ipa-load-sample\\.blue\\.tst\\.vs\\.market\\.yandex\\.net|ipa-test-load-sample\\.fslb\\.beru\\.ru)
+    service_name: ipa_blue_test_load_sample
+    vs: ipa_blue_test_load_sample
+    antirobot: true
+    antirobot_service_name: market
+
+servers:
+  default:
+    main:
+    - name: "GREY%ipa-load-sample.blue.tst.vs.market.yandex.net"
+      plain_http_backend: true
+      port: 80
+      timeout: 35s

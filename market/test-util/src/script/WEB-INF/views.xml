@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="false"
+       default-autowire="no">
+
+    <import resource="classpath:WEB-INF/push-api-full-class-mappings.xml" />
+    <import resource="classpath:WEB-INF/views-xml.xml"/>
+    <import resource="classpath:WEB-INF/views-json.xml"/>
+
+    <bean class="ru.yandex.market.checkout.common.web.ChainingViewResolver">
+        <property name="viewResolvers">
+            <list>
+                <bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
+                <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+                    <property name="contentNegotiationManager">
+                        <bean id="contentNegotiationManagerFactory"
+                              class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+                            <property name="favorPathExtension" value="true"/>
+                            <property name="favorParameter" value="false"/>
+                            <property name="ignoreAcceptHeader" value="false"/>
+                            <property name="useJaf" value="false"/>
+                            <property name="mediaTypes">
+                                <map>
+                                    <entry key="xml" value="application/xml; charset=utf-8"/>
+                                </map>
+                            </property>
+                        </bean>
+                    </property>
+                    <property name="viewResolvers">
+                        <list />
+                    </property>
+                    <property name="defaultViews">
+                        <list>
+                            <ref bean="xml" />
+                        </list>
+                    </property>
+                    <property name="order" value="1"/>
+                </bean>
+            </list>
+        </property>
+        <property name="defaultView" ref="xml"/>
+    </bean>
+
+
+    <bean id="apiDateFormat" class="java.lang.String">
+        <constructor-arg value="dd-MM-yyyy"/>
+    </bean>
+
+    <bean id="apiDateTimeFormat" class="java.lang.String">
+        <constructor-arg value="dd-MM-yyyy HH:mm:ss" />
+    </bean>
+
+
+</beans>

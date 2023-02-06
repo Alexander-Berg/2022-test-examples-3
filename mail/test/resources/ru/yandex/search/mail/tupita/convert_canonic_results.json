@@ -1,0 +1,717 @@
+[
+  {
+    "input": "{}",
+    "output": "(mid_p:*)",
+    "ok": true
+  },
+  {
+    "input": "{ \"from\": \"hello@ya.ru\" }",
+    "output": "((hdr_from_email:\"hello@ya.ru\" OR hdr_from_display_name:\"hello@ya.ru\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"from\": { \"$eq\": \"hello@ya.ru\" } }",
+    "output": "((hdr_from_email:\"hello@ya.ru\" OR hdr_from_display_name:\"hello@ya.ru\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"from\": { \"$ne\": \"hello@ya.ru\" } }",
+    "output": "(mid_p:* AND NOT (hdr_from_email:\"hello@ya.ru\" OR hdr_from_display_name:\"hello@ya.ru\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"from\": { \"$contains\": \"hello@ya.ru\" } }",
+    "output": "((hdr_from_email:(*hello@ya.ru*) OR hdr_from_display_name:(*hello@ya.ru*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"from\": { \"$not-contains\": \"hello@ya.ru\" } }",
+    "output": "(mid_p:* AND NOT (hdr_from_email:(*hello@ya.ru*) OR hdr_from_display_name:(*hello@ya.ru*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"from\": { \"$base64\": \"aGVsbG9AeWEucnU=\" } }",
+    "output": "((hdr_from_email:\"hello@ya.ru\" OR hdr_from_display_name:\"hello@ya.ru\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"from\": { \"$eq\": { \"$base64\": \"aGVsbG9AeWEucnU=\" } } }",
+    "output": "((hdr_from_email:\"hello@ya.ru\" OR hdr_from_display_name:\"hello@ya.ru\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"from\": { \"$ne\": { \"$base64\": \"aGVsbG9AeWEucnU=\" } } }",
+    "output": "(mid_p:* AND NOT (hdr_from_email:\"hello@ya.ru\" OR hdr_from_display_name:\"hello@ya.ru\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"from\": { \"$contains\": { \"$base64\": \"aGVsbG9AeWEucnU=\" } } }",
+    "output": "((hdr_from_email:(*hello@ya.ru*) OR hdr_from_display_name:(*hello@ya.ru*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"from\": { \"$not-contains\": { \"$base64\": \"aGVsbG9AeWEucnU=\" } } }",
+    "output": "(mid_p:* AND NOT (hdr_from_email:(*hello@ya.ru*) OR hdr_from_display_name:(*hello@ya.ru*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"to\": { \"$contains\": \"Luke Skywalker\" } }",
+    "output": "((hdr_to_email:(*Luke\\ Skywalker*) OR hdr_to_display_name:(*Luke\\ Skywalker*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"cc\": { \"$contains\": \"Luke Skywalker\" } }",
+    "output": "((hdr_cc_email:(*Luke\\ Skywalker*) OR hdr_cc_display_name:(*Luke\\ Skywalker*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"tocc\": { \"$contains\": \"Luke Skywalker\" } }",
+    "output": "((hdr_to_email:(*Luke\\ Skywalker*) OR hdr_to_display_name:(*Luke\\ Skywalker*) OR hdr_cc_email:(*Luke\\ Skywalker*) OR hdr_cc_display_name:(*Luke\\ Skywalker*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"address:from\": { \"$not-contains\": \"Luke Skywalker\" } }",
+    "output": "(mid_p:* AND NOT hdr_from_keyword:(*Luke\\ Skywalker*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"address:to\": { \"$not-contains\": \"Luke Skywalker\" } }",
+    "output": "(mid_p:* AND NOT hdr_to_keyword:(*Luke\\ Skywalker*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"address:cc\": { \"$not-contains\": \"Luke Skywalker\" } }",
+    "output": "(mid_p:* AND NOT hdr_cc_keyword:(*Luke\\ Skywalker*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"address:tocc\": { \"$not-contains\": \"Luke Skywalker\" } }",
+    "output": "(mid_p:* AND NOT (hdr_to_keyword:(*Luke\\ Skywalker*) OR hdr_cc_keyword:(*Luke\\ Skywalker*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"address:from\": { \"$not-contains\": { \"$base64\": \"aGVsbG9AeWEucnU=\" } } }",
+    "output": "(mid_p:* AND NOT hdr_from_keyword:(*hello@ya.ru*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"address:to\": { \"$not-contains\": { \"$base64\": \"aGVsbG9AeWEucnU=\" } } }",
+    "output": "(mid_p:* AND NOT hdr_to_keyword:(*hello@ya.ru*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"address:cc\": { \"$not-contains\": { \"$base64\": \"aGVsbG9AeWEucnU=\" } } }",
+    "output": "(mid_p:* AND NOT hdr_cc_keyword:(*hello@ya.ru*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"address:tocc\": { \"$not-contains\": { \"$base64\": \"aGVsbG9AeWEucnU=\" } } }",
+    "output": "(mid_p:* AND NOT (hdr_to_keyword:(*hello@ya.ru*) OR hdr_cc_keyword:(*hello@ya.ru*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": \"Hello\" }",
+    "output": "(hdr_subject_keyword:\"Hello\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$eq\": \"Hello\" } }",
+    "output": "(hdr_subject_keyword:\"Hello\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$ne\": \"Hello\" } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:\"Hello\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$contains\": \"Hello\" } }",
+    "output": "(hdr_subject_keyword:(*Hello*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$not-contains\": \"Hello\" } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:(*Hello*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$base64\": \"SGVsbG8=\" } }",
+    "output": "(hdr_subject_keyword:\"Hello\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$eq\": { \"$base64\": \"SGVsbG8=\" } } }",
+    "output": "(hdr_subject_keyword:\"Hello\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$ne\": { \"$base64\": \"SGVsbG8=\" } } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:\"Hello\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$contains\": { \"$base64\": \"SGVsbG8=\" } } }",
+    "output": "(hdr_subject_keyword:(*Hello*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$not-contains\": { \"$base64\": \"SGVsbG8=\" } } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:(*Hello*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"attach:filename\": \"my-file.txt\" }",
+    "output": "((attachname:\"my-file.txt\" OR attachname_keyword:\"my-file.txt\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"attach:filename\": { \"$eq\": \"my-file.txt\" } }",
+    "output": "((attachname:\"my-file.txt\" OR attachname_keyword:\"my-file.txt\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"attach:filename\": { \"$ne\": \"my-file.txt\" } }",
+    "output": "(mid_p:* AND NOT (attachname:\"my-file.txt\" OR attachname_keyword:\"my-file.txt\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"attach:filename\": { \"$contains\": \".txt\" } }",
+    "output": "((attachname:(*.txt*) OR attachname_keyword:(*.txt*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"attach:filename\": { \"$not-contains\": \".txt\" } }",
+    "output": "(mid_p:* AND NOT (attachname:(*.txt*) OR attachname_keyword:(*.txt*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"attach:filename\": { \"$base64\": \"bXktZmlsZS50eHQ=\" } }",
+    "output": "((attachname:\"my-file.txt\" OR attachname_keyword:\"my-file.txt\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"attach:filename\": { \"$eq\": { \"$base64\": \"bXktZmlsZS50eHQ=\" } } }",
+    "output": "((attachname:\"my-file.txt\" OR attachname_keyword:\"my-file.txt\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"attach:filename\": { \"$ne\": { \"$base64\": \"bXktZmlsZS50eHQ=\" } } }",
+    "output": "(mid_p:* AND NOT (attachname:\"my-file.txt\" OR attachname_keyword:\"my-file.txt\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"attach:filename\": { \"$contains\": { \"$base64\": \"LnR4dA==\" } } }",
+    "output": "((attachname:(*.txt*) OR attachname_keyword:(*.txt*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"attach:filename\": { \"$not-contains\": { \"$base64\": \"LnR4dA==\" } } }",
+    "output": "(mid_p:* AND NOT (attachname:(*.txt*) OR attachname_keyword:(*.txt*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"body\": \"Hello\" }",
+    "output": "((body_text:\"Hello\" OR pure_body:\"Hello\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"body\": { \"$eq\": \"Hello\" } }",
+    "output": "((body_text:\"Hello\" OR pure_body:\"Hello\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"body\": { \"$ne\": \"Hello\" } }",
+    "output": "(mid_p:* AND NOT (body_text:\"Hello\" OR pure_body:\"Hello\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"body\": { \"$contains\": \"Hello\" } }",
+    "output": "((body_text:(*Hello*) OR pure_body:(*Hello*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"body\": { \"$not-contains\": \"Hello\" } }",
+    "output": "(mid_p:* AND NOT (body_text:(*Hello*) OR pure_body:(*Hello*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"body\": { \"$base64\": \"SGVsbG8=\" } }",
+    "output": "((body_text:\"Hello\" OR pure_body:\"Hello\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"body\": { \"$eq\": { \"$base64\": \"SGVsbG8=\" } } }",
+    "output": "((body_text:\"Hello\" OR pure_body:\"Hello\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"body\": { \"$ne\": { \"$base64\": \"SGVsbG8=\" } } }",
+    "output": "(mid_p:* AND NOT (body_text:\"Hello\" OR pure_body:\"Hello\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"body\": { \"$contains\": { \"$base64\": \"SGVsbG8=\" } } }",
+    "output": "((body_text:(*Hello*) OR pure_body:(*Hello*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"body\": { \"$not-contains\": { \"$base64\": \"SGVsbG8=\" } } }",
+    "output": "(mid_p:* AND NOT (body_text:(*Hello*) OR pure_body:(*Hello*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"header:x-spam-flag\": { \"$exists\": true } }",
+    "output": "(headers:x\\-spam\\-flag\\:*)",
+    "ok": true
+  },
+  {
+    "input": "{ \"header:x-spam-flag\": { \"$exists\": false } }",
+    "output": "(mid_p:* AND NOT headers:x\\-spam\\-flag\\:*)",
+    "ok": true
+  },
+  {
+    "input": "{ \"header:x-spam-flag\": \"yes\" }",
+    "output": "(headers:\"x-spam-flag:yes\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"header:x-spam-flag\": { \"$eq\": \"yes\" } }",
+    "output": "(headers:\"x-spam-flag:yes\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"header:x-spam-flag\": { \"$ne\": \"yes\" } }",
+    "output": "(mid_p:* AND NOT headers:\"x-spam-flag:yes\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"header:x-spam-flag\": { \"$contains\": \"yes\" } }",
+    "output": "(headers:(*x\\-spam\\-flag\\:yes*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"header:x-spam-flag\": { \"$not-contains\": \"yes\" } }",
+    "output": "(mid_p:* AND NOT headers:(*x\\-spam\\-flag\\:yes*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"header:x-spam-flag\": { \"$base64\": \"eWVz\" } }",
+    "output": "(headers:\"x-spam-flag:yes\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"header:x-spam-flag\": { \"$eq\": { \"$base64\": \"eWVz\" } } }",
+    "output": "(headers:\"x-spam-flag:yes\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"header:x-spam-flag\": { \"$ne\": { \"$base64\": \"eWVz\" } } }",
+    "output": "(mid_p:* AND NOT headers:\"x-spam-flag:yes\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"header:x-spam-flag\": { \"$contains\": { \"$base64\": \"eWVz\" } } }",
+    "output": "(headers:(*x\\-spam\\-flag\\:yes*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"header:x-spam-flag\": { \"$not-contains\": { \"$base64\": \"eWVz\" } } }",
+    "output": "(mid_p:* AND NOT headers:(*x\\-spam\\-flag\\:yes*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"header:subject\": \"Привет!\" }",
+    "output": "(headers:\"subject:Привет!\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"header:subject\": { \"$base64\": \"0J/RgNC40LLQtdGCIQ==\" } }",
+    "output": "(headers:\"subject:Привет!\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": [ \"hello\", \"bye\" ] }",
+    "output": "(hdr_subject_keyword:(\"hello\" OR \"bye\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$eq\": [ \"hello\", \"bye\" ] } }",
+    "output": "(hdr_subject_keyword:(\"hello\" OR \"bye\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$ne\": [ \"hello\", \"bye\" ] } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:(\"hello\" OR \"bye\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$contains\": [ \"hello\", \"bye\" ] } }",
+    "output": "(hdr_subject_keyword:(*hello* OR *bye*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$not-contains\": [ \"hello\", \"bye\" ] } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:(*hello* OR *bye*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$any\": [ \"hello\", \"bye\" ] } }",
+    "output": "(hdr_subject_keyword:(\"hello\" OR \"bye\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$eq\": { \"$any\": [ \"hello\", \"bye\" ] } } }",
+    "output": "(hdr_subject_keyword:(\"hello\" OR \"bye\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$ne\": { \"$all\": [ \"hello\", \"bye\" ] } } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:(\"hello\" AND \"bye\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$contains\": { \"$any\":  [ \"hello\", \"bye\" ] } } }",
+    "output": "(hdr_subject_keyword:(*hello* OR *bye*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$not-contains\": { \"$all\": [ \"hello\", \"bye\" ] } } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:(*hello* AND *bye*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": [ { \"$base64\": \"aGVsbG8=\" }, \"bye\" ] }",
+    "output": "(hdr_subject_keyword:(\"hello\" OR \"bye\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$eq\": [ \"hello\", { \"$base64\": \"Ynll\" } ] } }",
+    "output": "(hdr_subject_keyword:(\"hello\" OR \"bye\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$ne\": [ { \"$base64\": \"aGVsbG8=\" }, { \"$base64\": \"Ynll\" } ] } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:(\"hello\" OR \"bye\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$contains\": [ { \"$base64\": \"aGVsbG8=\" }, \"bye\" ] } }",
+    "output": "(hdr_subject_keyword:(*hello* OR *bye*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$not-contains\": [ \"hello\", { \"base64\": \"Ynll\" } ] } }",
+    "output": "",
+    "ok": false
+  },
+  {
+    "input": "{ \"subject\": { \"$any\": [ { \"$base64\": \"aGVsbG8=\" }, \"bye\" ] } }",
+    "output": "(hdr_subject_keyword:(\"hello\" OR \"bye\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$eq\": { \"$any\": [ \"hello\", { \"$base64\": \"Ynll\" } ] } } }",
+    "output": "(hdr_subject_keyword:(\"hello\" OR \"bye\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$ne\": { \"$all\": [ { \"$base64\": \"aGVsbG8=\" }, { \"$base64\": \"Ynll\" } ] } } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:(\"hello\" AND \"bye\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$contains\": { \"$any\":  [ { \"$base64\": \"aGVsbG8=\" }, \"bye\" ] } } }",
+    "output": "(hdr_subject_keyword:(*hello* OR *bye*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$not-contains\": { \"$all\": [ \"hello\", { \"$base64\": \"Ynll\"} ] } } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:(*hello* AND *bye*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": [ \"hello\" ] }",
+    "output": "(hdr_subject_keyword:\"hello\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$eq\": [ \"hello\" ] } }",
+    "output": "(hdr_subject_keyword:\"hello\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$ne\": [ \"hello\" ] } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:\"hello\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$contains\": [ \"hello\" ] } }",
+    "output": "(hdr_subject_keyword:(*hello*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$not-contains\": [ \"hello\" ] } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:(*hello*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$any\": [ \"hello\" ] } }",
+    "output": "(hdr_subject_keyword:(\"hello\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$eq\": { \"$any\": [ \"hello\" ] } } }",
+    "output": "(hdr_subject_keyword:(\"hello\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$ne\": { \"$all\": [ \"hello\" ] } } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:(\"hello\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$contains\": { \"$any\":  [ \"hello\" ] } } }",
+    "output": "(hdr_subject_keyword:(*hello*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$not-contains\": { \"$all\": [ \"hello\" ] } } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:(*hello*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": [ { \"$base64\": \"aGVsbG8=\" } ] }",
+    "output": "(hdr_subject_keyword:\"hello\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$eq\": [ { \"$base64\": \"aGVsbG8=\" } ] } }",
+    "output": "(hdr_subject_keyword:\"hello\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$ne\": [ { \"$base64\": \"aGVsbG8=\" } ] } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:\"hello\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$contains\": [ { \"$base64\": \"aGVsbG8=\" } ] } }",
+    "output": "(hdr_subject_keyword:(*hello*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$not-contains\": [ { \"$base64\": \"aGVsbG8=\" } ] } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:(*hello*))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": \"\" }",
+    "output": "(hdr_subject_keyword:\"\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$eq\": \"\" } }",
+    "output": "(hdr_subject_keyword:\"\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$ne\": \"\" } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:\"\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$base64\": \"\" } }",
+    "output": "(hdr_subject_keyword:\"\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$eq\": { \"$base64\": \"\" } } }",
+    "output": "(hdr_subject_keyword:\"\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$ne\": { \"$base64\": \"\" } } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:\"\")",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$contains\": \"    \" } }",
+    "output": "(hdr_subject_keyword:(*\\ \\ \\ \\ *))",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": { \"$not-contains\": { \"$base64\": \"ICAgIA==\" } } }",
+    "output": "(mid_p:* AND NOT hdr_subject_keyword:(*\\ \\ \\ \\ *))",
+    "ok": true
+  },
+  {
+    "input": "{ \"$and\": [ {} ] }",
+    "output": "(((mid_p:*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"$or\": [ {} ] }",
+    "output": "(((mid_p:*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"$and\": [ {}, {} ] }",
+    "output": "(((mid_p:*) AND (mid_p:*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"$or\": [ {}, {} ] }",
+    "output": "(((mid_p:*) OR (mid_p:*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"$and\": [ {}, {}, {}, {}, {} ] }",
+    "output": "(((mid_p:*) AND (mid_p:*) AND (mid_p:*) AND (mid_p:*) AND (mid_p:*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"$or\": [ {}, {}, {}, {}, {} ] }",
+    "output": "(((mid_p:*) OR (mid_p:*) OR (mid_p:*) OR (mid_p:*) OR (mid_p:*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"$and\": [ { \"$and\": [ { \"$and\": [ { \"$and\": [ {} ] } ] } ] } ] }",
+    "output": "(((((((((mid_p:*)))))))))",
+    "ok": true
+  },
+  {
+    "input": "{ \"$or\": [ { \"$or\": [ { \"$or\": [ { \"$or\": [ {} ] } ] } ] } ] }",
+    "output": "(((((((((mid_p:*)))))))))",
+    "ok": true
+  },
+  {
+    "input": "{ \"$and\": [ { \"$or\": [ { \"$and\": [ { \"$or\": [ {} ] } ] } ] } ] }",
+    "output": "(((((((((mid_p:*)))))))))",
+    "ok": true
+  },
+  {
+    "input": "{ \"$or\": [ { \"$and\": [ { \"$or\": [ { \"$and\": [ {} ] } ] } ] } ] }",
+    "output": "(((((((((mid_p:*)))))))))",
+    "ok": true
+  },
+  {
+    "input": "{ \"$and\": [ { \"$or\": [ { \"$and\": [ { \"$or\": [ {}, {} ] }, {} ] }, {} ] }, {} ] }",
+    "output": "(((((((((mid_p:*) OR (mid_p:*))) AND (mid_p:*))) OR (mid_p:*))) AND (mid_p:*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"$or\": [ { \"$and\": [ { \"$or\": [ { \"$and\": [ {}, {} ] }, {} ] }, {} ] }, {} ] }",
+    "output": "(((((((((mid_p:*) AND (mid_p:*))) OR (mid_p:*))) AND (mid_p:*))) OR (mid_p:*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"$and\": [ {}, {} ], \"$or\": [ {}, {} ] }",
+    "output": "(((mid_p:*) OR (mid_p:*)) AND ((mid_p:*) AND (mid_p:*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"$and\": [ { \"$or\": [ {}, {}, {} ] }, { \"$or\": [ {}, {} ] } ] }",
+    "output": "(((((mid_p:*) OR (mid_p:*) OR (mid_p:*))) AND (((mid_p:*) OR (mid_p:*)))))",
+    "ok": true
+  },
+  {
+    "input": "{ \"$or\": [ { \"$and\": [ {}, {}, {} ] }, { \"$and\": [ {}, {} ] } ] }",
+    "output": "(((((mid_p:*) AND (mid_p:*) AND (mid_p:*))) OR (((mid_p:*) AND (mid_p:*)))))",
+    "ok": true
+  },
+  {
+    "input": "{ \"$and\": [ { \"from\": \"from@\"}, { \"to\": \"to@\" }, { \"cc\": \"cc@\" } ] }",
+    "output": "((((hdr_from_email:\"from@\" OR hdr_from_display_name:\"from@\")) AND ((hdr_to_email:\"to@\" OR hdr_to_display_name:\"to@\")) AND ((hdr_cc_email:\"cc@\" OR hdr_cc_display_name:\"cc@\"))))",
+    "ok": true
+  },
+  {
+    "input": "{ \"$or\": [ { \"from\": \"from@\"}, { \"to\": \"to@\" }, { \"cc\": \"cc@\" } ] }",
+    "output": "((((hdr_from_email:\"from@\" OR hdr_from_display_name:\"from@\")) OR ((hdr_to_email:\"to@\" OR hdr_to_display_name:\"to@\")) OR ((hdr_cc_email:\"cc@\" OR hdr_cc_display_name:\"cc@\"))))",
+    "ok": true
+  },
+  {
+    "input": "{ \"from\": \"from@\", \"to\": \"to@\", \"cc\": \"cc@\", \"subject\": \"subj#\", \"body\": \"body#\" }",
+    "output": "((hdr_cc_email:\"cc@\" OR hdr_cc_display_name:\"cc@\") AND hdr_subject_keyword:\"subj#\" AND (hdr_from_email:\"from@\" OR hdr_from_display_name:\"from@\") AND (hdr_to_email:\"to@\" OR hdr_to_display_name:\"to@\") AND (body_text:\"body#\" OR pure_body:\"body#\"))",
+    "ok": true
+  },
+  {
+    "input": "{ \"header:aaa\": { \"$exists\": true }, \"header:bbb\": { \"$exists\": true }, \"header:ccc\": { \"$exists\": true } }",
+    "output": "(headers:ccc\\:* AND headers:aaa\\:* AND headers:bbb\\:*)",
+    "ok": true
+  },
+  {
+    "input": "{ \"subject\": \"subj#\", \"$and\": [ { \"header:aaa\": { \"$exists\": true } }, { \"header:bbb\": { \"$exists\": false } } ] }",
+    "output": "(hdr_subject_keyword:\"subj#\" AND ((headers:aaa\\:*) AND (mid_p:* AND NOT headers:bbb\\:*)))",
+    "ok": true
+  },
+  {
+    "input": "{ \"from\": { \"$exists\": true } }",
+    "output": "",
+    "ok": false
+  },
+  {
+    "input": "{ \"attach:filename\": { \"$exists\": true } }",
+    "output": "",
+    "ok": false
+  },
+  {
+    "input": "{ \"header:xxx\": { \"    $exists    \": false } }",
+    "output": "",
+    "ok": false
+  },
+  {
+    "input": "{ \"header:xxx\": { \"$Exists\": false } },",
+    "output": "",
+    "ok": false
+  },
+  {
+    "input": "{ \"header:x:xx\": \"xx\" },",
+    "output": "",
+    "ok": false
+  },
+  {
+    "input": "{ \"header::xxx\": \"xx\" },",
+    "output": "",
+    "ok": false
+  },
+  {
+    "input": "{ \"header:\": \"xx\" },",
+    "output": "",
+    "ok": false
+  },
+  {
+    "input": "{ \"header:x x x\": \"xx\" },",
+    "output": "",
+    "ok": false
+  },
+  {
+    "input": "{ \"Address:From\": \"hello@ya.ru\" }",
+    "output": "",
+    "ok": false
+  },
+  {
+    "input": "{ \"header:xxx\": { \"$exists\": \"false\" } }",
+    "output": "",
+    "ok": false
+  },
+  {
+    "input": "{ \"address:from \": \"\" }",
+    "output": "",
+    "ok": false
+  },
+  {
+    "input": "{ \"address :from\": \"\" }",
+    "output": "",
+    "ok": false
+  },
+  {
+    "input": "{ \"address: from\": \"\" }",
+    "output": "",
+    "ok": false
+  },
+  {
+    "input": "{ \" address:from\": \"\" }",
+    "output": "",
+    "ok": false
+  }
+]

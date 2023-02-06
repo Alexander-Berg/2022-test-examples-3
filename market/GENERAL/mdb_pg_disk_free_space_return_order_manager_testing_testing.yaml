@@ -1,0 +1,55 @@
+name: MDB disk free space alert for return_order_manager_testing (testing)
+description: ''
+windowSecs: 3600
+delaySecs: 0
+type:
+  expression:
+    program: |-
+      let free_bytes = {
+        project='internal-mdb',
+        service='mdb',
+        node='primary',
+        host='by_node',
+        sensor='disk-free_bytes_/var/lib/postgresql',
+        name='disk-free_bytes_/var/lib/postgresql',
+        cluster='mdb_mdbs9gcuikpbkrtrq6qk',
+        shard='*'
+      };
+
+      let free_last = last(free_bytes);
+      let free_last_gb = free_last / 1000000000;
+      let mdb_cluster = get_label(free_bytes, 'cluster');
+
+      let mdb_id = mdb_cluster == 'mdb_mdbs9gcuikpbkrtrq6qk' ? 'mdbs9gcuikpbkrtrq6qk' : mdb_cluster;
+
+      let service_name =  mdb_cluster;
+
+      let total_bytes = {
+          project='internal-mdb',
+          service='mdb',
+          node='primary',
+          host='by_node',
+          sensor='disk-total_bytes_/var/lib/postgresql',
+          name='disk-total_bytes_/var/lib/postgresql',
+          cluster='mdb_mdbs9gcuikpbkrtrq6qk',
+          shard='*'
+      };
+
+      let total_last = last(total_bytes);
+      let total_last_gb = total_last / 1000000000;
+
+      let free_percent = 100 * free_last / total_last;
+
+      alarm_if(free_percent < 10);
+      warn_if(free_last < 20);
+    checkExpression: ''
+groupByLabels:
+- shard
+annotations:
+  free_last_gb: '{{expression.free_last_gb}}'
+  free_percent: '{{expression.free_percent}}'
+  juggler_service: return-order-manager_mdb_pg_disk_free_space_testing_{{expression.mdb_id}}_{{labels.shard}}
+  mdb_link: 'Link to MDB monitoring: https://yc.yandex-team.ru/folders/{{labels.shard}}/managed-postgresql/cluster/{{expression.mdb_id}}?section=monitoring'
+  service_name: '{{expression.service_name}}'
+  total_last: '{{expression.total_last_gb}}'
+channels: []

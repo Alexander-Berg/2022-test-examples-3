@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty name="LOG_PATH" source="logging.path" />
+    <springProperty name="LOG_FILE" source="logging.file" />
+
+    <include resource="appender/file.xml"/>
+    <include resource="appender/json-file.xml"/>
+    <include resource="appender/request-trace.xml"/>
+    <include resource="appender/sql-trace.xml"/>
+    <include resource="appender/console.xml"/>
+
+    <logger name="wms_navigator-trace" level="TRACE" additivity="false">
+        <appender-ref ref="REQUEST_TRACE"/>
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <logger name="wms_navigator-sql-trace" level="TRACE" additivity="false">
+        <appender-ref ref="SQL_TRACE" />
+        <appender-ref ref="FILE" />
+    </logger>
+    <logger name="requestTrace" level="TRACE" additivity="false">
+        <appender-ref ref="SQL_TRACE" />
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <logger name="org.springframework.jdbc.core" level="INFO" additivity="false">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <logger name="ru.yandex.market" level="DEBUG" additivity="false">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="JSON_FILE" />
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="JSON_FILE"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>

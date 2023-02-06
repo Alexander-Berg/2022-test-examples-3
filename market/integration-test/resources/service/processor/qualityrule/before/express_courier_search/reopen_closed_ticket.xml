@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lom_order
+            id="1"
+            barcode="777"
+            platform_client_id="1"
+            sender_id="1"
+            status="DRAFT"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="1"
+            external_id="101"
+            partner_id="987654321"
+            partner_type="DELIVERY"
+            segment_type="COURIER"
+            waybill_segment_index="0"
+            shipment_date="2020-11-02"
+            partner_name="Тестовая сд"
+            tags='["CALL_COURIER"]'
+    />
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="1"
+            waybill_segment_type="COURIER"
+            expected_status="TRANSIT_COURIER_FOUND"
+            processing_status="ENQUEUED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2020-11-07 11:11:50 +0300"
+            schedule_time="2020-11-07 11:11:50 +0300"
+            created="2020-11-01 12:00:00 +0000"
+            data='{
+                "ExpressOrderCourierSearchAdditionalData": {
+                    "_type": ".ExpressOrderCourierSearchAdditionalData",
+                    "issueKey": "MONITORINGSNDBX-1"
+                }
+            }'
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="TRANSIT_COURIER_FOUND"
+            waybill_segment_type="COURIER"
+            aggregation_type="NONE"
+            rule_processor="STARTREK"
+            rule='{
+                "_type": ".ExpressOrderCourierSearchPayload",
+                "queue": "MONITORINGSNDBX",
+                "components": ["91243"]
+            }'
+    />
+
+</dataset>

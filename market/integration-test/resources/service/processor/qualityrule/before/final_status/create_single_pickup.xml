@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <lom_order
+            id="100111"
+            barcode="777"
+            platform_client_id="1"
+            sender_id="1"
+            status="DRAFT"
+            delivery_type="PICKUP"
+            created="2020-11-01 12:00:00 +0000"
+            delivery_date_max="2020-12-12"
+            delivery_end_time="12:00:00"
+    />
+
+    <lom_waybill_segment
+            id="0"
+            order_id="100111"
+            partner_id="12345"
+            partner_type="DELIVERY"
+            partner_subtype="MARKET_COURIER"
+            external_id="222333444"
+            segment_type="MOVEMENT"
+            segment_status="TRANSIT_TRANSMITTED_TO_RECIPIENT"
+            waybill_segment_index="0"
+            shipment_date="2020-11-02"
+            partner_name="МК Какая-то"
+    />
+
+    <lom_waybill_segment
+            id="1"
+            order_id="100111"
+            partner_id="987654321"
+            partner_type="DELIVERY"
+            partner_subtype="MARKET_OWN_PICKUP_POINT"
+            external_id="111222333"
+            segment_type="PICKUP"
+            segment_status="TRANSIT_TRANSMITTED_TO_RECIPIENT"
+            waybill_segment_index="1"
+            shipment_date="2020-11-02"
+            partner_name="Какой-то ПВЗ"
+            location_to='{
+              "type": "PICKUP",
+              "address": {
+                "geoId": 10735,
+                "house": "3А",
+                "region": "Московская область",
+                "street": "Светлая улица",
+                "country": "Россия",
+                "zipCode": "143409",
+                "building": "4",
+                "latitude": 55.832839,
+                "locality": "Красногорск",
+                "longitude": 37.278216,
+                "settlement": "Красногорск"
+              },
+              "warehouseId": 10000010736
+            }'
+    />
+
+    <plan_fact
+            id="1"
+            entity_type="LOM_WAYBILL_SEGMENT"
+            entity_id="1"
+            expected_status="OUT"
+            processing_status="ENQUEUED"
+            plan_fact_status="ACTIVE"
+            expected_status_datetime="2020-11-01 12:00:00 +0000"
+            schedule_time="2020-11-01 12:00:00 +0000"
+            created="2020-11-01 12:00:00 +0000"
+    />
+
+    <quality_rule
+            id="1"
+            enabled="true"
+            expected_status="OUT"
+            aggregation_type="DATE_PARTNER_19"
+            rule_processor="STARTREK"
+            rule='{
+                "queue": "MONITORINGSNDBX",
+                "_type": ".FinalStatusPayload",
+                "segmentTypeComponents": {
+                    "POST": 88995
+                },
+                "partnerSubtypeComponents": {
+                    "MARKET_LOCKER": 88996,
+                    "MARKET_COURIER": 88998,
+                    "MARKET_OWN_PICKUP_POINT": 88997,
+                    "PARTNER_PICKUP_POINT_IP": 88997,
+                    "PARTNER_CONTRACT_DELIVERY": 88999
+                }
+            }'
+    />
+
+    <plan_fact_group
+            id="1"
+            aggregation_key="date:2020-11-01;partner:987654321;"
+            aggregation_type="DATE_PARTNER_19"
+            processing_status="ENQUEUED"
+            expected_status="OUT"
+            schedule_time="2020-11-01 12:00:00 +0000"
+            data='{
+                "PlanFactGroupAdditionalData": {
+                    "_type": ".PlanFactGroupAdditionalData",
+                    "aggregationEntity": {
+                        "date": [2020, 11, 1],
+                        "partner": {
+                            "id": 987654321,
+                            "name": "Какой-то ПВЗ",
+                            "type": "DELIVERY",
+                            "subtype": "MARKET_OWN_PICKUP_POINT"
+                        }
+                    }
+                }
+            }'
+    />
+
+    <plan_fact_group_relations
+            plan_fact_group_id="1"
+            plan_fact_id="1"
+    />
+
+</dataset>

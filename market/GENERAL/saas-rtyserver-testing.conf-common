@@ -1,0 +1,157 @@
+<DaemonConfig>
+    AccessLog : ${LOG_PATH or "/var/log"}/current-loadlog-rtyserver${LOG_POSTFIX or ".log"}
+    IndexLog : ${LOG_PATH or "/var/log"}/current-index-base${LOG_POSTFIX or ".log"}
+    LoggerType : ${LOG_PATH or "/var/log"}/current-global-base${LOG_POSTFIX or ".log"}
+    LogLevel : ${LOG_LEVEL}
+    LogRotation : false
+    MetricsMaxAge : 10
+    MetricsPrefix : Refresh_
+    StdErr : ${LOG_PATH or "/var/log"}/current-rtyserver-stderr${LOG_POSTFIX or ".log"}
+    StdOut : ${LOG_PATH or "/var/log"}/current-rtyserver-stdout${LOG_POSTFIX or ".log"}
+    <Controller>
+        ClientTimeout : 200
+        ConfigsControl : true
+        ConfigsRoot : ${WorkDir and WorkDir or _BIN_DIRECTORY}/configs
+        EnableNProfile : false
+        Log : ${LOG_PATH or "/var/log"}/current-controller-rtyserver${LOG_POSTFIX or ".log"}
+        MaxConnections : 0
+        MaxQueue : 0
+        Port : ${BasePort + 3}
+        StartServer : 1
+        StateRoot : ${StateRootDir and StateRootDir or _BIN_DIRECTORY}/controller_state
+        Threads : 20
+        <DMOptions>
+            ConnectionTimeout : 100
+            CType : ${CTYPE}
+            Enabled : 1
+            Host : ${DM_HOST}
+            InteractionTimeout : 60000
+            Port : ${DM_PORT}
+            Service : ${SERVICE}
+            ServiceType : ${SERVICE_TYPE}
+            Slot : ${SLOT}
+            TimeoutS : 45
+        </DMOptions>
+    </Controller>
+</DaemonConfig>
+<Server>
+    AdditionalModules : DOCFETCHER,Synchronizer
+    IndexDir : ${INDEX_DIRECTORY and INDEX_DIRECTORY or "/srv/rtyserver"}
+    IsPrefixedIndex : 1
+    IsReadOnly : true
+    ShardMax : ${SHARD_MAX or "0"}
+    ShardMin : ${SHARD_MIN or "0"}
+    <ModulesConfig>
+        <DOCFETCHER>
+            Enabled : true
+            LogFile : ${LOG_PATH or "/var/log"}/current-docfetcher-base${LOG_POSTFIX or ".log"}
+            StateFile : ${INDEX_DIRECTORY}/df.state
+            <Stream>
+                DistAgeAsDocAge : true
+                FastCatchUpAgeSec : 0
+                IterationsPause : 600
+                Mode : OnSchedule
+                Name : Snapshot
+                OverlapAge : 10
+                ProxyType : RTYSERVER
+                ShardMax : ${SHARD_MAX or "0"}
+                ShardMin : ${SHARD_MIN or "0"}
+                SnapshotManager : yt
+                SnapshotPath : //home/market/${CTYPE == 'prestable' and 'testing' or 'production'}/mbo/saas/saas-index/${CTYPE}/${SERVICE}
+                SnapshotServer : ${CTYPE == 'prestable' and 'arnold' or 'hahn'}
+                StoreReplies : true
+                StreamId : 0
+                StreamType : Snapshot
+                <ResourceFetchConfig>
+                    <YTFetch>
+                        Proxy : ${CTYPE == 'prestable' and 'arnold' or 'hahn'}
+                        WriteBytesPerSec : ${10*1024*1024}
+                    </YTFetch>
+                </ResourceFetchConfig>
+            </Stream>
+        </DOCFETCHER>
+        <Synchronizer>
+            DetachPath : ${DETACH_DIRECTORY and DETACH_DIRECTORY or "/srv/rtyserver/detach"}
+        </Synchronizer>
+    </ModulesConfig>
+    <Searcher>
+        #include ${WorkDir and WorkDir or _BIN_DIRECTORY}/saas-query-language
+        AccessLog : ${LOG_PATH or "/var/log"}/current-loadlog-rtyserver${LOG_POSTFIX or ".log"}
+        ArchivePolicy : MAPMEMLOCK
+        ArchiveType : AT_MULTIPART
+        ExternalSearch : rty_relevance
+        FactorsInfo : ${WorkDir and WorkDir or _BIN_DIRECTORY}/configs/text-relev-num.conf
+        FiltrationModel : WEIGHT
+        KeepAllDocuments : 0
+        LockIndexFiles : false
+        ReArrangeOptions :
+        UserRelevanceLibrary : rty_relevance
+        WildcardSearch : infix
+        <HttpOptions>
+            ClientTimeout : 200
+            MaxConnections : 0
+            MaxQueue : 5000
+            Port : ${BACKEND_SEARCH_PORT or ( BasePort + 0 )}
+            Threads : 32
+        </HttpOptions>
+    </Searcher>
+    <BaseSearchersServer>
+        ClientTimeout : 200
+        MaxConnections : 0
+        MaxQueue : 5000
+        Port : ${BACKEND_BASESEARCH_PORT or ( BasePort + 1 )}
+        Threads : 64
+    </BaseSearchersServer>
+    <Repair>
+        Enabled : false
+        Threads : 4
+    </Repair>
+    <Merger>
+        Enabled : false
+        MaxDocumentsToMerge : 1000000
+        MaxSegments : 1
+        MergerCheckPolicy : TIME
+        Threads : 4
+    </Merger>
+    <Logger>
+    </Logger>
+    <Monitoring>
+        Enabled : false
+    </Monitoring>
+    <Indexer>
+        <Common>
+            DefaultCharset : utf-8
+            DefaultLanguage : rus
+            DefaultLanguage2 : eng
+            Enabled : false
+            Groups : $docid$:1
+            IndexLog : ${LOG_PATH or "/var/log"}/current-index-base${LOG_POSTFIX or ".log"}
+            MadeUrlAttributes : 0
+            RecognizeLibraryFile : ${DictDir and DictDir or WorkDir and WorkDir or _BIN_DIRECTORY}/dict.dict
+            RejectDuplicates : 0
+            <HttpOptions>
+                ClientTimeout : 200
+                MaxConnections : 0
+                MaxQueue : 0
+                Port : ${BACKEND_INDEXER_PORT or ( BasePort + 2 )}
+                Threads : 8
+            </HttpOptions>
+            <TextArchiveParams>
+                Compression : COMPRESSED
+                ReadContextDataAccessType : MEMORY_LOCKED_MAP
+                WriteContextDataAccessType : FILE
+            </TextArchiveParams>
+        </Common>
+        <Disk>
+            ConnectionTimeout : 100
+            DocumentsQueueSize : 10000
+            MaxDocuments : 200000
+            Threads : 8
+            TimeToLiveSec : 1000
+        </Disk>
+        <Memory>
+            ConnectionTimeout : 100
+            DocumentsQueueSize : 10000
+        </Memory>
+    </Indexer>
+</Server>

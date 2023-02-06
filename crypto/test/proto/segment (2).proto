@@ -1,0 +1,23 @@
+syntax = "proto3";
+message Segment {
+    message Export {
+        uint64 keywordId = 1;
+        uint64 segmentId = 2;
+        repeated string tags = 3;
+    };
+
+    message Exports {
+        repeated Export exports = 1;
+    };
+
+    string id = 1;
+    string tankerNameKey = 2;
+    string tankerDescriptionKey = 3;
+    Exports exports = 4;
+    string parentId = 5;
+}
+
+message SegmentNode {
+    string id = 1;
+    repeated SegmentNode children = 2;
+}

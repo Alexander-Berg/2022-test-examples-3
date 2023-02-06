@@ -1,0 +1,45 @@
+name: Solomon quota for SPOK auto graph sensors (testing)
+description: ''
+windowSecs: 3600
+delaySecs: 0
+type:
+  expression:
+    program: |-
+      let limit = {
+          project="solomon",
+          cluster="production",
+          service="coremon",
+          sensor="engine.fileSensorsLimit",
+          projectId="market-checkout",
+          host="cluster",
+          shardId="market-checkout_testing_order-aux-data_ag"
+      };
+
+      let usage = {
+          project="solomon",
+          cluster="production",
+          service="coremon",
+          sensor="engine.fileSensors",
+          projectId="market-checkout",
+          host="cluster",
+          shardId="market-checkout_testing_order-aux-data_ag"
+      };
+
+      let avg_usage = avg(usage);
+      let avg_limit = avg(limit);
+
+      let percent_of_usage = round(10 * 100 * avg_usage / avg_limit) / 10;
+
+      alarm_if(percent_of_usage > 95);
+      warn_if(percent_of_usage > 85);
+    checkExpression: ''
+annotations:
+  crit_if_more_than: '{{expression.crit_if_more}} %'
+  juggler_service: market-checkout_solomon_shard_ag_testing__market-checkout_testing_order-aux-data_ag
+  percent_of_usage: '{{expression.percent_of_usage}} %'
+  shardId: market-checkout_testing_order-aux-data_ag
+  warn_if_more_than: '{{expression.warn_if_more}} %'
+  wiki_what_to_do_if_warn_or_crit: https://nda.ya.ru/t/sJfkExTc3fiZop
+channels:
+- id: juggler_spok_channel
+  config: {}

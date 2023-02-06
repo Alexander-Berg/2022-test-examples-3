@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:custom="http://lilucrm.market.yandex.ru/schema/1.0/triggers" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+    <bpmn:process id="Process_1" isExecutable="false">
+        <bpmn:startEvent id="StartEvent_1">
+            <bpmn:outgoing>SequenceFlow_1cnuarw</bpmn:outgoing>
+            <bpmn:messageEventDefinition messageRef="Message_0kldmp7" />
+        </bpmn:startEvent>
+        <bpmn:serviceTask id="ServiceTask_1ubh39f" camunda:delegateExpression="${sendEmailTrigger}" custom:customType="email" custom:utmSource="email" custom:utmMedium="trigger">
+            <bpmn:incoming>SequenceFlow_1cnuarw</bpmn:incoming>
+            <bpmn:outgoing>SequenceFlow_1hk67oq</bpmn:outgoing>
+        </bpmn:serviceTask>
+        <bpmn:endEvent id="EndEvent_1nenavx">
+            <bpmn:incoming>SequenceFlow_1hk67oq</bpmn:incoming>
+            <bpmn:incoming>SequenceFlow_0lkburj</bpmn:incoming>
+        </bpmn:endEvent>
+        <bpmn:sequenceFlow id="SequenceFlow_1cnuarw" sourceRef="StartEvent_1" targetRef="ServiceTask_1ubh39f" />
+        <bpmn:sequenceFlow id="SequenceFlow_1hk67oq" sourceRef="ServiceTask_1ubh39f" targetRef="EndEvent_1nenavx" />
+        <bpmn:boundaryEvent id="BoundaryEvent_0s4g6b0" attachedToRef="ServiceTask_1ubh39f">
+            <bpmn:outgoing>SequenceFlow_0lkburj</bpmn:outgoing>
+            <bpmn:errorEventDefinition errorRef="Error_06zsm2u" />
+        </bpmn:boundaryEvent>
+        <bpmn:sequenceFlow id="SequenceFlow_0lkburj" sourceRef="BoundaryEvent_0s4g6b0" targetRef="EndEvent_1nenavx" />
+    </bpmn:process>
+    <bpmn:message id="Message_0kldmp7" name="COIN_CREATED" />
+    <bpmn:error id="Error_06zsm2u" name="COMMUNICATION_ERROR" errorCode="COMMUNICATION_ERROR" />
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">
+            <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+                <dc:Bounds x="267" y="273" width="36" height="36" />
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="240" y="309" width="90" height="20" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="ServiceTask_1ubh39f_di" bpmnElement="ServiceTask_1ubh39f">
+                <dc:Bounds x="374" y="264" width="72" height="54" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="EndEvent_1nenavx_di" bpmnElement="EndEvent_1nenavx">
+                <dc:Bounds x="516" y="273" width="36" height="36" />
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="534" y="249.5" width="0" height="13" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge id="SequenceFlow_1cnuarw_di" bpmnElement="SequenceFlow_1cnuarw">
+                <di:waypoint x="303" y="291" />
+                <di:waypoint x="374" y="291" />
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="338.5" y="269" width="0" height="13" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="SequenceFlow_1hk67oq_di" bpmnElement="SequenceFlow_1hk67oq">
+                <di:waypoint x="446" y="291" />
+                <di:waypoint x="516" y="291" />
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="481" y="269" width="0" height="13" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNShape id="BoundaryEvent_1uh2kaj_di" bpmnElement="BoundaryEvent_0s4g6b0">
+                <dc:Bounds x="381" y="300" width="36" height="36" />
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="399" y="276.5" width="0" height="13" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge id="SequenceFlow_0lkburj_di" bpmnElement="SequenceFlow_0lkburj">
+                <di:waypoint x="399" y="336" />
+                <di:waypoint x="399" y="388" />
+                <di:waypoint x="534" y="388" />
+                <di:waypoint x="534" y="309" />
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="466.5" y="366.5" width="0" height="13" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,98 @@
+
+# Cases
+#- user1: non-paid agitation - do not show
+#- user2: two paid were send (do not show), one is fine (model 3)
+#- user3: paid 0,1,2 types - only 0 and 1 are fine
+#- user4: paid*2 + over balance limit by 'random' mock - show only two - 10, 11
+#- user5: paid + over user limit (1,2,3 ok, 4-th - no)
+#- model 1-9: paid
+#- model 10-19: vendor with limited balance
+
+
+# instead of random sort by price
+MOCK VAR $random_agit
+SET ($item) -> { return $item.price }
+
+MOCK VAR $random_agit_bal
+SET ($item) -> { return $item.entity_id}
+
+MOCK VAR $overflowMultiplier
+SET 2
+
+MOCK VAR $numberIfModels
+SET 3
+
+MOCK VAR $start_date
+SET "13"
+
+MOCK VAR $end_date
+SET "15"
+
+# list prev mails skip users from delivery
+MOCK DIR_TABLE //home/market/_YT_ENV_/pers-grade/author/paid_agitation_mail
+NAME 13
+SCHEMA model_id1:string, model_id2:string, model_id3:string, model_id4:string
+SCHEMA author_type:int32, user_id:string
+{"author_type":0, "user_id": "2", "model_id1": "1", "model_id2": "2"}
+
+# too old for range
+MOCK DIR_TABLE //home/market/_YT_ENV_/pers-grade/author/paid_agitation_mail
+NAME 12
+SCHEMA model_id1:string, model_id2:string, model_id3:string, model_id4:string
+SCHEMA author_type:int32, user_id:string
+{"author_type":0, "user_id": "3", "model_id1": "1"}
+
+# too fresh for range
+MOCK DIR_TABLE //home/market/_YT_ENV_/pers-grade/author/paid_agitation_mail
+NAME 16
+SCHEMA model_id1:string, model_id2:string, model_id3:string, model_id4:string
+SCHEMA author_type:int32, user_id:string
+{"author_type":0, "user_id": "2", "model_id1": "3"}
+
+
+# agitations to build mails
+# rely on persPayAvailable and persPayPrice in agitations
+MOCK TABLE //home/market/_YT_ENV_/pers-grade/author/agitation/current
+SCHEMA type:int32, author_type:int32, user_id:string,
+SCHEMA entity_id:string, data:yson, agitation_order:uint64
+{"type": 0, "author_type": 0, "user_id": "1", "entity_id": "1", "data": {"persPayAvailable": "0"}}
+# check already sent
+{"type": 0, "author_type": 0, "user_id": "2", "entity_id": "1", "data": {"persPayAvailable": "1"}}
+{"type": 0, "author_type": 0, "user_id": "2", "entity_id": "2", "data": {"persPayAvailable": "1"}}
+{"type": 0, "author_type": 0, "user_id": "2", "entity_id": "3", "data": {"persPayAvailable": "1"}}
+# check types
+{"type": 0, "author_type": 0, "user_id": "3", "entity_id": "1", "data": {"persPayAvailable": "1"}}
+{"type": 1, "author_type": 0, "user_id": "3", "entity_id": "1", "data": {"persPayAvailable": "1"}}
+{"type": 2, "author_type": 0, "user_id": "3", "entity_id": "1", "data": {"persPayAvailable": "1"}}
+# check random
+{"type": 0, "author_type": 0, "user_id": "4", "entity_id": "10", "data": {"persPayAvailable": "1"}}
+{"type": 0, "author_type": 0, "user_id": "4", "entity_id": "11", "data": {"persPayAvailable": "1"}}
+{"type": 0, "author_type": 0, "user_id": "4", "entity_id": "12", "data": {"persPayAvailable": "1"}}
+# check user limit
+{"type": 0, "author_type": 0, "user_id": "5", "entity_id": "1", "data": {"persPayAvailable": "1"}, "agitation_order": 1}
+{"type": 1, "author_type": 0, "user_id": "5", "entity_id": "2", "data": {"persPayAvailable": "1"}, "agitation_order": 1}
+{"type": 0, "author_type": 0, "user_id": "5", "entity_id": "3", "data": {"persPayAvailable": "1"}, "agitation_order": 2}
+{"type": 1, "author_type": 0, "user_id": "5", "entity_id": "4", "data": {"persPayAvailable": "1"}, "agitation_order": 2}
+
+MOCK VAR_TABLE $current_paid_opinion_models
+SCHEMA payer_type:int32, payer_id:string, model_id:int64
+SCHEMA price:uint64, charge:double, balance:double
+SCHEMA target_count:uint64
+{"payer_type": 0, "payer_id": "1", "model_id": 1, "price": 50, "charge": 2.0, "balance": 100.0}
+{"payer_type": 0, "payer_id": "1", "model_id": 2, "price": 50, "charge": 2.0, "balance": 100.0}
+{"payer_type": 0, "payer_id": "1", "model_id": 3, "price": 30, "charge": 0.5, "balance": 100.0}
+{"payer_type": 0, "payer_id": "1", "model_id": 4, "price": 40, "charge": 1.5, "balance": 100.0}
+{"payer_type": 0, "payer_id": "2", "model_id": 10, "price": 50, "charge": 2.0, "balance": 3.5}
+{"payer_type": 0, "payer_id": "2", "model_id": 11, "price": 51, "charge": 3.0, "balance": 3.5}
+{"payer_type": 0, "payer_id": "2", "model_id": 12, "price": 52, "charge": 4.0, "balance": 3.5}
+
+
+MOCK VAR_TABLE $pub_model_grades_cnt
+SCHEMA resource_id:uint64, cnt:uint64
+{"resource_id":1, "cnt": 1}
+{"resource_id":2, "cnt": 2}
+{"resource_id":3, "cnt": 4}
+{"resource_id":4, "cnt": 8}
+{"resource_id":10, "cnt": 2}
+{"resource_id":11, "cnt": 3}
+{"resource_id":12, "cnt": 7}

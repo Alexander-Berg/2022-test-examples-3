@@ -1,0 +1,1 @@
+TRUNCATE order_events_failover_counter RESTART IDENTITY CASCADE;

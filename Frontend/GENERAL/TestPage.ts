@@ -1,0 +1,41 @@
+/* eslint-disable */
+export const en = {
+    "alert-check-functional": "Check the functionality of your dialog before publishing it. The dialog must correctly respond to all the scenarios described by you on the \"Publication\" page in order to pass moderation.",
+    "button-label-delete": "Delete a session",
+    "button-label-send": "Send",
+    "chat-exit-skill": "Exiting a Skill",
+    "chat-geo-disable": "Disable geo-sharing",
+    "chat-menu-geo": "Geo",
+    "chat-menu-option-anonymous": "Anonymous user",
+    "chat-menu-option-no-screen": "No screen",
+    "chat-menu-settings": "Settings",
+    "chat-you-logged": "You are logged in",
+    "error-need-valid-webhook": "To test the skill, you must specify a valid Webhook URL",
+    "error-no-published": "You haven't published any versions of the dialog yet",
+    "header-chat": "Chat",
+    "header-last-request": "Last request",
+    "header-test-page": "Testing",
+    "input-placeholder": "Message...",
+    "menu-draft": "Draft",
+    "menu-published": "Published version"
+} as const;
+export const ru = {
+    "alert-check-functional": "Проверьте работоспособность вашего диалога перед тем, как опубликовать его. Диалог должен корректно отвечать на все сценарии, описанные вами на странице «Публикация» для того, чтобы пройти модерацию.",
+    "button-label-delete": "Удалить сессию",
+    "button-label-send": "Отправить",
+    "chat-exit-skill": "Выход из навыка",
+    "chat-geo-disable": "Выключить гео-шаринг",
+    "chat-menu-geo": "Гео",
+    "chat-menu-option-anonymous": "Анонимный пользователь",
+    "chat-menu-option-no-screen": "Нет экрана",
+    "chat-menu-settings": "Настройки",
+    "chat-you-logged": "Вы авторизованы",
+    "error-need-valid-webhook": "Для тестирования навыка необходимо указать валидный Webhook URL",
+    "error-no-published": "Вы еще не опубликовали ни одной версии диалога",
+    "header-chat": "Чат",
+    "header-last-request": "Последний запрос",
+    "header-test-page": "Тестирование",
+    "input-placeholder": "Сообщение...",
+    "menu-draft": "Черновик",
+    "menu-published": "Опубликованная версия"
+} as const;

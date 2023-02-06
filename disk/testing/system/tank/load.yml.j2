@@ -1,0 +1,29 @@
+phantom:
+  address: {{ mpfs.host }}:{{ mpfs.port }}
+  autocases: 2
+  load_profile:
+    load_type: rps
+    schedule: {{ tank.schedule }}
+  headers:
+    - "[Host: mpfs.disk.yandex.net]"
+    - "[Connection: close]"
+  uris:
+    - "{{ item }}"
+
+autostop:
+    autostop:
+          - http(5xx,5%,30s)
+          - http(404,1,30)
+telegraf:
+  enabled: true
+
+uploader:
+    component: {{ component.package_name }}-{{ item.split('?').0 }}
+    enabled: true
+    job_name: "[mpfs][autotest][load][{{ mpfs_version }}]"
+    job_dsc: "https://st.yandex-team.ru/{{ release_issue.key }}"
+    api_address: https://lunapark.yandex-team.ru
+    operator: lunapark
+    ver: {{ mpfs_version }}
+    package: yandextank.plugins.DataUploader
+    task: {{ release_issue.key }}

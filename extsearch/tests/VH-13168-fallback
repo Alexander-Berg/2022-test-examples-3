@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+SCRIPTS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd) #"
+. "${SCRIPTS_DIR}"/config.sh
+[ -z "$PROD" ] && . "${SCRIPTS_DIR}"/ugc_pumpkin
+[ -z "$PROD" ] && . "${SCRIPTS_DIR}"/templater
+
+set +e # TODO remove
+
+for v in vALIMqjJaF0c vWC_TSNpjPX4 veBNR7bhH6Zo voIi_bqnCGsE vyK0nYMdKTT4 vcALMWt5ZcUI vSNnhrLfYJV4 voF219tvi2lQ vaMQJjJy2RVk voKMgdKB58iM v2DkM3F-RiTA vqNjBpbzQGG4 v-OmmVghFRW8 voGTRXj8V53E voGdkMF2S0Xo vEN65Md9vv3w vKCy9xDxAVhg vqBDUoOmkAxE vAOQ67SCGigM v2JT_xXUoXgE vQHyaJ2O8g2c   vgPOLyUB9klo vuMZvrklHSGA vuA6LdonrFGk vuNlYIISW6BU vcGVvUs3t6xs vuNHzuXqUayU vcL2J7GjJBig vAMybJ6ujn00   vYLRBx0NlP0I vgHQPpC0OZU8 vwJXWnR21z14 vYBlSW7fD418 vqMIsUmQRw2I v4Fr35vYgN2M vgEEkd-_CQmY vGCVYeQd7mG0 vKHRUgh_VugQ vaLyu7zvZTQ4 vQLH0SYXBsBg v8CtIfRT7VSM vWNr9_5W-zCI vQBqcsiMQnSc vYDAsERCUpig v4E8nxUOUxDA  vcJHAC9mG2jE v6FeB6RN4tkk v8GfYGc-xnE0 ; do
+    ${CURL} -X POST "https://frontend.vh.yandex.ru/graphql?${URL_ADD}${SRCRWR}&srcrwr=UGC_VIDEO:example.com" --data-binary "{player(content_id:\"${v}\") {viewers title duration audio_source_url}}" \
+        | jq --exit-status '.player.content.content.audio_source_url'
+    ${CURL} "https://frontend.vh.yandex.ru/player/${v}.json?${URL_ADD}${SRCRWR}&srcrwr=UGC_VIDEO:example.com" \
+        | jq --exit-status '.content.audio_source_url | not'
+    # | tee result.$$.${v}.ok.out
+done

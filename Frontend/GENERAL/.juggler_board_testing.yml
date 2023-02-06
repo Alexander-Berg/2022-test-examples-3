@@ -1,0 +1,67 @@
+# https://juggler.yandex-team.ru/dashboards/tap-test/
+address: tap-test
+name: TAP
+description: Testing Платформы TurboApps
+owners:
+  - sapfear
+  - nodge
+  - k-medvedev
+  - sanyabas
+  - savichev
+links:
+  - title: '[JUGGLER] Production'
+    url: 'https://juggler.yandex-team.ru/dashboards/tap/'
+  - title: '[YASM] L7 Balancer'
+    url: 'https://yasm.yandex-team.ru/template/panel/tap/upstream=services/'
+  - title: '[YASM] S3 Nginx'
+    url: 'https://yasm.yandex-team.ru/template/panel/s3_mds_nginx/bucket=tap-test/'
+  - title: '[YASM] S3 Common'
+    url: 'https://yasm.yandex-team.ru/template/panel/s3_client/bucket=tap-test;owner=5999/'
+components:
+  - name: Balancers Health
+    component_type: AGGREGATE_CHECKS
+    aggregate_checks_options:
+      sort:
+        field: DEFAULT
+        order: DESC
+      selector: host=m.nanny.rtc_balancer_tap-testing_*
+      limit: 0
+      statuses: []
+    row: 1
+    col: 1
+    rowspan: 1
+    colspan: 2
+    view_type: COMPACT
+    elements_in_row: 3
+    links: []
+  - name: Balancers Statuses
+    component_type: AGGREGATE_CHECKS
+    aggregate_checks_options:
+      sort:
+        field: DEFAULT
+        order: DESC
+      selector: host=m.awacs.tap-testing.services
+      limit: 0
+      statuses: []
+    row: 1
+    col: 3
+    rowspan: 1
+    colspan: 2
+    view_type: COMPACT
+    elements_in_row: 3
+    links: []
+  - name: TAP Api Deploy Statuses
+    component_type: AGGREGATE_CHECKS
+    aggregate_checks_options:
+      sort:
+        field: DEFAULT
+        order: DESC
+      selector: host=m.deploy.tap_backend_testing
+      statuses: []
+    row: 2
+    col: 1
+    rowspan: 1
+    colspan: 4
+    view_type: COMPACT
+    elements_in_row: 4
+    links: []

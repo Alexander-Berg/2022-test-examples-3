@@ -1,0 +1,30 @@
+---
+##################################################
+# Install stable version on non-test component.
+#
+## Parameters:
+#
+# component:
+#   Test component (as dict, see: group_vars/all.yml)
+# differnt_component:
+#   Component to be updated
+#
+- name: Get information about {{ different_component.name }} package on stable
+  conductor:
+    package: "{{ different_component.package_name }}"
+  register: package_info
+
+- name: Set stable version
+  set_fact:
+    stable_version: "{{ package_info['stable']['version'] }}"
+
+- include: tasks/deploy.yml
+  package_name: "{{ different_component.package_name }}"
+  version: "{{ stable_version }}"
+  deploy_groups: "{{ different_component.deploy_groups }}"
+
+- include: tasks/deploy.yml
+  package_name: "{{ queue.package_name }}"
+  version: "{{ stable_version }}"
+  deploy_groups: "{{ queue.deploy_groups }}"
+  when: different_component.name == "mpfs"

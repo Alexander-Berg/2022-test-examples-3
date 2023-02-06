@@ -1,0 +1,51 @@
+Core {
+    Log {
+        Level: DEBUG
+
+        # comment for writting to stdout
+        # Target {
+        #    FilePath: "/app/log/report-time/report-time.log"
+        # }
+    }
+
+    Identity {
+        Name: "report_time"
+    }
+
+    Feature {
+        IncludeServerNameInSignals: true
+    }
+
+    TraceLog {
+        Target {
+            FilePath: "/app/log/report-time/report-time-trace.log"
+        }
+    }
+
+    Server {
+        RequestQueueSize : 30
+        ListenThreads: 4
+    }
+}
+
+Paths{
+    YtToken : "/app/secrets/.ytToken"
+    SolomonToken : "/app/secrets/.solomonToken"
+    PerfToolsDir: "/app/bin/flame-graph/"
+}
+
+Profiles{
+    PerfYtDir : "//home/market-report-time-testing/perf-data"
+    ProcessedYtDir : "//home/market-report-time-testing/processed"
+}
+
+Logbroker{
+    Type: "perf"
+    Logbroker: {
+        Topic: "/market-report-time/test/perf"
+        LBClientId: "/market-report-time/test/perf-service-consumer"
+        TvmClientId: 2029180
+        TvmSecretPath: "/app/secrets/.tvmSecret"
+    }
+}
+

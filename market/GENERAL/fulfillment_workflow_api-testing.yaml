@@ -1,0 +1,414 @@
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dfulfillment_workflow_api-testing
+
+vars:
+  - &kwargs_with_service_api_points
+    args:
+      - --kwargs
+      - '[ {"service": "hanging_jobs", "path": "/health/hangingJobs"}, {"service": "failed_jobs",
+        "path": "/health/failedJobs"},
+        {"service": "generate_supply_acts_fail_check", "path": "/health/failedJobs/generateSupplyActsExecutor"},
+        {"service": "generate_supply_acts_hang_check", "path": "/health/hangingJobs/generateSupplyActsExecutor"},
+        {"service": "load_request_details_fail_check", "path": "/health/failedJobs/loadRequestDetailsExecutor"},
+        {"service": "load_request_details_hang_check", "path": "/health/hangingJobs/loadRequestDetailsExecutor"},
+        {"service": "load_return_request_details_fail_check", "path": "/health/failedJobs/loadReturnRequestDetailsExecutor"},
+        {"service": "load_return_request_details_hang_check", "path": "/health/hangingJobs/loadReturnRequestDetailsExecutor"},
+        {"service": "load_xdoc_request_details_fail_check", "path": "/health/failedJobs/loadXDocRequestDetailsExecutor"},
+        {"service": "load_xdoc_request_details_hang_check", "path": "/health/hangingJobs/loadXDocRequestDetailsExecutor"},
+        {"service": "send_requests_to_service_fail_check", "path": "/health/failedJobs/sendRequestsToServiceExecutor"},
+        {"service": "send_requests_to_service_hang_check", "path": "/health/hangingJobs/sendRequestsToServiceExecutor"},
+        {"service": "send_orders_requests_to_service_fail_check", "path": "/health/failedJobs/sendOrdersRequestsToServiceExecutor"},
+        {"service": "send_orders_requests_to_service_hang_check", "path": "/health/hangingJobs/sendOrdersRequestsToServiceExecutor"},
+        {"service": "cancel_expired_shadow_withdraw_fail_check", "path": "/health/failedJobs/cancelExpiredShadowWithdrawExecutor"},
+        {"service": "cancel_expired_shadow_withdraw_hang_check", "path": "/health/hangingJobs/cancelExpiredShadowWithdrawExecutor"},
+        {"service": "cancel_expired_shadow_supplies_fail_check", "path": "/health/failedJobs/cancelExpiredShadowSuppliesExecutor"},
+        {"service": "cancel_expired_shadow_supplies_hang_check", "path": "/health/hangingJobs/cancelExpiredShadowSuppliesExecutor"},
+        {"service": "sync_tanker_keys_executor_fail_check", "path": "/health/failedJobs/syncTankerKeysExecutor"},
+        {"service": "sync_tanker_keys_executor_hang_check", "path": "/health/hangingJobs/syncTankerKeysExecutor"},
+        {"service": "send_requests_to_xdoc_service_fail_check", "path": "/health/failedJobs/sendRequestsToXDocServiceExecutor"},
+        {"service": "send_requests_to_xdoc_service_hang_check", "path": "/health/hangingJobs/sendRequestsToXDocServiceExecutor"},
+        {"service": "clean_old_rows_in_queue_log_hang_check", "path": "/health/hangingJobs/cleanOldRowsInQueueLogExecutor"},
+        {"service": "clean_old_rows_in_queue_log_fail_check", "path": "/health/failedJobs/cleanOldRowsInQueueLogExecutor"},
+        {"service": "supply_creation_sla_for_already_created_exceeded", "path": "/health/supply-creation-sla-for-already-created"},
+        {"service": "supply_creation_sla_for_not_created_exceeded", "path": "/health/supply-creation-sla-for-not-created"},
+        {"service": "requests_creation_sla_for_not_created_exceeded", "path": "/health/requests-creation-sla-for-not-created"},
+        {"service": "supply_validation_sla_for_already_validated_exceeded", "path":
+        "/health/supply-validation-sla-for-already-validated"}, {"service": "supply_validation_sla_for_not_validated_exceeded",
+        "path": "/health/supply-validation-sla-for-not-validated"}, {"service": "rejected_or_invalid_utilization_transfers", "path": "/health/rejected-or-invalid-utilization-transfers"},
+        {"service": "utilization_transfers_only_in_inactive_outbounds", "path": "/health/utilization-transfers-only-in-inactive-outbounds"},
+        {"service": "utilization_transfers_without_outbounds_for_too_long", "path": "/health/utilization-transfers-without-outbounds-too-long"},
+        {"service": "shadow-withdraw-in-validated-status-too-long", "path": "/health/shadow-withdraw-in-validated-status-too-long"},
+        {"service": "created-long-time-ago-crossdock-orders", "path": "/health/crossdock/created-long-time-ago-crossdock-orders"},
+        {"service": "utilization-transfers-stack-in-transitional-statuses", "path": "/health/utilization-transfers-stack-in-transitional-statuses"},
+        {"service": "requests-stack-in-sent-to-service-status", "path": "/health/requests-stack-in-sent-to-service-status"},
+        {"service": "rejected-or-invalid-cis-quarantine-transfers", "path": "/health/rejected-or-invalid-cis-quarantine-transfers"},
+        {"service": "auto-transfers-not-started-after-deadline", "path": "/health/auto-transfers-not-started-after-deadline"},
+        {"service": "request_finalizer_hang_check", "path": "/health/hangingJobs/requestFinalizerExecutor"},
+        {"service": "request_finalizer_fail_check", "path": "/health/failedJobs/requestFinalizerExecutor"},
+        {"service": "sync_services_hang_check", "path": "/health/hangingJobs/syncServicesExecutor"},
+        {"service": "sync_services_fail_check", "path": "/health/failedJobs/syncServicesExecutor"},
+        {"service": "doc_ticket_tracker_hang_check", "path": "/health/hangingJobs/docTicketTrackerExecutor"},
+        {"service": "doc_ticket_tracker_fail_check", "path": "/health/failedJobs/docTicketTrackerExecutor"},
+        {"service": "registry_invalid_units_check", "path": "/health/registry/units/invalidUnitsWithErrors"}]
+        '
+
+juggler:
+  checks:
+
+  # Check created-long-time-ago-crossdock-orders
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=created-long-time-ago-crossdock-orders&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: created-long-time-ago-crossdock-orders
+
+  # Check clean_old_rows_in_queue_log_fail_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=clean_old_rows_in_queue_log_fail_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: clean_old_rows_in_queue_log_fail_check
+
+  # Check clean_old_rows_in_queue_log_hang_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=clean_old_rows_in_queue_log_hang_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: clean_old_rows_in_queue_log_hang_check
+
+  # Check disk_free_space
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=disk_free_space&last=1DAY&mode=edit
+  - check_options:
+      args: []
+    service: disk_free_space
+
+  # Check failed_jobs
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=failed_jobs&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: failed_jobs
+
+  # Check fresh-hprof-files
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=fresh-hprof-files&last=1DAY&mode=edit
+  - check_options:
+      args: []
+    service: fresh-hprof-files
+
+  # Check generate_supply_acts_fail_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=generate_supply_acts_fail_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: generate_supply_acts_fail_check
+
+  # Check generate_supply_acts_hang_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=generate_supply_acts_hang_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: generate_supply_acts_hang_check
+
+  # Check hanging_jobs
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=hanging_jobs&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: hanging_jobs
+
+  # Check load_request_details_fail_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=load_request_details_fail_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: load_request_details_fail_check
+
+  # Check load_request_details_hang_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=load_request_details_hang_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: load_request_details_hang_check
+
+  # Check load_return_request_details_fail_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=load_return_request_details_fail_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: load_return_request_details_fail_check
+
+  # Check load_return_request_details_hang_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=load_return_request_details_hang_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: load_return_request_details_hang_check
+
+  # Check load_xdoc_request_details_fail_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=load_xdoc_request_details_fail_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: load_xdoc_request_details_fail_check
+
+  # Check load_xdoc_request_details_hang_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=load_xdoc_request_details_hang_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: load_xdoc_request_details_hang_check
+
+  # Check logrotate
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=logrotate&last=1DAY&mode=edit
+  - check_options:
+      args: []
+    service: logrotate
+
+  # Check not_processed_by_warehouse
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=not_processed_by_warehouse&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: not_processed_by_warehouse
+
+  # Check ping
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=ping&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: ping
+
+  # Check push-client-status
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=push-client-status&last=1DAY&mode=edit
+  - check_options:
+      args: []
+    service: push-client-status
+
+  # Check rejected_or_invalid
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=rejected_or_invalid&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: rejected_or_invalid
+
+  # Check send_requests_to_service_fail_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=send_requests_to_service_fail_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: send_requests_to_service_fail_check
+
+  # Check send_requests_to_service_hang_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=send_requests_to_service_hang_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: send_requests_to_service_hang_check
+
+  # Check send_orders_requests_to_service_fail_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=send_orders_requests_to_service_fail_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: send_orders_requests_to_service_fail_check
+
+  # Check send_orders_requests_to_service_hang_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=send_orders_requests_to_service_hang_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: send_orders_requests_to_service_hang_check
+
+  # Check cancel_expired_shadow_withdraw_fail_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=cancel_expired_shadow_withdraw_fail_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: cancel_expired_shadow_withdraw_fail_check
+
+  # Check cancel_expired_shadow_withdraw_hang_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=cancel_expired_shadow_withdraw_hang_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: cancel_expired_shadow_withdraw_hang_check
+
+  # Check cancel_expired_shadow_supplies_fail_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=cancel_expired_shadow_supplies_fail_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: cancel_expired_shadow_supplies_fail_check
+
+  # Check cancel_expired_shadow_supplies_hang_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=cancel_expired_shadow_supplies_hang_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: cancel_expired_shadow_supplies_hang_check
+
+  # Check sync_tanker_keys_executor_fail_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=sync_tanker_keys_executor_fail_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: sync_tanker_keys_executor_fail_check
+
+  # Check sync_tanker_keys_executor_hang_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=sync_tanker_keys_executor_hang_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: sync_tanker_keys_executor_hang_check
+
+  # Check send_requests_to_xdoc_service_fail_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=send_requests_to_xdoc_service_fail_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: send_requests_to_xdoc_service_fail_check
+
+  # Check send_requests_to_xdoc_service_hang_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=send_requests_to_xdoc_service_hang_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: send_requests_to_xdoc_service_hang_check
+
+  # Check supply_creation_sla_for_already_created_exceeded
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=supply_creation_sla_for_already_created_exceeded&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: supply_creation_sla_for_already_created_exceeded
+
+  # Check supply_creation_sla_for_not_created_exceeded
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=supply_creation_sla_for_not_created_exceeded&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: supply_creation_sla_for_not_created_exceeded
+
+  # Check requests_creation_sla_for_not_created_exceeded
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=requests_creation_sla_for_not_created_exceeded&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: requests_creation_sla_for_not_created_exceeded
+
+  # Check supply_validation_sla_for_already_validated_exceeded
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=supply_validation_sla_for_already_validated_exceeded&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: supply_validation_sla_for_already_validated_exceeded
+
+  # Check supply_validation_sla_for_not_validated_exceeded
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=supply_validation_sla_for_not_validated_exceeded&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: supply_validation_sla_for_not_validated_exceeded
+
+  # Check rejected_or_invalid_utilization_transfers
+  - check_options:
+      *kwargs_with_service_api_points
+    service: rejected_or_invalid_utilization_transfers
+
+  # Check rejected-or-invalid-cis-quarantine-transfers
+  - check_options:
+      *kwargs_with_service_api_points
+    service: rejected-or-invalid-cis-quarantine-transfers
+
+  # Check utilization_transfers_only_in_active_outbounds
+  - check_options:
+      *kwargs_with_service_api_points
+    service: utilization_transfers_only_in_active_outbounds
+
+  # Check utilization-transfers-stack-in-transitional-statuses
+  - check_options:
+      *kwargs_with_service_api_points
+    service: utilization-transfers-stack-in-transitional-statuses
+
+  # Check requests-stack-in-sent-to-service-status
+  - check_options:
+      *kwargs_with_service_api_points
+    service: requests-stack-in-sent-to-service-status
+
+  # Check shadow-withdraw-in-validated-status-too-long
+  - check_options:
+      *kwargs_with_service_api_points
+    service: shadow-withdraw-in-validated-status-too-long
+
+  # Check request_finalizer_hang_check
+  - check_options:
+      *kwargs_with_service_api_points
+    service: request_finalizer_hang_check
+
+  # Check request_finalizer_fail_check
+  - check_options:
+      *kwargs_with_service_api_points
+    service: request_finalizer_fail_check
+
+  # Check sync_services_hang_check
+  - check_options:
+      *kwargs_with_service_api_points
+    service: sync_services_hang_check
+
+  # Check sync_services_fail_check
+  - check_options:
+      *kwargs_with_service_api_points
+    service: sync_services_fail_check
+
+  # Check doc_ticket_tracker_hang_check
+  - check_options:
+      *kwargs_with_service_api_points
+    service: doc_ticket_tracker_hang_check
+
+  # Check doc_ticket_tracker_fail_check
+  - check_options:
+      *kwargs_with_service_api_points
+    service: doc_ticket_tracker_fail_check
+
+  # Check registry_invalid_units_check
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_workflow_api-testing&service=registry_invalid_units_check&last=1DAY&mode=edit
+  - check_options:
+      *kwargs_with_service_api_points
+    service: registry_invalid_units_check
+
+  # Check yasm_alert S3_used_space_ffwf_testing
+  - aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_ok
+      unreach_mode: force_ok
+      unreach_service:
+        - check: yasm_alert:virtual-meta
+    children:
+      - yasm_alert
+    meta:
+      urls:
+        - title: Алерт в Головане
+          type: yasm_alert
+          url: https://yasm.yandex-team.ru/chart-alert/alerts=S3_used_space_ffwf_testing;
+        - title: Снапшот графика алерта
+          type: screenshot_url
+          url: https://s.yasm.yandex-team.ru/chart/signals%3Dperc%28s3mds_service_stat-service_used_space_max%2Cs3mds_service_stat-service_max_size_max%29%3Bhosts%3DCON%3Bitype%3Ds3mdsstat%3Bctype%3Dtesting%3Bprj%3D4872
+        - title: График алерта
+          type: graph_url
+          url: https://yasm.yandex-team.ru/chart/signals%3Dperc%28s3mds_service_stat-service_used_space_max%2Cs3mds_service_stat-service_max_size_max%29%3Bhosts%3DCON%3Bitype%3Ds3mdsstat%3Bctype%3Dtesting%3Bprj%3D4872
+      yasm_alert_name: S3_used_space_ffwf_testing
+    service: S3_used_space_ffwf_testing
+    check_options:
+      *kwargs_with_service_api_points
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    tags:
+      - market_testing
+      - market_rtc
+      - fulfillment_workflow_api
+      - market
+      - _market_
+
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 30%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 50%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_crit
+    children:
+    - NANNY%testing_market_fulfillment_workflow_api_sas
+    - NANNY%testing_market_fulfillment_workflow_api_vla
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: fulfillment_workflow_api-testing
+    namespace: market.ff
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - fulfillment_workflow_api
+    - market
+    - _market_
+    ttl: 1800

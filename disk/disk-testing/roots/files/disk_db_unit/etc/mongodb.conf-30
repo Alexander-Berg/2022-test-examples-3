@@ -1,0 +1,27 @@
+systemLog:
+    destination: file
+    path: "/var/log/mongodb/mongodb-rs.log"
+    logAppend: true
+
+storage:
+    journal.enabled: true
+    dbPath: /opt/mongodb
+    engine: wiredTiger
+    wiredTiger.collectionConfig.blockCompressor: snappy
+    directoryperdb: true
+#   syncPeriodSecs: 120 #syncdelay: 120
+
+processManagement:
+    fork: false
+    pidFilePath: /var/run/mongodb/mongodb-rs.pid
+net:
+    port: 27018
+    ipv6: true
+replication:
+    replSetName: {{ grains['mongodb']['replSet'] }}
+
+operationProfiling:
+    slowOpThresholdMs: 300
+    mode: slowOp
+
+

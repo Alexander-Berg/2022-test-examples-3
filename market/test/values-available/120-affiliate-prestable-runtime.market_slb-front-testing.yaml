@@ -1,0 +1,21 @@
+context:
+  default:
+    service_name: affiliate_prestable_runtime_market
+    servername_regexp: affiliate-prestable\\.market\\.([\\w\\d]+\\.)?yandex\\.(ru|ua|kz|by|com)(\\.)?
+    vs: market
+    antirobot: true
+    antirobot_service_name: market
+    health_check: '"GET /ping HTTP/1.1\r\nHost: heartbeat-affiliate.market.yandex.ru\r\n\r\n"'
+    exp_getter: true
+    cert: affiliate.market
+  testing:
+    cert: fslb-testing
+
+servers:
+  default:
+    main:
+    - name: GREY%fslb.yandex.ru
+      timeout: 35s
+      weight: 100
+      port: 10007
+      plain_http_backend: true

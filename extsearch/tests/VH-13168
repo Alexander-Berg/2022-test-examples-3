@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+SCRIPTS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd) #"
+. "${SCRIPTS_DIR}"/config.sh
+PGSERVANT_SCHEMA=ugc
+[ -z "$PROD" ] && . "${SCRIPTS_DIR}"/pgservant
+[ -z "$PROD" ] && . "${SCRIPTS_DIR}"/templater
+
+# ids: https://paste.yandex-team.ru/6131927/text  id convert:
+# use arnold; select `video_meta.id` from `//home/video-hosting/ugc_replica/ugc_video_meta` where `video_meta.video_file_id` == 1935126972690733681;
+# mass convert: https://yql.yandex-team.ru/Operations/Yaqnb9JwbGUCJMeUKxfuwCBwFSm3VZc6KUyX2-Bp8UE=
+
+if [ -n "$PG_PROD" ] || [ -n "$PROD" ]; then
+    ${CURL} -X POST "https://frontend.vh.yandex.ru/graphql?${URL_ADD}${SRCRWR}" --data-binary '{player(content_id:"v1JjsYTXg9cU") {viewers title duration audio_source_url}}' 
+    ${CURL} -X POST "https://frontend.vh.yandex.ru/graphql?${URL_ADD}${SRCRWR}" --data-binary '{player(content_id:"vuMZvrklHSGA") {viewers title duration audio_source_url}}' \
+        | jq --exit-status '.player.content.content.audio_source_url'
+
+    ${CURL} "https://frontend.vh.yandex.ru/player/vuMZvrklHSGA.json?${URL_ADD}${SRCRWR}" \
+        | jq --exit-status '.content.audio_source_url'
+
+    #for v in vcRqCmrrz2ho vGKfa3zyiHxs v0wsZQonVbRs vm5-Dbe4kkRo v9fRniRPcqBo vK_VxFmgTrRo vdb_g1R02SBs v9ULEgh8F5ho v4Ck8avwcnxo v0xykmGUHHhs v3HfGBxClSBs vJZ-Q2CXVnxo vm7WVtxi7XBo vyic2y1hm9xo v71esJfusRhs vZ3_dnHeqeRo vPrC_hIrdDBs vOpzmSU5UZxs vVrmbrVVCeBo v84xDg1e4txo vDzJUe9p5ehs v3ehDhHoGOBs vgD4gJ9OSdhs vkB6JUPiL1ho v05sgEXQvkxo vhO0h4C3QpRo v99rfk0nFgho vBP_RWbzeAxs vVsCEVoYiYBs vM4jNW-dp3Ro vs74Jc-GEPBs viMV3HRF9nho vm4Nk3OPRwho v3NxCgpZqXBs v5efB9N9tYxo vGBcr9EudVhs vY5vcMrjoKRs vE_zmXuTmnho vwVWRz_yFbhs v8zmBIQwzlRo vHcXKKkQzpRo vc7NaUoRSdxs vWJSIWdzcexs v3GsegSpxmBo v5ahKRyaScxo vJdaceApfhho v3dIZqWZmlho vADllxDj_txo; do
+    # vyK0nYMdKTT4 vWC_TSNpjPX4 vcALMWt5ZcUI vYLRBx0NlP0I vuMZvrklHSGA vQBqcsiMQnSc 
+    for v in vALIMqjJaF0c veBNR7bhH6Zo voIi_bqnCGsE voF219tvi2lQ vaMQJjJy2RVk vgPOLyUB9klo vgHQPpC0OZU8 vSNnhrLfYJV4 vwJXWnR21z14 vYBlSW7fD418 vqMIsUmQRw2I v4Fr35vYgN2M vgEEkd-_CQmY vQHyaJ2O8g2c vuA6LdonrFGk vGCVYeQd7mG0 vqNjBpbzQGG4 voGTRXj8V53E voGdkMF2S0Xo vEN65Md9vv3w v2JT_xXUoXgE vKHRUgh_VugQ vAOQ67SCGigM vaLyu7zvZTQ4 vqBDUoOmkAxE vuNlYIISW6BU vKCy9xDxAVhg vQLH0SYXBsBg vcGVvUs3t6xs voKMgdKB58iM v8CtIfRT7VSM vWNr9_5W-zCI vuNHzuXqUayU vcL2J7GjJBig vYDAsERCUpig v4E8nxUOUxDA v2DkM3F-RiTA vcJHAC9mG2jE v6FeB6RN4tkk v8GfYGc-xnE0 vAMybJ6ujn00   v-OmmVghFRW8 ; do
+        ${CURL} -X POST "https://frontend.vh.yandex.ru/graphql?${URL_ADD}${SRCRWR}" --data-binary "{player(content_id:\"${v}\") {viewers title duration audio_source_url}}" \
+            | jq --exit-status '.player.content.content.audio_source_url'
+        ${CURL} "https://frontend.vh.yandex.ru/player/${v}.json?${URL_ADD}${SRCRWR}" \
+            | jq --exit-status '.content.audio_source_url' ||:
+    done
+fi

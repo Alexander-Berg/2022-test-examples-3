@@ -1,0 +1,52 @@
+logging:
+  level:
+    ROOT: DEBUG
+    com.jayway.jsonpath.internal.path: INFO
+    de.danielbechler.diff.differ.DifferDispatcher: INFO
+    # Hibernate logging settings
+    org.hibernate: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.CollectionType: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.type.descriptor.sql.BasicExtractor: DEBUG
+    # Hive logging settings
+    org.apache.hive.jdbc.HiveQueryResultSet: INFO
+    # Profiler logging settings
+    sun.rmi: INFO
+
+yql: &yql-default-configuration
+  url: jdbc:yql://yql.yandex.net:443
+  user: robot-mkt-barc-qa
+  database: hahn
+  syntax-version: 1
+  table-path-prefix: "home/market/testing/mbi/barc"
+
+yt: &yt-default-configuration
+  proxy: ${yql.database}.yt.yandex.net
+  token: ${yql.password}
+  root-path: //${yql.table-path-prefix}
+
+mbi:
+  data-archiver:
+    tms-console:
+      host: vla1-5925-vla-market-test-mbi--bd9-25777.gencfg-c.yandex.net
+      port: 25780
+    # main YT-archive settings
+    main-archive-cluster: &archive-cluster
+      yql:
+        <<: *yql-default-configuration
+        database: hahn
+        table-path-prefix: ${yql.table-path-prefix}
+      yt:
+        <<: *yt-default-configuration
+        proxy: ${mbi.data-archiver.main-archive-cluster.yql.database}.yt.yandex.net
+
+    # replica YT-archive settings (just overrides database property)
+    replica-archive-cluster:
+      yql:
+        <<: *yql-default-configuration
+        database: arnold
+        table-path-prefix: ${yql.table-path-prefix}
+      yt:
+        <<: *yt-default-configuration
+        proxy: ${mbi.data-archiver.replica-archive-cluster.yql.database}.yt.yandex.net

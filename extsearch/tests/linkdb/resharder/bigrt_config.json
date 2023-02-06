@@ -1,0 +1,68 @@
+{
+    "VerboseLevel": 6,
+    "YtVerboseLevel": "Error",
+
+    "YtCluster": "{{yt_cluster}}",
+    "YtLog": "{{global_log}}",
+    "Port": {{port}},
+
+    "GlobalLog": "{{global_log}}",
+    "Destinations": [
+        {
+            "Name": "{{ output_queue }}",
+            "ShardsCount": {{ output_shards_count }},
+            "QytWriter": {
+                "Queues": [
+                    {
+                        "Cluster": "{{ yt_cluster }}",
+                        "Path": "{{ output_queue }}"
+                    }
+                ]
+            }
+        }
+    ],
+
+    "Resharders": [
+        {
+            "Instance": {
+                "ConsumingSystem": {
+                    "MainPath": "{{consuming_system_main_path}}",
+                    "Shards": {
+                        "Range": {
+                            "Begin": 0,
+                            "End": {{max_shards}}
+                        }
+                    },
+                    "MaxShards": {{max_shards}},
+                    "MaxShardsToCheck": 2,
+                    "WorkerMinorName": "{{worker_minor_name}}"
+                },
+
+                "MaxMemoryUsage": 1000000000,
+                "OutputCodec": "null",
+
+                "StatelessShardProcessorConfig": {},
+
+                "Suppliers": [
+                {
+                    "Alias": "soup_log",
+                    "YtSupplier": {
+                        "QueueConsumer": "{{consumer}}",
+                        "QueuePath": "{{input_queue}}",
+                        "Cluster": "{{yt_cluster}}",
+                        "MaxOutChunkSize": 1
+                        }
+                    }
+                ]
+            },
+            "OutputQueue": "{{output_queue}}",
+            "RowsProcessor": {
+                "MaxOutputMessageSize": 1048576,
+                "MaxOutputChunksCount": 1
+
+            }
+        }
+    ],
+
+    "SharedTransactionPeriod": 100
+}

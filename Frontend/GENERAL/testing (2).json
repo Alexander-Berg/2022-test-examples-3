@@ -1,0 +1,392 @@
+{
+  "name": "agency-cabinet_test",
+  "revision": 0,
+  "vertical": "SHARED",
+  "uploadedAt": 0,
+  "firstSeen": 0,
+  "deleted": false,
+  "tag": "",
+  "settings": {
+    "expressionsMap": [],
+    "edgeExpressionsMap": [
+      [
+        "API_HTTP_SETUP->API_HTTP_PROXY",
+        "API_HTTP_SETUP[should_make_api_request]"
+      ]
+    ],
+    "nodeDepsMap": [
+      [
+        "BUNKER",
+        {
+          "inputDepsList": [
+            "BUNKER_REQUEST"
+          ]
+        }
+      ],
+      [
+        "BLACKBOX",
+        {
+          "inputDepsList": [
+            "BLACKBOX_PRE"
+          ]
+        }
+      ],
+      [
+        "BLACKBOX_PRE",
+        {
+          "inputDepsList": [
+            "INIT_MERGED"
+          ]
+        }
+      ],
+      [
+        "INIT_MERGED",
+        {
+          "inputDepsList": [
+            "HTTP_REQUEST"
+          ]
+        }
+      ],
+      [
+        "API_HTTP_SETUP",
+        {
+          "inputDepsList": [
+            "BLACKBOX",
+            "INIT_MERGED@request->input-request"
+          ]
+        }
+      ],
+      [
+        "API_HTTP_PROXY",
+        {
+          "inputDepsList": [
+            "API_HTTP_SETUP@api_request->http_request"
+          ]
+        }
+      ],
+      [
+        "RESPONSE",
+        {
+          "inputDepsList": [
+            "TEMPLATES"
+          ]
+        }
+      ],
+      [
+        "TEMPLATES",
+        {
+          "inputDepsList": [
+            "HTTP_REQUEST",
+            "TEMPLATES_DATA",
+            "INIT_MERGED",
+            "API_HTTP_PROXY@http_response->api_response",
+            "API_HTTP_SETUP",
+            "BLACKBOX",
+            "BUNKER"
+          ]
+        }
+      ],
+      [
+        "TEMPLATES_DATA",
+        {
+          "inputDepsList": [
+            "HTTP_REQUEST"
+          ]
+        }
+      ]
+    ],
+    "inputDepsList": [
+      "HTTP_REQUEST"
+    ],
+    "outputDepsList": [],
+    "criticalDepsList": [],
+    "nodesMap": [
+      [
+        "API_HTTP_SETUP",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "AGENCY_OFFICE__API_HTTP_SETUP"
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": []
+        }
+      ],
+      [
+        "API_HTTP_PROXY",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "AGENCY_OFFICE__API_HTTP_PROXY"
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": []
+        }
+      ],
+      [
+        "BUNKER_REQUEST",
+        {
+          "nodeType": 3,
+          "embedList": [
+            {
+              "fieldsMap": [
+                [
+                  "nodes",
+                  {
+                    "boolValue": false,
+                    "nullValue": 0,
+                    "numberValue": 0,
+                    "stringValue": "",
+                    "listValue": {
+                      "valuesList": [
+                        {
+                          "structValue": {
+                            "fieldsMap": [
+                              [
+                                "path",
+                                {
+                                  "stringValue": "/agency-cabinet/features"
+                                }
+                              ]
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ],
+                [
+                  "type",
+                  {
+                    "boolValue": false,
+                    "nullValue": 0,
+                    "numberValue": 0,
+                    "stringValue": "bunker_request"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      [
+        "BUNKER",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "BUNKER_API"
+          },
+          "params": {
+            "handler": {
+              "value": "/default"
+            },
+            "timeout": {
+              "value": "2s"
+            },
+            "codecsList": [],
+            "attempts": {
+              "maxAttempts": {
+                "value": 2
+              }
+            }
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": []
+        }
+      ],
+
+      [
+        "BLACKBOX",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "SRC_SETUP__SHARED"
+          },
+          "params": {
+            "handler": {
+              "value": "/proxy/blackbox"
+            },
+            "timeout": {
+              "value": "1000ms"
+            },
+            "codecsList": [],
+            "attempts": {
+              "maxAttempts": {
+                "value": 2
+              }
+            }
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": []
+        }
+      ],
+      [
+        "BLACKBOX_PRE",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "SRC_SETUP__SHARED"
+          },
+          "params": {
+            "handler": {
+              "value": "/setup/blackbox_pre"
+            },
+            "timeout": {
+              "value": "1000ms"
+            },
+            "codecsList": [],
+            "attempts": {
+              "maxAttempts": {
+                "value": 2
+              }
+            }
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": []
+        }
+      ],
+      [
+        "INIT_MERGED",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "SELF__SHARED"
+          },
+          "params": {
+            "handler": {
+              "value": "/_subhost/init"
+            },
+            "timeout": {
+              "value": "1000ms"
+            },
+            "codecsList": [],
+            "attempts": {
+              "maxAttempts": {
+                "value": 2
+              }
+            }
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": []
+        }
+      ],
+      [
+        "TEMPLATES",
+        {
+          "nodeType": 0,
+          "backendName": {
+            "value": "RENDERER_SHARED"
+          },
+          "params": {
+            "handler": {
+              "value": "/_subhost/init"
+            },
+            "timeout": {
+              "value": "1000ms"
+            },
+            "codecsList": [],
+            "attempts": {
+              "maxAttempts": {
+                "value": 2
+              }
+            }
+          },
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [],
+          "monitoringList": []
+        }
+      ],
+      [
+        "TEMPLATES_DATA",
+        {
+          "nodeType": 0,
+          "expectsDebugInfo": false,
+          "neverDiscard": false,
+          "forceRequestOnEmptyInput": false,
+          "excludeFromCommonStats": false,
+          "inputTypesList": [],
+          "outputTypesList": [],
+          "embedList": [
+            {
+              "fieldsMap": [
+                [
+                  "template",
+                  {
+                    "nullValue": 0,
+                    "numberValue": 0,
+                    "stringValue": "agency-office",
+                    "boolValue": false
+                  }
+                ],
+                [
+                  "type",
+                  {
+                    "nullValue": 0,
+                    "numberValue": 0,
+                    "stringValue": "template_params",
+                    "boolValue": false
+                  }
+                ]
+              ]
+            }
+          ],
+          "monitoringList": []
+        }
+      ]
+    ],
+    "streamingNoBlockOutputs": false,
+    "nodeSubsetsMap": [],
+    "responsibles": {
+      "loginsList": [
+        "pushkintyt",
+        "doroginin",
+        "robot-frontend"
+      ],
+      "abcList": []
+    },
+    "allowedTvmIdsList": [],
+    "allowEmptyResponse": false
+  },
+  "createdAt": 0
+}

@@ -1,0 +1,21 @@
+context:
+  default:
+    service_name: touch_default
+    servername_regexp: default.touch(-test)?\\.market\\.([\\w\\d]+\\.)?yandex\\.(ru|ua|com|kz|by)
+    vs: market
+    antirobot: true
+    antirobot_service_name: market
+    health_check: '"GET /ping HTTP/1.1\r\nHost: heartbeat.market.yandex.ru\r\n\r\n"'
+    priority: 3
+    cert: m.market
+  testing:
+    cert: fslb-testing
+
+servers:
+  default:
+    main:
+    - name: GREY%fslb.yandex.ru
+      timeout: 35s
+      weight: 100
+      port: 10020
+      plain_http_backend: true

@@ -1,0 +1,27 @@
+itype: itype_which_will_be_rewritten
+prj:
+  - example
+
+geo:
+  - sas
+
+ctype:
+ - hamster
+
+graph: SELF1  # look into web/app_host/conf/graph_generator/vertical/WEB and around
+source_caption: AH backend
+signal: Failures2  # Errors, Timeouts, Error-Connection-timed-out, etc.
+origin: apphost  # or unistat-SOURCES for graph sources
+source: SS  # for backend; or a real source name
+
+warning: .1
+critical: 1
+ignored_requests: 500  # for less RPS to the graph, no indication will happen
+caption: '{source_caption} {signal}'
+format: '%3.1f%%'
+
+monitors:
+  - signal: perc({origin}-{graph}-{source}-{signal}_dmmm,max(sum({origin}-{graph}-{source}-<Success|Failur>es_dmmm), {ignored_requests}))
+    caption: '{caption}'
+    warning: ['{warning}', '{critical}']
+    critical: ['{critical}', null]

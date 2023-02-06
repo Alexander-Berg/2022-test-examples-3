@@ -1,0 +1,33 @@
+{% if table == "features_item_pair_category_category_average_external_order_pmi" %}
+    {# Result data. #}
+    {% table table %}
+        [
+            "C1", "C2",
+            {{ (2.0 + 1.0) / 2.0 }},
+            {{ (10.0 + 20.0) / 2.0 }},
+            {{ (2.0 / (4.0 * 8.0) + 1.0 / (2.0 * 2.0)) / 2.0 }},
+            {{ (10.0 / (40.0 * 20.0) + 20.0 / (10.0 * 10.0)) / 2.0 }},
+            "category", "category",
+            "{{ day }}"
+        ]
+    {% endtable %}
+{% elif table == "features_item_pair_category_category_external_order_statistics" %}
+    {% table table %}
+        {% if shift == 0 %}
+            ["C1", "C2", 2.0, 10.0, "category", "category", "{{ day }}"]
+        {% elif shift == 1 %}
+            ["C1", "C2", 1.0, 20.0, "category", "category", "{{ day }}"]
+        {% endif %}
+    {% endtable %}
+{% elif table == "features_item_category_order_statistics" %}
+    {% table table %}
+        {# Note that here external order count goes before external orderer count. #}
+        {% if shift == 0 %}
+            ["C1", 40.0, 4.0, 10.0, 10.0,  10.0, 10.0, 10.0, 10.0,  0.0, 0.0, 0.0, 0.0,  10.0, 10.0, "category", "{{ day }}"],
+            ["C2", 20.0, 8.0, 10.0, 10.0,  10.0, 10.0, 10.0, 10.0,  0.0, 0.0, 0.0, 0.0,  10.0, 10.0, "category", "{{ day }}"]
+        {% elif shift == 1 %}
+            ["C1", 10.0, 2.0, 10.0, 10.0,  10.0, 10.0, 10.0, 10.0,  0.0, 0.0, 0.0, 0.0,  10.0, 10.0, "category", "{{ day }}"],
+            ["C2", 10.0, 2.0, 10.0, 10.0,  10.0, 10.0, 10.0, 10.0,  0.0, 0.0, 0.0, 0.0,  10.0, 10.0, "category", "{{ day }}"]
+        {% endif %}
+    {% endtable %}
+{% endif %}

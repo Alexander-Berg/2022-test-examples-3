@@ -1,0 +1,10 @@
+---
+##################################################
+# Deploy package to qloud and wait until env deployed
+
+- name: Deploy resource to qloud.
+  command: qloud-deploy mpfs deploy_package --wait {{ qloud_deploy_env }}  {{ package_name }}={{ version }}
+  register: result
+  until: result.rc == 0
+  retries: 5
+  delay: 15

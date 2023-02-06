@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <partner id="1" status="active" type="DROPSHIP" name="Partner 1"/>
+    <partner id="2" status="active" type="SORTING_CENTER" name="Partner 2"/>
+    <partner id="3" status="active" type="DELIVERY" name="Partner 3"/>
+
+    <address id="11"/>
+    <address id="12"/>
+    <address id="13"/>
+
+    <logistics_point
+            id="101"
+            name="Point 101"
+            external_id="warehouse_101"
+            type="WAREHOUSE"
+            address_id="11"
+            active="true"
+    />
+
+    <logistics_point
+            id="102"
+            name="Point 102"
+            external_id="warehouse_102"
+            type="WAREHOUSE"
+            address_id="12"
+            active="true"
+    />
+
+    <logistics_point
+            id="103"
+            name="Point 103"
+            external_id="pickup_point_103"
+            type="PICKUP_POINT"
+            address_id="12"
+            active="true"
+    />
+
+    <logistic_segments
+            id="10001"
+            partner_id="1"
+            logistic_point_id="101"
+            location_id="1001"
+            type="warehouse"
+    />
+
+    <logistic_segments
+            id="10002"
+            partner_id="2"
+            logistic_point_id="[null]"
+            location_id="1002"
+            type="movement"
+    />
+
+    <logistic_segments
+            id="10003"
+            partner_id="2"
+            logistic_point_id="102"
+            location_id="1002"
+            type="warehouse"
+            name="foo warehouse"
+    />
+
+    <logistic_segments
+            id="10004"
+            partner_id="3"
+            logistic_point_id="[null]"
+            location_id="1003"
+            type="movement"
+    />
+
+    <logistic_segments
+            id="10005"
+            partner_id="3"
+            logistic_point_id="[null]"
+            location_id="1003"
+            type="linehaul"
+            name="foo linehaul"
+    />
+
+    <logistic_segments
+            id="10006"
+            partner_id="3"
+            logistic_point_id="103"
+            location_id="1003"
+            type="pickup"
+            name="foo pickup"
+    />
+
+    <logistic_segments
+            id="10007"
+            partner_id="3"
+            logistic_point_id="[null]"
+            location_id="1003"
+            type="handing"
+            name="bar handing"
+    />
+
+    <logistic_edges from_segment_id="10001" to_segment_id="10002"/>
+    <logistic_edges from_segment_id="10002" to_segment_id="10003"/>
+    <logistic_edges from_segment_id="10003" to_segment_id="10004"/>
+    <logistic_edges from_segment_id="10004" to_segment_id="10005"/>
+    <logistic_edges from_segment_id="10005" to_segment_id="10006"/>
+    <logistic_edges from_segment_id="10005" to_segment_id="10007"/>
+
+    <schedule id="100"/>
+    <schedule id="200"/>
+
+    <schedule_day id="101" schedule_id="100" day="1" time_from="10:00:00" time_to="17:00:00"/>
+    <schedule_day id="102" schedule_id="100" day="3" time_from="12:00:00" time_to="13:00:00"/>
+    <schedule_day id="201" schedule_id="200" day="4" time_from="15:00:00" time_to="20:00:00"/>
+    <schedule_day id="202" schedule_id="200" day="5" time_from="00:00:00" time_to="17:00:00"/>
+
+    <calendar id="1000"/>
+    <calendar id="2000"/>
+    <calendar id="3000"/>
+
+    <calendar_day calendar_id="1000" day="2021-06-01" is_holiday="true"/>
+    <calendar_day calendar_id="1000" day="2021-06-02" is_holiday="true"/>
+    <calendar_day calendar_id="1000" day="2021-06-03" is_holiday="false"/>
+    <calendar_day calendar_id="2000" day="2021-06-04" is_holiday="true"/>
+    <calendar_day calendar_id="2000" day="2021-06-05" is_holiday="true"/>
+    <calendar_day calendar_id="2000" day="2021-06-06" is_holiday="false"/>
+    <calendar_day calendar_id="3000" day="2021-06-07" is_holiday="true"/>
+    <calendar_day calendar_id="3000" day="2021-06-08" is_holiday="true"/>
+    <calendar_day calendar_id="3000" day="2021-06-09" is_holiday="false"/>
+
+
+    <logistic_segments_services
+            id="100001"
+            segment_id="10001"
+            status="active"
+            code="550"
+            duration="180"
+            price="0"
+            schedule="100"
+            calendar="1000"
+            capacity_calendar="2000"
+            created="[null]"
+            updated="2018-01-01 12:00:00"
+    />
+    <logistic_segments_services
+            id="100002"
+            segment_id="10001"
+            status="inactive"
+            code="551"
+            duration="0"
+            price="1000"
+            schedule="200"
+            calendar="3000"
+            capacity_calendar="[null]"
+            created="2018-01-01 12:00:00"
+            updated="2018-01-01 12:00:00"
+    />
+    <logistic_segments_services
+            id="100003"
+            segment_id="10002"
+            status="active"
+            code="554"
+            duration="180"
+            price="0"
+            schedule="100"
+            calendar="3000"
+            capacity_calendar="[null]"
+            created="2018-01-01 12:00:00"
+            updated="2020-01-01 12:00:00"
+    />
+
+    <cargo_type
+            id="1"
+            cargo_type="10"
+            description="документы и ценные бумаги"
+    />
+    <cargo_type
+            id="2"
+            cargo_type="100"
+            description="товары народного потребления"
+    />
+    <cargo_type
+            id="3"
+            cargo_type="300"
+            description="тяжеловесный и крупногабаритный"
+    />
+
+    <logistic_segments_services_cargo_types
+            logistic_service_id="100001"
+            cargo_type_id="2"
+    />
+
+    <logistic_segments_services_cargo_types
+            logistic_service_id="100001"
+            cargo_type_id="3"
+    />
+
+    <logistic_segments_services_meta_key id="401" key="RETURN_SORTING_CENTER_ID"/>
+    <logistic_segments_services_meta_value id="501" key_id="401" service_id="100001" value="100"/>
+</dataset>

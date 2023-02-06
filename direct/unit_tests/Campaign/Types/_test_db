@@ -1,0 +1,50 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Settings;
+
+return {
+    campaigns => {
+        original_db => PPC(shard => 'all'),
+        rows => {
+            1 => [
+                {cid => 1, OrderID => 0, type => 'text'},
+                {cid => 2, OrderID => 12, type => 'text'},
+                {cid => 3, OrderID => 13, type => 'mcb'},
+                ],
+            2 => [
+                {cid => 4, OrderID => 14, type => 'geo'},
+                {cid => 5, OrderID => 15, type => 'wallet'},
+                {cid => 6, OrderID => 0, type => 'wallet'},
+            ],
+        },
+    },
+    shard_client_id => {
+        original_db => PPCDICT,
+        rows => [
+            {ClientID => 1, shard => 2},
+            {ClientID => 2, shard => 1},
+            ],
+    },
+    shard_inc_cid => {
+        original_db => PPCDICT,
+        rows => [
+            {cid => 1, ClientID => 2},
+            {cid => 2, ClientID => 2},
+            {cid => 3, ClientID => 2},
+            {cid => 4, ClientID => 1},
+            {cid => 5, ClientID => 1},
+            {cid => 6, ClientID => 1},
+            ],
+    },
+    shard_order_id => {
+        original_db => PPCDICT,
+        rows => [
+            {OrderID => 12, ClientID => 2},
+            {OrderID => 13, ClientID => 2},
+            {OrderID => 14, ClientID => 1},
+            {OrderID => 15, ClientID => 1},
+            ],
+    },
+};

@@ -1,0 +1,23 @@
+export default {
+  list: '.qa-TodoList',
+  listCreate: '.qa-Todo-CreateList',
+  listTitleInput: '.qa-TodoList-EditContent .textinput__control',
+  listTitle: '.qa-TodoList-Title',
+  listItems: '.qa-TodoList-Items',
+  listExpander: '.qa-TodoList-Expander',
+  listDelete: '.qa-TodoList-Delete',
+  listEdit: '.qa-TodoList-Edit',
+  item: '.qa-TodoItem',
+  itemEdit: '.qa-TodoItem-Edit',
+  itemTitle: '.qa-TodoItem-Title',
+  itemDate: '.qa-TodoItem-Date',
+  itemCreate: '.qa-TodoList-CreateItem',
+  itemTitleInput: '.qa-TodoItem-EditContent .textinput__control',
+  itemDateInput: '.qa-TodoItem-DateInput .react-datepicker__input',
+  itemDelete: '.qa-TodoItem-Delete',
+  tabAll: '.qa-Todo-TabAll',
+  tabCompleted: '.qa-Todo-TabCompleted',
+  tabExpired: '.qa-Todo-TabExpired',
+  tabDisabled: 'qa-TabsItem_disabled',
+  tabActive: 'qa-TabsItem_active'
+};

@@ -1,0 +1,32 @@
+pools:
+- gun:
+    type: "collector_pg_gun"
+    host: "pgload03e.mail.yandex.net"
+    port: 6432
+    database: "maildb"
+    user: "mxfront"
+
+  ammo:
+    type: "collector_pg_provider"
+    source: # You may just write file path here. Or stdin.
+      type: inline
+      data: |
+        {"tag": "ping", "uid": 10010000000001, "folderName": "Inbox", "folderType": "inbox"}
+
+
+     #data: |
+      #  {"tag": "ping", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+      #  {"tag": "proxy", "sourceUid": 10000001000001, "targetUid": 10000002000001}
+
+  result:
+    type: phout
+    destination: ./phout_pg.log
+
+  rps:
+    - {duration: 30s, type: line, from: 5, to: 5}
+  startup:
+    type: once
+    times: 5
+
+log:
+  level: debug

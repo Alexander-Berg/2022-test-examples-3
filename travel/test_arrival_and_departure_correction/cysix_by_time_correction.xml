@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf8'?>
+<channel t_type="bus" carrier_code_system="local" version="1.0" station_code_system="vendor" timezone="start_station" vehicle_code_system="local">
+  <group code="default">
+    <stations>
+      <station code="102469" title="Старая Майна КП">
+        <legacy_station code="102469" type="raw" title="Старая Майна КП"/>
+      </station>
+      <station code="100011" title="Старая Майна">
+        <legacy_station code="100011" type="raw" title="Старая Майна"/>
+      </station>
+      <station code="100397" title="Аристовка">
+        <legacy_station code="100397" type="raw" title="Аристовка"/>
+      </station>
+      <station code="100659" title="Волостниковка">
+        <legacy_station code="100659" type="raw" title="Волостниковка"/>
+      </station>
+    </stations>
+    <vehicles>
+      <vehicle code="2" title="ПАЗ-3205"/>
+    </vehicles>
+    <carriers>
+      <carrier code="3" title="САТО ООО"/>
+    </carriers>
+
+    <threads>
+      <thread number="3x32" carrier_code="3" vehicle_code="2">
+        <stoppoints>
+          <stoppoint station_title="Старая Майна КП" station_code="102469" departure_time="13:00:00"/>
+          <stoppoint station_title="Старая Майна" station_code="100011"/>
+          <stoppoint station_title="Аристовка" station_code="100397"/>
+          <stoppoint station_title="Волостниковка" station_code="100659" arrival_time="13:59:00"/>
+        </stoppoints>
+        <schedules>
+          <schedule period_start_date="2013-03-29" period_end_date="2015-03-29" days="135" times="13:00:00"/>
+        </schedules>
+      </thread>
+
+      <!-- Поменены местами arrival и departure -->
+      <thread number="3x32_a_d_incorrect" carrier_code="3" vehicle_code="2">
+        <stoppoints>
+          <stoppoint station_title="Старая Майна КП" station_code="102469" arrival_time="13:00:00"/>
+          <stoppoint station_title="Старая Майна" station_code="100011"/>
+          <stoppoint station_title="Аристовка" station_code="100397"/>
+          <stoppoint station_title="Волостниковка" station_code="100659" departure_time="14:00:00"/>
+        </stoppoints>
+        <schedules>
+          <schedule period_start_date="2013-03-29" period_end_date="2015-03-29" days="246" times="13:00:00"/>
+        </schedules>
+      </thread>
+
+      <!-- привышаем допустимый лимит времени -->
+      <thread number="3x32_big_times" carrier_code="3" vehicle_code="2">
+        <stoppoints>
+          <stoppoint station_title="Старая Майна КП" station_code="102469" arrival_shift="0"/>
+          <stoppoint station_title="Старая Майна" station_code="100011"    arrival_shift="14400"/>
+          <stoppoint station_title="Аристовка" station_code="100397"       arrival_shift="36000"/>
+          <stoppoint station_title="Волостниковка" station_code="100659"   arrival_shift="72000"/>
+        </stoppoints>
+        <schedules>
+          <schedule period_start_date="2013-03-29" period_end_date="2015-03-29" days="246" times="13:00:00"/>
+        </schedules>
+      </thread>
+
+     </threads>
+  </group>
+</channel>

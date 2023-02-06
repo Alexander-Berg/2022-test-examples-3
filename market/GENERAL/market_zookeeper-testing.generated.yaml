@@ -1,0 +1,45 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый market_zookeeper-testing.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_zookeeper-testing
+
+juggler:
+  checks:
+
+  # Check unispace
+  # https://juggler.yandex-team.ru/check_details/?host=market_zookeeper-testing&service=unispace&last=1DAY&mode=edit
+  - service: unispace
+    tags:
+    - market_testing
+    - market_sre_incident
+    - market
+    - _market_
+
+  # Check zookeeper
+  # https://juggler.yandex-team.ru/check_details/?host=market_zookeeper-testing&service=zookeeper&last=1DAY&mode=edit
+  - service: zookeeper
+    tags:
+    - market_testing
+    - market_sre_incident
+    - market
+    - _market_
+    - market_testing_zookeeper
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+      unreach_mode: force_ok
+      unreach_service:
+      - check: market_walle:UNREACHABLE
+    check_options: {}
+    children:
+    - CGROUP%market_zookeeper-testing
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    host: market_zookeeper-testing
+    namespace: market.sre
+    notifications: []
+    refresh_time: 60
+    ttl: 900

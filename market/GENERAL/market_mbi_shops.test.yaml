@@ -1,0 +1,79 @@
+# Do not edit manually!!!
+# Этот файл был автоматически сгенерирован с помощью утилиты migrator.
+# Если вам необходимо внести изменения, то следует удалить этот файл и создать новый market_mbi_shops.test.yaml (без суффикса generated).
+# https://juggler.yandex-team.ru/aggregate_checks/?query=host%3Dmarket_mbi_shops.test
+
+juggler:
+  checks:
+
+  # Check mbi-logic-no-ticket-1882
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_shops.test&service=mbi-logic-no-ticket-1882&last=1DAY&mode=edit
+  - service: mbi-logic-no-ticket-1882
+
+  # Check mbi-logic-no-ticket-1883
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_shops.test&service=mbi-logic-no-ticket-1883&last=1DAY&mode=edit
+  - service: mbi-logic-no-ticket-1883
+
+  # Check mbi-market-12
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_shops.test&service=mbi-market-12&last=1DAY&mode=edit
+  - service: mbi-market-12
+    meta:
+      urls:
+        - title: Wiki
+          type: wiki
+          url: https://wiki.yandex-team.ru/mbi/development/monitoringssubs/12/
+        - title: Indexer
+          type: graph_url
+          url: http://mi01ht.market.yandex.net/marketindexer/show.py
+
+  # Check mbi-tms-682
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_shops.test&service=mbi-tms-682&last=1DAY&mode=edit
+  - service: mbi-tms-682
+
+  # Check samovar_processing_timing
+  # https://juggler.yandex-team.ru/check_details/?host=market_mbi_shops&service=lb_datacamp_reports_read_lag&last=1DAY&mode=edit
+  - aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+        - crit: 0
+          day_end: 7
+          day_start: 1
+          time_end: 20
+          time_start: 12
+          warn: 0
+        - crit: 101%
+          day_end: 7
+          day_start: 1
+          time_end: 11
+          time_start: 21
+          warn: '0'
+      nodata_mode: force_crit
+    children: []
+    flaps:
+      boost_time: 0
+      critical_time: 3000
+      stable_time: 600
+    notifications:
+      - template_kwargs:
+          login: mbi
+          method: telegram
+        template_name: on_status_change
+    service: lb_datacamp_reports_read_lag
+
+  default:
+    aggregator: logic_or
+    aggregator_kwargs:
+      nodata_mode: force_crit
+    check_options: {}
+    children: []
+    host: market_mbi_shops.test
+    namespace: market.mbi_shops
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_mbi
+    - market_dev
+    - market
+    - _market_
+    ttl: 900

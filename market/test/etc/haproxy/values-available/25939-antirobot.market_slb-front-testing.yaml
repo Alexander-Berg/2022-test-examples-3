@@ -1,0 +1,91 @@
+# Параметры обработки
+params:
+  default:
+    resolve: true
+    templates:
+      - user_mslb_triple_waterfall.tpl
+
+# Значения, доступные в шаблоне
+values:
+  default:
+    be_defaults:
+      check:           check observe layer7
+      on_error:        fastinter
+
+    be_globals:
+      balance:         hdr(X-Real-IP)
+      hash_type:       consistent sdbm
+      timeout_queue:   100ms
+    be1_globals:
+      timeout_connect: 25
+      min_nbsrv:       10
+    be2_globals:
+      min_nbsrv:       10
+
+    globals:
+      service_name:    antirobot.tst.vs.market.yandex.net
+      service_port:    80
+      ping_expect:     rstring pong
+
+# Именованные списки серверов, доступные в шаблоне
+servers:
+  default:
+    be1:
+      - name: YP@prod-antirobot-yp-man@local
+        dns_resolvers: "yandex-ns"
+        resolve: false
+      - name: YP@prod-antirobot-yp-prestable-man@local
+        dns_resolvers: "yandex-ns"
+        resolve: false
+      - name: YP@prod-antirobot-yp-prestable-sas@local
+        dns_resolvers: "yandex-ns"
+        resolve: false
+      - name: YP@prod-antirobot-yp-prestable-vla@local
+        dns_resolvers: "yandex-ns"
+        resolve: false
+      - name: YP@prod-antirobot-yp-sas@local
+        dns_resolvers: "yandex-ns"
+        resolve: false
+      - name: YP@prod-antirobot-yp-vla@local
+        dns_resolvers: "yandex-ns"
+        resolve: false
+    be3:
+      - name: YP@prod-antirobot-yp-man
+        dns_resolvers: "yandex-ns"
+        resolve: false
+      - name: YP@prod-antirobot-yp-prestable-man
+        dns_resolvers: "yandex-ns"
+        resolve: false
+      - name: YP@prod-antirobot-yp-prestable-sas
+        dns_resolvers: "yandex-ns"
+        resolve: false
+      - name: YP@prod-antirobot-yp-prestable-vla
+        dns_resolvers: "yandex-ns"
+        resolve: false
+      - name: YP@prod-antirobot-yp-sas
+        dns_resolvers: "yandex-ns"
+        resolve: false
+      - name: YP@prod-antirobot-yp-vla
+        dns_resolvers: "yandex-ns"
+        resolve: false
+  default@iva:
+    be1:
+      - name: YP@prod-antirobot-yp-prestable-vla
+        dns_resolvers: "yandex-ns"
+        resolve: false
+      - name: YP@prod-antirobot-yp-vla
+        dns_resolvers: "yandex-ns"
+        resolve: false
+    be2:
+      - name: YP@prod-antirobot-yp-prestable-sas
+        dns_resolvers: "yandex-ns"
+        resolve: false
+      - name: YP@prod-antirobot-yp-prestable-vla
+        dns_resolvers: "yandex-ns"
+        resolve: false
+      - name: YP@prod-antirobot-yp-sas
+        dns_resolvers: "yandex-ns"
+        resolve: false
+      - name: YP@prod-antirobot-yp-vla
+        dns_resolvers: "yandex-ns"
+        resolve: false

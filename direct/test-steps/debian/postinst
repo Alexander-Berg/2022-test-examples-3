@@ -1,0 +1,10 @@
+#!/bin/sh
+
+#DEBHELPER#
+
+[ -L /etc/service/direct-test-steps ] || ln -s /etc/sv/direct-test-steps /etc/service/direct-test-steps
+
+if [ x$(readlink /etc/init.d/direct-test-steps) != x"/usr/bin/sv" ]; then
+    rm -fv /etc/init.d/direct-test-steps
+    ln -s /usr/bin/sv /etc/init.d/direct-test-steps
+fi

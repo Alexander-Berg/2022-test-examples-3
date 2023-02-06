@@ -1,0 +1,97 @@
+# Тут проверяются статусы и данные в контенте.
+# Хоты бы одна запись с полным набором данных. Для упрощения часть полей в остальных записях могут быть опущены.
+# Вложенность проверяется отдельным тестом, поэтому тут контент плоский.
+#
+# Отзывы
+# - 1. опубликованный, полный (текст, все поля, ip/port)
+# - 2. опубликованный удалённый
+# - 3. предыдущая версия принятый
+# - 4. отклонённый
+# - 5. на модерации
+# - 6. принятый, но спам
+# - 7. странный статус
+# Вопросы
+# - 1. принятый полный (текст, ip, port)
+# - 2. отклонённый
+# - 3. удалённый
+# - 4. в процессе модерации
+# Ответы
+# - так же, как у вопросов
+# - 10. принятый от магазина
+# - 11. принятый от вендора
+# Комменты
+# - 1. принятый полный для qa (текст, ip, port)
+# - 2. удалённый qa
+# - 3. принятый для отзывов
+# - 4. принятый для статей
+
+# Таблицы для отзывов
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_grade
+SCHEMA id:int64, fix_id:int64, state:int16, mod_state:int16
+SCHEMA type:int16, resource_id:int64, author_id:int64, cr_time:string
+SCHEMA anonymous:int16, real_source:string, short_text:string, pro:string, contra:string
+SCHEMA yandexuid:string, grade_state:int16
+{"id": 1, "fix_id": 1, "state": 0, "mod_state": 3, "type": 1, "resource_id": 1, "author_id": 1, "cr_time": "2021-01-01T00:00:00", "short_text":"text", "pro":"protest", "contra":"context", "yandexuid":"my_yuid"}
+{"id": 2, "fix_id": 2, "state": 2, "mod_state": 3, "type": 1, "resource_id": 1, "author_id": 2, "cr_time": "2021-01-01T00:00:00", "anonymous":1, "real_source": "none"}
+{"id": 3, "fix_id": 3, "state": 1, "mod_state": 3, "type": 1, "resource_id": 1, "author_id": 3, "cr_time": "2021-01-01T00:00:00", "anonymous":0, "real_source": "import;some"}
+{"id": 4, "fix_id": 4, "state": 0, "mod_state": 4, "type": 1, "resource_id": 1, "author_id": 4, "cr_time": "2021-01-01T00:00:00"}
+{"id": 5, "fix_id": 5, "state": 0, "mod_state": 1, "type": 1, "resource_id": 1, "author_id": 5, "cr_time": "2021-01-01T00:00:00"}
+{"id": 6, "fix_id": 6, "state": 0, "mod_state": 3, "type": 1, "resource_id": 1, "author_id": 6, "cr_time": "2021-01-01T00:00:00", "grade_state": 1}
+{"id": 7, "fix_id": 7, "state": 0, "mod_state": 8, "type": 1, "resource_id": 1, "author_id": 7, "cr_time": "2021-01-01T00:00:00"}
+
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_security_data
+SCHEMA grade_id:int64, ip:string, port:int16, yandexuid:string
+{"grade_id":1, "ip":"test_ip", "port":123}
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-grade/tables/grade_mod_grade_last
+SCHEMA grade_id:int64, mod_time:string
+{"grade_id":1, "mod_time":"2021-01-02T01:00:00"}
+
+# Таблицы для вопросов-ответов
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-qa/tables/qa_question
+SCHEMA id:int64, state:int16, mod_state:int16
+SCHEMA entity_type:int16, entity_id:string, user_type:int16, user_id:string, cr_time:string
+SCHEMA title:string, text:string
+{"id":1, "state":0, "mod_state":7, "entity_type":0, "entity_id":"1", "user_type":0, "user_id":"1", "cr_time": "2021-01-01T00:00:00", "title":"titext", "text":"questext"}
+{"id":2, "state":0, "mod_state":5, "entity_type":0, "entity_id":"2", "user_type":0, "user_id":"1", "cr_time": "2021-01-01T00:00:00"}
+{"id":3, "state":1, "mod_state":7, "entity_type":0, "entity_id":"3", "user_type":0, "user_id":"1", "cr_time": "2021-01-01T00:00:00"}
+{"id":4, "state":0, "mod_state":4, "entity_type":0, "entity_id":"4", "user_type":0, "user_id":"1", "cr_time": "2021-01-01T00:00:00"}
+
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-qa/tables/qa_answer
+SCHEMA id:int64, state:int16, mod_state:int16
+SCHEMA question_id:int64, user_type:int16, user_id:string, cr_time:string
+SCHEMA shop_id:int64, brand_id:int64, text:string
+{"id":1, "state":0, "mod_state":7, "question_id":0, "user_type":0, "user_id":"1", "cr_time": "2021-01-01T00:00:00", "text":"antent"}
+{"id":2, "state":0, "mod_state":5, "question_id":0, "user_type":0, "user_id":"2", "cr_time": "2021-01-01T00:00:00"}
+{"id":3, "state":1, "mod_state":7, "question_id":0, "user_type":0, "user_id":"3", "cr_time": "2021-01-01T00:00:00"}
+{"id":4, "state":0, "mod_state":4, "question_id":0, "user_type":0, "user_id":"4", "cr_time": "2021-01-01T00:00:00"}
+{"id":5, "state":0, "mod_state":7, "question_id":0, "user_type":0, "user_id":"5", "cr_time": "2021-01-01T00:00:00", "shop_id": 42}
+{"id":6, "state":0, "mod_state":7, "question_id":0, "user_type":0, "user_id":"6", "cr_time": "2021-01-01T00:00:00", "brand_id": 12}
+
+
+# Таблицы для комментов
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-qa/tables/com_comment
+SCHEMA id:int64, state:int16, mod_state:int16
+SCHEMA project:int16, root_id:int64, user_type:int16, user_id:string, parent_id:int64
+SCHEMA cr_time:string, shop_id:int64, brand_id:int64, text:string
+{"id":1, "state":0, "mod_state":0, "project":5,  "root_id":100, "user_type":0, "user_id":"1", "parent_id":1, "text":"some comment text", "cr_time": "2021-01-01T00:00:00"}
+{"id":2, "state":1, "mod_state":0, "project":5,  "root_id":100, "user_type":0, "user_id":"2", "parent_id":null, "cr_time": "2021-01-01T00:00:00", "shop_id": 42}
+{"id":3, "state":0, "mod_state":1, "project":9,  "root_id":100, "user_type":0, "user_id":"3", "parent_id":null, "cr_time": "2021-01-01T00:00:00", "brand_id": 73}
+{"id":4, "state":0, "mod_state":2, "project":10, "root_id":100, "user_type":0, "user_id":"4", "parent_id":null, "cr_time": "2021-01-01T00:00:00"}
+
+
+# доп данные по ip/port для вопросов, ответов и комментов
+MOCK TABLE //home/cdc/market/_YT_ENV_/pers-qa/tables/qa_security_data
+SCHEMA entity_type:int16, entity_id:int64, ip:string, port:int64
+# question
+{"entity_type":0, "entity_id":1, "ip":"some_question_ip", "port":12345}
+# answer
+{"entity_type":1, "entity_id":1, "ip":"some_answer_ip", "port":123}
+# comment (ok, wrong project)
+{"entity_type":2, "entity_id":1, "ip":"comment_ip", "port":345}
+{"entity_type":99, "entity_id":1, "ip":"wrong_ip", "port":666}
+
+# бизнесы магазинов
+MOCK TABLE //home/market/production/mstat/dictionaries/partner_types/latest
+SCHEMA id:int64, business_id:string

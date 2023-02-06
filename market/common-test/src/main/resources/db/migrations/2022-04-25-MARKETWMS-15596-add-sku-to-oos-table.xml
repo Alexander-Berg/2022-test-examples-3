@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="TIMESTAMP_WITH_TIME_ZONE" value="datetimeoffset" dbms="mssql"/>
+    <property name="TIMESTAMP_WITH_TIME_ZONE" value="TIMESTAMP WITH TIME ZONE" dbms="h2"/>
+
+    <property name="NOW" value="getutcdate()" dbms="mssql"/>
+    <property name="NOW" value="CURRENT_TIMESTAMP()" dbms="h2"/>
+
+    <property name="USER_NAME" value="user_name()" dbms="mssql"/>
+    <property name="USER_NAME" value="USER()" dbms="h2"/>
+
+    <changeSet id="MARKETWMS-15596" author="j-sverhnova">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists
+                    schemaName="wmwhse1"
+                    tableName="SKU_TO_OOS"
+                />
+            </not>
+        </preConditions>
+
+        <createTable tableName="SKU_TO_OOS" schemaName="wmwhse1">
+            <column name="SKU" type="nvarchar(50)" remarks="SKU">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STORERKEY" type="nvarchar(15)" remarks="STORERKEY">
+                <constraints nullable="false"/>
+            </column>
+            <column name="GMV" type="NUMERIC(13,4)" remarks="GMV">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ITEMS" type="NUMERIC(13,4)" remarks="ITEMS">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDDATE" type="${TIMESTAMP_WITH_TIME_ZONE}" defaultValueComputed="${NOW}"
+                    remarks="Дата добавления">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDWHO" type="nvarchar(256)" defaultValueComputed="${USER_NAME}"
+                    remarks="Пользователь, создавший строку">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITDATE" type="${TIMESTAMP_WITH_TIME_ZONE}" defaultValueComputed="${NOW}"
+                    remarks="Дата последнего редактирования строки">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EDITWHO" type="nvarchar(256)" defaultValueComputed="${USER_NAME}"
+                    remarks="Кем изменено">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey
+            columnNames="SKU, STORERKEY"
+            constraintName="PK_SKU_TO_OOS"
+            schemaName="wmwhse1"
+            tableName="SKU_TO_OOS"/>
+
+        <addForeignKeyConstraint
+            baseColumnNames="SKU, STORERKEY"
+            baseTableName="SKU_TO_OOS"
+            baseTableSchemaName="wmwhse1"
+            constraintName="FK_SKU_TO_OOS"
+            referencedColumnNames="SKU, STORERKEY"
+            referencedTableName="SKU"
+            referencedTableSchemaName="wmwhse1"
+            onDelete="CASCADE"/>
+
+        <rollback>
+            <dropTable schemaName="wmwhse1" tableName="SKU_TO_OOS"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

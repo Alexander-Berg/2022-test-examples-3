@@ -1,0 +1,74 @@
+# Есть несколько отзывов на вход, которые хотим проверить.
+# Проверяем их. Ситуации (по id магазина, совпадает с id отзыва):
+# - 1. всё ок (магазин совпал)
+# - 2-3. всё ок (отзыв на 3, покупка в 3, но связаны бизнесом)
+# - 10. слишком старая покупка
+# - 11. покупка после отзыва
+# - 12-13. покупка есть, но не попала в range (до и после)
+# - 14. покупка есть, но не того статуса
+# - 15 покупка есть, но не на тот магазин (достаточно покупок из кейса 1-2)
+# - 16 покупка есть, но отзыв на модель (хз как пролез)
+# - 17 покупка есть, но у другого пользователя
+# Для удобства всё под одним пользователем и разными магазинами
+# Даты отзывов 2020-06.01 - 2020-07-01
+# Даты для мока покупок: 2020-05, 2020-06, 2020-07, 2020-08
+# Обязательно поставить бизнес для магазина - без бизнеса точно не сматчится
+
+MOCK TABLE //_PREPAREDPATH_
+SCHEMA id:int64, author_uid:int64, resource_id:int64, type:int16, created:string
+# ок
+{"author_uid":1, "id":1, "resource_id":1, "type":0, "created":"2020-06-01T..."}
+{"author_uid":1, "id":3, "resource_id":3, "type":0, "created":"2020-07-01T..."}
+# не ок
+{"author_uid":1, "id":10, "resource_id":10, "type":0, "created":"2020-06-01T..."}
+{"author_uid":1, "id":11, "resource_id":11, "type":0, "created":"2020-06-01T..."}
+{"author_uid":1, "id":12, "resource_id":12, "type":0, "created":"2020-06-01T..."}
+{"author_uid":1, "id":13, "resource_id":13, "type":0, "created":"2020-06-01T..."}
+{"author_uid":1, "id":14, "resource_id":14, "type":0, "created":"2020-06-01T..."}
+{"author_uid":1, "id":15, "resource_id":15, "type":0, "created":"2020-06-01T..."}
+{"author_uid":1, "id":16, "resource_id":16, "type":1, "created":"2020-06-01T..."}
+{"author_uid":1, "id":17, "resource_id":17, "type":0, "created":"2020-06-01T..."}
+
+MOCK DIR_TABLE //home/market/production/mstat/analyst/regular/cubes_vertica/fact_new_order_item_dict_flattened
+NAME 2019-06
+SCHEMA order_puid:int64, order_order_status:string, supplier_id:int64, order_creation_datetime:string, order_id:int64
+# ок
+{"order_puid":1, "order_order_status":"DELIVERED", "supplier_id":1, "order_creation_datetime":"2020-06-01T...", "order_id":123}
+{"order_puid":1, "order_order_status":"DELIVERED", "supplier_id":1, "order_creation_datetime":"2020-06-01T...", "order_id":132}
+# не ок
+{"order_puid":1, "order_order_status":"DELIVERED", "supplier_id":10, "order_creation_datetime":"2019.05.01T...", "order_id":124}
+{"order_puid":1, "order_order_status":"DELIVERED", "supplier_id":11, "order_creation_datetime":"2020-06.02T...", "order_id":125}
+{"order_puid":1, "order_order_status":"NOT_DELIVERED", "supplier_id":14, "order_creation_datetime":"2020-06-01T...", "order_id":126}
+{"order_puid":1, "order_order_status":"DELIVERED", "supplier_id":16, "order_creation_datetime":"2020-06-01T...", "order_id":127}
+{"order_puid":2, "order_order_status":"DELIVERED", "supplier_id":17, "order_creation_datetime":"2020-06-01T...", "order_id":128}
+
+
+MOCK DIR_TABLE //home/market/production/mstat/analyst/regular/cubes_vertica/fact_new_order_item_dict_flattened
+NAME 2020-07
+SCHEMA order_puid:int64, order_order_status:string, supplier_id:int64, order_creation_datetime:string, order_id:int64
+{"order_puid":1, "order_order_status":"DELIVERED", "supplier_id":2, "order_creation_datetime":"2020-06-01T...", "order_id":121}
+
+# два range с норм покупкой, но вне интервала выборки
+MOCK DIR_TABLE //home/market/production/mstat/analyst/regular/cubes_vertica/fact_new_order_item_dict_flattened
+NAME 2019-05
+SCHEMA order_puid:int64, order_order_status:string, supplier_id:int64, order_creation_datetime:string, order_id:int64
+{"order_puid":1, "order_order_status":"DELIVERED", "supplier_id":12, "order_creation_datetime":"2020-06-01T...", "order_id":122}
+
+MOCK DIR_TABLE //home/market/production/mstat/analyst/regular/cubes_vertica/fact_new_order_item_dict_flattened
+NAME 2020-08
+SCHEMA order_puid:int64, order_order_status:string, supplier_id:int64, order_creation_datetime:string, order_id:int64
+{"order_puid":1, "order_order_status":"DELIVERED", "supplier_id":13, "order_creation_datetime":"2020-06-01T...", "order_id":129}
+
+MOCK VAR_TABLE $shopIdMappingByBusiness
+SCHEMA shop_id:int64, group_id:int64
+{"shop_id": 1, "group_id": 1}
+{"shop_id": 2, "group_id": 111}
+{"shop_id": 3, "group_id": 111}
+{"shop_id": 10, "group_id": 10}
+{"shop_id": 11, "group_id": 11}
+{"shop_id": 12, "group_id": 12}
+{"shop_id": 13, "group_id": 13}
+{"shop_id": 14, "group_id": 14}
+{"shop_id": 15, "group_id": 15}
+{"shop_id": 16, "group_id": 16}
+{"shop_id": 17, "group_id": 17}

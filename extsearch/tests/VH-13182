@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+
+# env NO_BUILD=1 APPHOST_DBG=1 ./VH-13182
+
+SCRIPTS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd) #"
+. "${SCRIPTS_DIR}"/config.sh
+
+SRCSETUP_PROVIDE="${SRCSETUP_PROVIDE} DOWNLOADS_TRACKS_PREPARE DOWNLOADS_TRACKS_PARSE DOWNLOADS_TRACKS"
+[ -z "$PROD" ] && . "${SCRIPTS_DIR}"/src_setup
+[ -z "$PROD" ] && . "${SCRIPTS_DIR}"/apphost
+. "${SCRIPTS_DIR}"/util
+
+#APPHOST_HOST=${APPHOST_HOST=man-vh-app-host-testing-yp-3.man.yp-c.yandex.net}
+APPHOST_HOST=${APPHOST_HOST=testing-app-host-vh-2.vla.yp-c.yandex.net}
+#APPHOST_HOST=${APPHOST_HOST=pwzpfn6ouzkpcubf.sas.yp-c.yandex.net}
+#APPHOST_HOST=man-vh-app-host-testing-yp-3.man.yp-c.yandex.net:80
+APPHOST_HTTP=${APPHOST_HTTP=84}
+APPHOST_GRPC=${APPHOST_GRPC=81}
+APPHOST_BASE=${APPHOST_BASE=80}
+
+[ -z "${KEEP}" ] && set -e
+
+# /vh/tracks_meta video-hosting-tracks-meta.json
+# /vh/music_url   video-hosting-music-url.json
+
+#export SRCRWR="${SRCRWR}&srcrwr=DOWNLOADS_TRACKS:music-web-ext.music.qa.yandex.net:80:10000000"
+
+set -x
+
+if [ -z "$NO_BROKEN" ]; then
+
+! ${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/music_url?${URL_ADD}${SRCRWR}&otherparam=lol"
+! ${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/music_url?${URL_ADD}${SRCRWR}&TrackIds="
+! ${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/music_url?${URL_ADD}${SRCRWR}&TrackIds=1sometrash"
+
+! ${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/music_url?${URL_ADD}${SRCRWR}" --data-raw '{ "TrackIds" : [ "1string" ] }'
+! ${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/music_url?${URL_ADD}${SRCRWR}" --data-raw '{ "TrackIds" : { "babax":1 } }'
+! ${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/music_url?${URL_ADD}${SRCRWR}" --data-raw '{ "somekey":123 }'
+! ${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/music_url?${URL_ADD}${SRCRWR}" --data-raw '{ "TrackIds" : [ {"sometrash":123 }, 2 ] }' | jq --exit-status '.Tracks[0].Url'
+! ${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/music_url?${URL_ADD}${SRCRWR}" --data-raw 'не очень жсонка'
+
+fi
+
+#${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/music_url?${URL_ADD}${SRCRWR}&TrackIds=18062616" | jq --exit-status '.Tracks[0].Url'
+#${CURL} -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/vh/music_url?${URL_ADD}${SRCRWR}" --data-raw '{ "TrackIds" : [ 72020559 ] }' | jq --exit-status '.Tracks[0].Url'
+
+
+#ok ${CURL} -v -H 'X-Test-Mode: True' --request POST "http://${APPHOST_HOST}:${APPHOST_HTTP}/?${URL_ADD}${SRCRWR}&graph=video-hosting-music-url@9052719"
+#ok ${CURL} -v -H 'X-Test-Mode: True' --request POST "http://${APPHOST_HOST}:${APPHOST_HTTP}/?${URL_ADD}${SRCRWR}&graph=video-hosting-music-url@trunk"
+#${CURL} -v -H 'X-Test-Mode: True' --request POST "http://${APPHOST_HOST}:${APPHOST_HTTP}/?${URL_ADD}${SRCRWR}&graph=video-hosting-music-url"
+#echo 1-------------------------------------------
+#${CURL} -v -H 'X-Test-Mode: True'  --request POST "http://${APPHOST_HOST}:${APPHOST_BASE}/${APPHOST_URL_ADD}video-hosting-music-url" --data-raw '[{ "name":"HTTP_REQUEST", "results": [  { "type": "http_request", "content": "{}" } ] }]'
+#echo 2-------------------------------------------
+#${CURL} -v -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/?${URL_ADD}${SRCRWR}&graph=video-hosting-music-url&TrackIds=25527318"
+#${CURL} -v -H 'X-Test-Mode: True' "http://${APPHOST_HOST}:${APPHOST_HTTP}/?${URL_ADD}${SRCRWR}&graph=video-hosting-music-url&TrackIds=25527318"
+
+#${CURL} -v -H 'X-Test-Mode: True' --request POST "http://${APPHOST_HOST}:${APPHOST_HTTP}/${APPHOST_URL_ADD}video-hosting-music-url@9052719"
+#${CURL} -v -H 'X-Test-Mode: True' --request POST "http://${APPHOST_HOST}:${APPHOST_HTTP}/${APPHOST_URL_ADD}video-hosting-music-url@trunk"
+#${CURL} -v -H 'X-Test-Mode: True' --request POST "http://${APPHOST_HOST}:${APPHOST_HTTP}/${APPHOST_URL_ADD}video-hosting-music-url"
+#${CURL} -v -H 'X-Test-Mode: True' --request POST "http://${APPHOST_HOST}:${APPHOST_HTTP}/${APPHOST_URL_ADD}video-hosting-music-url" --data-raw '[{"name":"INIT", "results": [{}]}]'
+#${CURL} -v -H 'X-Test-Mode: True' --request POST "http://${APPHOST_HOST}:${APPHOST_BASE}/${APPHOST_URL_ADD}video-hosting-music-url@9052719"
+#${CURL} -v -H 'X-Test-Mode: True' --request POST "http://${APPHOST_HOST}:${APPHOST_BASE}/${APPHOST_URL_ADD}video-hosting-music-url@trunk"
+#${CURL} -v -H 'X-Test-Mode: True'  --request POST "http://${APPHOST_HOST}:${APPHOST_BASE}/${APPHOST_URL_ADD}video-hosting-music-url" --data-raw '[{ "name":"HTTP_REQUEST", "results": [  { "type": "http_request", "content": "tetetetest" } ] }]'
+#${CURL} -v -H 'X-Test-Mode: True'  --request POST "http://${APPHOST_HOST}:${APPHOST_BASE}/${APPHOST_URL_ADD}video-hosting-music-url" --data-raw '[{"name":"DOWNLOAD_INFO_PREPARE", "results": [{ "type": "http_request", "content": "tetetetest" }]}]'
+
+#${CURL} "http://${APPHOST_HOST}:10094/?${URL_ADD}${SRCRWR}&graph=video-hosting-music-url@9052719"
+#${CURL} "http://${APPHOST_HOST}:10094/?${URL_ADD}${SRCRWR}&graph=video-hosting-music-url"
+#${CURL} "http://${APPHOST}:84/?${URL_ADD}${SRCRWR}&graph=video-hosting-music-url@9032562&srcrwr=MUSIC:https://api.music.yandex.net/tracks/25024448/download-info"
+#${CURL} "http://man-vh-app-host-testing-yp-3.man.yp-c.yandex.net:84/?${URL_ADD}${SRCRWR}&graph=video-hosting-music-url@9032562&srcrwr=APP_HOST:man-vh-app-host-testing-yp-1.man.yp-c.yandex.net:80&srcrwr=APP_HOST:man-vh-app-host-testing-yp-3.man.yp-c.yandex.net:80&srcrwr=APP_HOST:htghuvo3kre6eww3.man.yp-c.yandex.net:80&&graph=video-hosting-music-url@9032562"
+
+
+#${ARCADIA_ROOT}/apphost/tools/servant_client/servant_client --proto-to-json -a "${HOST}:${SRCSETUP_HTTP}/setup/music_url_download_info" -c '{ "answers": [ { "name" : "DOWNLOAD_INFO_PREPARE", "results" : [ { "TrackIds" : [ 42 ] } ] } ] }'
+#${ARCADIA_ROOT}/apphost/tools/servant_client/servant_client --proto-to-json -a "${HOST}:${SRCSETUP_HTTP}/setup/music_url_pre_get" -c '{ "answers": [ { "name" : "NAME", "results" : [ { "TTTTTTrackId" : [ 42 ] } ] } ] }'
+#${ARCADIA_ROOT}/apphost/tools/servant_client/servant_client --proto-to-json -a "${HOST}:${SRCSETUP_HTTP}/setup/music_url_final_get" -c '{ "answers": [ { "name" : "NAME", "results" : [ { "TTTTTTrackId" : [ 42 ] } ] } ] }'
+
+
+# no:
+#${ARCADIA_ROOT}/apphost/tools/grpc_client/grpc_client --proto-to-json -a "${APPHOST_HOST}:${APPHOST_GRPC}/video-hosting-music-url" -c '{ "answers": [  {  "source": "FAKE_NODE",  "codec": "lz4",  "type": "http_request", "__content_type": "json", "binary": {    "TrackIds": [1, 3, 42], "tracks_request":"test1"  }  }  ] }'
+#${ARCADIA_ROOT}/apphost/tools/servant_client/servant_client --proto-to-json -a "${APPHOST_HOST}:${APPHOST_GRPC}/video-hosting-music-url?${URL_ADD}${SRCRWR}" -c '{ "answers": [  {  "source": "FAKE_NODE",  "codec": "lz4",  "type": "http_request", "__content_type": "json", "binary": {    "TrackIds": [1, 3, 42], "tracks_request":"test1"  }  }  ] }'
+#${ARCADIA_ROOT}/apphost/tools/servant_client/servant_client --proto-to-json -a "${APPHOST_HOST}:${APPHOST_BASE}/video-hosting-music-url?${URL_ADD}${SRCRWR}" -c '{ "results": [  {  "source": "FAKE_NODE",  "codec": "lz4",  "type": "http_request", "__content_type": "json", "binary": {    "TrackIds": [1, 3, 42], "tracks_request":"test1"  }  }  ] }'
+#${ARCADIA_ROOT}/apphost/tools/servant_client/servant_client --proto-to-json -a "${APPHOST_HOST}:${APPHOST_BASE}/${APPHOST_URL_ADD}video-hosting-music-url" -c '{ "results": [  {  "source": "FAKE_NODE",  "codec": "lz4",  "type": "http_request", "__content_type": "json", "binary": {    "TrackIds": [1, 3, 42], "tracks_request":"test1"  }  }  ] }'
+#${ARCADIA_ROOT}/apphost/tools/servant_client/servant_client --proto-to-json -a "${APPHOST_HOST}:${APPHOST_BASE}/${APPHOST_URL_ADD}video-hosting-music-url" -c '{ "name":"HTTP_REQUEST", "results": [  { "type": "http_request", "content": "tetetetest" } ] }'
+
+#${ARCADIA_ROOT}/apphost/tools/servant_client/servant_client --proto-to-json -a "${APPHOST_HOST}:${APPHOST_BASE}/${APPHOST_URL_ADD}video-hosting-music-url" -c '[{"name":"INIT", "results": [{}]}]'
+#${ARCADIA_ROOT}/apphost/tools/servant_client/servant_client --proto-to-json -a "${APPHOST_HOST}:${APPHOST_BASE}/${APPHOST_URL_ADD}video-hosting-tracks-meta" -c '[{"name":"INIT", "results": [{}]}]'
+#${ARCADIA_ROOT}/apphost/tools/servant_client/servant_client --proto-to-json -a "${APPHOST_HOST}:${APPHOST_BASE}/${APPHOST_URL_ADD}video-hosting-tracks-meta" -c '[{"name":"TRACKS", "results": [{ "TrackIds" : [ 42 ]}]}]'
+
+
+#${ARCADIA_ROOT}/apphost/tools/servant_client/servant_client --proto-to-json -a "${APPHOST_HOST}:${APPHOST_BASE}/${APPHOST_URL_ADD}video-hosting-music-url" -c '[{"name":"DOWNLOAD_INFO_PREPARE", "results": [{ "TrackIds" : [ 42 ] }]}]'
+
+#${ARCADIA_ROOT}/apphost/tools/servant_client/servant_client --proto-to-json -a "${APPHOST_HOST}:${APPHOST_BASE}/${APPHOST_URL_ADD}video-hosting-music-url" -c '[{"name":"DOWNLOAD_INFO_PREPARE", "results": [{ "type": "http_request", "content": "tetetetest" }]}]'
+
+
+
+#no ${CURL} -v -H 'X-Test-Mode: True' --request POST "http://${APPHOST_HOST}:${APPHOST_BASE}/vh/tracks_meta?${URL_ADD}${SRCRWR}" --data-raw ''
+#no ${CURL} -v -H 'X-Test-Mode: True' --request POST "http://${APPHOST_HOST}:${APPHOST_BASE}/vh/music_url?${URL_ADD}${SRCRWR}" --data-raw ''
+
+#yes!
+
+#no ${CURL} -v "http://${APPHOST_HOST}:${APPHOST_BASE}/vh/tracks_meta?${URL_ADD}${SRCRWR}&test_param=test_value" -H 'X-Test-Mode: True'
+
+# ${ARCADIA_ROOT}/apphost/tools/event_log_dump/event_log_dump --human-readable ~/apphost_${APPHOST_VERTICAL}/eventlog-* > apphost.log
+
+${CURL} "https://vh.test.yandex.ru/music_url?${URL_ADD}${SRCRWR}&TrackIds=18062616" | jq --exit-status '.Tracks[0].Url'
+${CURL} "https://vh.test.yandex.ru/music_url?${URL_ADD}${SRCRWR}" --header 'Content-Type: application/json' --data-raw '{ "TrackIds" : [ 72020553 ] }' | jq --exit-status '.Tracks[0].Url'
+
+# prod balancer:
+${CURL} "https://internal.vh.yandex.net/music_url?${URL_ADD}${SRCRWR}&TrackIds=72020573" | jq --exit-status '.Tracks[0].Url'
+${CURL} "https://internal.vh.yandex.net/music_url?${URL_ADD}${SRCRWR}" --header 'Content-Type: application/json' --data-raw '{ "TrackIds" : [ 72020559 ] }' | jq --exit-status '.Tracks[0].Url'

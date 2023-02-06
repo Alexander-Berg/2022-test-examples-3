@@ -1,0 +1,23 @@
+{% if table == "sets_model_to_category_whitelist" %}
+    {% table table %}
+        ["M4", 2000000000, "C0", "{{ day }}"],
+        ["M6", 2000000000, "C4", "{{ day }}"],
+        ["M7", 2000000000, "C5", "{{ day }}"]
+    {% endtable %}
+{% elif table == "sets_banned_categories" %}
+    {% table table %}
+        ["C1", ["adult"], "{{ day }}"], {#- 18+ products #}
+        ["C2", ["illegal"], "{{ day }}"], {#- drugs #}
+        ["C3", ["adult", "illegal"], "{{ day }}"] {#- 18+ drugs #}
+    {% endtable %}
+{% elif table == "items_model_category_id" %}
+    {% table table %}
+        ["M1", "C1", "model", "{{ day }}"],
+        ["M2", "C1", "model", "{{ day }}"],
+        ["M3", "C2", "model", "{{ day }}"],
+        ["M4", "C0", "model", "{{ day }}"],
+        ["M5", "C3", "model", "{{ day }}"],
+        ["M6", "C4", "model", "{{ day }}"],
+        ["M7", "C5", "model", "{{ day }}"]
+    {% endtable %}
+{% endif %}

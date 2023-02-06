@@ -1,0 +1,201 @@
+labels:
+  tags:
+    - logexport
+meta:
+  account_id: abc:service:200
+  id: crm-yacalls-queue-test
+  project_id: crm-test
+spec:
+  deploy_units:
+    yacalls-queue:
+      endpoint_sets:
+        - port: 3456
+          liveness_limit_ratio: 0.35
+          id: solomon
+      images_for_boxes:
+        logexport-box:
+          digest: sha256:aceeb2561bd866567d970a41293e314cec44ed057c850e4cddf0d27422261e82
+          name: crm/log-export-worker
+          registry_host: registry.yandex.net
+          tag: "34"
+        yacalls-queue-box:
+          name: crm/yacalls-queue
+          registry_host: registry.yandex.net
+          tag: "2-b"
+      multi_cluster_replica_set:
+        replica_set:
+          clusters:
+            - cluster: sas
+              spec:
+                replica_count: 1
+            - cluster: vla
+              spec:
+                replica_count: 1
+          deployment_strategy:
+            max_unavailable: 1
+          pod_template_spec:
+            spec:
+              resource_requests:
+                vcpu_guarantee: 4000
+                vcpu_limit: 4000
+                memory_guarantee: 4294967296
+                memory_limit: 4294967296
+                network_bandwidth_guarantee: 1048576
+              disk_volume_requests:
+                - id: main-disk
+                  labels:
+                    used_by_infra: true
+                  storage_class: hdd
+                  quota_policy:
+                    capacity: 107374182400
+                    bandwidth_guarantee: 3145728
+                    bandwidth_limit: 6291456
+              pod_agent_payload:
+                spec:
+                  boxes:
+                    - id: yacalls-queue-box
+                      volumes:
+                        - mode: read_write
+                          mount_point: /logs
+                          volume_ref: logs
+                      static_resources:
+                        - resource_ref: tnsnames.ora
+                          mount_point: /oracle
+                      env:
+                        - name: ASPNETCORE_ENVIRONMENT
+                          value:
+                            literal_env:
+                              value: Testing
+                        - name: CommonPolicy__CrmTvmId
+                          value:
+                            literal_env:
+                              value: "2001283"
+                        - name: Kestrel__Endpoints__Http__Url
+                          value:
+                            literal_env:
+                              value: http://*:80
+                        - name: OracleDbSettings__DataSource
+                          value:
+                            literal_env:
+                              value: TCRM.YANDEX.RU
+                        - name: OracleDbSettings__UserId
+                          value:
+                            literal_env:
+                              value: crm
+                        - name: OracleDbSettings__Password
+                          value:
+                            secret_env:
+                              id: crm
+                              alias: crm-oracle-testing
+                        - name: TvmClientConfig__TvmSecret
+                          value:
+                            secret_env:
+                              id: client_secret
+                              alias: tvm.secret.2001283
+                        - name: TNS_ADMIN
+                          value:
+                            literal_env:
+                              value: /oracle
+                    - id: logexport-box
+                      volumes:
+                        - mode: read_write
+                          mount_point: /logs
+                          volume_ref: logs
+                      env:
+                        - name: ASPNETCORE_ENVIRONMENT
+                          value:
+                            literal_env:
+                              value: Testing
+                  mutable_workloads:
+                    - workload_ref: yacalls-queue-workload
+                    - workload_ref: logexport-workload
+                  volumes:
+                    - id: logs
+                  workloads:
+                    - box_ref: yacalls-queue-box
+                      env:
+                        - name: ASPNETCORE_ENVIRONMENT
+                          value:
+                            literal_env:
+                              value: Testing
+                      id: yacalls-queue-workload
+                      liveness_check:
+                        http_get:
+                          any: true
+                          path: /liveness
+                          port: 80
+                      readiness_check:
+                        http_get:
+                          any: true
+                          path: /readiness
+                          port: 80
+                    - box_ref: logexport-box
+                      env:
+                        - name: ElasticConfig__Username
+                          value:
+                            literal_env:
+                              value: crm-yacalls-queue
+                        - name: ElasticConfig__Password
+                          value:
+                            secret_env:
+                              alias: crm-logs-test-admin
+                              id: crm-yacalls-queue
+                        - name: LogSourcesConfig__Sources__1__ApplicationName
+                          value:
+                            literal_env:
+                              value: logs-yacalls-queue
+                        - name: LogSourcesConfig__Sources__1__DirectoryPath
+                          value:
+                            literal_env:
+                              value: /logs/Yandex.Crm.YaCallsQueue.Service
+                      id: logexport-workload
+                      transmit_logs: true
+                  resources:
+                    static_resources:
+                      - id: tnsnames.ora
+                        verification:
+                          checksum: MD5:c0d020b1a0527405a3ea4d8d560ef6c2
+                          check_period_ms: 180000
+                          disabled: true
+                        files:
+                          files:
+                            - file_name: tnsnames.ora
+                              raw_data: |-
+                                TCRM.YANDEX.RU =
+                                  (DESCRIPTION =
+                                    (ADDRESS = (PROTOCOL = TCP)(HOST = tcrm-db1f.yandex.ru)(PORT = 1521))
+                                    (CONNECT_DATA =
+                                      (SERVER = DEDICATED)
+                                      (SERVICE_NAME = tcrmdb)
+                                    )
+                                  )
+              secret_refs:
+                crm-logs-test-admin:
+                  secret_id: sec-01f92gcrxd4j2czhv1x3epk464
+                  secret_version: ver-01g816ep9fy3thdrvyezbv3nc0
+                crm-oracle-testing:
+                  secret_id: sec-01fxq26qx7q0kdveqrvm1ac354
+                  secret_version: ver-01fz8d2vwwb46xs8yy0gsc1b65
+                tvm.secret.2001283:
+                  secret_id: sec-01dq7m10q03ytkzp4z39hzs07w
+                  secret_version: ver-01dq7m10yrrfwh13ng7azs89ge
+      network_defaults:
+        network_id: _CRMTEST_DEPLOY_NETS_
+      patchers_revision: 11
+      pod_agent_sandbox_info:
+        revision: 3214891279
+      tvm_config:
+        blackbox_environment: ProdYaTeam
+        clients:
+          - destinations:
+              - alias: crm
+                app_id: 2001283
+            secret_selector:
+              alias: tvm.secret.2001283
+              id: client_secret
+            source:
+              alias: crm
+              app_id: 2001283
+        mode: enabled
+      tvm_sandbox_info:
+        revision: 3017078191

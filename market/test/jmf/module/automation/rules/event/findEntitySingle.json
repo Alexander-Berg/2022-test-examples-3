@@ -1,0 +1,57 @@
+{
+  "rules": [
+    {
+      "conditions": [
+        {
+          "predicate": {
+            "type": "attribute",
+            "filter": {
+              "type": "eq",
+              "value": [
+                "START"
+              ],
+              "attribute": "simple1@triggerCondition"
+            },
+            "parameter": "obj"
+          },
+          "positiveBranch": {
+            "rules": [
+              {
+                "actions": [
+                  {
+                    "type": "findEntity",
+                    "limit": 1,
+                    "filters": [
+                      {
+                        "type": "eq",
+                        "value": [
+                          "test"
+                        ],
+                        "attribute": "simple2@ruleCondition3"
+                      }
+                    ],
+                    "metaclass": "simple2",
+                    "resultParameterName": "simple"
+                  },
+                  {
+                    "type": "edit",
+                    "parameter": "obj",
+                    "properties": [
+                      {
+                        "code": "simple1@dataKey",
+                        "value": {
+                          "type": "template",
+                          "value": "${params.simple.ruleResult}"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

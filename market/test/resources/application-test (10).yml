@@ -1,0 +1,55 @@
+warehouse-timezone: Europe/Moscow
+application:
+  security:
+    use-tvm-auth: false
+
+spring:
+  config:
+    import:
+      - application-fragment-common-test.yml
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:h2:mem:SCPRD;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS wmwhse1\;SET SCHEMA wmwhse1
+  liquibase:
+    enabled: true
+  jackson:
+    default-property-inclusion: non_null
+    deserialization:
+      wrap-exceptions: false
+
+AppServer: localhost
+
+logging:
+  config:
+  level:
+    ru.yandex.market.wms: debug
+    org.springframework.jdbc.core: debug
+    root: info
+
+check:
+  authentication: 'no'
+
+servicebus:
+  api:
+    host: http://localhost:8382
+
+wiremock.server.port: 9999
+
+wms:
+  inbound-management:
+    host: http://localhost
+    tvm:
+      serviceId: 0
+      secret: xxx
+      log-only-mode: false
+      check-user-ticket: false
+      cache:
+        dir: /var/cache/tvm
+  transportation:
+    host: http://localhost
+core:
+  api:
+    host: http://localhost
+
+s3.use: false

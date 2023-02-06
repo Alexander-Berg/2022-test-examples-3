@@ -1,0 +1,121 @@
+<config>
+    <system>
+        <daemon>0</daemon>
+        <dir>/</dir>
+        <pid>/var/run/mulcagate/mulcagate.pid</pid>
+
+        <libpath>/usr/lib64</libpath>
+        <libpath>/usr/lib64/modules</libpath>
+    </system>
+    <log>
+        <Core>
+            <DisableLogging>false</DisableLogging>
+        </Core>
+        <Sink:File>
+            <Destination>RotateTextFile</Destination>
+            <Filter>"not %CustomLog%"</Filter>
+            <FileName>/var/log/mulcagate/yplatform.log</FileName>
+            <AutoFlush>true</AutoFlush>
+            <Asynchronous>true</Asynchronous>
+            <Format>"[%TimeStamp%] %RequestID% %Severity%: %_%"</Format>
+        </Sink:File>
+        <Sink:AccessLog>
+            <Destination>RotateTextFile</Destination>
+            <Filter>"!!%AccessLog%"</Filter>
+            <FileName>/var/log/mulcagate/access.log</FileName>
+            <AutoFlush>true</AutoFlush>
+            <Asynchronous>true</Asynchronous>
+            <Format>"[%IsoTimeStamp%] %RemoteAddress% \"%Request%\" result %Status% \"%Description%\" %RequestLength% %BytesSent% \"%RequestID%\" %RequestTime%"</Format>
+        </Sink:AccessLog>
+    </log>
+    <modules>
+        <module>
+            <system>
+                <name>http</name>
+                <type>service_object</type>
+                <library>ymod_httpserver</library>
+                <factory>ymod_http_server::impl</factory>
+            </system>
+            <configuration>
+                <reactor io_threads="2" accept_threads="2" pool_count="8"/>
+                <endpoints>
+                    <listen addr="::" port="10010">
+                        <parameterized_access_log>1</parameterized_access_log>
+                        <read_timeout>120000</read_timeout>
+                        <write_timeout>120000</write_timeout>
+                        <keep_alive>
+                            <enable>0</enable>
+                        </keep_alive>
+                    </listen>
+                </endpoints>
+            </configuration>
+        </module>
+        <module>
+            <system>
+                <name>mulca_gate</name>
+                <type>service_object</type>
+                <library>ymod_mulcagate</library>
+                <factory>mulcagate::processor</factory>
+            </system>
+            <configuration>
+                <prefix>/gate</prefix>
+                <max_buffers_size>21474836480</max_buffers_size>
+                <client_chunk_size>83886</client_chunk_size>
+                <backend_chunk_size>83886</backend_chunk_size>
+                <put>
+                    <pool_size>150</pool_size>
+                    <pool_threads>50</pool_threads>
+                    <streaming_threshold>536870912</streaming_threshold>
+                </put>
+                <get>
+                    <pool_size>500</pool_size>
+                    <pool_threads>200</pool_threads>
+        		    <rules>
+			        <!--
+                         <rule content-type="image/*">elliptics, mulca</rule>
+                         <rule content-type="*/*">mulca, elliptics</rule>
+			        -->
+                         <rule content-type="*/*">elliptics, mulca</rule>
+                    </rules>
+                </get>
+                <del>
+                    <pool_size>500</pool_size>
+                    <pool_threads>200</pool_threads>
+                </del>
+                <redirect_threshold>655360</redirect_threshold>
+                <redirect_enabled>false</redirect_enabled>
+    		<elliptics>
+                    <log_file>/var/log/mulcagate/elliptics.log</log_file>
+                    <log_level>info</log_level>
+                    <session_timeout>5</session_timeout>
+                    <check_timeout>30</check_timeout>
+                    <io_thread_num>3</io_thread_num>
+                    <nonblocking_io_thread_num>3</nonblocking_io_thread_num>
+                    <net_thread_num>3</net_thread_num>
+                    <data_flow_rate>10000000</data_flow_rate>
+                    <remotes>
+                        <remote>s01e.mdst.yandex.net:1025:10</remote>
+                        <remote>s04e.mdst.yandex.net:1025:10</remote>
+                        <remote>s03h.mdst.yandex.net:1025:10</remote>
+                    </remotes>
+                    <mastermind>
+                        <cache_path>/var/tmp/libmastermind.cache</cache_path>
+                        <update-period>30</update-period>
+                        <warning_time>300</warning_time>
+                        <expire_time>43200</expire_time>
+                        <worker_name>mastermind2.26</worker_name>
+                        <remotes>
+                            <remote>mmproxy01g.mdst.yandex.net</remote>
+                            <remote>mmproxy02g.mdst.yandex.net</remote>
+                        </remotes>
+                        <port>10053</port>
+                        <group_count>2</group_count>
+                        <namespace>disk</namespace>
+                        <enqueue_timeout>15000</enqueue_timeout>
+                        <reconnect_timeout>5000</reconnect_timeout>
+                    </mastermind>
+                </elliptics>
+            </configuration>
+        </module>
+    </modules>
+</config>

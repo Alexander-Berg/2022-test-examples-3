@@ -1,0 +1,31 @@
+
+INSERT INTO `output_table_table` WITH TRUNCATE
+SELECT *
+FROM (
+    SELECT
+        flattened_hits.yandexuid AS yandexuid,
+        flattened_hits.host AS host,
+        idf.weight AS weight
+    FROM `flattened_metrics_hits_table` AS flattened_hits
+    INNER JOIN `metrics_idf_table` AS idf
+    ON flattened_hits.host == idf.host
+    INNER JOIN `hosts_counter_table` AS hosts_counter
+    ON idf.host == hosts_counter.site
+    WHERE idf.count >= 2
+        AND (metrica_visitors_count ?? 0 >= bar_visitors_count ?? 0)
+
+UNION ALL
+
+    SELECT
+        flattened_hits.yandexuid AS yandexuid,
+        flattened_hits.host AS host,
+        idf.weight AS weight
+    FROM `flattened_bar_hits_table` AS flattened_hits
+    INNER JOIN `bar_idf_table` AS idf
+    ON flattened_hits.host == idf.host
+    INNER JOIN `hosts_counter_table` AS hosts_counter
+    ON idf.host == hosts_counter.site
+    WHERE idf.count >= 2
+        AND NOT (metrica_visitors_count ?? 0 >= bar_visitors_count ?? 0)
+)
+ORDER BY yandexuid;

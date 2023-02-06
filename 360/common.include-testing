@@ -1,0 +1,223 @@
+# CSRF headers
+if ($http_Origin = '') {
+    set $origin yamailint://0610899fa9a3a4300e375ce582762273;
+}
+
+if ($http_Origin) {
+    set $origin $http_Origin;
+}
+
+if ($http_Referer = '') {
+    set $referer yamailint://0610899fa9a3a4300e375ce582762273;
+}
+
+if ($http_Referer) {
+    set $referer $http_Referer;
+}
+
+location = /monitoring.txt {
+    return  200 "This is secret level";
+}
+
+location = /monitoring_liza.txt {
+    return  200 "This is secret level";
+}
+
+location = /monitoring_homer.txt {
+    return  200 "This is secret level";
+}
+
+location ~* /[4-5]0[0-5](_tr)?\.html$ {
+    if ( $host ~ 'yandex.com.tr' ) {
+        rewrite /404.html /404_tr.html break;
+        rewrite /502.html /502_tr.html break;
+    }
+
+    root /home/nginx/html;
+}
+
+# DARIA-60892
+location = /mc/pixel {
+    add_header 'Access-Control-Allow-Origin' "*";
+    add_header Cache-Control "private,no-cache,no-store,must-revalidate,max-age=0";
+    empty_gif;
+}
+
+# DARIA-37068
+location = /robots.txt {
+    alias /var/wwwroot/mail/$robots;
+}
+
+location = /edit {
+    return 404;
+}
+
+location ~* /(server|cfg|cfgs|projects|src|common)/ {
+    return 404;
+}
+
+# common jsx location
+location ~* \.jsx$ {
+    return 404;
+}
+
+# DARIA-60269
+location ~* ^/neo2/ {
+
+    location ~* ^/neo2/speeddial(|/)$ {
+        rewrite ^/neo2/speeddial(.*) /lite/?speeddial=1;
+    }
+
+    location ~* ^/neo2/lite.jsx {
+        rewrite ^/neo2/lite.jsx /lite/?updater=1;
+    }
+
+    location ~* ^/neo2/messages {
+        rewrite ^/(.*) / permanent;
+    }
+
+    location ~* ^/neo2/collect {
+        rewrite ^/neo2/collect(.*) / permanent;
+    }
+
+    rewrite ^/neo2/(.*) /$1 permanent;
+}
+
+# CHEMODAN-462 CHEMODAN-3114 DARIA-62346
+location /disk {
+    rewrite ^/disk(.*) https://disk.yandex.ru/ redirect;
+
+    location /disk/public {
+        default_type text/html;
+        return 200 "<script>location.href='https://yadi.sk/public/?hash='+encodeURIComponent(location.hash.slice(1))</script>";
+    }
+}
+
+location ~* ^/(m|for/[^/]+/m)/ {
+    rewrite ^/m / redirect;
+    rewrite ^/for/([^/]+)/m /for/$1/ redirect;
+}
+
+# DARIA-15226
+location ~* ^/(classic|modern|neo)/?$ {
+    rewrite ^/(.*) / permanent;
+}
+
+# DARIA-25108 DARIA-60269
+location ~* /for/([^/]+)/(classic|modern|neo|neo2)/?$ {
+    rewrite ^/for/(.*) / permanent;
+}
+
+# DARIA-17100
+location /share/ {
+    rewrite ^/(.*) / redirect;
+}
+
+# DARIA-60269
+location /(neo|neo2|)/migration {
+    rewrite ^/(.*) /#setup/collectors permanent;
+}
+
+location = /neo/(webchat_history_all|webchat_history) {
+    rewrite ^/(.*) /#contacts/ permanent;
+}
+
+# DARIA-32886
+location ~* /for/([^/]+)/share/digit {
+    rewrite ^/for/([^/]+)/share/digit /for/$1/ permanent;
+}
+
+# DARIA-32199
+location ~* ^/digit {
+    rewrite ^/digit(.*) /share/digit$1 permanent;
+}
+
+# DARIA-62820, DARIA-62977
+location = /handlers/xiva_sub.jsx {
+    rewrite ^ /api/v1/xiva_sub;
+}
+
+location ~ ^/pdd/?$ {
+    rewrite ^/(.*) http://pdd.yandex.ru permanent;
+}
+
+# MOBILEMAIL-9824
+location = /mgoodbye {
+    rewrite ^/mgoodbye(.*) https://forms.yandex.ru/surveys/mob_mail_goodbye/$1 redirect;
+}
+
+# DARIA-38510
+location ~ ^/socialsbscr/?$ {
+    rewrite ^/(.*) https://news.yandex.ru/mynews;
+}
+
+# DARIA-42449
+location ~* ^/(my|for/[^/]+/my)/? {
+    rewrite /my/(.*) https://news.yandex.ru/mynews redirect;
+}
+
+location ~* ^/lenta-block {
+    rewrite ^/(.*) https://news.yandex.ru/mynews redirect;
+}
+
+# DARIA-17712 DARIA-60690
+location = /prefetch.txt {
+    root /var/wwwroot/mail/u2709/;
+}
+
+location ~* ^/(favicon|ya-team-favicon|favicon-ie9).ico$ {
+    expires 24h;
+
+    add_header X-Frame-Options SAMEORIGIN;
+    add_header X-Request-Id $request_id always;
+    add_header X-XSS-Protection "1; mode=block";
+
+    root /var/wwwroot/mail/host-root2;
+}
+
+location ~* ^/favicon/ {
+    expires 24h;
+
+    add_header X-Frame-Options SAMEORIGIN;
+    add_header X-Request-Id $request_id always;
+    add_header X-XSS-Protection "1; mode=block";
+
+    root /var/wwwroot/mail/host-root2;
+}
+
+location ~* ^/(google\w+\.html) {
+    add_header X-Frame-Options SAMEORIGIN;
+    add_header X-Request-Id $request_id always;
+    add_header X-XSS-Protection "1; mode=block";
+    root /var/wwwroot/mail/host-root2;
+}
+
+# DARIA-21050
+location = /apple-touch-icon-precomposed.png {
+    root /var/wwwroot/mail/host-root2/;
+}
+
+location = /crossdomain.xml {
+    expires 24h;
+    gzip off;
+    types {
+        text/x-cross-domain-policy xml;
+    }
+
+    root /var/wwwroot/mail/host-root2;
+}
+
+# DARIA-25493
+location = /i-social__closer.html {
+    rewrite ^/i-social__closer.html /host-root2/i-social__closer.html;
+}
+
+# DARIA-25108
+location ~* ^(/for/[^/]+/basebusy|/basebusy)$ {
+    rewrite ^/(.*) /host-root2/basebusy.jsx;
+}
+
+# MAILSRE-946
+if ($request_method = PROPFIND) {
+    return 405 'Method not allowed';
+}

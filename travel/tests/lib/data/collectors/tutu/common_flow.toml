@@ -1,0 +1,71 @@
+bin_path = "travel/cpa/collectors_exec/collectors_exec/"
+
+args = [
+    "--partner-name", "tutu",
+    "--base-url", "%(partner_server_url)s",
+    "--no-proxy",
+    "--date-from", "2019-01-01",
+    "--date-to", "2019-01-01",
+    "--lb-url", "localhost",
+    "--lb-port", "%(lb_port)s",
+    "--lb-topic", "%(lb_topic)s",
+    "--yt-proxy", "%(yt_proxy)s",
+]
+
+checkers = [
+    "lb",
+    "partner",
+    "yt",
+]
+
+[partner]
+    check_type = "http"
+    mime_type = "apllication/json"
+
+[[partner.responses]]
+    args = {dateFrom = "2019-01-01", dateTo = "2019-01-02"}
+    data_file = "partner_response_2019_01_01.json"
+
+[yt.input.partner_table]
+    path = "//home/rasp/reference/partner"
+
+[[yt.input.partner_table.data]]
+    billing_order_id = 1053
+    code = "tutu"
+    partner_id = 163
+
+[yt.input.station_table]
+    path = "//home/rasp/reference/station"
+
+[[yt.input.station_table.data]]
+    city_id = "c54"
+    iata = "SVX"
+    sirena = ""
+
+[[yt.input.station_table.data]]
+    city_id = "c213"
+    iata = "DME"
+    sirena = ""
+
+[lb]
+    topic = "topic-tutu"
+    fields_to_skip = ["last_seen", "_timestamp", "profit_amount", "partner_profit", "updated_at"]
+
+[[lb.expected]]
+    partner_name = "tutu"
+    travel_order_id = "tutu:1gdxr28b1j"
+    partner_order_id = "1gdxr28b1j"
+    created_at = 1546300800
+    status = "cancelled"
+    label = "unknown"
+    currency_code = "RUB"
+    order_amount = 7184.95
+    category = "avia"
+    source = "tutu"
+    partner_id = 163
+    billing_order_id = 1053
+    origin = "SVX"
+    destination = "DME"
+    trip_type = "oneway"
+    date_forward = "2019-01-01"
+    date_backward = ""

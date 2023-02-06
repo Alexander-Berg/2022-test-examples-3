@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <service
+        id="1"
+        name="service"
+        initial_state_id="1000"
+    />
+
+    <service_param
+        id="1"
+        service_id="1"
+        name="PASS_CONNECTOR"
+        value="DUMMY"
+    />
+
+    <state
+        id="1000"
+        name="REGISTERED"
+        service_id="1"
+    />
+
+    <state
+        id="1001"
+        name="ALLOCATED"
+        service_id="1"
+    />
+
+    <state
+        id="1002"
+        name="PASS_ISSUED"
+        service_id="1"
+    />
+
+    <edge
+        id="1"
+        from_state_id="1000"
+        to_state_id="1001"
+        priority="0"
+    />
+
+    <edge
+        id="2"
+        from_state_id="1000"
+        to_state_id="1002"
+        priority="1"
+    />
+
+    <edge_restriction
+        id="1"
+        type="UNPROCESSED_EVENT_REQUIRED"
+        edge_id="1"
+    />
+
+    <restriction_param
+        id="1"
+        edge_restriction_id="1"
+        name="EVENT_TYPE"
+        value="PASS_ISSUE"
+    />
+
+    <yard_client
+        id="1"
+        name="client"
+        phone="123123123"
+        service_id="1"
+        state_id="1002"
+    />
+
+    <yard_client_event
+        id="1"
+        type="ISSUE_PASS"
+        yard_client_id="1"
+        processed="false"
+    />
+
+    <warehouse_pass
+        id="1"
+        status="CREATED"
+        yard_client_id="1"
+        comment="[null]"
+    />
+
+    <client_queue/>
+</dataset>

@@ -1,0 +1,893 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`header-archive-all-actions 1`] = `
+<div
+  class="header header_has-center header"
+>
+  <div
+    class="header__side-left"
+  >
+    <span
+      class="logo"
+    >
+      <a
+        class="logo__link logo__link_yandex"
+        href="//yandex.ru"
+        rel="noopener noreferrer"
+      />
+      <svg
+        class="logo__svg"
+        height="30"
+        width="69"
+      >
+        <g>
+          <path
+            d="M34.997 22.97V9.024l-7.26-.026v1.363c0 4.248-.316 9.22-1.775 12.61h-1.045v5.036H27.2V25h6.846v3.006h2.22V22.97h-1.27.001zm11.444-.95c-.633.444-1.743 1.078-3.138 1.078-1.965 0-2.948-1.57-2.948-5.184h6.657V16.55c0-5.42-1.774-7.75-4.437-7.75-3.392 0-4.818 3.742-4.818 8.877 0 4.914 2.03 7.545 5.325 7.545 1.585 0 2.917-.507 3.93-1.3l-.57-1.902h-.001zm-25.415-6h-3.523V9.034H15.03V25.01h2.472v-6.96h3.523v6.96h2.44V9.034h-2.44v6.987l.001-.001zM58.9 25l-4.534-8.464 3.962-7.513h-2.504l-3.836 7.386V9.022h-2.473V25h2.473v-7.957L56.204 25H58.9zm5.8.222c1.458 0 2.472-.476 3.328-1.205l-.57-1.838c-.57.506-1.49.98-2.695.98-1.997 0-2.948-2.28-2.948-6.275 0-4.026 1.268-6.023 3.043-6.023 1.015 0 1.966.54 2.63 1.11l.35-2.347c-.697-.443-1.522-.824-2.948-.824-3.74 0-5.674 3.203-5.674 8.212 0 5.452 2.06 8.21 5.484 8.21zm-32.144-2.25h-4.248c1.332-3.393 1.49-8.306 1.49-11.666v-.286h2.758v11.952zm11.834-8.886c.062.567.09 1.198.09 1.874h-4.09c.16-2.853.662-5.13 2.183-5.13 1.073 0 1.626 1.536 1.817 3.256z"
+            fill="#000"
+          />
+          <path
+            d="M9.547 25.006h2.44V2H8.343C4.761 2 1.728 4.377 1.728 9.132c0 3.39 1.352 5.572 3.35 6.586L.83 25.006h2.82l3.868-8.685h2.03v8.686l-.001-.001zM8.27 14.303c-2.125 0-3.864-1.357-3.864-5.003 0-.214.006-.422.018-.623.198-3.34 1.99-4.704 3.845-4.704h1.3v10.33h-1.3.001z"
+            fill="#F00"
+          />
+        </g>
+      </svg>
+    </span>
+  </div>
+  <div
+    class="header__side-center"
+  >
+    <ufo-rocks_hover-tooltip
+      classname="actionButton"
+    >
+      <lego-components_button
+        classname="download-button"
+        iconleft="className => /*#__PURE__*/_react.default.createElement(_logo.default, {
+  cls: className
+})"
+        onclick="event => {
+    if (maybeBlockActionOverdraft()) {
+      // прерываем всплытие, т.к. клик по body провоцирует событие, скрывающее попапы в доксах
+      // а в случае блокировки овердрафтника - как раз нужно показать попап
+      event.stopPropagation();
+      return;
+    }
+
+    if (!actions.save.buttonUrl) {
+      saveToDisk();
+    } else {
+      const afterOneHour = new Date();
+      afterOneHour.setHours(afterOneHour.getHours() + 1);
+      const mode = auth && !hasPassword ? 'noPassword' : 'needAuth';
+      const cookieValue = encodeURIComponent(mode + ':' + fileUrl);
+      document.cookie = \`save-to-disk=\${cookieValue};path=/;expires=\${afterOneHour.toUTCString()}\`;
+    }
+
+    metrika.countAction(protocol, 'save');
+
+    if (protocol === 'ya-browser:' && !auth && !actions.edit.editPromoDisabled) {
+      disableEditPromo();
+    }
+  }"
+        progress="false"
+        size="m"
+        theme="raised"
+        view="action"
+      >
+        Сохранить архив на Яндекс Диск
+      </lego-components_button>
+    </ufo-rocks_hover-tooltip>
+  </div>
+  <div
+    class="header__side-right"
+  >
+    <ufo-rocks_hover-tooltip
+      classname="iconButton"
+      disabled="false"
+      text="Поделиться архивом"
+    >
+      <lego-components_button
+        aria-label="Поделиться архивом"
+        classname="share-button"
+        icon="className => /*#__PURE__*/_react.default.createElement(_share.default, {
+    iconSize: \\"m\\",
+    isAndroid: OSFamily === 'Android',
+    cls: className
+  })"
+        innerref="[object Object]"
+        onclick="event => {
+    if (actions.share.state === 'FAIL' && !actions.share.url && maybeBlockActionOverdraft()) {
+      // прерываем всплытие, т.к. клик по body провоцирует событие, скрывающее попапы в доксах
+      // а в случае блокировки овердрафтника - как раз нужно показать попап
+      event.stopPropagation();
+      return;
+    }
+
+    share().then(() => {
+      onShareShow();
+    });
+    metrika.countShare(protocol, 'button-click');
+  }"
+        size="m"
+        view="clear"
+      />
+    </ufo-rocks_hover-tooltip>
+    <ufo-rocks_share-link-popup
+      anchor="[object Object]"
+      direction="bottom-end"
+      isiossafari="false"
+      lang="ru"
+      onclose="() => {
+    setPopupVisible(false);
+  }"
+      qrhost="https://disk.yandex.net/qr/"
+      services="[object Object]"
+      target="anchor"
+      texts="[object Object]"
+      visible="false"
+    />
+    <ufo-rocks_hover-tooltip
+      classname="iconButton"
+      text="Скачать архив"
+    >
+      <lego-components_button
+        aria-label="Скачать архив"
+        classname="download-button"
+        icon="className => /*#__PURE__*/_react.default.createElement(_download.default, {
+  iconSize: \\"m\\",
+  cls: className
+})"
+        onclick="() => {
+    download().catch(error => metrika.countDownloadError(error));
+    metrika.countAction(protocol, 'download');
+  }"
+        size="m"
+        view="clear"
+      />
+    </ufo-rocks_hover-tooltip>
+    <ufo-rocks_user
+      accounts="[object Object]"
+      passporthost="passport.ya.ru"
+      popup="[object Object]"
+      retpath="https://dv.ya.ru/?forceDefaultAccount=1"
+    />
+  </div>
+</div>
+`;
+
+exports[`header-auth-2-accounts-and-saved 1`] = `
+<div
+  class="header header_has-center header"
+>
+  <div
+    class="header__side-left"
+  >
+    <span
+      class="logo"
+    >
+      <a
+        class="logo__link logo__link_yandex"
+        href="//yandex.ru"
+        rel="noopener noreferrer"
+      />
+      <svg
+        class="logo__svg"
+        height="30"
+        width="69"
+      >
+        <g>
+          <path
+            d="M34.997 22.97V9.024l-7.26-.026v1.363c0 4.248-.316 9.22-1.775 12.61h-1.045v5.036H27.2V25h6.846v3.006h2.22V22.97h-1.27.001zm11.444-.95c-.633.444-1.743 1.078-3.138 1.078-1.965 0-2.948-1.57-2.948-5.184h6.657V16.55c0-5.42-1.774-7.75-4.437-7.75-3.392 0-4.818 3.742-4.818 8.877 0 4.914 2.03 7.545 5.325 7.545 1.585 0 2.917-.507 3.93-1.3l-.57-1.902h-.001zm-25.415-6h-3.523V9.034H15.03V25.01h2.472v-6.96h3.523v6.96h2.44V9.034h-2.44v6.987l.001-.001zM58.9 25l-4.534-8.464 3.962-7.513h-2.504l-3.836 7.386V9.022h-2.473V25h2.473v-7.957L56.204 25H58.9zm5.8.222c1.458 0 2.472-.476 3.328-1.205l-.57-1.838c-.57.506-1.49.98-2.695.98-1.997 0-2.948-2.28-2.948-6.275 0-4.026 1.268-6.023 3.043-6.023 1.015 0 1.966.54 2.63 1.11l.35-2.347c-.697-.443-1.522-.824-2.948-.824-3.74 0-5.674 3.203-5.674 8.212 0 5.452 2.06 8.21 5.484 8.21zm-32.144-2.25h-4.248c1.332-3.393 1.49-8.306 1.49-11.666v-.286h2.758v11.952zm11.834-8.886c.062.567.09 1.198.09 1.874h-4.09c.16-2.853.662-5.13 2.183-5.13 1.073 0 1.626 1.536 1.817 3.256z"
+            fill="#000"
+          />
+          <path
+            d="M9.547 25.006h2.44V2H8.343C4.761 2 1.728 4.377 1.728 9.132c0 3.39 1.352 5.572 3.35 6.586L.83 25.006h2.82l3.868-8.685h2.03v8.686l-.001-.001zM8.27 14.303c-2.125 0-3.864-1.357-3.864-5.003 0-.214.006-.422.018-.623.198-3.34 1.99-4.704 3.845-4.704h1.3v10.33h-1.3.001z"
+            fill="#F00"
+          />
+        </g>
+      </svg>
+    </span>
+  </div>
+  <div
+    class="header__side-center"
+  >
+    <ufo-rocks_hover-tooltip
+      classname="actionButton"
+    >
+      <lego-components_button
+        classname="download-button"
+        iconleft="className => /*#__PURE__*/_react.default.createElement(_logo.default, {
+  cls: className
+})"
+        onclick="() => {
+    metrika.countLinkToDownloads(protocol, 'save_header');
+  }"
+        size="m"
+        target="_blank"
+        type="link"
+        view="raised"
+      >
+        Открыть Яндекс Диск
+      </lego-components_button>
+    </ufo-rocks_hover-tooltip>
+  </div>
+  <div
+    class="header__side-right"
+  >
+    <ufo-rocks_hover-tooltip
+      classname="iconButton"
+      disabled="false"
+      text="Поделиться"
+    >
+      <lego-components_button
+        aria-label="Поделиться"
+        classname="share-button"
+        icon="className => /*#__PURE__*/_react.default.createElement(_share.default, {
+    iconSize: \\"m\\",
+    isAndroid: OSFamily === 'Android',
+    cls: className
+  })"
+        innerref="[object Object]"
+        onclick="event => {
+    if (actions.share.state === 'FAIL' && !actions.share.url && maybeBlockActionOverdraft()) {
+      // прерываем всплытие, т.к. клик по body провоцирует событие, скрывающее попапы в доксах
+      // а в случае блокировки овердрафтника - как раз нужно показать попап
+      event.stopPropagation();
+      return;
+    }
+
+    share().then(() => {
+      onShareShow();
+    });
+    metrika.countShare(protocol, 'button-click');
+  }"
+        size="m"
+        view="clear"
+      />
+    </ufo-rocks_hover-tooltip>
+    <ufo-rocks_share-link-popup
+      anchor="[object Object]"
+      direction="bottom-end"
+      isiossafari="false"
+      lang="ru"
+      onclose="() => {
+    setPopupVisible(false);
+  }"
+      qrhost="https://disk.yandex.net/qr/"
+      services="[object Object]"
+      target="anchor"
+      texts="[object Object]"
+      visible="false"
+    />
+    <ufo-rocks_user
+      accounts="[object Object],[object Object]"
+      passporthost="passport.ya.ru"
+      popup="[object Object]"
+      retpath="https://dv.ya.ru/?forceDefaultAccount=1"
+    />
+  </div>
+</div>
+`;
+
+exports[`header-auth-all-actions 1`] = `
+<div
+  class="header header_has-center header"
+>
+  <div
+    class="header__side-left"
+  >
+    <span
+      class="logo"
+    >
+      <a
+        class="logo__link logo__link_yandex"
+        href="//yandex.ru"
+        rel="noopener noreferrer"
+      />
+      <svg
+        class="logo__svg"
+        height="30"
+        width="69"
+      >
+        <g>
+          <path
+            d="M34.997 22.97V9.024l-7.26-.026v1.363c0 4.248-.316 9.22-1.775 12.61h-1.045v5.036H27.2V25h6.846v3.006h2.22V22.97h-1.27.001zm11.444-.95c-.633.444-1.743 1.078-3.138 1.078-1.965 0-2.948-1.57-2.948-5.184h6.657V16.55c0-5.42-1.774-7.75-4.437-7.75-3.392 0-4.818 3.742-4.818 8.877 0 4.914 2.03 7.545 5.325 7.545 1.585 0 2.917-.507 3.93-1.3l-.57-1.902h-.001zm-25.415-6h-3.523V9.034H15.03V25.01h2.472v-6.96h3.523v6.96h2.44V9.034h-2.44v6.987l.001-.001zM58.9 25l-4.534-8.464 3.962-7.513h-2.504l-3.836 7.386V9.022h-2.473V25h2.473v-7.957L56.204 25H58.9zm5.8.222c1.458 0 2.472-.476 3.328-1.205l-.57-1.838c-.57.506-1.49.98-2.695.98-1.997 0-2.948-2.28-2.948-6.275 0-4.026 1.268-6.023 3.043-6.023 1.015 0 1.966.54 2.63 1.11l.35-2.347c-.697-.443-1.522-.824-2.948-.824-3.74 0-5.674 3.203-5.674 8.212 0 5.452 2.06 8.21 5.484 8.21zm-32.144-2.25h-4.248c1.332-3.393 1.49-8.306 1.49-11.666v-.286h2.758v11.952zm11.834-8.886c.062.567.09 1.198.09 1.874h-4.09c.16-2.853.662-5.13 2.183-5.13 1.073 0 1.626 1.536 1.817 3.256z"
+            fill="#000"
+          />
+          <path
+            d="M9.547 25.006h2.44V2H8.343C4.761 2 1.728 4.377 1.728 9.132c0 3.39 1.352 5.572 3.35 6.586L.83 25.006h2.82l3.868-8.685h2.03v8.686l-.001-.001zM8.27 14.303c-2.125 0-3.864-1.357-3.864-5.003 0-.214.006-.422.018-.623.198-3.34 1.99-4.704 3.845-4.704h1.3v10.33h-1.3.001z"
+            fill="#F00"
+          />
+        </g>
+      </svg>
+    </span>
+  </div>
+  <div
+    class="header__side-center"
+  >
+    <ufo-rocks_hover-tooltip
+      classname="actionButton"
+    >
+      <lego-components_button
+        classname="download-button"
+        iconleft="className => /*#__PURE__*/_react.default.createElement(_logo.default, {
+  cls: className
+})"
+        onclick="event => {
+    if (maybeBlockActionOverdraft()) {
+      // прерываем всплытие, т.к. клик по body провоцирует событие, скрывающее попапы в доксах
+      // а в случае блокировки овердрафтника - как раз нужно показать попап
+      event.stopPropagation();
+      return;
+    }
+
+    if (!actions.save.buttonUrl) {
+      saveToDisk();
+    } else {
+      const afterOneHour = new Date();
+      afterOneHour.setHours(afterOneHour.getHours() + 1);
+      const mode = auth && !hasPassword ? 'noPassword' : 'needAuth';
+      const cookieValue = encodeURIComponent(mode + ':' + fileUrl);
+      document.cookie = \`save-to-disk=\${cookieValue};path=/;expires=\${afterOneHour.toUTCString()}\`;
+    }
+
+    metrika.countAction(protocol, 'save');
+
+    if (protocol === 'ya-browser:' && !auth && !actions.edit.editPromoDisabled) {
+      disableEditPromo();
+    }
+  }"
+        progress="false"
+        size="m"
+        theme="raised"
+        view="action"
+      >
+        Сохранить на Яндекс Диск
+      </lego-components_button>
+    </ufo-rocks_hover-tooltip>
+    <ufo-rocks_hover-tooltip
+      classname="actionButton"
+      text="Документ можно отредактировать.
+Копия сохранится на Яндекс Диск в папку «Загрузки»."
+    >
+      <lego-components_button
+        classname="edit-button"
+        iconleft="className => /*#__PURE__*/_react.default.createElement(_edit.default, {
+  iconSize: \\"m\\",
+  cls: className
+})"
+        onclick="event => {
+    metrika.countEditing('click', title);
+
+    if (maybeBlockActionOverdraft()) {
+      // переход по ссылке в данном случае делать не надо
+      event.preventDefault(); // прерываем всплытие, т.к. клик по body провоцирует событие, скрывающее попапы в доксах
+      // а в случае блокировки овердрафтника - как раз нужно показать попап
+
+      event.stopPropagation();
+      return;
+    }
+
+    if (!isFromDisk) {
+      updateAction('edit', {
+        state: 'READY'
+      });
+    }
+
+    if (protocol === 'ya-browser:' && !auth && !actions.edit.editPromoDisabled) {
+      disableEditPromo();
+    }
+  }"
+        size="m"
+        target="_blank"
+        type="link"
+        url="/some/edit/url"
+        view="raised"
+      >
+        Редактировать копию
+      </lego-components_button>
+    </ufo-rocks_hover-tooltip>
+  </div>
+  <div
+    class="header__side-right"
+  >
+    <ufo-rocks_hover-tooltip
+      classname="iconButton"
+      disabled="false"
+      text="Поделиться"
+    >
+      <lego-components_button
+        aria-label="Поделиться"
+        classname="share-button"
+        icon="className => /*#__PURE__*/_react.default.createElement(_share.default, {
+    iconSize: \\"m\\",
+    isAndroid: OSFamily === 'Android',
+    cls: className
+  })"
+        innerref="[object Object]"
+        onclick="event => {
+    if (actions.share.state === 'FAIL' && !actions.share.url && maybeBlockActionOverdraft()) {
+      // прерываем всплытие, т.к. клик по body провоцирует событие, скрывающее попапы в доксах
+      // а в случае блокировки овердрафтника - как раз нужно показать попап
+      event.stopPropagation();
+      return;
+    }
+
+    share().then(() => {
+      onShareShow();
+    });
+    metrika.countShare(protocol, 'button-click');
+  }"
+        size="m"
+        view="clear"
+      />
+    </ufo-rocks_hover-tooltip>
+    <ufo-rocks_share-link-popup
+      anchor="[object Object]"
+      direction="bottom-end"
+      isiossafari="false"
+      lang="ru"
+      onclose="() => {
+    setPopupVisible(false);
+  }"
+      qrhost="https://disk.yandex.net/qr/"
+      services="[object Object]"
+      target="anchor"
+      texts="[object Object]"
+      visible="false"
+    />
+    <ufo-rocks_hover-tooltip
+      classname="iconButton"
+      text="Напечатать"
+    >
+      <lego-components_button
+        aria-label="Напечатать"
+        classname="print-button"
+        icon="className => /*#__PURE__*/_react.default.createElement(_print.default, {
+  iconSize: \\"m\\",
+  cls: className
+})"
+        onclick="() => {
+    print();
+    metrika.countPrint(protocol, BrowserName, title);
+  }"
+        size="m"
+        view="clear"
+      />
+    </ufo-rocks_hover-tooltip>
+    <ufo-rocks_hover-tooltip
+      classname="iconButton"
+      text="Скачать"
+    >
+      <lego-components_button
+        aria-label="Скачать"
+        classname="download-button"
+        icon="className => /*#__PURE__*/_react.default.createElement(_download.default, {
+  iconSize: \\"m\\",
+  cls: className
+})"
+        onclick="() => {
+    download().catch(error => metrika.countDownloadError(error));
+    metrika.countAction(protocol, 'download');
+  }"
+        size="m"
+        view="clear"
+      />
+    </ufo-rocks_hover-tooltip>
+    <ufo-rocks_user
+      accounts="[object Object]"
+      passporthost="passport.ya.ru"
+      popup="[object Object]"
+      retpath="https://dv.ya.ru/?forceDefaultAccount=1"
+    />
+  </div>
+</div>
+`;
+
+exports[`header-conversion-error 1`] = `
+<div
+  class="header header_has-center header"
+>
+  <div
+    class="header__side-left"
+  >
+    <span
+      class="logo"
+    >
+      <a
+        class="logo__link logo__link_yandex"
+        href="//yandex.ru"
+        rel="noopener noreferrer"
+      />
+      <svg
+        class="logo__svg"
+        height="30"
+        width="69"
+      >
+        <g>
+          <path
+            d="M34.997 22.97V9.024l-7.26-.026v1.363c0 4.248-.316 9.22-1.775 12.61h-1.045v5.036H27.2V25h6.846v3.006h2.22V22.97h-1.27.001zm11.444-.95c-.633.444-1.743 1.078-3.138 1.078-1.965 0-2.948-1.57-2.948-5.184h6.657V16.55c0-5.42-1.774-7.75-4.437-7.75-3.392 0-4.818 3.742-4.818 8.877 0 4.914 2.03 7.545 5.325 7.545 1.585 0 2.917-.507 3.93-1.3l-.57-1.902h-.001zm-25.415-6h-3.523V9.034H15.03V25.01h2.472v-6.96h3.523v6.96h2.44V9.034h-2.44v6.987l.001-.001zM58.9 25l-4.534-8.464 3.962-7.513h-2.504l-3.836 7.386V9.022h-2.473V25h2.473v-7.957L56.204 25H58.9zm5.8.222c1.458 0 2.472-.476 3.328-1.205l-.57-1.838c-.57.506-1.49.98-2.695.98-1.997 0-2.948-2.28-2.948-6.275 0-4.026 1.268-6.023 3.043-6.023 1.015 0 1.966.54 2.63 1.11l.35-2.347c-.697-.443-1.522-.824-2.948-.824-3.74 0-5.674 3.203-5.674 8.212 0 5.452 2.06 8.21 5.484 8.21zm-32.144-2.25h-4.248c1.332-3.393 1.49-8.306 1.49-11.666v-.286h2.758v11.952zm11.834-8.886c.062.567.09 1.198.09 1.874h-4.09c.16-2.853.662-5.13 2.183-5.13 1.073 0 1.626 1.536 1.817 3.256z"
+            fill="#000"
+          />
+          <path
+            d="M9.547 25.006h2.44V2H8.343C4.761 2 1.728 4.377 1.728 9.132c0 3.39 1.352 5.572 3.35 6.586L.83 25.006h2.82l3.868-8.685h2.03v8.686l-.001-.001zM8.27 14.303c-2.125 0-3.864-1.357-3.864-5.003 0-.214.006-.422.018-.623.198-3.34 1.99-4.704 3.845-4.704h1.3v10.33h-1.3.001z"
+            fill="#F00"
+          />
+        </g>
+      </svg>
+    </span>
+  </div>
+  <div
+    class="header__side-center"
+  />
+  <div
+    class="header__side-right"
+  >
+    <lego-components_button
+      size="m"
+      type="link"
+      url="passport.ya.ru/auth?retpath=https%3A%2F%2Fdv.ya.ru%2F%3FforceDefaultAccount%3D1&origin=disk_dv_web_signin_ru"
+      view="raised"
+    >
+      <span>
+        Войти
+      </span>
+    </lego-components_button>
+  </div>
+</div>
+`;
+
+exports[`header-conversion-error-file-is-downloadable 1`] = `
+<div
+  class="header header_has-center header"
+>
+  <div
+    class="header__side-left"
+  >
+    <span
+      class="logo"
+    >
+      <a
+        class="logo__link logo__link_yandex"
+        href="//yandex.ru"
+        rel="noopener noreferrer"
+      />
+      <svg
+        class="logo__svg"
+        height="30"
+        width="69"
+      >
+        <g>
+          <path
+            d="M34.997 22.97V9.024l-7.26-.026v1.363c0 4.248-.316 9.22-1.775 12.61h-1.045v5.036H27.2V25h6.846v3.006h2.22V22.97h-1.27.001zm11.444-.95c-.633.444-1.743 1.078-3.138 1.078-1.965 0-2.948-1.57-2.948-5.184h6.657V16.55c0-5.42-1.774-7.75-4.437-7.75-3.392 0-4.818 3.742-4.818 8.877 0 4.914 2.03 7.545 5.325 7.545 1.585 0 2.917-.507 3.93-1.3l-.57-1.902h-.001zm-25.415-6h-3.523V9.034H15.03V25.01h2.472v-6.96h3.523v6.96h2.44V9.034h-2.44v6.987l.001-.001zM58.9 25l-4.534-8.464 3.962-7.513h-2.504l-3.836 7.386V9.022h-2.473V25h2.473v-7.957L56.204 25H58.9zm5.8.222c1.458 0 2.472-.476 3.328-1.205l-.57-1.838c-.57.506-1.49.98-2.695.98-1.997 0-2.948-2.28-2.948-6.275 0-4.026 1.268-6.023 3.043-6.023 1.015 0 1.966.54 2.63 1.11l.35-2.347c-.697-.443-1.522-.824-2.948-.824-3.74 0-5.674 3.203-5.674 8.212 0 5.452 2.06 8.21 5.484 8.21zm-32.144-2.25h-4.248c1.332-3.393 1.49-8.306 1.49-11.666v-.286h2.758v11.952zm11.834-8.886c.062.567.09 1.198.09 1.874h-4.09c.16-2.853.662-5.13 2.183-5.13 1.073 0 1.626 1.536 1.817 3.256z"
+            fill="#000"
+          />
+          <path
+            d="M9.547 25.006h2.44V2H8.343C4.761 2 1.728 4.377 1.728 9.132c0 3.39 1.352 5.572 3.35 6.586L.83 25.006h2.82l3.868-8.685h2.03v8.686l-.001-.001zM8.27 14.303c-2.125 0-3.864-1.357-3.864-5.003 0-.214.006-.422.018-.623.198-3.34 1.99-4.704 3.845-4.704h1.3v10.33h-1.3.001z"
+            fill="#F00"
+          />
+        </g>
+      </svg>
+    </span>
+  </div>
+  <div
+    class="header__side-center"
+  >
+    <ufo-rocks_hover-tooltip
+      classname="actionButton"
+    >
+      <lego-components_button
+        classname="download-button"
+        iconleft="className => /*#__PURE__*/_react.default.createElement(_logo.default, {
+  cls: className
+})"
+        onclick="event => {
+    if (maybeBlockActionOverdraft()) {
+      // прерываем всплытие, т.к. клик по body провоцирует событие, скрывающее попапы в доксах
+      // а в случае блокировки овердрафтника - как раз нужно показать попап
+      event.stopPropagation();
+      return;
+    }
+
+    if (!actions.save.buttonUrl) {
+      saveToDisk();
+    } else {
+      const afterOneHour = new Date();
+      afterOneHour.setHours(afterOneHour.getHours() + 1);
+      const mode = auth && !hasPassword ? 'noPassword' : 'needAuth';
+      const cookieValue = encodeURIComponent(mode + ':' + fileUrl);
+      document.cookie = \`save-to-disk=\${cookieValue};path=/;expires=\${afterOneHour.toUTCString()}\`;
+    }
+
+    metrika.countAction(protocol, 'save');
+
+    if (protocol === 'ya-browser:' && !auth && !actions.edit.editPromoDisabled) {
+      disableEditPromo();
+    }
+  }"
+        progress="false"
+        size="m"
+        theme="raised"
+        view="action"
+      >
+        Сохранить на Яндекс Диск
+      </lego-components_button>
+    </ufo-rocks_hover-tooltip>
+  </div>
+  <div
+    class="header__side-right"
+  >
+    <ufo-rocks_hover-tooltip
+      classname="iconButton"
+      text="Скачать"
+    >
+      <lego-components_button
+        aria-label="Скачать"
+        classname="download-button"
+        icon="className => /*#__PURE__*/_react.default.createElement(_download.default, {
+  iconSize: \\"m\\",
+  cls: className
+})"
+        onclick="() => {
+    download().catch(error => metrika.countDownloadError(error));
+    metrika.countAction(protocol, 'download');
+  }"
+        size="m"
+        view="clear"
+      />
+    </ufo-rocks_hover-tooltip>
+    <lego-components_button
+      size="m"
+      type="link"
+      url="passport.ya.ru/auth?retpath=https%3A%2F%2Fdv.ya.ru%2F%3FforceDefaultAccount%3D1&origin=disk_dv_web_signin_ru"
+      view="raised"
+    >
+      <span>
+        Войти
+      </span>
+    </lego-components_button>
+  </div>
+</div>
+`;
+
+exports[`header-no-auth-no-actions 1`] = `
+<div
+  class="header header_has-center header"
+>
+  <div
+    class="header__side-left"
+  >
+    <span
+      class="logo"
+    >
+      <a
+        class="logo__link logo__link_yandex"
+        href="//yandex.ru"
+        rel="noopener noreferrer"
+      />
+      <svg
+        class="logo__svg"
+        height="30"
+        width="69"
+      >
+        <g>
+          <path
+            d="M34.997 22.97V9.024l-7.26-.026v1.363c0 4.248-.316 9.22-1.775 12.61h-1.045v5.036H27.2V25h6.846v3.006h2.22V22.97h-1.27.001zm11.444-.95c-.633.444-1.743 1.078-3.138 1.078-1.965 0-2.948-1.57-2.948-5.184h6.657V16.55c0-5.42-1.774-7.75-4.437-7.75-3.392 0-4.818 3.742-4.818 8.877 0 4.914 2.03 7.545 5.325 7.545 1.585 0 2.917-.507 3.93-1.3l-.57-1.902h-.001zm-25.415-6h-3.523V9.034H15.03V25.01h2.472v-6.96h3.523v6.96h2.44V9.034h-2.44v6.987l.001-.001zM58.9 25l-4.534-8.464 3.962-7.513h-2.504l-3.836 7.386V9.022h-2.473V25h2.473v-7.957L56.204 25H58.9zm5.8.222c1.458 0 2.472-.476 3.328-1.205l-.57-1.838c-.57.506-1.49.98-2.695.98-1.997 0-2.948-2.28-2.948-6.275 0-4.026 1.268-6.023 3.043-6.023 1.015 0 1.966.54 2.63 1.11l.35-2.347c-.697-.443-1.522-.824-2.948-.824-3.74 0-5.674 3.203-5.674 8.212 0 5.452 2.06 8.21 5.484 8.21zm-32.144-2.25h-4.248c1.332-3.393 1.49-8.306 1.49-11.666v-.286h2.758v11.952zm11.834-8.886c.062.567.09 1.198.09 1.874h-4.09c.16-2.853.662-5.13 2.183-5.13 1.073 0 1.626 1.536 1.817 3.256z"
+            fill="#000"
+          />
+          <path
+            d="M9.547 25.006h2.44V2H8.343C4.761 2 1.728 4.377 1.728 9.132c0 3.39 1.352 5.572 3.35 6.586L.83 25.006h2.82l3.868-8.685h2.03v8.686l-.001-.001zM8.27 14.303c-2.125 0-3.864-1.357-3.864-5.003 0-.214.006-.422.018-.623.198-3.34 1.99-4.704 3.845-4.704h1.3v10.33h-1.3.001z"
+            fill="#F00"
+          />
+        </g>
+      </svg>
+    </span>
+  </div>
+  <div
+    class="header__side-center"
+  />
+  <div
+    class="header__side-right"
+  >
+    <lego-components_button
+      size="m"
+      type="link"
+      url="passport.ya.ru/auth?retpath=https%3A%2F%2Fdv.ya.ru%2F%3FforceDefaultAccount%3D1&origin=disk_dv_web_signin_ru"
+      view="raised"
+    >
+      <span>
+        Войти
+      </span>
+    </lego-components_button>
+  </div>
+</div>
+`;
+
+exports[`header-no-auth-some-actions 1`] = `
+<div
+  class="header header_has-center header"
+>
+  <div
+    class="header__side-left"
+  >
+    <span
+      class="logo"
+    >
+      <a
+        class="logo__link logo__link_yandex"
+        href="//yandex.ru"
+        rel="noopener noreferrer"
+      />
+      <svg
+        class="logo__svg"
+        height="30"
+        width="69"
+      >
+        <g>
+          <path
+            d="M34.997 22.97V9.024l-7.26-.026v1.363c0 4.248-.316 9.22-1.775 12.61h-1.045v5.036H27.2V25h6.846v3.006h2.22V22.97h-1.27.001zm11.444-.95c-.633.444-1.743 1.078-3.138 1.078-1.965 0-2.948-1.57-2.948-5.184h6.657V16.55c0-5.42-1.774-7.75-4.437-7.75-3.392 0-4.818 3.742-4.818 8.877 0 4.914 2.03 7.545 5.325 7.545 1.585 0 2.917-.507 3.93-1.3l-.57-1.902h-.001zm-25.415-6h-3.523V9.034H15.03V25.01h2.472v-6.96h3.523v6.96h2.44V9.034h-2.44v6.987l.001-.001zM58.9 25l-4.534-8.464 3.962-7.513h-2.504l-3.836 7.386V9.022h-2.473V25h2.473v-7.957L56.204 25H58.9zm5.8.222c1.458 0 2.472-.476 3.328-1.205l-.57-1.838c-.57.506-1.49.98-2.695.98-1.997 0-2.948-2.28-2.948-6.275 0-4.026 1.268-6.023 3.043-6.023 1.015 0 1.966.54 2.63 1.11l.35-2.347c-.697-.443-1.522-.824-2.948-.824-3.74 0-5.674 3.203-5.674 8.212 0 5.452 2.06 8.21 5.484 8.21zm-32.144-2.25h-4.248c1.332-3.393 1.49-8.306 1.49-11.666v-.286h2.758v11.952zm11.834-8.886c.062.567.09 1.198.09 1.874h-4.09c.16-2.853.662-5.13 2.183-5.13 1.073 0 1.626 1.536 1.817 3.256z"
+            fill="#000"
+          />
+          <path
+            d="M9.547 25.006h2.44V2H8.343C4.761 2 1.728 4.377 1.728 9.132c0 3.39 1.352 5.572 3.35 6.586L.83 25.006h2.82l3.868-8.685h2.03v8.686l-.001-.001zM8.27 14.303c-2.125 0-3.864-1.357-3.864-5.003 0-.214.006-.422.018-.623.198-3.34 1.99-4.704 3.845-4.704h1.3v10.33h-1.3.001z"
+            fill="#F00"
+          />
+        </g>
+      </svg>
+    </span>
+  </div>
+  <div
+    class="header__side-center"
+  >
+    <ufo-rocks_hover-tooltip
+      classname="actionButton"
+    >
+      <lego-components_button
+        classname="download-button"
+        iconleft="className => /*#__PURE__*/_react.default.createElement(_logo.default, {
+  cls: className
+})"
+        onclick="event => {
+    if (maybeBlockActionOverdraft()) {
+      // прерываем всплытие, т.к. клик по body провоцирует событие, скрывающее попапы в доксах
+      // а в случае блокировки овердрафтника - как раз нужно показать попап
+      event.stopPropagation();
+      return;
+    }
+
+    if (!actions.save.buttonUrl) {
+      saveToDisk();
+    } else {
+      const afterOneHour = new Date();
+      afterOneHour.setHours(afterOneHour.getHours() + 1);
+      const mode = auth && !hasPassword ? 'noPassword' : 'needAuth';
+      const cookieValue = encodeURIComponent(mode + ':' + fileUrl);
+      document.cookie = \`save-to-disk=\${cookieValue};path=/;expires=\${afterOneHour.toUTCString()}\`;
+    }
+
+    metrika.countAction(protocol, 'save');
+
+    if (protocol === 'ya-browser:' && !auth && !actions.edit.editPromoDisabled) {
+      disableEditPromo();
+    }
+  }"
+        progress="false"
+        size="m"
+        target="_parent"
+        theme="raised"
+        type="link"
+        url="save/url"
+        view="action"
+      >
+        Сохранить на Яндекс Диск
+      </lego-components_button>
+    </ufo-rocks_hover-tooltip>
+  </div>
+  <div
+    class="header__side-right"
+  >
+    <ufo-rocks_hover-tooltip
+      classname="iconButton"
+      text="Напечатать"
+    >
+      <lego-components_button
+        aria-label="Напечатать"
+        classname="print-button"
+        icon="className => /*#__PURE__*/_react.default.createElement(_print.default, {
+  iconSize: \\"m\\",
+  cls: className
+})"
+        onclick="() => {
+    print();
+    metrika.countPrint(protocol, BrowserName, title);
+  }"
+        size="m"
+        view="clear"
+      />
+    </ufo-rocks_hover-tooltip>
+    <ufo-rocks_hover-tooltip
+      classname="iconButton"
+      text="Скачать"
+    >
+      <lego-components_button
+        aria-label="Скачать"
+        classname="download-button"
+        icon="className => /*#__PURE__*/_react.default.createElement(_download.default, {
+  iconSize: \\"m\\",
+  cls: className
+})"
+        onclick="() => {
+    download().catch(error => metrika.countDownloadError(error));
+    metrika.countAction(protocol, 'download');
+  }"
+        size="m"
+        view="clear"
+      />
+    </ufo-rocks_hover-tooltip>
+    <lego-components_button
+      size="m"
+      type="link"
+      url="passport.ya.ru/auth?retpath=https%3A%2F%2Fdv.ya.ru%2F%3FforceDefaultAccount%3D1&origin=disk_dv_web_signin_ru"
+      view="raised"
+    >
+      <span>
+        Войти
+      </span>
+    </lego-components_button>
+  </div>
+</div>
+`;
+
+exports[`header-version 1`] = `
+<div
+  class="header header_has-center header"
+>
+  <div
+    class="header__side-left"
+  >
+    <span
+      class="logo"
+    >
+      <a
+        class="logo__link logo__link_yandex"
+        href="//yandex.ru"
+        rel="noopener noreferrer"
+      />
+      <svg
+        class="logo__svg"
+        height="30"
+        width="69"
+      >
+        <g>
+          <path
+            d="M34.997 22.97V9.024l-7.26-.026v1.363c0 4.248-.316 9.22-1.775 12.61h-1.045v5.036H27.2V25h6.846v3.006h2.22V22.97h-1.27.001zm11.444-.95c-.633.444-1.743 1.078-3.138 1.078-1.965 0-2.948-1.57-2.948-5.184h6.657V16.55c0-5.42-1.774-7.75-4.437-7.75-3.392 0-4.818 3.742-4.818 8.877 0 4.914 2.03 7.545 5.325 7.545 1.585 0 2.917-.507 3.93-1.3l-.57-1.902h-.001zm-25.415-6h-3.523V9.034H15.03V25.01h2.472v-6.96h3.523v6.96h2.44V9.034h-2.44v6.987l.001-.001zM58.9 25l-4.534-8.464 3.962-7.513h-2.504l-3.836 7.386V9.022h-2.473V25h2.473v-7.957L56.204 25H58.9zm5.8.222c1.458 0 2.472-.476 3.328-1.205l-.57-1.838c-.57.506-1.49.98-2.695.98-1.997 0-2.948-2.28-2.948-6.275 0-4.026 1.268-6.023 3.043-6.023 1.015 0 1.966.54 2.63 1.11l.35-2.347c-.697-.443-1.522-.824-2.948-.824-3.74 0-5.674 3.203-5.674 8.212 0 5.452 2.06 8.21 5.484 8.21zm-32.144-2.25h-4.248c1.332-3.393 1.49-8.306 1.49-11.666v-.286h2.758v11.952zm11.834-8.886c.062.567.09 1.198.09 1.874h-4.09c.16-2.853.662-5.13 2.183-5.13 1.073 0 1.626 1.536 1.817 3.256z"
+            fill="#000"
+          />
+          <path
+            d="M9.547 25.006h2.44V2H8.343C4.761 2 1.728 4.377 1.728 9.132c0 3.39 1.352 5.572 3.35 6.586L.83 25.006h2.82l3.868-8.685h2.03v8.686l-.001-.001zM8.27 14.303c-2.125 0-3.864-1.357-3.864-5.003 0-.214.006-.422.018-.623.198-3.34 1.99-4.704 3.845-4.704h1.3v10.33h-1.3.001z"
+            fill="#F00"
+          />
+        </g>
+      </svg>
+    </span>
+  </div>
+  <div
+    class="header__side-center"
+  >
+    <span
+      class="versionHeader"
+    >
+      Версия от 27.03.2018, 11:01:33
+    </span>
+  </div>
+  <div
+    class="header__side-right"
+  >
+    <ufo-rocks_user
+      accounts="[object Object]"
+      passporthost="passport.ya.ru"
+      popup="[object Object]"
+      retpath="https://dv.ya.ru/?forceDefaultAccount=1"
+    />
+  </div>
+</div>
+`;

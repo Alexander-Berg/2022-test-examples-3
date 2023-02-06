@@ -1,0 +1,120 @@
+{
+    "test_common.test_get_config_content": {
+        "global_vars": [
+            {
+                "template_kwargs": {
+                    "queue": "CSADMIN",
+                    "status": [
+                        "WARN",
+                        "CRIT"
+                    ]
+                },
+                "template_name": "startrek"
+            }
+        ],
+        "juggler": {
+            "checks": [
+                {
+                    "notifications": [
+                        {
+                            "template_kwargs": {
+                                "queue": "CSADMIN",
+                                "status": [
+                                    "WARN",
+                                    "CRIT"
+                                ]
+                            },
+                            "template_name": "startrek"
+                        }
+                    ],
+                    "service": "fslb_false_positive_pings"
+                }
+            ],
+            "default": {
+                "aggregator": "logic_and",
+                "children": [
+                    {
+                        "host": "service=fslb_false_positive_pings",
+                        "instance": "all",
+                        "service": "all",
+                        "type": "EVENTS"
+                    }
+                ],
+                "host": "market_sandbox",
+                "namespace": "market.sre"
+            }
+        }
+    },
+    "test_juggler_config.test__make_check_like_ansible_dict[juggler_sections0]": [
+        {
+            "check_options": {},
+            "children": [
+                "my_children"
+            ],
+            "flap": {
+                "boost": 0,
+                "critical": 3600,
+                "stable": 900
+            },
+            "host": "testhost",
+            "namespace": "market.sre",
+            "notifications": [
+                {
+                    "description": "description",
+                    "queue": "CSADMIN",
+                    "status": [
+                        "CRIT"
+                    ],
+                    "template": "startrek"
+                }
+            ],
+            "refresh_time": 60,
+            "service": "ping",
+            "tags": [
+                "_market_",
+                "_market_cleanup_tag_",
+                "market",
+                "market_billing_phone",
+                "test_tag"
+            ],
+            "ttl": 900
+        },
+        {
+            "check_options": {},
+            "flap": true,
+            "host": "testhost",
+            "namespace": "market.sre",
+            "refresh_time": 60,
+            "service": "with_default_flaps",
+            "tags": [
+                "_market_",
+                "_market_cleanup_tag_",
+                "market",
+                "test_tag"
+            ],
+            "ttl": 900
+        },
+        {
+            "check_options": {},
+            "host": "testhost",
+            "namespace": "market.sre",
+            "refresh_time": 60,
+            "service": "without_flaps",
+            "tags": [
+                "_market_",
+                "_market_cleanup_tag_",
+                "market",
+                "test_tag"
+            ],
+            "ttl": 900
+        }
+    ],
+    "test_juggler_config.test__normalize_sections_types[juggler_sections0]": {
+        "checks": [
+            {}
+        ],
+        "default": {
+            "host": "testhost"
+        }
+    }
+}

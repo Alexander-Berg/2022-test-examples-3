@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-autowire="byName"
+       default-lazy-init="true">
+
+    <import resource="workers.xml"/>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>00_datasources.properties</value>
+                <value>datasources.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="dataStorage" class="ru.yandex.market.ultracontroller.ext.datastorage.DataStorage" init-method="init"/>
+
+    <bean id="skuBDApiService" class="ru.yandex.market.ultracontroller.ext.SkuBDApiServiceMock">
+        <property name="dataStorage" ref="dataStorage"/>
+    </bean>
+
+    <bean name="mapper" class="ru.yandex.market.ultracontroller.mapper.Mapper"/>
+
+    <bean name="badWords" class="ru.yandex.market.ultracontroller.ext.BadWords">
+        <property name="mboPath" value="${mbo.path}"/>
+        <property name="xpathFileName" value="${mbo.xpath_file_name}"/>
+    </bean>
+
+    <bean name="badCategories" class="ru.yandex.market.ultracontroller.ext.BadCategories" parent="banWorker">
+        <property name="bannedTovar" value="${mbo.bannedCategories}"/>
+    </bean>
+
+    <bean name="categoryTree" class="ru.yandex.market.CategoryTree" init-method="reload">
+        <property name="categoryTreeDao" ref="categoryTreeDaoMock"/>
+    </bean>
+
+    <bean name="categoryTreeDaoMock" class="ru.yandex.market.ultracontroller.ext.CategoryTreeDaoMock"/>
+
+    <bean name="classifierWorker" class="ru.yandex.market.ultracontroller.ext.ListWorkerMock"/>
+
+    <bean name="formalizerWorker" class="ru.yandex.market.ultracontroller.ext.ListWorkerMock"/>
+
+    <bean name="formalizerAfterSkuBDIdWorker" class="ru.yandex.market.ultracontroller.ext.ListWorkerMock"/>
+
+    <bean name="mapperWorker" class="ru.yandex.market.ultracontroller.ext.WorkerMock"/>
+
+    <bean name="bestMatches" class="ru.yandex.market.ultracontroller.ext.WorkerMock"/>
+
+    <bean name="mappingFinder" class="ru.yandex.market.ultracontroller.ext.MappingFinderMock">
+        <property name="dataStorage" ref="dataStorage"/>
+    </bean>
+
+    <bean name="expectedEnrichTypeWorker" class="ru.yandex.market.ultracontroller.ext.ExpectedEnrichTypeWorker">
+        <property name="mappingFinder" ref="mappingFinder"/>
+    </bean>
+
+    <bean name="antiMappingWorker" class="ru.yandex.market.ultracontroller.ext.AntiMappingWorker" />
+
+    <bean name="matcherWorker" class="ru.yandex.market.ultracontroller.ext.MatcherWorkerMock">
+        <property name="matcherParallelism" value="100"/>
+        <property name="matcherPartSize" value="250"/>
+        <property name="matcherRequestTimeoutMillis" value="90000"/>
+    </bean>
+
+    <bean name="mappingsPipelineTest" class="ru.yandex.market.ultracontroller.ext.MappingPipelinesTest">
+        <property name="mainListWorker" ref="mainListWorker"/>
+        <property name="dataStorage" ref="dataStorage"/>
+    </bean>
+
+</beans>

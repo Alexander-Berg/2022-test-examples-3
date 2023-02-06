@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <service
+        id="123"
+        name="service"
+        initial_state_id="11"
+    />
+
+    <capacity
+        id="11"
+        name="FIRST"
+        value="10"
+    />
+
+    <capacity
+        id="12"
+        name="SECOND"
+        value="100"
+    />
+
+    <capacity_param
+        capacity_id="11"
+        name="param1"
+        value="value1"
+    />
+    <capacity_param
+        capacity_id="11"
+        name="param2"
+        value="value2"
+    />
+    <capacity_param
+        capacity_id="12"
+        name="param3"
+        value="value3"
+    />
+
+    <priority_function
+        id="11"
+        type="ARRIVAL_TIME"
+    />
+
+    <priority_function_param
+        priority_function_id="11"
+        name="PRIORITY_STEP"
+        value="10"
+    />
+
+    <priority_function_param
+        priority_function_id="11"
+        name="SKIP_N_CLIENTS"
+        value="15"
+    />
+
+    <priority_function
+        id="12"
+        type="DEFAULT"
+    />
+
+    <state
+        id="11"
+        name="REGISTERED"
+        service_id="123"
+    />
+
+    <state
+        id="12"
+        name="ALLOCATED"
+        service_id="123"
+        capacity_id="11"
+    />
+
+    <state
+        id="13"
+        name="IN_QUEUE"
+        service_id="123"
+        capacity_id="11"
+        priority_function_id="11"
+    />
+
+    <state
+        id="14"
+        name="FINISHED"
+        service_id="123"
+        capacity_id="12"
+        priority_function_id="12"
+    />
+
+    <edge
+        id="11"
+        from_state_id="11"
+        to_state_id="12"
+        priority="1"
+    />
+
+    <edge_restriction
+        id="11"
+        type="EVENT_REQUIRED"
+        edge_id="11"
+    />
+
+    <restriction_param
+        edge_restriction_id="11"
+        name="EVENT_TYPE"
+        value="SOME_EVENT"
+    />
+
+    <edge_restriction
+        id="12"
+        type="DISJUNCTION"
+        edge_id="11"
+    />
+
+    <restriction_param
+        edge_restriction_id="12"
+        name="EVENT_TYPE"
+        value="SOME_EVENT_2"
+    />
+
+    <restriction_param
+        edge_restriction_id="12"
+        name="RESTRICTION_TYPES"
+        value="EVENT_REQUIRED,QUEUE_IS_EMPTY"
+    />
+
+    <edge_action
+        id="11"
+        edge_id="11"
+        type="SEND_NOTIFICATION"
+    />
+
+    <action_param
+        edge_action_id="11"
+        name="URL"
+        value="http://123.com"
+    />
+
+    <edge
+        id="12"
+        from_state_id="12"
+        to_state_id="13"
+        priority="1"
+    />
+
+    <edge
+        id="13"
+        from_state_id="13"
+        to_state_id="14"
+        priority="1"
+    />
+
+    <edge_restriction
+        id="13"
+        type="EVENT_REQUIRED"
+        edge_id="13"
+    />
+
+    <restriction_param
+        edge_restriction_id="13"
+        name="EVENT_TYPE"
+        value="FINISHED_PROCESSING"
+    />
+
+    <edge
+        id="14"
+        from_state_id="11"
+        to_state_id="14"
+        priority="2"
+    />
+
+    <edge_restriction
+        id="14"
+        type="EVENT_REQUIRED"
+        edge_id="14"
+    />
+
+    <restriction_param
+        edge_restriction_id="14"
+        name="EVENT_TYPE"
+        value="FINISHED_PROCESSING"
+    />
+
+    <service_param
+        service_id="123"
+        name="TYPE"
+        value="FULFILLMENT"
+    />
+</dataset>

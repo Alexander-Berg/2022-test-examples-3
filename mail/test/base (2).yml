@@ -1,0 +1,40 @@
+config:
+    system:
+        dir: .
+        daemon: 0
+        reactor:
+            - { _io_threads: 2, _pool_count: 8, _name: global }
+            - { _io_threads: 8, _pool_count: 1, _name: python }
+    log:
+        global:
+            async: false
+            level: debug
+            format: "[%Y-%b-%d %H:%M:%S.%f] %l %v"
+            sinks:
+                type: file
+                path: /dev/null
+    modules:
+        module:
+        -   _name: mod_python
+            system:
+                name: mod_python
+                factory: ymod_python::impl
+            configuration:
+                reactor: python
+                program_name: my_python
+                python_home: .
+                python_path: .
+                load: main_test.py
+        -   _name: unistat
+            system:
+                name: unistat
+                factory: NYmodUnistat::TModule
+            configuration:
+                metrics:
+                -   name: abc
+                    aggregation: absolute_average
+                    host_aggregation: average
+                -   name: qwe
+                    aggregation: delta_histogram
+                    host_aggregation: histogram
+                    borders: [0, 0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 25, 30, 35, 40, 50, 100, 200, 500, 1000, 2000, 3000]

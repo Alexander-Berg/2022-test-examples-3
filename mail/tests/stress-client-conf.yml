@@ -1,0 +1,47 @@
+config:
+    system:
+        daemon: 0
+        dir: ./
+        pid: var/run/stress-smtp-client.pid
+        reactor:
+        -   { _io_threads: 1, _pool_count: 8, _name: global }
+    log:
+        global:
+            level: info
+            queue_size: 1048576
+            async: true
+            sinks:
+            -   type: reopenable_file
+                path: var/log/stress-smtp.log
+            -   type: stdout
+    modules:
+        module:
+        -   _name: smtp_client
+            system:
+                name: smtp_client
+                factory: ymod_smtpclient::CallImpl
+            configuration:
+                reactor: global
+                default_timeouts:
+                    connect: 2.0    # seconds
+                    command: 5.0    # seconds
+                    data: 10.0      # seconds
+                reuse_connection: true
+                max_idle_time: 10.0 # seconds
+                max_pool_size: 10
+                connect_attempt_timeout: 1.0    # seconds
+                ssl:
+                    only_tls: false # allow sslv3, tls*
+        -   _name: stress_client
+            system:
+                name: stress_client
+                factory: ymod_smtpclient_test::StressClient
+            configuration:
+                reactor: global
+                message_size: 65536   # 64 KB
+                log_debug: true
+                max_parallel_request: 1
+                total_request_count: 1
+                address: smtp://localhost:1025
+                mailfrom: ['mailfrom@google.com']
+                rcpts: ['furita-test-pg-klimuk@ya.ru', 'furita-test-oracle-klimuk@yandex.ru', 'no-such-user@yandex.by']

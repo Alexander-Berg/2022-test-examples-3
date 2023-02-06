@@ -1,0 +1,80 @@
+
+
+juggler:
+  checks:
+
+  # Check high-log-error-events-percent
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_yard-solomon-testing&service=high-log-error-events-percent&last=1DAY&mode=edit
+  - children:
+    - EVENTS%host=fulfillment_yard-solomon-testing & service=fulfillment-yard-error-log-events-percent-testing:all:all
+    service: high-log-error-events-percent
+
+  # Check jvm-gc-pause
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_yard-solomon-testing&service=jvm-gc-pause&last=1DAY&mode=edit
+  - children:
+    - EVENTS%host=fulfillment_yard-solomon-testing & service=fulfillment-yard-gc-pause-testing:all:all
+    service: jvm-gc-pause
+
+  # Check many-jdbc-connections
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_yard-solomon-testing&service=many-jdbc-connections&last=1DAY&mode=edit
+  - children:
+    - EVENTS%host=fulfillment_yard-solomon-testing & service=fulfillment-yard-many-jdbc-connection-testing:all:all
+    service: many-jdbc-connections
+
+  # Check many-jetty-connections
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_yard-solomon-testing&service=many-jetty-connections&last=1DAY&mode=edit
+  - children:
+    - EVENTS%host=fulfillment_yard-solomon-testing & service=fulfillment-yard-many-jetty-connections-testing:all:all
+    service: many-jetty-connections
+
+  # Check http-code-4xx-percent
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_yard-solomon-testing&service=http-code-4xx-percent&last=1DAY&mode=edit
+  - children:
+    - EVENTS%host=fulfillment_yard-solomon-testing & service=fulfillment-yard-testing-http-4xx-percent:all:all
+    service: http-code-4xx-percent
+
+  # Check http-code-5xx-percent
+  # https://juggler.yandex-team.ru/check_details/?host=fulfillment_yard-solomon-testing&service=http-code-5xx-percent&last=1DAY&mode=edit
+  - children:
+    - EVENTS%host=fulfillment_yard-solomon-testing & service=fulfillment-yard-testing-http-5xx-percent:all:all
+    service: http-code-5xx-percent
+
+  - children:
+    - EVENTS%host=fulfillment_yard-solomon-testing & service=fulfillment-yard-queue-tasks-few-attempts-number-testing-*:all:all
+    service: queue-tasks-few-attempts-number
+
+  - children:
+    - EVENTS%host=fulfillment_yard-solomon-testing & service=fulfillment-yard-queue-tasks-many-attempts-number-testing-*:all:all
+    service: queue-tasks-many-attempts-number
+
+  default:
+    aggregator: timed_more_than_limit_is_problem
+    aggregator_kwargs:
+      limits:
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 20
+        time_start: 12
+        warn: '0'
+      - crit: 0%
+        day_end: 7
+        day_start: 1
+        time_end: 11
+        time_start: 21
+        warn: '0'
+      nodata_mode: force_ok
+    check_options: {}
+    host: fulfillment_yard-solomon-testing
+    namespace: market.yard
+    notifications: []
+    refresh_time: 60
+    tags:
+    - market_testing
+    - market_rtc
+    - marketfulfillmentyard
+    - testing
+    - ffyard
+    - market
+    - _market_
+    ttl: 900
